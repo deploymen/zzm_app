@@ -1,0 +1,113 @@
+.tab-bar {
+	height: rem(55px);
+}
+
+.title-tab-section {
+	padding-top: rem(5px);
+}
+
+.title-tab-section .title img {
+	width: rem(40px);
+}
+
+/** Off-canvas menu **/
+.left-off-canvas-menu {
+	background-color: $curious-blue;
+}
+
+ul.off-canvas-list li a {
+	border-bottom: none;
+
+	&:hover {
+		background-color: darken($curious-blue, 5%);
+		border-left: rem(3px) solid $broom;
+	}
+}
+
+/**Plan Label**/
+.plan-label {
+	border-radius: 5px;
+	padding: 5px;
+	font-family: 'museo-sans', sans-serif;
+	font-size: rem(16px);
+	font-weight: lighter;
+	margin-left: rem(5px);
+}
+
+.plan-label.basic {
+	background-color: $gimblet;
+}
+
+/** Left Sidebar - Styles **/
+.left-sidebar {
+	position: fixed;
+	background-color: $curious-blue;
+	height: 100%;
+	padding-top: rem(55px);
+	padding-bottom: rem(45px);
+	z-index: 1;
+}
+
+.left-sidebar .left-sidebar-list {
+	width: rem(225px);
+	transition: width 0.6s ease;
+}
+
+.left-sidebar .left-sidebar-list li {
+	width: rem(225px);
+}
+
+.left-sidebar label,
+ul.off-canvas-list li label {
+	display: block;
+	padding: rem(5px) rem(20px);
+	color: $white;
+	text-transform: uppercase;
+	font-family: 'proxima-nova-soft', sans-serif;
+	font-size: rem(16px);
+	border-top: 1px solid #5e5e5e;
+	border-bottom: none;
+	margin: 0;
+}
+
+.left-sidebar .main-label,
+ul.off-canvas-list li label.main-label {
+	background: $picton-blue;
+}
+
+.left-sidebar .secondary-label {
+	background: $fiord;
+}
+
+.left-sidebar-list {
+	margin: rem(0px);
+}
+
+.left-sidebar-list li {
+	list-style: none;
+}
+
+.left-sidebar-list li a {
+	display: block;
+	color: $white;
+	padding-left: rem(20px);
+	padding-top: rem(7px);
+	padding-bottom: rem(7px);
+	transition: background-color 0.6s ease;
+}
+
+.left-sidebar-list li:nth-child(2) a{
+	padding-top: rem(20px);
+}
+
+.left-sidebar-list li a:hover,
+.left-sidebar-list li a:focus,
+.left-sidebar-list li a:active,
+.left-sidebar-list li a.active {
+	background-color: darken($curious-blue, 5%);
+	border-left: rem(3px) solid $broom;
+}
+
+.left-sidebar-list li a .fa {
+	display: none;
+}

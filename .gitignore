@@ -1,0 +1,11 @@
+/vendor
+/cron
+/shell
+/public/bower_components
+/public/node_modules
+/database/backup
+composer.lock
+.env*
+*.log
+*.sql
+

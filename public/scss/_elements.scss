@@ -1,0 +1,573 @@
+/*
+************************************************************************
+- ELEMENTS -
+: Buttons, Logos, Icons, Form Elements, Lists
+************************************************************************
+*/
+
+body {
+
+}
+
+.info-icon {
+	position: relative;
+	display: block;
+	width: rem(25px);
+	height: rem(25px);
+	border-radius: rem(25px);
+	background-color: $curious-blue;
+}
+
+button,
+.button {
+	font-size: rem(12px);
+	padding: rem(13px) rem(20px) rem(13px) rem(20px);
+	letter-spacing: 0.08em;
+}
+
+button.wide,
+.button.wide {
+	width: 100%;
+}
+
+button,
+.button,
+button.blue,
+.button.blue {
+	background-color: $picton-blue;
+	border: 1px solid rgba(52, 73, 94, 0.2);
+	color: $white;
+}
+
+button.grey,
+.button.grey {
+	background-color: lighten($black, 50%);
+	border: 1px solid rgba(52, 73, 94, 0.2);
+	color: $white;
+}
+
+button:hover,
+.button:hover,
+.button.blue:hover {
+	background-color: darken($picton-blue, 10%);
+	color: $white;
+}
+
+.button.green:hover {
+	background-color: darken($fringy-flower, 10%);
+	color: lighten($black, 30%);
+}
+
+button.grey:hover,
+.button.grey:hover {
+	background-color: lighten($black, 55%);
+	color: lighten($black, 90%);
+}
+
+button.alert,
+.button.alert {
+	background-color: $punch;
+	color: $white;
+}
+
+button.alert:hover,
+.button.alert:hover {
+
+}
+
+[data-abide] .error small.error,
+[data-abide] .error span.error,
+[data-abide] span.error,
+[data-abide] small.error {
+	background: $lightning-yellow;
+}
+
+ul.pagination li.current a,
+ul.pagination li.current button {
+	background: $flamingo;
+}
+
+.list-signup--services {
+	li {
+		display: inline-block;
+		list-style: none;
+		margin-left: rem(10px);
+		margin-right: rem(10px);
+		padding: rem(5px) rem(10px);
+		@include border(rem(1px), solid, lighten($grey, 30%));
+	}
+}
+
+.f-dropdown li a {
+	text-align: left;
+}
+
+.profile-tooltip {
+	display: none;
+	position: absolute;
+	top: rem(-110px);
+  	left: rem(-50px);
+	z-index: 1;
+	width: rem(130px);
+	height: rem(100px);
+	background-color: $fiord;
+	padding: rem(10px);
+	border-radius: rem(5px);
+}
+
+.hideit {
+	display: none;
+}
+
+.showit {
+	display: block;
+}
+
+.profile-tooltip p {
+	color: $white;
+	font-size: rem(12px);
+	font-style: normal;
+}
+
+.profile-tooltip .fa {
+	color: $fiord;
+	position: absolute;
+	bottom: rem(-18px);
+	left: 42%;
+	font-size: rem(30px);
+}
+
+/** Main Header Styles **/
+.main-header {
+	position: fixed;
+	width: 100%;
+	top: 0;
+	left: 0;
+	z-index: 2;
+}
+
+/** Global Form Elements **/
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="date"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="month"]:focus,
+input[type="week"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="time"]:focus,
+input[type="url"]:focus,
+input[type="color"]:focus,
+textarea:focus {
+	border-color: $curious-blue;
+	border-width: rem(2px);
+}
+
+/** Form Styles **/
+.login-form {
+	margin-top: rem(20px);
+}
+
+input[type="text"],
+input[type="password"],
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="week"],
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="time"],
+input[type="url"],
+input[type="color"],
+textarea,
+.login-form input[type=email],
+.login-form input[type=text],
+.login-form input[type=password] {
+	background-color: $loblolly;
+	border-radius: rem(5px);
+	padding-top: rem(5px);
+	padding-bottom: rem(10px);
+}
+
+.login-form input[type=email]:focus,
+.login-form input[type=text]:focus,
+.login-form input[type=password]:focus {
+	background-color: $loblolly;
+}
+
+/* Base for label styling */
+.login-form [type="checkbox"] + label,
+.login-form [type="checkbox"] + label {
+	margin-left: rem(0px);
+}
+
+.login-form [type="checkbox"]:not(:checked),
+.login-form [type="checkbox"]:checked {
+  position: absolute;
+  left: -9999px;
+}
+.login-form [type="checkbox"]:not(:checked) + label,
+.login-form [type="checkbox"]:checked + label {
+  position: relative;
+  padding-left: 25px;
+  cursor: pointer;
+}
+
+.login-form [type="checkbox"]:not(:checked) + label:before,
+.login-form [type="checkbox"]:checked + label:before {
+	content: '';
+	position: absolute;
+	left:0; top: 2px;
+	width: 19px;
+	height: 19px;
+	border: 1px solid $loblolly;
+	background-color: $loblolly;
+	border-radius: 3px;
+	box-shadow: inset 0 1px 3px rgba(0,0,0,.3);
+}
+
+/* checked mark aspect */
+.login-form [type="checkbox"]:not(:checked) + label:after,
+.login-form [type="checkbox"]:checked + label:after {
+  content: '✔';
+  position: absolute;
+  top: 0; left: 4px;
+  font-size: 14px;
+  color: $picton-blue;
+  transition: all .2s;
+}
+/* checked mark aspect changes */
+.login-form [type="checkbox"]:not(:checked) + label:after {
+  opacity: 0;
+  transform: scale(0);
+}
+.login-form [type="checkbox"]:checked + label:after {
+  opacity: 1;
+  transform: scale(1);
+}
+/* disabled checkbox */
+.login-form [type="checkbox"]:disabled:not(:checked) + label:before,
+.login-form [type="checkbox"]:disabled:checked + label:before {
+  box-shadow: none;
+  border-color: #bbb;
+  background-color: #ddd;
+}
+.login-form [type="checkbox"]:disabled:checked + label:after {
+  color: #999;
+}
+.login-form [type="checkbox"]:disabled + label {
+  color: #aaa;
+}
+/* accessibility */
+.login-form [type="checkbox"]:checked:focus + label:before,
+.login-form [type="checkbox"]:not(:checked):focus + label:before {
+  border: 1px dotted blue;
+}
+
+/* hover style just for information */
+label:hover:before {
+  border: 1px solid #4778d9!important;
+}
+
+/**Sidebar Styles**/
+.left-off-canvas-menu {
+	.logo {
+		width: 50%;
+		margin: rem(30px) auto;
+	}
+}
+
+/** Home Styles **/
+.sort-box-list {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+.sort-box-list li {
+	padding: 1px;
+	float: left;
+	font-size: 4em;
+	text-align: center;
+	background-color: $fringy-flower;
+	border: rem(1px) solid $flamingo;
+}
+
+/** ACCOUNT SETTINGS STYLES **/
+
+
+.profile-button button
+.profile-button button.dropdown,
+.profile-button .button.dropdown {
+	display: flex;
+	float: right;
+	margin: rem(0px);
+	padding-top: rem(10px);
+	padding-right: rem(48px);
+	padding-bottom: rem(7px);
+	padding-left: rem(32px);
+	background: $oil;
+
+	&:hover,
+	&:focus {
+		background: darken($oil, 5%);
+	}
+
+	span {
+		align-items: center;
+	}
+
+	.main-profile-picture {
+		position: absolute;
+		left: rem(0px);
+		display: inline-block;
+		overflow: hidden;
+		width: rem(26px);
+		height: rem(26px);
+		border: 1px solid $white;
+		border-radius: rem(25px);
+
+		.fa {
+			color: $white;
+			font-size: rem(18px);
+			line-height: rem(28px);
+		}
+	}
+
+	.main-profile-name {
+		display: inline-block;
+		margin: rem(0px);
+		margin-left: rem(10px);
+
+		p {
+			margin: rem(0px);
+		}
+	}
+
+	.f-dropdown li a {
+		text-align: left
+	}
+}
+
+.profile-first-name,
+.profile-last-initial {
+	text-transform: capitalize;
+}
+
+.profile-item {
+	/*text-align: center;*/
+	padding-top: rem(70px) !important;
+	width: rem(340px);
+	height: rem(500px);
+	margin-right: rem(10px);
+	margin-left: rem(10px);
+	float: left;
+}
+
+.add-button .profile-info {
+	position: relative;
+	background-color: lighten($black, 80%);
+	text-align: center;
+	cursor: pointer;
+	padding-top: rem(110px);
+}
+
+.add-button .profile-info p {
+	color: $white;
+	font-size: rem(20px);
+}
+
+.add-button .profile-info a {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+}
+
+.add-button .profile-info .add-plus-box {
+	width: rem(130px);
+	height: rem(130px);
+	border-radius: rem(130px);
+	background-color: lighten($black, 75%);
+	margin: 0 auto;
+	margin-bottom: rem(30px);
+}
+
+.add-button .profile-info .add-plus-box .fa {
+	color: $white;
+	font-size: rem(80px);
+	line-height: 130px;
+}
+
+.profile-pic-holder,
+.avatar-holder {
+	width: rem(140px);
+	height: rem(140px);
+	overflow: hidden;
+	border: 3px solid $curious-blue;
+	border-radius: rem(140px);
+	background-color: $white;
+}
+
+.profile-pic-holder {
+	margin-bottom: rem(20px);
+	margin: 0 auto;
+	margin-top: rem(-70px);
+}
+
+.profile-code,
+.profile-class-name,
+.profile-name,
+.profile-email {
+	margin-bottom: rem(5px);
+}
+
+.profile-item-group {
+	border-bottom: rem(2px) solid $curious-blue;
+	padding-top: rem(5px);
+	padding-right: rem(10px);
+	padding-left: rem(10px);
+}
+
+.profile-item-group .columns {
+	padding: 0px;
+}
+
+.profile-item-group.no-padding {
+	padding: rem(0px);
+}
+
+.avatar-holder {
+	width: rem(140px);
+}
+
+.profile-info,
+.content-group--content {
+	position: relative;
+	background-color: $white;
+	border-radius: rem(20px);
+	/*box-shadow: inset 0 0px 0px $flamingo,0 5px 0px darken($flamingo, 10%);*/
+	box-shadow: 0px 0px 12px 3px rgba(0,0,0,0.1);
+
+}
+
+.profile-info {
+	padding: rem(15px) rem(0px);
+	height: 100%;
+}
+
+.profile-upgrade-cta {
+	margin-bottom: rem(0px);
+}
+
+.profile-upgrade-cta a {
+	display: inline-block;
+	border: 1px solid $picton-blue;
+	padding: rem(3px) rem(5px);
+}
+
+.content-group--content {
+	padding: rem(20px) rem(30px);
+	margin: 0 auto;
+}
+
+.content-group--content.red {
+	border: rem(5px) solid $punch;
+}
+
+.content-group {
+	margin-bottom: rem(25px);
+}
+
+.content-group--heading {
+	background-color: lighten($grey, 45%);
+	border: rem(1px) solid lighten($grey, 30%);
+	border-radius: rem(3px) rem(3px) rem(0px) rem(0px);
+	padding: rem(9px) rem(10px) rem(10px);
+	margin-top: rem(0px);
+	margin-bottom: rem(0px);
+}
+
+.content-group--heading {
+	&.green {
+		background-color: $fringy-flower;
+	}
+
+	&.red {
+		background-color: $punch;
+	}
+}
+
+.content-group.has-table {
+	.content-group--content {
+		padding: rem(0px);
+		border: none;
+
+		.wide-table {
+			border-top: none;
+
+			tr:nth-of-type(even) {
+				background: lighten($chateau-green, 50%);
+			}
+		}
+	}
+}
+
+/** Edit Profile Form Styles **/
+.edit-profile-form {
+	font-family: 'museo-sans', sans-serif;
+}
+
+/** Modal Styles **/
+.reveal-modal {
+	padding: rem(20px);
+	border-radius: rem(20px);
+}
+
+.reveal-modal .close-reveal-modal {
+	top: auto;
+	bottom: rem(-50px);
+}
+
+.reveal-modal .close-reveal-modal a {
+	font-size: rem(36px);
+	color: $white;
+	font-size: rem(16px);
+}
+
+.reveal-modal-bg {
+	background: rgba(43, 145, 214, 0.7);
+}
+
+/** Loading Bar **/
+.pace {
+  -webkit-pointer-events: none;
+  pointer-events: none;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.pace-inactive {
+  display: none;
+}
+
+.pace .pace-progress {
+  background: #2b6dbc;
+  position: fixed;
+  z-index: 2000;
+  top: 0;
+  right: 100%;
+  width: 100%;
+  height: rem(5px);
+}

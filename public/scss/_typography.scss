@@ -1,0 +1,281 @@
+/*
+************************************************************************
+- TYPOGRAPHY -
+: Fonts, Links, Etc.
+************************************************************************
+*/
+p, label {
+	color: lighten($black, 30%);
+	font-family: 'museo-sans', sans-serif;
+	font-size: rem(14px);
+
+	/*@include mobile {
+		font-size: rem(16px);
+	}*/
+}
+
+h6 {
+	color: lighten($black, 30%);
+	text-transform: uppercase;
+	font-size: rem(14px);
+	font-weight: bold;
+}
+
+a {
+	color: $picton-blue;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+a:hover,
+a:focus,
+a:active {
+	color: darken($picton-blue, 10%);
+}
+
+.star-group .fa-star {
+	color: lighten($black, 50%);
+}
+
+.star-group.big .fa-star {
+	font-size: rem(25px);
+}
+
+.star-group.small .fa-star {
+	font-size: rem(10px);
+}
+
+.blue-header,
+.blue-text {
+	color: $curious-blue;
+}
+
+.grey-heading {
+	color: lighten($black, 40%);
+	font-size: rem(44px);
+	font-family: 'museo-sans', sans-serif;
+}
+
+.red-text {
+	color: $punch;
+}
+
+.blue-heading-small {
+	color: $curious-blue;
+	font-size: rem(14px);
+	font-weight: bold;
+}
+
+.info-icon {
+	color: $white;
+	font-family: 'Times New Roman', serif;
+	font-style: italic;
+	font-weight: normal;
+	text-align: center;
+	cursor: pointer;
+}
+
+.info-icon.has-tip:hover {
+	color: $white;
+}
+
+.truncate {
+	width: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+
+/** Account Settings STYLES **/
+.content-group--heading {
+	font-size: rem(14px);
+	font-weight: bold;
+
+	&.red {
+		color: $white;
+	}
+}
+
+/** HEADER STYLES **/
+.profile-button button
+.profile-button button.dropdown,
+.profile-button .button.dropdown {
+	.main-profile-name {
+		p {
+			color: darken($chateau-green, 10%);
+		}
+	}
+
+}
+
+/** Sign Up/In Form Styles **/
+.login-form .label-header {
+	text-transform: uppercase;
+	font-size: rem(13px);
+	font-weight: bold;
+}
+
+.login-form .label-grey {
+	color: lighten($black, 60%);
+	font-size: rem(16px);
+}
+
+.login-form input[type=email],
+.login-form input[type=text],
+.login-form input[type=password] {
+	color: lighten($black, 35%);
+	font-family: 'proxima-nova-soft', sans-serif;
+	font-size: rem(18px);
+}
+
+.login-form input[type=email]:focus,
+.login-form input[type=text]:focus,
+.login-form input[type=password]:focus {
+	color: lighten($black, 35%);
+}
+
+button,
+.button,
+button.wide,
+.button.wide,
+.login-form button,
+.login-form .button,
+.login-form button.blue,
+.login-form .button.blue {
+	font-family: 'proxima-nova-soft', sans-serif;
+	font-size: rem(20px);
+}
+
+.forgot-password-box {
+	text-align: center;
+	padding-top: rem(15px);
+}
+
+.forgot-password-box a {
+	color: $white;
+	font-family: 'proxima-nova-soft', sans-serif;
+	font-size: rem(16px);
+}
+
+/** PROFILES STYLES **/
+.profile-name {
+	color: lighten($black, 30%);
+	font-family: 'museo-sans', sans-serif;
+	font-size: rem(19px);
+	font-weight: bold;
+	margin-top: rem(-10px);
+	text-align: center;
+}
+
+.profile-nickname {
+	font-size: rem(28px);
+	color: lighten($black, 60%);
+	font-family: 'museo-sans', sans-serif;
+	font-weight: lighter;
+	margin-bottom: rem(0px);
+	text-align: center;
+}
+
+.nickname-middle {
+	margin-top: rem(40px);
+
+	.profile-nickname {
+		margin-left: rem(-45px); 
+	}
+}
+
+.nickname-middle.columns {
+	padding: rem(0px);
+}
+
+.profile-code,
+.profile-class-name,
+.profile-email {
+	color: lighten($black, 30%);
+	font-size: rem(14px);
+}
+
+.profile-email {
+	font-style: italic;
+}
+
+.profile-school-name {
+	color: lighten($black, 60%);
+	font-size: rem(18px);
+	text-transform: uppercase;
+	margin-bottom: rem(0px);
+}
+
+.profile-proficiency {
+	margin-bottom: rem(0px);
+}
+
+.profile-percentage {
+	color: $curious-blue;
+	font-size: rem(40px);
+	/*margin-bottom: rem(0px);*/
+}
+
+.profile-subject-name {
+	color: $curious-blue;
+	font-size: rem(16px);
+	margin-bottom: rem(0px);
+}
+
+.change-class-button {
+	position: absolute;
+	bottom: rem(0px);
+	left: rem(0px);
+	right: rem(0px);
+	background-color: $curious-blue;
+	color: $white;
+	margin-bottom: rem(0px);
+	text-align: center;
+	font-size: rem(11px);
+}
+
+.btn-profile-edit {
+	color: lighten($black, 60%);
+	font-family: 'proxima-nova-soft', sans-serif;
+}
+
+.profile-upgrade-cta {
+	text-align: center;
+	padding-top: rem(5px);
+}
+
+.profile-upgrade-cta a {
+
+}
+
+/** Edit Profile Form Styles **/
+.edit-profile-form label,
+.reveal-modal label {
+	font-family: 'museo-sans', sans-serif;
+	font-size: rem(18px);
+	font-weight: 300;
+}
+
+.subline-desc {
+	color: $curious-blue;
+	font-size: rem(11px);
+	font-family: 'museo-sans', sans-serif;
+	margin-bottom: rem(0px);
+	margin-left: rem(20px);
+}
+
+
+/** COPYRIGHT STYLES **/
+.footer-link-list .copyright,
+.footer-link-list li a {
+	color: $white;
+	font-size: rem(12px);
+	text-align: center;
+}
+
+.footer-link-list .footer-link-divider {
+	color: darken($chateau-green, 25%);;
+}

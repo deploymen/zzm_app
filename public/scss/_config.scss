@@ -1,0 +1,86 @@
+/*
+************************************************************************
+- CONFIGURATION -
+: Global site colours, fonts,
+************************************************************************
+*/
+
+/** Variables **/
+$fa-font-path: '../../fonts/fontawesome/';
+
+/* Font Stacks */
+$font-url--google			: 'http://fonts.googleapis.com/css?family=Varela+Round';
+
+$font-family--primary		: 'Arial', Helvetica;
+$font-family--secondary		: 'Helvetica Neue';
+
+$font-family--fa			: "../fonts/fontawesome/" !default;
+$font-family--ro			: "../fonts/roboto/" !default;
+$font-family--os			: "../fonts/opensans/" !default;
+
+/* Font Weights */
+$font-weight--thin				: 100;
+$font-weight--light				: 300;
+$font-weight--medium			: 400;
+$font-weight--bold				: 700;
+$font-weight--ultra-bold		: 900;
+
+/* Descriptive Base Colours */
+$white			: #FFFFFF;
+$black			: #000000;
+$mercury		: #E1E1E1;
+$grey			: #808080;
+$alto			: #D7D7D7;
+$alabaster		: #F7F7F7;
+
+$blaze-orange			: #FA6900;
+$lightning-yellow		: #FABD26;
+
+$blue-zodiac			: #0E2651;
+$spring-wood-light		: #F7F7F1;
+$spring-wood-dark		: #FCFCF9;
+$fringy-flower			: #B1DCBE;
+$chateau-green			: #39B54A;
+$flamingo				: #F26522;
+$punch					: #DF3E3E;
+$aquamarine-blue		: #80D8E2;
+$curious-blue			: #2B91D6;
+$picton-blue			: #4AAFF4;
+$loblolly				: #BAC5CC;
+$fiord					: #3D596C;
+$broom					: #FFF91A;
+$gimblet				: #BDA869;
+
+/* Colour Usages */
+$color-primary			: $blue-zodiac;
+$color-secondary		: $spring-wood-light;
+$color-accent			: $fringy-flower;
+$color-shadow			: rgba($black, .2);
+
+/* Colour Palette Modifiers */
+$palettes	: (
+	grey: (
+		xx-light  : lighten($grey, 43%),
+		x-light   : lighten($grey, 35%),
+		light     : lighten($grey, 12%),
+		base      : $grey,
+		dark      : darken($grey, 8%),
+		x-dark    : darken($grey, 16%)
+	)
+);
+
+/* UI Colours */
+/*$ui-colors	: (
+	default : $blue-zodiac,
+	success : $chateau-green,
+	error 	: $flamingo,
+	warning : $fringy-flower,
+	info 	: $spring-wood-light
+);*/
+
+/* Text */
+$base__font-size		: 16px;
+$base__line				: 24px;
+
+$tooltip-bg				: $fiord;
+$tooltip-max-width		: 200px;
