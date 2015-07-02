@@ -263,6 +263,7 @@ class ZapZapQuestionHelper{
 						'answer_option_4' => $r->answer_option_4,
 						'answer_option_5' => $r->answer_option_5,
 						'answer_option_6' => $r->answer_option_6,
+						'fixed_num' => $r->fixed,
 						'difficulty' => $r->difficulty,
 						'subject' => []
 					]);
