@@ -35,7 +35,7 @@ function allVars(){
 
 	$.ajaxSetup({
 	    beforeSend: function(xhr) {
-	        xat =xhr.setRequestHeader('X-access-token', '1|92b943b0ff3ffe4ff943f448d30eb5a0ff7ef7e9');
+	        xat =xhr.setRequestHeader('X-access-token', '1');
 	    }
 	});
 };

@@ -7,7 +7,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Zap Zap Math | Reset Password</title>
+        <title>Zap Zap Math | Sign Up</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -45,28 +45,74 @@
 				<div class="logo">
 					<img src="../assets/img/global/logo-icon.png" alt=" ">
 				</div>
-				<form data-abide="ajax" id="login-form" method="POST" action="?action=login" novalidate="novalidate">
+				<form data-abide="ajax" id="signup-form" class="signup-form" action="?action=signup" method="POST" novalidate="novalidate">
 				  <fieldset>
-				    <legend>Reset Password</legend>
+				    <legend>Create A Free Zap Zap Math Account</legend>
+
+				    <div class="row">
+						<div class="small-6 columns">
+							<label for="radio-parent" class="">
+								<input name="role" type="radio" id="radio-parent" required="" value="parent"> I am a parent
+							</label>
+						</div>
+
+						<div class="small-6 columns">
+							<label for="radio-teacher" class="">
+								<input name="role" type="radio" id="radio-teacher" required="" value="teacher"> I am a teacher
+							</label>
+						</div>
+						<small class="error">Please select a role</small>
+					</div>
 
 				    <div class="row">
 				      <div class="small-12 columns">
-				        <label for="password">
-                            Email Address
-				          <input type="text" id="" placeholder="What's the email address you used to sign up?" name="" required>
+				        <label for="name">
+				          <input type="text" id="users_name" placeholder="Hello! What's your name?" name="users_name" required pattern="[a-zA-Z]+">
 				        </label>
-				        <small class="error">That doesn't appear to be a valid email address</small>
+				        <small class="error">Please fill in your name, we like to address our friends properly!</small>
 				      </div>
 				    </div>
 
 				    <div class="row">
 				      <div class="small-12 columns">
-				        <button type="submit" class="medium button green">Reset</button>
+				        <label for="email">
+				          <input type="email" id="users_email" placeholder="Please input your email address." name="password" required>
+				        </label>
+				        <small class="error">Please input a valid email address. Like example@domain.com</small>
+				      </div>
+				    </div>
+
+				    <div class="row">
+				      <div class="small-12 columns">
+				        <label for="password">
+				          <input type="password" id="users_password" placeholder="Please choose a secure password." name="password" required>
+				        </label>
+				        <small class="error">Passwords must be at least 8 characters with 1 capital letter, 1 number, and one special character.</small>
+				      </div>
+				    </div>
+
+				    <div class="row">
+				      <div class="small-12 columns">
+				        <label for="country">
+				          <input type="text" id="users_country" placeholder="What country do you call home?" name="country" required>
+				        </label>
+				        <small class="error">Please specify a country</small>
+				      </div>
+				    </div>
+
+				    <div class="row">
+				      <div class="small-12 columns">
+				        <button type="submit" class="medium button green">Sign Up</button>
 				      </div>
 				    </div>
 
 				  </fieldset>
 				</form>
+				<hr>
+				<section class="prompt-login-wrapper">
+					<h2>Already a member?</h2>
+					<a href="#">Log in to Zap Zap Math!</a>
+				</section>
 			</section><!--entry-wrapper-->
 		</div><!--site-wrapper-->
 
