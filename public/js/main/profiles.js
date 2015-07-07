@@ -35,7 +35,7 @@ function allVars(){
 
 	$.ajaxSetup({
 	    beforeSend: function(xhr) {
-	        xat =xhr.setRequestHeader('X-access-token', '1');
+	        xat =xhr.setRequestHeader('X-access-token', '1|92b943b0ff3ffe4ff943f448d30eb5a0ff7ef7e9');
 	    }
 	});
 };
@@ -62,32 +62,32 @@ function displayProfiles(){
 
 			var profilesArray = [];
 			
-			$.each( allVars.datal.list, function( i, profile ) {
+			$.each( allVars.datal, function( i, profile ) {
 				profilesArray.push([
 					'<div class="profile-item">',
 						'<section class="profile-info">',
 							'<div class="profile-pic-holder">',
-								'<img src="/assets/main/img/avatars/',allVars.datal.list[i].avatar.filename,'" alt="Avatar 3">',
+								'<img src="/assets/main/img/avatars/avatar',allVars.datal[0].avatar_id,'.png" alt="Avatar 3">',
 							'</div>',
 							'<div class="profile-item-group cf">',
 								'<p class="profile-nickname">',
-									'<span class="first-name">',allVars.datal.list[i].nick_name1.name,' </span>',
-									'<span class="first-name">',allVars.datal.list[i].nick_name2.name,'</span>',
+									'<span class="first-name">',allVars.datal[0].nickname1,'</span>',
+									'<span class="first-name">nickname2</span>',
 								'</p>',
 								'<p class="profile-name">',
-									'<span class="first-name">',allVars.datal.list[i].first_name,'</span>',' ',
-									'<span class="last-name">',allVars.datal.list[i].last_name,'</span>',
+									'<span class="first-name">',allVars.datal[0].first_name,'</span>',' ',
+									'<span class="last-name">',allVars.datal[0].last_name,'</span>',
 								'</p>',
 							'</div>',
 
 							'<div class="profile-item-group cf">',
-								'<p class="profile-school-name truncate">',allVars.datal.list[i].school,'</p>',
+								'<p class="profile-school-name truncate">',allVars.datal[0].school,'</p>',
 								'<div class="small-5 columns">',
-									'<p class="profile-class-name bold"><span class="blue-header">Class ID:</span> <span class="class-id">',allVars.datal.list[i].class_id,'</span></p>',
+									'<p class="profile-class-name bold"><span class="blue-header">Class ID:</span> <span class="class-id">',allVars.datal[0].class_id,'</span></p>',
 								'</div>',
 
 								'<div class="small-7 columns">',
-									'<p class="profile-code bold"><span class="blue-header">Player ID</span> <span class="user-id">',allVars.datal.list[i].game_code.code,'</span></p>',
+									'<p class="profile-code bold"><span class="blue-header">Player ID</span> <span class="user-id">game code</span></p>',
 								'</div>',
 							'</div>',
 
@@ -111,7 +111,7 @@ function displayProfiles(){
 								'</div>',
 							'</div>',
 
-							'<div class="profile-item-group no-padding hideit cf">',
+							'<div class="profile-item-group no-padding cf">',
 								'<div class="small-5 columns progress-section ps1">',
 									'<p class="profile-percentage text-center">100%</p>',
 									'<p class="change-class-button">',
@@ -152,8 +152,8 @@ function displayProfiles(){
 								'</div>',
 							'</div>',
 
-							'<p class="profile-upgrade-cta"><a href="/user/profiles/',allVars.datal.list[i].id,'/results" class="">Upgrade</a> for detailed reports!</p>',
-							'<a href="/user/profiles/',allVars.datal.list[i].id,'/edit" class="btn-profile-edit">Edit</a>',
+							'<p class="profile-upgrade-cta"><a href="/user/profiles/id/results" class="">Upgrade</a> for detailed reports!</p>',
+							'<a href="/user/profiles/',allVars.datal[0].id,'/edit" class="btn-profile-edit">Edit</a>',
 						'</section>',
 					'</div>'
 				].join(''));
@@ -262,9 +262,9 @@ function createNewProfile(){
 		last_name    : newlastname.val(),
 		school       : newschool.val(),
 		city         : newcity.val(),
-		email        : allVars.datal.list[0].email,
-		nickname1    : allVars.datal.list[0].nickname1,
-		nickname2    : allVars.datal.list[0].nickname2,
+		email        : 'obiwan@jediacademy.com',
+		nickname1    : 1,
+		nickname2    : 2,
 	}
 
 	$.ajax({

@@ -61,7 +61,7 @@
 
                             <div class="row">
                               <div class="small-12 columns">
-                                <button id="btn-reset-password" type="submit" class="medium button expand radius blue">Send Reset Link</button>
+                                <a id="btn-reset-password" type="submit" class="medium button expand radius blue">Send Reset Link</a>
                               </div>
                             </div>
                         </form>
@@ -81,6 +81,7 @@
         <script>window.jQuery || document.write('<script src="js/jquery/dist/jquery.min.js"><\/script>')</script>
 
         <script src="/js/main/app.js"></script>
+        <script src="/js/main/forgot.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
@@ -90,6 +91,6 @@
           // })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
           // ga('create', 'UA-60608433-1', 'auto');
           // ga('send', 'pageview');
-        // </script>
+        </script>
     </body>
 </html>
