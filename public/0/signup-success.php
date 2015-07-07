@@ -7,7 +7,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Zap Zap Math | Reset Password</title>
+        <title>Zap Zap Math | Login</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -45,28 +45,13 @@
 				<div class="logo">
 					<img src="../assets/img/global/logo-icon.png" alt=" ">
 				</div>
-				<form data-abide="ajax" id="login-form" method="POST" action="?action=login" novalidate="novalidate">
-				  <fieldset>
-				    <legend>Reset Password</legend>
-
-				    <div class="row">
-				      <div class="small-12 columns">
-				        <label for="password">
-                            Email Address
-				          <input type="text" id="" placeholder="What's the email address you used to sign up?" name="" required>
-				        </label>
-				        <small class="error">That doesn't appear to be a valid email address</small>
-				      </div>
-				    </div>
-
-				    <div class="row">
-				      <div class="small-12 columns">
-				        <button type="submit" class="medium button green">Reset</button>
-				      </div>
-				    </div>
-
-				  </fieldset>
-				</form>
+				<div class="row">
+                    <div class="small-12 columns">
+                        <h2>Welcome!</h2>
+                        <p>Thanks for registering.</p>
+                        <a href="/user/signin" class="button radius">Please Log In Here.</a>
+                    </div>            
+                </div>
 			</section><!--entry-wrapper-->
 		</div><!--site-wrapper-->
 

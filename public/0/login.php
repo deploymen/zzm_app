@@ -7,7 +7,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Zap Zap Math | Reset Password</title>
+        <title>Zap Zap Math | Login</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -47,26 +47,45 @@
 				</div>
 				<form data-abide="ajax" id="login-form" method="POST" action="?action=login" novalidate="novalidate">
 				  <fieldset>
-				    <legend>Reset Password</legend>
+				    <legend>Member Login</legend>
 
 				    <div class="row">
 				      <div class="small-12 columns">
-				        <label for="password">
-                            Email Address
-				          <input type="text" id="" placeholder="What's the email address you used to sign up?" name="" required>
+				        <label for="email">
+				          <input type="email" id="users_login_email" placeholder="What is your email address?" name="password" required>
 				        </label>
-				        <small class="error">That doesn't appear to be a valid email address</small>
+				        <small class="error">Please input a valid email address. Like example@domain.com</small>
 				      </div>
 				    </div>
 
 				    <div class="row">
 				      <div class="small-12 columns">
-				        <button type="submit" class="medium button green">Reset</button>
+				        <label for="password">
+				          <input type="password" id="users_login_password" placeholder="What is your password?" name="password" required>
+				        </label>
+				        <small class="error">Please input your password</small>
+				      </div>
+				    </div>
+
+				    <div class="row">
+				      <div class="small-12 columns">
+				        <a href="#">I forgot my password</a>
+				      </div>
+				    </div>
+
+				    <div class="row">
+				      <div class="small-12 columns">
+				        <button type="submit" class="medium button green">Login</button>
 				      </div>
 				    </div>
 
 				  </fieldset>
 				</form>
+				<hr>
+				<section class="prompt-login-wrapper">
+					<h2>Not a member yet?</h2>
+					<a href="#">Register for free!</a>
+				</section>
 			</section><!--entry-wrapper-->
 		</div><!--site-wrapper-->
 
