@@ -44,7 +44,7 @@
 
 									<tr width="100%">
 										<td bgcolor="#FFFFFF" style="background-color: #FFFFFF; padding: 30px;">
-											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">You've just signed your little mathling up for the most exciting math adventure this side of the Universe! <!-- If you haven't downloaded the app yet, please navigate your browser starship to XXX --></p>
+											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">You've just signed your little mathling up for the most exciting math adventure this side of the Universe! If you haven't downloaded the app yet, please navigate your browser starship to XXX</p>
 
 											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">To help you prepare for the trip ahead, here are a few vital things to remember:<br />
 											Your login is: XXX<br/>
