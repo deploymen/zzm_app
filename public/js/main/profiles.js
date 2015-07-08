@@ -67,23 +67,23 @@ function displayProfiles(){
 					'<div class="profile-item">',
 						'<section class="profile-info">',
 							'<div class="profile-pic-holder">',
-								'<img src="/assets/main/img/avatars/avatar',allVars.datal[0].avatar_id,'.png" alt="Avatar 3">',
+								'<img src="/assets/main/img/avatars/avatar',allVars.datal[i].avatar_id,'.png" alt="Avatar 3">',
 							'</div>',
 							'<div class="profile-item-group cf">',
 								'<p class="profile-nickname">',
-									'<span class="first-name">',allVars.datal[0].nickname1,'</span>',
-									'<span class="first-name">nickname2</span>',
+									'<span class="first-name">',allVars.datal[i].nickname1,' </span>',
+									'<span class="first-name">',allVars.datal[i].nickname2,'</span>',
 								'</p>',
 								'<p class="profile-name">',
-									'<span class="first-name">',allVars.datal[0].first_name,'</span>',' ',
-									'<span class="last-name">',allVars.datal[0].last_name,'</span>',
+									'<span class="first-name">',allVars.datal[i].first_name,'</span>',' ',
+									'<span class="last-name">',allVars.datal[i].last_name,'</span>',
 								'</p>',
 							'</div>',
 
 							'<div class="profile-item-group cf">',
-								'<p class="profile-school-name truncate">',allVars.datal[0].school,'</p>',
+								'<p class="profile-school-name truncate">',allVars.datal[i].school,'</p>',
 								'<div class="small-5 columns">',
-									'<p class="profile-class-name bold"><span class="blue-header">Class ID:</span> <span class="class-id">',allVars.datal[0].class_id,'</span></p>',
+									'<p class="profile-class-name bold"><span class="blue-header">Class ID:</span> <span class="class-id">',allVars.datal[i].class_id,'</span></p>',
 								'</div>',
 
 								'<div class="small-7 columns">',
@@ -119,7 +119,7 @@ function displayProfiles(){
 											'</span>',
 										'</div>',
 										'<div class="small-12 columns">',
-											'<p class="profile-subject-name truncate">',allVars.datal[0].best_score,'</p>',
+											'<p class="profile-subject-name truncate">',allVars.datal[i].best_score,'</p>',
 										'</div>',
 									'</div>',
 									'<div class="small-12 columns">',
@@ -134,14 +134,14 @@ function displayProfiles(){
 											'</span>',
 										'</div>',
 										'<div class="small-12 columns">',
-											'<p class="profile-subject-name truncate">',allVars.datal[0].weak_score,'</p>',
+											'<p class="profile-subject-name truncate">',allVars.datal[i].weak_score,'</p>',
 										'</div>',
 									'</div>',
 								'</div>',
 							'</div>',
 
-							'<p class="profile-upgrade-cta"><a href="/user/profiles/id/results" class="">See detailed reports!</a></p>',
-							'<a href="/user/profiles/',allVars.datal[0].id,'/edit" class="btn-profile-edit">Edit</a>',
+							'<p class="profile-upgrade-cta"><a href="/user/profiles/',allVars.datal[i].id,'/results" class="">See detailed reports!</a></p>',
+							'<a href="/user/profiles/',allVars.datal[i].id,'/edit" class="btn-profile-edit">Edit</a>',
 						'</section>',
 					'</div>'
 				].join(''));
@@ -251,9 +251,15 @@ function createNewProfile(){
 		school       : newschool.val(),
 		city         : newcity.val(),
 		email        : 'obiwan@jediacademy.com',
-		nickname1    : 1,
-		nickname2    : 2,
+		nickname1    : allVars.datal.nickname1,
+		nickname2    : allVars.datal.nickname2,
 	}
+
+	$.ajaxSetup({
+	    beforeSend: function(data) {
+	        allVars.datal = data["data"];
+	    }
+	});
 
 	$.ajax({
 		type     : 'POST',

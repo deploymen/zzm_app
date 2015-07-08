@@ -55,8 +55,8 @@ VARS = {
 		<div class="small-12 medium-8 columns">
 			<div class="small-12 medium-5 columns">
 				<div class="avatar-holder">
-					<img src="/assets/main/img/avatars/{{$profile->avatar->filename}}" alt="">
-					<img src="/assets/img/global/logo-icon.png" alt=" ">
+					<img src="/assets/main/img/avatars/avatar{{$profile->avatar->id}}.png" alt="">
+					<!-- <img src="/assets/img/global/logo-icon.png" alt=" "> -->
 				</div>
 
 			</div>
