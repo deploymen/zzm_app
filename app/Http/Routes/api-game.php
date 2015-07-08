@@ -31,12 +31,6 @@ Route::group(['prefix' => 'api/game'], function () {
 	});
 });
 
-		/* fade domain name */
-		Route::get('api/game/result/only-system', 'ResultController@onlySystem');
-		Route::get('api/game/result/only-planet', 'ResultController@onlyPlanet');
-		Route::get('api/game/result/only-play', 'ResultController@onlyPlay');
-		Route::get('api/game/result/only-questions', 'ResultController@onlyQuestions');
-
 
 Route::get('/api/set/nick', 'ApiProfileController@getNick');
 
@@ -51,6 +45,16 @@ Route::get('/api/game/leaderboard/system/{id}', 'ApiGameController@leaderBoardSy
 Route::get('/api/game/leaderboard/planet/{id}', 'ApiGameController@leaderBoardPlanet');
 
 Route::get('/api/game/top-score', 'ApiGameController@GameScreenTopScore');
+
+Route::group(['middleware' => 'auth.game'], function () {
+	Route::group(['prefix' => 'api/game'], function () {
+/* fade domain name */
+		Route::get('/result/only-system', 'ResultController@onlySystem');
+		Route::get('/result/only-planet', 'ResultController@onlyPlanet');
+		Route::get('/result/only-play', 'ResultController@onlyPlay');
+		Route::get('/result/only-questions', 'ResultController@onlyQuestions');
+	});
+});
 
 
 
