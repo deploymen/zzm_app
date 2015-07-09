@@ -232,8 +232,10 @@ Class ApiGameController extends Controller {
 				case 'p06': $status = ZapZapQuestionHelper::SubmitResultP06($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p07': $status = ZapZapQuestionHelper::SubmitResultP07($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p10': $status = ZapZapQuestionHelper::SubmitResultP10($planetId,$gamePlay,$gameResult,$profileId); break;
-
+				case 'p18': $status = ZapZapQuestionHelper::SubmitResultP18($planetId,$gamePlay,$gameResult,$profileId); break;
 			}	
+
+
 
 			$profile = GameProfile::find($profileId);
 			$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();
