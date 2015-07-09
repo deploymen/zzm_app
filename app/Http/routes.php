@@ -14,3 +14,5 @@ require __DIR__.'/Routes/1.0/page-user.php';
 require __DIR__.'/Routes/1.0/page-admin.php';
 require __DIR__.'/Routes/1.0/page-docs.php';
 require __DIR__.'/Routes/1.0/page-edm.php';
+require __DIR__.'/Routes/1.0/page-member.php';
+require __DIR__.'/Routes/1.0/page-public.php';
