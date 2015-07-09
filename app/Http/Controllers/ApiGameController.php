@@ -27,6 +27,7 @@ use App\Models\GameResultP02;
 use App\Models\GameResultP03;
 use App\Models\GameResultP06;
 use App\Models\GameResultP07;
+use App\Models\GameResultP10;
 use App\Models\GameQuestion;
 use App\Models\GameQuestionp03;
 use App\Models\GameQuestionP04ChallengeSet;
@@ -40,7 +41,7 @@ Class ApiGameController extends Controller {
 
 	//GET QUESTION
 	public function request($planetId) {		
-		try{
+		// try{
 			$profileId =  Request::input('game_code_profile_id');
 
 			if($planetId < 100){
@@ -85,6 +86,8 @@ Class ApiGameController extends Controller {
 				case 'p03':$questions = ZapZapQuestionHelper::GetQuestionP03($planetId,$difficulty); break;
 				case 'p06':$questions = ZapZapQuestionHelper::GetQuestionP06($planetId,$difficulty); break;
 				case 'p07':$questions = ZapZapQuestionHelper::GetQuestionP07($planetId,$difficulty); break;
+				case 'p10':$questions = ZapZapQuestionHelper::GetQuestionP10($planetId,$difficulty); break;
+
 			}	
 
 			return ResponseHelper::OutputJSON('success', '', [
@@ -106,14 +109,14 @@ Class ApiGameController extends Controller {
 	            	'questions' => $questions,
 	            ]);
 
-			} catch (Exception $ex) {
+			// } catch (Exception $ex) {
 
-				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-					'source' => 'ApiGameController > request',
-					'inputs' => Request::all(),
-				])]);
-				return ResponseHelper::OutputJSON('exception');
-			}
+			// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+			// 		'source' => 'ApiGameController > request',
+			// 		'inputs' => Request::all(),
+			// 	])]);
+			// 	return ResponseHelper::OutputJSON('exception');
+			// }
 	}
 
 	//SUBMIT RESULT
@@ -228,6 +231,8 @@ Class ApiGameController extends Controller {
 				case 'p03': $status = ZapZapQuestionHelper::SubmitResultP03($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p06': $status = ZapZapQuestionHelper::SubmitResultP06($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p07': $status = ZapZapQuestionHelper::SubmitResultP07($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p10': $status = ZapZapQuestionHelper::SubmitResultP10($planetId,$gamePlay,$gameResult,$profileId); break;
+
 			}	
 
 			$profile = GameProfile::find($profileId);
