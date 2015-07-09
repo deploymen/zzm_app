@@ -47,3 +47,13 @@ Route::group(['middleware' => 'auth.user'], function () {
 
 
 Route::post('api/game-code/anonymous', 'ApiProfileController@GenerateAnonymousGameCode');
+
+Route::group(['middleware' => 'auth.user'], function () {
+	Route::group(['prefix' => 'api/profiles'], function () {
+/* fade domain name */
+		Route::get('/result/only-system', 'ResultController@onlySystem');
+		Route::get('/result/only-planet', 'ResultController@onlyPlanet');
+		Route::get('/result/only-play', 'ResultController@onlyPlay');
+		Route::get('/result/only-questions', 'ResultController@onlyQuestions');
+	});
+});
