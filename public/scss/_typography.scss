@@ -257,6 +257,56 @@ button.wide,
 
 }
 
+/** Results Styles **/
+.results-btn-holder a {
+	color: lighten($black, 40%);
+}
+
+.results-table-name {
+	color: $curious-blue;
+	font-family: 'museo-sans', sans-serif;
+	font-size: rem(16px);
+}
+
+
+.result-table-desc p {
+	color: lighten($black, 70%);
+	font-family: 'museo-sans', sans-serif;
+	font-size: rem(18px);
+	font-weight: 300;
+}
+
+.table-label {
+	color: $curious-blue;
+	font-family: 'museo-sans', sans-serif;
+	font-size: rem(16px);
+	font-weight: bold;
+	margin-bottom: rem(0px);
+}
+
+.results-table thead tr th.table-label-cell,
+.results-table .results-progress-column {
+	text-align: center;
+}
+
+.table-label-cell .info-icon {
+	font-size: rem(16px);
+	line-height: rem(23px);
+}
+
+.results-table .results-progress-column {
+
+}
+
+.profile-bar .profile-name,
+.profile-bar .profile-nickname {
+	text-align: left;
+}
+
+.progress .meter-percentage {
+	color: $white;
+}
+
 /** Edit Profile Form Styles **/
 .edit-profile-form label,
 .reveal-modal label {
