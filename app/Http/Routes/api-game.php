@@ -30,7 +30,14 @@ Route::group(['prefix' => 'api/game'], function () {
 		Route::post('/profile-transfer', 'ApiProfileController@profileTransfer');
 	});
 });
-		
+
+		/* fade domain name */
+		Route::get('api/game/result/only-system', 'ResultController@onlySystem');
+		Route::get('api/game/result/only-planet', 'ResultController@onlyPlanet');
+		Route::get('api/game/result/only-play', 'ResultController@onlyPlay');
+		Route::get('api/game/result/only-questions', 'ResultController@onlyQuestions');
+
+
 Route::get('/api/set/nick', 'ApiProfileController@getNick');
 
 Route::post('api/game/verify-code', 'ApiProfileController@verifyCode');
