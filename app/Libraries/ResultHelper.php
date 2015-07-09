@@ -75,7 +75,8 @@ class ResultHelper{
 					'answer_angle4' => $r->answer_angle4,
 					'answer_angle5' => $r->answer_angle5,
 					'answer_angle6' => $r->answer_angle6,
-					'answer' => [
+					'difficulty'=>$r->difficulty,
+					'result' => [
 						'result_id' => $r->result_id,
 						'correct'=> $r->correct,
 						'angle3'=>$r->angle3,
@@ -184,6 +185,7 @@ class ResultHelper{
 					'correct_answer' => $r->question_answer,
 					'answer_option_1' => $r->answer_option_1,
 					'answer_option_2' => $r->answer_option_2,
+					'difficulty'=>$r->difficulty,
 					'result' => [
 						'result_id' => $r->result_id,
 						'correct'=> $r->correct,
@@ -257,6 +259,7 @@ class ResultHelper{
 					'part_2' => $part2,
 					'part_3' => $part3,
 					'expression' => $expression,
+					'difficulty'=>$r->difficulty,
 					'result' => [
 						'result_id' => $r->result_id,
 						'correct'=> $r->correct,
@@ -271,11 +274,10 @@ class ResultHelper{
 						'description' => $r->description
 			]);
 				
-		$prevQuestionId = $r->question_id;
+			$prevQuestionId = $r->question_id;
+			return $answers;
+		}
 	}
-		return $answers;
-	}
-
 	public static function ResultQuestionP07($playId){
 		$answers = [];
 
@@ -307,6 +309,7 @@ class ResultHelper{
 					'right_question_1'=>$r->right_question_1,
 					'right_question_2'=>$r->right_question_2,
 					'right_question_3'=>$r->right_question_3,
+					'difficulty'=>$r->difficulty,
 					'result' => [
 						'result_id' => $r->result_id,
 						'correct'=> $r->correct,
@@ -330,15 +333,103 @@ class ResultHelper{
 		$answers = [];
 
 		 $sql = "
-       		SELECT *
-       			FROM `t0300_game_result` r , `t0210_game_question_p10` q10 , `t0310_game_result_p10` r10
+       		SELECT q10.`id` AS `question_id` , q10.`answer` AS `question_answer` ,q10.* , r10.`id` AS `result_id` , r10.* , IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description`
+       			FROM (`t0300_game_result` r , `t0210_game_question_p10` q10 , `t0310_game_result_p10` r10)
+
+       			LEFT JOIN `t0132_game_question_subject` qs ON (qs.`question_id` =r.`question_id`)
+				LEFT JOIN `t0131_game_subject` s ON(qs.`subject_id` = s.`id`  )
+
        				WHERE r.`target_id` = r10.`id`
-       				AND r.`question_id` = q10.`id`
+       				AND r.`target_id` = q10.`id`
        				AND r.`play_id` = {$playId}
+
+       				ORDER BY r.`id` ASC;
        ";
        $result = DB::select($sql);
+		  $prevQuestionId = 0;
+
+        for($i=0; $i<count($result); $i++){
+			$r = $result[$i];
+			if($r->question_id != $prevQuestionId){
+				array_push($answers, [
+					'question_id' => $r->question_id,
+					'question'=>$r->question,
+					'start_1'=>$r->start_1,
+					'start_10'=>$r->start_10,
+					'start_100'=> $r->start_100,
+					'start_1000'=>$r->start_1000,
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->result_id,
+						'correct'=> $r->correct,
+						'answer'=>$r->question_answer,
+					],
+					'subjects' => []
+				]);
+			}
+
+			array_push($answers[count($answers)-1]['subjects'] ,[
+					'subject_code' => $r->subject_code,
+					'subject_name' => $r->name,
+					'description' => $r->description
+				]);
+				
+			$prevQuestionId = $r->question_id;
+		}
+		return $answers;
+	}
+
+	public static function ResultQuestionP18($playId){
+		$answers = [];
+
+		 $sql = "
+       		SELECT q18.`id` AS `question_id` , q18.`answer` AS `question_answer` ,q18.* , r18.`id` AS `result_id` , r18.* , IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description`
+       			FROM (`t0300_game_result` r , `t0218_game_question_p18` q18 , `t0318_game_result_p18` r18)
+
+       			LEFT JOIN `t0132_game_question_subject` qs ON (qs.`question_id` =r.`question_id`)
+				LEFT JOIN `t0131_game_subject` s ON(qs.`subject_id` = s.`id`  )
+
+       				WHERE r.`target_id` = r18.`id`
+       				AND r.`target_id` = q18.`id`
+       				AND r.`play_id` = {$playId}
+
+       				ORDER BY r.`id` ASC;
+       ";
+       $result = DB::select($sql);
+		  $prevQuestionId = 0;
+
+        for($i=0; $i<count($result); $i++){
+			$r = $result[$i];
+			if($r->question_id != $prevQuestionId){
+				array_push($answers, [
+					'question_id' => $r->question_id,
+					'question'=>$r->question,
+					'answer'=>$r->answer,
+					'option_from'=>$r->option_from,
+					'option_until_total'=> $r->option_until_total,
+					'ruler_type'=>$r->ruler_type,
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->result_id,
+						'correct'=> $r->correct,
+						'answer'=>$r->question_answer,
+					],
+					'subjects' => []
+				]);
+			}
+
+			array_push($answers[count($answers)-1]['subjects'] ,[
+					'subject_code' => $r->subject_code,
+					'subject_name' => $r->name,
+					'description' => $r->description
+				]);
+				
+			$prevQuestionId = $r->question_id;
+		}
+		return $answers;
 	}
 
 }
+
 
 

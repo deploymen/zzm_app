@@ -286,7 +286,7 @@ Class ResultController extends Controller {
 		$page = Request::input("page", '1');
 		$pageSize = Request::input("page_size", '30');
 
-		try{
+		// try{
 			if(!$profileId){
 				return ResponseHelper::OutputJSON('fail', 'missing parametter');
 			}
@@ -302,6 +302,12 @@ Class ResultController extends Controller {
 			if(!$gameCode){
 				$gameCode = GameCode::where('profile_id', $profileId)->select('code')->first();
 				$gameCode = $gameCode->code;
+			}
+
+			$play = GamePlay::where('id', $playId)->where('profile_id' ,$profileId)->first();
+			if(!$play){
+				return ResponseHelper::OutputJSON('fail', 'play record not found');
+
 			}
 
 			$breakcrumbSql = "
@@ -336,6 +342,8 @@ Class ResultController extends Controller {
 				case 'p06':$answers = ResultHelper::ResultQuestionP06($playId); break;
 				case 'p07':$answers = ResultHelper::ResultQuestionP07($playId); break;
 				case 'p10':$answers = ResultHelper::ResultQuestionP10($playId); break;
+				case 'p18':$answers = ResultHelper::ResultQuestionP18($playId); break;
+
 
 			}	
 
@@ -353,14 +361,14 @@ Class ResultController extends Controller {
 				'page_size' => $pageSize, 
 				'pageTotal' => ceil($total/$pageSize) ,
 				]);
-		} catch (Exception $ex) {
+		// } catch (Exception $ex) {
 
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiGameController > systemPlanetProgress',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		'source' => 'ApiGameController > systemPlanetProgress',
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 	}
 }
 
