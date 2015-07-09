@@ -77,6 +77,12 @@ a:active {
 	cursor: pointer;
 }
 
+.info-icon:hover,
+.info-icon:focus {
+	color: $white;
+	text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.55);
+}
+
 .info-icon.has-tip:hover {
 	color: $white;
 }
@@ -264,7 +270,15 @@ button.wide,
 	font-size: rem(11px);
 	font-family: 'museo-sans', sans-serif;
 	margin-bottom: rem(0px);
-	margin-left: rem(20px);
+	/*margin-left: rem(20px);*/
+}
+
+.privacydisclaimer {
+	margin-top: rem(20px);
+	margin-bottom: rem(20px);
+	color: $curious-blue;
+	font-size: rem(11px);
+	font-family: 'museo-sans', sans-serif;
 }
 
 

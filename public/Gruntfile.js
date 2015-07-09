@@ -53,6 +53,7 @@ module.exports = function (grunt) {
           'js/main/js.cookie.js',
           'js/main/jeditable.min.js',
           'js/main/pace.min.js',
+          // 'js/main/tooltip.js',
           'js/main/init.js'
         ],
 

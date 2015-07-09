@@ -117,7 +117,7 @@ VARS = {
 
 <div class="row">
 	<div class="box-centered small-12 medium-7 text-center">
-		<p class="subline-desc">Your child's name is kept strictly confidential and is only visible to you.<br/>We do not use it for any purpose, it is just to associate your child with their profile.</p>
+		<p class="privacydisclaimer">Your child's name is kept strictly confidential and is only visible to you.<br/>We do not use it for any purpose, it is just to associate your child with their profile.</p>
 	</div>
 </div>
 
