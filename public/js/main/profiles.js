@@ -62,98 +62,68 @@ function displayProfiles(){
 
 			var profilesArray = [];
 			
-			$.each( allVars.datal.list, function( i, profile ) {
+			$.each( allVars.datal, function( i, profile ) {
 				profilesArray.push([
 					'<div class="profile-item">',
 						'<section class="profile-info">',
 							'<div class="profile-pic-holder">',
-								'<img src="/assets/main/img/avatars/',allVars.datal.list[i].avatar.filename,'" alt="Avatar 3">',
+								'<img src="/assets/main/img/avatars/avatar',allVars.datal[i].avatar_id,'.png" alt="Avatar 3">',
 							'</div>',
 							'<div class="profile-item-group cf">',
 								'<p class="profile-nickname">',
-									'<span class="first-name">',allVars.datal.list[i].nick_name1.name,' </span>',
-									'<span class="first-name">',allVars.datal.list[i].nick_name2.name,'</span>',
+									'<span class="first-name">',allVars.datal[i].nickname1,' </span>',
+									'<span class="first-name">',allVars.datal[i].nickname2,'</span>',
 								'</p>',
 								'<p class="profile-name">',
-									'<span class="first-name">',allVars.datal.list[i].first_name,'</span>',' ',
-									'<span class="last-name">',allVars.datal.list[i].last_name,'</span>',
+									'<span class="first-name">',allVars.datal[i].first_name,'</span>',' ',
+									'<span class="last-name">',allVars.datal[i].last_name,'</span>',
 								'</p>',
 							'</div>',
 
 							'<div class="profile-item-group cf">',
-								'<p class="profile-school-name truncate">',allVars.datal.list[i].school,'</p>',
-								'<div class="small-5 columns">',
-									'<p class="profile-class-name bold"><span class="blue-header">Class ID:</span> <span class="class-id">',allVars.datal.list[i].class_id,'</span></p>',
-								'</div>',
-
-								'<div class="small-7 columns">',
-									'<p class="profile-code bold"><span class="blue-header">Player ID</span> <span class="user-id">',allVars.datal.list[i].game_code.code,'</span></p>',
+								'<p class="profile-school-name truncate">',allVars.datal[i].school,'</p>',
+								'<div class="small-12 columns">',
+									'<p class="profile-code bold"><span class="blue-header">Player ID</span> <span class="user-id">game code</span></p>',
 								'</div>',
 							'</div>',
 
 							'<div class="profile-item-group cf">',
 								'<div class="small-4 columns">',
 									'<p class="profile-proficiency">',
-										'<span class="blue-header bold">Proficiency</span>',
+										'<span class="blue-header bold">Last Played</span>',
 									'</p>',
 								'</div>',
 								'<div class="small-6 columns">',
-									'<span class="star-group big">',
-										'<i class="fa fa-star"></i>',
-										'<i class="fa fa-star"></i>',
-										'<i class="fa fa-star"></i>',
-										'<i class="fa fa-star"></i>',
-										'<i class="fa fa-star"></i>',
-									'</span>',
+									'<p class="profile-last-seen">Has not played yet</p>',
 								'</div>',
 								'<div class="small-2 columns">',
-									'<span onclick="itooltip('+i+')" id="info-icon-'+i+'" class="info-icon">i<span id="profile-tooltip-'+i+'" class="profile-tooltip"><i class="fa fa-caret-down"></i><p>Proficiency is based on the average score of all games played</p></span></span>',
+									'<a href="javascript:void(0);" title="Proficiency is based on the average score of all games played." class="info-icon">i<span class="profile-tooltip"><p>Proficiency is based on the average score of all games played.</p></span></a>',
 								'</div>',
 							'</div>',
 
-							'<div class="profile-item-group no-padding hideit cf">',
-								'<div class="small-5 columns progress-section ps1">',
-									'<p class="profile-percentage text-center">100%</p>',
-									'<p class="change-class-button">',
-										'Grade 2 Progress <i class="fa fa-chevron-down"></i>',
-									'</p>',
-								'</div>',
-								'<div class="small-7 columns progress-section ps2">',
+							'<div class="profile-item-group no-padding cf">',
+								'<div class="small-12 columns progress-section ps2">',
 									'<div class="small-12 columns">',
 										'<div class="small-12 columns">',
 											'<span class="blue-heading-small">Best score</span>',
-											'<span class="star-group small right">',
-												'<i class="fa fa-star"></i>',
-												'<i class="fa fa-star"></i>',
-												'<i class="fa fa-star"></i>',
-												'<i class="fa fa-star"></i>',
-												'<i class="fa fa-star"></i>',
-											'</span>',
 										'</div>',
 										'<div class="small-12 columns">',
-											'<p class="profile-subject-name truncate">Geometry (F01)</p>',
+											'<p class="profile-subject-name truncate">',allVars.datal[i].best_score,'</p>',
 										'</div>',
 									'</div>',
 									'<div class="small-12 columns">',
 										'<div class="small-12 columns">',
 											'<span class="blue-heading-small">Weakest score</span>',
-											'<span class="star-group small right">',
-												'<i class="fa fa-star"></i>',
-												'<i class="fa fa-star"></i>',
-												'<i class="fa fa-star"></i>',
-												'<i class="fa fa-star"></i>',
-												'<i class="fa fa-star"></i>',
-											'</span>',
 										'</div>',
 										'<div class="small-12 columns">',
-											'<p class="profile-subject-name truncate">Fraction Basics (G01)</p>',
+											'<p class="profile-subject-name truncate">',allVars.datal[i].weak_score,'</p>',
 										'</div>',
 									'</div>',
 								'</div>',
 							'</div>',
 
-							'<p class="profile-upgrade-cta"><a href="/user/profiles/',allVars.datal.list[i].id,'/results" class="">Upgrade</a> for detailed reports!</p>',
-							'<a href="/user/profiles/',allVars.datal.list[i].id,'/edit" class="btn-profile-edit">Edit</a>',
+							'<p class="profile-upgrade-cta"><a href="/user/profiles/',allVars.datal[i].id,'/results" class="">See detailed reports!</a></p>',
+							'<a href="/user/profiles/',allVars.datal[i].id,'/edit" class="btn-profile-edit">Edit</a>',
 						'</section>',
 					'</div>'
 				].join(''));
@@ -262,10 +232,16 @@ function createNewProfile(){
 		last_name    : newlastname.val(),
 		school       : newschool.val(),
 		city         : newcity.val(),
-		email        : allVars.datal.list[0].email,
-		nickname1    : allVars.datal.list[0].nickname1,
-		nickname2    : allVars.datal.list[0].nickname2,
+		email        : 'obiwan@jediacademy.com',
+		nickname1    : allVars.datal.nickname1,
+		nickname2    : allVars.datal.nickname2,
 	}
+
+	$.ajaxSetup({
+	    beforeSend: function(data) {
+	        allVars.datal = data["data"];
+	    }
+	});
 
 	$.ajax({
 		type     : 'POST',
@@ -341,8 +317,5 @@ btndeleteprofile.click(function(){
 	if (top.location.pathname === '/user/profiles'){
 		displayProfiles();
 	};
-
-	// itooltip();
-	$(document).foundation('tooltip', 'reflow');
 
 })(jQuery, this, this.document);
