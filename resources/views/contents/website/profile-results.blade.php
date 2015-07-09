@@ -67,7 +67,7 @@ ZZM.playId = '{{Request::input('play_id')}}';
 	    <ol class="breadcrumb pull-left">
 	        <li><span><a href="/user/profiles/{{$profile->id}}/results">All Result</a></span>&nbsp;</li>
 	        <li ng-if="breadcumbs.system_id = breadcumbs.system_id">&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;<a href="/user/profiles/{{$profile->id}}/results?system_id=@{{breadcumbs.system_id}}">@{{breadcumbs.system_name}}</a></li>
-	        <li ng-if="breadcumbs.planet_id = breadcumbs.planet_id">&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;<a href="/user/profiles/{{$profile->id}}/results?planet_id=@{{breadcumbs.planet_id}}">@{{breadcumbs.planet_id}}</a></li>
+	        <li ng-if="breadcumbs.planet_id = breadcumbs.planet_id">&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;<a href="/user/profiles/{{$profile->id}}/results?planet_id=@{{breadcumbs.planet_id}}">@{{breadcumbs.planet_subtitle}}</a></li>
 	        <li ng-if="breadcumbs.play_id = breadcumbs.play_id">&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;<a href="/user/profiles/{{$profile->id}}/results?play_id=@{{breadcumbs.play_id}}">@{{breadcumbs.play_id}}</a></li>
 	    </ol>
 	</div>

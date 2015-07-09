@@ -107,7 +107,7 @@ App.controller('MainController', function ($scope, $http){
             'page_size=' + pageSize
         ].join('&')).success(function(data, status, headers, config) {
             if (data.status == 'success') {
-            	$scope.plays = data.data.system;
+            	$scope.plays = data.data.play;
             	$scope.breadcumbs = data.data.breakcrumb;
 
             } else {
@@ -119,7 +119,7 @@ App.controller('MainController', function ($scope, $http){
 	}
 
 	$scope.fetchQuestionsResult = function(profile_id, play_id, page, pageSize){
-		
+
 		var i, q;
 		$('li.indicator-list-item:nth-child(4)').addClass('active');
 		$http.get('/api/profiles/result/only-questions?' + [
@@ -129,7 +129,7 @@ App.controller('MainController', function ($scope, $http){
             'page_size=' + pageSize
         ].join('&')).success(function(data, status, headers, config) {
             if (data.status == 'success') {
-            	$scope.questions = data.data.system;
+            	$scope.questions = data.data.questions;
             	$scope.breadcumbs = data.data.breakcrumb;
 
             	for(i=0; i<$scope.questions.length; i++ ) {
