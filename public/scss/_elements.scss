@@ -9,15 +9,6 @@ body {
 
 }
 
-.info-icon {
-	position: relative;
-	display: block;
-	width: rem(25px);
-	height: rem(25px);
-	border-radius: rem(25px);
-	background-color: $curious-blue;
-}
-
 button,
 .button {
 	font-size: rem(12px);
@@ -100,6 +91,43 @@ ul.pagination li.current button {
 
 .f-dropdown li a {
 	text-align: left;
+}
+
+.info-icon {
+	position: relative;
+	display: block;
+	width: rem(25px);
+	height: rem(25px);
+	border-radius: rem(25px);
+	background-color: $curious-blue;
+
+	.profile-tooltip {
+		display: none;
+	}
+
+	.profile-tooltip:before {
+		top: 100%;
+		left: 50%;
+		border: solid transparent;
+		content: " ";
+		height: 0;
+		width: 0;
+		position: absolute;
+		pointer-events: none;
+		border-color: rgba(136, 183, 213, 0);
+		border-top-color: $fiord;
+		border-width: 10px;
+		margin-left: -10px;
+	}
+}
+
+.info-icon:hover {
+	width: rem(26px);
+	height: rem(26px);
+
+	.profile-tooltip {
+		display: block;
+	}
 }
 
 .profile-tooltip {

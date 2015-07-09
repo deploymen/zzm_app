@@ -82,11 +82,7 @@ function displayProfiles(){
 
 							'<div class="profile-item-group cf">',
 								'<p class="profile-school-name truncate">',allVars.datal[i].school,'</p>',
-								'<div class="small-5 columns">',
-									'<p class="profile-class-name bold"><span class="blue-header">Class ID:</span> <span class="class-id">',allVars.datal[i].class_id,'</span></p>',
-								'</div>',
-
-								'<div class="small-7 columns">',
+								'<div class="small-12 columns">',
 									'<p class="profile-code bold"><span class="blue-header">Player ID</span> <span class="user-id">game code</span></p>',
 								'</div>',
 							'</div>',
@@ -98,10 +94,10 @@ function displayProfiles(){
 									'</p>',
 								'</div>',
 								'<div class="small-6 columns">',
-									'<p class="profile-last-seen">Tues, 14 August, 2014</p>',
+									'<p class="profile-last-seen">Has not played yet</p>',
 								'</div>',
 								'<div class="small-2 columns">',
-									'<span onclick="itooltip('+i+')" id="info-icon-'+i+'" class="info-icon">i<span id="profile-tooltip-'+i+'" class="profile-tooltip"><i class="fa fa-caret-down"></i><p>Proficiency is based on the average score of all games played</p></span></span>',
+									'<a href="javascript:void(0);" title="Proficiency is based on the average score of all games played." class="info-icon">i<span class="profile-tooltip"><p>Proficiency is based on the average score of all games played.</p></span></a>',
 								'</div>',
 							'</div>',
 
@@ -110,13 +106,6 @@ function displayProfiles(){
 									'<div class="small-12 columns">',
 										'<div class="small-12 columns">',
 											'<span class="blue-heading-small">Best score</span>',
-											'<span class="star-group small right">',
-												'<i class="fa fa-star"></i>',
-												'<i class="fa fa-star"></i>',
-												'<i class="fa fa-star"></i>',
-												'<i class="fa fa-star"></i>',
-												'<i class="fa fa-star"></i>',
-											'</span>',
 										'</div>',
 										'<div class="small-12 columns">',
 											'<p class="profile-subject-name truncate">',allVars.datal[i].best_score,'</p>',
@@ -125,13 +114,6 @@ function displayProfiles(){
 									'<div class="small-12 columns">',
 										'<div class="small-12 columns">',
 											'<span class="blue-heading-small">Weakest score</span>',
-											'<span class="star-group small right">',
-												'<i class="fa fa-star"></i>',
-												'<i class="fa fa-star"></i>',
-												'<i class="fa fa-star"></i>',
-												'<i class="fa fa-star"></i>',
-												'<i class="fa fa-star"></i>',
-											'</span>',
 										'</div>',
 										'<div class="small-12 columns">',
 											'<p class="profile-subject-name truncate">',allVars.datal[i].weak_score,'</p>',
@@ -336,7 +318,12 @@ btndeleteprofile.click(function(){
 		displayProfiles();
 	};
 
-	// itooltip();
-	$(document).foundation('tooltip', 'reflow');
+	profilelist.on('click', function(){
+		$(".profile-item-group a[title]").tooltips();
+	});
+
+	profilelist.on('tooltips', function(){
+		$(".profile-item-group a[title]").tooltips();
+	});
 
 })(jQuery, this, this.document);
