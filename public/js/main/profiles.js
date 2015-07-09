@@ -318,12 +318,4 @@ btndeleteprofile.click(function(){
 		displayProfiles();
 	};
 
-	profilelist.on('click', function(){
-		$(".profile-item-group a[title]").tooltips();
-	});
-
-	profilelist.on('tooltips', function(){
-		$(".profile-item-group a[title]").tooltips();
-	});
-
 })(jQuery, this, this.document);
