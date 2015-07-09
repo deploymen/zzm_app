@@ -586,7 +586,7 @@ class ZapZapQuestionHelper{
 
 	public static function GetQuestionP10($planetId,$difficulty){
 
-		try{
+		// try{
 			$gamePlanet = GamePlanet::find($planetId);
 			$questionCount = $gamePlanet->question_count;
 
@@ -662,13 +662,13 @@ class ZapZapQuestionHelper{
 
 			return $results;
 
-		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp03', ['environment' => json_encode([
-				'ex' =>  $ex->getMessage(),
-				'sql' =>  $sql,
-			])]);
-		return ResponseHelper::OutputJSON('exception');
-		}
+		// }catch(Exception $ex){
+		// 	LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp03', ['environment' => json_encode([
+		// 		'ex' =>  $ex->getMessage(),
+		// 		'sql' =>  $sql,
+		// 	])]);
+		// return ResponseHelper::OutputJSON('exception');
+		// }
 	}
 
 	public static function SubmitResultP01($planetId,$gamePlay ,$gameResult,$profileId ) {
