@@ -37,6 +37,15 @@ KONAMI CODE MOFO
         <link rel="icon" href="favicon.ico" type="image/x-icon">
         <link rel="stylesheet" href="css/prelaunch/app.css">
         <script src="js/modernizr/modernizr.min.js"></script>
+        <style>
+            html, body {
+                height: 100%;
+            }
+
+            body {
+                background-color: #e7f2f4;
+            }
+        </style>
     </head>
     <body>
         <!--[if IE 8]>
@@ -45,18 +54,29 @@ KONAMI CODE MOFO
 
         <div class="job-wrapper">
             <header class="job-banner">
-                <div class="logo">
-                    <img src="assets/img/banner/logo-zapzap.png" alt="">
+                <nav class="main-menu">
+                    <ul class="menu-list">
+                        <li><a href="/pre-launch">Home</a></li>
+                        <li><a href="blog.zapzapmath.com" target="_blank">Blog</a></li>
+                        <li><a href="/contributors">Contributors</a></li>
+                    </ul>
+                </nav>
+
+                <div class="row cf">
+                    <div class="badge-box">
+                        <img src="assets/img/jobs/job-badge.png" alt="">
+                    </div>
+                    <div class="text-box">
+                        <h2>Team Building</h2>
+                        <p>
+                            We are building a world class team with a mission to make learning math fun and easy with our suite of digital learning tools and content. Here, we perfectly blend math instruction, visual graphics and gamification that result in greater degree of learning.
+                        </p>
+                    </div>
                 </div>
             </header>
 
             <div class="jobs-main-content">
                 <div class="inner-job-wrapper">
-                    <h2>Team Building</h2>
-                    <p class="job-section-desc">
-                        We are building a world class team with a mission to make to learn and practice math more effectively with our suite of digital learning tools and content. Here, we perfectly blend math instruction, visual graphics and gamification that result in greater degree of learning. Also, by making everything available online, math will be much more fun and go beyond the restricted borders of local classrooms to reach students wherever they are, the world over!
-                    </p>
-
                     <h2>Positions</h2>
                     <p class="job-section-desc">
                         We are looking for team players in the following positions:-
@@ -109,31 +129,46 @@ KONAMI CODE MOFO
                                         <img src="assets/img/jobs/web-developer-large.jpg" alt="img02"/>
                                     </div>
                                     <p class="dummy-text bold">
-                                        Design Intern a.k.a. Artistic Tenderfoot
+                                        Web Developer (Front-end) a.k.a. Spider
                                     </p>
                                     <p class="dummy-text">
                                         A good design is not just a pretty interface. It should be functional, versatile and continuously improved to better meet user goals. Our little team is looking for artists to help positively power our imagination engines.
                                     </p>
-                                    <p class="dummy-text bold job-heading">RESPONSIBILITY</p>
+                                    <p class="dummy-text bold job-heading">WE ARE LOOKING FOR</p>
                                     <ul class="dummy-text job-desc-list">
-                                        <li>assist in the development of the User Interface</li>
-                                        <li>conceptualization and creation of Game Art Assets</li>
-                                        <li>interaction design</li>
+                                        <li>A passionate developer who can build user interfaces that are both responsive and responsible</li>
+                                        <li>Fluent communicator who can work in a team with both technical and non-technical team mates</li>
+                                        <li>Must be willing to self-learn and self-start</li>
+                                        <li>Willing to work in a startup environment</li>
                                     </ul>
                                     <p class="dummy-text bold job-heading">DUTIES</p>
                                     <ul class="dummy-text job-desc-list">
-                                        <li>to assist in designing for print, websites and mobile applications</li>
-                                        <li>participate in brainstorming to continuously improve user experience</li>
+                                        <li>Adapt design mockups into clean and semantic markup</li>
+                                        <li>Develop and maintain web applications</li>
+                                        <li>Work closely with designers to enhance UX and UI</li>
+                                        <li>Consume API provided by the backend</li>
                                     </ul>
                                     <p class="dummy-text bold job-heading">SKILLS</p>
                                     <ul class="dummy-text job-desc-list">
-                                        <li>Photoshop</li>
-                                        <li>Illustrator</li>
-                                        <li>Basic animarion knowledge</li>
+                                        <li>HTML5 &amp; CSS3</li>
+                                        <li>SASS &amp; LESS</li>
+                                        <li>Javascript (jQuery)</li>
+                                        <li>Responsive Web Design</li>
+                                        <li>Adobe Creative Suite</li>
+                                        <li>Github</li>
+                                        <li>Foundation, Bootstrap or Semantic UI</li>
+                                        <li>Experience working with APIs - AJAX, JSON</li>
+                                        <li>Some knowledge of the PHP framework, Laravel</li>
+                                        <li>Bonus: Experience with WordPress development</li>
+                                        <li>Bonus: Experience with AngularJS</li>
                                     </ul>
                                     <p class="dummy-text bold job-heading">QUALIFICATION</p>
                                     <p class="dummy-text">
-                                        Pursuing a Degree in Graphic Design or equivalent
+                                        Degree in Computer Science or Information Technology or equivalent
+                                    </p>
+                                    <p class="dummy-text bold job-heading">LANGUAGE</p>
+                                    <p class="dummy-text">
+                                        Knowledge in HTML5, CSS, Javascript, PHP (Laravel Framework)
                                     </p>
                                 </div>
                                 <div>
@@ -207,19 +242,7 @@ KONAMI CODE MOFO
                 </div><!--inner-job-wrapper-->
                
 
-                <footer class="cf">
-                    <div class="copyright push-left">
-                        <p>Copyright &copy; <span id="year" class="year"></span> <a href="javascript:void(0);">Visual Math Interactive</a> All rights reserved. <a href="/terms">Terms of Use</a> | <a href="/privacy">Privacy</a></p>
-                    </div>
-
-                    <div class="nav-footer push-right">
-                        <ul>
-                            <li><a href="http://zapzapmath.com/pre-launch/">Home</a></li>
-                            <li class="divider">|</li>
-                            <li><a href="http://blog.zapzapmath.com" target="_blank">Blog</a></li>
-                        </ul>
-                    </div>
-                </footer>
+                <div class="footer-fader"></div>
             </div><!--main-content-->
 
             <a id="btn-to-top" class="btn-to-top" href="javascript:void(0);">
