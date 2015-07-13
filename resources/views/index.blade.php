@@ -35,7 +35,7 @@ KONAMI CODE MOFO
         <script type="text/javascript" src="//use.typekit.net/sfk0apd.js"></script>
         <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
-        <link rel="icon" href="favicon.ico" type="image/x-icon">
+        <link rel="icon" href="assets/img/global/favicon.ico" type="image/x-icon">
         <link rel="stylesheet" href="css/prelaunch/app.css">
         <script src="js/modernizr/modernizr.min.js"></script>
     </head>
