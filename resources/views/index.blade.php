@@ -46,7 +46,13 @@ KONAMI CODE MOFO
 
         <div class="site-wrapper">
             <header id="main-banner" class="main-banner-2 cf" role="banner" style="height:900px;">
-                
+                <nav class="main-menu">
+                    <ul class="menu-list">
+                        <li><a href="/jobs" target="_blank">Jobs</a></li>
+                        <li><a href="blog.zapzapmath.com" target="_blank">Blog</a></li>
+                        <li><a href="/contributors" target="_blank">Contributors</a></li>
+                    </ul>
+                </nav>
                 <!-- Background Elements -->
                 <div id="bg-elements" class="bg-elements cf">
                     <img class="bg-gradient floating-down-slow-o" src="assets/img/banner/bg-gradient.png" alt="">
@@ -245,6 +251,8 @@ KONAMI CODE MOFO
                             <li><a href="/jobs">Jobs</a></li>
                             <li class="divider">|</li>
                             <li><a href="http://blog.zapzapmath.com" target="_blank">Blog</a></li>
+                            <li class="divider">|</li>
+                            <li><a href="/contributors" target="_blank">Contributors</a></li>
                         </ul>
                     </div>
                 </footer>
