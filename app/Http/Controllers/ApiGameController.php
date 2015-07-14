@@ -39,8 +39,13 @@ use App\Models\LeaderboardPlanet;
 Class ApiGameController extends Controller {
 
 	//GET QUESTION
-	public function request($planetId) {		
+	public function request($planetId) {	
+		$gameCode = Request::input('game_code');
+		LogHelper::LogGetQuestions($planetId, $gameCode);
+
 		try{
+			$questionCount = Request::input('question_count');
+
 			$profileId =  Request::input('game_code_profile_id');
 
 			if($planetId < 100){
@@ -80,13 +85,13 @@ Class ApiGameController extends Controller {
 			if($difficulty > 5){ $difficulty = 5; }
 
 			switch($planet->game_type){
-				case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId,$difficulty); break;
-				case 'p02':$questions = ZapZapQuestionHelper::GetQuestionP02($planetId,$difficulty); break;
-				case 'p03':$questions = ZapZapQuestionHelper::GetQuestionP03($planetId,$difficulty); break;
-				case 'p06':$questions = ZapZapQuestionHelper::GetQuestionP06($planetId,$difficulty); break;
-				case 'p07':$questions = ZapZapQuestionHelper::GetQuestionP07($planetId,$difficulty); break;
-				case 'p10':$questions = ZapZapQuestionHelper::GetQuestionP10($planetId,$difficulty); break;
-				case 'p18':$questions = ZapZapQuestionHelper::GetQuestionP18($planetId,$difficulty); break;
+				case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId,$difficulty,$questionCount); break;
+				case 'p02':$questions = ZapZapQuestionHelper::GetQuestionP02($planetId,$difficulty,$questionCount); break;
+				case 'p03':$questions = ZapZapQuestionHelper::GetQuestionP03($planetId,$difficulty,$questionCount); break;
+				case 'p06':$questions = ZapZapQuestionHelper::GetQuestionP06($planetId,$difficulty,$questionCount); break;
+				case 'p07':$questions = ZapZapQuestionHelper::GetQuestionP07($planetId,$difficulty,$questionCount); break;
+				case 'p10':$questions = ZapZapQuestionHelper::GetQuestionP10($planetId,$difficulty,$questionCount); break;
+				case 'p18':$questions = ZapZapQuestionHelper::GetQuestionP18($planetId,$difficulty,$questionCount); break;
 
 			}	
 

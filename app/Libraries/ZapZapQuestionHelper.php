@@ -110,10 +110,13 @@ class ZapZapQuestionHelper{
 		}
 	}
 
-	public static function GetQuestionP01($planetId, $difficulty){
+	public static function GetQuestionP01($planetId, $difficulty,$questionCount){
 		try{
-			$gamePlanet = GamePlanet::find($planetId);
-			$questionCount = $gamePlanet->question_count;
+			
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
 
 			$sql = "
 				  SELECT GROUP_CONCAT(ran.`target_id`)  AS `ids`
@@ -203,11 +206,13 @@ class ZapZapQuestionHelper{
 		}
 	}
 
-	public static function GetQuestionP02($planetId,$difficulty) {
+	public static function GetQuestionP02($planetId,$difficulty,$questionCount) {
 		try{
 
-			$gamePlanet = GamePlanet::find($planetId);
-			$questionCount = $gamePlanet->question_count;
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
 
 			$sql = "
 				  SELECT GROUP_CONCAT(ran.`target_id`)  AS `ids`
@@ -292,11 +297,13 @@ class ZapZapQuestionHelper{
 		}
 	}
 
-	public static function GetQuestionP03($planetId,$difficulty){
+	public static function GetQuestionP03($planetId,$difficulty,$questionCount){
 
 		try{
-			$gamePlanet = GamePlanet::find($planetId);
-			$questionCount = $gamePlanet->question_count;
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
 
 			$sql = "
 				  SELECT GROUP_CONCAT(ran.`target_id`)  AS `ids`
@@ -380,10 +387,12 @@ class ZapZapQuestionHelper{
 		}
 	}
 
-	public static function GetQuestionP06($planetId,$difficulty){
+	public static function GetQuestionP06($planetId,$difficulty,$questionCount){
 		try{
-			$gamePlanet = GamePlanet::find($planetId);
-			$questionCount = $gamePlanet->question_count;
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
 
 			$sql = "
 				  SELECT GROUP_CONCAT(ran.`target_id`)  AS `ids`
@@ -495,11 +504,13 @@ class ZapZapQuestionHelper{
 		}
 	}
 
-	public static function GetQuestionP07($planetId,$difficulty){
+	public static function GetQuestionP07($planetId,$difficulty,$questionCount){
 		try{
 
-			$gamePlanet = GamePlanet::find($planetId);
-			$questionCount = $gamePlanet->question_count;
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
 
 			$sql = "
 				  SELECT GROUP_CONCAT(ran.`target_id`)  AS `ids`
@@ -585,11 +596,13 @@ class ZapZapQuestionHelper{
 		}
 	}
 
-	public static function GetQuestionP10($planetId,$difficulty){
+	public static function GetQuestionP10($planetId,$difficulty,$questionCount){
 
 		try{
-			$gamePlanet = GamePlanet::find($planetId);
-			$questionCount = $gamePlanet->question_count;
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
 
 			$sql = "
 				  SELECT GROUP_CONCAT(ran.`target_id`)  AS `ids`
@@ -664,7 +677,7 @@ class ZapZapQuestionHelper{
 			return $results;
 
 		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp03', ['environment' => json_encode([
+			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp10', ['environment' => json_encode([
 				'ex' =>  $ex->getMessage(),
 				'sql' =>  $sql,
 			])]);
@@ -672,7 +685,7 @@ class ZapZapQuestionHelper{
 		}
 	}
 
-	public static function GetQuestionP18($planetId,$difficulty){
+	public static function GetQuestionP18($planetId,$difficulty,$questionCount){
 
 		try{
 			$gamePlanet = GamePlanet::find($planetId);
@@ -753,7 +766,7 @@ class ZapZapQuestionHelper{
 			return $results;
 
 		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp03', ['environment' => json_encode([
+			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp18', ['environment' => json_encode([
 				'ex' =>  $ex->getMessage(),
 				'sql' =>  $sql,
 			])]);

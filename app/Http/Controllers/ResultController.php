@@ -89,7 +89,7 @@ Class ResultController extends Controller {
 				]);
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiGameController > systemPlanetProgress',
+				'source' => 'ResultController > onlySystem',
 				'inputs' => Request::all(),
 			])]);
 			return ResponseHelper::OutputJSON('exception');
@@ -175,7 +175,7 @@ Class ResultController extends Controller {
 		} catch (Exception $ex) {
 
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiGameController > systemPlanetProgress',
+				'source' => 'ResultController > onlyPlanet',
 				'inputs' => Request::all(),
 			])]);
 			return ResponseHelper::OutputJSON('exception');
@@ -268,7 +268,7 @@ Class ResultController extends Controller {
 		} catch (Exception $ex) {
 
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiGameController > systemPlanetProgress',
+				'source' => 'ResultController > onlyPlay',
 				'inputs' => Request::all(),
 			])]);
 			return ResponseHelper::OutputJSON('exception');
@@ -286,7 +286,7 @@ Class ResultController extends Controller {
 		$page = Request::input("page", '1');
 		$pageSize = Request::input("page_size", '30');
 
-		// try{
+		try{
 			if(!$profileId){
 				return ResponseHelper::OutputJSON('fail', 'missing parametter');
 			}
@@ -361,14 +361,14 @@ Class ResultController extends Controller {
 				'page_size' => $pageSize, 
 				'pageTotal' => ceil($total/$pageSize) ,
 				]);
-		// } catch (Exception $ex) {
+		} catch (Exception $ex) {
 
-		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-		// 		'source' => 'ApiGameController > systemPlanetProgress',
-		// 		'inputs' => Request::all(),
-		// 	])]);
-		// 	return ResponseHelper::OutputJSON('exception');
-		// }
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ResultController > onlyQuestions',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 	}
 }
 
