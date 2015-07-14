@@ -2146,6 +2146,13 @@ h5 {
     color: #FFFFFF;
     font-size: 1.25rem
 }
+
+.main-menu {
+    position: absolute;
+    z-index: 5;
+    right: 0;
+}
+
 .menu-list li a {
     color: #FFFFFF;
     text-decoration: none;
@@ -6379,7 +6386,7 @@ footer {
     resize: none;
     overflow-y: scroll;
     width: 100%;
-    height: 12.5rem
+    height: 12.5rem;
 }
 .hiddendiv {
     display: none;
@@ -6392,32 +6399,219 @@ footer {
     min-height: 50px;
     font-family: Arial, sans-serif;
     font-size: 13px;
-    overflow: hidden
+    overflow: hidden;
 }
 .lbr {
-    line-height: 3px
+    line-height: 3px;
 }
 .job-wrapper {
-    background-color: #F7F7F1
+    background-color: #e7f2f4;
 }
+
+
+
+/*Contributors Page*/
+.contributor-wrapper {
+    /*height: 100%;*/
+    position: relative;
+}
+
+.contributor-banner,
 .job-banner {
-    height: 6.875rem;
-    background-image: url('../../assets/img/banner/bg-gradient.png');
-    background-color: #0E2651
+    background-color: #2b91d6;
+    height: 275px;
 }
+
+.contributor-wrapper .row,
+.inner-job-wrapper .row,
+.job-wrapper .row {
+    max-width: 1024px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.contributor-banner .badge-box,
+.contributor-banner .text-box,
+.job-banner .badge-box,
+.job-banner .text-box {
+    float: left;
+}
+
+.contributor-banner .badge-box,
+.job-banner .badge-box {
+    width: 20%;
+    margin-top: 30px;
+}
+
+.contributor-banner .text-box,
+.job-banner .text-box {
+    width: 80%;
+}
+
+.contributor-banner .text-box h2,
+.job-banner .text-box h2 {
+    color: #FFFFFF;
+    font-family: 'proxima-nova-soft', sans-serif;
+    font-size: 70px;
+    margin-top: 30px;
+    margin-bottom: 0px;
+}
+
+.contributor-banner .text-box p,
+.job-banner .text-box p {
+    color: #FFFFFF;
+    font-family: 'museo-sans', sans-serif;
+    text-transform: uppercase;
+    margin-top: 0px;
+    text-align: center;
+    max-width: 606px;
+}
+
+.collaborator-list {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.collaborator-list li {
+    padding-top: 4.375rem;
+    list-style: none;
+    width: 30%;
+    /*display: inline-flex;*/
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.collab-profile-holder {
+    position: relative;
+    background-color: #FFFFFF;
+    border-radius: 1.25rem;
+    box-shadow: 0px 0px 12px 3px rgba(0,0,0,0.1);
+    padding-top: 100px;
+}
+
+.profile-pic-holder {
+    width: 8.75rem;
+    height: 8.75rem;
+    overflow: hidden;
+    border: 3px solid #2B91D6;
+    border-radius: 8.75rem;
+    background-color: #FFFFFF;
+    margin-bottom: 1.25rem;
+    margin: 0 auto;
+    margin-top: -10.375rem;
+}
+
+.profile-pic-holder img {
+    width: 100%;
+}
+
+.profile-item-group {
+    text-align: center;
+}
+
+.profile-item-group hr {
+    border-bottom: 0.125rem solid #2B91D6;
+}
+
+.collab-details {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.collab-name {
+    font-family: 'museo-sans', sans-serif;
+    font-size: 18px;
+    margin-bottom: 0px;
+}
+
+.country-name {
+    font-family: 'museo-sans', sans-serif;
+    font-size: 18px;
+    font-weight: 300;
+    font-style: italic;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.collab-quote {
+    font-family: 'museo-sans', sans-serif;
+    font-size: 18px;
+    font-weight: 300;
+    height:110px;
+}
+
+.profile-position {
+    font-family: 'museo-sans', sans-serif;
+    font-size: 18px;
+    font-weight: 300;
+    color: #757575;
+    height: 60px;
+}
+
+.collab-quote {
+    padding-bottom: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+
+
+.footer-fader {
+    background-image: url('../../assets/img/contributors/footer-gradient.png');
+    height: 215px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+.jobs-footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+
+}
+
+
 @media (min-width: 570px) and (max-width: 929px) {
+    
+
+    .contributor-banner,
     .job-banner {
-        height: 13.75rem;
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+
+    .contributor-banner .text-box h2,
+    .job-banner .text-box h2 {
+        font-size: 40px;
+        text-align: center;
+    }
+
+    .contributor-banner .text-box p,
+    .job-banner .text-box p {
+        width: 100%;
+    }
+
+    .collaborator-list li {
+        width: 45%;
+    }
+
+    .contributor-banner .badge-box,
+    .job-banner .badge-box {
+        width: 30%;
+    }
+
+    .contributor-banner .text-box,
+    .job-banner .text-box {
+        width: 70%;
     }
 }
 
-@media (min-width: 930px) {
-    .job-banner {
-        height: 13.75rem;
-    }
-}
 .positions-holder {
-    background-color: #F7F7F1
+    background-color: #e7f2f4;
 }
 .inner-job-wrapper {
     margin-bottom: 6.25rem
@@ -6437,6 +6631,39 @@ footer {
 @media (max-width: 570px) {
     .tq-big-text {
         width: 95%;
+    }
+
+    .contributor-banner .badge-box {
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .contributor-banner .badge-box img {
+        width: 20%;
+    }
+
+    .contributor-banner .text-box {
+        width: 100%;
+        text-align: center;
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+
+    .contributor-banner .text-box h2 {
+        font-size: 25px;
+        margin-top: 10px;
+    }
+
+    .contributor-banner .text-box p {
+        font-size: 16px;
+    }
+
+    .collaborator-list li {
+        display: block;
+        width: 100%;
+        margin-left: 0px;
+        margin-right: 0px;
     }
 }
 
