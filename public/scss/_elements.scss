@@ -216,7 +216,8 @@ input[type="color"],
 textarea,
 .login-form input[type=email],
 .login-form input[type=text],
-.login-form input[type=password] {
+.login-form input[type=password],
+select {
 	background-color: $loblolly;
 	border-radius: rem(5px);
 	padding-top: rem(5px);
@@ -225,8 +226,14 @@ textarea,
 
 .login-form input[type=email]:focus,
 .login-form input[type=text]:focus,
-.login-form input[type=password]:focus {
+.login-form input[type=password]:focus,
+select:focus,
+select:hover {
 	background-color: $loblolly;
+}
+
+select:hover {
+	border: none;
 }
 
 /* Base for label styling */
@@ -302,6 +309,7 @@ textarea,
 label:hover:before {
   border: 1px solid #4778d9!important;
 }
+
 
 /**Sidebar Styles**/
 .left-off-canvas-menu {
@@ -726,4 +734,9 @@ ul.pagination > li > a { color: #333 }
 
 .reveal-modal-bg {
 	background: rgba(43, 145, 214, 0.7);
+}
+
+/** Forgot Password **/
+.forgot-after {
+	margin-top: rem(30px);
 }
