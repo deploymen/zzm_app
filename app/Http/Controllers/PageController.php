@@ -66,7 +66,7 @@ Class PageController extends Controller {
 				return ResponseHelper::OutputJSON('fail','wrong user id');
 			}			
 
-			return view('contents.website.results', ['profile'=>$profile]);
+			return view('contents.website.profile-results', ['profile'=>$profile]);
 
 		} catch (\Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([

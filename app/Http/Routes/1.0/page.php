@@ -18,8 +18,6 @@ Route::get('/server', function(){ return die(\Config::get('app.version_test')); 
 
 Route::get('/thank-you', function(){ return view('website.thank-you'); });
 
-Route::get('/contributors', function(){ return view('website.contributors'); });
-
 Route::get('/check/status', 'ApiCheckingController@CheckStatus');
 
 

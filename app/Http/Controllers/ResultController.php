@@ -36,24 +36,30 @@ use App\Models\UserExternalId;
 Class ResultController extends Controller {
 
 	public function onlySystem(){
+		$gameCode = Request::input('game_code');
+		$profileId = Request::input('game_code_profile_id');
+		
+		$profileId = Request::input('profile_id');
+
 		$page = Request::input("page", '1');
 		$pageSize = Request::input("page_size", '30');
 
 		try{
-
-			$startIndex = $pageSize*($page - 1);
 			
-
+			/* pagination */
+			$startIndex = $pageSize*($page - 1);
 			$total = GameSystem::where('enable' , 1)->count();
+	       	//end 
 
+	       	/* get system id */
 	       	$resultSystemIds = GameSystem::where('enable', 1)->skip($startIndex)->take($pageSize)->select('id')->get();
 
 	       	$systemIds = [];
 	       	for($i=0; $i<count($resultSystemIds); $i++){
 	       		array_push($systemIds, $resultSystemIds[$i]->id);
 	       	}
-
 	       	$systemIds = implode(',', $systemIds);
+	       	//end 
 
 			$sql = " 
 				SELECT s.`id` AS `system_id` , s.`name` AS `system_name`
@@ -82,9 +88,8 @@ Class ResultController extends Controller {
 				'pageTotal' => ceil($total/$pageSize) ,
 				]);
 		} catch (Exception $ex) {
-
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiGameController > systemPlanetProgress',
+				'source' => 'ResultController > onlySystem',
 				'inputs' => Request::all(),
 			])]);
 			return ResponseHelper::OutputJSON('exception');
@@ -92,19 +97,29 @@ Class ResultController extends Controller {
 	}
 
 	public function onlyPlanet(){
+		$userId = Request::input('user_id');
+
 		$gameCode = Request::input('game_code');
 		$profileId = Request::input('game_code_profile_id');
 
 		$systmeId = Request::input('system_id');
-		$profileId = Request::input('profile_id' , $profileId);
+		$profileId = Request::input('profile_id');
 
 		$page = Request::input("page", '1');
 		$pageSize = Request::input("page_size", '30');
 
 		try{
 
+			if(!$profileId){
+				return ResponseHelper::OutputJSON('fail', 'missing profile id');
+			}
 			if(!$systmeId){
 				return ResponseHelper::OutputJSON('fail', 'missing parametter');
+			}
+
+			$profile = GameProfile::find($profileId);
+			if($userId != $profile->user_id){
+				return ResponseHelper::OutputJSON('fail', 'invalid profile');
 			}
 
 			if(!$gameCode){
@@ -112,8 +127,9 @@ Class ResultController extends Controller {
 				$gameCode = $gameCode->code;
 			}
 
-			$startIndex = $pageSize*($page - 1);
+			$system = GameSystem::find($systmeId);
 
+			$startIndex = $pageSize*($page - 1);
 			$total = GameSystem::where('enable' , 1)->count();
 
 			$sql = " 
@@ -149,7 +165,8 @@ Class ResultController extends Controller {
 			return ResponseHelper::OutputJSON('success', '' , [
 				'planet' =>$answers,
 				'breakcrumb' => [
-					'system_id' => $systmeId
+					'system_id' => $systmeId,
+					'system_name' => $system->name,
 				],
 				'page' => $page,
 				'page_size' => $pageSize, 
@@ -158,7 +175,7 @@ Class ResultController extends Controller {
 		} catch (Exception $ex) {
 
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiGameController > systemPlanetProgress',
+				'source' => 'ResultController > onlyPlanet',
 				'inputs' => Request::all(),
 			])]);
 			return ResponseHelper::OutputJSON('exception');
@@ -166,20 +183,28 @@ Class ResultController extends Controller {
 	}
 
 	public function onlyPlay(){
+		$userId = Request::input('user_id');
+
 		$gameCode = Request::input('game_code');
 		$profileId = Request::input('game_code_profile_id');
 
 		$planetId = Request::input('planet_id');
-		$profileId = Request::input('profile_id' , $profileId);
+		$profileId = Request::input('profile_id');
 
 		$page = Request::input("page", '1');
 		$pageSize = Request::input("page_size", '30');
 
-		try{
-			$systemId = GameSystemPlanet::where('planet_id', $planetId)->first();
-
+		try{	
 			if(!$profileId){
+				return ResponseHelper::OutputJSON('fail', 'missing profile id');
+			}
+			if(!$planetId){
 				return ResponseHelper::OutputJSON('fail', 'missing parametter');
+			}
+
+			$profile = GameProfile::find($profileId);
+			if($userId != $profile->user_id){
+				return ResponseHelper::OutputJSON('fail', 'invalid profile');
 			}
 
 			if(!$gameCode){
@@ -187,9 +212,22 @@ Class ResultController extends Controller {
 				$gameCode = $gameCode->code;
 			}
 
-			$startIndex = $pageSize*($page - 1);
+			$breakcrumbSql = "
+				SELECT sp.`system_id`, s.`name` , sp.`planet_id` , p.`description` 
+					FROM `t0124_game_system_planet` sp , `t0123_game_planet` p , `t0122_game_system` s
+						WHERE s.`id` = sp.`system_id`
+						AND p.`id` = sp.`planet_id`
+						AND sp.`planet_id` = {$planetId}
 
+			";
+
+			$breakcrumb = DB::select($breakcrumbSql);
+			$breakcrumb = $breakcrumb[0];
+
+			$startIndex = $pageSize*($page - 1);
 			$total = GameSystem::where('enable' , 1)->count();
+
+
 			$sql = " 
 				SELECT *
 					FROM `t0400_game_play` 
@@ -215,10 +253,12 @@ Class ResultController extends Controller {
 			}
 
 			return ResponseHelper::OutputJSON('success', '' , [
-				'system' =>$answers,
+				'play' =>$answers,
 				'breakcrumb' => [
-					'system_id' => $systemId->system_id,
-					'planet_id' => $planetId
+					'system_id' => $breakcrumb->system_id,
+					'system_name' => $breakcrumb->name,
+					'planet_id' => $planetId,
+					'planet_subtitle' => $breakcrumb->description
 
 				],
 				'page' => $page,
@@ -228,7 +268,7 @@ Class ResultController extends Controller {
 		} catch (Exception $ex) {
 
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiGameController > systemPlanetProgress',
+				'source' => 'ResultController > onlyPlay',
 				'inputs' => Request::all(),
 			])]);
 			return ResponseHelper::OutputJSON('exception');
@@ -236,21 +276,27 @@ Class ResultController extends Controller {
 	}
 
 	public function onlyQuestions(){
+		$userId = Request::input('user_id');
+
 		$gameCode = Request::input('game_code');
-		$profileId = Request::input('game_code_profile_id');
 
 		$playId = Request::input('play_id');
-		$profileId = Request::input('profile_id' , $profileId);
+		$profileId = Request::input('profile_id');
 
 		$page = Request::input("page", '1');
 		$pageSize = Request::input("page_size", '30');
 
 		try{
-			$planetId = GamePlay::find($playId);
-			$systemId = GameSystemPlanet::where('planet_id', $planetId->planet_id)->first();
-
 			if(!$profileId){
 				return ResponseHelper::OutputJSON('fail', 'missing parametter');
+			}
+			if(!$playId){
+				return ResponseHelper::OutputJSON('fail', 'missing parametter');
+			}
+
+			$profile = GameProfile::find($profileId);
+			if($userId != $profile->user_id){
+				return ResponseHelper::OutputJSON('fail', 'invalid profile');
 			}
 
 			if(!$gameCode){
@@ -258,8 +304,26 @@ Class ResultController extends Controller {
 				$gameCode = $gameCode->code;
 			}
 
-			$startIndex = $pageSize*($page - 1);
+			$play = GamePlay::where('id', $playId)->where('profile_id' ,$profileId)->first();
+			if(!$play){
+				return ResponseHelper::OutputJSON('fail', 'play record not found');
 
+			}
+
+			$breakcrumbSql = "
+				SELECT sp.`system_id`, s.`name` , sp.`planet_id` , p.`description` 
+					FROM `t0124_game_system_planet` sp , `t0123_game_planet` p , `t0122_game_system` s , `t0400_game_play` pl
+						WHERE pl.`id` = {$playId}
+							AND pl.`planet_id` = sp.`planet_id`
+							AND pl.`planet_id` = p.`id`
+							AND sp.`system_id` = s.`id`
+
+			";
+
+			$breakcrumb = DB::select($breakcrumbSql);
+			$breakcrumb = $breakcrumb[0];
+
+			$startIndex = $pageSize*($page - 1);
 			$total = GameSystem::where('enable' , 1)->count();
 
 			$sqlGameType = " 
@@ -278,17 +342,20 @@ Class ResultController extends Controller {
 				case 'p06':$answers = ResultHelper::ResultQuestionP06($playId); break;
 				case 'p07':$answers = ResultHelper::ResultQuestionP07($playId); break;
 				case 'p10':$answers = ResultHelper::ResultQuestionP10($playId); break;
+				case 'p18':$answers = ResultHelper::ResultQuestionP18($playId); break;
+
 
 			}	
 
 
 			return ResponseHelper::OutputJSON('success', '' , [
-				'system' =>$answers,
+				'questions' =>$answers,
 				'breakcrumb' => [
-					'system_id' => $systemId->system_id,
-					'planet_id' => $planetId->planet_id,
+					'system_id' => $breakcrumb->system_id,
+					'system_name' => $breakcrumb->name,
+					'planet_id' => $breakcrumb->planet_id,
+					'planet_subtitle' => $breakcrumb->description,
 					'play_id' => $playId
-
 				],
 				'page' => $page,
 				'page_size' => $pageSize, 
@@ -297,7 +364,7 @@ Class ResultController extends Controller {
 		} catch (Exception $ex) {
 
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiGameController > systemPlanetProgress',
+				'source' => 'ResultController > onlyQuestions',
 				'inputs' => Request::all(),
 			])]);
 			return ResponseHelper::OutputJSON('exception');

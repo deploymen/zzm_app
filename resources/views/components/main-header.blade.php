@@ -11,7 +11,7 @@
             <h1 class="title">
                 <img src="/assets/main/img/global/logo-icon.png" alt=" ">
                 Zap Zap Math
-                <span class="plan-label basic">Basic</span>
+                <span class="plan-label basic">Beta</span>
             </h1>
         </section>
     </nav>

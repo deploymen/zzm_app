@@ -22,7 +22,8 @@ VARS = {
 	email      : '{{$profile->email}}',
 	avatar     : '{{$profile->avatar}}',
 	game_code  : '{{$profile->gameCode}}',
-	class_id   : '{{$profile->class_id}}'
+	class_id   : '{{$profile->class_id}}',
+	nickname1  : '{{$profile->nickname1}}'
 };
 </script>
 <script src="/../js/main/profiles.js"></script>
@@ -56,12 +57,12 @@ VARS = {
 			<div class="small-12 medium-5 columns">
 				<div class="avatar-holder">
 					<img src="/assets/main/img/avatars/{{$profile->avatar->filename}}" alt="">
-					<img src="/assets/img/global/logo-icon.png" alt=" ">
+					<!-- <img src="/assets/img/global/logo-icon.png" alt=" "> -->
 				</div>
 
 			</div>
 			<div class="small-12 medium-7 columns nickname-middle">
-				<p class="profile-nickname">Nickname</p>
+				<p class="profile-nickname">{{$profile->nickname1}}</p>
 			</div>
 		</div>
 		<div class="small-12 medium-4 columns text-right">
@@ -80,6 +81,50 @@ VARS = {
 			<div class="small-12 medium-6 columns">
 				<label>Last Name
 					<input id="profile-last-initial" class="profile-last-initial" type="text" value="{{$profile->last_name}}" />
+				</label>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="small-12 medium-6 columns">
+				<label>Age
+					<select>
+						<option value="5">0 - 5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="8">9</option>
+						<option value="8">10</option>
+						<option value="8">11</option>
+						<option value="8">12</option>
+						<option value="8">13</option>
+						<option value="8">14</option>
+						<option value="8">15</option>
+						<option value="8">16</option>
+						<option value="8">17</option>
+						<option value="8">18 +</option>
+					</select>
+				</label>
+			</div>
+			<div class="small-12 medium-6 columns">
+				<label>Grade
+					<select>
+						<option value="prekindergarten">Pre-Kindergarten</option>
+						<option value="kindergarten">Kindergarten</option>
+						<option value="grade1">Grade 1</option>
+						<option value="grade2">Grade 2</option>
+						<option value="grade3">Grade 3</option>
+						<option value="grade4">Grade 4</option>
+						<option value="grade5">Grade 5</option>
+						<option value="grade6">Grade 6</option>
+						<option value="grade7">Grade 7</option>
+						<option value="grade8">Grade 8</option>
+						<option value="grade9">Grade 9</option>
+						<option value="grade10">Grade 10</option>
+						<option value="grade11">Grade 11</option>
+						<option value="grade12">Grade 12</option>
+						<option value="continue">Continuous Learner</option>
+					</select>
 				</label>
 			</div>
 		</div>
@@ -108,7 +153,7 @@ VARS = {
 					<a href="/user/profiles" class="button wide radius grey">Back</a>
 				</div>
 				<div class="small-12 medium-6 columns">
-					<input type="button" value="Save Changes" id="btn-save-profile" class="button wide radius blue">
+					<a href="javascript:void(0)" id="btn-save-profile" class="button wide radius blue">Save Changes</a>
 				</div>
 			</div>
 		</div>
@@ -117,7 +162,7 @@ VARS = {
 
 <div class="row">
 	<div class="box-centered small-12 medium-7 text-center">
-		<p class="subline-desc">Your child's name is kept strictly confidential and is only visible to you.<br/>We do not use it for any purpose, it is just to associate your child with their profile.</p>
+		<p class="privacydisclaimer">Your child's name is kept strictly confidential and is only visible to you.<br/>We do not use it for any purpose, it is just to associate your child with their profile.</p>
 	</div>
 </div>
 
@@ -137,11 +182,17 @@ VARS = {
 </div>
 
 
-<!-- <div id="ssmodal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
-	<h2 id="modalTitle">Awesome. I have it.</h2>
-	<p class="lead">Your couch.  It is mine.</p>
-	<p>I'm a cool paragraph that lives inside of an even cooler modal. Wins!</p>
-	<a class="close-reveal-modal" aria-label="Close">&#215;</a>
-</div> -->
+<div id="profilesaved" class="reveal-modal text-center" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+	<h3 id="modalTitle">Beautiful</h3>
+	<p class="lead">Your changes have been saved.</p>
+	<div class="row">
+		<div class="medium-5 box-centered text-center">
+			<label>
+				<input type="button" value="OK" id="btn-changes-ok" class="button wide radius blue" />
+			</label>
+		</div>
+	</div>
+	<a href="javascript:void(0)" class="close-reveal-modal" aria-label="Close">OK</a>
+</div>
 
 @stop
