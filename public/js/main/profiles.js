@@ -35,7 +35,7 @@ function allVars(){
 
 	$.ajaxSetup({
 	    beforeSend: function(xhr) {
-	        xat =xhr.setRequestHeader('X-access-token', '1|d32755e3e1094c423bed5ca68803c2c08ca1e50b');
+	        xat =xhr.setRequestHeader('X-access-token', '1|92b943b0ff3ffe4ff943f448d30eb5a0ff7ef7e9');
 	    }
 	});
 };
@@ -62,28 +62,28 @@ function displayProfiles(){
 
 			var profilesArray = [];
 			
-			$.each( allVars.datal.list, function( i, profile ) {
+			$.each( allVars.datal, function( i, profile ) {
 				profilesArray.push([
 					'<div class="profile-item">',
 						'<section class="profile-info">',
 							'<div class="profile-pic-holder">',
-								'<img src="/assets/main/img/avatars/',allVars.datal.list[i].avatar.filename,'" alt="Avatar 3">',
+								'<img src="/assets/main/img/avatars/avatar',allVars.datal[i].avatar_id,'.png" alt="Avatar 3">',
 							'</div>',
 							'<div class="profile-item-group cf">',
 								'<p class="profile-nickname">',
-									'<span class="first-name">',allVars.datal.list[i].nickname1,' </span>',
-									'<span class="first-name">',allVars.datal.list[i].nickname2,'</span>',
+									'<span class="first-name">',allVars.datal[i].nickname1,' </span>',
+									'<span class="first-name">',allVars.datal[i].nickname2,'</span>',
 								'</p>',
 								'<p class="profile-name">',
-									'<span class="first-name">',allVars.datal.list[i].first_name,'</span>',' ',
-									'<span class="last-name">',allVars.datal.list[i].last_name,'</span>',
+									'<span class="first-name">',allVars.datal[i].first_name,'</span>',' ',
+									'<span class="last-name">',allVars.datal[i].last_name,'</span>',
 								'</p>',
 							'</div>',
 
 							'<div class="profile-item-group cf">',
-								'<p class="profile-school-name truncate">',allVars.datal.list[i].school,'</p>',
+								'<p class="profile-school-name truncate">',allVars.datal[i].school,'</p>',
 								'<div class="small-12 columns">',
-									'<p class="profile-code bold"><span class="blue-header">Player ID</span> <span class="user-id">',allVars.datal.list[i].game_code.code,'</span></p>',
+									'<p class="profile-code bold"><span class="blue-header">Player ID</span> <span class="user-id">game code</span></p>',
 								'</div>',
 							'</div>',
 
@@ -108,7 +108,7 @@ function displayProfiles(){
 											'<span class="blue-heading-small">Best score</span>',
 										'</div>',
 										'<div class="small-12 columns">',
-											'<p class="profile-subject-name truncate">',allVars.datal.list[i].best_score,'</p>',
+											'<p class="profile-subject-name truncate">',allVars.datal[i].best_score,'</p>',
 										'</div>',
 									'</div>',
 									'<div class="small-12 columns">',
@@ -116,14 +116,14 @@ function displayProfiles(){
 											'<span class="blue-heading-small">Weakest score</span>',
 										'</div>',
 										'<div class="small-12 columns">',
-											'<p class="profile-subject-name truncate">',allVars.datal.list[i].weak_score,'</p>',
+											'<p class="profile-subject-name truncate">',allVars.datal[i].weak_score,'</p>',
 										'</div>',
 									'</div>',
 								'</div>',
 							'</div>',
 
-							'<p class="profile-upgrade-cta"><a href="/user/profiles/',allVars.datal.list[i].id,'/results" class="">See detailed reports!</a></p>',
-							'<a href="/user/profiles/',allVars.datal.list[i].id,'/edit" class="btn-profile-edit">Edit</a>',
+							'<p class="profile-upgrade-cta"><a href="/user/profiles/',allVars.datal[i].id,'/results" class="">See detailed reports!</a></p>',
+							'<a href="/user/profiles/',allVars.datal[i].id,'/edit" class="btn-profile-edit">Edit</a>',
 						'</section>',
 					'</div>'
 				].join(''));
@@ -139,6 +139,29 @@ function displayProfiles(){
 
 };
 
+// Tooltips
+// $(staticAncestors).on(eventName, dynamicChild, function() {});
+function itooltip(i){
+	var profilelist = $('#profile-list');
+	var tooltiptrigger = $('#info-icon-'+i);
+	var profiletooltip = $('#profile-tooltip-'+i);
+	$('.profile-tooltip').fadeOut('fast');
+	//$(this).find(profiletooltip).show('slow');
+	profiletooltip.stop().fadeIn('fast');
+
+	// profilelist.on( 'click',tooltiptrigger, function() {
+	// 	$(this).find(profiletooltip).show('slow');
+	// });
+	// profiletooltip.each(function(){
+	//     $(this).click(function(){
+
+	//        $("div.content").hide();
+
+	//       profiletooltip.toggleClass('showit');
+
+	//     });
+	// });
+};
 
 
 
@@ -150,13 +173,10 @@ var profilefirstname = $('#profile-first-name');
 var profilelastinitial = $('#profile-last-initial');
 var profilecity = $('#profile-city');
 var profileschool = $('#profile-school');
-var btnchangesok = $('#btn-changes-ok');
 
 function saveProfile(){
 	var id = VARS.id;
 	var email = VARS.id;
-
-	var modalprofilesaved = $('#profilesaved');
 
 	var editedInfo = {
 		first_name : profilefirstname.val(),
@@ -179,8 +199,8 @@ function saveProfile(){
 		url     : '/api/profiles/'+id+'/edit',
 		data    : editedInfo,
 		success : function(data){
-			// window.location = "/user/profiles";
-			modalprofilesaved.foundation('reveal', 'open');
+			alert('Your changes have been successfully changed');
+			window.location = "/user/profiles";
 		},
 		error   : function(data){
 			// window.location = "/user/profiles";	
@@ -193,10 +213,6 @@ function saveProfile(){
 
 btnsaveprofile.click(function(){
 	saveProfile();
-});
-
-btnchangesok.click(function(){
-	window.location = "/user/profiles";
 });
 
 // Add Profile
