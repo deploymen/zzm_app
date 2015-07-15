@@ -24,6 +24,7 @@ use App\Models\LogAccountActivate;
 use App\Models\GameProfile;
 use App\Models\GameCode;
 use App\Models\IdCounter;
+use App\Models\LogPasswordReset;
 
 
 Class AuthUserController extends Controller {
