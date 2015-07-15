@@ -5,6 +5,7 @@ Route::group(['prefix' => 'user'], function(){
 	Route::get('/signup', function(){ return view('contents.website.signup'); });
 	Route::get('/signin', function(){ return view('contents.website.signin'); });
 	Route::get('/forgot-password', function(){ return view('contents.website.forgot-password'); });
+	Route::get('/reset-password', function(){ return view('contents.website.reset-password'); });
 	
 	Route::group(['middleware' => 'auth.user'], function () {
 		Route::group(['middleware' => 'auth.parent'], function () {
