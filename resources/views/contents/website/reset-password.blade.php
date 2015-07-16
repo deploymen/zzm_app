@@ -77,9 +77,22 @@
                     <div class="forgot-password-box small-12 medium-4 medium-centered columns">
                         <a href="/user/signin">back</a>
                     </div>
-                </section>
-                      
+                </section>       
             </div>
+
+            <div id="resetsuccess" class="reveal-modal text-center" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+                <h3 id="modalTitle">Hooray</h3>
+                <p class="lead">Your password has been reset. Please login using your new password.</p>
+                <div class="row">
+                    <div class="medium-5 box-centered text-center">
+                        <label>
+                            <input type="button" value="OK" id="btn-reset-ok" class="button wide radius blue" />
+                        </label>
+                    </div>
+                </div>
+                <a href="javascript:void(0)" class="close-reveal-modal" aria-label="Close">OK</a>
+            </div>
+
             <div class="blue-bg-overlay"></div>
 
 

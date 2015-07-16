@@ -10,22 +10,7 @@
 @stop
 
 @section('js_include')
-<script type="text/javascript">
-var VARS = VARS || {};
 
-VARS = {
-	id         : '{{$profile->id}}',
-	first_name : '{{$profile->first_name}}',
-	last_name  : '{{$profile->last_name}}',
-	school     : '{{$profile->school}}',
-	city       : '{{$profile->city}}',
-	email      : '{{$profile->email}}',
-	avatar     : '{{$profile->avatar}}',
-	game_code  : '{{$profile->gameCode}}',
-	class_id   : '{{$profile->class_id}}',
-	nickname1  : '{{$profile->nickname1}}'
-};
-</script>
 <script src="/../js/main/profiles.js"></script>
 @stop
 

@@ -44,7 +44,7 @@
 
 									<tr width="100%">
 										<td bgcolor="#FFFFFF" style="background-color: #FFFFFF; padding: 30px;">
-											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">It appears you've lost the password to your starship.</p>
+											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">It appears you've lost the password to your starship.<br/><br/></p>
 
 											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">Fear not! You can reset it by clicking the link below:<br/>{{$reset_url}}<br/><br/></p>
 
