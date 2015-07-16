@@ -6682,6 +6682,17 @@ btnlogout.click(function(){
 	logout();
 });
 
+// Wrong Password
+function unableToLogin() {
+	var loginformholder = $('#signup-holder');
+
+	var pageurl = document.URL.split('?')[1];
+	if(pageurl === 'no-access'){
+		loginformholder.prepend('<p class="incorrect-details">Your username or password is incorrect. Please try again.</p>');
+	}
+}
+unableToLogin();
+
 (function($, window, document, undefined){
 	$(document).foundation();
 
