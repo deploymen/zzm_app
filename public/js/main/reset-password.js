@@ -18,8 +18,7 @@ function resetPassword(){
 		url      : '/api/auth/reset-password',
 		data     : resetdetails,
 		success  : function(){
-			console.log(resetpwd);
-			console.log(resetc);
+			alert('change successful!');
 		}
 	});
 }
