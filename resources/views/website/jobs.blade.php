@@ -242,7 +242,7 @@ KONAMI CODE MOFO
                 </div><!--inner-job-wrapper-->
                
 
-                <div class="footer-fader"></div>
+                <!-- <div class="footer-fader"></div> -->
             </div><!--main-content-->
 
             <a id="btn-to-top" class="btn-to-top" href="javascript:void(0);">
