@@ -1,23 +1,5 @@
 //Global Variables
-// var allVars = (function(){
-// 	var  datal;
-// 	var xat;
 
-// 	$.ajax({
-// 		type    : 'GET',
-// 		url     : '/api/profiles',
-// 		dataType: 'json',
-// 		success : function(data){
-// 			datal = data["data"];
-// 		}
-// 	});
-
-// 	$.ajaxSetup({
-// 	    beforeSend: function(xhr) {
-// 	        xat =xhr.setRequestHeader('X-access-token', '1|92b943b0ff3ffe4ff943f448d30eb5a0ff7ef7e9');
-// 	    }
-// 	});
-// });
 var profilelist = $('#profile-list');
 
 function allVars(){
@@ -40,6 +22,8 @@ function allVars(){
 	});
 };
 allVars();
+
+
 
 // Profiles Page
 function displayProfiles(){
@@ -122,8 +106,8 @@ function displayProfiles(){
 								'</div>',
 							'</div>',
 
-							'<p class="profile-upgrade-cta"><a href="/user/profiles/',allVars.datal.list[i].id,'/results" class="">See detailed reports!</a></p>',
-							'<a href="/user/profiles/',allVars.datal.list[i].id,'/edit" class="btn-profile-edit">Edit</a>',
+							'<p class="profile-upgrade-cta"><a href="/user/profiles/',allVars.datal.list[i].user_id,'/results" class="">See detailed reports!</a></p>',
+							'<a href="/user/profiles/',allVars.datal.list[i].user_id,'/edit" class="btn-profile-edit">Edit</a>',
 						'</section>',
 					'</div>'
 				].join(''));
@@ -153,8 +137,6 @@ var profileschool = $('#profile-school');
 var btnchangesok = $('#btn-changes-ok');
 
 function saveProfile(){
-	var id = VARS.id;
-	var email = VARS.id;
 
 	var modalprofilesaved = $('#profilesaved');
 
@@ -163,8 +145,8 @@ function saveProfile(){
 		last_name  : profilelastinitial.val(),
 		school     : profileschool.val(),
 		city       : profilecity.val(),
-		id         : VARS.id,
-		email      : VARS.email
+		id         : allVars.datal.list[0].id,
+		email      : allVars.datal.list[0].email
 	}
 
 	$.ajaxSetup({
@@ -216,9 +198,9 @@ function createNewProfile(){
 		last_name    : newlastname.val(),
 		school       : newschool.val(),
 		city         : newcity.val(),
-		email        : 'obiwan@jediacademy.com',
-		nickname1    : allVars.datal.nickname1,
-		nickname2    : allVars.datal.nickname2,
+		email        : allVars.datal.list[0].email,
+		nickname1    : allVars.datal.list[0].nickname1,
+		nickname2    : allVars.datal.list[0].nickname2,
 	}
 
 	$.ajaxSetup({
@@ -238,6 +220,9 @@ function createNewProfile(){
 		success  : function(data){
 			addprofilemodal.foundation('reveal', 'close');
 			location.reload();
+			// console.log(newprofileinfo.email);
+			// console.log(newprofileinfo.nickname1);
+			// console.log(newprofileinfo.nickname2);
 		}
 	});
 };
@@ -251,7 +236,9 @@ createbtn.click(function(){
 var btndeleteprofile = $('#btn-delete-profile');
 
 function deleteProfile(){
-	var id = VARS.id;
+	var profiletodelete = {
+		id    : allVars.datal.list[0].id
+	}
 
 	$.ajaxSetup({
 	    beforeSend: function(xat) {
@@ -301,5 +288,6 @@ btndeleteprofile.click(function(){
 	if (top.location.pathname === '/user/profiles'){
 		displayProfiles();
 	};
+
 
 })(jQuery, this, this.document);

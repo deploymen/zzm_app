@@ -74,26 +74,14 @@
 			<div class="small-12 medium-6 columns">
 				<label>Age
 					<select>
-					@foreach ($ages as $age)
-					    @if ($age->id == $userAgeId)
-					        <option selected="selected">{{$age->name}}</option>
-					    @else
-					        <option value="{{$grade->name}}">{{$age->name}}</option>
-					    @endif
-					@endforeach
+
 					</select>
 				</label>
 			</div>
 			<div class="small-12 medium-6 columns">
 				<label>Grade
 					<select>
-						@foreach ($grades as $grade)
-						    @if ($grade->id == $userGradeId)
-						        <option selected="selected">{{$grade->name}}</option>
-						    @else
-						        <option value="{{$grade->name}}">{{$grade->name}}</option>
-						    @endif
-						@endforeach
+
 					</select>
 				</label>
 			</div>
