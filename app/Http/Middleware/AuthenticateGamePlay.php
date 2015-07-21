@@ -86,6 +86,7 @@ class AuthenticateGamePlay {
 			}					
 		}
 		$inputs['user_id'] = $userId->user_id;
+		$inputs['profile_id'] = $userId->id;
 
 		$inputs['game_code_profile_id'] = $gameCodeObj->profile_id;
 				

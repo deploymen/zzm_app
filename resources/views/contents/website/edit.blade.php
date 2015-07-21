@@ -47,7 +47,7 @@
 
 			</div>
 			<div class="small-12 medium-7 columns nickname-middle">
-				<p class="profile-nickname">{{$profile->nickname1}}</p>
+				<p class="profile-nickname">{{$profile->nickName1->name}} {{$profile->nickName2->name}}</p>
 			</div>
 		</div>
 		<div class="small-12 medium-4 columns text-right">

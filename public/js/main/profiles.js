@@ -106,8 +106,8 @@ function displayProfiles(){
 								'</div>',
 							'</div>',
 
-							'<p class="profile-upgrade-cta"><a href="/user/profiles/',allVars.datal.list[i].user_id,'/results" class="">See detailed reports!</a></p>',
-							'<a href="/user/profiles/',allVars.datal.list[i].user_id,'/edit" class="btn-profile-edit">Edit</a>',
+							'<p class="profile-upgrade-cta"><a href="/user/profiles/',allVars.datal.list[i].id,'/results" class="">See detailed reports!</a></p>',
+							'<a href="/user/profiles/',allVars.datal.list[i].id,'/edit" class="btn-profile-edit">Edit</a>',
 						'</section>',
 					'</div>'
 				].join(''));

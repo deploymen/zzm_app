@@ -33,6 +33,12 @@ Route::group(['prefix' => 'docs'], function(){
 	Route::get('/api.user-anonymous-game-code-post', function(){ return view('contents.docs.api-user-anonymous-game-code-post'); });
 	Route::get('/api.user-verify-code-post', function(){ return view('contents.docs.api-user-verify-code-post'); });
 	Route::get('/api.user-profile-transfer-post', function(){ return view('contents.docs.api-user-profile-transfer-post'); });
+	Route::get('/api.user-report-profile-details-get', function(){ return view('contents.docs.api-user-report-profile-details-get'); });
+	Route::get('/api.user-profiles-result-only-planet-get', function(){ return view('contents.docs.api-user-profiles-result-only-planet-get'); });
+	Route::get('/api.user-profiles-result-only-system-get', function(){ return view('contents.docs.api-user-profiles-result-only-system-get'); });
+	Route::get('/api.user-profiles-result-only-play-get', function(){ return view('contents.docs.api-user-profiles-result-only-play-get'); });
+	Route::get('/api.user-profiles-result-only-questions-get', function(){ return view('contents.docs.api-user-profiles-result-only-questions-get'); });
+
 
 
 
@@ -82,5 +88,4 @@ Route::group(['prefix' => 'docs'], function(){
 	Route::get('/api.game-user-map-get', function(){ return view('contents.docs.api-game-user-map-get'); });
 
 
-	
 });

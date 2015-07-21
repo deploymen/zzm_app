@@ -167,7 +167,7 @@ function unableToLogin() {
 
 	var pageurl = document.URL.split('?')[1];
 	if(pageurl === 'no-access'){
-		loginformholder.prepend('<p class="incorrect-details">Your username or password is incorrect. Please try again.</p>');
+		loginformholder.prepend('<p class="incorrect-details">You are not signed in. Please check that your username or password is incorrect and try again.</p>');
 	}
 }
 unableToLogin();
