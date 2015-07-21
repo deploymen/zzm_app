@@ -17,7 +17,7 @@ function allVars(){
 
 	$.ajaxSetup({
 	    beforeSend: function(xhr) {
-	        xat =xhr.setRequestHeader('X-access-token', '1|d32755e3e1094c423bed5ca68803c2c08ca1e50b');
+	        xat =xhr.setRequestHeader('X-access-token', '13|19e0173a89b037da54892ca2b075b6ccf29a8944');
 	    }
 	});
 };
@@ -31,6 +31,7 @@ function displayProfiles(){
 	$.ajaxSetup({
 	    beforeSend: function(xat) {
 	        allVars.xat;
+	        console.log(allVars.xat);
 	    }
 	});
 
@@ -40,6 +41,7 @@ function displayProfiles(){
 		dataType: 'json',
 		success : function(data){
 			allVars.datal = data["data"];
+			// console.log(allVars.datal);
 
 			//Profile variables
 			var profilelist = $('#profile-list');
@@ -133,6 +135,7 @@ var btnsaveprofile = $('#btn-save-profile');
 var profilefirstname = $('#profile-first-name');
 var profilelastinitial = $('#profile-last-initial');
 var profilecity = $('#profile-city');
+var profileid = $('#profile-id');
 var profileschool = $('#profile-school');
 var btnchangesok = $('#btn-changes-ok');
 
@@ -145,8 +148,7 @@ function saveProfile(){
 		last_name  : profilelastinitial.val(),
 		school     : profileschool.val(),
 		city       : profilecity.val(),
-		id         : allVars.datal.list[0].id,
-		email      : allVars.datal.list[0].email
+		id         : profileid.val()
 	}
 
 	$.ajaxSetup({
@@ -158,10 +160,10 @@ function saveProfile(){
 	$.ajax({
 		type    : 'PUT',
 		dataType: 'json',
-		url     : '/api/profiles/'+id+'/edit',
+		url     : '/api/profiles/'+editedInfo.id+'/edit',
 		data    : editedInfo,
 		success : function(data){
-			// window.location = "/user/profiles";
+			//window.location = "/user/profiles";
 			modalprofilesaved.foundation('reveal', 'open');
 		},
 		error   : function(data){
@@ -191,6 +193,10 @@ function createNewProfile(){
 	var newschool = $('#new-school');
 	var newcity = $('#new-city');
 	var addprofilemodal = $('#addProfileModal');
+	var profileemail = $('#profile-email');
+	var profilenickname1 = $('#profile-nickname1');
+	var profilenickname2 = $('#profile-nickname2');
+	var profileavatar = $('#profile-avatar-id');
 
 
 	var newprofileinfo = {
@@ -198,14 +204,14 @@ function createNewProfile(){
 		last_name    : newlastname.val(),
 		school       : newschool.val(),
 		city         : newcity.val(),
-		email        : allVars.datal.list[0].email,
-		nickname1    : allVars.datal.list[0].nickname1,
-		nickname2    : allVars.datal.list[0].nickname2,
+		email        : 'marypoppins@nanny.com',
+		age          : 8,
+		grade        : 9
 	}
 
 	$.ajaxSetup({
-	    beforeSend: function(data) {
-	        allVars.datal = data["data"];
+	    beforeSend: function(xat) {
+	        allVars.xat;
 	    }
 	});
 
@@ -214,15 +220,13 @@ function createNewProfile(){
 		dataType : 'json',
 		url      : '/api/profiles',
 		data     : newprofileinfo,
-		beforeSend: function(xat) {
-	        allVars.xat;
-	    },
 		success  : function(data){
 			addprofilemodal.foundation('reveal', 'close');
 			location.reload();
-			// console.log(newprofileinfo.email);
-			// console.log(newprofileinfo.nickname1);
-			// console.log(newprofileinfo.nickname2);
+			// console.log('Hello');
+		},
+		error    : function(){
+			console.log('fail');
 		}
 	});
 };
@@ -234,10 +238,15 @@ createbtn.click(function(){
 
 // Delete Profile
 var btndeleteprofile = $('#btn-delete-profile');
+var btndeleteok = $('#btn-delete-ok');
+var btndeltecancel = $('#btn-delete-cancel');
+var modalprofiledeleted = $('#profiledelete');
 
 function deleteProfile(){
+	var deleteconfirm = $('#profiledelete');
+
 	var profiletodelete = {
-		id    : allVars.datal.list[0].id
+		id    : profileid.val()
 	}
 
 	$.ajaxSetup({
@@ -249,21 +258,25 @@ function deleteProfile(){
 	$.ajax({
 		type     : 'DELETE',
 		dataType : 'json',
-		url      : '/api/profiles/'+id,
-		data     : id,
+		url      : '/api/profiles/'+profiletodelete.id,
+		data     : profiletodelete,
 		complete  : function(data){
 			console.log("complete");
-			confirm("Sure you want to delete?");
 			window.location = "/user/profiles";
 		}
 	});
 };
 
 btndeleteprofile.click(function(){
-	if(confirm("Sure you want to delete?") === true){
-		deleteProfile();
-		window.location = "/user/profiles";
-	}
+	modalprofiledeleted.foundation('reveal', 'open');
+});
+
+btndeltecancel.click(function(){
+	modalprofiledeleted.foundation('reveal', 'close');
+});
+
+btndeleteok.click(function(){
+	deleteProfile();
 });
 
 //pre-fill profile avatar

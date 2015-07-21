@@ -33,7 +33,7 @@
 	<a href="javascript:void(0);" data-reveal-id="addProfileModal" class="button radius green" id="btn-show-profile-form" class="btn-show-profile-form">Add New Profile</a>
 </div> -->
 
-<div id="addProfileModal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+<div id="addProfileModal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" data-options="close_on_background_click:false">
 	<h3 id="modalTitle" class="modalTitle">Create a new Profile</h3>
 	<p class="subline-desc">Profiles allow you to follow the progress of each individual child</p>
 	<form id="new-profile-form">
@@ -47,6 +47,12 @@
 				<label>Last Name
 					<input id="new-last-name" type="text" placeholder="Lim" />
 				</label>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="small-12 medium-12 columns">
+				
 			</div>
 		</div>
 

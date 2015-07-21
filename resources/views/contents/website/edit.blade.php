@@ -53,6 +53,8 @@
 		<div class="small-12 medium-4 columns text-right">
 			<p class="profile-code bold"><span class="blue-text">Class ID:</span> <span class="user-id">{{$profile->class_id}}</span></p>
 			<p class="profile-code bold"><span class="blue-text">Player ID:</span> <span class="user-id">{{$profile->gameCode->code}}</span></p>
+			<input type="hidden" id="profile-id" value="{{$profile->id}}" />
+			<input type="hidden" id="profile-email" value="{{$profile->email}}" />
 		</div>
 	</div><!--row-->
 
@@ -137,6 +139,25 @@
 			</div>
 		</div>
 	</form>
+</div>
+
+<div id="profiledelete" class="reveal-modal text-center" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" data-options="close_on_background_click:false">
+	<h3 id="modalTitle">Be Careful!</h3>
+	<p class="lead">You are about to delete this profile. Are you sure?</p>
+	<div class="row">
+		<div class="small-12 columns">
+			<div class="small-6 columns text-center">
+				<label>
+					<input type="button" value="Cancel" id="btn-delete-cancel" class="button wide radius blue" />
+				</label>
+			</div>
+			<div class="small-6 columns text-center">
+				<label>
+					<input type="button" value="Delete" id="btn-delete-ok" class="button wide radius alert" />
+				</label>
+			</div>
+		</div>
+	</div>
 </div>
 
 
