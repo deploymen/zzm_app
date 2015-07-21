@@ -77,6 +77,11 @@
                         <td></td>
                     </tr>
                     <tr>
+                        <td>age</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
                         <td>email</td>
                         <td></td>
                         <td></td>
@@ -88,6 +93,11 @@
                     </tr>
                     <tr>
                         <td>school</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>grade</td>
                         <td></td>
                         <td></td>
                     </tr>
