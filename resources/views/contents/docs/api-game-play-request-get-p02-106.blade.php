@@ -23,7 +23,7 @@
 
 <div class="row">
     <div class="col-lg-8">
-        <h3>GET  /api/game/play/103/request</h3>
+        <h3>GET  /api/game/play/106/request</h3>
         <ul id="myTab" class="nav nav-tabs">
             <li class="active"><a href="#descriptions" data-toggle="tab">Explain</a>
             </li>
@@ -54,7 +54,7 @@
                 </table>
               
                 <div style="margin-top:50px; height:500px; overflow:auto; font-size:12px">
-<pre class="prettyprint">GET http://staging.zapzapmath.com/api/game/play/103/request HTTP/1.1
+<pre class="prettyprint">GET http://staging.zapzapmath.com/api/game/play/106/request HTTP/1.1
 Host: staging.zapzapmath.com
 X-game-code: 0000015k
 </pre>
@@ -88,11 +88,11 @@ X-game-code: 0000015k
   "status": "success",
   "data": {
     "planet": {
-      "id": 103,
-      "name": "Space Taxi",
-      "description": "What + What = What??",
+      "id": 106,
+      "name": "Space Taxi 2",
+      "description": "Get up to 20 passengers!",
       "parameters": null,
-      "question_count": 5,
+      "question_count": 10,
       "badges": {
         "speed": "2",
         "accuracy": "0.2",
@@ -102,87 +102,25 @@ X-game-code: 0000015k
       }
     },
     "status": {
-      "star": "1",
-      "difficulty": 2,
-      "top_score": 108
+      "star": "0",
+      "difficulty": 1,
+      "top_score": 0
     },
     "planet_top_score": [
-      {
-        "nickname1": "Mozviss",
-        "nickname2": "Oznin",
-        "avatar": "default.jpg",
-        "score": 108
-      }
+      
     ],
     "questions": [
       {
-        "id": 1060,
-        "question": "9",
+        "id": 209018,
+        "question": "12",
         "answer_option_1": "3",
-        "answer_option_2": "6",
-        "answer_option_3": "1",
-        "answer_option_4": "4",
-        "answer_option_5": "",
-        "answer_option_6": "",
-        "fixed_num": 0,
-        "difficulty": 2,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": 1045,
-        "question": "4",
-        "answer_option_1": "2",
-        "answer_option_2": "2",
-        "answer_option_3": "3",
-        "answer_option_4": "3",
-        "answer_option_5": "",
-        "answer_option_6": "",
-        "fixed_num": 0,
-        "difficulty": 2,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": 1034,
-        "question": "7",
-        "answer_option_1": "1",
-        "answer_option_2": "2",
-        "answer_option_3": "4",
-        "answer_option_4": "4",
-        "answer_option_5": "",
-        "answer_option_6": "",
-        "fixed_num": 0,
-        "difficulty": 2,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": 1038,
-        "question": "8",
-        "answer_option_1": "1",
-        "answer_option_2": "2",
+        "answer_option_2": "4",
         "answer_option_3": "5",
-        "answer_option_4": "4",
+        "answer_option_4": "",
         "answer_option_5": "",
         "answer_option_6": "",
-        "fixed_num": 0,
-        "difficulty": 2,
+        "fixed_num": 9,
+        "difficulty": 1,
         "subject": [
           {
             "subject_code": "0",
@@ -192,16 +130,168 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": 1062,
-        "question": "10",
-        "answer_option_1": "1",
-        "answer_option_2": "9",
-        "answer_option_3": "2",
-        "answer_option_4": "3",
+        "id": 209002,
+        "question": "11",
+        "answer_option_1": "9",
+        "answer_option_2": "4",
+        "answer_option_3": "7",
+        "answer_option_4": "",
         "answer_option_5": "",
         "answer_option_6": "",
-        "fixed_num": 0,
-        "difficulty": 2,
+        "fixed_num": 2,
+        "difficulty": 1,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 209012,
+        "question": "12",
+        "answer_option_1": "9",
+        "answer_option_2": "4",
+        "answer_option_3": "6",
+        "answer_option_4": "",
+        "answer_option_5": "",
+        "answer_option_6": "",
+        "fixed_num": 3,
+        "difficulty": 1,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 209004,
+        "question": "11",
+        "answer_option_1": "7",
+        "answer_option_2": "2",
+        "answer_option_3": "9",
+        "answer_option_4": "",
+        "answer_option_5": "",
+        "answer_option_6": "",
+        "fixed_num": 4,
+        "difficulty": 1,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 209034,
+        "question": "14",
+        "answer_option_1": "4",
+        "answer_option_2": "2",
+        "answer_option_3": "6",
+        "answer_option_4": "",
+        "answer_option_5": "",
+        "answer_option_6": "",
+        "fixed_num": 10,
+        "difficulty": 1,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 209020,
+        "question": "13",
+        "answer_option_1": "10",
+        "answer_option_2": "1",
+        "answer_option_3": "2",
+        "answer_option_4": "",
+        "answer_option_5": "",
+        "answer_option_6": "",
+        "fixed_num": 3,
+        "difficulty": 1,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 209013,
+        "question": "12",
+        "answer_option_1": "8",
+        "answer_option_2": "5",
+        "answer_option_3": "2",
+        "answer_option_4": "",
+        "answer_option_5": "",
+        "answer_option_6": "",
+        "fixed_num": 4,
+        "difficulty": 1,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 209027,
+        "question": "13",
+        "answer_option_1": "3",
+        "answer_option_2": "2",
+        "answer_option_3": "8",
+        "answer_option_4": "",
+        "answer_option_5": "",
+        "answer_option_6": "",
+        "fixed_num": 10,
+        "difficulty": 1,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 209009,
+        "question": "11",
+        "answer_option_1": "2",
+        "answer_option_2": "1",
+        "answer_option_3": "3",
+        "answer_option_4": "",
+        "answer_option_5": "",
+        "answer_option_6": "",
+        "fixed_num": 9,
+        "difficulty": 1,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 209006,
+        "question": "11",
+        "answer_option_1": "5",
+        "answer_option_2": "4",
+        "answer_option_3": "7",
+        "answer_option_4": "",
+        "answer_option_5": "",
+        "answer_option_6": "",
+        "fixed_num": 6,
+        "difficulty": 1,
         "subject": [
           {
             "subject_code": "0",

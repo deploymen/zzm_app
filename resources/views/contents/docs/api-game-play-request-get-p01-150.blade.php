@@ -88,11 +88,11 @@ X-game-code: 0000015k
   "status": "success",
   "data": {
     "planet": {
-      "id": "150",
+      "id": 150,
       "name": "Sushi Star: Sushimetry 3",
       "description": "Know your ingredients!",
       "parameters": null,
-      "question_count": "10",
+      "question_count": 10,
       "badges": {
         "speed": "1",
         "accuracy": "0.1",
@@ -104,78 +104,80 @@ X-game-code: 0000015k
     "status": {
       "star": "1",
       "difficulty": 2,
-      "top_score": "1"
+      "top_score": 1
     },
-    "planet_top_score": {
-      "nickname1": "Azoil",
-      "nickname2": "Smishis",
-      "avatar": "avatar5.jpg",
-      "score": "1"
-    },
+    "planet_top_score": [
+      {
+        "nickname1": "Mozviss",
+        "nickname2": "Oznin",
+        "avatar": "default.jpg",
+        "score": 1
+      }
+    ],
     "questions": [
       {
-        "id": "85",
-        "question": "4 Triangles and 2 Hexagons",
-        "difficulty": "2",
+        "id": 326,
+        "question": "2 Triangles and 2 Quadrilaterals",
+        "difficulty": 2,
         "questions": {
-          "angle3": "4",
-          "angle4": "4",
-          "angle5": "0",
-          "angle6": "4"
+          "angle3": 4,
+          "angle4": 4,
+          "angle5": 0,
+          "angle6": 4
         },
         "answers": {
-          "angle3": "4",
-          "angle4": "0",
-          "angle5": "0",
-          "angle6": "2"
+          "angle3": 2,
+          "angle4": 2,
+          "angle5": 0,
+          "angle6": 0
         },
         "subject": [
           {
-            "subject_code": "0",
-            "name": null,
-            "description": null
+            "subject_code": "subject_2",
+            "name": "subject_2",
+            "description": "subject_2"
           }
         ]
       },
       {
-        "id": "330",
-        "question": "3 Triangles and 3 Quadrilaterals",
-        "difficulty": "2",
-        "questions": {
-          "angle3": "4",
-          "angle4": "4",
-          "angle5": "0",
-          "angle6": "4"
-        },
-        "answers": {
-          "angle3": "3",
-          "angle4": "3",
-          "angle5": "0",
-          "angle6": "0"
-        },
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "112",
+        "id": 112,
         "question": "3 Quadrilaterals and 3 Hexagons",
-        "difficulty": "2",
+        "difficulty": 2,
         "questions": {
-          "angle3": "4",
-          "angle4": "4",
-          "angle5": "0",
-          "angle6": "4"
+          "angle3": 4,
+          "angle4": 4,
+          "angle5": 0,
+          "angle6": 4
         },
         "answers": {
-          "angle3": "0",
-          "angle4": "3",
-          "angle5": "0",
-          "angle6": "3"
+          "angle3": 0,
+          "angle4": 3,
+          "angle5": 0,
+          "angle6": 3
+        },
+        "subject": [
+          {
+            "subject_code": "subject_2",
+            "name": "subject_2",
+            "description": "subject_2"
+          }
+        ]
+      },
+      {
+        "id": 239,
+        "question": "4 Triangles and 1 Hexagon",
+        "difficulty": 2,
+        "questions": {
+          "angle3": 4,
+          "angle4": 4,
+          "angle5": 0,
+          "angle6": 4
+        },
+        "answers": {
+          "angle3": 4,
+          "angle4": 0,
+          "angle5": 0,
+          "angle6": 1
         },
         "subject": [
           {
@@ -186,68 +188,97 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": "418",
-        "question": "2 Quadrilaterals and 1 Hexagon",
-        "difficulty": "2",
+        "id": 424,
+        "question": "3 Quadrilaterals and 3 Hexagons",
+        "difficulty": 2,
         "questions": {
-          "angle3": "4",
-          "angle4": "4",
-          "angle5": "0",
-          "angle6": "4"
+          "angle3": 4,
+          "angle4": 4,
+          "angle5": 0,
+          "angle6": 4
         },
         "answers": {
-          "angle3": "0",
-          "angle4": "2",
-          "angle5": "0",
-          "angle6": "1"
+          "angle3": 0,
+          "angle4": 3,
+          "angle5": 0,
+          "angle6": 3
         },
         "subject": [
           {
-            "subject_code": "0",
-            "name": null,
-            "description": null
+            "subject_code": "subject_2",
+            "name": "subject_2",
+            "description": "subject_2"
           }
         ]
       },
       {
-        "id": "235",
-        "question": "1 Triangle and 1 Hexagon",
-        "difficulty": "2",
+        "id": 330,
+        "question": "3 Triangles and 3 Quadrilaterals",
+        "difficulty": 2,
         "questions": {
-          "angle3": "4",
-          "angle4": "4",
-          "angle5": "0",
-          "angle6": "4"
+          "angle3": 4,
+          "angle4": 4,
+          "angle5": 0,
+          "angle6": 4
         },
         "answers": {
-          "angle3": "1",
-          "angle4": "0",
-          "angle5": "0",
-          "angle6": "1"
+          "angle3": 3,
+          "angle4": 3,
+          "angle5": 0,
+          "angle6": 0
         },
         "subject": [
           {
-            "subject_code": "0",
-            "name": null,
-            "description": null
+            "subject_code": "subject_2",
+            "name": "subject_2",
+            "description": "subject_2"
+          },
+          {
+            "subject_code": "subject_3",
+            "name": "subject_3",
+            "description": "subject_3"
           }
         ]
       },
       {
-        "id": "325",
+        "id": 13,
         "question": "3 Triangles and 1 Quadrilateral",
-        "difficulty": "2",
+        "difficulty": 2,
         "questions": {
-          "angle3": "4",
-          "angle4": "4",
-          "angle5": "0",
-          "angle6": "4"
+          "angle3": 4,
+          "angle4": 4,
+          "angle5": 0,
+          "angle6": 4
         },
         "answers": {
-          "angle3": "3",
-          "angle4": "1",
-          "angle5": "0",
-          "angle6": "0"
+          "angle3": 3,
+          "angle4": 1,
+          "angle5": 0,
+          "angle6": 0
+        },
+        "subject": [
+          {
+            "subject_code": "subject_1",
+            "name": "subject_1",
+            "description": "subject_1"
+          }
+        ]
+      },
+      {
+        "id": 237,
+        "question": "3 Triangles and 1 Hexagon",
+        "difficulty": 2,
+        "questions": {
+          "angle3": 4,
+          "angle4": 4,
+          "angle5": 0,
+          "angle6": 4
+        },
+        "answers": {
+          "angle3": 3,
+          "angle4": 0,
+          "angle5": 0,
+          "angle6": 1
         },
         "subject": [
           {
@@ -258,98 +289,79 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": "242",
-        "question": "3 Triangles and 3 Hexagons",
-        "difficulty": "2",
+        "id": 114,
+        "question": "4 Quadrilaterals and 4 Hexagons",
+        "difficulty": 2,
         "questions": {
-          "angle3": "4",
-          "angle4": "4",
-          "angle5": "0",
-          "angle6": "4"
+          "angle3": 4,
+          "angle4": 4,
+          "angle5": 0,
+          "angle6": 4
         },
         "answers": {
-          "angle3": "3",
-          "angle4": "0",
-          "angle5": "0",
-          "angle6": "3"
+          "angle3": 0,
+          "angle4": 4,
+          "angle5": 0,
+          "angle6": 4
         },
         "subject": [
           {
-            "subject_code": "0",
-            "name": null,
-            "description": null
+            "subject_code": "subject_2",
+            "name": "subject_2",
+            "description": "subject_2"
+          },
+          {
+            "subject_code": "subject_3",
+            "name": "subject_3",
+            "description": "subject_3"
           }
         ]
       },
       {
-        "id": "423",
-        "question": "4 Quadrilaterals and 2 Hexagons",
-        "difficulty": "2",
+        "id": 107,
+        "question": "3 Quadrilaterals and 1 Hexagon",
+        "difficulty": 2,
         "questions": {
-          "angle3": "4",
-          "angle4": "4",
-          "angle5": "0",
-          "angle6": "4"
+          "angle3": 4,
+          "angle4": 4,
+          "angle5": 0,
+          "angle6": 4
         },
         "answers": {
-          "angle3": "0",
-          "angle4": "4",
-          "angle5": "0",
-          "angle6": "2"
+          "angle3": 0,
+          "angle4": 3,
+          "angle5": 0,
+          "angle6": 1
         },
         "subject": [
           {
-            "subject_code": "0",
-            "name": null,
-            "description": null
+            "subject_code": "subject_1",
+            "name": "subject_1",
+            "description": "subject_1"
           }
         ]
       },
       {
-        "id": "399",
-        "question": "4 Triangles and 3 Hexagons",
-        "difficulty": "2",
+        "id": 395,
+        "question": "4 Triangles and 1 Hexagon",
+        "difficulty": 2,
         "questions": {
-          "angle3": "4",
-          "angle4": "4",
-          "angle5": "0",
-          "angle6": "4"
+          "angle3": 4,
+          "angle4": 4,
+          "angle5": 0,
+          "angle6": 4
         },
         "answers": {
-          "angle3": "4",
-          "angle4": "0",
-          "angle5": "0",
-          "angle6": "3"
+          "angle3": 4,
+          "angle4": 0,
+          "angle5": 0,
+          "angle6": 1
         },
         "subject": [
           {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "169",
-        "question": "3 Triangles and 1 Quadrilateral",
-        "difficulty": "2",
-        "questions": {
-          "angle3": "4",
-          "angle4": "4",
-          "angle5": "0",
-          "angle6": "4"
-        },
-        "answers": {
-          "angle3": "3",
-          "angle4": "1",
-          "angle5": "0",
-          "angle6": "0"
-        },
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
+            "subject_code": "subject_1",
+            "name": "subject_1",
+            "description": "subject_1"
           }
         ]
       }
