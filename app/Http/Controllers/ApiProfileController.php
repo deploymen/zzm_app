@@ -47,7 +47,7 @@ Class ApiProfileController extends Controller {
 		
 		$userId = Request::input('user_id');
 		$profileInfo = [];
-		// try {
+		try {
 	 	$profiles = GameProfile::select('id','user_id', 'class_id', 'first_name' , 'last_name','age','school','grade' ,'city','email','nickname1','nickname2','avatar_id')->where('user_id', $userId)->get();
 
 		foreach($profiles as $profile){
@@ -109,13 +109,13 @@ Class ApiProfileController extends Controller {
 
 			return ResponseHelper::OutputJSON('success', '', ['list' => $profileInfo]);
 
-			// } catch (Exception $ex) {
-			// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-			// 		'source' => 'ApiProfileController > get',
-			// 		'inputs' => Request::all(),
-			// 	])]);
-			// 	return ResponseHelper::OutputJSON('exception');
-			// }	
+			} catch (Exception $ex) {
+				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+					'source' => 'ApiProfileController > get',
+					'inputs' => Request::all(),
+				])]);
+				return ResponseHelper::OutputJSON('exception');
+			}	
 	}
 
 	public function create() {

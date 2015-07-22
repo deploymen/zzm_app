@@ -214,6 +214,25 @@ Class ApiGameController extends Controller {
 
 			$result = DB::SELECT($sql, ['planet_id'=>$planetId] );
 
+			$gameStatus = $gameResult['status'];
+			if($gameStatus == 'False'){
+				$gameStatus = 'fail';
+			}elseif($gameStatus == 'True'){
+				$gameStatus = 'pass';
+			}
+
+			if($gameResult['badges']['speed'] == 'True'){
+				$gameResult['badges']['speed'] = '1';
+			}elseif($gameResult['badges']['speed'] == 'False'){
+				$gameResult['badges']['speed'] = '0';
+			}
+
+			if($gameResult['badges']['accuracy'] == 'True'){
+				$gameResult['badges']['accuracy'] = '1';
+			}elseif($gameResult['badges']['accuracy'] == 'False'){
+				$gameResult['badges']['accuracy'] = '0';
+			}
+				
 			$gamePlay = new GamePlay;
 			$gamePlay->user_id = $userId;
 			$gamePlay->profile_id = $profileId;
@@ -224,7 +243,7 @@ Class ApiGameController extends Controller {
 			$gamePlay->device_id = $deviceId;
 			$gamePlay->code = $gameCode;
 			$gamePlay->hash = $hash1;
-			$gamePlay->status = $gameResult['status'];
+			$gamePlay->status = $gameStatus;
 			$gamePlay->badges_matrick = json_encode($gameResult['badges']);
 			$gamePlay->save();
 
