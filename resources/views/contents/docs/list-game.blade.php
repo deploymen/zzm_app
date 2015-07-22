@@ -213,6 +213,20 @@
                     <td>p07</td>
                     <td align="center"><a href="/docs/api.game-play-result-post-p07" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
+                 <tr>
+                    <td>7.</td>
+                    <td>POST</td>
+                    <td>/api/game/play/105/result </td>
+                    <td>p10</td>
+                    <td align="center"><a href="/docs/api.game-play-result-post-p10" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                </tr>
+                 <tr>
+                    <td>8.</td>
+                    <td>POST</td>
+                    <td>/api/game/play/129/result </td>
+                    <td>p18</td>
+                    <td align="center"><a href="/docs/api.game-play-result-post-p18" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                </tr>
 
             </tbody>
         </table>
