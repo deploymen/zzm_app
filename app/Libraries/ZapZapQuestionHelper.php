@@ -677,7 +677,7 @@ class ZapZapQuestionHelper{
 			return $results;
 
 		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp03', ['environment' => json_encode([
+			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp10', ['environment' => json_encode([
 				'ex' =>  $ex->getMessage(),
 				'sql' =>  $sql,
 			])]);
@@ -766,7 +766,7 @@ class ZapZapQuestionHelper{
 			return $results;
 
 		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp03', ['environment' => json_encode([
+			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp18', ['environment' => json_encode([
 				'ex' =>  $ex->getMessage(),
 				'sql' =>  $sql,
 			])]);
