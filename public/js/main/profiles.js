@@ -31,7 +31,7 @@ function displayProfiles(){
 	$.ajaxSetup({
 	    beforeSend: function(xat) {
 	        allVars.xat;
-	        console.log(allVars.xat);
+	        // console.log(allVars.xat);
 	    }
 	});
 
@@ -138,6 +138,10 @@ var profilecity = $('#profile-city');
 var profileid = $('#profile-id');
 var profileschool = $('#profile-school');
 var btnchangesok = $('#btn-changes-ok');
+//var editselectage = $('#profile-age-edit :selected');
+var editselectage = $('#profile-age-edit').children('option').filter(':selected').val();
+var editselectgrade = $('#profile-grade-edit').children('option').filter(':selected').val();
+//console.log(editselectage.val());
 
 function saveProfile(){
 
@@ -148,7 +152,9 @@ function saveProfile(){
 		last_name  : profilelastinitial.val(),
 		school     : profileschool.val(),
 		city       : profilecity.val(),
-		id         : profileid.val()
+		id         : profileid.val(),
+		age        : editselectage,
+		grade      : editselectgrade
 	}
 
 	$.ajaxSetup({
@@ -180,7 +186,7 @@ btnsaveprofile.click(function(){
 });
 
 btnchangesok.click(function(){
-	window.location = "/user/profiles";
+	location.reload();
 });
 
 // Add Profile
@@ -205,8 +211,8 @@ function createNewProfile(){
 		school       : newschool.val(),
 		city         : newcity.val(),
 		email        : 'marypoppins@nanny.com',
-		age          : 8,
-		grade        : 9
+		age          : editselectage,
+		grade        : editselectgrade
 	}
 
 	$.ajaxSetup({

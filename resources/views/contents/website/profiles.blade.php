@@ -59,7 +59,7 @@
 		<div class="row">
 			<div class="small-12 medium-6 columns">
 				<label>Age
-					<select>
+					<select id="profile-age-edit">
 						<option value="5">5 or younger</option>
 						<option value="6">6</option>
 						<option value="7">7</option>
@@ -79,7 +79,7 @@
 			</div>
 			<div class="small-12 medium-6 columns">
 				<label>Grade
-					<select>
+					<select id="profile-grade-edit">
 						<option value="prekindergarten">Pre-Kindergarten</option>
 						<option value="kindergarten">Kindergarten</option>
 						<option value="1">1</option>
