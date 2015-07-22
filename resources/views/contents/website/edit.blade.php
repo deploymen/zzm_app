@@ -94,7 +94,7 @@
 				</label>
 			</div>
 			<div class="small-12 medium-6 columns">
-				<!-- <label>Grade
+				<label>Grade
 					<select>
 						<option value="prekindergarten">Pre-Kindergarten</option>
 						<option value="kindergarten">Kindergarten</option>
@@ -112,18 +112,8 @@
 						<option value="12">12</option>
 						<option value="continuous">Continuous Learner</option>
 					</select>
-				</label> -->
-				<label>Grade
-					<select>
-						@foreach ([1,2,3,4,5,6,7,8,9,10,11,12] as $grade)
-							@if ($grade->id == $userGradeId)
-							    <option selected="selected">{{$grade->name}}</option>
-							@else
-							    <option>{{$grade->name}}</option>
-							@endif
-						@endforeach
-					</select>
 				</label>
+				
 			</div>
 		</div>
 

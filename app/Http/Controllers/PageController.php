@@ -60,6 +60,9 @@ Class PageController extends Controller {
 				return ResponseHelper::OutputJSON('fail', 'profile not found');
 			}
 
+			$profile->nickName1;
+			$profile->nickName2;
+
 			$profile->avatar;
 			$profile->gameCode;
 

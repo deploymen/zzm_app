@@ -80,7 +80,7 @@ ZZM.playId = '{{Request::input('play_id')}}';
 				</div>
 				<div class="nickname">
 					<p class="profile-name">{{$profile->first_name}} {{$profile->last_name}}</p>
-					<p class="profile-nickname">Nickname</p>
+					<p class="profile-nickname">{{$profile->nickName1->name}} {{$profile->nickName2->name}}</p>
 					<p class="profile-school-name truncate">{{$profile->school}}</p>
 				</div>
 			</div>
