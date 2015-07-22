@@ -17,7 +17,7 @@ function allVars(){
 
 	$.ajaxSetup({
 	    beforeSend: function(xhr) {
-	        xat =xhr.setRequestHeader('X-access-token', '13|19e0173a89b037da54892ca2b075b6ccf29a8944');
+	        xat =xhr.setRequestHeader('X-access-token', '15|988d09d3d9af03b0abc9d97fb5f709cb77e422f6');
 	    }
 	});
 };
