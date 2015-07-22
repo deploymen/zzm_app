@@ -41,12 +41,17 @@ Class PageController extends Controller {
 			if($userId != $profile->user_id){
 				return ResponseHelper::OutputJSON('fail','wrong user id');
 			}			
-
-			return view('contents.website.edit', [
-				'profile'=>$profile,
+return ResponseHelper::OutputJSON('success','',[
+	'profile'=>$profile,
 				'age' => $age,
 				'grade' => $grade
-				]);
+
+	]);
+			// return view('contents.website.edit', [
+			// 	'profile'=>$profile,
+			// 	'age' => $age,
+			// 	'grade' => $grade
+			// 	]);
 
 		} catch (\Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
