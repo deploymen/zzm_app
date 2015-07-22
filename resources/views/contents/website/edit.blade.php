@@ -10,22 +10,7 @@
 @stop
 
 @section('js_include')
-<script type="text/javascript">
-var VARS = VARS || {};
 
-VARS = {
-	id         : '{{$profile->id}}',
-	first_name : '{{$profile->first_name}}',
-	last_name  : '{{$profile->last_name}}',
-	school     : '{{$profile->school}}',
-	city       : '{{$profile->city}}',
-	email      : '{{$profile->email}}',
-	avatar     : '{{$profile->avatar}}',
-	game_code  : '{{$profile->gameCode}}',
-	class_id   : '{{$profile->class_id}}',
-	nickname1  : '{{$profile->nickname1}}'
-};
-</script>
 <script src="/../js/main/profiles.js"></script>
 @stop
 
@@ -89,41 +74,26 @@ VARS = {
 			<div class="small-12 medium-6 columns">
 				<label>Age
 					<select>
-						<option value="5">0 - 5</option>
-						<option value="6">6</option>
-						<option value="7">7</option>
-						<option value="8">8</option>
-						<option value="8">9</option>
-						<option value="8">10</option>
-						<option value="8">11</option>
-						<option value="8">12</option>
-						<option value="8">13</option>
-						<option value="8">14</option>
-						<option value="8">15</option>
-						<option value="8">16</option>
-						<option value="8">17</option>
-						<option value="8">18 +</option>
+					@foreach ($ages as $age)
+					    @if ($age->id == $userAgeId)
+					        <option selected="selected">{{$age->name}}</option>
+					    @else
+					        <option value="{{$grade->name}}">{{$age->name}}</option>
+					    @endif
+					@endforeach
 					</select>
 				</label>
 			</div>
 			<div class="small-12 medium-6 columns">
 				<label>Grade
 					<select>
-						<option value="prekindergarten">Pre-Kindergarten</option>
-						<option value="kindergarten">Kindergarten</option>
-						<option value="grade1">Grade 1</option>
-						<option value="grade2">Grade 2</option>
-						<option value="grade3">Grade 3</option>
-						<option value="grade4">Grade 4</option>
-						<option value="grade5">Grade 5</option>
-						<option value="grade6">Grade 6</option>
-						<option value="grade7">Grade 7</option>
-						<option value="grade8">Grade 8</option>
-						<option value="grade9">Grade 9</option>
-						<option value="grade10">Grade 10</option>
-						<option value="grade11">Grade 11</option>
-						<option value="grade12">Grade 12</option>
-						<option value="continue">Continuous Learner</option>
+						@foreach ($grades as $grade)
+						    @if ($grade->id == $userGradeId)
+						        <option selected="selected">{{$grade->name}}</option>
+						    @else
+						        <option value="{{$grade->name}}">{{$grade->name}}</option>
+						    @endif
+						@endforeach
 					</select>
 				</label>
 			</div>
