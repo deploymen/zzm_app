@@ -108,7 +108,7 @@ Class ApiGameController extends Controller {
 					],
 					'status' => [
 						'star' => $userMap[0]->star,	
-						'difficulty' =>$difficulty,
+						'difficulty' =>(string)$difficulty,
 						'top_score' => $userMap[0]->top_score,
 					],
 					'planet_top_score'=>$top_scre_result,
