@@ -41,6 +41,7 @@ Class ApiGameController extends Controller {
 	//GET QUESTION
 	public function request($planetId) {	
 		$gameCode = Request::input('game_code');
+		
 		LogHelper::LogGetQuestions($planetId, $gameCode);
 
 		try{
@@ -107,7 +108,7 @@ Class ApiGameController extends Controller {
 					],
 					'status' => [
 						'star' => $userMap[0]->star,	
-						'difficulty' =>(string)$difficulty,
+						'difficulty' =>$difficulty,
 						'top_score' => $userMap[0]->top_score,
 					],
 					'planet_top_score'=>$top_scre_result,
