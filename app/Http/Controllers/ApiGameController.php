@@ -83,7 +83,6 @@ Class ApiGameController extends Controller {
 
 			$difficulty = $userMap[0]->star + 1;
 			if($difficulty > 5){ $difficulty = 5; }
-
 			switch($planet->game_type){
 				case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId,$difficulty,$questionCount); break;
 				case 'p02':$questions = ZapZapQuestionHelper::GetQuestionP02($planetId,$difficulty,$questionCount); break;
@@ -108,7 +107,7 @@ Class ApiGameController extends Controller {
 					],
 					'status' => [
 						'star' => $userMap[0]->star,	
-						'difficulty' =>$difficulty,
+						'difficulty' =>(string)$difficulty,
 						'top_score' => $userMap[0]->top_score,
 					],
 					'planet_top_score'=>$top_scre_result,
