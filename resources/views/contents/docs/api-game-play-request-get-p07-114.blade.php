@@ -88,39 +88,30 @@ X-game-code: 0000015k
   "status": "success",
   "data": {
     "planet": {
-      "id": "114",
+      "id": 114,
       "name": "More or Less?",
       "description": ">=<",
       "parameters": null,
-      "question_count": "10",
-      "badges": {
-        "speed": "6",
-        "accuracy": "0.6",
-        "score_mul_base": "1",
-        "score_mul_accuracy": "1",
-        "score_mul_speed": "1"
-      }
+      "question_count": 10,
+      "badges": null
     },
     "status": {
       "star": "0",
       "difficulty": 1,
-      "top_score": "0"
+      "top_score": 0
     },
-    "planet_top_score": {
-      "nickname1": "NULL",
-      "nickname2": "NULL",
-      "avatar": "NULL",
-      "score": "NULL"
-    },
+    "planet_top_score": [
+      
+    ],
     "questions": [
       {
-        "id": "5005",
-        "difficulty": "1",
+        "id": 5017,
+        "difficulty": 1,
         "questions": {
-          "left_question_1": "1",
+          "left_question_1": 2,
           "left_question_2": "",
           "left_question_3": null,
-          "right_question_1": "5",
+          "right_question_1": 7,
           "right_question_2": "",
           "right_question_3": null
         },
@@ -129,64 +120,20 @@ X-game-code: 0000015k
         },
         "subject": [
           {
-            "subject_code": "0",
-            "name": null,
-            "description": null
+            "subject_code": "subject_1",
+            "name": "subject_1",
+            "description": "subject_1"
           }
         ]
       },
       {
-        "id": "5062",
-        "difficulty": "1",
+        "id": 5019,
+        "difficulty": 1,
         "questions": {
-          "left_question_1": "7",
+          "left_question_1": 2,
           "left_question_2": "",
           "left_question_3": null,
-          "right_question_1": "2",
-          "right_question_2": "",
-          "right_question_3": null
-        },
-        "answers": {
-          "answer": ">"
-        },
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "5086",
-        "difficulty": "1",
-        "questions": {
-          "left_question_1": "9",
-          "left_question_2": "",
-          "left_question_3": null,
-          "right_question_1": "6",
-          "right_question_2": "",
-          "right_question_3": null
-        },
-        "answers": {
-          "answer": ">"
-        },
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "5019",
-        "difficulty": "1",
-        "questions": {
-          "left_question_1": "2",
-          "left_question_2": "",
-          "left_question_3": null,
-          "right_question_1": "9",
+          "right_question_1": 9,
           "right_question_2": "",
           "right_question_3": null
         },
@@ -195,20 +142,25 @@ X-game-code: 0000015k
         },
         "subject": [
           {
-            "subject_code": "0",
-            "name": null,
-            "description": null
+            "subject_code": "subject_3",
+            "name": "subject_3",
+            "description": "subject_3"
+          },
+          {
+            "subject_code": "subject_1",
+            "name": "subject_1",
+            "description": "subject_1"
           }
         ]
       },
       {
-        "id": "5046",
-        "difficulty": "1",
+        "id": 5003,
+        "difficulty": 1,
         "questions": {
-          "left_question_1": "5",
+          "left_question_1": 1,
           "left_question_2": "",
           "left_question_3": null,
-          "right_question_1": "6",
+          "right_question_1": 3,
           "right_question_2": "",
           "right_question_3": null
         },
@@ -217,20 +169,25 @@ X-game-code: 0000015k
         },
         "subject": [
           {
-            "subject_code": "0",
-            "name": null,
-            "description": null
+            "subject_code": "subject_1",
+            "name": "subject_1",
+            "description": "subject_1"
+          },
+          {
+            "subject_code": "subject_3",
+            "name": "subject_3",
+            "description": "subject_3"
           }
         ]
       },
       {
-        "id": "5011",
-        "difficulty": "1",
+        "id": 5044,
+        "difficulty": 1,
         "questions": {
-          "left_question_1": "2",
+          "left_question_1": 5,
           "left_question_2": "",
           "left_question_3": null,
-          "right_question_1": "1",
+          "right_question_1": 4,
           "right_question_2": "",
           "right_question_3": null
         },
@@ -239,42 +196,20 @@ X-game-code: 0000015k
         },
         "subject": [
           {
-            "subject_code": "0",
-            "name": null,
-            "description": null
+            "subject_code": "subject_2",
+            "name": "subject_2",
+            "description": "subject_2"
           }
         ]
       },
       {
-        "id": "5043",
-        "difficulty": "1",
+        "id": 5018,
+        "difficulty": 1,
         "questions": {
-          "left_question_1": "5",
+          "left_question_1": 2,
           "left_question_2": "",
           "left_question_3": null,
-          "right_question_1": "3",
-          "right_question_2": "",
-          "right_question_3": null
-        },
-        "answers": {
-          "answer": ">"
-        },
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "5013",
-        "difficulty": "1",
-        "questions": {
-          "left_question_1": "2",
-          "left_question_2": "",
-          "left_question_3": null,
-          "right_question_1": "3",
+          "right_question_1": 8,
           "right_question_2": "",
           "right_question_3": null
         },
@@ -283,20 +218,42 @@ X-game-code: 0000015k
         },
         "subject": [
           {
-            "subject_code": "0",
-            "name": null,
-            "description": null
+            "subject_code": "subject_2",
+            "name": "subject_2",
+            "description": "subject_2"
           }
         ]
       },
       {
-        "id": "5042",
-        "difficulty": "1",
+        "id": 5015,
+        "difficulty": 1,
         "questions": {
-          "left_question_1": "5",
+          "left_question_1": 2,
           "left_question_2": "",
           "left_question_3": null,
-          "right_question_1": "2",
+          "right_question_1": 5,
+          "right_question_2": "",
+          "right_question_3": null
+        },
+        "answers": {
+          "answer": "<"
+        },
+        "subject": [
+          {
+            "subject_code": "subject_1",
+            "name": "subject_1",
+            "description": "subject_1"
+          }
+        ]
+      },
+      {
+        "id": 5083,
+        "difficulty": 1,
+        "questions": {
+          "left_question_1": 9,
+          "left_question_2": "",
+          "left_question_3": null,
+          "right_question_1": 3,
           "right_question_2": "",
           "right_question_3": null
         },
@@ -305,31 +262,85 @@ X-game-code: 0000015k
         },
         "subject": [
           {
-            "subject_code": "0",
-            "name": null,
-            "description": null
+            "subject_code": "subject_1",
+            "name": "subject_1",
+            "description": "subject_1"
           }
         ]
       },
       {
-        "id": "5089",
-        "difficulty": "1",
+        "id": 5002,
+        "difficulty": 1,
         "questions": {
-          "left_question_1": "9",
+          "left_question_1": 1,
           "left_question_2": "",
           "left_question_3": null,
-          "right_question_1": "9",
+          "right_question_1": 2,
           "right_question_2": "",
           "right_question_3": null
         },
         "answers": {
-          "answer": "="
+          "answer": "<"
         },
         "subject": [
           {
-            "subject_code": "0",
-            "name": null,
-            "description": null
+            "subject_code": "subject_2",
+            "name": "subject_2",
+            "description": "subject_2"
+          },
+          {
+            "subject_code": "subject_3",
+            "name": "subject_3",
+            "description": "subject_3"
+          }
+        ]
+      },
+      {
+        "id": 5043,
+        "difficulty": 1,
+        "questions": {
+          "left_question_1": 5,
+          "left_question_2": "",
+          "left_question_3": null,
+          "right_question_1": 3,
+          "right_question_2": "",
+          "right_question_3": null
+        },
+        "answers": {
+          "answer": ">"
+        },
+        "subject": [
+          {
+            "subject_code": "subject_3",
+            "name": "subject_3",
+            "description": "subject_3"
+          },
+          {
+            "subject_code": "subject_1",
+            "name": "subject_1",
+            "description": "subject_1"
+          }
+        ]
+      },
+      {
+        "id": 5059,
+        "difficulty": 1,
+        "questions": {
+          "left_question_1": 6,
+          "left_question_2": "",
+          "left_question_3": null,
+          "right_question_1": 9,
+          "right_question_2": "",
+          "right_question_3": null
+        },
+        "answers": {
+          "answer": "<"
+        },
+        "subject": [
+          {
+            "subject_code": "subject_1",
+            "name": "subject_1",
+            "description": "subject_1"
           }
         ]
       }

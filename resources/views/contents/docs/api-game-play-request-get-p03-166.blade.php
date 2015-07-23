@@ -88,38 +88,46 @@ X-game-code: 0000015k
   "status": "success",
   "data": {
     "planet": {
-      "id": "102",
-      "name": "The 'Correct' Collector",
-      "description": "Yes? No?",
+      "id": 166,
+      "name": "The Big Showdown",
+      "description": "Which piece fits?",
       "parameters": null,
-      "question_count": "10",
+      "question_count": 20,
       "badges": {
-        "speed": "2",
-        "accuracy": "0.2",
+        "speed": "3",
+        "accuracy": "0.3",
         "score_mul_base": "1",
         "score_mul_accuracy": "1",
         "score_mul_speed": "1"
       }
     },
     "status": {
-      "star": "0",
-      "difficulty": 1,
-      "top_score": "0"
+      "star": "2",
+      "difficulty": 3,
+      "top_score": 108
     },
-    "planet_top_score": {
-      "nickname1": "NULL",
-      "nickname2": "NULL",
-      "avatar": "NULL",
-      "score": "NULL"
-    },
+    "planet_top_score": [
+      {
+        "nickname1": "Mozviss",
+        "nickname2": "Oznin",
+        "avatar": "default.jpg",
+        "score": 108
+      },
+      {
+        "nickname1": "Mozviss",
+        "nickname2": "Oznin",
+        "avatar": "default.jpg",
+        "score": 1
+      }
+    ],
     "questions": [
       {
-        "id": "205002",
-        "question": "2 = 1",
+        "id": 2165,
+        "question": "9\u00d76=15",
         "answer": "FALSE",
         "answer_option_1": "T",
         "answer_option_2": "F",
-        "difficulty": "1",
+        "difficulty": 3,
         "subject": [
           {
             "subject_code": "0",
@@ -129,12 +137,12 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": "205029",
-        "question": "9 = 6",
+        "id": 2164,
+        "question": "8\u00d76=14",
         "answer": "FALSE",
         "answer_option_1": "T",
         "answer_option_2": "F",
-        "difficulty": "1",
+        "difficulty": 3,
         "subject": [
           {
             "subject_code": "0",
@@ -144,12 +152,12 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": "205030",
-        "question": "10 = 6",
+        "id": 2167,
+        "question": "30\u00d76=36",
         "answer": "FALSE",
         "answer_option_1": "T",
         "answer_option_2": "F",
-        "difficulty": "1",
+        "difficulty": 3,
         "subject": [
           {
             "subject_code": "0",
@@ -159,87 +167,12 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": "205004",
-        "question": "4 = 1",
-        "answer": "FALSE",
-        "answer_option_1": "T",
-        "answer_option_2": "F",
-        "difficulty": "1",
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "205020",
-        "question": "5 = 4",
-        "answer": "FALSE",
-        "answer_option_1": "T",
-        "answer_option_2": "F",
-        "difficulty": "1",
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "205005",
-        "question": "5 = 1",
-        "answer": "FALSE",
-        "answer_option_1": "T",
-        "answer_option_2": "F",
-        "difficulty": "1",
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "205043",
-        "question": "8 = 9",
-        "answer": "FALSE",
-        "answer_option_1": "T",
-        "answer_option_2": "F",
-        "difficulty": "1",
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "205012",
-        "question": "2 = 3",
-        "answer": "FALSE",
-        "answer_option_1": "T",
-        "answer_option_2": "F",
-        "difficulty": "1",
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "205019",
-        "question": "4 = 4",
+        "id": 2021,
+        "question": "3\u00d75=15",
         "answer": "TRUE",
         "answer_option_1": "T",
         "answer_option_2": "F",
-        "difficulty": "1",
+        "difficulty": 3,
         "subject": [
           {
             "subject_code": "0",
@@ -249,12 +182,237 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": "205007",
-        "question": "2 = 2",
+        "id": 2168,
+        "question": "40\u00d76=46",
+        "answer": "FALSE",
+        "answer_option_1": "T",
+        "answer_option_2": "F",
+        "difficulty": 3,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 2135,
+        "question": "5\u00d75=10",
+        "answer": "FALSE",
+        "answer_option_1": "T",
+        "answer_option_2": "F",
+        "difficulty": 3,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 2022,
+        "question": "4\u00d75=20",
         "answer": "TRUE",
         "answer_option_1": "T",
         "answer_option_2": "F",
-        "difficulty": "1",
+        "difficulty": 3,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 2162,
+        "question": "6\u00d76=12",
+        "answer": "FALSE",
+        "answer_option_1": "T",
+        "answer_option_2": "F",
+        "difficulty": 3,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 2245,
+        "question": "6-6=1",
+        "answer": "FALSE",
+        "answer_option_1": "T",
+        "answer_option_2": "F",
+        "difficulty": 3,
+        "subject": [
+          {
+            "subject_code": "subject_1",
+            "name": "subject_1",
+            "description": "subject_1"
+          }
+        ]
+      },
+      {
+        "id": 2057,
+        "question": "50\u00d76=300",
+        "answer": "TRUE",
+        "answer_option_1": "T",
+        "answer_option_2": "F",
+        "difficulty": 3,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 2019,
+        "question": "1\u00d75=5",
+        "answer": "TRUE",
+        "answer_option_1": "T",
+        "answer_option_2": "F",
+        "difficulty": 3,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 2024,
+        "question": "10\u00d75=50",
+        "answer": "TRUE",
+        "answer_option_1": "T",
+        "answer_option_2": "F",
+        "difficulty": 3,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 2254,
+        "question": "5-5=1",
+        "answer": "FALSE",
+        "answer_option_1": "T",
+        "answer_option_2": "F",
+        "difficulty": 3,
+        "subject": [
+          {
+            "subject_code": "subject_2",
+            "name": "subject_2",
+            "description": "subject_2"
+          }
+        ]
+      },
+      {
+        "id": 2132,
+        "question": "2\u00d75=7",
+        "answer": "FALSE",
+        "answer_option_1": "T",
+        "answer_option_2": "F",
+        "difficulty": 3,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 2056,
+        "question": "40\u00d76=240",
+        "answer": "TRUE",
+        "answer_option_1": "T",
+        "answer_option_2": "F",
+        "difficulty": 3,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 2049,
+        "question": "1\u00d76=6",
+        "answer": "TRUE",
+        "answer_option_1": "T",
+        "answer_option_2": "F",
+        "difficulty": 3,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 2246,
+        "question": "6-5=2",
+        "answer": "FALSE",
+        "answer_option_1": "T",
+        "answer_option_2": "F",
+        "difficulty": 3,
+        "subject": [
+          {
+            "subject_code": "subject_2",
+            "name": "subject_2",
+            "description": "subject_2"
+          }
+        ]
+      },
+      {
+        "id": 2163,
+        "question": "7\u00d76=13",
+        "answer": "FALSE",
+        "answer_option_1": "T",
+        "answer_option_2": "F",
+        "difficulty": 3,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 2020,
+        "question": "2\u00d75=10",
+        "answer": "TRUE",
+        "answer_option_1": "T",
+        "answer_option_2": "F",
+        "difficulty": 3,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 2052,
+        "question": "8\u00d76=48",
+        "answer": "TRUE",
+        "answer_option_1": "T",
+        "answer_option_2": "F",
+        "difficulty": 3,
         "subject": [
           {
             "subject_code": "0",

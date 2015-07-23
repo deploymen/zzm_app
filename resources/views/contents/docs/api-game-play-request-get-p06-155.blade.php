@@ -88,11 +88,11 @@ X-game-code: 0000015k
   "status": "success",
   "data": {
     "planet": {
-      "id": "155",
+      "id": 155,
       "name": "Word Games 10",
       "description": "Do you divide or multiply?",
       "parameters": null,
-      "question_count": "10",
+      "question_count": 10,
       "badges": {
         "speed": "6",
         "accuracy": "0.6",
@@ -102,30 +102,32 @@ X-game-code: 0000015k
       }
     },
     "status": {
-      "star": "0",
-      "difficulty": 1,
-      "top_score": "0"
+      "star": "1",
+      "difficulty": 2,
+      "top_score": 1
     },
-    "planet_top_score": {
-      "nickname1": "NULL",
-      "nickname2": "NULL",
-      "avatar": "NULL",
-      "score": "NULL"
-    },
+    "planet_top_score": [
+      {
+        "nickname1": "Mozviss",
+        "nickname2": "Oznin",
+        "avatar": "default.jpg",
+        "score": 1
+      }
+    ],
     "questions": [
       {
-        "id": "3082",
-        "param_1": "9",
-        "param_2": "3",
+        "id": 3083,
+        "param_1": "12",
+        "param_2": "4",
         "param_3": "",
         "p1_object": "fruit",
         "p2_object": "fruit",
         "p3_object": "",
         "setting": "Day",
-        "part_1": "I have 9 fruits.",
-        "part_2": "One bag could contain only 3 fruits.",
+        "part_1": "I have 12 fruits.",
+        "part_2": "One bag could contain only 4 fruits.",
         "part_3": "How many bags do I need in total in order to contain all the fruits?",
-        "expression": "9 \/ 3",
+        "expression": "12 \/ 4",
         "answer": 3,
         "subject": [
           {
@@ -136,19 +138,19 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": "3022",
+        "id": 3073,
         "param_1": "10",
-        "param_2": "3",
+        "param_2": "4",
         "param_3": "",
-        "p1_object": "fruit",
-        "p2_object": "fruit slice",
+        "p1_object": "tree",
+        "p2_object": "fruit",
         "p3_object": "",
         "setting": "Day",
-        "part_1": "I have 10 fruits.",
-        "part_2": "I am going to cut them into 3 pieces each.",
-        "part_3": "How many pieces will there be in total?",
-        "expression": "10 * 3",
-        "answer": 30,
+        "part_1": "I planted 10 trees in my garden.",
+        "part_2": "Each tree bore 4 fruits.",
+        "part_3": "How many fruits are there in total?",
+        "expression": "10 * 4",
+        "answer": 40,
         "subject": [
           {
             "subject_code": "0",
@@ -158,18 +160,128 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": "3005",
-        "param_1": "2",
+        "id": 3085,
+        "param_1": "30",
         "param_2": "10",
+        "param_3": "",
+        "p1_object": "fruit",
+        "p2_object": "fruit",
+        "p3_object": "",
+        "setting": "Day",
+        "part_1": "I have 30 fruits.",
+        "part_2": "One bag could contain only 10 fruits.",
+        "part_3": "How many bags do I need in total in order to contain all the fruits?",
+        "expression": "30 \/ 10",
+        "answer": 3,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 3080,
+        "param_1": "20",
+        "param_2": "10",
+        "param_3": "",
+        "p1_object": "fruit",
+        "p2_object": "fruit",
+        "p3_object": "",
+        "setting": "Day",
+        "part_1": "I have 20 fruits.",
+        "part_2": "One bag could contain only 10 fruits.",
+        "part_3": "How many bags do I need in total in order to contain all the fruits?",
+        "expression": "20 \/ 10",
+        "answer": 2,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 3024,
+        "param_1": "10",
+        "param_2": "5",
         "param_3": "",
         "p1_object": "fruit",
         "p2_object": "fruit slice",
         "p3_object": "",
         "setting": "Day",
-        "part_1": "I have 2 fruits.",
-        "part_2": "I am going to cut them into 10 pieces each.",
+        "part_1": "I have 10 fruits.",
+        "part_2": "I am going to cut them into 5 pieces each.",
         "part_3": "How many pieces will there be in total?",
-        "expression": "2 * 10",
+        "expression": "10 * 5",
+        "answer": 50,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 3035,
+        "param_1": "30",
+        "param_2": "10",
+        "param_3": "",
+        "p1_object": "fruit",
+        "p2_object": "bag",
+        "p3_object": "",
+        "setting": "Day",
+        "part_1": "I have 30 fruits.",
+        "part_2": "I have 10 bags.",
+        "part_3": "How many fruits should go in each bag?",
+        "expression": "30 \/ 10",
+        "answer": 3,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 3098,
+        "param_1": "40",
+        "param_2": "4",
+        "param_3": "",
+        "p1_object": "fruit",
+        "p2_object": "fruit",
+        "p3_object": "",
+        "setting": "Day",
+        "part_1": "I have 40 fruits.",
+        "part_2": "One bag could contain only 4 fruits.",
+        "part_3": "How many bags do I need in total in order to contain all the fruits?",
+        "expression": "40 \/ 4",
+        "answer": 10,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 3064,
+        "param_1": "4",
+        "param_2": "5",
+        "param_3": "",
+        "p1_object": "tree",
+        "p2_object": "fruit",
+        "p3_object": "",
+        "setting": "Day",
+        "part_1": "I planted 4 trees in my garden.",
+        "part_2": "Each tree bore 5 fruits.",
+        "part_3": "How many fruits are there in total?",
+        "expression": "4 * 5",
         "answer": 20,
         "subject": [
           {
@@ -180,63 +292,19 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": "3052",
-        "param_1": "2",
-        "param_2": "3",
-        "param_3": "",
-        "p1_object": "tree",
-        "p2_object": "fruit",
-        "p3_object": "",
-        "setting": "Day",
-        "part_1": "I planted 2 trees in my garden.",
-        "part_2": "Each tree bore 3 fruits.",
-        "part_3": "How many fruits are there in total?",
-        "expression": "2 * 3",
-        "answer": 6,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "3017",
-        "param_1": "5",
-        "param_2": "3",
-        "param_3": "",
-        "p1_object": "fruit",
-        "p2_object": "fruit slice",
-        "p3_object": "",
-        "setting": "Day",
-        "part_1": "I have 5 fruits.",
-        "part_2": "I am going to cut them into 3 pieces each.",
-        "part_3": "How many pieces will there be in total?",
-        "expression": "5 * 3",
-        "answer": 15,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "3097",
-        "param_1": "30",
-        "param_2": "3",
+        "id": 3090,
+        "param_1": "40",
+        "param_2": "10",
         "param_3": "",
         "p1_object": "fruit",
         "p2_object": "fruit",
         "p3_object": "",
         "setting": "Day",
-        "part_1": "I have 30 fruits.",
-        "part_2": "One bag could contain only 3 fruits.",
+        "part_1": "I have 40 fruits.",
+        "part_2": "One bag could contain only 10 fruits.",
         "part_3": "How many bags do I need in total in order to contain all the fruits?",
-        "expression": "30 \/ 3",
-        "answer": 10,
+        "expression": "40 \/ 10",
+        "answer": 4,
         "subject": [
           {
             "subject_code": "0",
@@ -246,85 +314,19 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": "3032",
-        "param_1": "9",
-        "param_2": "3",
+        "id": 3045,
+        "param_1": "50",
+        "param_2": "10",
         "param_3": "",
         "p1_object": "fruit",
         "p2_object": "bag",
         "p3_object": "",
         "setting": "Day",
-        "part_1": "I have 9 fruits.",
-        "part_2": "I have 3 bags.",
+        "part_1": "I have 50 fruits.",
+        "part_2": "I have 10 bags.",
         "part_3": "How many fruits should go in each bag?",
-        "expression": "9 \/ 3",
-        "answer": 3,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "3062",
-        "param_1": "4",
-        "param_2": "3",
-        "param_3": "",
-        "p1_object": "tree",
-        "p2_object": "fruit",
-        "p3_object": "",
-        "setting": "Day",
-        "part_1": "I planted 4 trees in my garden.",
-        "part_2": "Each tree bore 3 fruits.",
-        "part_3": "How many fruits are there in total?",
-        "expression": "4 * 3",
-        "answer": 12,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "3096",
-        "param_1": "20",
-        "param_2": "2",
-        "param_3": "",
-        "p1_object": "fruit",
-        "p2_object": "fruit",
-        "p3_object": "",
-        "setting": "Day",
-        "part_1": "I have 20 fruits.",
-        "part_2": "One bag could contain only 2 fruits.",
-        "part_3": "How many bags do I need in total in order to contain all the fruits?",
-        "expression": "20 \/ 2",
-        "answer": 10,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "3046",
-        "param_1": "20",
-        "param_2": "2",
-        "param_3": "",
-        "p1_object": "fruit",
-        "p2_object": "bag",
-        "p3_object": "",
-        "setting": "Day",
-        "part_1": "I have 20 fruits.",
-        "part_2": "I have 2 bags.",
-        "part_3": "How many fruits should go in each bag?",
-        "expression": "20 \/ 2",
-        "answer": 10,
+        "expression": "50 \/ 10",
+        "answer": 5,
         "subject": [
           {
             "subject_code": "0",

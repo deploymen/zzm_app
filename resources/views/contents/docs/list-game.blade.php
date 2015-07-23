@@ -162,6 +162,20 @@
                     <td>p07</td>
                     <td align="center"><a href="/docs/api.game-play-request-get-p07-114" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
+                 <tr>
+                    <td>8.</td>
+                    <td>GET </td>
+                    <td>/api/game/play/105/request </td>
+                    <td>p10</td>
+                    <td align="center"><a href="/docs/api.game-play-request-get-p10-105" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                </tr>
+                 <tr>
+                    <td>9.</td>
+                    <td>GET </td>
+                    <td>/api/game/play/129/request </td>
+                    <td>p18</td>
+                    <td align="center"><a href="/docs/api.game-play-request-get-p18-129" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                </tr>
             </tbody>
         </table>
      
