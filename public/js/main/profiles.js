@@ -97,7 +97,7 @@ function displayProfiles(){
 											'<span class="blue-heading-small">Best score</span>',
 										'</div>',
 										'<div class="small-12 columns">',
-											'<p class="profile-subject-name truncate">',allVars.datal.list[i].best_score,'</p>',
+											'<p class="profile-subject-name truncate">',allVars.datal.list[i].best_score[0],'</p>',
 										'</div>',
 									'</div>',
 									'<div class="small-12 columns">',
@@ -105,7 +105,7 @@ function displayProfiles(){
 											'<span class="blue-heading-small">Weakest score</span>',
 										'</div>',
 										'<div class="small-12 columns">',
-											'<p class="profile-subject-name truncate">',allVars.datal.list[i].weak_score,'</p>',
+											'<p class="profile-subject-name truncate">',allVars.datal.list[i].weak_score[0],'</p>',
 										'</div>',
 									'</div>',
 								'</div>',
@@ -144,9 +144,6 @@ var btnchangesok = $('#btn-changes-ok');
 //var editselectage = $('#profile-age-edit :selected');
 var editselectage = $('#profile-age-edit');
 var editselectgrade = $('#profile-grade-edit');
-console.log(editselectage);
-console.log(editselectgrade);
-
 
 function saveProfile(){
 

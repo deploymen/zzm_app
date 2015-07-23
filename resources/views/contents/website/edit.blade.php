@@ -38,7 +38,7 @@
 
 <div class="content-group--content small-12 medium-8">
 	<div class="row">
-		<div class="small-12 medium-8 columns">
+		<div class="small-12 medium-12 columns">
 			<div class="small-12 medium-5 columns">
 				<div class="avatar-holder">
 					<img src="/assets/main/img/avatars/{{$profile->avatar->filename}}" alt="">
