@@ -41,7 +41,7 @@ Class ApiGameController extends Controller {
 	//GET QUESTION
 	public function request($planetId) {	
 		$gameCode = Request::input('game_code');
-		
+
 		LogHelper::LogGetQuestions($planetId, $gameCode);
 
 		try{

@@ -19,7 +19,7 @@ class ResponseHelper {
 
 		if (count($data) > 0) {$payload['data'] = $data;}
 
-		$response = response()->json($payload, $statusCode, $headers, JSON_NUMERIC_CHECK);
+		$response = response()->json($payload, $statusCode, $headers); //JSON_NUMERIC_CHECK
 
 		//cookies
 		foreach ($cookies as $key => $value) {
