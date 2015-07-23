@@ -210,7 +210,7 @@ function createNewProfile(){
 		last_name    : newlastname.val(),
 		school       : newschool.val(),
 		city         : newcity.val(),
-		email        : 'marypoppins@nanny.com',
+		email        : profileemail.val(),
 		age          : editselectage,
 		grade        : editselectgrade
 	}
