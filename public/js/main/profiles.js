@@ -20,8 +20,11 @@ function allVars(){
 	        xat =xhr.setRequestHeader('X-access-token', '15|988d09d3d9af03b0abc9d97fb5f709cb77e422f6');
 	    }
 	});
+
+	return datal;
 };
 allVars();
+//console.log(allVars.datal);
 
 
 
@@ -139,9 +142,11 @@ var profileid = $('#profile-id');
 var profileschool = $('#profile-school');
 var btnchangesok = $('#btn-changes-ok');
 //var editselectage = $('#profile-age-edit :selected');
-var editselectage = $('#profile-age-edit').children('option').filter(':selected').val();
-var editselectgrade = $('#profile-grade-edit').children('option').filter(':selected').val();
-//console.log(editselectage.val());
+var editselectage = $('#profile-age-edit');
+var editselectgrade = $('#profile-grade-edit');
+console.log(editselectage);
+console.log(editselectgrade);
+
 
 function saveProfile(){
 
@@ -153,8 +158,8 @@ function saveProfile(){
 		school     : profileschool.val(),
 		city       : profilecity.val(),
 		id         : profileid.val(),
-		age        : editselectage,
-		grade      : editselectgrade
+		age        : editselectage.children('option').filter(':selected').val(),
+		grade      : editselectgrade.children('option').filter(':selected').val()
 	}
 
 	$.ajaxSetup({
@@ -210,7 +215,7 @@ function createNewProfile(){
 		last_name    : newlastname.val(),
 		school       : newschool.val(),
 		city         : newcity.val(),
-		email        : profileemail.val(),
+		email        : datal.list[0].email,
 		age          : editselectage,
 		grade        : editselectgrade
 	}

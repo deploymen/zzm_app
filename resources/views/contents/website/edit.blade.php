@@ -74,58 +74,28 @@
 
 		<div class="row">
 			<div class="small-12 medium-6 columns">
-				<!-- <label>Age
-					<select id="profile-age-edit">
-						<option value="{{$age}}"></option>
-						<option value="6">6</option>
-						<option value="7">7</option>
-						<option value="8">8</option>
-						<option value="9">9</option>
-						<option value="10">10</option>
-						<option value="11">11</option>
-						<option value="12">12</option>
-						<option value="13">13</option>
-						<option value="14">14</option>
-						<option value="15">15</option>
-						<option value="16">16</option>
-						<option value="17">17</option>
-						<option value="18">18 +</option>
-					</select>
-				</label> -->
-
 				<label>Age
 					<select id="profile-age-edit">
 						@foreach ($age as $age)
-							<option value="{{$age->age}}">{{$age->age_name}}</option>
+							@if ($age->age == $profile->age)
+								<option selected="selected" value="{{$age->age}}">{{$age->age_name}}</option>
+							@else
+								<option value="{{$age->age}}">{{$age->age_name}}</option>
+							@endif
 						@endforeach
 					</select>
 				</label>
 			</div>
 			<div class="small-12 medium-6 columns">
-				<!-- <label>Grade
-					<select>
-						<option value="prekindergarten">Pre-Kindergarten</option>
-						<option value="kindergarten">Kindergarten</option>
-						<option value="1">1</option>
-						<option value="2">2</option>
-						<option value="3">3</option>
-						<option value="4">4</option>
-						<option value="5">5</option>
-						<option value="6">6</option>
-						<option value="7">7</option>
-						<option value="8">8</option>
-						<option value="9">9</option>
-						<option value="10">10</option>
-						<option value="11">11</option>
-						<option value="12">12</option>
-						<option value="continuous">Continuous Learner</option>
-					</select>
-				</label> -->
-
 				<label>Grade
-					<select>
+					<select id="profile-grade-edit">
 						@foreach ($grade as $grade)
-							<option value="{{$grade->grade}}">{{$grade->grade_name}}</option>
+							@if ($grade->grade == $profile->grade)
+								<option selected="selected" value="{{$grade->grade}}">{{$grade->grade_name}}</option>
+							@else
+								<option value="{{$grade->grade}}">{{$grade->grade_name}}</option>
+							@endif
+							
 						@endforeach
 					</select>
 				</label>
