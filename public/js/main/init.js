@@ -62,7 +62,7 @@ function signup(){
 			data	: signUpCred,
 			success	: function(data, status){
 				if(data && status==='success'){
-					window.location = '/user/profiles';
+					//window.location = '/user/profiles';//
 				}
 			},
 
@@ -110,33 +110,27 @@ function login(){
 		$.ajax({
 			type	   : 'POST', 
 			url        : '/api/auth/sign-in',
-			beforeSend : function(){ btnsignin.val('Connecting...');},
 			data       : loginCred,
+			beforeSend : function(){
+				btnsignin.val('Connecting...');
+			},
 			success    : function(data, status){
 				// repsonseMsg();
-				if(data && status === 'success') {
-					window.location = '/user/profiles';
-				} else {
-					console.log('DEFEAT');
-				}
+				// if(data && status === 'success') {
+				// 	window.location = '/user/profiles';
+				// 	console.log('DEFEAT');
+				// } else {
+				// 	console.log('DEFEAT');
+				// }
 			},
 			error      : function(data, status){
-				if(status === 'fail'){
-					errorMsg();
-				}
+				// if(status === 'fail'){
+				// 	errorMsg();
+				// }
 			}
 		});
 
-		function repsonseMsg(){
-			// if()
-			//window.location = "/user/profiles";	
-		};
-
-		function errorMsg(){
-			console.log('DEFEAT!');
-		};
-
-		return false;
+		//return false;
 	});
 };
 btnsignin.click(function(){
