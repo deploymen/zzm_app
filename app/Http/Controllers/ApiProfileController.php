@@ -323,18 +323,22 @@ Class ApiProfileController extends Controller {
 		try {
 
 			$profile = GameProfile::find($id);
+			$count = GameProfile::where('user_id' , $userId)->count();
 
 			if (!$profile) {
 				return ResponseHelper::OutputJSON('fail', "profile not found");
 			}
 
-			if($userId == $profile->user_id){
+			if($userId != $profile->user_id){
+				return ResponseHelper::OutputJSON('fail','wrong user id');
+			}	
+			
+			if($count = 1){
+				return ResponseHelper::OutputJSON('fail','at least once profile in account');
+			}
+
 			$profile->delete();
 			return ResponseHelper::OutputJSON('success');
-			
-			}	
-			return ResponseHelper::OutputJSON('fail','wrong user id');
-
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
