@@ -100,6 +100,9 @@ function login(){
 	var loginUsername = $('#users_login_email');
 	var loginPewPew = $('#users_login_password');
 	var loginForm = $('#login-form');
+
+	var loginformholder = $('#signup-holder');
+	var incorrectdetails = $('#incorrect-details');
 	
 	loginForm.on('valid.fndtn.abide', function(){
 		var loginCred = {
@@ -111,26 +114,21 @@ function login(){
 			type	   : 'POST', 
 			url        : '/api/auth/sign-in',
 			data       : loginCred,
-			beforeSend : function(){
-				btnsignin.val('Connecting...');
-			},
-			success    : function(data, status){
-				// repsonseMsg();
-				// if(data && status === 'success') {
-				// 	window.location = '/user/profiles';
-				// 	console.log('DEFEAT');
-				// } else {
-				// 	console.log('DEFEAT');
-				// }
-			},
-			error      : function(data, status){
-				// if(status === 'fail'){
-				// 	errorMsg();
-				// }
+			success    : function(data){
+				var status = data['status'];
+				//console.log('status: ' + status);
+				//repsonseMsg();
+				if(status === 'success') {
+					window.location = '/user/profiles';
+				} else if(status === 'fail') {
+					loginformholder.prepend('<span class="incorrect-details"><p>Invalid email or password</p></span>');
+					loginUsername.val('');
+					loginPewPew.val('');
+				}
 			}
 		});
 
-		//return false;
+		return false;
 	});
 };
 btnsignin.click(function(){
@@ -156,15 +154,14 @@ btnlogout.click(function(){
 });
 
 // Wrong Password
-function unableToLogin() {
-	var loginformholder = $('#signup-holder');
+// function unableToLogin() {
+// 	var loginformholder = $('#signup-holder');
 
-	var pageurl = document.URL.split('?')[1];
-	if(pageurl === 'no-access'){
-		loginformholder.prepend('<p class="incorrect-details">You are not signed in. Please check that your username or password is incorrect and try again.</p>');
-	}
-}
-unableToLogin();
+// 	var pageurl = document.URL.split('?')[1];
+// 	if(pageurl === 'no-access'){
+// 		loginformholder.prepend('<p class="incorrect-details">You are not signed in. Please check that your username or password is incorrect and try again.</p>');
+// 	}
+// }
 
 (function($, window, document, undefined){
 	$(document).foundation();
