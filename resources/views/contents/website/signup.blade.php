@@ -124,6 +124,7 @@
         <script>window.jQuery || document.write('<script src="js/jquery/dist/jquery.min.js"><\/script>')</script>
 
         <script src="/js/main/app.js"></script>
+        <script src="/js/main/init.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>

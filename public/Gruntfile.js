@@ -54,7 +54,7 @@ module.exports = function (grunt) {
           'js/main/jeditable.min.js',
           'js/main/pace.min.js',
           // 'js/main/tooltip.js',
-          'js/main/init.js'
+          // 'js/main/init.js'
         ],
 
         dest: 'js/main/app.js'
