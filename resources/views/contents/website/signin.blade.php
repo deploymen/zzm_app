@@ -41,7 +41,6 @@
         <![endif]-->
 		
 		<div class="site-wrapper sign-in-up">
-
 			<div class="row">
                 <section id="signup-holder" class="signup-holder cf">
                     <section class="signup-holder-inner small-12 medium-4 medium-centered columns">

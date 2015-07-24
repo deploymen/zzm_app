@@ -144,8 +144,22 @@ a:active {
 }
 
 .incorrect-details {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1;
 	text-align: center;
+	background-color: $lightning-yellow;
+
+	p {
+		font-family: 'proxima-nova-soft', sans-serif;
+		font-weight: bold;
+		margin: rem(0px);
+		line-height: rem(45px);
+	}
 }
+
 
 button,
 .button,
