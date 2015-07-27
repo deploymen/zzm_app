@@ -173,6 +173,20 @@
 	</div>
 </div>
 
+<div id="cannotdelete" class="reveal-modal text-center" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" data-options="close_on_background_click:false">
+	<h3 id="modalTitle">Oops!</h3>
+	<p class="lead">You cannot delete the last profile.</p>
+	<div class="row">
+		<div class="small-12 columns">
+			<div class="small-12 columns text-center">
+				<label>
+					<input type="button" value="OK" id="btn-cannot-delete" class="button wide radius blue" />
+				</label>
+			</div>
+		</div>
+	</div>
+</div>
+
 
 <div id="profilesaved" class="reveal-modal text-center" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
 	<h3 id="modalTitle">Beautiful</h3>

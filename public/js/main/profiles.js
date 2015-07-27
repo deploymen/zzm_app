@@ -98,6 +98,8 @@ function displayProfiles(){
 										'</div>',
 										'<div class="small-12 columns">',
 											'<p class="profile-subject-name truncate">',allVars.datal.list[i].best_score[0],'</p>',
+											'<p class="profile-subject-name truncate">',allVars.datal.list[i].best_score[1],'</p>',
+											'<p class="profile-subject-name truncate">',allVars.datal.list[i].best_score[2],'</p>',
 										'</div>',
 									'</div>',
 									'<div class="small-12 columns">',
@@ -105,6 +107,8 @@ function displayProfiles(){
 											'<span class="blue-heading-small">Weakest score</span>',
 										'</div>',
 										'<div class="small-12 columns">',
+											'<p class="profile-subject-name truncate">',allVars.datal.list[i].weak_score[0],'</p>',
+											'<p class="profile-subject-name truncate">',allVars.datal.list[i].weak_score[0],'</p>',
 											'<p class="profile-subject-name truncate">',allVars.datal.list[i].weak_score[0],'</p>',
 										'</div>',
 									'</div>',
@@ -257,6 +261,8 @@ var btndeleteprofile = $('#btn-delete-profile');
 var btndeleteok = $('#btn-delete-ok');
 var btndeltecancel = $('#btn-delete-cancel');
 var modalprofiledeleted = $('#profiledelete');
+var modalcannotdelete = $('#cannotdelete');
+var btncannotdelete = $('#btn-cannot-delete');
 
 function deleteProfile(){
 	var deleteconfirm = $('#profiledelete');
@@ -276,9 +282,22 @@ function deleteProfile(){
 		dataType : 'json',
 		url      : '/api/profiles/'+profiletodelete.id,
 		data     : profiletodelete,
-		complete  : function(data){
-			console.log("complete");
-			window.location = "/user/profiles";
+		success  : function(data){
+			var status = data['status'];
+			var message = data['message'];
+			console.log(profiletodelete.id);
+			if(status === 'fail' && message === 'at least once profile in account'){
+				console.log('You cannot delete the last profile.');
+				modalcannotdelete.foundation('reveal', 'open');
+
+				btncannotdelete.click(function(){
+					modalcannotdelete.foundation('reveal', 'close');
+				});
+			} else if(status === 'fail' && message === 'profile not found') {
+				window.location = "/user/profiles";
+			} else {
+				window.location = "/user/profiles";
+			}
 		}
 	});
 };
