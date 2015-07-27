@@ -118,9 +118,9 @@ function displayProfiles(){
 				].join(''));
 			});
 
-		profilesArray.push([
-			'<div class="profile-item add-button"><section class="profile-info"><div class="add-plus-box"><i class="fa fa-plus"></i></div><p class="">Create a Student Profile</p><a href="javascript:void(0);" data-reveal-id="addProfileModal" class="" id="btn-show-profile-form" class="btn-show-profile-form"></a></section></div>'
-		].join());
+		// profilesArray.push([
+		// 	'<div class="profile-item add-button"><section class="profile-info"><div class="add-plus-box"><i class="fa fa-plus"></i></div><p class="">Create a Student Profile</p><a href="javascript:void(0);" id="btn-show-profile-form" class="btn-show-profile-form"></a></section></div>'
+		// ].join());
 
 		profilelist.html(profilesArray.join(''));
 		}
@@ -141,7 +141,6 @@ var profilecity = $('#profile-city');
 var profileid = $('#profile-id');
 var profileschool = $('#profile-school');
 var btnchangesok = $('#btn-changes-ok');
-//var editselectage = $('#profile-age-edit :selected');
 var editselectage = $('#profile-age-edit');
 var editselectgrade = $('#profile-grade-edit');
 
@@ -193,6 +192,8 @@ btnchangesok.click(function(){
 
 // Add Profile
 var createbtn = $('#btn-create-profile');
+var btnnewprofile = $('#btn-show-profile-form');
+var addprofilemodal = $('#addProfileModal');
 
 function createNewProfile(){
 	var addbtn = $('#btn-add-new-profile');
@@ -200,7 +201,6 @@ function createNewProfile(){
 	var newlastname = $('#new-last-name');
 	var newschool = $('#new-school');
 	var newcity = $('#new-city');
-	var addprofilemodal = $('#addProfileModal');
 	var profileemail = $('#profile-email');
 	var profilenickname1 = $('#profile-nickname1');
 	var profilenickname2 = $('#profile-nickname2');
@@ -212,9 +212,9 @@ function createNewProfile(){
 		last_name    : newlastname.val(),
 		school       : newschool.val(),
 		city         : newcity.val(),
-		email        : datal.list[0].email,
-		age          : editselectage,
-		grade        : editselectgrade
+		email        : 'marypoppins@nanny.com',
+		age        	 : editselectage.children('option').filter(':selected').val(),
+		grade     	 : editselectgrade.children('option').filter(':selected').val()
 	}
 
 	$.ajaxSetup({
@@ -229,8 +229,8 @@ function createNewProfile(){
 		url      : '/api/profiles',
 		data     : newprofileinfo,
 		success  : function(data){
-			addprofilemodal.foundation('reveal', 'close');
 			location.reload();
+			addprofilemodal.foundation('reveal', 'close');
 			// console.log('Hello');
 		},
 		error    : function(){
@@ -242,6 +242,14 @@ function createNewProfile(){
 createbtn.click(function(){
 	createNewProfile();
 });
+
+btnnewprofile.on('click', function() {
+    addprofilemodal.foundation('reveal', 'open');
+    return false;
+    //console.log('add new profile');
+});
+
+
 // End of Add Profile
 
 // Delete Profile
@@ -287,23 +295,6 @@ btndeleteok.click(function(){
 	deleteProfile();
 });
 
-//pre-fill profile avatar
-// function prefillAvatar(){
-// 	var avatarholder = $('.avatar-holder');
-// 	var avatarfile = allVars.datal.list[i].avatar.filename;
-
-// 	$.ajax({
-// 		type    : 'GET',
-// 		url     : '/api/profiles',
-// 		dataType: 'json',
-// 		success : function(data){
-// 			allVars.datal = data["data"];
-// 		}
-// 	});
-
-// 	avatarholder.append('<img src="/assets/main/img/avatars/'+avatarfile+'" alt="">');
-// };
-// prefillAvatar();
 
 (function($, window, document, undefined){
 	if (top.location.pathname === '/user/profiles'){

@@ -30,10 +30,11 @@
 @section('content')
 
 <!-- <div class="row">
-	<a href="javascript:void(0);" data-reveal-id="addProfileModal" class="button radius green" id="btn-show-profile-form" class="btn-show-profile-form">Add New Profile</a>
+	<a href="javascript:void(0);" data-reveal-id="addProfileModal" class="btn-show-profile-form button radius green" id="btn-show-profile-form">Add New Profile</a>
 </div> -->
 
-<div id="addProfileModal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" data-options="close_on_background_click:false">
+
+<div id="addProfileModal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
 	<h3 id="modalTitle" class="modalTitle">Create a new Profile</h3>
 	<p class="subline-desc">Profiles allow you to follow the progress of each individual child</p>
 	<form id="new-profile-form">
@@ -41,6 +42,7 @@
 			<div class="small-12 medium-6 columns">
 				<label>First Name
 					<input id="new-first-name" type="text" placeholder="Adam" />
+					
 				</label>
 			</div>
 			<div class="small-12 medium-6 columns">
@@ -135,5 +137,7 @@
 <div class="row">
 	<div id="profile-list" class="cf"></div>
 </div>
+
+<div class="profile-item add-button"><section class="profile-info"><div class="add-plus-box"><i class="fa fa-plus"></i></div><p class="">Create a Student Profile</p><a href="javascript:void(0);" data-reveal-id="addProfileModal" id="btn-show-profile-form" class="btn-show-profile-form"></a></section></div>
 
 @stop
