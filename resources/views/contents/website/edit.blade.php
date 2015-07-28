@@ -58,16 +58,16 @@
 		</div>
 	</div><!--row-->
 
-	<form id="edit-profile-form" class="edit-profile-form">
+	<form data-abide="ajax" id="edit-profile-form" class="edit-profile-form" novalidate="novalidate">
 		<div class="row">
 			<div class="small-12 medium-6 columns">
 				<label>First Name
-					<input id="profile-first-name" class="profile-first-name" type="text" value="{{$profile->first_name}}" />
+					<input id="profile-first-name" class="profile-first-name" type="text" required value="{{$profile->first_name}}" />
 				</label>
 			</div>
 			<div class="small-12 medium-6 columns">
 				<label>Last Name
-					<input id="profile-last-initial" class="profile-last-initial" type="text" value="{{$profile->last_name}}" />
+					<input id="profile-last-initial" class="profile-last-initial" type="text" required value="{{$profile->last_name}}" />
 				</label>
 			</div>
 		</div>
@@ -188,7 +188,7 @@
 </div>
 
 
-<div id="profilesaved" class="reveal-modal text-center" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+<div id="profilesaved" class="reveal-modal text-center" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" data-options="close_on_background_click:false">
 	<h3 id="modalTitle">Beautiful</h3>
 	<p class="lead">Your changes have been saved.</p>
 	<div class="row">

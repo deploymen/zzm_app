@@ -52,151 +52,80 @@ function displayProfiles(){
 			var profilesArray = [];
 			
 			$.each( allVars.datal.list, function( i, profile ) {
-				if(allVars.datal.list[i].best_score.length !== 0 || allVars.datal.list[i].weak_score.length !== 0 ){
-					profilesArray.push([
-						'<div class="profile-item">',
-							'<section class="profile-info">',
-								'<div class="profile-pic-holder">',
-									'<img src="/assets/main/img/avatars/',allVars.datal.list[i].avatar.filename,'" alt="Avatar 3">',
-								'</div>',
-								'<div class="profile-item-group cf">',
-									'<p class="profile-nickname">',
-										'<span class="first-name">',allVars.datal.list[i].nick_name1.name,' </span>',
-										'<span class="first-name">',allVars.datal.list[i].nick_name2.name,'</span>',
-									'</p>',
-									'<p class="profile-name">',
-										'<span class="first-name">',allVars.datal.list[i].first_name,'</span>',' ',
-										'<span class="last-name">',allVars.datal.list[i].last_name,'</span>',
-									'</p>',
-								'</div>',
+				profilesArray.push([
+					'<div class="profile-item">',
+						'<section class="profile-info">',
+							'<div class="profile-pic-holder">',
+								'<img src="/assets/main/img/avatars/',allVars.datal.list[i].avatar.filename,'" alt="Avatar 3">',
+							'</div>',
+							'<div class="profile-item-group cf">',
+								'<p class="profile-nickname">',
+									'<span class="first-name">',allVars.datal.list[i].nick_name1.name,' </span>',
+									'<span class="first-name">',allVars.datal.list[i].nick_name2.name,'</span>',
+								'</p>',
+								'<p class="profile-name">',
+									'<span class="first-name">',allVars.datal.list[i].first_name,'</span>',' ',
+									'<span class="last-name">',allVars.datal.list[i].last_name,'</span>',
+								'</p>',
+							'</div>',
 
-								'<div class="profile-item-group cf">',
-									'<p class="profile-school-name truncate">',allVars.datal.list[i].school,'</p>',
+							'<div class="profile-item-group cf">',
+								'<p class="profile-school-name truncate">',allVars.datal.list[i].school,'</p>',
+								'<div class="small-12 columns">',
+									'<p class="profile-code bold"><span class="blue-header">Player ID</span> <span class="user-id">',allVars.datal.list[i].game_code.code,'</span></p>',
+								'</div>',
+							'</div>',
+
+							'<div class="profile-item-group cf">',
+								'<div class="small-4 columns">',
+									'<p class="profile-proficiency">',
+										'<span class="blue-header bold">Last Played</span>',
+									'</p>',
+								'</div>',
+								'<div class="small-6 columns">',
+									'<p class="profile-last-seen">Has not played yet</p>',
+								'</div>',
+								'<div class="small-2 columns">',
+									'<a href="javascript:void(0);" title="Proficiency is based on the average score of all games played." class="info-icon">i<span class="profile-tooltip"><p>Proficiency is based on the average score of all games played.</p></span></a>',
+								'</div>',
+							'</div>',
+
+							'<div class="profile-item-group no-padding cf">',
+								'<div class="small-12 columns progress-section ps2">',
 									'<div class="small-12 columns">',
-										'<p class="profile-code bold"><span class="blue-header">Player ID</span> <span class="user-id">',allVars.datal.list[i].game_code.code,'</span></p>',
-									'</div>',
-								'</div>',
-
-								'<div class="profile-item-group cf">',
-									'<div class="small-4 columns">',
-										'<p class="profile-proficiency">',
-											'<span class="blue-header bold">Last Played</span>',
-										'</p>',
-									'</div>',
-									'<div class="small-6 columns">',
-										'<p class="profile-last-seen">Has not played yet</p>',
-									'</div>',
-									'<div class="small-2 columns">',
-										'<a href="javascript:void(0);" title="Proficiency is based on the average score of all games played." class="info-icon">i<span class="profile-tooltip"><p>Proficiency is based on the average score of all games played.</p></span></a>',
-									'</div>',
-								'</div>',
-
-								'<div class="profile-item-group no-padding cf">',
-									'<div class="small-12 columns progress-section ps2">',
 										'<div class="small-12 columns">',
-											'<div class="small-12 columns">',
-												'<span class="blue-heading-small">Best score</span>',
-											'</div>',
-											'<div class="small-12 columns">',
-												'<p class="profile-subject-name truncate">',allVars.datal.list[i].best_score[0].description,'</p>',
-												'<p class="profile-subject-name truncate">',allVars.datal.list[i].best_score[1].description,'</p>',
-												'<p class="profile-subject-name truncate">',allVars.datal.list[i].best_score[2].description,'</p>',
-											'</div>',
+											'<span class="blue-heading-small">Best score</span>',
 										'</div>',
 										'<div class="small-12 columns">',
-											'<div class="small-12 columns">',
-												'<span class="blue-heading-small">Weakest score</span>',
-											'</div>',
-											'<div class="small-12 columns">',
-												'<p class="profile-subject-name truncate">',allVars.datal.list[i].weak_score[0].description,'</p>',
-												'<p class="profile-subject-name truncate">',allVars.datal.list[i].weak_score[0].description,'</p>',
-												'<p class="profile-subject-name truncate">',allVars.datal.list[i].weak_score[0].description,'</p>',
-											'</div>',
+											'<p class="profile-subject-name truncate">',(allVars.datal.list[i].best_score.length > 0)?allVars.datal.list[i].best_score[0].description:'no data available','</p>',
+											'<p class="profile-subject-name truncate">',(allVars.datal.list[i].best_score.length > 1)?allVars.datal.list[i].best_score[1].description:'no data available','</p>',
+											'<p class="profile-subject-name truncate">',(allVars.datal.list[i].best_score.length > 2)?allVars.datal.list[i].best_score[2].description:'no data available','</p>',
 										'</div>',
 									'</div>',
-								'</div>',
-
-								'<p class="profile-upgrade-cta"><a href="/user/profiles/',allVars.datal.list[i].id,'/results" class="">See detailed reports!</a></p>',
-								'<a href="/user/profiles/',allVars.datal.list[i].id,'/edit" class="btn-profile-edit">Edit</a>',
-							'</section>',
-						'</div>'
-					].join(''));
-				} else {
-					profilesArray.push([
-						'<div class="profile-item">',
-							'<section class="profile-info">',
-								'<div class="profile-pic-holder">',
-									'<img src="/assets/main/img/avatars/',allVars.datal.list[i].avatar.filename,'" alt="Avatar 3">',
-								'</div>',
-								'<div class="profile-item-group cf">',
-									'<p class="profile-nickname">',
-										'<span class="first-name">',allVars.datal.list[i].nick_name1.name,' </span>',
-										'<span class="first-name">',allVars.datal.list[i].nick_name2.name,'</span>',
-									'</p>',
-									'<p class="profile-name">',
-										'<span class="first-name">',allVars.datal.list[i].first_name,'</span>',' ',
-										'<span class="last-name">',allVars.datal.list[i].last_name,'</span>',
-									'</p>',
-								'</div>',
-
-								'<div class="profile-item-group cf">',
-									'<p class="profile-school-name truncate">',allVars.datal.list[i].school,'</p>',
 									'<div class="small-12 columns">',
-										'<p class="profile-code bold"><span class="blue-header">Player ID</span> <span class="user-id">',allVars.datal.list[i].game_code.code,'</span></p>',
-									'</div>',
-								'</div>',
-
-								'<div class="profile-item-group cf">',
-									'<div class="small-4 columns">',
-										'<p class="profile-proficiency">',
-											'<span class="blue-header bold">Last Played</span>',
-										'</p>',
-									'</div>',
-									'<div class="small-6 columns">',
-										'<p class="profile-last-seen">Has not played yet</p>',
-									'</div>',
-									'<div class="small-2 columns">',
-										'<a href="javascript:void(0);" title="Proficiency is based on the average score of all games played." class="info-icon">i<span class="profile-tooltip"><p>Proficiency is based on the average score of all games played.</p></span></a>',
-									'</div>',
-								'</div>',
-
-								'<div class="profile-item-group no-padding cf">',
-									'<div class="small-12 columns progress-section ps2">',
 										'<div class="small-12 columns">',
-											'<div class="small-12 columns">',
-												'<span class="blue-heading-small">Best score</span>',
-											'</div>',
-											'<div class="small-12 columns">',
-												'<p class="profile-subject-name truncate">no data available</p>',
-												'<p class="profile-subject-name truncate">no data available</p>',
-												'<p class="profile-subject-name truncate">no data available</p>',
-											'</div>',
+											'<span class="blue-heading-small">Weakest score</span>',
 										'</div>',
 										'<div class="small-12 columns">',
-											'<div class="small-12 columns">',
-												'<span class="blue-heading-small">Weakest score</span>',
-											'</div>',
-											'<div class="small-12 columns">',
-												'<p class="profile-subject-name truncate">no data available</p>',
-												'<p class="profile-subject-name truncate">no data available</p>',
-												'<p class="profile-subject-name truncate">no data available</p>',
-											'</div>',
+											'<p class="profile-subject-name truncate">',(allVars.datal.list[i].weak_score.length > 0)?allVars.datal.list[i].weak_score[0].description:'no data available','</p>',
+											'<p class="profile-subject-name truncate">',(allVars.datal.list[i].weak_score.length > 1)?allVars.datal.list[i].weak_score[1].description:'no data available','</p>',
+											'<p class="profile-subject-name truncate">',(allVars.datal.list[i].weak_score.length > 2)?allVars.datal.list[i].weak_score[2].description:'no data available','</p>',
 										'</div>',
 									'</div>',
 								'</div>',
+							'</div>',
 
-								'<p class="profile-upgrade-cta"><a href="/user/profiles/',allVars.datal.list[i].id,'/results" class="">See detailed reports!</a></p>',
-								'<a href="/user/profiles/',allVars.datal.list[i].id,'/edit" class="btn-profile-edit">Edit</a>',
-							'</section>',
-						'</div>'
-					].join(''));
-				}
-				
+							'<p class="profile-upgrade-cta"><a href="/user/profiles/',allVars.datal.list[i].id,'/results" class="">See detailed reports!</a></p>',
+							'<a href="/user/profiles/',allVars.datal.list[i].id,'/edit" class="btn-profile-edit">Edit</a>',
+						'</section>',
+					'</div>'
+				].join(''));				
 			});
 
 		// profilesArray.push([
-		// 	'<div class="profile-item add-button"><section class="profile-info"><div class="add-plus-box"><i class="fa fa-plus"></i></div><p class="">Create a Student Profile</p><a href="javascript:void(0);" id="btn-show-profile-form" class="btn-show-profile-form"></a></section></div>'
+		// 	'<div class="profile-item add-button"><section class="profile-info"><div class="add-plus-box"><i class="fa fa-plus"></i></div><p class="">Create a Student Profile</p><a href="javascript:void(0);" data-reveal-id="addProfileModal" class="" id="btn-show-profile-form" class="btn-show-profile-form"></a></section></div>'
 		// ].join());
+
 
 		profilelist.html(profilesArray.join(''));
 		}
@@ -270,6 +199,7 @@ btnchangesok.click(function(){
 var createbtn = $('#btn-create-profile');
 var btnnewprofile = $('#btn-show-profile-form');
 var addprofilemodal = $('#addProfileModal');
+var newprofileform = $('#new-profile-form');
 
 function createNewProfile(){
 	var addbtn = $('#btn-add-new-profile');
@@ -281,7 +211,6 @@ function createNewProfile(){
 	var profilenickname1 = $('#profile-nickname1');
 	var profilenickname2 = $('#profile-nickname2');
 	var profileavatar = $('#profile-avatar-id');
-
 
 	var newprofileinfo = {
 		first_name   : newfirstname.val(),
@@ -305,9 +234,16 @@ function createNewProfile(){
 		url      : '/api/profiles',
 		data     : newprofileinfo,
 		success  : function(data){
-			location.reload();
-			addprofilemodal.foundation('reveal', 'close');
-			// console.log('Hello');
+			var status = data['status'];
+			var message = data['message'];
+			//location.reload();
+			if(status === 'fail' && message === 'missing parameters'){
+				alert('Missing Parameters');
+			} else {
+				addprofilemodal.foundation('reveal', 'close');
+				location.reload();
+			}
+			
 		},
 		error    : function(){
 			console.log('fail');
@@ -316,6 +252,10 @@ function createNewProfile(){
 };
 
 createbtn.click(function(){
+	console.log(newprofileform);
+	// newprofileform.on('valid.fndtn.abide', function(){
+	// 	createNewProfile();
+	// });
 	createNewProfile();
 });
 
@@ -392,5 +332,6 @@ btndeleteok.click(function(){
 		displayProfiles();
 	};
 
+	//$(document).foundation('abide', 'reflow');
 
 })(jQuery, this, this.document);

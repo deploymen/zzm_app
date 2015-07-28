@@ -34,15 +34,14 @@
 </div> -->
 
 
-<div id="addProfileModal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+<div id="addProfileModal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" data-options="close_on_background_click:false">
 	<h3 id="modalTitle" class="modalTitle">Create a new Profile</h3>
 	<p class="subline-desc">Profiles allow you to follow the progress of each individual child</p>
-	<form id="new-profile-form">
+	<form data-abide="ajax" id="new-profile-form" class="new-profile-form">
 		<div class="row">
 			<div class="small-12 medium-6 columns">
-				<label>First Name
-					<input id="new-first-name" type="text" placeholder="Adam" />
-					
+				<label for="first-name">First Name
+					<input id="new-first-name" type="text" placeholder="Adam" name="first-name" required />
 				</label>
 			</div>
 			<div class="small-12 medium-6 columns">
