@@ -47,7 +47,6 @@ Class PageController extends Controller {
 			// 	'grade' => $grade
 
 			// 	]);
-			//Comment out below and uncomment above for JSON output
 			return view('contents.website.edit', [
 				'profile'=>$profile,
 				'age' => $age,
@@ -61,8 +60,6 @@ Class PageController extends Controller {
 			return ResponseHelper::OutputJSON('exception');
 		}
 	}
-
-	
 
 	public function resultProfile($id) {
 		

@@ -83,10 +83,10 @@ function displayProfiles(){
 									'</p>',
 								'</div>',
 								'<div class="small-6 columns">',
-									'<p class="profile-last-seen">Has not played yet</p>',
+									'<p class="profile-last-seen">',(allVars.datal.last_played === null)?allVars.datal.last_played:'has not played yet','</p>',
 								'</div>',
 								'<div class="small-2 columns">',
-									'<a href="javascript:void(0);" title="Proficiency is based on the average score of all games played." class="info-icon">i<span class="profile-tooltip"><p>Proficiency is based on the average score of all games played.</p></span></a>',
+									'<a href="javascript:void(0);" title="Proficiency is based on the average score of all games played." class="info-icon">i<span class="profile-tooltip"><p>Last Played shows the last time this child played Zap Zap Math.</p></span></a>',
 								'</div>',
 							'</div>',
 

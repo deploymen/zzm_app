@@ -49,7 +49,7 @@ KONAMI CODE MOFO
                 <nav class="main-menu">
                     <ul class="menu-list">
                         <li><a href="/jobs" target="_blank">Jobs</a></li>
-                        <li><a href="blog.zapzapmath.com" target="_blank">Blog</a></li>
+                        <li><a href="http://blog.zapzapmath.com" target="_blank">Blog</a></li>
                         <li><a href="/contributors" target="_blank">Contributors</a></li>
                     </ul>
                 </nav>

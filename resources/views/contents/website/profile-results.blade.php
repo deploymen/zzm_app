@@ -111,8 +111,8 @@ ZZM.playId = '{{Request::input('play_id')}}';
 					<tbody>
 						<tr ng-repeat="s in systems">
 							<!-- <td width="10%">@{{s.id}}</td> -->
-							<td width="70%"><p class="results-table-name">@{{s.system_name}}</p></td>
-							<td width="10%" class="results-progress-column">
+							<td width="60%"><p class="results-table-name">@{{s.system_name}}</p></td>
+							<td width="20%" class="results-progress-column">
 								<div class="progress">
 									<span class="meter" style="width: 80%"></span>
 									<span class="meter-percentage">80%</span>
@@ -154,7 +154,10 @@ ZZM.playId = '{{Request::input('play_id')}}';
 						<tr>
 							<th><p class="table-label">Code</p></th>
 							<th><p class="table-label">Topic</p></th>
-							<th><p class="table-label">Progress</p></th>
+							<th class="table-label-cell">
+								<p class="table-label">Progress</p>
+								<span class="info-icon">i</span>
+							</th>
 							<th>&nbsp;</th>
 						</tr>
 					</thead>
