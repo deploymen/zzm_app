@@ -41,6 +41,7 @@ function signup(){
 	var signUpEmail = $('#users_email');
 	var signUpPewPew = $('#users_password');
 	var signUpCountry = $('#users_country');
+	var loginformholder = $('#signup-holder');
 
 	signUpForm.on('valid.fndtn.abide', function(){
 		// The following variable "signupRole" NEEDS to be inside this function
@@ -60,9 +61,16 @@ function signup(){
 			type	: 'POST',
 			url		: '/api/auth/sign-up',
 			data	: signUpCred,
-			success	: function(data, status){
-				if(data && status==='success'){
-					window.location = '/user/profiles';
+			success	: function(data){
+				var status = data['status'];
+				var message = data['message'];
+				// console.log('status: ' + status);
+				// console.log('message: ' + message);
+
+				if(status === 'fail' && message === 'password must be atleast 6 chars'){
+					loginformholder.prepend('<span class="incorrect-details"><p>Password must be at least 6 characters long</p></span>');
+				} else if(status === 'fail' && message === 'email used'){
+					loginformholder.prepend('<span class="incorrect-details"><p>E-mail address is already in use.</p></span>');
 				}
 			},
 
@@ -70,19 +78,6 @@ function signup(){
 				//alert('Harlp, this is not an error!');
 			}
 		});
-
-		function repsonseMsg(){
-			// if(signUpCred){
-			// 	window.location = '/user/profiles';	
-			// } else {
-			// 	alert("Please fill in the form");
-			// }
-			alert("Please fill in the form");
-		};
-
-		function errorMsg(){
-			alert('Harlp, this is not an error!');
-		};
 
 		return false;
 	});
@@ -100,6 +95,9 @@ function login(){
 	var loginUsername = $('#users_login_email');
 	var loginPewPew = $('#users_login_password');
 	var loginForm = $('#login-form');
+
+	var loginformholder = $('#signup-holder');
+	var incorrectdetails = $('#incorrect-details');
 	
 	loginForm.on('valid.fndtn.abide', function(){
 		var loginCred = {
@@ -110,31 +108,21 @@ function login(){
 		$.ajax({
 			type	   : 'POST', 
 			url        : '/api/auth/sign-in',
-			beforeSend : function(){ btnsignin.val('Connecting...');},
 			data       : loginCred,
-			success    : function(data, status){
-				// repsonseMsg();
-				if(data && status === 'success') {
+			success    : function(data){
+				var status = data['status'];
+				var message = data['message'];
+				//console.log('status: ' + status);
+				//repsonseMsg();
+				if(status === 'success') {
 					window.location = '/user/profiles';
-				} else {
-					console.log('DEFEAT');
-				}
-			},
-			error      : function(data, status){
-				if(status === 'fail'){
-					errorMsg();
+				} else if(status === 'fail'  && message === 'invalid username/password') {
+					loginformholder.prepend('<span class="incorrect-details"><p>Invalid email or password</p></span>');
+					loginUsername.val('');
+					loginPewPew.val('');
 				}
 			}
 		});
-
-		function repsonseMsg(){
-			// if()
-			//window.location = "/user/profiles";	
-		};
-
-		function errorMsg(){
-			console.log('DEFEAT!');
-		};
 
 		return false;
 	});
@@ -162,15 +150,14 @@ btnlogout.click(function(){
 });
 
 // Wrong Password
-function unableToLogin() {
-	var loginformholder = $('#signup-holder');
+// function unableToLogin() {
+// 	var loginformholder = $('#signup-holder');
 
-	var pageurl = document.URL.split('?')[1];
-	if(pageurl === 'no-access'){
-		loginformholder.prepend('<p class="incorrect-details">Your username or password is incorrect. Please try again.</p>');
-	}
-}
-unableToLogin();
+// 	var pageurl = document.URL.split('?')[1];
+// 	if(pageurl === 'no-access'){
+// 		loginformholder.prepend('<p class="incorrect-details">You are not signed in. Please check that your username or password is incorrect and try again.</p>');
+// 	}
+// }
 
 (function($, window, document, undefined){
 	$(document).foundation();
