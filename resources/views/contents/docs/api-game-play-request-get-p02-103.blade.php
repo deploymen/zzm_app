@@ -91,7 +91,6 @@ X-game-code: 0000015k
       "id": 103,
       "name": "Space Taxi",
       "description": "What + What = What??",
-      "parameters": null,
       "question_count": 5,
       "badges": {
         "speed": "2",
@@ -102,7 +101,7 @@ X-game-code: 0000015k
       }
     },
     "status": {
-      "star": "2",
+      "star": 2,
       "difficulty": 3,
       "top_score": 108
     },

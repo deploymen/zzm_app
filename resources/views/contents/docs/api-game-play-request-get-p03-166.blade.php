@@ -91,7 +91,6 @@ X-game-code: 0000015k
       "id": 166,
       "name": "The Big Showdown",
       "description": "Which piece fits?",
-      "parameters": null,
       "question_count": 20,
       "badges": {
         "speed": "3",
@@ -102,7 +101,7 @@ X-game-code: 0000015k
       }
     },
     "status": {
-      "star": "2",
+      "star": 2,
       "difficulty": 3,
       "top_score": 108
     },

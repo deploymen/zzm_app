@@ -91,12 +91,11 @@ X-game-code: 0000015k
       "id": 102,
       "name": "The 'Correct' Collector",
       "description": "Yes? No?",
-      "parameters": null,
       "question_count": 20,
       "badges": null
     },
     "status": {
-      "star": "0",
+      "star": 0,
       "difficulty": 1,
       "top_score": 0
     },

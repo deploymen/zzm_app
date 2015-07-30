@@ -91,12 +91,11 @@ X-game-code: 0000015k
       "id": 105,
       "name": "Tap Tens",
       "description": "How many ones are in a ten?",
-      "parameters": null,
       "question_count": 10,
       "badges": null
     },
     "status": {
-      "star": "2",
+      "star": 2,
       "difficulty": 3,
       "top_score": 100
     },

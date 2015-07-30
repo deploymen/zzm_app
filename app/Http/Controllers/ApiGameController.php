@@ -81,7 +81,7 @@ Class ApiGameController extends Controller {
 					]);
 
 			}
-
+			
 			$difficulty = $userMap[0]->star + 1;
 			if($difficulty > 5){ $difficulty = 5; }
 			switch($planet->game_type){
@@ -103,13 +103,12 @@ Class ApiGameController extends Controller {
 						'id' => $planet->id,
 						'name' => $planet->name,
 						'description' => $planet->description,
-						'parameters' => json_decode($planet->param),
 						'question_count' => $planet->question_count,
 						'badges' => json_decode($planet->badges_metrics),
 					],
 					'status' => [
 						'star' => $userMap[0]->star,	
-						'difficulty' =>(string)$difficulty,
+						'difficulty' =>$difficulty,
 						'top_score' => $userMap[0]->top_score,
 					],
 					'planet_top_score'=>$top_scre_result,

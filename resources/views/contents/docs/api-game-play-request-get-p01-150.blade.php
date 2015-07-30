@@ -91,7 +91,6 @@ X-game-code: 0000015k
       "id": 150,
       "name": "Sushi Star: Sushimetry 3",
       "description": "Know your ingredients!",
-      "parameters": null,
       "question_count": 10,
       "badges": {
         "speed": "1",
@@ -102,7 +101,7 @@ X-game-code: 0000015k
       }
     },
     "status": {
-      "star": "1",
+      "star": 1,
       "difficulty": 2,
       "top_score": 1
     },
