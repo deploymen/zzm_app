@@ -165,6 +165,10 @@ ul.pagination li.current button {
 	font-size: rem(30px);
 }
 
+.profile-school-name {
+	height: rem(28px);
+}
+
 /** Main Header Styles **/
 .main-header {
 	position: fixed;
@@ -413,6 +417,7 @@ label:hover:before {
 	text-align: center;
 	cursor: pointer;
 	padding-top: rem(110px);
+	min-height: rem(527px);
 }
 
 .add-button .profile-info p {
@@ -614,7 +619,7 @@ label:hover:before {
 }
 
 .profile-bar .avatar-holder {
-	border: none;
+	/*border: none;*/
 	margin-right: rem(30px);
 }
 

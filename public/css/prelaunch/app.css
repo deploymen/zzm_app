@@ -6430,6 +6430,36 @@ footer {
     margin: 0 auto;
 }
 
+.inner-beta-wrapper {
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 130px;
+}
+
+.inner-beta-wrapper .fa-android {
+    background-color: #92C13B;
+    color: #FFFFFF;
+    padding: 5px 8px;
+    border-radius: 5px;
+}
+
+.inner-beta-wrapper .fa-apple {
+    background-color: #BDBABE;
+    color: #262626;
+    padding: 5px 8px;
+    border-radius: 5px;
+}
+
+.beta-instruction-list {
+    line-height: 30px;
+    font-family: 'museo-sans', sans-serif;
+    color: #777;
+}
+
+.beta-instruction-list li a {
+    color: #2B91D6;
+}
+
 .contributor-banner .badge-box,
 .contributor-banner .text-box,
 .job-banner .badge-box,
@@ -6455,6 +6485,7 @@ footer {
     font-size: 70px;
     margin-top: 30px;
     margin-bottom: 0px;
+    text-align: center;
 }
 
 .contributor-banner .text-box p,
@@ -6464,7 +6495,7 @@ footer {
     text-transform: uppercase;
     margin-top: 0px;
     text-align: center;
-    max-width: 606px;
+   /* max-width: 606px;*/
 }
 
 .collaborator-list {
