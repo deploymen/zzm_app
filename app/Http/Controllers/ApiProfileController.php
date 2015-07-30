@@ -47,6 +47,7 @@ Class ApiProfileController extends Controller {
 		
 		$userId = Request::input('user_id');
 		$profileInfo = [];
+<<<<<<< HEAD
 		try {
 		 	$profiles = GameProfile::select('id','user_id', 'class_id', 'first_name' , 'last_name','age','school','grade' ,'city','email','nickname1','nickname2','avatar_id')->where('user_id', $userId)->orderBy('id')->get();
 
@@ -134,6 +135,77 @@ Class ApiProfileController extends Controller {
 			])]);
 			return ResponseHelper::OutputJSON('exception');
 		}	
+=======
+		// try {
+	 	$profiles = GameProfile::select('id','user_id', 'class_id', 'first_name' , 'last_name','age','school','grade' ,'city','email','nickname1','nickname2','avatar_id')->where('user_id', $userId)->get();
+
+		foreach($profiles as $profile){
+			$profile->nickName1;
+			$profile->nickName2;
+			$profile->avatar;
+			$profile->gameCode;
+		}
+
+		for($i=0; $i<count($profiles); $i++){
+	 		$p = $profiles[$i];
+
+	 		array_push($profileInfo, [
+	 				'id' => $p->id,
+		 			'user_id' => $p->user_id,
+		 			'class_id' => $p->class_id,
+		 			'first_name' => $p->first_name,
+		 			'last_name' => $p->last_name,
+		 			'age' => $p->age,
+		 			'school' => $p->school,
+		 			'grade' => $p->grade,
+		 			'city' => $p->city,
+		 			'email' => $p->email,
+		 			'nickname1' => $p->nickname1,
+		 			'nickname2' => $p->nickname2,
+		 			'avatar_id' => $p->avatar_id,
+		 			'nick_name1' => $p->nickName1,
+		 			'nick_name2' => $p->nickName2,
+		 			'avatar' => $p->avatar,
+		 			'game_code' => $p->gameCode,
+		 			'best_score' => [],
+		 			'weak_score' => [],
+	 			]);
+	 		$best_score = ApiProfileHelper::ProfileBestScore($p, $scoreType = 'best_score');
+			$weak_score = ApiProfileHelper::ProfileBestScore($p, $scoreType = 'weak_score');
+			 	for($j=0; $j<count($best_score); $j++){
+			 		$b = $best_score[$j];
+			 		array_push($profileInfo[$i]['best_score'], [
+			 			'system_name' => $b->name,
+			 			'planet_id' => $b->planet_id,
+			 			'description' => $b->description,
+			 			'best_score'=> $b->score,
+			 			'status'=>$b->status,
+			 			'play_id'=>$b->play_id,
+			 			]);
+			 	}
+			 	for($k=0; $k<count($weak_score); $k++){
+			 		$w = $weak_score[$k];
+			 		array_push($profileInfo[$i]['weak_score'], [
+			 			'system_name' => $w->name,
+			 			'planet_id' => $w->planet_id,
+			 			'description' => $w->description,
+			 			'weak_score'=> $w->score,
+			 			'status'=>$w->status,
+			 			'play_id'=>$w->play_id,
+			 			]);
+			 	}
+		}
+
+			return ResponseHelper::OutputJSON('success', '', ['list' => $profileInfo]);
+
+			// } catch (Exception $ex) {
+			// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+			// 		'source' => 'ApiProfileController > get',
+			// 		'inputs' => Request::all(),
+			// 	])]);
+			// 	return ResponseHelper::OutputJSON('exception');
+			// }	
+>>>>>>> adds for each for age and grade in profiles blade
 	}
 
 	public function create() {

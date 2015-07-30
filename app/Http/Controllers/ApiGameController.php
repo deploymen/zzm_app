@@ -92,7 +92,10 @@ Class ApiGameController extends Controller {
 				case 'p07':$questions = ZapZapQuestionHelper::GetQuestionP07($planetId,$difficulty,$questionCount); break;
 				case 'p10':$questions = ZapZapQuestionHelper::GetQuestionP10($planetId,$difficulty,$questionCount); break;
 				case 'p18':$questions = ZapZapQuestionHelper::GetQuestionP18($planetId,$difficulty,$questionCount); break;
+<<<<<<< HEAD
 				case 'p23':$questions = ZapZapQuestionHelper::GetQuestionP23($planetId,$difficulty,$questionCount); break;
+=======
+>>>>>>> adds for each for age and grade in profiles blade
 
 			}	
 

@@ -217,9 +217,15 @@ function createNewProfile(){
 		last_name    : newlastname.val(),
 		school       : newschool.val(),
 		city         : newcity.val(),
+<<<<<<< HEAD
 		email        : 'marypoppins@nanny.com',
 		age        	 : editselectage.children('option').filter(':selected').val(),
 		grade     	 : editselectgrade.children('option').filter(':selected').val()
+=======
+		email        : profileemail.val(),
+		age          : editselectage,
+		grade        : editselectgrade
+>>>>>>> adds for each for age and grade in profiles blade
 	}
 
 	$.ajaxSetup({
