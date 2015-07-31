@@ -27,8 +27,8 @@ Class PageController extends Controller {
 		try {
 
 			$profile = GameProfile::select('id','user_id', 'class_id', 'first_name' , 'last_name','age', 'school' ,'grade','city','email','nickname1','nickname2','avatar_id')->find($id);
-			$age = Age::select('age','age_name')->get();
-			$grade = Grade::select('grade', 'grade_name')->get();
+			$ages = Age::select('age','age_name')->get();
+			$grades = Grade::select('grade', 'grade_name')->get();
 
 			if(!$profile){
 				return ResponseHelper::OutputJSON('fail', 'profile not found');
@@ -47,10 +47,11 @@ Class PageController extends Controller {
 			// 	'grade' => $grade
 
 			// 	]);
+
 			return view('contents.website.edit', [
 				'profile'=>$profile,
-				'age' => $age,
-				'grade' => $grade
+				'ages' => $ages,
+				'grades' => $grades
 				]);
 
 		} catch (\Exception $ex) {
