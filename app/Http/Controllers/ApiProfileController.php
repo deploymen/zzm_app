@@ -48,63 +48,81 @@ Class ApiProfileController extends Controller {
 		$userId = Request::input('user_id');
 		$profileInfo = [];
 		try {
-	 	$profiles = GameProfile::select('id','user_id', 'class_id', 'first_name' , 'last_name','age','school','grade' ,'city','email','nickname1','nickname2','avatar_id')->where('user_id', $userId)->get();
+	 	$profiles = GameProfile::select('id','user_id', 'class_id', 'first_name' , 'last_name','age','school','grade' ,'city','email','nickname1','nickname2','avatar_id')->where('user_id', $userId)->orderBy('id')->get();
 
-		foreach($profiles as $profile){
-			$profile->nickName1;
-			$profile->nickName2;
-			$profile->avatar;
-			$profile->gameCode;
-		}
+			foreach($profiles as $profile){
+				$profile->nickName1;
+				$profile->nickName2;
+				$profile->avatar;
+				$profile->gameCode;
+			}
 
-		for($i=0; $i<count($profiles); $i++){
-	 		$p = $profiles[$i];
+			$sql = "
+				SELECT  *
+					FROM  (
+				        	SELECT p.`id` , gp.`created_at`
+				        		FROM (`t0111_game_profile` p)
+				        			LEFT JOIN `t0400_game_play` gp ON (gp.`profile_id` = p.`id`)
+				        		WHERE p.`user_id` = {$userId}
+				        		AND p.`deleted_at` IS NULL
+				        		ORDER BY gp.`created_at` DESC
 
-	 		array_push($profileInfo, [
-	 				'id' => $p->id,
-		 			'user_id' => $p->user_id,
-		 			'class_id' => $p->class_id,
-		 			'first_name' => $p->first_name,
-		 			'last_name' => $p->last_name,
-		 			'age' => $p->age,
-		 			'school' => $p->school,
-		 			'grade' => $p->grade,
-		 			'city' => $p->city,
-		 			'email' => $p->email,
-		 			'nickname1' => $p->nickname1,
-		 			'nickname2' => $p->nickname2,
-		 			'avatar_id' => $p->avatar_id,
-		 			'nick_name1' => $p->nickName1,
-		 			'nick_name2' => $p->nickName2,
-		 			'avatar' => $p->avatar,
-		 			'game_code' => $p->gameCode,
-		 			'best_score' => [],
-		 			'weak_score' => [],
-	 			]);
-	 		$best_score = ApiProfileHelper::ProfileBestScore($p, $scoreType = 'best_score');
-			$weak_score = ApiProfileHelper::ProfileBestScore($p, $scoreType = 'weak_score');
-			 	for($j=0; $j<count($best_score); $j++){
-			 		$b = $best_score[$j];
-			 		array_push($profileInfo[$i]['best_score'], [
-			 			'system_name' => $b->name,
-			 			'planet_id' => $b->planet_id,
-			 			'description' => $b->description,
-			 			'best_score'=> $b->score,
-			 			'status'=>$b->status,
-			 			'play_id'=>$b->play_id,
-			 			]);
-			 	}
-			 	for($k=0; $k<count($weak_score); $k++){
-			 		$w = $weak_score[$k];
-			 		array_push($profileInfo[$i]['weak_score'], [
-			 			'system_name' => $w->name,
-			 			'planet_id' => $w->planet_id,
-			 			'description' => $w->description,
-			 			'weak_score'=> $w->score,
-			 			'status'=>$w->status,
-			 			'play_id'=>$w->play_id,
-			 			]);
-			 	}
+				            )t
+				           GROUP BY `id`
+			";
+
+			$lastPlayed = DB::select($sql);
+			for($i=0; $i<count($profiles); $i++){
+		 		$p = $profiles[$i];
+		 		$lp = $lastPlayed[$i];
+
+		 		array_push($profileInfo, [
+		 				'id' => $p->id,
+			 			'user_id' => $p->user_id,
+			 			'class_id' => $p->class_id,
+			 			'first_name' => $p->first_name,
+			 			'last_name' => $p->last_name,
+			 			'age' => $p->age,
+			 			'school' => $p->school,
+			 			'grade' => $p->grade,
+			 			'city' => $p->city,
+			 			'email' => $p->email,
+			 			'nickname1' => $p->nickname1,
+			 			'nickname2' => $p->nickname2,
+			 			'avatar_id' => $p->avatar_id,
+			 			'nick_name1' => $p->nickName1,
+			 			'nick_name2' => $p->nickName2,
+			 			'avatar' => $p->avatar,
+			 			'game_code' => $p->gameCode,
+			 			'best_score' => [],
+			 			'weak_score' => [],
+			 			'last_played' => $lp->created_at,
+			 			
+		 			]);
+		 		$best_score = ApiProfileHelper::ProfileBestScore($p, $scoreType = 'best_score');
+				$weak_score = ApiProfileHelper::ProfileBestScore($p, $scoreType = 'weak_score');
+				 	for($j=0; $j<count($best_score); $j++){
+				 		$b = $best_score[$j];
+				 		array_push($profileInfo[$i]['best_score'], [
+				 			'system_name' => $b->name,
+				 			'planet_id' => $b->planet_id,
+				 			'description' => $b->description,
+				 			'best_score'=> $b->score,
+				 			'status'=>$b->status,
+				 			'play_id'=>$b->play_id,
+				 			]);
+				 	}
+				 	for($k=0; $k<count($weak_score); $k++){
+				 		$w = $weak_score[$k];
+				 		array_push($profileInfo[$i]['weak_score'], [
+				 			'system_name' => $w->name,
+				 			'planet_id' => $w->planet_id,
+				 			'description' => $w->description,
+				 			'weak_score'=> $w->score,
+				 			'status'=>$w->status,
+				 			'play_id'=>$w->play_id,
+				 			]);
+				 	}
 		}
 
 			return ResponseHelper::OutputJSON('success', '', ['list' => $profileInfo]);
