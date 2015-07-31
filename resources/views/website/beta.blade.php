@@ -89,7 +89,7 @@
                     <div class="row">
                         <h3><i class="fa fa-apple"></i> Step By Step iOS</h3>
                         <ol class="beta-instruction-list">
-                            <li>Reply to this email and to let us know that you are an iOS user so that we can add you to the tester list.</li>
+                            <li>Please send an email to "<a href="mailto:hello@zapzapmath.com?Subject=Zap%20Zap%20Math%20Beta%20Testing" target="_top">hello@zapzapmath.com</a>" with the subject header "Zap Zap Math Beta Testing" to let us know if you are an iOS user.</li>
                             <li>You will receive an email from iTunes Connect with the subject of "Testflight" within a day or two (please open the email from your Apple device). If you don't see the message, please check your spam or junk folder.</li>
                             <li>Open the iTunes Store email with the subject title "Testflight"</li>
                             <li>Click on "Open in Testflight"</li>

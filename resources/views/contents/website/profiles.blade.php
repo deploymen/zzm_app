@@ -10,10 +10,12 @@
 @stop
 
 @section('js_include')
+<script src="/../js/main/profiles.js"></script>
+
 <script type="text/javascript">
     
 </script>
-<script src="/../js/main/profiles.js"></script>
+
 @stop
 
 <!-- @section('breadcrumb')
