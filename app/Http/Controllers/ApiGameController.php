@@ -263,11 +263,13 @@ Class ApiGameController extends Controller {
 				default: return ResponseHelper::OutputJSON('fail', 'submit answer error');
 			}
 
+			ZapZapQuestionHelper::UserMap($profileId,$planetId,$gamePlay); //update user_map
+
 			$profile = GameProfile::find($profileId);
 			$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();
 
 			ZapZapQuestionHelper::LeaderboardUpdate($profile,$systemPlanet,$gameResult);
-			LogHelper::LogPostResult($jsonGameResult, $gameCode);
+			LogHelper::LogPostResult($jsonGameResult, $gameCode);//log post result
 			} catch (Exception $ex) {
 
 				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([

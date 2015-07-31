@@ -37,14 +37,13 @@ Class ResultController extends Controller {
 
 	public function onlySystem(){
 		$gameCode = Request::input('game_code');
-		$profileId = Request::input('game_code_profile_id');
 		
 		$profileId = Request::input('profile_id');
 
 		$page = Request::input("page", '1');
 		$pageSize = Request::input("page_size", '30');
 
-		try{
+		// try{
 			
 			/* pagination */
 			$startIndex = $pageSize*($page - 1);
@@ -52,8 +51,7 @@ Class ResultController extends Controller {
 	       	//end 
 
 	       	/* get system id */
-	       	$resultSystemIds = GameSystem::where('enable', 1)->skip($startIndex)->take($pageSize)->select('id')->get();
-
+	       	$resultSystemIds = GameSystem::where('enable', 1)->skip($startIndex)->take($pageSize)->select('id')->orderBy('sequence')->get();
 	       	$systemIds = [];
 	       	for($i=0; $i<count($resultSystemIds); $i++){
 	       		array_push($systemIds, $resultSystemIds[$i]->id);
@@ -61,12 +59,23 @@ Class ResultController extends Controller {
 	       	$systemIds = implode(',', $systemIds);
 	       	//end 
 
+	       	if(!$systemIds){
+				return ResponseHelper::OutputJSON('fail','page not found');			
+	       	}
 			$sql = " 
-				SELECT s.`id` AS `system_id` , s.`name` AS `system_name`
-					FROM `t0122_game_system` s
-						WHERE s.`id` IN ({$systemIds})
-                            GROUP BY s.`id`
-							ORDER BY s.`sequence` ASC
+				SELECT s.`id` AS `system_id` , s.`name` AS `system_name` , IFNULL(p.`played`,0) AS `played`
+					FROM (`t0122_game_system` s)
+					LEFT JOIN(
+						SELECT sp.`system_id`, IF(SUM(um.`played`) > 0, 1, 0) AS `played`
+						FROM `t0124_game_system_planet` sp, `t0501_game_user_map` um
+						WHERE sp.`planet_id` = um.`planet_id` 
+						AND um.`profile_id` = 1
+							GROUP BY sp.`system_id`
+							ORDER BY sp.`system_id` ASC
+					) p ON(s.`id` = p.`system_id`)
+					WHERE s.`id` IN ({$systemIds}) 
+					GROUP BY s.`id` 
+					ORDER BY s.`sequence` ASC
 			";
 
 			$result = DB::SELECT($sql);
@@ -77,7 +86,7 @@ Class ResultController extends Controller {
 				array_push($system, [
 					'id' => $r->system_id,
 					'system_name' => $r->system_name,
-					'played' => '1',
+					'played' => $r->played,
 				]);
 			}
 
@@ -87,20 +96,19 @@ Class ResultController extends Controller {
 				'page_size' => $pageSize, 
 				'pageTotal' => ceil($total/$pageSize) ,
 				]);
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ResultController > onlySystem',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		// } catch (Exception $ex) {
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		'source' => 'ResultController > onlySystem',
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 	}
 
 	public function onlyPlanet(){
 		$userId = Request::input('user_id');
 
 		$gameCode = Request::input('game_code');
-		$profileId = Request::input('game_code_profile_id');
 
 		$systmeId = Request::input('system_id');
 		$profileId = Request::input('profile_id');
@@ -133,7 +141,7 @@ Class ResultController extends Controller {
 			$total = GameSystem::where('enable' , 1)->count();
 
 			$sql = " 
-				SELECT p.`id` AS `planet_id`, p.`description` AS `subtitle`, COUNT(gp.`id`) AS `play_count` ,IFNULL(MAX(gp.`score`), 0) AS `max_score` , IFNULL(um.`star`, 0) AS `star`
+				SELECT p.`id` AS `planet_id`, p.`description` AS `subtitle`, COUNT(gp.`id`) AS `play_count` ,IFNULL(MAX(gp.`score`), 0) AS `max_score` , IFNULL(um.`star`, 0) AS `star` , IFNULL(um.`played`,0) AS `played`
 					FROM (`t0122_game_system` s, `t0123_game_planet` p, `t0124_game_system_planet` sp)
 		            
 						LEFT JOIN `t0400_game_play` gp ON( p.`id` = gp.`planet_id` AND gp.`code` = :game_code )
@@ -158,7 +166,7 @@ Class ResultController extends Controller {
 					'play_count' => $r->play_count,
 					'star' => $r->star,
 					'max_score' => $r->max_score,
-					'played' => '1',
+					'played' => $r->played,
 				]);
 			}
 
@@ -343,7 +351,7 @@ Class ResultController extends Controller {
 				case 'p07':$question = ResultHelper::ResultQuestionP07($playId); break;
 				case 'p10':$question = ResultHelper::ResultQuestionP10($playId); break;
 				case 'p18':$question = ResultHelper::ResultQuestionP18($playId); break;
-				case 'p18':$question = ResultHelper::ResultQuestionP18($playId); break;
+				case 'p23':$question = ResultHelper::ResultQuestionP23($playId); break;
 			}	
 
 
