@@ -65,16 +65,16 @@ Class ResultController extends Controller {
 				SELECT s.`id` AS `system_id` , s.`name` AS `system_name`
 					FROM `t0122_game_system` s
 						WHERE s.`id` IN ({$systemIds})
-	                                    GROUP BY s.`id`
-										ORDER BY s.`sequence` ASC
+                            GROUP BY s.`id`
+							ORDER BY s.`sequence` ASC
 			";
 
 			$result = DB::SELECT($sql);
 
-			$answers = [];
+			$system = [];
 			for($i=0; $i<count($result); $i++){
 				$r = $result[$i];
-				array_push($answers, [
+				array_push($system, [
 					'id' => $r->system_id,
 					'system_name' => $r->system_name,
 					'played' => '1',
@@ -82,7 +82,7 @@ Class ResultController extends Controller {
 			}
 
 			return ResponseHelper::OutputJSON('success', '' , [
-				'system' =>$answers,
+				'system' =>$system,
 				'page' => $page,
 				'page_size' => $pageSize, 
 				'pageTotal' => ceil($total/$pageSize) ,
@@ -149,10 +149,10 @@ Class ResultController extends Controller {
 
 			$result = DB::SELECT($sql ,['game_code'=>$gameCode , 'profileId'=>$profileId ]);
 
-			$answers = [];
+			$planet = [];
 			for($i=0; $i<count($result); $i++){
 				$r = $result[$i];
-				array_push($answers, [
+				array_push($planet, [
 					'id' => $r->planet_id,
 					'subtitle' => $r->subtitle,
 					'play_count' => $r->play_count,
@@ -163,7 +163,7 @@ Class ResultController extends Controller {
 			}
 
 			return ResponseHelper::OutputJSON('success', '' , [
-				'planet' =>$answers,
+				'planet' =>$planet,
 				'breakcrumb' => [
 					'system_id' => $systmeId,
 					'system_name' => $system->name,
@@ -238,10 +238,10 @@ Class ResultController extends Controller {
 
 			$result = DB::SELECT($sql);
 
-			$answers = [];
+			$play = [];
 			for($i=0; $i<count($result); $i++){
 				$r = $result[$i];
-				array_push($answers, [
+				array_push($play, [
 					'id' => $r->id,
 					'planet_id'=>$r->planet_id,
 					'score'=>$r->score,
@@ -253,7 +253,7 @@ Class ResultController extends Controller {
 			}
 
 			return ResponseHelper::OutputJSON('success', '' , [
-				'play' =>$answers,
+				'play' =>$play,
 				'breakcrumb' => [
 					'system_id' => $breakcrumb->system_id,
 					'system_name' => $breakcrumb->name,
@@ -336,20 +336,19 @@ Class ResultController extends Controller {
 			$targetType = DB::SELECT($sqlGameType);
 
 			switch($targetType[0]->target_type){
-				case 'p01':$answers = ResultHelper::ResultQuestionP01($playId); break;
-				case 'p02':$answers = ResultHelper::ResultQuestionP02($playId); break;
-				case 'p03':$answers = ResultHelper::ResultQuestionP03($playId); break;
-				case 'p06':$answers = ResultHelper::ResultQuestionP06($playId); break;
-				case 'p07':$answers = ResultHelper::ResultQuestionP07($playId); break;
-				case 'p10':$answers = ResultHelper::ResultQuestionP10($playId); break;
-				case 'p18':$answers = ResultHelper::ResultQuestionP18($playId); break;
-
-
+				case 'p01':$question = ResultHelper::ResultQuestionP01($playId); break;
+				case 'p02':$question = ResultHelper::ResultQuestionP02($playId); break;
+				case 'p03':$question = ResultHelper::ResultQuestionP03($playId); break;
+				case 'p06':$question = ResultHelper::ResultQuestionP06($playId); break;
+				case 'p07':$question = ResultHelper::ResultQuestionP07($playId); break;
+				case 'p10':$question = ResultHelper::ResultQuestionP10($playId); break;
+				case 'p18':$question = ResultHelper::ResultQuestionP18($playId); break;
+				case 'p18':$question = ResultHelper::ResultQuestionP18($playId); break;
 			}	
 
 
 			return ResponseHelper::OutputJSON('success', '' , [
-				'questions' =>$answers,
+				'questions' =>$question,
 				'breakcrumb' => [
 					'system_id' => $breakcrumb->system_id,
 					'system_name' => $breakcrumb->name,

@@ -168,7 +168,6 @@ Class ApiGameController extends Controller {
 					'message' => "invalid game result format",
 				]; 
 			}
-
 			// check hash
 			$hash1 = sha1($jsonGameResult.$random.Config::get('app.p02_key'));
 			$hash2 = $hash;
@@ -262,16 +261,13 @@ Class ApiGameController extends Controller {
 				case 'p23': $status = ZapZapQuestionHelper::SubmitResultP23($planetId,$gamePlay,$gameResult,$profileId); break;
 
 				default: return ResponseHelper::OutputJSON('fail', 'submit answer error');
-
 			}
-
-
 
 			$profile = GameProfile::find($profileId);
 			$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();
 
 			ZapZapQuestionHelper::LeaderboardUpdate($profile,$systemPlanet,$gameResult);
-			
+			LogHelper::LogPostResult($jsonGameResult, $gameCode);
 			} catch (Exception $ex) {
 
 				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([

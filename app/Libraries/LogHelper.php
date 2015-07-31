@@ -38,6 +38,7 @@ use App\Models\LeaderboardWorld;
 use App\Models\LeaderboardSystem;
 use App\Models\LeaderboardPlanet;
 use App\Models\LogGetQuestions;
+use App\Models\LogPostResult;
 
 
 class LogHelper{
@@ -54,6 +55,14 @@ class LogHelper{
 	public static function LogGetQuestions($planetId,$gameCode){
 		$logGetQuestions = new LogGetQuestions;
 		$logGetQuestions->planet_id = $planetId;
+		$logGetQuestions->game_code = $gameCode;
+		$logGetQuestions->created_ip = Request::ip();
+		$logGetQuestions->save();
+	}
+
+	public static function LogPostResult($jsonGameResult,$gameCode){
+		$logGetQuestions = new LogPostResult;
+		$logGetQuestions->result = $jsonGameResult;
 		$logGetQuestions->game_code = $gameCode;
 		$logGetQuestions->created_ip = Request::ip();
 		$logGetQuestions->save();
