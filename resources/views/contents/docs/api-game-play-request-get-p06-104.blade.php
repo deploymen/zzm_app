@@ -91,7 +91,6 @@ X-game-code: 0000015k
       "id": 104,
       "name": "Word Games",
       "description": "What's your (word) problem?",
-      "parameters": null,
       "question_count": 10,
       "badges": {
         "speed": "6",
@@ -102,7 +101,7 @@ X-game-code: 0000015k
       }
     },
     "status": {
-      "star": "0",
+      "star": 0,
       "difficulty": 1,
       "top_score": 0
     },

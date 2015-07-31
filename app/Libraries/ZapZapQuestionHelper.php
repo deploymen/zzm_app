@@ -44,7 +44,7 @@ class ZapZapQuestionHelper{
 	public static function GetPlanetInfo($planetId){
 		try{
 			$sql = "
-				SELECT t.`name` AS `game_type` , p.`id` ,p.`name` , p.`description` , p.`badges_metrics` , p.`question_count` , p.`param` , p.`enable` 
+				SELECT t.`name` AS `game_type` , p.`id` ,p.`name` , p.`description` , p.`badges_metrics` , p.`question_count` , p.`enable` 
 					FROM `t0123_game_planet` p, `t0124_game_system_planet` sp, `t0122_game_system` s , `t0121_game_type` t
 						WHERE sp.`system_id` = s.`id`
 						AND t.id = p.`game_type_id`
@@ -85,7 +85,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT um.`top_score` , s.`id` AS `system_id` , s.`name` AS `system_name` , p.`id` AS `planet_id` , p.`name` AS `planet_name` , p.`description` ,IFNULL(um.`star`, 0) AS `star`
+				SELECT um.`top_score` , s.`id` AS `system_id` , s.`name` AS `system_name` , p.`id` AS `planet_id` , p.`name` AS `planet_name` , p.`description` ,CAST(IFNULL(um.`star`, 0) AS UNSIGNED) AS `star`
 					FROM (`t0122_game_system` s, `t0123_game_planet` p , `t0124_game_system_planet` sp) 
 						LEFT JOIN `t0501_game_user_map` um 
 							ON(
@@ -657,6 +657,7 @@ class ZapZapQuestionHelper{
 					array_push($results, [
 						'id' => $r->id,
 						'question' => $r->question,
+						'answer' => $r->answer,
 						'option_type' => $r->option_type,
 						'option_generate' => $r->option_generate,
 						'difficulty' => $r->difficulty,

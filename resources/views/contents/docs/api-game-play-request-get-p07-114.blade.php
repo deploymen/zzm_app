@@ -91,12 +91,11 @@ X-game-code: 0000015k
       "id": 114,
       "name": "More or Less?",
       "description": ">=<",
-      "parameters": null,
       "question_count": 10,
       "badges": null
     },
     "status": {
-      "star": "0",
+      "star": 0,
       "difficulty": 1,
       "top_score": 0
     },

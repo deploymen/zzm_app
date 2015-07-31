@@ -81,7 +81,7 @@ Class ApiGameController extends Controller {
 					]);
 
 			}
-
+			
 			$difficulty = $userMap[0]->star + 1;
 			if($difficulty > 5){ $difficulty = 5; }
 			switch($planet->game_type){
@@ -92,10 +92,9 @@ Class ApiGameController extends Controller {
 				case 'p07':$questions = ZapZapQuestionHelper::GetQuestionP07($planetId,$difficulty,$questionCount); break;
 				case 'p10':$questions = ZapZapQuestionHelper::GetQuestionP10($planetId,$difficulty,$questionCount); break;
 				case 'p18':$questions = ZapZapQuestionHelper::GetQuestionP18($planetId,$difficulty,$questionCount); break;
-<<<<<<< HEAD
 				case 'p23':$questions = ZapZapQuestionHelper::GetQuestionP23($planetId,$difficulty,$questionCount); break;
-=======
->>>>>>> adds for each for age and grade in profiles blade
+
+				default: return ResponseHelper::OutputJSON('fail', 'question not found');
 
 			}	
 
@@ -104,13 +103,12 @@ Class ApiGameController extends Controller {
 						'id' => $planet->id,
 						'name' => $planet->name,
 						'description' => $planet->description,
-						'parameters' => json_decode($planet->param),
 						'question_count' => $planet->question_count,
 						'badges' => json_decode($planet->badges_metrics),
 					],
 					'status' => [
 						'star' => $userMap[0]->star,	
-						'difficulty' =>(string)$difficulty,
+						'difficulty' =>$difficulty,
 						'top_score' => $userMap[0]->top_score,
 					],
 					'planet_top_score'=>$top_scre_result,
@@ -170,7 +168,6 @@ Class ApiGameController extends Controller {
 					'message' => "invalid game result format",
 				]; 
 			}
-
 			// check hash
 			$hash1 = sha1($jsonGameResult.$random.Config::get('app.p02_key'));
 			$hash2 = $hash;
@@ -264,16 +261,13 @@ Class ApiGameController extends Controller {
 				case 'p23': $status = ZapZapQuestionHelper::SubmitResultP23($planetId,$gamePlay,$gameResult,$profileId); break;
 
 				default: return ResponseHelper::OutputJSON('fail', 'submit answer error');
-
 			}
-
-
 
 			$profile = GameProfile::find($profileId);
 			$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();
 
 			ZapZapQuestionHelper::LeaderboardUpdate($profile,$systemPlanet,$gameResult);
-			
+			LogHelper::LogPostResult($jsonGameResult, $gameCode);
 			} catch (Exception $ex) {
 
 				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([

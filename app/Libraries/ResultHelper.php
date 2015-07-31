@@ -429,6 +429,55 @@ class ResultHelper{
 		return $answers;
 	}
 
+	public static function ResultQuestionP23($playId){
+		$answers = [];
+
+		 $sql = "
+       		SELECT q23.`id` AS `question_id` , q23.`answer` AS `question_answer` ,q23.* , r23.`id` AS `result_id` , r23.* , IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description`
+       			FROM (`t0300_game_result` r , `t0223_game_question_p23` q23 , `t0323_game_result_p23` r23)
+
+       			LEFT JOIN `t0132_game_question_subject` qs ON (qs.`question_id` =r.`question_id`)
+				LEFT JOIN `t0131_game_subject` s ON(qs.`subject_id` = s.`id`  )
+
+       				WHERE r.`target_id` = r23.`id`
+       				AND r.`target_id` = q18.`id`
+       				AND r.`play_id` = {$playId}
+
+       				ORDER BY r.`id` ASC;
+       ";
+       $result = DB::select($sql);
+		  $prevQuestionId = 0;
+
+        for($i=0; $i<count($result); $i++){
+			$r = $result[$i];
+			if($r->question_id != $prevQuestionId){
+				array_push($answers, [
+					'question_id' => $r->question_id,
+					'question'=>$r->question,
+					'answer'=>$r->answer,
+					'plan'=>$r->plan,
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->result_id,
+						'correct'=> $r->correct,
+						'answer'=>$r->question_answer,
+					],
+					'subjects' => []
+				]);
+			}
+
+			array_push($answers[count($answers)-1]['subjects'] ,[
+					'subject_code' => $r->subject_code,
+					'subject_name' => $r->name,
+					'description' => $r->description
+				]);
+				
+			$prevQuestionId = $r->question_id;
+		}
+		return $answers;
+	}
+
+
 }
 
 
