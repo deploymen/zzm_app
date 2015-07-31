@@ -56,7 +56,8 @@ App.controller('MainController', function ($scope, $http){
 		$('li.indicator-list-item:nth-child(1)').addClass('active');
         $http.get('/api/profiles/result/only-system?' + [
             'page=' + page,
-            'page_size=' + pageSize
+            'page_size=' + pageSize,
+            'profile_id=' + $scope.profileId
         ].join('&')).success(function(data, status, headers, config) {
             if (data.status == 'success') {
             	$scope.systems = data.data.system;
