@@ -657,6 +657,7 @@ class ZapZapQuestionHelper{
 					array_push($results, [
 						'id' => $r->id,
 						'question' => $r->question,
+						'answer' => $r->answer,
 						'option_type' => $r->option_type,
 						'option_generate' => $r->option_generate,
 						'difficulty' => $r->difficulty,
