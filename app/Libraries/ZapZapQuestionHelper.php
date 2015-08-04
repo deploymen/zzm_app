@@ -882,20 +882,7 @@ class ZapZapQuestionHelper{
 				$gameResults->game_type_id = '1';
 				$gameResults->save();
 
-				
 				}
-				$userMap = UserMap::where('profile_id', $profileId)->where('planet_id' , $planetId)->first();
-				if(!$userMap){
-					$userMap = new UserMap;
-					$userMap->profile_id = $profileId;
-					$userMap->planet_id = $planetId;
-					$userMap->save();
-				}
-
-				$userMap->star += ($gamePlay->status == 'pass')?1:0;
-				$userMap->star = ($userMap->star > 5)?5:$userMap->star;
-				$userMap->top_score = ($userMap->top_score > $gamePlay->score)?$userMap->top_score:$gamePlay->score;
-				$userMap->save();		
 
 			} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -926,7 +913,6 @@ class ZapZapQuestionHelper{
 				$resultP02->answer_4 = $answers[3];
 				$resultP02->answer_5 = $answers[4];
 				$resultP02->answer_6 = $answers[5];
-
 				$resultP02->save();
 
 				$gameResults = new GameResult;
@@ -937,19 +923,6 @@ class ZapZapQuestionHelper{
 				$gameResults->game_type_id = '2';
 				$gameResults->save();
 			}
-
-			$userMap = UserMap::where('profile_id', $profileId)->where('planet_id' , $planetId)->first();
-			if(!$userMap){
-				$userMap = new UserMap;
-				$userMap->profile_id = $profileId;
-				$userMap->planet_id = $planetId;
-				$userMap->save();
-			}
-
-			$userMap->star += ($gamePlay->status == 'pass')?1:0;
-			$userMap->star = ($userMap->star > 5)?5:$userMap->star;
-			$userMap->top_score = ($userMap->top_score > $gamePlay->score)?$userMap->top_score:$gamePlay->score;
-			$userMap->save();
 
 
 			} catch (Exception $ex) {
@@ -992,20 +965,6 @@ class ZapZapQuestionHelper{
 
 			}
 
-			$userMap = UserMap::where('profile_id', $profileId)->where('planet_id' , $planetId)->first();
-
-			if(!$userMap){
-				$userMap = new UserMap;
-				$userMap->profile_id = $profileId;
-				$userMap->planet_id = $planetId;
-				$userMap->save();
-			}
-
-			$userMap->star += ($gamePlay->status == 'pass')?1:0;
-			$userMap->star = ($userMap->star > 5)?5:$userMap->star;
-			$userMap->top_score = ($userMap->top_score > $gamePlay->score)?$userMap->top_score:$gamePlay->score;
-			$userMap->save();
-
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 				'inputs' => Request::all(),
@@ -1035,20 +994,6 @@ class ZapZapQuestionHelper{
 				$gameResults->game_type_id = '6';
 				$gameResults->save();
 			}	
-
-			$userMap = UserMap::where('profile_id', $profileId)->where('planet_id' , $planetId)->first();
-
-			if(!$userMap){
-				$userMap = new UserMap;
-				$userMap->profile_id = $profileId;
-				$userMap->planet_id = $planetId;
-				$userMap->save();
-			}
-
-			$userMap->star += ($gamePlay->status == 'pass')?1:0;
-			$userMap->star = ($userMap->star > 5)?5:$userMap->star;
-			$userMap->top_score = ($userMap->top_score > $gamePlay->score)?$userMap->top_score:$gamePlay->score;
-			$userMap->save();
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -1080,20 +1025,6 @@ class ZapZapQuestionHelper{
 				$gameResults->save();
 			}	
 
-			$userMap = UserMap::where('profile_id', $profileId)->where('planet_id' , $planetId)->first();
-
-			if(!$userMap){
-				$userMap = new UserMap;
-				$userMap->profile_id = $profileId;
-				$userMap->planet_id = $planetId;
-				$userMap->save();
-			}
-
-			$userMap->star += ($gamePlay->status == 'pass')?1:0;
-			$userMap->star = ($userMap->star > 5)?5:$userMap->star;
-			$userMap->top_score = ($userMap->top_score > $gamePlay->score)?$userMap->top_score:$gamePlay->score;
-			$userMap->save();
-
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 				'inputs' => Request::all(),
@@ -1123,20 +1054,6 @@ class ZapZapQuestionHelper{
 				$gameResults->game_type_id = '10';
 				$gameResults->save();
 			}	
-
-			$userMap = UserMap::where('profile_id', $profileId)->where('planet_id' , $planetId)->first();
-
-			if(!$userMap){
-				$userMap = new UserMap;
-				$userMap->profile_id = $profileId;
-				$userMap->planet_id = $planetId;
-				$userMap->save();
-			}
-
-			$userMap->star += ($gamePlay->status == 'pass')?1:0;
-			$userMap->star = ($userMap->star > 5)?5:$userMap->star;
-			$userMap->top_score = ($userMap->top_score > $gamePlay->score)?$userMap->top_score:$gamePlay->score;
-			$userMap->save();
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -1168,20 +1085,6 @@ class ZapZapQuestionHelper{
 				$gameResults->save();
 			}	
 
-			$userMap = UserMap::where('profile_id', $profileId)->where('planet_id' , $planetId)->first();
-
-			if(!$userMap){
-				$userMap = new UserMap;
-				$userMap->profile_id = $profileId;
-				$userMap->planet_id = $planetId;
-				$userMap->save();
-			}
-
-			$userMap->star += ($gamePlay->status == 'pass')?1:0;
-			$userMap->star = ($userMap->star > 5)?5:$userMap->star;
-			$userMap->top_score = ($userMap->top_score > $gamePlay->score)?$userMap->top_score:$gamePlay->score;
-			$userMap->save();
-
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 				'inputs' => Request::all(),
@@ -1191,7 +1094,7 @@ class ZapZapQuestionHelper{
 	}
 
 	public static function submitResultP23($planetId,$gamePlay ,$gameResult,$profileId ) {
-		// try{
+		try{
 			for($i=0; $i<count($gameResult['answers']); $i++){
 				$inAnswer = $gameResult['answers'][$i];
 				$question = GameQuestion::find($inAnswer['question_id']);
@@ -1212,27 +1115,30 @@ class ZapZapQuestionHelper{
 				$gameResults->save();
 			}	
 
-			$userMap = UserMap::where('profile_id', $profileId)->where('planet_id' , $planetId)->first();
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
+	}
 
+	public static function UserMap($profileId,$planetId,$gamePlay){
+		$userMap = UserMap::where('profile_id', $profileId)->where('planet_id' , $planetId)->first();
 			if(!$userMap){
 				$userMap = new UserMap;
 				$userMap->profile_id = $profileId;
 				$userMap->planet_id = $planetId;
+				$userMap->played = '1';
 				$userMap->save();
 			}
 
 			$userMap->star += ($gamePlay->status == 'pass')?1:0;
 			$userMap->star = ($userMap->star > 5)?5:$userMap->star;
 			$userMap->top_score = ($userMap->top_score > $gamePlay->score)?$userMap->top_score:$gamePlay->score;
-			$userMap->save();
-
-		// } catch (Exception $ex) {
-		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-		// 		'inputs' => Request::all(),
-		// 	])]);
-		// 	return ResponseHelper::OutputJSON('exception');
-		// }
-	}
+			$userMap->played = '1';
+			$userMap->save();		
+		}
 
 
 	public static function LeaderboardUpdate($profile,$systemPlanet,$gameResult) {

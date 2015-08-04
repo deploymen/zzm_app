@@ -440,7 +440,7 @@ class ResultHelper{
 				LEFT JOIN `t0131_game_subject` s ON(qs.`subject_id` = s.`id`  )
 
        				WHERE r.`target_id` = r23.`id`
-       				AND r.`target_id` = q18.`id`
+       				AND r.`target_id` = q23.`id`
        				AND r.`play_id` = {$playId}
 
        				ORDER BY r.`id` ASC;
@@ -455,7 +455,7 @@ class ResultHelper{
 					'question_id' => $r->question_id,
 					'question'=>$r->question,
 					'answer'=>$r->answer,
-					'plan'=>$r->plan,
+					'plan'=>$r->plane,
 					'difficulty'=>$r->difficulty,
 					'result' => [
 						'result_id' => $r->result_id,
