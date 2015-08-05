@@ -191,7 +191,7 @@ KONAMI CODE MOFO
                                     </div>
                                 </div>
                             </li>
-                            <li class="wow bounceInUp" data-wow-delay="0.5s">
+                            <li class="wow bounceInUp" data-wow-delay="0.25s">
                                 <a href="/contributors" class="contributor-link"></a>
                                 <div class="collab-profile-holder">
                                     <div class="profile-pic-holder">
@@ -210,7 +210,7 @@ KONAMI CODE MOFO
                                     </div>
                                 </div>
                             </li>
-                            <li class="wow bounceInDown" data-wow-delay="1s">
+                            <li class="wow bounceInDown" data-wow-delay="0.5s">
                                 <a href="/contributors" class="contributor-link"></a>
                                 <div class="collab-profile-holder">
                                     <div class="profile-pic-holder">

@@ -11,9 +11,10 @@
 
 @section('js_include')
 <script src="/../js/main/profiles.js"></script>
+<script src="/../js/main/profiles-ng.js"></script>
 
 <script type="text/javascript">
-    
+
 </script>
 
 @stop
@@ -36,7 +37,28 @@
 </div> -->
 
 
-<section ng-app="zapzapApp" ng-controller="profilesController" data-ng-init="init()">
+<!-- <section ng-app="zapzapProfile" ng-controller="MainController" data-ng-init="init()"> -->
+<section>
+	<div class="row">
+		<div class="indicator-holder">
+			<span class="indicator-bar"></span>
+			<ul class="indicator-list">
+				<li class="indicator-list-item active">
+					<img src="/assets/main/img/profiles/icon-profiles-1.png" alt="Icon Profiles">
+				</li>
+				<li class="indicator-list-item">
+					<img src="/assets/main/img/profiles/icon-profiles-2.png" alt="Icon Systems">
+				</li>
+				<li class="indicator-list-item">
+					<img src="/assets/main/img/profiles/icon-profiles-3.png" alt="Icon Planets">
+				</li>
+				<li class="indicator-list-item">
+					<img src="/assets/main/img/profiles/icon-profiles-4.png" alt="Icon Questions">
+				</li>
+			</ul>
+		</div>
+	</div>
+
 	<div id="addProfileModal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" data-options="close_on_background_click:false">
 		<h3 id="modalTitle" class="modalTitle">Create a new Profile</h3>
 		<p class="subline-desc">Profiles allow you to follow the progress of each individual child</p>
@@ -137,7 +159,9 @@
 	</div><!--addProfileModal-->
 
 	<div class="row">
-		<div id="profile-list" class="cf"></div>
+		<div id="profile-list" class="cf">
+			<!-- <div ng-repeat=""></div> -->
+		</div>
 	</div>
 
 	<div class="profile-item add-button"><section class="profile-info"><div class="add-plus-box"><i class="fa fa-plus"></i></div><p class="">Create a Student Profile</p><a href="javascript:void(0);" data-reveal-id="addProfileModal" id="btn-show-profile-form" class="btn-show-profile-form"></a></section></div>

@@ -351,7 +351,7 @@ Class ApiProfileController extends Controller {
 				return ResponseHelper::OutputJSON('fail','wrong user id');
 			}	
 			
-			if($count = 1){
+			if($count == 1){
 				return ResponseHelper::OutputJSON('fail','at least once profile in account');
 			}
 
