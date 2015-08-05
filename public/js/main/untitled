@@ -1,0 +1,15 @@
+'<a class="profile-subject-name truncate"',(allVars.datal.list[i].best_score.length > 0)?,' href="/user/profiles/',allVars.datal.list[i].id,'/results?play_id=',(allVars.datal.list[i].best_score.length > 0)?allVars.datal.list[i].best_score[0].play_id:'href="#"','&profile_id=',allVars.datal.list[i].id,'">',(allVars.datal.list[i].best_score.length > 0)?allVars.datal.list[i].best_score[0].description:'no data available','</a><br/>',
+
+
+
+
+
+
+
+
+
+
+
+
+'<a class="profile-subject-name truncate" href="/user/profiles/',allVars.datal.list[i].id,'/results?play_id=',(allVars.datal.list[i].best_score.length > 1)?allVars.datal.list[i].best_score[1].play_id:'no data available','&profile_id=',allVars.datal.list[i].id,'">',(allVars.datal.list[i].best_score.length > 1)?allVars.datal.list[i].best_score[1].description:'no data available','</a><br/>',
+'<a class="profile-subject-name truncate" href="/user/profiles/',allVars.datal.list[i].id,'/results?play_id=',(allVars.datal.list[i].best_score.length > 2)?allVars.datal.list[i].best_score[2].play_id:'no data available','&profile_id=',allVars.datal.list[i].id,'">',(allVars.datal.list[i].best_score.length > 2)?allVars.datal.list[i].best_score[2].description:'no data available','</a><br/>',
