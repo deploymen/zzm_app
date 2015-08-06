@@ -6517,14 +6517,15 @@ footer {
 .collaborator-list {
     padding-left: 10px;
     padding-right: 10px;
+    display: inline-flex;
 }
 
 .collaborator-list li {
     padding-top: 4.375rem;
     list-style: none;
     width: 30%;
-    /*display: inline-flex;*/
-    display: inline-block;
+   /* display: inline-flex;*/
+    /*display: inline-block;*/
     margin-left: 10px;
     margin-right: 10px;
 }

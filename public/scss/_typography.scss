@@ -185,22 +185,32 @@ button.wide,
 }
 
 /** PROFILES STYLES **/
-.profile-name {
-	color: lighten($black, 30%);
+.profile-nickname {
+	color: lighten($black, 40%);
 	font-family: 'museo-sans', sans-serif;
 	font-size: rem(19px);
 	font-weight: bold;
 	margin-top: rem(-10px);
-	text-align: center;
+	margin-bottom: rem(5px);
+	/*text-align: center;*/
 }
 
-.profile-nickname {
+.profile-name {
 	font-size: rem(28px);
 	color: lighten($black, 60%);
 	font-family: 'museo-sans', sans-serif;
 	font-weight: lighter;
 	margin-bottom: rem(0px);
-	text-align: center;
+	padding-top: rem(25px);
+	/*text-align: center;*/
+}
+
+.profile-school-grade {
+	color: lighten($black, 40%);
+	font-family: 'museo-sans', sans-serif;
+	font-size: rem(19px);
+	font-weight: bold;
+	margin-bottom: rem(0px);
 }
 
 .nickname-middle {
@@ -220,6 +230,14 @@ button.wide,
 .profile-email {
 	color: lighten($black, 30%);
 	font-size: rem(14px);
+}
+
+.profile-code .user-id {
+	color: lighten($black, 60%);
+}
+
+.profile-label {
+	text-transform: uppercase;
 }
 
 .profile-email {
@@ -272,7 +290,10 @@ button.wide,
 }
 
 .profile-upgrade-cta a {
-
+	padding: 10px 20px;
+	text-transform: uppercase;
+	font-size: rem(19px);
+	font-family: 'museo-sans', sans-serif;
 }
 
 /** Results Styles **/

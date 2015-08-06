@@ -331,7 +331,7 @@ btndeleteok.click(function(){
 
 (function($, window, document, undefined){
 	if (top.location.pathname === '/user/profiles'){
-		displayProfiles();
+		//displayProfiles();
 	};
 
 	//$(document).foundation('abide', 'reflow');

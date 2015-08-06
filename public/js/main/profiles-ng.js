@@ -1,21 +1,19 @@
-// var App = App || angular.module('zapzapProfile', []),
-// 	ZZM = ZZM || {};
+var App = App || angular.module('zapzapProfile', []),
+	ZZM = ZZM || {};
 
-// App.service();
+App.service();
 
-// App.controller('MainController', function ($scope, $http){
-// 	$scope.profileId = '';
-// 	$scope.playId = '';
+App.controller('ProfileController', function ($scope, $http){
+	$scope.profileId = '';
+	$scope.playId = '';
 
-// 	$scope.init = function(){
-// 		$scope.profileId = ZZM.profileId;
-//    		$scope.playId = ZZM.playId;
+	$scope.init = function(){
+		$scope.profileId = ZZM.profileId;
+   		$scope.playId = ZZM.playId;
 
-//    		$scope.profiles = 
+   		// $scope.profiles = 
 
-//    		$http.get('/api/profiles').
-//    			success(){
-
-//    			}
-// 	}
-// });
+   		// $http.get('/api/profiles').
+   		// 	success()
+	}
+});

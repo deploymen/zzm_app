@@ -403,7 +403,7 @@ label:hover:before {
 
 .profile-item {
 	/*text-align: center;*/
-	padding-top: rem(70px) !important;
+	/*padding-top: rem(70px) !important;*/
 	width: rem(340px);
 	/*height: rem(500px);*/
 	margin-right: rem(10px);
@@ -451,8 +451,8 @@ label:hover:before {
 
 .profile-pic-holder,
 .avatar-holder {
-	width: rem(140px);
-	height: rem(140px);
+	width: rem(120px);
+	height: rem(120px);
 	overflow: hidden;
 	border: 3px solid $curious-blue;
 	border-radius: rem(140px);
@@ -461,8 +461,8 @@ label:hover:before {
 
 .profile-pic-holder {
 	margin-bottom: rem(20px);
-	margin: 0 auto;
-	margin-top: rem(-70px);
+	/*margin: 0 auto;*/
+	/*margin-top: rem(-70px);*/
 }
 
 .profile-code,

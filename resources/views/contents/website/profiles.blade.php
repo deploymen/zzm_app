@@ -37,8 +37,8 @@
 </div> -->
 
 
-<!-- <section ng-app="zapzapProfile" ng-controller="MainController" data-ng-init="init()"> -->
-<section>
+<section ng-app="zapzapProfile" ng-controller="ProfileController" data-ng-init="init()">
+<!-- <section> -->
 	<div class="row">
 		<div class="indicator-holder">
 			<span class="indicator-bar"></span>
@@ -161,6 +161,64 @@
 	<div class="row">
 		<div id="profile-list" class="cf">
 			<!-- <div ng-repeat=""></div> -->
+			<div class="profile-item">
+				<section class="profile-info">
+					<div class="profile-item-group small-12 columns">
+						<div class="small-5 columns">
+							<div class="profile-pic-holder">
+								<img src="/assets/main/img/avatars/default.jpg" alt="Avatar 3">
+							</div>
+						</div>
+						<div class="small-7 columns">
+							<div class="cf">
+								<p class="profile-name">
+									<span class="first-name">Blaze </span>
+									<span class="first-name">Smith</span>
+								</p>
+								<p class="profile-nickname">
+									<span class="first-name">Nick </span>
+									<span class="last-name">Name</span>
+								</p>
+								<p class="profile-code bold"><span class="profile-label">Player ID:</span> <span class="user-id">CLI009977</span></p>
+							</div>
+						</div>
+					</div>
+
+					<div class="profile-item-group cf">
+						<p class="profile-school-name truncate">SCHOOL</p>
+						<p class="profile-school-grade truncate">Grade 4A</p>
+					</div>
+
+					<div class="profile-item-group cf">
+						<div class="small-4 columns">
+							<p class="profile-proficiency">
+								<span class="profile-label bold">Last Played</span>
+							</p>
+							<p class="profile-last-seen">has not played yet</p>
+						</div>
+						<div class="small-2 columns">
+							<a href="javascript:void(0);" title="Proficiency is based on the average score of all games played." class="info-icon">i<span class="profile-tooltip"><p>Last Played shows the last time this child played Zap Zap Math.</p></span></a>
+						</div>
+					</div>
+
+					<div class="profile-item-group cf">
+						<div class="small-4 columns">
+							<p class="profile-proficiency">
+								<span class="profile-label bold">Total Attempts</span>
+							</p>
+						</div>
+						<div class="small-6 columns">
+							<p class="profile-last-seen">has not played yet</p>
+						</div>
+						<div class="small-2 columns">
+							<a href="javascript:void(0);" title="Proficiency is based on the average score of all games played." class="info-icon">i<span class="profile-tooltip"><p>Last Played shows the last time this child played Zap Zap Math.</p></span></a>
+						</div>
+					</div>
+
+					<p class="profile-upgrade-cta"><a href="/user/profiles/',allVars.datal.list[i].id,'/results" class="button round">Detailed report</a></p>
+					<a href="/user/profiles/',allVars.datal.list[i].id,'/edit" class="btn-profile-edit">Edit</a>
+				</section>
+			</div>
 		</div>
 	</div>
 
