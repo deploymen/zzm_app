@@ -20,6 +20,8 @@ Route::get('/thank-you', function(){ return view('website.thank-you'); });
 
 Route::get('/contributors', function(){ return view('website.contributors'); });
 
+Route::get('/beta', function(){ return view('website.beta'); });
+
 Route::get('/check/status', 'ApiCheckingController@CheckStatus');
 
 

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
@@ -49,7 +49,7 @@ KONAMI CODE MOFO
                 <nav class="main-menu">
                     <ul class="menu-list">
                         <li><a href="/jobs" target="_blank">Jobs</a></li>
-                        <li><a href="blog.zapzapmath.com" target="_blank">Blog</a></li>
+                        <li><a href="http://blog.zapzapmath.com" target="_blank">Blog</a></li>
                         <li><a href="/contributors" target="_blank">Contributors</a></li>
                     </ul>
                 </nav>
@@ -166,6 +166,72 @@ KONAMI CODE MOFO
                         </ul>
                     </div>
                 </div><!-- End features-->
+
+                <!-- Screenshot -->
+                <div id="contributors" class="contributors wrapper">
+                    <div class="row">
+                        <h2>Collaborators</h2>
+                        <ul class="contributors-list">
+                            <li class="wow bounceInDown" data-wow-delay="0s">
+                                <a href="/contributors" class="contributor-link"></a>
+                                <div class="collab-profile-holder">
+                                    <div class="profile-pic-holder">
+                                        <img src="assets/img/contributors/dp/henri-holm.jpg" alt="Henri Holm">
+                                    </div>
+                                    <div class="profile-item-group">
+                                        <div class="collab-details">
+                                            <p class="collab-name">Henri Holm,</p>
+                                            <p class="country-name">Finland</p>
+                                            <p class="profile-position">Fun Learning and Content Advisor</p>
+                                        </div>
+                                        <hr>
+                                        <p class="collab-quote">
+                                            "ZAP ZAP MATH is of the highest quality educational &amp; game content"
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="wow bounceInUp" data-wow-delay="0.5s">
+                                <a href="/contributors" class="contributor-link"></a>
+                                <div class="collab-profile-holder">
+                                    <div class="profile-pic-holder">
+                                        <img src="assets/img/contributors/dp/david-fingerote.jpg" alt="Avatar 3">
+                                    </div>
+                                    <div class="profile-item-group">
+                                        <div class="collab-details">
+                                            <p class="collab-name">David W. Fingerote,</p>
+                                            <p class="country-name">U.S.A</p>
+                                            <p class="profile-position">International Educational Consultant</p>
+                                        </div>
+                                        <hr>
+                                        <p class="collab-quote">
+                                            "Zap Zap Math is an application that will grow as your child grows."
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="wow bounceInDown" data-wow-delay="1s">
+                                <a href="/contributors" class="contributor-link"></a>
+                                <div class="collab-profile-holder">
+                                    <div class="profile-pic-holder">
+                                        <img src="assets/img/contributors/dp/py-teow.jpg" alt="Avatar 3">
+                                    </div>
+                                    <div class="profile-item-group">
+                                        <div class="collab-details">
+                                            <p class="collab-name">Teoh Poh Yew,</p>
+                                            <p class="country-name">Malaysia</p>
+                                            <p class="profile-position">Higher-Order Thinking Expert</p>
+                                        </div>
+                                        <hr>
+                                        <p class="collab-quote">
+                                            "Zap Zap Math develops higher-order thinking skills (HOTS)."
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div><!-- End Screenshot -->
 
                 <div id="testimonials" class="testimonials wrapper">
                     <div class="row">
