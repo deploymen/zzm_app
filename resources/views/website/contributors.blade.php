@@ -112,24 +112,6 @@
                                     </div>
                                 </div>
                             </li>
-                            <li>
-                                <div class="collab-profile-holder">
-                                    <div class="profile-pic-holder">
-                                        <img src="assets/img/contributors/dp/py-teow.jpg" alt="Avatar 3">
-                                    </div>
-                                    <div class="profile-item-group">
-                                        <div class="collab-details">
-                                            <p class="collab-name">Teoh Poh Yew,</p>
-                                            <p class="country-name">Malaysia</p>
-                                            <p class="profile-position">Higher-Order Thinking Expert</p>
-                                        </div>
-                                        <hr>
-                                        <p class="collab-quote">
-                                            "Zap Zap Math develops higher-order thinking skills (HOTS)."
-                                        </p>
-                                    </div>
-                                </div>
-                            </li>
                         </ul>
                     </div>
                 </div><!--inner-job-wrapper-->

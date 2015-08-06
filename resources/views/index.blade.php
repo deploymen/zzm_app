@@ -214,17 +214,17 @@ KONAMI CODE MOFO
                                 <a href="/contributors" class="contributor-link"></a>
                                 <div class="collab-profile-holder">
                                     <div class="profile-pic-holder">
-                                        <img src="assets/img/contributors/dp/py-teow.jpg" alt="Avatar 3">
+                                        <img src="assets/img/contributors/dp/david-fingerote.jpg" alt="Avatar 3">
                                     </div>
                                     <div class="profile-item-group">
                                         <div class="collab-details">
-                                            <p class="collab-name">Teoh Poh Yew,</p>
-                                            <p class="country-name">Malaysia</p>
-                                            <p class="profile-position">Higher-Order Thinking Expert</p>
+                                            <p class="collab-name">David W. Fingerote,</p>
+                                            <p class="country-name">U.S.A</p>
+                                            <p class="profile-position">International Educational Consultant</p>
                                         </div>
                                         <hr>
                                         <p class="collab-quote">
-                                            "Zap Zap Math develops higher-order thinking skills (HOTS)."
+                                            "Zap Zap Math is an application that will grow as your child grows."
                                         </p>
                                     </div>
                                 </div>

@@ -88,11 +88,10 @@ X-game-code: 0000015k
   "status": "success",
   "data": {
     "planet": {
-      "id": "103",
+      "id": 103,
       "name": "Space Taxi",
       "description": "What + What = What??",
-      "parameters": null,
-      "question_count": "10",
+      "question_count": 5,
       "badges": {
         "speed": "2",
         "accuracy": "0.2",
@@ -102,117 +101,36 @@ X-game-code: 0000015k
       }
     },
     "status": {
-      "star": "0",
-      "difficulty": 1,
-      "top_score": "0"
+      "star": 2,
+      "difficulty": 3,
+      "top_score": 108
     },
-    "planet_top_score": {
-      "nickname1": "Fregus",
-      "nickname2": "Rin",
-      "avatar": "avatar3.jpg",
-      "score": "90"
-    },
+    "planet_top_score": [
+      {
+        "nickname1": "Mozviss",
+        "nickname2": "Oznin",
+        "avatar": "default.jpg",
+        "score": 108
+      },
+      {
+        "nickname1": "Mozviss",
+        "nickname2": "Oznin",
+        "avatar": "default.jpg",
+        "score": 1
+      }
+    ],
     "questions": [
       {
-        "id": "1020",
-        "question": "9",
-        "answer_option_1": "4",
-        "answer_option_2": "5",
-        "answer_option_3": "3",
-        "answer_option_4": "",
-        "answer_option_5": "",
-        "answer_option_6": "",
-        "difficulty": "1",
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "1010",
-        "question": "7",
-        "answer_option_1": "1",
-        "answer_option_2": "6",
-        "answer_option_3": "2",
-        "answer_option_4": "",
-        "answer_option_5": "",
-        "answer_option_6": "",
-        "difficulty": "1",
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "1005",
-        "question": "5",
-        "answer_option_1": "1",
-        "answer_option_2": "4",
-        "answer_option_3": "2",
-        "answer_option_4": "",
-        "answer_option_5": "",
-        "answer_option_6": "",
-        "difficulty": "1",
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "1014",
-        "question": "8",
-        "answer_option_1": "2",
-        "answer_option_2": "6",
-        "answer_option_3": "3",
-        "answer_option_4": "",
-        "answer_option_5": "",
-        "answer_option_6": "",
-        "difficulty": "1",
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "1004",
-        "question": "4",
-        "answer_option_1": "2",
-        "answer_option_2": "2",
-        "answer_option_3": "3",
-        "answer_option_4": "",
-        "answer_option_5": "",
-        "answer_option_6": "",
-        "difficulty": "1",
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "1018",
+        "id": 1111,
         "question": "9",
         "answer_option_1": "2",
         "answer_option_2": "7",
         "answer_option_3": "3",
-        "answer_option_4": "",
-        "answer_option_5": "",
+        "answer_option_4": "4",
+        "answer_option_5": "4",
         "answer_option_6": "",
-        "difficulty": "1",
+        "fixed_num": 0,
+        "difficulty": 3,
         "subject": [
           {
             "subject_code": "0",
@@ -222,69 +140,73 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": "1003",
-        "question": "4",
-        "answer_option_1": "1",
-        "answer_option_2": "3",
-        "answer_option_3": "2",
-        "answer_option_4": "",
-        "answer_option_5": "",
-        "answer_option_6": "",
-        "difficulty": "1",
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "1019",
+        "id": 1071,
         "question": "9",
-        "answer_option_1": "3",
-        "answer_option_2": "6",
-        "answer_option_3": "2",
-        "answer_option_4": "",
-        "answer_option_5": "",
-        "answer_option_6": "",
-        "difficulty": "1",
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "1024",
-        "question": "10",
-        "answer_option_1": "4",
-        "answer_option_2": "6",
-        "answer_option_3": "3",
-        "answer_option_4": "",
-        "answer_option_5": "",
-        "answer_option_6": "",
-        "difficulty": "1",
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "1011",
-        "question": "7",
         "answer_option_1": "2",
-        "answer_option_2": "5",
-        "answer_option_3": "3",
-        "answer_option_4": "",
+        "answer_option_2": "2",
+        "answer_option_3": "5",
+        "answer_option_4": "3",
         "answer_option_5": "",
         "answer_option_6": "",
-        "difficulty": "1",
+        "fixed_num": 0,
+        "difficulty": 3,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 1116,
+        "question": "10",
+        "answer_option_1": "3",
+        "answer_option_2": "7",
+        "answer_option_3": "2",
+        "answer_option_4": "6",
+        "answer_option_5": "7",
+        "answer_option_6": "",
+        "fixed_num": 0,
+        "difficulty": 3,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 1118,
+        "question": "10",
+        "answer_option_1": "5",
+        "answer_option_2": "5",
+        "answer_option_3": "4",
+        "answer_option_4": "8",
+        "answer_option_5": "9",
+        "answer_option_6": "",
+        "fixed_num": 0,
+        "difficulty": 3,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 1085,
+        "question": "7",
+        "answer_option_1": "1",
+        "answer_option_2": "1",
+        "answer_option_3": "5",
+        "answer_option_4": "3",
+        "answer_option_5": "8",
+        "answer_option_6": "",
+        "fixed_num": 0,
+        "difficulty": 3,
         "subject": [
           {
             "subject_code": "0",

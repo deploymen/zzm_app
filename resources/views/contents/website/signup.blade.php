@@ -42,7 +42,7 @@
 		
 		<div class="site-wrapper sign-in-up">
 			<div class="row">
-				<section class="signup-holder cf">
+				<section id="signup-holder" class="signup-holder cf">
                     <section class="signup-holder-inner small-12 medium-4 medium-centered columns">
                         <div class="logo">
                             <img src="/assets/main/img/global/logo-main-white.png" alt=" ">
@@ -87,9 +87,9 @@
     					      <div class="small-12 columns">
     					        <label for="password" class="label-header">
                                 Password
-    					          <input type="password" id="users_password" placeholder="........" name="password" required>
+    					          <input type="password" id="users_password" placeholder="......" name="password" required>
     					        </label>
-    					        <small class="error">Passwords must be at least 8 characters with 1 capital letter, 1 number, and one special character.</small>
+    					        <small class="error">Passwords must be at least 6 characters with 1 capital letter, 1 number, and one special character.</small>
     					      </div>
     					    </div>
 
@@ -124,6 +124,7 @@
         <script>window.jQuery || document.write('<script src="js/jquery/dist/jquery.min.js"><\/script>')</script>
 
         <script src="/js/main/app.js"></script>
+        <script src="/js/main/init.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>

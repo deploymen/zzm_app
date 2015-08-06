@@ -77,6 +77,12 @@ a:active {
 	cursor: pointer;
 }
 
+.info-icon:hover,
+.info-icon:focus {
+	color: $white;
+	text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.55);
+}
+
 .info-icon.has-tip:hover {
 	color: $white;
 }
@@ -136,6 +142,24 @@ a:active {
 .login-form input[type=password]:focus {
 	color: lighten($black, 35%);
 }
+
+.incorrect-details {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1;
+	text-align: center;
+	background-color: $lightning-yellow;
+
+	p {
+		font-family: 'proxima-nova-soft', sans-serif;
+		font-weight: bold;
+		margin: rem(0px);
+		line-height: rem(45px);
+	}
+}
+
 
 button,
 .button,
@@ -244,11 +268,61 @@ button.wide,
 
 .profile-upgrade-cta {
 	text-align: center;
-	padding-top: rem(5px);
+	padding-top: rem(10px);
 }
 
 .profile-upgrade-cta a {
 
+}
+
+/** Results Styles **/
+.results-btn-holder a {
+	color: lighten($black, 40%);
+}
+
+.results-table-name {
+	color: $curious-blue;
+	font-family: 'museo-sans', sans-serif;
+	font-size: rem(16px);
+}
+
+
+.result-table-desc p {
+	color: lighten($black, 70%);
+	font-family: 'museo-sans', sans-serif;
+	font-size: rem(18px);
+	font-weight: 300;
+}
+
+.table-label {
+	color: $curious-blue;
+	font-family: 'museo-sans', sans-serif;
+	font-size: rem(16px);
+	font-weight: bold;
+	margin-bottom: rem(0px);
+}
+
+.results-table thead tr th.table-label-cell,
+.results-table .results-progress-column {
+	text-align: center;
+}
+
+.table-label-cell .info-icon {
+	font-size: rem(16px);
+	line-height: rem(23px);
+}
+
+.results-table .results-progress-column {
+
+}
+
+.profile-bar .profile-name,
+.profile-bar .profile-nickname {
+	text-align: left;
+}
+
+.progress .meter-percentage {
+	color: $white;
 }
 
 /** Edit Profile Form Styles **/
@@ -264,7 +338,15 @@ button.wide,
 	font-size: rem(11px);
 	font-family: 'museo-sans', sans-serif;
 	margin-bottom: rem(0px);
-	margin-left: rem(20px);
+	/*margin-left: rem(20px);*/
+}
+
+.privacydisclaimer {
+	margin-top: rem(20px);
+	margin-bottom: rem(20px);
+	color: $curious-blue;
+	font-size: rem(11px);
+	font-family: 'museo-sans', sans-serif;
 }
 
 

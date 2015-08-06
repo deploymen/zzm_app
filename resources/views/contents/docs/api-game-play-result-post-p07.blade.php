@@ -63,7 +63,7 @@
                         <td>game_result</td>
                         <td></td>
                         <td>
-                       {"score":"20","status":"pass","badges":{"speed":"1","accuracy":"0"},"answers":[{"question_id":5093,"answer":">","correct":1},{"question_id":5024,"answer":">","correct":0},{"question_id":5075,"answer":"=","correct":1},{"question_id":5086,"answer":"=","correct":0},{"question_id":5048,"answer":"=","correct":0},{"question_id":5049,"answer":"<","correct":1},{"question_id":5050,"answer":">","correct":0},{"question_id":5051,"answer":"<","correct":0},{"question_id":5052,"answer":"=","correct":1},{"question_id":5053,"answer":">","correct":0}]}
+                       {"score":1,"status":"pass","badges":{"speed":1,"accuracy":0},"answers":[{"question_id":5093,"answer":">","correct":1},{"question_id":5024,"answer":">","correct":0},{"question_id":5075,"answer":"=","correct":1},{"question_id":5086,"answer":"=","correct":0},{"question_id":5048,"answer":"=","correct":0},{"question_id":5049,"answer":"<","correct":1},{"question_id":5050,"answer":">","correct":0},{"question_id":5051,"answer":"<","correct":0},{"question_id":5052,"answer":"=","correct":1},{"question_id":5053,"answer":">","correct":0}]}
                        </td>
                     </tr>
                     <tr>
@@ -87,7 +87,7 @@ POST http://staging.zapzapmath.com/api/game/play/114/result HTTP/1.1
 Host: staging.zapzapmath.com
 X-game-code: 0000015k
 
-random=ak55a4w78vx4a12c2&game_result={"score":"20","status":"pass","badges":{"speed":"1","accuracy":"0"},"answers":[{"question_id":5093,"answer":">","correct":1},{"question_id":5024,"answer":">","correct":0},{"question_id":5075,"answer":"=","correct":1},{"question_id":5086,"answer":"=","correct":0},{"question_id":5048,"answer":"=","correct":0},{"question_id":5049,"answer":"<","correct":1},{"question_id":5050,"answer":">","correct":0},{"question_id":5051,"answer":"<","correct":0},{"question_id":5052,"answer":"=","correct":1},{"question_id":5053,"answer":">","correct":0}]}&hash=5ed53eaa3cab0030944757fa99080d627d313ccf
+random=ak55a4w78vx4a12c2&game_result={"score":1,"status":"pass","badges":{"speed":1,"accuracy":0},"answers":[{"question_id":5093,"answer":">","correct":1},{"question_id":5024,"answer":">","correct":0},{"question_id":5075,"answer":"=","correct":1},{"question_id":5086,"answer":"=","correct":0},{"question_id":5048,"answer":"=","correct":0},{"question_id":5049,"answer":"<","correct":1},{"question_id":5050,"answer":">","correct":0},{"question_id":5051,"answer":"<","correct":0},{"question_id":5052,"answer":"=","correct":1},{"question_id":5053,"answer":">","correct":0}]}&hash=5ed53eaa3cab0030944757fa99080d627d313ccf
 </pre>
                 </div>
             </div>

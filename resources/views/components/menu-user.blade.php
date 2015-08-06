@@ -189,7 +189,7 @@
             </li>
         @endif
         <li>
-            <a href="javascript:void(0);" id="button-logout" class="button-logout">
+            <a href="/user/signin" id="button-logout" class="button-logout">
                 <i class="fa fa-bolt"></i>
                 Logout
             </a>

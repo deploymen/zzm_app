@@ -6625,7 +6625,7 @@ footer {
 /** Contributors List Syles on main page **/
 
 .contributors-list {
-    /*padding-top: 70px;*/
+    padding-top: 70px;
 }
 
 .contributors-list li {
