@@ -48,12 +48,12 @@
                         <div class="logo">
                             <img src="/assets/main/img/global/logo-main-white.png" alt=" ">
                         </div>
-                        <form data-abide="ajax" id="login-form" class="login-form" novalidate="novalidate">
+                        <form data-abide="ajax" id="forgot-password-form" class="login-form" novalidate="novalidate">
                           <div class="row">
                               <div class="small-12 columns">
                                 <label for="email" class="label-header">
                                     Email
-                                  <input type="email" id="users-reset-email" placeholder="johnjones@internet.com" name="password" required>
+                                  <input type="email" id="users-reset-email" placeholder="johnjones@internet.com" name="email" required>
                                 </label>
                                 <small class="error">Please input your email address. Like example@domain.com</small>
                               </div>
@@ -61,10 +61,19 @@
 
                             <div class="row">
                               <div class="small-12 columns">
-                                <button id="btn-reset-password" type="submit" class="medium button expand radius blue">Send Reset Link</button>
+                                <a id="btn-reset-password" type="submit" class="medium button expand radius blue">Send Reset Link</a>
                               </div>
                             </div>
                         </form>
+                        <div id="forgot-after" class="forgot-after hideit text-center">
+                            <p>A reset email has been sent to:</p>
+                            <p id="email-for-reset"></p>
+                            <div class="row">
+                              <div class="small-12 columns">
+                                <a id="btn-ok-reset" class="medium button expand radius blue">OK</a>
+                              </div>
+                            </div>
+                        </div>
                     </section><!--signup-holder-inner-->
                     <div class="forgot-password-box small-12 medium-4 medium-centered columns">
                         <a href="/user/signin">back</a>
@@ -74,6 +83,8 @@
             </div>
             <div class="blue-bg-overlay"></div>
 
+
+
 		</div><!--site-wrapper-->
 
         <!-- SCRIPTS START HERE -->
@@ -81,6 +92,7 @@
         <script>window.jQuery || document.write('<script src="js/jquery/dist/jquery.min.js"><\/script>')</script>
 
         <script src="/js/main/app.js"></script>
+        <script src="/js/main/forgot.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
@@ -90,6 +102,6 @@
           // })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
           // ga('create', 'UA-60608433-1', 'auto');
           // ga('send', 'pageview');
-        // </script>
+        </script>
     </body>
 </html>

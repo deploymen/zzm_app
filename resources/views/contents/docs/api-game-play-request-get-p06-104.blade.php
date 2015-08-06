@@ -88,11 +88,10 @@ X-game-code: 0000015k
   "status": "success",
   "data": {
     "planet": {
-      "id": "104",
+      "id": 104,
       "name": "Word Games",
       "description": "What's your (word) problem?",
-      "parameters": null,
-      "question_count": "10",
+      "question_count": 10,
       "badges": {
         "speed": "6",
         "accuracy": "0.6",
@@ -102,53 +101,28 @@ X-game-code: 0000015k
       }
     },
     "status": {
-      "star": "0",
+      "star": 0,
       "difficulty": 1,
-      "top_score": "0"
+      "top_score": 0
     },
-    "planet_top_score": {
-      "nickname1": "NULL",
-      "nickname2": "NULL",
-      "avatar": "NULL",
-      "score": "NULL"
-    },
+    "planet_top_score": [
+      
+    ],
     "questions": [
       {
-        "id": "3383",
-        "param_1": "8",
+        "id": 3545,
+        "param_1": "9",
         "param_2": "1",
         "param_3": "",
         "p1_object": "coin",
         "p2_object": "coin",
         "p3_object": "",
         "setting": "Small town",
-        "part_1": "Alvin has 8 coins.",
-        "part_2": "Bert has 1 less coin(s).",
-        "part_3": "How many coins does Bert have?",
-        "expression": "8 - 1",
-        "answer": 7,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "3501",
-        "param_1": "1",
-        "param_2": "1",
-        "param_3": "",
-        "p1_object": "coin",
-        "p2_object": "coin",
-        "p3_object": "",
-        "setting": "Small town",
-        "part_1": "I had 1 coin(s).",
+        "part_1": "I had 9 coin(s).",
         "part_2": "I received 1 more coin(s).",
         "part_3": "How many coins do I have now?",
-        "expression": "1 + 1",
-        "answer": 2,
+        "expression": "9 + 1",
+        "answer": 10,
         "subject": [
           {
             "subject_code": "0",
@@ -158,7 +132,29 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": "3360",
+        "id": 3465,
+        "param_1": "9",
+        "param_2": "1",
+        "param_3": "",
+        "p1_object": "fruit",
+        "p2_object": "fruit",
+        "p3_object": "",
+        "setting": "Small town",
+        "part_1": "Abdul and Brendan have 9 fruits.",
+        "part_2": "1 of those fruits belong to Abdul.",
+        "part_3": "How many fruits belong to Brendan?",
+        "expression": "9 - 1",
+        "answer": 8,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 3360,
         "param_1": "4",
         "param_2": "1",
         "param_3": "",
@@ -180,105 +176,17 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": "3315",
-        "param_1": "7",
-        "param_2": "1",
-        "param_3": "",
-        "p1_object": "fruit",
-        "p2_object": "fruit",
-        "p3_object": "",
-        "setting": "Small town",
-        "part_1": "I have 7 fruit(s).",
-        "part_2": "I received another 1 fruit(s).",
-        "part_3": "How many fruits do I have in total?",
-        "expression": "7 + 1",
-        "answer": 8,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "3363",
-        "param_1": "3",
-        "param_2": "1",
-        "param_3": "",
-        "p1_object": "fruit",
-        "p2_object": "fruit",
-        "p3_object": "",
-        "setting": "Small town",
-        "part_1": "I had 3 fruits.",
-        "part_2": "I ate 1 of them.",
-        "part_3": "How many fruits do I have left?",
-        "expression": "3 - 1",
-        "answer": 2,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "3428",
-        "param_1": "3",
-        "param_2": "1",
-        "param_3": "",
-        "p1_object": "coin",
-        "p2_object": "coin",
-        "p3_object": "",
-        "setting": "Small town",
-        "part_1": "Arvin has 3 coin(s).",
-        "part_2": "Bella has 1 coin(s) more than Arvin.",
-        "part_3": "How many coins does Bella have?",
-        "expression": "3 + 1",
-        "answer": 4,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "3456",
-        "param_1": "10",
-        "param_2": "1",
-        "param_3": "",
-        "p1_object": "fruit",
-        "p2_object": "fruit",
-        "p3_object": "",
-        "setting": "Small town",
-        "part_1": "Abdul and Brendan have 10 fruits.",
-        "part_2": "1 of those fruits belong to Abdul.",
-        "part_3": "How many fruits belong to Brendan?",
-        "expression": "10 - 1",
-        "answer": 9,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": "3455",
+        "id": 3320,
         "param_1": "9",
         "param_2": "1",
         "param_3": "",
-        "p1_object": "coin",
-        "p2_object": "coin",
+        "p1_object": "fruit",
+        "p2_object": "fruit",
         "p3_object": "",
         "setting": "Small town",
-        "part_1": "Arvin has 9 coin(s).",
-        "part_2": "Bella has 1 coin(s) more than Arvin.",
-        "part_3": "How many coins does Bella have?",
+        "part_1": "I have 9 fruit(s).",
+        "part_2": "I received another 1 fruit(s).",
+        "part_3": "How many fruits do I have in total?",
         "expression": "9 + 1",
         "answer": 10,
         "subject": [
@@ -290,19 +198,19 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": "3318",
-        "param_1": "8",
+        "id": 3570,
+        "param_1": "7",
         "param_2": "1",
         "param_3": "",
-        "p1_object": "fruit",
-        "p2_object": "fruit",
+        "p1_object": "coin",
+        "p2_object": "coin",
         "p3_object": "",
         "setting": "Small town",
-        "part_1": "I have 8 fruit(s).",
-        "part_2": "I received another 1 fruit(s).",
-        "part_3": "How many fruits do I have in total?",
-        "expression": "8 + 1",
-        "answer": 9,
+        "part_1": "I had 7 coins.",
+        "part_2": "I used 1 coin(s).",
+        "part_3": "How many coins do I have now?",
+        "expression": "7 - 1",
+        "answer": 6,
         "subject": [
           {
             "subject_code": "0",
@@ -312,7 +220,95 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": "3585",
+        "id": 3626,
+        "param_1": "6",
+        "param_2": "1",
+        "param_3": "",
+        "p1_object": "fruit",
+        "p2_object": "fruit",
+        "p3_object": "",
+        "setting": "Small town",
+        "part_1": "Amanda had 6 fruit(s).",
+        "part_2": "Ben gave Amanda 1 more fruit(s).",
+        "part_3": "How many fruits does Amanda have now?",
+        "expression": "6 + 1",
+        "answer": 7,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 3375,
+        "param_1": "9",
+        "param_2": "1",
+        "param_3": "",
+        "p1_object": "coin",
+        "p2_object": "coin",
+        "p3_object": "",
+        "setting": "Small town",
+        "part_1": "Alvin has 9 coins.",
+        "part_2": "Bert has 1 less coin(s).",
+        "part_3": "How many coins does Bert have?",
+        "expression": "9 - 1",
+        "answer": 8,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 3300,
+        "param_1": "4",
+        "param_2": "1",
+        "param_3": "",
+        "p1_object": "fruit",
+        "p2_object": "fruit",
+        "p3_object": "",
+        "setting": "Small town",
+        "part_1": "I have 4 fruit(s).",
+        "part_2": "I received another 1 fruit(s).",
+        "part_3": "How many fruits do I have in total?",
+        "expression": "4 + 1",
+        "answer": 5,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 3615,
+        "param_1": "4",
+        "param_2": "1",
+        "param_3": "",
+        "p1_object": "fruit",
+        "p2_object": "fruit",
+        "p3_object": "",
+        "setting": "Small town",
+        "part_1": "Amanda had 4 fruit(s).",
+        "part_2": "Ben gave Amanda 1 more fruit(s).",
+        "part_3": "How many fruits does Amanda have now?",
+        "expression": "4 + 1",
+        "answer": 5,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 3435,
         "param_1": "4",
         "param_2": "1",
         "param_3": "",
@@ -320,11 +316,11 @@ X-game-code: 0000015k
         "p2_object": "coin",
         "p3_object": "",
         "setting": "Small town",
-        "part_1": "I had 4 coins.",
-        "part_2": "I used 1 coin(s).",
-        "part_3": "How many coins do I have now?",
-        "expression": "4 - 1",
-        "answer": 3,
+        "part_1": "Arvin has 4 coin(s).",
+        "part_2": "Bella has 1 coin(s) more than Arvin.",
+        "part_3": "How many coins does Bella have?",
+        "expression": "4 + 1",
+        "answer": 5,
         "subject": [
           {
             "subject_code": "0",

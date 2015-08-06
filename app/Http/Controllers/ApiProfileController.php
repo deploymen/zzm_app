@@ -13,6 +13,7 @@ use App\Libraries\EmailHelper;
 use App\Libraries\ResponseHelper;
 use App\Libraries\DatabaseUtilHelper;
 use App\Libraries\ApiProfileHelper;
+use App\Libraries\ReportProfileHelper;
 
 
 use App\Models;
@@ -45,35 +46,61 @@ Class ApiProfileController extends Controller {
 	public function get() {
 		
 		$userId = Request::input('user_id');
-	
-		// try {
-	 		$profile = GameProfile::select('id','user_id', 'class_id', 'first_name' , 'last_name','school' ,'city','email','nickname1','nickname2','avatar_id')->where('user_id', $userId)->get();
+		$profileInfo = [];
+		try {
+	 	$profiles = GameProfile::select('id','user_id', 'class_id', 'first_name' , 'last_name','age','school','grade' ,'city','email','nickname1','nickname2','avatar_id')->where('user_id', $userId)->orderBy('id')->get();
 
-	 		$profileInfo = [];
+			foreach($profiles as $profile){
+				$profile->nickName1;
+				$profile->nickName2;
+				$profile->avatar;
+				$profile->gameCode;
+			}
 
-	 		for($i=0; $i<count($profile); $i++){
-	 			$p = $profile[$i];
+			$sql = "
+				SELECT  *
+					FROM  (
+				        	SELECT p.`id` , gp.`created_at`
+				        		FROM (`t0111_game_profile` p)
+				        			LEFT JOIN `t0400_game_play` gp ON (gp.`profile_id` = p.`id`)
+				        		WHERE p.`user_id` = {$userId}
+				        		AND p.`deleted_at` IS NULL
+				        		ORDER BY gp.`created_at` DESC
+
+				            )t
+				           GROUP BY `id`
+			";
+
+			$lastPlayed = DB::select($sql);
+			for($i=0; $i<count($profiles); $i++){
+		 		$p = $profiles[$i];
+		 		$lp = $lastPlayed[$i];
 
 		 		array_push($profileInfo, [
-		 			'id' => $p->id,
-		 			'user_id' => $p->user_id,
-		 			'class_id' => $p->class_id,
-		 			'first_name' => $p->first_name,
-		 			'last_name' => $p->last_name,
-		 			'school' => $p->school,
-		 			'city' => $p->city,
-		 			'email' => $p->email,
-		 			'nickname1' => $p->nickname1,
-		 			'nickname2' => $p->nickname2,
-		 			'avatar_id' => $p->avatar_id,
-		 			'best_score' => [],
-		 			'weak_score' => [],
-
+		 				'id' => $p->id,
+			 			'user_id' => $p->user_id,
+			 			'class_id' => $p->class_id,
+			 			'first_name' => $p->first_name,
+			 			'last_name' => $p->last_name,
+			 			'age' => $p->age,
+			 			'school' => $p->school,
+			 			'grade' => $p->grade,
+			 			'city' => $p->city,
+			 			'email' => $p->email,
+			 			'nickname1' => $p->nickname1,
+			 			'nickname2' => $p->nickname2,
+			 			'avatar_id' => $p->avatar_id,
+			 			'nick_name1' => $p->nickName1,
+			 			'nick_name2' => $p->nickName2,
+			 			'avatar' => $p->avatar,
+			 			'game_code' => $p->gameCode,
+			 			'best_score' => [],
+			 			'weak_score' => [],
+			 			'last_played' => $lp->created_at,
+			 			
 		 			]);
-
-				$best_score = ApiProfileHelper::ProfileBestScore($p, $scoreType = 'best_score');
+		 		$best_score = ApiProfileHelper::ProfileBestScore($p, $scoreType = 'best_score');
 				$weak_score = ApiProfileHelper::ProfileBestScore($p, $scoreType = 'weak_score');
-
 				 	for($j=0; $j<count($best_score); $j++){
 				 		$b = $best_score[$j];
 				 		array_push($profileInfo[$i]['best_score'], [
@@ -85,7 +112,6 @@ Class ApiProfileController extends Controller {
 				 			'play_id'=>$b->play_id,
 				 			]);
 				 	}
-
 				 	for($k=0; $k<count($weak_score); $k++){
 				 		$w = $weak_score[$k];
 				 		array_push($profileInfo[$i]['weak_score'], [
@@ -97,20 +123,17 @@ Class ApiProfileController extends Controller {
 				 			'play_id'=>$w->play_id,
 				 			]);
 				 	}
+		}
 
-		 	}
+			return ResponseHelper::OutputJSON('success', '', ['list' => $profileInfo]);
 
-
-
-			return ResponseHelper::OutputJSON('success', '',  $profileInfo);
-
-			// } catch (Exception $ex) {
-			// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-			// 		'source' => 'ApiProfileController > get',
-			// 		'inputs' => Request::all(),
-			// 	])]);
-			// 	return ResponseHelper::OutputJSON('exception');
-			// }	
+			} catch (Exception $ex) {
+				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+					'source' => 'ApiProfileController > get',
+					'inputs' => Request::all(),
+				])]);
+				return ResponseHelper::OutputJSON('exception');
+			}	
 	}
 
 	public function create() {
@@ -119,7 +142,9 @@ Class ApiProfileController extends Controller {
 		
 		$firstName = Request::input('first_name');
 		$lastName = Request::input('last_name');
+		$age = Request::input('age');
 		$school = Request::input('school');
+		$grade = Request::input('grade');
 		$city = Request::input('city');
 		$email = Request::input('email');
 
@@ -128,7 +153,7 @@ Class ApiProfileController extends Controller {
 		$avatarId = Request::input('avatar_id', 1);
 
 
-		if (!$firstName || !$email || !$lastName || !$school ||!$city) {
+		if (!$firstName || !$email || !$lastName || !$school ||!$city||!$age||!$grade) {
 			return ResponseHelper::OutputJSON('fail', "missing parameters");
 		}
 
@@ -159,7 +184,9 @@ Class ApiProfileController extends Controller {
 			$gamePro->user_id = $userId;
 			$gamePro->first_name = $firstName;
 			$gamePro->last_name = $lastName;
+			$gamePro->age = $age;
 			$gamePro->school = $school;
+			$gamePro->grade = $grade;
 			$gamePro->city = $city;
 			$gamePro->email = $email;
 			$gamePro->nickname1 = $nickname1;
@@ -198,7 +225,9 @@ Class ApiProfileController extends Controller {
 		
 		$firstName = Request::input('first_name');
 		$lastName = Request::input('last_name');
+		$age = Request::input('age');
 		$school = Request::input('school');
+		$grade = Request::input('grade');
 		$city = Request::input('city');
 		$email = Request::input('email');
 		$nickname1 = Request::input('nickname1');
@@ -234,9 +263,19 @@ Class ApiProfileController extends Controller {
 				$profile->last_name = $lastName;
 			}
 
+			if ($age) {
+				$wiped['age'] = $profile->age;
+				$profile->age = $age;
+			}
+
 			if ($school) {
 				$wiped['school'] = $profile->school;
 				$profile->school = $school;
+			}
+
+			if ($grade) {
+				$wiped['grade'] = $profile->grade;
+				$profile->grade = $grade;
 			}
 
 			if ($city) {
@@ -302,18 +341,22 @@ Class ApiProfileController extends Controller {
 		try {
 
 			$profile = GameProfile::find($id);
+			$count = GameProfile::where('user_id' , $userId)->count();
 
 			if (!$profile) {
 				return ResponseHelper::OutputJSON('fail', "profile not found");
 			}
 
-			if($userId == $profile->user_id){
+			if($userId != $profile->user_id){
+				return ResponseHelper::OutputJSON('fail','wrong user id');
+			}	
+			
+			if($count = 1){
+				return ResponseHelper::OutputJSON('fail','at least once profile in account');
+			}
+
 			$profile->delete();
 			return ResponseHelper::OutputJSON('success');
-			
-			}	
-			return ResponseHelper::OutputJSON('fail','wrong user id');
-
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -600,5 +643,50 @@ Class ApiProfileController extends Controller {
 			return ResponseHelper::OutputJSON('exception');
 		}
 	}
+
+	public function profileDetails(){
+		$profileId = Request::input('profile_id');
+		$userId = Request::input('user_id');
+		
+		try{	
+			if(!$profileId){
+				return ResponseHelper::OutputJSON('fail', 'misssing parameters');
+			}
+
+			$profile = GameProfile::find($profileId);
+			if($userId != $profile->user_id){
+				return ResponseHelper::OutputJSON('fail', 'invalid profile');
+			}
+
+			$gameCode = GameCode::where('profile_id', $profileId)->first();
+			$planetCount = GamePlanet::where('enable', 1)->count();
+
+			$lastPlay = ReportProfileHelper::LastPlay($profileId);
+			$totalPlay = ReportProfileHelper::TotalPlay($profileId);
+			$planetProgress = ReportProfileHelper::planetProgress($profileId);
+			$TotalCompletedPlanet = ReportProfileHelper::TotalCompletedPlanet($profileId);
+
+
+			return ResponseHelper::OutputJSON('success' , '' , [
+				'first_name' => $profile->first_name,
+				'last_name' => $profile->last_name,
+				'game_code' => $gameCode->code,
+				'total_play' => $totalPlay->total_play,
+				'total_pass' =>  $totalPlay->total_pass,
+				'total_fail' =>  $totalPlay->total_fail,
+				'total_completed_planet' =>  $TotalCompletedPlanet->completed_planet.'/'.$planetCount,
+				'last_play' => $lastPlay,
+				'planet_progress' => $planetProgress
+				]);
+
+		} catch (Exception $ex) {
+		LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+			'source' => 'ApiProfileController > profileDetails',
+			'inputs' => Request::all(),
+		])]);
+		return ResponseHelper::OutputJSON('exception');
+		}
+	}
+	
 
 }

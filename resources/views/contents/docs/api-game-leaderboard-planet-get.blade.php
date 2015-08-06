@@ -86,32 +86,49 @@ X-game-code: 0000015k
 <pre class="prettyprint">
 {
   "status": "success",
-  "data": [
-    {
-      "id": "6",
-      "rank": "1",
-      "planet_id": "103",
-      "profile_id": "1",
-      "first_name": "lai",
-      "last_name": "weizhong",
-      "score": "108",
-      "created_at": "2015-06-12 04:28:32",
-      "updated_at": null,
-      "deleted_at": null
-    },
-    {
-      "id": "7",
-      "rank": "1",
-      "planet_id": "103",
-      "profile_id": "1",
-      "first_name": "lai",
-      "last_name": "weizhong",
-      "score": "108",
-      "created_at": "2015-06-12 04:30:17",
-      "updated_at": null,
-      "deleted_at": null
-    }
-  ]
+  "data": {
+    "Leaderboard_planet": [
+      {
+        "id": 1,
+        "rank": 1,
+        "planet_id": 185,
+        "profile_id": 1,
+        "nickname1": "Mozviss",
+        "nickname2": "Oznin",
+        "avatar": "default.jpg",
+        "score": 1,
+        "created_at": "2015-07-29 11:59:18",
+        "updated_at": null,
+        "deleted_at": null
+      },
+      {
+        "id": 2,
+        "rank": 1,
+        "planet_id": 185,
+        "profile_id": 1,
+        "nickname1": "Mozviss",
+        "nickname2": "Oznin",
+        "avatar": "default.jpg",
+        "score": 1,
+        "created_at": "2015-07-29 12:00:05",
+        "updated_at": null,
+        "deleted_at": null
+      },
+      {
+        "id": 3,
+        "rank": 1,
+        "planet_id": 185,
+        "profile_id": 1,
+        "nickname1": "Mozviss",
+        "nickname2": "Oznin",
+        "avatar": "default.jpg",
+        "score": 1,
+        "created_at": "2015-07-30 13:53:12",
+        "updated_at": null,
+        "deleted_at": null
+      }
+    ]
+  }
 }
 </pre>
             </div>

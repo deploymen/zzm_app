@@ -5553,17 +5553,20 @@ Copyright (c) 2014 Daniel Eden
 }
 .feat-list,
 .testimonial-list,
+.contributors-list,
 .connect-list {
     padding-left: 0rem
 }
 .feat-list li,
 .testimonial-list li,
-.connect-list li {
+.connect-list li,
+.contributors-list li {
     list-style: none;
     display: inline-table
 }
 .feat-list li,
-.testimonial-list li {
+.testimonial-list li,
+.contributors-list li {
     margin-bottom: 0.625rem
 }
 .main-banner,
@@ -6120,19 +6123,31 @@ Copyright (c) 2014 Daniel Eden
     background-color: #0E2651;
     background-image: url('../../assets/img/banner/bg-gradient.png')
 }
-.testimonial-list {
+.testimonial-list,
+.contributors-list {
     overflow: hidden
 }
-.testimonial-list li {
+
+.testimonial-list li,
+.contributors-list li {
     width: 90%;
-    background-color: #FFFFFF;
     border-radius: 20px;
-    overflow: hidden
 }
-.testimonial-list li img {
+
+.testimonial-list li{
+    background-color: #FFFFFF;
+}
+
+.testimonial-list li {
+    overflow: hidden;
+}
+
+.testimonial-list li img,
+.contributors-list li img {
     width: 100%
 }
-.testimonial-list li p {
+.testimonial-list li p,
+.contributors-list li p {
     padding-left: 0.625rem;
     padding-right: 0.625rem
 }
@@ -6142,7 +6157,8 @@ Copyright (c) 2014 Daniel Eden
     }
 }
 @media (min-width: 930px) {
-    .testimonial-list li {
+    .testimonial-list li,
+    .contributors-list li {
         width: 25%;
         margin-left: 0.625rem;
         margin-right: 0.625rem
@@ -6430,6 +6446,36 @@ footer {
     margin: 0 auto;
 }
 
+.inner-beta-wrapper {
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 130px;
+}
+
+.inner-beta-wrapper .fa-android {
+    background-color: #92C13B;
+    color: #FFFFFF;
+    padding: 5px 8px;
+    border-radius: 5px;
+}
+
+.inner-beta-wrapper .fa-apple {
+    background-color: #BDBABE;
+    color: #262626;
+    padding: 5px 8px;
+    border-radius: 5px;
+}
+
+.beta-instruction-list {
+    line-height: 30px;
+    font-family: 'museo-sans', sans-serif;
+    color: #777;
+}
+
+.beta-instruction-list li a {
+    color: #2B91D6;
+}
+
 .contributor-banner .badge-box,
 .contributor-banner .text-box,
 .job-banner .badge-box,
@@ -6455,6 +6501,7 @@ footer {
     font-size: 70px;
     margin-top: 30px;
     margin-bottom: 0px;
+    text-align: center;
 }
 
 .contributor-banner .text-box p,
@@ -6464,7 +6511,7 @@ footer {
     text-transform: uppercase;
     margin-top: 0px;
     text-align: center;
-    max-width: 606px;
+   /* max-width: 606px;*/
 }
 
 .collaborator-list {
@@ -6572,6 +6619,36 @@ footer {
     bottom: 0;
     width: 100%;
 
+}
+
+/** Contributors List Syles on main page **/
+
+.contributors-list {
+    padding-top: 70px;
+}
+
+.contributors-list li {
+    max-width: 300px;
+    padding-top: 70px;
+}
+
+.contributors {
+    text-align: center;
+    background-color: #e7f2f4;
+}
+
+.contributors .collab-profile-holder {
+    padding-bottom: 1px;
+}
+
+.contributor-link {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: block;
+    top: 0;
+    left: 0;
+    z-index: 2;
 }
 
 

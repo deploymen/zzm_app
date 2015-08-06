@@ -63,8 +63,7 @@
                         <td>game_result</td>
                         <td></td>
                         <td>
-                            {"score":"108","status":"pass","badges":{"speed": 1 , "accuracy":"0"},"answers":[{"question_id":10,"answer":"1,2,3,4,5,6","correct":1},{"question_id":5,"answer":"3,4,5,6,7","correct":1},{"question_id":4,"answer":"3,4,5,6,7","correct":1},{"question_id":3,"answer":"3,4,5,6,7","correct":1},{"question_id":2,"answer":"3,4,5,6,7","correct":1},{"question_id":1,"answer":"3,4,5,6,7","correct":1},{"question_id":6,"answer":"3,4,5,6,7","correct":1},{"question_id":7,"answer":"3,4,5,6,7","correct":1},{"question_id":8,"answer":"3,4,5,6,7","correct":1},{"question_id":9,"answer":"3,4,5,6,7","correct":1}]}
-                        </td> 
+                            {"score":108,"status":"pass","badges":{"speed":1,"accuracy":0},"answers":[{"question_id":10,"answer":"1,2,3,4,5,6","correct":1},{"question_id":5,"answer":"3,4,5,6,7","correct":1},{"question_id":4,"answer":"3,4,5,6,7","correct":1},{"question_id":3,"answer":"3,4,5,6,7","correct":1},{"question_id":2,"answer":"3,4,5,6,7","correct":1},{"question_id":1,"answer":"3,4,5,6,7","correct":1},{"question_id":6,"answer":"3,4,5,6,7","correct":1},{"question_id":7,"answer":"3,4,5,6,7","correct":1},{"question_id":8,"answer":"3,4,5,6,7","correct":1},{"question_id":9,"answer":"3,4,5,6,7","correct":1}]}</td> 
                           </tr>
                     <tr>
                         <td>random</td>
@@ -87,7 +86,7 @@ POST http://staging.zapzapmath.com/api/game/play/103/result HTTP/1.1
 Host: staging.zapzapmath.com
 X-game-code: 0000015k
 
-random=ak55a4w78vx4a12c&game_result={"score":"108","status":"pass","badges":{"speed": 1 , "accuracy":"0"},"answers":[{"question_id":10,"answer":"1,2,3,4,5,6","correct":1},{"question_id":5,"answer":"3,4,5,6,7","correct":1},{"question_id":4,"answer":"3,4,5,6,7","correct":1},{"question_id":3,"answer":"3,4,5,6,7","correct":1},{"question_id":2,"answer":"3,4,5,6,7","correct":1},{"question_id":1,"answer":"3,4,5,6,7","correct":1},{"question_id":6,"answer":"3,4,5,6,7","correct":1},{"question_id":7,"answer":"3,4,5,6,7","correct":1},{"question_id":8,"answer":"3,4,5,6,7","correct":1},{"question_id":9,"answer":"3,4,5,6,7","correct":1}]}&hash=709f6051fc9a29f92b36ec6c2b051ca0bea829b7
+random=ak55a4w78vx4a12c&game_result={"score":108,"status":"pass","badges":{"speed":1, "accuracy":0},"answers":[{"question_id":10,"answer":"1,2,3,4,5,6","correct":1},{"question_id":5,"answer":"3,4,5,6,7","correct":1},{"question_id":4,"answer":"3,4,5,6,7","correct":1},{"question_id":3,"answer":"3,4,5,6,7","correct":1},{"question_id":2,"answer":"3,4,5,6,7","correct":1},{"question_id":1,"answer":"3,4,5,6,7","correct":1},{"question_id":6,"answer":"3,4,5,6,7","correct":1},{"question_id":7,"answer":"3,4,5,6,7","correct":1},{"question_id":8,"answer":"3,4,5,6,7","correct":1},{"question_id":9,"answer":"3,4,5,6,7","correct":1}]}&hash=709f6051fc9a29f92b36ec6c2b051ca0bea829b7
 
 </pre>
                 </div>

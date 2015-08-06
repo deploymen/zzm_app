@@ -36,7 +36,7 @@
         <div id="myTabContent" class="tab-content">
             <div id="descriptions" class="tab-pane fade in active">
                 <p>
-
+                    This edit profile api allow owner to edit their own profile information. It doesn't require to pass in all fields, just to pass in only the field that you want to update.
                 </p>
             </div>
             <div id="request" class="tab-pane fade">
@@ -67,47 +67,47 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td>first_name</td>
+                        <td>first_name(optional)</td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td>last_name</td>
+                        <td>last_name(optional)</td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td>email</td>
+                        <td>email(optional)</td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td>city</td>
+                        <td>city(optional)</td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td>school</td>
+                        <td>school(optional)</td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td>class_id</td>
+                        <td>class_id(optional)</td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td>nickname1</td>
+                        <td>nickname1(optional)</td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td>nickname2</td>
+                        <td>nickname2(optional)</td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td>avatar_id</td>
+                        <td>avatar_id(optional)</td>
                         <td></td>
                         <td></td>
                     </tr>
