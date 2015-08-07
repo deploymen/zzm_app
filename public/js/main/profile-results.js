@@ -1,6 +1,7 @@
 var App = App || angular.module('zapzapApp', []),
 	ZZM = ZZM || {};
 
+
 App.controller('MainController', function ($scope, $http){
 
 	$scope.systems = [];
@@ -143,7 +144,9 @@ App.controller('MainController', function ($scope, $http){
             }
         }); 
 
-		$scope.showResult('question');    	
+		$scope.showResult('question'); 
+
+        console.log(questions);   	
 	}
 
 	$scope.showResult = function(mode){
@@ -167,5 +170,6 @@ App.controller('MainController', function ($scope, $http){
 			case 'question': $(".question").removeClass('hide'); break;  	
 		}
 	}
+
 
 });

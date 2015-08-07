@@ -73,52 +73,64 @@ ZZM.playId = '{{Request::input('play_id')}}';
 	</div>
     <div class="results-container cf">
     	<div class="profile-bar cf">
-			<div class="small-12 medium-8 columns cf">
-				<div class="avatar-holder">
-					<img src="/assets/main/img/avatars/{{$profile->avatar->filename}}" alt="">
-					<!-- <img src="/assets/img/global/logo-icon.png" alt=" "> -->
+			<div class="small-12 columns cf">
+				<div class="small-12 medium-2 columns">
+					<div class="avatar-holder">
+						<img src="/assets/main/img/avatars/{{$profile->avatar->filename}}" alt="">
+					</div>
 				</div>
-				<div class="nickname">
-					<p class="profile-name">{{$profile->first_name}} {{$profile->last_name}}</p>
-					<p class="profile-nickname">{{$profile->nickName1->name}} {{$profile->nickName2->name}}</p>
-					<p class="profile-school-name truncate">{{$profile->school}}</p>
+
+				<div class="small-12 medium-10 columns">
+					<div class="nickname">
+						<p class="profile-name">{{$profile->first_name}} {{$profile->last_name}}</p>
+						<p class="profile-nickname">{{$profile->nickName1->name}} {{$profile->nickName2->name}}</p>
+						<p class="profile-code bold"><span class="profile-label">Player ID:</span> <span class="user-id">{{$profile->gameCode->code}}</span></p>
+					</div>
 				</div>
-			</div>
-			<div class="small-12 medium-4 columns text-right">
-				<p class="profile-code bold"><span class="blue-text">Class ID:</span> <span class="user-id">{{$profile->class_id}}</span></p>
-				<p class="profile-code bold"><span class="blue-text">Player ID:</span> <span class="user-id">{{$profile->gameCode->code}}</span></p>
 			</div>
 		</div><!--row-->
+
+		<div class="profile-bar cf">
+			<div class="small-12 columns">
+				<div class="medium-7 columns">
+					<p class="profile-school-name truncate">School name</p>
+					<p class="profile-school-grade truncate">Grade @{{gameprofile.grade}}</p>
+				</div>
+				<div class="medium-5 columns text-right">
+					<p class="profile-label">Last Played</p>
+					<p class="profile-last-seen">@{{gameprofile.last_played}}</p>
+				</div>
+			</div>
+		</div>
 
     	<div class="content-group has-table">
 		<div class="content-group--table">
 			<div class="result system">
 				<div class="result-table-desc">
 					<h2>Systems</h2>
-					<p>In Zap Zap Math, the system represents the <span class="bold">individual modules</span> taught in schools following the <span class="bold">New York Common Core</span> syllabus.</p>
+					<p>In Zap Zap Math, the system represents the overarching topics encompassing multiple subjects. The bar shows how much of the topic has been covered by the player as they complete the planets in each system.</p>
 				</div>
 				<table id="results-table-systems" class="results-table plays wide-table">
-					<thead class="hide-for-small">
+					<!-- <thead class="hide-for-small">
 						<tr>
 							<th>&nbsp;</th>
 							<th class="table-label-cell">
 								<p class="table-label">Progress</p>
-								<span class="info-icon">i</span>
 							</th>
 							<th>&nbsp;</th>
 						</tr>
-					</thead>
+					</thead> -->
 					<tbody>
 						<tr ng-repeat="s in systems">
 							<!-- <td width="10%">@{{s.id}}</td> -->
-							<td width="60%"><p class="results-table-name">@{{s.system_name}}</p></td>
+							<td width="70%"><p class="results-table-name">@{{s.system_name}}</p></td>
 							<td width="20%" class="results-progress-column">
 								<div class="progress">
 									<span class="meter" style="width: 80%"></span>
 									<span class="meter-percentage">80%</span>
 								</div>
 							</td>
-							<td width="20%">
+							<td width="10%">
 								<a href="/user/profiles/{{$profile->id}}/results?system_id=@{{s.id}}" class="button round btn-more-results">
 									<span>More</span>
 									<i class="fa fa-chevron-right"></i>
@@ -147,31 +159,35 @@ ZZM.playId = '{{Request::input('play_id')}}';
 			<div class="result planet hide">
 				<div class="result-table-desc">
 					<h2>Planets</h2>
-					<p>In Zap Zap Math planets represent individual <span class="bold">subtopics</span> within a module taught according to the New York Common Core syllabus.</p>
+					<p>In Zap Zap Math, planets represent individual subjects within a larger topic.</p>
+					<div class="difficuly-meter-box">
+						<ul class="difficuly-label-list">
+							<li>Beginner</li>
+							<li>Developing</li>
+							<li>Average</li>
+							<li>Good</li>
+							<li>Beyond Expectations</li>
+						</ul>
+						<ul class="difficuly-meter cf">
+							<li></li>
+							<li></li>
+							<li></li>
+							<li></li>
+							<li></li>
+						</ul>
+					</div>
 				</div>
 				<table id="results-table-systems" class="results-table plays wide-table">
-					<thead class="hide-for-small">
-						<tr>
-							<th><p class="table-label">Code</p></th>
-							<th><p class="table-label">Topic</p></th>
-							<th class="table-label-cell">
-								<p class="table-label">Progress</p>
-								<span class="info-icon">i</span>
-							</th>
-							<th>&nbsp;</th>
-						</tr>
-					</thead>
 					<tbody>
 						<tr ng-repeat="p in planets">
-							<td class="hide-for-small"><p class="results-table-name">@{{p.id}}</p></td>
-							<td><p class="results-table-name">@{{p.subtitle}}</p></td>
-							<td>
+							<td width="70%"><p class="results-table-name">@{{p.subtitle}}</p></td>
+							<td width="20%">
 								<div class="progress">
 									<span class="meter" style="width: 80%"></span>
 									<span class="meter-percentage">80%</span>
 								</div>
 							</td>
-							<td>
+							<td width="10%">
 								<a href="/user/profiles/{{$profile->id}}/results?planet_id=@{{p.id}}" class="button round btn-more-results">
 									<span>More</span>
 									<i class="fa fa-chevron-right"></i>
@@ -183,25 +199,26 @@ ZZM.playId = '{{Request::input('play_id')}}';
 			</div>
 
 			<div class="result play hide">
-				<div class="result-table-desc">
+				<!-- <div class="result-table-desc">
 					<h2>Questions</h2>
 					<p>Here we take a more detailed look at the questions that have been asked and how well your child has performed in answering these questions.</p>
-				</div>
+				</div> -->
 				<table id="results-table-systems" class="results-table plays wide-table">
 					<thead class="hide-for-small">
 						<tr>
-							<th><p class="table-label">Id</p></th>
-							<th><p class="table-label">Play Time</p></th>
-							<th><p class="table-label">Score</p></th>
-							<th><p class="table-label">Status</p></th>
+							<th><p class="table-label">Question</p></th>
+							<th><p class="table-label">{{$profile->first_name}}'s Answer</p></th>
+							<th><p class="table-label">&nbsp;</p></th>
+							<th><p class="table-label">&nbsp;</p></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr ng-repeat="pl in plays">
 							<td>@{{pl.id}}</td>
 							<td><a href="/user/profiles/{{$profile->id}}/results?play_id=@{{pl.id}}">@{{pl.play_time}}</a></td>
-							<td>@{{pl.score}}</td>
 							<td>@{{pl.status}}</td>
+							<td>@{{pl.score}}</td>
+							
 						</tr>
 					</tbody>
 				</table>

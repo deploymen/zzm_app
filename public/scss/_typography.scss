@@ -14,6 +14,11 @@ p, label {
 	}*/
 }
 
+h2 {
+	color: lighten($black, 50%);
+	font-family: 'museo-sans', sans-serif;
+}
+
 h6 {
 	color: lighten($black, 30%);
 	text-transform: uppercase;
@@ -238,6 +243,7 @@ button.wide,
 
 .profile-label {
 	text-transform: uppercase;
+	font-weight: bold;
 }
 
 .profile-email {
@@ -245,9 +251,15 @@ button.wide,
 }
 
 .profile-school-name,
-.profile-last-seen {
+.profile-last-seen,
+.results-table-name {
 	color: lighten($black, 60%);
-	font-size: rem(18px);
+	font-family: 'museo-sans', sans-serif;
+	font-size: rem(20px);
+}
+
+.profile-school-name,
+.profile-last-seen{
 	text-transform: uppercase;
 	margin-bottom: rem(0px);
 }
@@ -308,16 +320,22 @@ button.wide,
 	margin-bottom: rem(0px);
 }
 
+/** Diffiulty Meter Styles **/
+.difficuly-label-list li {
+	text-align: center;
+	color: lighten($black, 50%);
+}
+
 /** Results Styles **/
 .results-btn-holder a {
 	color: lighten($black, 40%);
 }
 
-.results-table-name {
+/*.results-table-name {
 	color: $curious-blue;
 	font-family: 'museo-sans', sans-serif;
 	font-size: rem(16px);
-}
+}*/
 
 
 .result-table-desc p {

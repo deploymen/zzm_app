@@ -166,7 +166,7 @@
 					<div class="profile-item-group small-12 columns">
 						<div class="small-5 columns">
 							<div class="profile-pic-holder">
-								<img src="/assets/main/img/avatars/default.jpg" alt="Avatar 3">
+								<img ng-src="/assets/main/img/avatars/@{{gameprofile.avatar.filename}}" alt="Avatar">
 							</div>
 						</div>
 						<div class="small-7 columns">
@@ -208,14 +208,20 @@
 						</div>
 					</div>
 
-					<p class="profile-upgrade-cta"><a href="/user/profiles/',allVars.datal.list[i].id,'/results" class="button round">Detailed report</a></p>
-					<a href="/user/profiles/',allVars.datal.list[i].id,'/edit" class="btn-profile-edit">Edit</a>
+					<p class="profile-upgrade-cta"><a ng-href="/user/profiles/@{{gameprofile.id}}/results" class="button round">Detailed report</a></p>
+					<a ng-href="/user/profiles/@{{gameprofile.id}}/edit" class="btn-profile-edit">Edit</a>
+				</section>
+			</div>
+
+			<div class="profile-item add-button">
+				<section class="profile-info">
+					<p class="">Add Profile</p>
+					<div class="add-plus-box"><i class="fa fa-plus"></i></div>
+					<a href="javascript:void(0);" data-reveal-id="addProfileModal" id="btn-show-profile-form" class="btn-show-profile-form"></a>
 				</section>
 			</div>
 		</div>
 	</div>
-
-	<div class="profile-item add-button"><section class="profile-info"><div class="add-plus-box"><i class="fa fa-plus"></i></div><p class="">Create a Student Profile</p><a href="javascript:void(0);" data-reveal-id="addProfileModal" id="btn-show-profile-form" class="btn-show-profile-form"></a></section></div>
 </section>
 
 @stop

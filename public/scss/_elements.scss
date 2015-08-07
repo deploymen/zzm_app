@@ -78,6 +78,12 @@ ul.pagination li.current button {
 	background: $flamingo;
 }
 
+/** TABLE Styles **/
+table tr:nth-of-type(even) {
+	background: lighten($curious-blue, 35%);
+}
+
+
 .list-signup--services {
 	li {
 		display: inline-block;
@@ -342,6 +348,8 @@ label:hover:before {
 
 /** ACCOUNT SETTINGS STYLES **/
 
+/** Profile Styles **/
+
 
 .profile-button button
 .profile-button button.dropdown,
@@ -403,9 +411,10 @@ label:hover:before {
 
 .profile-item {
 	/*text-align: center;*/
-	/*padding-top: rem(70px) !important;*/
-	width: rem(340px);
-	/*height: rem(500px);*/
+	margin-top: rem(50px) !important;
+	/*width: rem(340px);*/
+	width: rem(310px);
+	height: rem(417px);
 	margin-right: rem(10px);
 	margin-left: rem(10px);
 	float: left;
@@ -416,13 +425,14 @@ label:hover:before {
 	background-color: lighten($black, 80%);
 	text-align: center;
 	cursor: pointer;
-	padding-top: rem(110px);
-	min-height: rem(527px);
+	/*padding-top: rem(110px);
+	min-height: rem(527px);*/
 }
 
 .add-button .profile-info p {
 	color: $white;
 	font-size: rem(20px);
+	line-height: rem(120px);
 }
 
 .add-button .profile-info a {
@@ -451,11 +461,11 @@ label:hover:before {
 
 .profile-pic-holder,
 .avatar-holder {
-	width: rem(120px);
-	height: rem(120px);
+	width: rem(110px);
+	height: rem(110px);
 	overflow: hidden;
 	border: 3px solid $curious-blue;
-	border-radius: rem(140px);
+	border-radius: rem(110px);
 	background-color: $white;
 }
 
@@ -486,10 +496,6 @@ label:hover:before {
 
 .profile-item-group.no-padding {
 	padding: rem(0px);
-}
-
-.avatar-holder {
-	width: rem(140px);
 }
 
 .profile-info,
@@ -564,6 +570,57 @@ label:hover:before {
 	}
 }
 
+/** Difficulty Meter **/
+.difficuly-meter-box {
+
+}
+
+.difficuly-meter li,
+.difficuly-label-list li {
+	display: block;
+	float: left;
+	width: 20%;
+}
+
+
+
+.difficuly-meter {
+	width: 100%;
+	margin: rem(0px);
+	border: 4px solid lighten($black, 30%);
+	border-radius: rem(50px);
+	overflow: hidden;
+	margin-bottom: rem(20px);
+}
+
+.difficuly-meter li {
+	
+	height: rem(30px);
+	border-right: 4px solid lighten($black, 30%);
+}
+
+.difficuly-meter li:first-child {
+	background-color: $flamingo;
+}
+
+.difficuly-meter li:nth-child(2) {
+	background-color: $crusta;
+}
+
+.difficuly-meter li:nth-child(3) {
+	background-color: $sea-buckthorn;
+}
+
+.difficuly-meter li:nth-child(4) {
+	background-color: $starship;
+}
+
+.difficuly-meter li:last-child {
+	background-color: $harlequin;
+	border-right: none;
+}
+
+
 /** Results Styles **/
 .indicator-holder {
 	position: relative;
@@ -611,12 +668,13 @@ label:hover:before {
 }
 
 .profile-bar {
-	padding: rem(30px) rem(30px) rem(20px) rem(20px);
+	padding: rem(10px) rem(30px) rem(10px) rem(20px);
+	border-bottom: rem(3px) solid $curious-blue;
 }
 
 .profile-bar .avatar-holder,
 .profile-bar .nickname {
-	float: left;
+	/*float: left;*/
 }
 
 .profile-bar .avatar-holder {
@@ -625,12 +683,13 @@ label:hover:before {
 }
 
 .profile-bar .nickname {
-	margin-top: rem(20px);
-	width: 70%;
+	/*margin-top: rem(20px);*/
+	/*width: 70%;*/
 }
 
 .profile-bar .profile-name {
 	margin-top: rem(0px);
+	padding-top: rem(0px);
 }
 
 .results-container {
@@ -669,13 +728,13 @@ table.results-table {
 
 
 .results-table thead tr th {
-	border-top: rem(3px) solid $curious-blue;
+	/*border-top: rem(3px) solid $curious-blue;*/
 }
 
 .result-table-desc {
 	padding-right: 5%;
 	padding-left: 5%;
-	border-top: rem(3px) solid $curious-blue;
+	border-bottom: rem(3px) solid $curious-blue;
 }
 
 .results-btn-holder {
@@ -697,10 +756,11 @@ table.results-table {
 
 .progress {
 	position: relative;
-	border: 3px solid lighten($black, 10%);
+	border: 3px solid lighten($black, 30%);
 	background-color: lighten($black, 40%);
 	border-radius: 1000px;
 	padding: rem(0px);
+	height: rem(15px);
 }
 
 .progress .meter {
@@ -710,7 +770,16 @@ table.results-table {
 
 .progress .meter-percentage {
 	position: absolute;
-	top: 0;
+	top: rem(-10px);
+	left: 45%;
+	font-weight: bold;
+	font-size: rem(18px);
+
+	text-shadow:
+	-1px -1px 0 lighten($black, 20%),  
+	1px -1px 0 lighten($black, 20%),
+	-1px  1px 0 lighten($black, 20%),
+	1px  1px 0 lighten($black, 20%);
 }
 
 /** Vanese Results Classes **/
