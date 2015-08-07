@@ -161,7 +161,7 @@
 	<div class="row">
 		<div id="profile-list" class="cf">
 			<!-- <div ng-repeat=""></div> -->
-			<div class="profile-item">
+			<div class="profile-item" ng-repeat="gameprofile in gameprofiles">
 				<section class="profile-info">
 					<div class="profile-item-group small-12 columns">
 						<div class="small-5 columns">
@@ -172,45 +172,38 @@
 						<div class="small-7 columns">
 							<div class="cf">
 								<p class="profile-name">
-									<span class="first-name">Blaze </span>
-									<span class="first-name">Smith</span>
+									<span class="first-name">@{{gameprofile.first_name}} </span>
+									<span class="first-name">@{{gameprofile.last_name}}</span>
 								</p>
 								<p class="profile-nickname">
-									<span class="first-name">Nick </span>
-									<span class="last-name">Name</span>
+									<span class="first-name">@{{gameprofile.nick_name1.name}} </span>
+									<span class="last-name">@{{gameprofile.nick_name2.name}}</span>
 								</p>
-								<p class="profile-code bold"><span class="profile-label">Player ID:</span> <span class="user-id">CLI009977</span></p>
+								<p class="profile-code bold"><span class="profile-label">Player ID:</span> <span class="user-id">@{{gameprofile.game_code.code}}</span></p>
 							</div>
 						</div>
 					</div>
 
 					<div class="profile-item-group cf">
-						<p class="profile-school-name truncate">SCHOOL</p>
-						<p class="profile-school-grade truncate">Grade 4A</p>
+						<p class="profile-school-name truncate">@{{gameprofile.school}}</p>
+						<p class="profile-school-grade truncate">Grade @{{gameprofile.grade}}</p>
 					</div>
 
 					<div class="profile-item-group cf">
-						<div class="small-4 columns">
+						<div class="small-12 columns text-center">
 							<p class="profile-proficiency">
 								<span class="profile-label bold">Last Played</span>
 							</p>
-							<p class="profile-last-seen">has not played yet</p>
-						</div>
-						<div class="small-2 columns">
-							<a href="javascript:void(0);" title="Proficiency is based on the average score of all games played." class="info-icon">i<span class="profile-tooltip"><p>Last Played shows the last time this child played Zap Zap Math.</p></span></a>
+							<p class="profile-last-seen">@{{gameprofile.last_played}}</p>
 						</div>
 					</div>
 
 					<div class="profile-item-group cf">
-						<div class="small-4 columns">
-							<p class="profile-proficiency">
+						<div class="small-12 columns text-center">
+							<p class="profile-attempts">
 								<span class="profile-label bold">Total Attempts</span>
 							</p>
-						</div>
-						<div class="small-6 columns">
-							<p class="profile-last-seen">has not played yet</p>
-						</div>
-						<div class="small-2 columns">
+							<p class="profile-attempt-number">545</p>
 							<a href="javascript:void(0);" title="Proficiency is based on the average score of all games played." class="info-icon">i<span class="profile-tooltip"><p>Last Played shows the last time this child played Zap Zap Math.</p></span></a>
 						</div>
 					</div>

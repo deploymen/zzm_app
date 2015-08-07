@@ -473,6 +473,7 @@ label:hover:before {
 }
 
 .profile-item-group {
+	position: relative;
 	border-bottom: rem(2px) solid $curious-blue;
 	padding-top: rem(5px);
 	padding-right: rem(10px);
@@ -651,11 +652,21 @@ table.results-table {
 	position: relative;
 }
 
-.table-label-cell .info-icon {
+.table-label-cell .info-icon,
+.info-icon {
 	position: absolute;
 	right: 0;
+}
+
+.info-icon {
+	bottom: 10px;
+}
+
+.table-label-cell .info-icon, {
 	top: 10px;
 }
+
+
 
 .results-table thead tr th {
 	border-top: rem(3px) solid $curious-blue;

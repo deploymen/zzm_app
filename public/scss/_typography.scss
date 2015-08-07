@@ -244,7 +244,8 @@ button.wide,
 	font-style: italic;
 }
 
-.profile-school-name {
+.profile-school-name,
+.profile-last-seen {
 	color: lighten($black, 60%);
 	font-size: rem(18px);
 	text-transform: uppercase;
@@ -259,6 +260,16 @@ button.wide,
 	color: $curious-blue;
 	font-size: rem(40px);
 	/*margin-bottom: rem(0px);*/
+}
+
+.profile-attempts {
+	margin-bottom: rem(0px);
+}
+
+.profile-attempt-number {
+	font-size: rem(28px);
+	color: lighten($black, 60%);
+	margin-bottom: rem(0px);
 }
 
 .profile-subject-name {
@@ -292,8 +303,9 @@ button.wide,
 .profile-upgrade-cta a {
 	padding: 10px 20px;
 	text-transform: uppercase;
-	font-size: rem(19px);
+	font-size: rem(16px);
 	font-family: 'museo-sans', sans-serif;
+	margin-bottom: rem(0px);
 }
 
 /** Results Styles **/
