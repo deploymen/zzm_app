@@ -14,6 +14,7 @@
 
 @section('js_include')
 <script type="text/javascript" src="/js/main/profile-results.js"></script>
+<script type="text/javascript" src="/js/main/progress-meter.js"></script>
 <script type="text/javascript">
 /*var VARS = VARS || {};
 
@@ -126,8 +127,8 @@ ZZM.playId = '{{Request::input('play_id')}}';
 							<td width="70%"><p class="results-table-name">@{{s.system_name}}</p></td>
 							<td width="20%" class="results-progress-column">
 								<div class="progress">
-									<span class="meter" style="width: 80%"></span>
-									<span class="meter-percentage">80%</span>
+									<span class="meter" style="width: 40%"></span>
+									<span class="meter-percentage">40%</span>
 								</div>
 							</td>
 							<td width="10%">
@@ -183,8 +184,8 @@ ZZM.playId = '{{Request::input('play_id')}}';
 							<td width="70%"><p class="results-table-name">@{{p.subtitle}}</p></td>
 							<td width="20%">
 								<div class="progress">
-									<span class="meter" style="width: 80%"></span>
-									<span class="meter-percentage">80%</span>
+									<span class="meter" style="width: 100%"></span>
+									<span class="meter-percentage">100%</span>
 								</div>
 							</td>
 							<td width="10%">

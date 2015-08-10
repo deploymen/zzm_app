@@ -186,7 +186,7 @@
 
 					<div class="profile-item-group cf">
 						<p class="profile-school-name truncate">@{{gameprofile.school}}</p>
-						<p class="profile-school-grade truncate">Grade @{{gameprofile.grade}}</p>
+						<p class="profile-school-grade truncate">Grade: @{{gameprofile.grade}}</p>
 					</div>
 
 					<div class="profile-item-group cf">

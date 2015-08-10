@@ -764,8 +764,27 @@ table.results-table {
 }
 
 .progress .meter {
-	background: $curious-blue;
 	border-radius: 1000px;
+}
+
+.progress .meter-20 {
+	background-color: $flamingo;
+}
+
+.progress .meter-40 {
+	background-color: $crusta;
+}
+
+.progress .meter-60 {
+	background-color: $sea-buckthorn;
+}
+
+.progress .meter-80 {
+	background-color: $starship;
+}
+
+.progress .meter-100 {
+	background-color: $harlequin;
 }
 
 .progress .meter-percentage {

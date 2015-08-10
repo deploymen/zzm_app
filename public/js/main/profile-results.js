@@ -146,7 +146,7 @@ App.controller('MainController', function ($scope, $http){
 
 		$scope.showResult('question'); 
 
-        console.log(questions);   	
+        console.log($scope.questions);   	
 	}
 
 	$scope.showResult = function(mode){
