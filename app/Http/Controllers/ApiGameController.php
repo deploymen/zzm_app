@@ -161,7 +161,6 @@ Class ApiGameController extends Controller {
 			}
 
 			$gameResult = json_decode($jsonGameResult, true);
-	
 			if(!isset($gameResult['score']) || !isset($gameResult['answers'])|| !isset($gameResult['status']) || !isset($gameResult['badges'])){ 
 					return  [
 					'status' => "fail",

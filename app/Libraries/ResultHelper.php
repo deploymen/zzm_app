@@ -64,21 +64,15 @@ class ResultHelper{
 			$r = $result[$i];
 
 			if($r->question_id != $prevQuestionId){
+				$answer = 'Triangle = '.$r->angle3.' , Quadrilateral = '.$r->angle4.' , Pentagon = '.$r->angle5.' , Hexagon = '.$r->angle6;
 				array_push($answers, [
 					'question_id' => $r->question_id,
 					'question' => $r->question,
-					'question_angle3' => $r->question_angle3,
-					'question_angle4' => $r->question_angle4,
-					'question_angle5' => $r->question_angle5,
-					'question_angle6' => $r->question_angle6,
 					'difficulty'=>$r->difficulty,
 					'result' => [
 						'result_id' => $r->result_id,
 						'correct'=> $r->correct,
-						'angle3'=>$r->angle3,
-						'angle4'=>$r->angle4,
-						'angle5'=>$r->angle5,
-						'angle6'=>$r->angle6,
+						'answer' => $answer,
 						],
 					'subjects' => []
 				]);
@@ -118,25 +112,15 @@ class ResultHelper{
 			$r = $result[$i];
 
 			if($r->question_id != $prevQuestionId){
+				$answer = $r->answer_1+$r->answer_2+$r->answer_3+$r->answer_4+$r->answer_5+$r->answer_6;
 				array_push($answers, [
 						'question_id' => $r->question_id,
 						'question'=>$r->question,
-						'answer_option_1'=>$r->answer_option_1,
-						'answer_option_2'=>$r->answer_option_2,
-						'answer_option_3'=>$r->answer_option_3,
-						'answer_option_4'=>$r->answer_option_4,
-						'answer_option_5'=>$r->answer_option_5,
-						'answer_option_6'=>$r->answer_option_6,
 						'difficulty'=>$r->difficulty,
 						'result' => [
 							'result_id' => $r->id,
 							'correct' => $r->correct,
-							'answer_1' => $r->answer_1,
-							'answer_2' => $r->answer_2,
-							'answer_3' => $r->answer_3,
-							'answer_4' => $r->answer_4,
-							'answer_5' => $r->answer_5,
-							'answer_6' => $r->answer_6
+							'answer' => $answer,
 						],
 						'subjects' => []
 						]);
@@ -175,16 +159,15 @@ class ResultHelper{
 			$r = $result[$i];
 
 			if($r->question_id != $prevQuestionId){
+				
 				array_push($answers, [
 					'question_id' => $r->question_id,
 					'question' => $r->question,
-					'answer_option_1' => $r->answer_option_1,
-					'answer_option_2' => $r->answer_option_2,
 					'difficulty'=>$r->difficulty,
 					'result' => [
 						'result_id' => $r->result_id,
 						'correct'=> $r->correct,
-						'answer'=>$r->answer,
+						'answer'=>$r->answer_text,
 					],
 					'subjects' => []
 				]);
@@ -204,7 +187,7 @@ class ResultHelper{
 		$answers = [];
 
 		 $sql = "
-       		SELECT q6.`id` AS `question_id` , q6.* , r6.`id` AS `result_id` ,r6.`answer`AS `question_answer`, r6.* , q6t.*, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description`
+       		SELECT q6.`id` AS `question_id` , q6.* , r6.`id` AS `result_id` ,r6.`answer`AS `result_answer`, r6.* , q6t.*, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description`
        			FROM (`t0300_game_result` r , `t0206_game_question_p06` q6 ,`t0206_game_question_p06_template` q6t, `t0306_game_result_p06` r6)
 
        			LEFT JOIN `t0132_game_question_subject` qs ON (qs.`question_id` =r.`question_id`)
@@ -241,24 +224,17 @@ class ResultHelper{
 				$expression =  str_replace("@3", $r->tpl_param_3, $expression);
 
 			if($r->question_id != $prevQuestionId){
+
+				$question = $part1.' '.$part2.' '.$part3;
+
 				array_push($answers, [
 					'question_id' => $r->question_id,
-					'param_1' => $r->game_param_1,
-					'param_2' => $r->game_param_2,
-					'param_3' => $r->game_param_3,
-					'p1_object' => $r->game_param_4,
-					'p2_object' => $r->game_param_5,
-					'p3_object' => $r->game_param_6,
-					'setting' => $r->game_param_7,
-					'part_1' => $part1,
-					'part_2' => $part2,
-					'part_3' => $part3,
-					'expression' => $expression,
+					'question' => $question,
 					'difficulty'=>$r->difficulty,
 					'result' => [
 						'result_id' => $r->result_id,
 						'correct'=> $r->correct,
-						'answer'=>$r->answer,
+						'answer'=>$r->result_answer,
 					],
 					'subjects' => []
 				]);
@@ -270,8 +246,9 @@ class ResultHelper{
 			]);
 				
 			$prevQuestionId = $r->question_id;
-			return $answers;
 		}
+			return $answers;
+
 	}
 	public static function ResultQuestionP07($playId){
 		$answers = [];
@@ -343,10 +320,6 @@ class ResultHelper{
 				array_push($answers, [
 					'question_id' => $r->question_id,
 					'question'=>$r->question,
-					'start_1'=>$r->start_1,
-					'start_10'=>$r->start_10,
-					'start_100'=> $r->start_100,
-					'start_1000'=>$r->start_1000,
 					'difficulty'=>$r->difficulty,
 					'result' => [
 						'result_id' => $r->result_id,
@@ -393,9 +366,6 @@ class ResultHelper{
 				array_push($answers, [
 					'question_id' => $r->question_id,
 					'question'=>$r->question,
-					'option_from'=>$r->option_from,
-					'option_until_total'=> $r->option_until_total,
-					'ruler_type'=>$r->ruler_type,
 					'difficulty'=>$r->difficulty,
 					'result' => [
 						'result_id' => $r->result_id,
@@ -443,7 +413,6 @@ class ResultHelper{
 				array_push($answers, [
 					'question_id' => $r->question_id,
 					'question'=>$r->question,
-					'plan'=>$r->plane,
 					'difficulty'=>$r->difficulty,
 					'result' => [
 						'result_id' => $r->result_id,
