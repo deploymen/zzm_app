@@ -52,7 +52,7 @@ class ResultHelper{
 
        				WHERE r.`target_id` = r1.`id`
        				AND r1.`target_id` = q1.`id`
-       				AND r.`play_id` = {$playId}
+       				AND r.`play_id` IN ($playId)
 
        				ORDER BY r.`id` ASC;
        ";
@@ -71,10 +71,6 @@ class ResultHelper{
 					'question_angle4' => $r->question_angle4,
 					'question_angle5' => $r->question_angle5,
 					'question_angle6' => $r->question_angle6,
-					'answer_angle3' => $r->answer_angle3,
-					'answer_angle4' => $r->answer_angle4,
-					'answer_angle5' => $r->answer_angle5,
-					'answer_angle6' => $r->answer_angle6,
 					'difficulty'=>$r->difficulty,
 					'result' => [
 						'result_id' => $r->result_id,
@@ -111,7 +107,7 @@ class ResultHelper{
 
        				WHERE r.`target_id` = r2.`id`
        				AND r2.`target_id` = q2.`id`
-       				AND r.`play_id` = {$playId}
+       				AND r.`play_id` IN ($playId)
 
        				ORDER BY r.`id` ASC;
        ";
@@ -168,7 +164,7 @@ class ResultHelper{
 
        				WHERE r.`target_id` = r3.`id`
        				AND r3.`target_id` = q3.`id`
-       				AND r.`play_id` = {$playId}
+       				AND r.`play_id` IN ($playId)
 
        				ORDER BY r.`id` ASC;
        ";
@@ -182,14 +178,13 @@ class ResultHelper{
 				array_push($answers, [
 					'question_id' => $r->question_id,
 					'question' => $r->question,
-					'correct_answer' => $r->question_answer,
 					'answer_option_1' => $r->answer_option_1,
 					'answer_option_2' => $r->answer_option_2,
 					'difficulty'=>$r->difficulty,
 					'result' => [
 						'result_id' => $r->result_id,
 						'correct'=> $r->correct,
-						'answer'=>$r->question_answer,
+						'answer'=>$r->answer,
 					],
 					'subjects' => []
 				]);
@@ -217,7 +212,7 @@ class ResultHelper{
        				WHERE r.`target_id` = r6.`id`
        				AND r6.`target_id` = q6.`id`
        				AND q6t.`id` = q6.`template_id`
-       				AND r.`play_id` = {$playId}
+       				AND r.`play_id` IN ($playId)
 
        				ORDER BY r.`id` ASC;
 
@@ -263,7 +258,7 @@ class ResultHelper{
 					'result' => [
 						'result_id' => $r->result_id,
 						'correct'=> $r->correct,
-						'answer'=>$r->question_answer,
+						'answer'=>$r->answer,
 					],
 					'subjects' => []
 				]);
@@ -282,7 +277,7 @@ class ResultHelper{
 		$answers = [];
 
 		 $sql = "
-       		SELECT q7.`id` AS `question_id` , q7.`answer` AS `question_answer` ,q7.* , r7.`id` AS `result_id` , r7.* , IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description`
+       		SELECT q7.`id` AS `question_id` , r7.`answer` AS `question_answer` ,q7.* , r7.`id` AS `result_id` , r7.* , IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description`
        			FROM (`t0300_game_result` r , `t0207_game_question_p07` q7 , `t0307_game_result_p07` r7)
 
        			LEFT JOIN `t0132_game_question_subject` qs ON (qs.`question_id` =r.`question_id`)
@@ -290,7 +285,7 @@ class ResultHelper{
 
        				WHERE r.`target_id` = r7.`id`
        				AND r7.`target_id` = q7.`id`
-       				AND r.`play_id` = {$playId}
+       				AND r.`play_id` IN ($playId)
 
        				ORDER BY r.`id` ASC;
        ";
@@ -300,20 +295,14 @@ class ResultHelper{
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
 			if($r->question_id != $prevQuestionId){
+				$question = $r->left_question_1.$r->left_question_2.$r->left_question_3." "."?"." ".$r->right_question_1.$r->right_question_2.$r->right_question_3;
 				array_push($answers, [
-					'question_id' => $r->question_id,
-					'left_question_1'=>$r->left_question_1,
-					'left_question_2'=>$r->left_question_2,
-					'left_question_3'=>$r->left_question_3,
-					'correct_answer'=> $r->question_answer,
-					'right_question_1'=>$r->right_question_1,
-					'right_question_2'=>$r->right_question_2,
-					'right_question_3'=>$r->right_question_3,
+					'question' => $question,
 					'difficulty'=>$r->difficulty,
 					'result' => [
 						'result_id' => $r->result_id,
 						'correct'=> $r->correct,
-						'answer'=>$r->question_answer,
+						'answer'=>$r->answer,
 					],
 					'subjects' => []
 				]);
@@ -341,7 +330,7 @@ class ResultHelper{
 
        				WHERE r.`target_id` = r10.`id`
        				AND r.`target_id` = q10.`id`
-       				AND r.`play_id` = {$playId}
+       				AND r.`play_id` IN ($playId)
 
        				ORDER BY r.`id` ASC;
        ";
@@ -362,7 +351,7 @@ class ResultHelper{
 					'result' => [
 						'result_id' => $r->result_id,
 						'correct'=> $r->correct,
-						'answer'=>$r->question_answer,
+						'answer'=>$r->answer,
 					],
 					'subjects' => []
 				]);
@@ -391,7 +380,7 @@ class ResultHelper{
 
        				WHERE r.`target_id` = r18.`id`
        				AND r.`target_id` = q18.`id`
-       				AND r.`play_id` = {$playId}
+       				AND r.`play_id` IN ($playId)
 
        				ORDER BY r.`id` ASC;
        ";
@@ -404,7 +393,6 @@ class ResultHelper{
 				array_push($answers, [
 					'question_id' => $r->question_id,
 					'question'=>$r->question,
-					'answer'=>$r->answer,
 					'option_from'=>$r->option_from,
 					'option_until_total'=> $r->option_until_total,
 					'ruler_type'=>$r->ruler_type,
@@ -412,7 +400,7 @@ class ResultHelper{
 					'result' => [
 						'result_id' => $r->result_id,
 						'correct'=> $r->correct,
-						'answer'=>$r->question_answer,
+						'answer'=>$r->answer,
 					],
 					'subjects' => []
 				]);
@@ -429,7 +417,7 @@ class ResultHelper{
 		return $answers;
 	}
 
-	public static function ResultQuestionP23($playId){
+	public static function ResultQuestionP23($playId){		
 		$answers = [];
 
 		 $sql = "
@@ -439,9 +427,10 @@ class ResultHelper{
        			LEFT JOIN `t0132_game_question_subject` qs ON (qs.`question_id` =r.`question_id`)
 				LEFT JOIN `t0131_game_subject` s ON(qs.`subject_id` = s.`id`  )
 
-       				WHERE r.`target_id` = r23.`id`
-       				AND r.`target_id` = q23.`id`
-       				AND r.`play_id` = {$playId}
+       				
+       				WHERE r23.`target_id` = q23.`id`
+					AND r.`target_id` = r23.`id`
+       				AND r.`play_id` IN ({$playId})
 
        				ORDER BY r.`id` ASC;
        ";
@@ -454,13 +443,12 @@ class ResultHelper{
 				array_push($answers, [
 					'question_id' => $r->question_id,
 					'question'=>$r->question,
-					'answer'=>$r->answer,
 					'plan'=>$r->plane,
 					'difficulty'=>$r->difficulty,
 					'result' => [
 						'result_id' => $r->result_id,
 						'correct'=> $r->correct,
-						'answer'=>$r->question_answer,
+						'answer'=>$r->answer,
 					],
 					'subjects' => []
 				]);
