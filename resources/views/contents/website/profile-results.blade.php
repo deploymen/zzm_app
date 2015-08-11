@@ -76,21 +76,24 @@ ZZM.playId = '{{Request::input('play_id')}}';
 	        <li ng-if="breadcumbs.planet_id = breadcumbs.planet_id">
 	        	<a href="/user/profiles/{{$profile->id}}/results?planet_id=@{{breadcumbs.planet_id}}">@{{breadcumbs.planet_subtitle}}</a>
 	        </li>
-	        <li ng-if="breadcumbs.play_id = breadcumbs.play_id">
+	        <!-- <li ng-if="breadcumbs.play_id = breadcumbs.play_id">
 	        	<a href="/user/profiles/{{$profile->id}}/results?play_id=@{{breadcumbs.play_id}}">@{{breadcumbs.play_id}}</a>
+	        </li> -->
+	        <li ng-if="breadcumbs.play_id = breadcumbs.play_id">
+	        	<a href="/user/profiles/{{$profile->id}}/results?planet_id=@{{breadcumbs.planet_id}}">@{{breadcumbs.play_id}}</a>
 	        </li>
 	    </ol>
 	</div>
     <div class="results-container cf">
     	<div class="profile-bar cf">
 			<div class="small-12 columns cf">
-				<div class="small-12 medium-2 columns">
+				<div class="small-12 medium-3 columns">
 					<div class="avatar-holder">
 						<img src="/assets/main/img/avatars/{{$profile->avatar->filename}}" alt="">
 					</div>
 				</div>
 
-				<div class="small-12 medium-10 columns">
+				<div class="small-12 medium-9 columns">
 					<div class="nickname">
 						<p class="profile-name">{{$profile->first_name}} {{$profile->last_name}}</p>
 						<p class="profile-nickname">{{$profile->nickName1->name}} {{$profile->nickName2->name}}</p>
@@ -121,15 +124,6 @@ ZZM.playId = '{{Request::input('play_id')}}';
 					<p>In Zap Zap Math, the system represents the overarching topics encompassing multiple subjects. The bar shows how much of the topic has been covered by the player as they complete the planets in each system.</p>
 				</div>
 				<table id="results-table-systems" class="results-table plays wide-table">
-					<!-- <thead class="hide-for-small">
-						<tr>
-							<th>&nbsp;</th>
-							<th class="table-label-cell">
-								<p class="table-label">Progress</p>
-							</th>
-							<th>&nbsp;</th>
-						</tr>
-					</thead> -->
 					<tbody>
 						<tr ng-repeat="s in systems">
 							<!-- <td width="10%">@{{s.id}}</td> -->
@@ -198,7 +192,7 @@ ZZM.playId = '{{Request::input('play_id')}}';
 								</div>
 							</td>
 							<td width="10%">
-								<a href="/user/profiles/{{$profile->id}}/results?planet_id=@{{p.id}}" class="button round btn-more-results">
+								<a href="/user/profiles/{{$profile->id}}/results?planet_id=@{{p.id}}&profile_id={{$profile->id}}" class="button round btn-more-results">
 									<span>More</span>
 									<i class="fa fa-chevron-right"></i>
 								</a>
@@ -208,11 +202,7 @@ ZZM.playId = '{{Request::input('play_id')}}';
 				</table>
 			</div>
 
-			<div class="result play hide">
-				<!-- <div class="result-table-desc">
-					<h2>Questions</h2>
-					<p>Here we take a more detailed look at the questions that have been asked and how well your child has performed in answering these questions.</p>
-				</div> -->
+			<!-- <div class="result play hide">
 				<table id="results-table-systems" class="results-table plays wide-table">
 					<thead class="hide-for-small">
 						<tr>
@@ -232,22 +222,7 @@ ZZM.playId = '{{Request::input('play_id')}}';
 						</tr>
 					</tbody>
 				</table>
-				<!-- <nav>
-				  <ul class="pagination pagination-sm">
-					<li>
-					  <a href="javascript:;" aria-label="Previous" ng-click="fetchPlayResult(page - 1, pageSize, planetid, planetname)">
-						<span aria-hidden="true">&laquo;</span>
-					  </a>
-					</li>
-					<li ng-repeat="pp in play_pagination" ng-class="{active:pp.active}"><a ng-click="fetchPlayResult($index + 1, pageSize, planetid, planetname)">@{{$index + 1}}</a></li>
-					<li>
-					  <a href="javascript:;" aria-label="Next" ng-click="fetchPlayResult(page + 1, pageSize, planetid, planetname)">
-						<span aria-hidden="true">&raquo;</span>
-					  </a>
-					</li>
-				  </ul>
-				</nav> -->
-			</div>
+			</div> -->
 
 			<div class="result question hide">
 				<table id="results-table-systems" class="results-table plays wide-table">

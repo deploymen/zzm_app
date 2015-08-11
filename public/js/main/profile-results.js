@@ -41,9 +41,10 @@ App.controller('MainController', function ($scope, $http){
     	$(".result").addClass('hide');
 		switch(mode){
 			case '': $scope.fetchSystemResult(1, $scope.pageSize); break;  	
-			case 'system_id': $scope.fetchPlanetsResult($scope.profileId, $scope.systemId, 1, $scope.pageSize); break;  	
-			case 'planet_id': $scope.fetchPlayResult($scope.profileId, $scope.planetId, 1, $scope.pageSize); break;  	
-			case 'play_id': $scope.fetchQuestionsResult($scope.profileId, $scope.playId, 1, $scope.pageSize); break;  	
+			case 'system_id': $scope.fetchPlanetsResult($scope.profileId, $scope.systemId, 1, $scope.pageSize); break;
+            case 'planet_id': $scope.fetchQuestionsResult($scope.profileId, $scope.planetId, 1, $scope.pageSize); break; 	
+			// case 'planet_id': $scope.fetchPlayResult($scope.profileId, $scope.planetId, 1, $scope.pageSize); break;  	
+			// case 'play_id': $scope.fetchQuestionsResult($scope.profileId, $scope.playId, 1, $scope.pageSize); break;  	
 		} 
     }
 
@@ -83,8 +84,7 @@ App.controller('MainController', function ($scope, $http){
 	$scope.fetchPlanetsResult = function(profile_id, system_id, page, pageSize){
 
 		$('li.indicator-list-item:nth-child(3)').addClass('active');
-        // $('a.results-back-link').html('Go Back to Systems');
-        //$('a.results-back-link').attr('href', '/user/profiles/'+$scope.profileId+'/results');
+
 		$http.get('/api/profiles/result/only-planet?' + [
 			'profile_id=' + profile_id,
         	'system_id=' + system_id, 
@@ -103,34 +103,63 @@ App.controller('MainController', function ($scope, $http){
 		$scope.showResult('planet');    	
 	}
 
-	$scope.fetchPlayResult = function(profile_id, planet_id, page, pageSize){
+	// $scope.fetchPlayResult = function(profile_id, planet_id, page, pageSize){
 
-		$('li.indicator-list-item:nth-child(4)').addClass('active');
-        // $('a.results-back-link').html('Go Back to Planets');
-        //$('a.results-back-link').attr('href', '/user/profiles/'+ $scope.profileId+'/results?system_id='+ $scope.systemId);
-		$http.get('/api/profiles/result/only-play?' + [
-			'profile_id=' + profile_id,
-        	'planet_id=' + planet_id, 
-            'page=' + page,
-            'page_size=' + pageSize
-        ].join('&')).success(function(data, status, headers, config) {
-            if (data.status == 'success') {
-            	$scope.plays = data.data.play;
-            	$scope.breadcumbs = data.data.breakcrumb;
+	// 	$('li.indicator-list-item:nth-child(4)').addClass('active');
 
-            } else {
-                alert(data.message);
-            }
-        }); 
+	// 	$http.get('/api/profiles/result/only-play?' + [
+	// 		'profile_id=' + profile_id,
+ //        	'planet_id=' + planet_id, 
+ //            'page=' + page,
+ //            'page_size=' + pageSize
+ //        ].join('&')).success(function(data, status, headers, config) {
+ //            if (data.status == 'success') {
+ //            	$scope.plays = data.data.play;
+ //            	$scope.breadcumbs = data.data.breakcrumb;
 
-		$scope.showResult('play');    	
-	}
+ //            } else {
+ //                alert(data.message);
+ //            }
+ //        }); 
+
+	// 	$scope.showResult('play');    	
+	// }
+
+    // Vanese's Original fetchQuestionsResult
+    // $scope.fetchQuestionsResult = function(profile_id, play_id, page, pageSize){
+
+    //     var i, q;
+    //     $('li.indicator-list-item:nth-child(4)').addClass('active');
+    //     // $('a.results-back-link').text('Go Back to Plays');
+    //     $http.get('/api/profiles/result/only-questions?' + [
+    //         'profile_id=' + profile_id,
+    //         'play_id=' + play_id, 
+    //         'page=' + page,
+    //         'page_size=' + pageSize
+    //     ].join('&')).success(function(data, status, headers, config) {
+    //         if (data.status == 'success') {
+    //             $scope.questions = data.data.questions;
+    //             $scope.breadcumbs = data.data.breakcrumb;
+
+    //             for(i=0; i<$scope.questions.length; i++ ) {
+    //                 r = $scope.questions[i].result;
+    //                 $scope.answer = r.correct;
+    //             }
+
+    //         } else {
+    //             alert(data.message);
+    //         }
+    //     }); 
+
+    //     $scope.showResult('question');     
+    // }
+    // END of Vanese's Original fetchQuestionsResult
 
 	$scope.fetchQuestionsResult = function(profile_id, play_id, page, pageSize){
 
 		var i, q;
 		$('li.indicator-list-item:nth-child(4)').addClass('active');
-        // $('a.results-back-link').text('Go Back to Plays');
+        
 		$http.get('/api/profiles/result/only-questions?' + [
 			'profile_id=' + profile_id,
         	'play_id=' + play_id, 
@@ -153,7 +182,7 @@ App.controller('MainController', function ($scope, $http){
 
 		$scope.showResult('question'); 
 
-        console.log($scope.questions);   	
+        //console.log($scope.questions);   	
 	}
 
 	$scope.showResult = function(mode){
