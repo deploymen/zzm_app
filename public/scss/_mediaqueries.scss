@@ -61,6 +61,7 @@
 
 	.button.btn-more-results {
 		padding: rem(6px) rem(15px);
+		margin-right: rem(50px);
 	}
 
 	.button.btn-more-results span {
@@ -89,6 +90,14 @@
 		left: 2px;
 		width: 98%;
 	}
+
+	.results-table-name {
+		padding-left: 10px;
+	}
+
+	/*.results-more-column {
+		padding-right: 10px;
+	}*/
 }
 
 @media #{$medium-up} {

@@ -63,13 +63,22 @@ ZZM.playId = '{{Request::input('play_id')}}';
 			</ul>
 		</div>
 	</div>
-	<div class="clearfix">&nbsp;</div>
 	<div class="row ng-cloak">
-	    <ol class="breadcrumb pull-left">
-	        <li><span><a href="/user/profiles/{{$profile->id}}/results">All Result</a></span>&nbsp;</li>
-	        <li ng-if="breadcumbs.system_id = breadcumbs.system_id">&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;<a href="/user/profiles/{{$profile->id}}/results?system_id=@{{breadcumbs.system_id}}">@{{breadcumbs.system_name}}</a></li>
-	        <li ng-if="breadcumbs.planet_id = breadcumbs.planet_id">&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;<a href="/user/profiles/{{$profile->id}}/results?planet_id=@{{breadcumbs.planet_id}}">@{{breadcumbs.planet_subtitle}}</a></li>
-	        <li ng-if="breadcumbs.play_id = breadcumbs.play_id">&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;<a href="/user/profiles/{{$profile->id}}/results?play_id=@{{breadcumbs.play_id}}">@{{breadcumbs.play_id}}</a></li>
+	    <ol class="breadcrumbs">
+	        <li>
+	        	<span>
+	        		<a href="/user/profiles/{{$profile->id}}/results">All Result</a>
+	        	</span>
+	        </li>
+	        <li ng-if="breadcumbs.system_id = breadcumbs.system_id">
+	        	<a href="/user/profiles/{{$profile->id}}/results?system_id=@{{breadcumbs.system_id}}">@{{breadcumbs.system_name}}</a>
+	        </li>
+	        <li ng-if="breadcumbs.planet_id = breadcumbs.planet_id">
+	        	<a href="/user/profiles/{{$profile->id}}/results?planet_id=@{{breadcumbs.planet_id}}">@{{breadcumbs.planet_subtitle}}</a>
+	        </li>
+	        <li ng-if="breadcumbs.play_id = breadcumbs.play_id">
+	        	<a href="/user/profiles/{{$profile->id}}/results?play_id=@{{breadcumbs.play_id}}">@{{breadcumbs.play_id}}</a>
+	        </li>
 	    </ol>
 	</div>
     <div class="results-container cf">
@@ -131,7 +140,7 @@ ZZM.playId = '{{Request::input('play_id')}}';
 									<span class="meter-percentage">40%</span>
 								</div>
 							</td>
-							<td width="10%">
+							<td width="10%" class="">
 								<a href="/user/profiles/{{$profile->id}}/results?system_id=@{{s.id}}" class="button round btn-more-results">
 									<span>More</span>
 									<i class="fa fa-chevron-right"></i>
@@ -262,7 +271,7 @@ ZZM.playId = '{{Request::input('play_id')}}';
 	</div><!--content-group-->
     </div>
 	<div class="row results-btn-holder text-center">
-		<a href="/user/profiles" class="">Go Back to Profiles</a>
+		<a href="/user/profiles/" class="results-back-link">Go Back to Profiles</a>
 	</div>
 
 	

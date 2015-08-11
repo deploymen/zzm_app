@@ -194,7 +194,7 @@
 							<p class="profile-proficiency">
 								<span class="profile-label bold">Last Played</span>
 							</p>
-							<p class="profile-last-seen">@{{gameprofile.last_played}}</p>
+							<p class="profile-last-seen">@{{gameprofile.last_played | date:'MM/dd/yyyy @ h:mma'}}</p>
 						</div>
 					</div>
 
@@ -203,7 +203,7 @@
 							<p class="profile-attempts">
 								<span class="profile-label bold">Total Attempts</span>
 							</p>
-							<p class="profile-attempt-number">545</p>
+							<p class="profile-attempt-number">@{{gameprofile.questions_played}}</p>
 							<a href="javascript:void(0);" title="Proficiency is based on the average score of all games played." class="info-icon">i<span class="profile-tooltip"><p>Last Played shows the last time this child played Zap Zap Math.</p></span></a>
 						</div>
 					</div>

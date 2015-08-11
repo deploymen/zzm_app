@@ -482,6 +482,14 @@ label:hover:before {
 	margin-bottom: rem(5px);
 }
 
+.profile-attempt-number {
+	height: rem(44px);
+}
+
+.profile-last-seen {
+	height: rem(32px);
+}
+
 .profile-item-group {
 	position: relative;
 	border-bottom: rem(2px) solid $curious-blue;
@@ -595,7 +603,7 @@ label:hover:before {
 
 .difficuly-meter li {
 	
-	height: rem(30px);
+	height: rem(25px);
 	border-right: 4px solid lighten($black, 30%);
 }
 
@@ -626,6 +634,7 @@ label:hover:before {
 	position: relative;
 	width: rem(500px);
 	margin: 0 auto;
+	padding-bottom: rem(20px);
 }
 
 .indicator-list {
@@ -646,7 +655,7 @@ label:hover:before {
 }
 
 .indicator-list-item.active {
-	background-color: $curious-blue;
+	/*background-color: $curious-blue;*/
 }
 
 .indicator-list-item:first-child {
@@ -655,6 +664,22 @@ label:hover:before {
 
 .indicator-list-item:last-child {
 	margin-right: rem(0px);
+}
+
+.indicator-list-item:first-child.active {
+	background-color: $curious-blue;
+}
+
+.indicator-list-item:nth-child(2).active {
+	background-color: $purple;
+}
+
+.indicator-list-item:nth-child(3).active {
+	background-color: $flamingo;
+}
+
+.indicator-list-item:nth-child(4).active {
+	background-color: $candlelight;
 }
 
 .indicator-bar {
@@ -725,7 +750,13 @@ table.results-table {
 	top: 10px;
 }
 
+.results-table-name {
+	padding-left: 50px;
+}
 
+/*.results-more-column {
+	padding-right: 10px;
+}*/
 
 .results-table thead tr th {
 	/*border-top: rem(3px) solid $curious-blue;*/
@@ -754,62 +785,19 @@ table.results-table {
 	display: none;
 }
 
-.progress {
-	position: relative;
-	border: 3px solid lighten($black, 30%);
-	background-color: lighten($black, 40%);
-	border-radius: 1000px;
-	padding: rem(0px);
-	height: rem(15px);
-}
 
-.progress .meter {
-	border-radius: 1000px;
-}
-
-.progress .meter-20 {
-	background-color: $flamingo;
-}
-
-.progress .meter-40 {
-	background-color: $crusta;
-}
-
-.progress .meter-60 {
-	background-color: $sea-buckthorn;
-}
-
-.progress .meter-80 {
-	background-color: $starship;
-}
-
-.progress .meter-100 {
-	background-color: $harlequin;
-}
-
-.progress .meter-percentage {
-	position: absolute;
-	top: rem(-10px);
-	left: 45%;
-	font-weight: bold;
-	font-size: rem(18px);
-
-	text-shadow:
-	-1px -1px 0 lighten($black, 20%),  
-	1px -1px 0 lighten($black, 20%),
-	-1px  1px 0 lighten($black, 20%),
-	1px  1px 0 lighten($black, 20%);
-}
 
 /** Vanese Results Classes **/
 ul.pagination > li > a { color: #333 }
 .pagination .active a { background-color: #2B91D6; color: #fff; font-weight: bold;}
-.breadcrumb {
+
+.breadcrumbs {
 	margin-left: 0px;
   	padding: 8px 15px;
   	margin-bottom: 20px;
   	list-style: none;
-  	background-color: #f5f5f5;
+  	background-color: $alto;
+  	border: none;
   	border-radius: 4px;
 }
 .pull-left, .pull-left > li { float: left !important; }

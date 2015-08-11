@@ -54,7 +54,9 @@ App.controller('MainController', function ($scope, $http){
     	page = (page < 1)?1:page;
 		page = (page > $scope.pageTotal)?$scope.pageTotal:page;
 		$scope.page = page;
-		$('li.indicator-list-item:nth-child(1)').addClass('active');
+		$('li.indicator-list-item:nth-child(2)').addClass('active');
+        // $('a.results-back-link').html('Go Back to Profiles');
+        //$('a.results-back-link').attr('href', '/user/profiles');
         $http.get('/api/profiles/result/only-system?' + [
             'page=' + page,
             'page_size=' + pageSize,
@@ -80,7 +82,9 @@ App.controller('MainController', function ($scope, $http){
 
 	$scope.fetchPlanetsResult = function(profile_id, system_id, page, pageSize){
 
-		$('li.indicator-list-item:nth-child(2)').addClass('active');
+		$('li.indicator-list-item:nth-child(3)').addClass('active');
+        // $('a.results-back-link').html('Go Back to Systems');
+        //$('a.results-back-link').attr('href', '/user/profiles/'+$scope.profileId+'/results');
 		$http.get('/api/profiles/result/only-planet?' + [
 			'profile_id=' + profile_id,
         	'system_id=' + system_id, 
@@ -101,7 +105,9 @@ App.controller('MainController', function ($scope, $http){
 
 	$scope.fetchPlayResult = function(profile_id, planet_id, page, pageSize){
 
-		$('li.indicator-list-item:nth-child(3)').addClass('active');
+		$('li.indicator-list-item:nth-child(4)').addClass('active');
+        // $('a.results-back-link').html('Go Back to Planets');
+        //$('a.results-back-link').attr('href', '/user/profiles/'+ $scope.profileId+'/results?system_id='+ $scope.systemId);
 		$http.get('/api/profiles/result/only-play?' + [
 			'profile_id=' + profile_id,
         	'planet_id=' + planet_id, 
@@ -124,6 +130,7 @@ App.controller('MainController', function ($scope, $http){
 
 		var i, q;
 		$('li.indicator-list-item:nth-child(4)').addClass('active');
+        // $('a.results-back-link').text('Go Back to Plays');
 		$http.get('/api/profiles/result/only-questions?' + [
 			'profile_id=' + profile_id,
         	'play_id=' + play_id, 
@@ -173,3 +180,9 @@ App.controller('MainController', function ($scope, $http){
 
 
 });
+
+// App.filter("newdate", function () {
+//     return function (x) {
+//         return new Date(parseInt(x.substr(6)));
+//     };
+// });
