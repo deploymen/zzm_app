@@ -155,14 +155,14 @@ App.controller('MainController', function ($scope, $http){
     // }
     // END of Vanese's Original fetchQuestionsResult
 
-	$scope.fetchQuestionsResult = function(profile_id, play_id, page, pageSize){
+	$scope.fetchQuestionsResult = function(profile_id, planet_id, page, pageSize){
 
 		var i, q;
 		$('li.indicator-list-item:nth-child(4)').addClass('active');
-        
+
 		$http.get('/api/profiles/result/only-questions?' + [
 			'profile_id=' + profile_id,
-        	'play_id=' + play_id, 
+        	'planet_id=' + planet_id, 
             'page=' + page,
             'page_size=' + pageSize
         ].join('&')).success(function(data, status, headers, config) {
@@ -182,7 +182,8 @@ App.controller('MainController', function ($scope, $http){
 
 		$scope.showResult('question'); 
 
-        //console.log($scope.questions);   	
+        // console.log($scope.questions);
+        // console.log($scope.questions); 	
 	}
 
 	$scope.showResult = function(mode){

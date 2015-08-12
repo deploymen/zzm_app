@@ -128,8 +128,7 @@ table tr:nth-of-type(even) {
 }
 
 .info-icon:hover {
-	width: rem(26px);
-	height: rem(26px);
+	box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.25);
 
 	.profile-tooltip {
 		display: block;
@@ -486,6 +485,10 @@ label:hover:before {
 	height: rem(44px);
 }
 
+.profile-last-seen-wrapper {
+	text-align: right;
+}
+
 .profile-last-seen {
 	height: rem(32px);
 }
@@ -628,6 +631,19 @@ label:hover:before {
 	border-right: none;
 }
 
+.fa-check,
+.fa-times {
+	font-size: rem(24px);
+}
+
+.fa-check {
+	color: $jade;
+}
+
+.fa-times {
+	color: $crimson;
+}
+
 
 /** Results Styles **/
 .indicator-holder {
@@ -736,14 +752,9 @@ table.results-table {
 	position: relative;
 }
 
-.table-label-cell .info-icon,
-.info-icon {
+.table-label-cell .info-icon {
 	position: absolute;
 	right: 0;
-}
-
-.info-icon {
-	bottom: 10px;
 }
 
 .table-label-cell .info-icon, {
@@ -760,6 +771,7 @@ table.results-table {
 
 .results-table thead tr th {
 	/*border-top: rem(3px) solid $curious-blue;*/
+	padding-left: rem(50px);
 }
 
 .result-table-desc {
@@ -783,6 +795,10 @@ table.results-table {
 
 .button.btn-more-results .fa {
 	display: none;
+}
+
+.results-info-column {
+	position: relative;
 }
 
 

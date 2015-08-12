@@ -74,13 +74,13 @@ ZZM.playId = '{{Request::input('play_id')}}';
 	        	<a href="/user/profiles/{{$profile->id}}/results?system_id=@{{breadcumbs.system_id}}">@{{breadcumbs.system_name}}</a>
 	        </li>
 	        <li ng-if="breadcumbs.planet_id = breadcumbs.planet_id">
-	        	<a href="/user/profiles/{{$profile->id}}/results?planet_id=@{{breadcumbs.planet_id}}">@{{breadcumbs.planet_subtitle}}</a>
+	        	<a href="/user/profiles/{{$profile->id}}/results?planet_id=@{{breadcumbs.planet_id}}&planet_id=@{{breadcumbs.planet_id">@{{breadcumbs.planet_subtitle}}</a>
 	        </li>
 	        <!-- <li ng-if="breadcumbs.play_id = breadcumbs.play_id">
 	        	<a href="/user/profiles/{{$profile->id}}/results?play_id=@{{breadcumbs.play_id}}">@{{breadcumbs.play_id}}</a>
 	        </li> -->
-	        <li ng-if="breadcumbs.play_id = breadcumbs.play_id">
-	        	<a href="/user/profiles/{{$profile->id}}/results?planet_id=@{{breadcumbs.planet_id}}">@{{breadcumbs.play_id}}</a>
+	        <li ng-if="breadcumbs.question_id = breadcumbs.question_id">
+	        	<a href="/user/profiles/{{$profile->id}}/results?question_id=@{{breadcumbs.question_id}}">@{{breadcumbs.question_id}}</a>
 	        </li>
 	    </ol>
 	</div>
@@ -109,7 +109,7 @@ ZZM.playId = '{{Request::input('play_id')}}';
 					<p class="profile-school-name truncate">School name</p>
 					<p class="profile-school-grade truncate">Grade @{{gameprofile.grade}}</p>
 				</div>
-				<div class="medium-5 columns text-right">
+				<div class="medium-5 columns profile-last-seen-wrapper">
 					<p class="profile-label">Last Played</p>
 					<p class="profile-last-seen">@{{gameprofile.last_played}}</p>
 				</div>
@@ -164,7 +164,7 @@ ZZM.playId = '{{Request::input('play_id')}}';
 				<div class="result-table-desc">
 					<h2>Planets</h2>
 					<p>In Zap Zap Math, planets represent individual subjects within a larger topic.</p>
-					<div class="difficuly-meter-box">
+					<div class="difficuly-meter-box cf">
 						<ul class="difficuly-label-list">
 							<li>Beginner</li>
 							<li>Developing</li>
@@ -185,14 +185,14 @@ ZZM.playId = '{{Request::input('play_id')}}';
 					<tbody>
 						<tr ng-repeat="p in planets">
 							<td width="70%"><p class="results-table-name">@{{p.subtitle}}</p></td>
-							<td width="20%">
+							<td width="20%" class="">
 								<div class="progress">
 									<span class="meter" style="width: 100%"></span>
 									<span class="meter-percentage">100%</span>
 								</div>
 							</td>
 							<td width="10%">
-								<a href="/user/profiles/{{$profile->id}}/results?planet_id=@{{p.id}}&profile_id={{$profile->id}}" class="button round btn-more-results">
+								<a href="/user/profiles/{{$profile->id}}/results?profile_id={{$profile->id}}&planet_id=@{{p.id}}" class="button round btn-more-results">
 									<span>More</span>
 									<i class="fa fa-chevron-right"></i>
 								</a>
@@ -228,16 +228,25 @@ ZZM.playId = '{{Request::input('play_id')}}';
 				<table id="results-table-systems" class="results-table plays wide-table">
 					<thead class="hide-for-small">
 						<tr>
-							<th>Id</th>
-							<th>Question</th>
-							<th>Correct</th>
+							<th>
+								<span class="profile-label">Question</span>
+							</th>
+							<th>
+								<span class="profile-label">{{$profile->first_name}}'s Answer</span>
+							</th>
+							<th>&nbsp;</th>
+							<th>&nbsp;</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr ng-repeat="q in questions">
-							<td width="10%">@{{q.question_id}}</td>
-							<td width="80%">@{{q.question}}</td>
-							<td width="20%">@{{answer}}</td>
+							<td width="60%" class="results-table-name">@{{q.question}}</td>
+							<td width="20%" class="results-table-name">@{{q.result.answer}}</td>
+							<td width="10%" ng-switch on="q.result.correct">
+								<span ng-switch-when="1"><i class="fa fa-check"></i></span>
+								<span ng-switch-when="0"><i class="fa fa-times"></i></span>
+							</td>
+							<td width="10%" class="results-info-column"><span class="info-icon">i</span></td>
 						</tr>
 					</tbody>
 				</table>

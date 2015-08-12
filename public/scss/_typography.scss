@@ -80,6 +80,8 @@ a:active {
 	font-weight: normal;
 	text-align: center;
 	cursor: pointer;
+	font-size: rem(20px);
+	line-height: rem(23px);
 }
 
 .info-icon:hover,
@@ -98,6 +100,8 @@ a:active {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
+
 
 
 /** Account Settings STYLES **/
@@ -359,7 +363,7 @@ button.wide,
 }
 
 .table-label-cell .info-icon {
-	font-size: rem(16px);
+	font-size: rem(20px);
 	line-height: rem(23px);
 }
 
