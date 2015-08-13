@@ -48,9 +48,9 @@ KONAMI CODE MOFO
             <header id="main-banner" class="main-banner-2 cf" role="banner" style="height:900px;">
                 <nav class="main-menu">
                     <ul class="menu-list">
-                        <li><a href="/jobs" target="_blank">Jobs</a></li>
-                        <li><a href="http://blog.zapzapmath.com" target="_blank">Blog</a></li>
-                        <li><a href="/contributors" target="_blank">Contributors</a></li>
+                        <li><a href="/jobs">Jobs</a></li>
+                        <li><a href="http://blog.zapzapmath.com">Blog</a></li>
+                        <li><a href="/contributors">Contributors</a></li>
                     </ul>
                 </nav>
                 <!-- Background Elements -->
@@ -88,16 +88,21 @@ KONAMI CODE MOFO
                     <div class="form-inner-wrapper">
                         <h1>Students struggling with math homework? Zap Zap Math can change that!</h1>
                         <!-- <p class="signup-instruct">Sign up to be the first to get a full ZAP ZAP MATH subscription for 1 year worth $99.99</p> -->
-                        <p id="signup-instruct" class="signup-instruct">Be the first in line for our preview release and get tons of goodies for free!</p>
+                        <!-- <p id="signup-instruct" class="signup-instruct">Be the first in line for our preview release and get tons of goodies for free!</p> -->
+                        <p id="signup-instruct" class="signup-instruct">Join our Facebook group and always be the first to test the preview release of Zap Zap Math!</p><br/>
                         <div id="signup-btn-holder" class="signup-btn-holder">
+                            <a href="https://www.facebook.com/groups/916373445085339/" class="btn btn--orange" target="_blank">Join Now!</a>
+                        </div>
+                        <!-- <div id="signup-btn-holder" class="signup-btn-holder">
                             <div id="signup-form2" class="signup-form2">
                                 <form id="signupform2" class="signupform2">
                                     <input id="signup-form-email2" class="signup-form-email2" name="foremail" type="email" placeholder="Email" required>
                                     <p></p>
                                     <input id="email-address-submit2" class="btn btn--orange email-address-submit2" type="submit" value=" Sign Up!" onClick="signup2();"></input>
                                 </form>
-                            </div><!--signup-form-->
-                        </div><!--signup-btn-holder-->
+                            </div>
+                        </div> -->
+                        <!--signup-btn-holder-->
                     </div><!--form-inner-wrapper-->
                 </div>
                 <!-- End Background Elements -->
@@ -191,7 +196,7 @@ KONAMI CODE MOFO
                                     </div>
                                 </div>
                             </li>
-                            <li class="wow bounceInUp" data-wow-delay="0.5s">
+                            <li class="wow bounceInUp" data-wow-delay="0.25s">
                                 <a href="/contributors" class="contributor-link"></a>
                                 <div class="collab-profile-holder">
                                     <div class="profile-pic-holder">
@@ -210,21 +215,21 @@ KONAMI CODE MOFO
                                     </div>
                                 </div>
                             </li>
-                            <li class="wow bounceInDown" data-wow-delay="1s">
+                            <li class="wow bounceInDown" data-wow-delay="0.5s">
                                 <a href="/contributors" class="contributor-link"></a>
                                 <div class="collab-profile-holder">
                                     <div class="profile-pic-holder">
-                                        <img src="assets/img/contributors/dp/david-fingerote.jpg" alt="Avatar 3">
+                                        <img src="assets/img/contributors/dp/py-teow.jpg" alt="Avatar 3">
                                     </div>
                                     <div class="profile-item-group">
                                         <div class="collab-details">
-                                            <p class="collab-name">David W. Fingerote,</p>
-                                            <p class="country-name">U.S.A</p>
-                                            <p class="profile-position">International Educational Consultant</p>
+                                            <p class="collab-name">Teoh Poh Yew,</p>
+                                            <p class="country-name">Malaysia</p>
+                                            <p class="profile-position">Higher-Order Thinking Expert</p>
                                         </div>
                                         <hr>
                                         <p class="collab-quote">
-                                            "Zap Zap Math is an application that will grow as your child grows."
+                                            "Zap Zap Math develops higher-order thinking skills (HOTS)."
                                         </p>
                                     </div>
                                 </div>
@@ -316,9 +321,9 @@ KONAMI CODE MOFO
                         <ul>
                             <li><a href="/jobs">Jobs</a></li>
                             <li class="divider">|</li>
-                            <li><a href="http://blog.zapzapmath.com" target="_blank">Blog</a></li>
+                            <li><a href="http://blog.zapzapmath.com">Blog</a></li>
                             <li class="divider">|</li>
-                            <li><a href="/contributors" target="_blank">Contributors</a></li>
+                            <li><a href="/contributors">Contributors</a></li>
                         </ul>
                     </div>
                 </footer>

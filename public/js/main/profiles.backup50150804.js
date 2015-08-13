@@ -26,8 +26,6 @@ function allVars(){
 allVars();
 //console.log(allVars.datal);
 
-<<<<<<< HEAD
-=======
 
 
 // Profiles Page
@@ -101,9 +99,9 @@ function displayProfiles(){
 											'<span class="blue-heading-small">Best score</span>',
 										'</div>',
 										'<div class="small-12 columns">',
-											'<a class="profile-subject-name truncate" href="/user/profiles/',allVars.datal.list[i].id,'/results?play_id=',(allVars.datal.list[i].best_score.length > 0)?allVars.datal.list[i].best_score[0].play_id:'no data available','&profile_id=',allVars.datal.list[i].id,'">',(allVars.datal.list[i].best_score.length > 0)?allVars.datal.list[i].best_score[0].description:'no data available','</a><br/>',
-	                                        '<a class="profile-subject-name truncate" href="/user/profiles/',allVars.datal.list[i].id,'/results?play_id=',(allVars.datal.list[i].best_score.length > 1)?allVars.datal.list[i].best_score[1].play_id:'no data available','&profile_id=',allVars.datal.list[i].id,'">',(allVars.datal.list[i].best_score.length > 1)?allVars.datal.list[i].best_score[1].description:'no data available','</a><br/>',
-	                                        '<a class="profile-subject-name truncate" href="/user/profiles/',allVars.datal.list[i].id,'/results?play_id=',(allVars.datal.list[i].best_score.length > 2)?allVars.datal.list[i].best_score[2].play_id:'no data available','&profile_id=',allVars.datal.list[i].id,'">',(allVars.datal.list[i].best_score.length > 2)?allVars.datal.list[i].best_score[2].description:'no data available','</a><br/>',
+											'<p class="profile-subject-name truncate">',(allVars.datal.list[i].best_score.length > 0)?allVars.datal.list[i].best_score[0].description:'no data available','</p>',
+											'<p class="profile-subject-name truncate">',(allVars.datal.list[i].best_score.length > 1)?allVars.datal.list[i].best_score[1].description:'no data available','</p>',
+											'<p class="profile-subject-name truncate">',(allVars.datal.list[i].best_score.length > 2)?allVars.datal.list[i].best_score[2].description:'no data available','</p>',
 										'</div>',
 									'</div>',
 									'<div class="small-12 columns">',
@@ -111,9 +109,9 @@ function displayProfiles(){
 											'<span class="blue-heading-small">Weakest score</span>',
 										'</div>',
 										'<div class="small-12 columns">',
-											'<a class="profile-subject-name truncate" href="/user/profiles/',allVars.datal.list[i].id,'/results?play_id=',(allVars.datal.list[i].weak_score.length > 0)?allVars.datal.list[i].weak_score[0].play_id:'no data available','&profile_id=',allVars.datal.list[i].id,'">',(allVars.datal.list[i].weak_score.length > 0)?allVars.datal.list[i].weak_score[0].description:'no data available','</a><br/>',
-	                                        '<a class="profile-subject-name truncate" href="/user/profiles/',allVars.datal.list[i].id,'/results?play_id=',(allVars.datal.list[i].weak_score.length > 1)?allVars.datal.list[i].weak_score[1].play_id:'no data available','&profile_id=',allVars.datal.list[i].id,'">',(allVars.datal.list[i].weak_score.length > 1)?allVars.datal.list[i].weak_score[1].description:'no data available','</a><br/>',
-	                                        '<a class="profile-subject-name truncate" href="/user/profiles/',allVars.datal.list[i].id,'/results?play_id=',(allVars.datal.list[i].weak_score.length > 2)?allVars.datal.list[i].weak_score[2].play_id:'no data available','&profile_id=',allVars.datal.list[i].id,'">',(allVars.datal.list[i].weak_score.length > 2)?allVars.datal.list[i].weak_score[2].description:'no data available','</a><br/>',
+											'<p class="profile-subject-name truncate">',(allVars.datal.list[i].weak_score.length > 0)?allVars.datal.list[i].weak_score[0].description:'no data available','</p>',
+											'<p class="profile-subject-name truncate">',(allVars.datal.list[i].weak_score.length > 1)?allVars.datal.list[i].weak_score[1].description:'no data available','</p>',
+											'<p class="profile-subject-name truncate">',(allVars.datal.list[i].weak_score.length > 2)?allVars.datal.list[i].weak_score[2].description:'no data available','</p>',
 										'</div>',
 									'</div>',
 								'</div>',
@@ -141,7 +139,6 @@ function displayProfiles(){
 
 
 
->>>>>>> adds clickable code for best_score to profiles.js
 // Single Profile - Edit Inner Page
 var editprofileform = $('#edit-profile-form');
 var btnsaveprofile = $('#btn-save-profile');
@@ -334,7 +331,7 @@ btndeleteok.click(function(){
 
 (function($, window, document, undefined){
 	if (top.location.pathname === '/user/profiles'){
-		//displayProfiles();
+		displayProfiles();
 	};
 
 	//$(document).foundation('abide', 'reflow');

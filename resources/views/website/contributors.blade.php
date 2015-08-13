@@ -54,7 +54,7 @@
                 <nav class="main-menu">
                     <ul class="menu-list">
                         <li><a href="/pre-launch">Home</a></li>
-                        <li><a href="blog.zapzapmath.com" target="_blank">Blog</a></li>
+                        <li><a href="http://blog.zapzapmath.com">Blog</a></li>
                         <li><a href="/jobs">Jobs</a></li>
                     </ul>
                 </nav>
@@ -108,6 +108,24 @@
                                         <hr>
                                         <p class="collab-quote">
                                             "Zap Zap Math is an application that will grow as your child grows."
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="collab-profile-holder">
+                                    <div class="profile-pic-holder">
+                                        <img src="assets/img/contributors/dp/py-teow.jpg" alt="Avatar 3">
+                                    </div>
+                                    <div class="profile-item-group">
+                                        <div class="collab-details">
+                                            <p class="collab-name">Teoh Poh Yew,</p>
+                                            <p class="country-name">Malaysia</p>
+                                            <p class="profile-position">Higher-Order Thinking Expert</p>
+                                        </div>
+                                        <hr>
+                                        <p class="collab-quote">
+                                            "Zap Zap Math develops higher-order thinking skills (HOTS)."
                                         </p>
                                     </div>
                                 </div>

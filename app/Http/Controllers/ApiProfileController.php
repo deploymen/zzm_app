@@ -60,12 +60,15 @@ Class ApiProfileController extends Controller {
 			$sql = "
 				SELECT  *
 					FROM  (
-				        	SELECT p.`id` , gp.`created_at`
+				        	SELECT p.`id` , gp.`created_at` , count(r.`id`) AS `questions_played`
 				        		FROM (`t0111_game_profile` p)
 				        			LEFT JOIN `t0400_game_play` gp ON (gp.`profile_id` = p.`id`)
+                        			LEFT JOIN `t0300_game_result` r ON (gp.`id` = r.`play_id`)
 				        		WHERE p.`user_id` = {$userId}
 				        		AND p.`deleted_at` IS NULL
+                        GROUP BY p.`id`
 				        		ORDER BY gp.`created_at` DESC
+                				
 
 				            )t
 				           GROUP BY `id`
@@ -87,6 +90,7 @@ Class ApiProfileController extends Controller {
 			 			'grade' => $p->grade,
 			 			'city' => $p->city,
 			 			'email' => $p->email,
+			 			'questions_played' => $p->questions_played,
 			 			'nickname1' => $p->nickname1,
 			 			'nickname2' => $p->nickname2,
 			 			'avatar_id' => $p->avatar_id,
@@ -351,7 +355,7 @@ Class ApiProfileController extends Controller {
 				return ResponseHelper::OutputJSON('fail','wrong user id');
 			}	
 			
-			if($count = 1){
+			if($count == 1){
 				return ResponseHelper::OutputJSON('fail','at least once profile in account');
 			}
 

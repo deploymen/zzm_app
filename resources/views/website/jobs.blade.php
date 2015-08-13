@@ -57,7 +57,7 @@ KONAMI CODE MOFO
                 <nav class="main-menu">
                     <ul class="menu-list">
                         <li><a href="/pre-launch">Home</a></li>
-                        <li><a href="blog.zapzapmath.com" target="_blank">Blog</a></li>
+                        <li><a href="http://blog.zapzapmath.com">Blog</a></li>
                         <li><a href="/contributors">Contributors</a></li>
                     </ul>
                 </nav>
