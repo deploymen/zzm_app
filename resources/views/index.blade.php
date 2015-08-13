@@ -88,16 +88,21 @@ KONAMI CODE MOFO
                     <div class="form-inner-wrapper">
                         <h1>Students struggling with math homework? Zap Zap Math can change that!</h1>
                         <!-- <p class="signup-instruct">Sign up to be the first to get a full ZAP ZAP MATH subscription for 1 year worth $99.99</p> -->
-                        <p id="signup-instruct" class="signup-instruct">Be the first in line for our preview release and get tons of goodies for free!</p>
+                        <!-- <p id="signup-instruct" class="signup-instruct">Be the first in line for our preview release and get tons of goodies for free!</p> -->
+                        <p id="signup-instruct" class="signup-instruct">Join our Facebook group and always be the first to test the preview release of Zap Zap Math!</p><br/>
                         <div id="signup-btn-holder" class="signup-btn-holder">
+                            <a href="https://www.facebook.com/groups/916373445085339/" class="btn btn--orange" target="_blank">Join Now!</a>
+                        </div>
+                        <!-- <div id="signup-btn-holder" class="signup-btn-holder">
                             <div id="signup-form2" class="signup-form2">
                                 <form id="signupform2" class="signupform2">
                                     <input id="signup-form-email2" class="signup-form-email2" name="foremail" type="email" placeholder="Email" required>
                                     <p></p>
                                     <input id="email-address-submit2" class="btn btn--orange email-address-submit2" type="submit" value=" Sign Up!" onClick="signup2();"></input>
                                 </form>
-                            </div><!--signup-form-->
-                        </div><!--signup-btn-holder-->
+                            </div>
+                        </div> -->
+                        <!--signup-btn-holder-->
                     </div><!--form-inner-wrapper-->
                 </div>
                 <!-- End Background Elements -->

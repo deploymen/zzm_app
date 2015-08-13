@@ -135,6 +135,8 @@ table tr:nth-of-type(even) {
 	}
 }
 
+
+
 .profile-tooltip {
 	display: none;
 	position: absolute;
@@ -413,7 +415,7 @@ label:hover:before {
 	margin-top: rem(50px) !important;
 	/*width: rem(340px);*/
 	width: rem(310px);
-	height: rem(417px);
+	height: rem(410px);
 	margin-right: rem(10px);
 	margin-left: rem(10px);
 	float: left;
@@ -507,6 +509,12 @@ label:hover:before {
 
 .profile-item-group.no-padding {
 	padding: rem(0px);
+}
+
+.profile-item-group .info-icon {
+	position: absolute;
+	bottom: rem(10px);
+	right: rem(20px);
 }
 
 .profile-info,

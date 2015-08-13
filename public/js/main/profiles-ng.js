@@ -21,7 +21,7 @@ App.controller('ProfileController', function ($scope, profileService){
 
 	promise.then(function(data){
 		$scope.gameprofiles = data['data'].data.list;
-		console.log($scope.gameprofiles);
+		// console.log($scope.gameprofiles);
 	});
 	
 });

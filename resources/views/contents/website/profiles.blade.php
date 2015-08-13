@@ -194,7 +194,13 @@
 							<p class="profile-proficiency">
 								<span class="profile-label bold">Last Played</span>
 							</p>
-							<p class="profile-last-seen">@{{gameprofile.last_played | date:'MM/dd/yyyy @ h:mma'}}</p>
+							<span ng-switch on="gameprofile.last_played">
+								<p class="profile-last-seen" ng-switch-when="null">
+									no record yet
+								</p>
+								<p class="profile-last-seen" ng-switch-default>@{{gameprofile.last_played | date:'MM/dd/yyyy @ h:mma'}}</p>
+								<!-- <p class="profile-last-seen">@{{gameprofile.last_played | date:'MM/dd/yyyy @ h:mma'}}</p> -->
+							</span>
 						</div>
 					</div>
 
@@ -203,7 +209,11 @@
 							<p class="profile-attempts">
 								<span class="profile-label bold">Total Attempts</span>
 							</p>
-							<p class="profile-attempt-number">@{{gameprofile.questions_played}}</p>
+							<span ng-switch on="gameprofile.questions_played">
+								<p class="profile-attempt-number" ng-switch-when="null">0</p>
+								<p class="profile-attempt-number" ng-switch-default>@{{gameprofile.questions_played}}</p>
+								<!-- <p class="profile-attempt-number">@{{gameprofile.questions_played}}</p> -->
+							</span>
 							<a href="javascript:void(0);" title="Proficiency is based on the average score of all games played." class="info-icon">i<span class="profile-tooltip"><p>Last Played shows the last time this child played Zap Zap Math.</p></span></a>
 						</div>
 					</div>
