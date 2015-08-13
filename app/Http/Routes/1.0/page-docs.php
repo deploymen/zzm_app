@@ -76,6 +76,8 @@ Route::group(['prefix' => 'docs'], function(){
 	Route::get('/api.game-play-request-get-p06-104', function(){ return view('contents.docs.api-game-play-request-get-p06-104'); });
 	Route::get('/api.game-play-request-get-p07-114', function(){ return view('contents.docs.api-game-play-request-get-p07-114'); });
 	Route::get('/api.game-play-request-get-p10-105', function(){ return view('contents.docs.api-game-play-request-get-p10-105'); });
+	Route::get('/api.game-play-request-get-p10-123', function(){ return view('contents.docs.api-game-play-request-get-p10-123'); });
+	Route::get('/api.game-play-request-get-p10-131', function(){ return view('contents.docs.api-game-play-request-get-p10-131'); });
 	Route::get('/api.game-play-request-get-p18-129', function(){ return view('contents.docs.api-game-play-request-get-p18-129'); });
 	Route::get('/api.game-play-request-get-p23-185', function(){ return view('contents.docs.api-game-play-request-get-p23-185'); });
 

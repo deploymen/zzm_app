@@ -127,7 +127,7 @@ Class ApiProfileController extends Controller {
 				 			'play_id'=>$w->play_id,
 				 			]);
 				 	}
-		}
+			}
 
 			return ResponseHelper::OutputJSON('success', '', ['list' => $profileInfo]);
 

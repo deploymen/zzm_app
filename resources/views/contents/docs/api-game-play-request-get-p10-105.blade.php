@@ -35,6 +35,7 @@
         <div id="myTabContent" class="tab-content">
             <div id="descriptions" class="tab-pane fade in active">
                 <p>
+                   <p> Tap Ten <p>
 
                 </p>
             </div>
