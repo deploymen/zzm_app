@@ -37,8 +37,13 @@
 </div> -->
 
 
+<<<<<<< HEAD
 <section ng-app="zapzapProfile" ng-controller="ProfileController" data-ng-init="init()">
 <!-- <section> -->
+=======
+<!-- <section ng-app="zapzapProfile" ng-controller="MainController" data-ng-init="init()"> -->
+<section>
+>>>>>>> adds clickable code for best_score to profiles.js
 	<div class="row">
 		<div class="indicator-holder">
 			<span class="indicator-bar"></span>
@@ -161,6 +166,7 @@
 	<div class="row">
 		<div id="profile-list" class="cf">
 			<!-- <div ng-repeat=""></div> -->
+<<<<<<< HEAD
 			<div class="profile-item" ng-repeat="gameprofile in gameprofiles">
 				<section class="profile-info">
 					<div class="profile-item-group small-12 columns">
@@ -222,6 +228,10 @@
 					<a ng-href="/user/profiles/@{{gameprofile.id}}/edit" class="btn-profile-edit">Edit</a>
 				</section>
 			</div>
+=======
+		</div>
+	</div>
+>>>>>>> adds clickable code for best_score to profiles.js
 
 			<div class="profile-item add-button">
 				<section class="profile-info">
