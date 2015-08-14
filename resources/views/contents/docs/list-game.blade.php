@@ -180,8 +180,22 @@
                     <td>11.</td>
                     <td>GET </td>
                     <td>/api/game/play/105/request </td>
-                    <td>p10</td>
+                    <td>p10 (Tap Ten)</td>
                     <td align="center"><a href="/docs/api.game-play-request-get-p10-105" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                </tr>
+                 <tr>
+                    <td>11.</td>
+                    <td>GET </td>
+                    <td>/api/game/play/123/request </td>
+                    <td>p10 (Tap Hundred)</td>
+                    <td align="center"><a href="/docs/api.game-play-request-get-p10-123" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                </tr>
+                 <tr>
+                    <td>11.</td>
+                    <td>GET </td>
+                    <td>/api/game/play/131/request </td>
+                    <td>p10 (Tap Thousand)</td>
+                    <td align="center"><a href="/docs/api.game-play-request-get-p10-131" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
                  <tr>
                     <td>12.</td>

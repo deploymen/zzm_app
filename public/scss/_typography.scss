@@ -14,6 +14,11 @@ p, label {
 	}*/
 }
 
+h2 {
+	color: lighten($black, 50%);
+	font-family: 'museo-sans', sans-serif;
+}
+
 h6 {
 	color: lighten($black, 30%);
 	text-transform: uppercase;
@@ -75,6 +80,8 @@ a:active {
 	font-weight: normal;
 	text-align: center;
 	cursor: pointer;
+	font-size: rem(20px);
+	line-height: rem(23px);
 }
 
 .info-icon:hover,
@@ -93,6 +100,8 @@ a:active {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
+
 
 
 /** Account Settings STYLES **/
@@ -185,29 +194,39 @@ button.wide,
 }
 
 /** PROFILES STYLES **/
-.profile-name {
-	color: lighten($black, 30%);
+.profile-nickname {
+	color: lighten($black, 40%);
 	font-family: 'museo-sans', sans-serif;
 	font-size: rem(19px);
 	font-weight: bold;
 	margin-top: rem(-10px);
-	text-align: center;
+	margin-bottom: rem(5px);
+	/*text-align: center;*/
 }
 
-.profile-nickname {
+.profile-name {
 	font-size: rem(28px);
 	color: lighten($black, 60%);
 	font-family: 'museo-sans', sans-serif;
 	font-weight: lighter;
 	margin-bottom: rem(0px);
-	text-align: center;
+	padding-top: rem(25px);
+	text-transform: capitalize;
+}
+
+.profile-school-grade {
+	color: lighten($black, 40%);
+	font-family: 'museo-sans', sans-serif;
+	font-size: rem(19px);
+	font-weight: bold;
+	margin-bottom: rem(0px);
 }
 
 .nickname-middle {
 	margin-top: rem(40px);
 
 	.profile-nickname {
-		margin-left: rem(-45px); 
+		/*margin-left: rem(-45px);*/
 	}
 }
 
@@ -222,13 +241,29 @@ button.wide,
 	font-size: rem(14px);
 }
 
+.profile-code .user-id {
+	color: lighten($black, 60%);
+}
+
+.profile-label {
+	text-transform: uppercase;
+	font-weight: bold;
+}
+
 .profile-email {
 	font-style: italic;
 }
 
-.profile-school-name {
+.profile-school-name,
+.profile-last-seen,
+.results-table-name {
 	color: lighten($black, 60%);
-	font-size: rem(18px);
+	font-family: 'museo-sans', sans-serif;
+	font-size: rem(20px);
+}
+
+.profile-school-name,
+.profile-last-seen{
 	text-transform: uppercase;
 	margin-bottom: rem(0px);
 }
@@ -241,6 +276,16 @@ button.wide,
 	color: $curious-blue;
 	font-size: rem(40px);
 	/*margin-bottom: rem(0px);*/
+}
+
+.profile-attempts {
+	margin-bottom: rem(0px);
+}
+
+.profile-attempt-number {
+	font-size: rem(28px);
+	color: lighten($black, 60%);
+	margin-bottom: rem(0px);
 }
 
 .profile-subject-name {
@@ -272,7 +317,17 @@ button.wide,
 }
 
 .profile-upgrade-cta a {
+	padding: 10px 20px;
+	text-transform: uppercase;
+	font-size: rem(16px);
+	font-family: 'museo-sans', sans-serif;
+	margin-bottom: rem(0px);
+}
 
+/** Diffiulty Meter Styles **/
+.difficuly-label-list li {
+	text-align: center;
+	color: lighten($black, 50%);
 }
 
 /** Results Styles **/
@@ -280,11 +335,11 @@ button.wide,
 	color: lighten($black, 40%);
 }
 
-.results-table-name {
+/*.results-table-name {
 	color: $curious-blue;
 	font-family: 'museo-sans', sans-serif;
 	font-size: rem(16px);
-}
+}*/
 
 
 .result-table-desc p {
@@ -308,7 +363,7 @@ button.wide,
 }
 
 .table-label-cell .info-icon {
-	font-size: rem(16px);
+	font-size: rem(20px);
 	line-height: rem(23px);
 }
 

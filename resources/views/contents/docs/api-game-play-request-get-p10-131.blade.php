@@ -23,7 +23,7 @@
 
 <div class="row">
     <div class="col-lg-8">
-        <h3>GET  /api/game/play/105/request</h3>
+        <h3>GET  /api/game/play/131/request</h3>
         <ul id="myTab" class="nav nav-tabs">
             <li class="active"><a href="#descriptions" data-toggle="tab">Explain</a>
             </li>
@@ -35,8 +35,7 @@
         <div id="myTabContent" class="tab-content">
             <div id="descriptions" class="tab-pane fade in active">
                 <p>
-                   <p> Tap Ten <p>
-
+                   <p> Tap Thousand <p>
                 </p>
             </div>
             <div id="request" class="tab-pane fade">
@@ -55,7 +54,7 @@
                 </table>
               
                 <div style="margin-top:50px; height:500px; overflow:auto; font-size:12px">
-<pre class="prettyprint">GET http://staging.zapzapmath.com/api/game/play/105/request HTTP/1.1
+<pre class="prettyprint">GET http://staging.zapzapmath.com/api/game/play/131/request HTTP/1.1
 Host: staging.zapzapmath.com
 X-game-code: 0000015k
 </pre>
@@ -89,38 +88,34 @@ X-game-code: 0000015k
   "status": "success",
   "data": {
     "planet": {
-      "id": 105,
-      "name": "Tap Tens",
-      "description": "How many ones are in a ten?",
+      "id": 131,
+      "name": "Tap Thousand",
+      "description": "Hundreds, tens, and ones",
       "question_count": 10,
-      "badges": null
+      "badges": {
+        "speed": "1",
+        "accuracy": "1",
+        "score_mul_base": "1",
+        "score_mul_accuracy": "1",
+        "score_mul_speed": "1"
+      }
     },
     "status": {
-      "star": 2,
-      "difficulty": 3,
-      "top_score": 100
+      "star": 0,
+      "difficulty": 1,
+      "top_score": 0
     },
     "planet_top_score": [
-      {
-        "nickname1": "Mozviss",
-        "nickname2": "Oznin",
-        "avatar": "default.jpg",
-        "score": 100
-      },
-      {
-        "nickname1": "Mozviss",
-        "nickname2": "Oznin",
-        "avatar": "default.jpg",
-        "score": 1
-      }
+      
     ],
     "questions": [
       {
-        "id": 210036,
-        "question": "16",
-        "option_type": "ten",
-        "option_generate": 3,
-        "difficulty": 3,
+        "id": 230206,
+        "question": "406",
+        "answer": 406,
+        "option_type": "hundred",
+        "option_generate": 5,
+        "difficulty": 1,
         "subject": [
           {
             "subject_code": "0",
@@ -130,11 +125,12 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": 210024,
-        "question": "4",
-        "option_type": "ten",
-        "option_generate": 3,
-        "difficulty": 3,
+        "id": 230241,
+        "question": "441",
+        "answer": 441,
+        "option_type": "hundred",
+        "option_generate": 5,
+        "difficulty": 1,
         "subject": [
           {
             "subject_code": "0",
@@ -144,11 +140,12 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": 210029,
-        "question": "9",
-        "option_type": "ten",
-        "option_generate": 3,
-        "difficulty": 3,
+        "id": 230014,
+        "question": "214",
+        "answer": 214,
+        "option_type": "hundred",
+        "option_generate": 5,
+        "difficulty": 1,
         "subject": [
           {
             "subject_code": "0",
@@ -158,11 +155,12 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": 210032,
-        "question": "12",
-        "option_type": "ten",
-        "option_generate": 3,
-        "difficulty": 3,
+        "id": 230026,
+        "question": "226",
+        "answer": 226,
+        "option_type": "hundred",
+        "option_generate": 5,
+        "difficulty": 1,
         "subject": [
           {
             "subject_code": "0",
@@ -172,11 +170,12 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": 210021,
-        "question": "1",
-        "option_type": "ten",
-        "option_generate": 3,
-        "difficulty": 3,
+        "id": 230220,
+        "question": "420",
+        "answer": 420,
+        "option_type": "hundred",
+        "option_generate": 5,
+        "difficulty": 1,
         "subject": [
           {
             "subject_code": "0",
@@ -186,11 +185,12 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": 210026,
-        "question": "6",
-        "option_type": "ten",
-        "option_generate": 3,
-        "difficulty": 3,
+        "id": 230120,
+        "question": "320",
+        "answer": 320,
+        "option_type": "hundred",
+        "option_generate": 5,
+        "difficulty": 1,
         "subject": [
           {
             "subject_code": "0",
@@ -200,11 +200,12 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": 210030,
-        "question": "10",
-        "option_type": "ten",
-        "option_generate": 3,
-        "difficulty": 3,
+        "id": 230046,
+        "question": "246",
+        "answer": 246,
+        "option_type": "hundred",
+        "option_generate": 5,
+        "difficulty": 1,
         "subject": [
           {
             "subject_code": "0",
@@ -214,11 +215,12 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": 210031,
-        "question": "11",
-        "option_type": "ten",
-        "option_generate": 3,
-        "difficulty": 3,
+        "id": 230167,
+        "question": "367",
+        "answer": 367,
+        "option_type": "hundred",
+        "option_generate": 5,
+        "difficulty": 1,
         "subject": [
           {
             "subject_code": "0",
@@ -228,11 +230,12 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": 210027,
-        "question": "7",
-        "option_type": "ten",
-        "option_generate": 3,
-        "difficulty": 3,
+        "id": 230285,
+        "question": "485",
+        "answer": 485,
+        "option_type": "hundred",
+        "option_generate": 5,
+        "difficulty": 1,
         "subject": [
           {
             "subject_code": "0",
@@ -242,11 +245,12 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": 210022,
-        "question": "2",
-        "option_type": "ten",
-        "option_generate": 3,
-        "difficulty": 3,
+        "id": 230174,
+        "question": "374",
+        "answer": 374,
+        "option_type": "hundred",
+        "option_generate": 5,
+        "difficulty": 1,
         "subject": [
           {
             "subject_code": "0",

@@ -91,7 +91,7 @@ KONAMI CODE MOFO
                         <!-- <p id="signup-instruct" class="signup-instruct">Be the first in line for our preview release and get tons of goodies for free!</p> -->
                         <p id="signup-instruct" class="signup-instruct">Join our Facebook group and always be the first to test the preview release of Zap Zap Math!</p><br/>
                         <div id="signup-btn-holder" class="signup-btn-holder">
-                            <a href="http://bit.ly/zapzapmathfb" class="btn btn--orange" target="_blank">Join Now!</a>
+                            <a href="https://www.facebook.com/groups/916373445085339/" class="btn btn--orange" target="_blank">Join Now!</a>
                         </div>
                         <!-- <div id="signup-btn-holder" class="signup-btn-holder">
                             <div id="signup-form2" class="signup-form2">
