@@ -2136,7 +2136,8 @@ h5 {
 }
 .btn {
     font-family: 'museo-sans', sans-serif;
-    font-weight: 300
+    font-weight: 300;
+    text-decoration: none;
 }
 .menu-btn {
     color: #FFFFFF;
@@ -5966,6 +5967,12 @@ Copyright (c) 2014 Daniel Eden
         width: 70%;
         margin-top: 35%;
     }
+
+    .btn {
+        display: block;
+        width: 60%;
+        margin: 0 auto;
+    }
 }
 @media (min-width: 930px) {
     .form-inner-wrapper {
@@ -5984,6 +5991,10 @@ Copyright (c) 2014 Daniel Eden
 @media (max-width: 569px) {
     .main-banner-2 .form-inner-wrapper {
         margin-top: 55%;
+    }
+
+    .btn {
+        display: block;
     }
 }
 
@@ -6010,7 +6021,8 @@ Copyright (c) 2014 Daniel Eden
 @media (min-width: 570px) {
     .signup-btn-holder {
         /*width: 20.125rem;*/
-        width: 60%;
+       /* width: 60%;*/
+       width: 100%;
     }
 }
 .signup-info {
@@ -6625,7 +6637,7 @@ footer {
 /** Contributors List Syles on main page **/
 
 .contributors-list {
-    padding-top: 70px;
+    /*padding-top: 70px;*/
 }
 
 .contributors-list li {
