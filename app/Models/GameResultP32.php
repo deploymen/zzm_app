@@ -3,7 +3,7 @@
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class GameResultP23 extends Eloquent {
+class GameResultP32 extends Eloquent {
 
 	public $table = 't0332_game_result_p32';
 	protected $primaryKey = 'id';

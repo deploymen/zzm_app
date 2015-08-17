@@ -110,70 +110,70 @@
                     <td>1.</td>
                     <td>GET </td>
                     <td>/api/game/play/150/request </td>
-                    <td>p01</td>
+                    <td>p01 (Sushi Star: Sushimetry 3)</td>
                     <td align="center"><a href="/docs/api.game-play-request-get-p01-150" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr> 
                 <tr>
                     <td>2.</td>
                     <td>GET </td>
                     <td>/api/game/play/103/request </td>
-                    <td>p02</td>
+                    <td>p02 (Space Taxi)</td>
                     <td align="center"><a href="/docs/api.game-play-request-get-p02-103" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
                 <tr>
                     <td>3.</td>
                     <td>GET </td>
                     <td>/api/game/play/106/request </td>
-                    <td>p02</td>
+                    <td>p02 (Space Taxi 2)</td>
                     <td align="center"><a href="/docs/api.game-play-request-get-p02-106" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
                 <tr>
                     <td>4.</td>
                     <td>GET </td>
                     <td>/api/game/play/115/request </td>
-                    <td>p02</td>
+                    <td>p02 (Space Taxi 3)</td>
                     <td align="center"><a href="/docs/api.game-play-request-get-p02-115" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
                  <tr>
                     <td>5.</td>
                     <td>GET </td>
                     <td>/api/game/play/166/request </td>
-                    <td>p03-t</td>
+                    <td>p03-t (The Big Showdown)</td>
                     <td align="center"><a href="/docs/api.game-play-request-get-p03-166" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
               <tr>
                     <td>6.</td>
                     <td>GET </td>
                     <td>/api/game/play/102/request </td>
-                    <td>p03-t</td>
+                    <td>p03-t (The 'Correct' Collector)</td>
                     <td align="center"><a href="/docs/api.game-play-request-get-p03-102" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
                  <tr>
                     <td>7.</td>
                     <td>GET </td>
                     <td>/api/game/play/141/request </td>
-                    <td>p03-i</td>
+                    <td>p03-i (The 'Correct' Collector 2)</td>
                     <td align="center"><a href="/docs/api.game-play-request-get-p03-141" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
                 <tr>
                     <td>8.</td>
                     <td>GET </td>
                     <td>/api/game/play/155/request </td>
-                    <td>p06</td>
+                    <td>p06 (Word Games 10)</td>
                     <td align="center"><a href="/docs/api.game-play-request-get-p06-155" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
                  <tr>
                     <td>9.</td>
                     <td>GET </td>
                     <td>/api/game/play/104/request </td>
-                    <td>p06</td>
+                    <td>p06 (Word Games)</td>
                     <td align="center"><a href="/docs/api.game-play-request-get-p06-104" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
                 <tr>
                     <td>10.</td>
                     <td>GET </td>
                     <td>/api/game/play/114/request </td>
-                    <td>p07</td>
+                    <td>p07 (More or Less?)</td>
                     <td align="center"><a href="/docs/api.game-play-request-get-p07-114" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
                  <tr>
@@ -201,15 +201,22 @@
                     <td>12.</td>
                     <td>GET </td>
                     <td>/api/game/play/129/request </td>
-                    <td>p18</td>
+                    <td>p18 (Engine Engine Number Line)</td>
                     <td align="center"><a href="/docs/api.game-play-request-get-p18-129" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
                 <tr>
                     <td>13.</td>
                     <td>GET </td>
                     <td>/api/game/play/185/request </td>
-                    <td>p23</td>
+                    <td>p23 (Angle Align)</td>
                     <td align="center"><a href="/docs/api.game-play-request-get-p23-185" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                </tr>
+                 <tr>
+                    <td>14.</td>
+                    <td>GET </td>
+                    <td>/api/game/play/225/request </td>
+                    <td>p32 (Coordinate Game)</td>
+                    <td align="center"><a href="/docs/api.game-play-request-get-p32-225" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
             </tbody>
         </table>
@@ -282,6 +289,13 @@
                     <td>/api/game/play/185/result </td>
                     <td>p23</td>
                     <td align="center"><a href="/docs/api.game-play-result-post-p23" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                </tr>
+                 <tr>
+                    <td>10.</td>
+                    <td>POST</td>
+                    <td>/api/game/play/225/result </td>
+                    <td>p32</td>
+                    <td align="center"><a href="/docs/api.game-play-result-post-p32" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
 
             </tbody>

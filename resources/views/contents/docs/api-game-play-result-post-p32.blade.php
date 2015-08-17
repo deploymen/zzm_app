@@ -23,7 +23,7 @@
 
 <div class="row">
     <div class="col-lg-8">
-        <h3>GET  /api/game/play/225/request</h3>
+        <h3>POST  /api/game/play/225/result</h3>
         <ul id="myTab" class="nav nav-tabs">
             <li class="active"><a href="#descriptions" data-toggle="tab">Explain</a>
             </li>
@@ -52,11 +52,43 @@
                         <td></td>
                     </tr>
                 </table>
-              
+                <p>INPUT</p>
+                <table class="table table-striped table-bordered table-hover">
+                    <tr>
+                        <th style="width:175px;">Key</th>
+                        <th style="width:500px;">Description</th>
+                        <th style="width:360px;">Example</th>
+                    </tr>
+                    <tr>
+                        <td>game_result</td>
+                        <td></td>
+                        <td>
+                        {"score":"1","status":"pass","badges":{"speed":"1","accuracy":"1"},"answers":[{"question_id":215329,"answer_x":"2","answer_y":"2","correct":1},{"question_id":215354,"answer_x":"2","answer_y":"2","correct":1},{"question_id":215354,"answer_x":"2","answer_y":"2","correct":1},{"question_id":215354,"answer_x":"2","answer_y":"2","correct":1},{"question_id":215354,"answer_x":"2","answer_y":"2","correct":1},{"question_id":215354,"answer_x":"2","answer_y":"2","correct":1},{"question_id":215354,"answer_x":"2","answer_y":"2","correct":1},{"question_id":215354,"answer_x":"2","answer_y":"2","correct":1},{"question_id":215354,"answer_x":"2","answer_y":"2","correct":1},{"question_id":215354,"answer_x":"2","answer_y":"2","correct":1}]}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>random</td>
+                        <td></td>
+                        <td>ak55a4w78vx4a12c</td>
+                    </tr>
+                    <tr>
+                        <td>hash</td>
+                        <td>hash = sha1(game_result + random + secret_key)</td>
+                        <td>
+                            <p>= sha1("{something}" + "123" + "d60dK53A40I6HBTBNVoC") </p>
+                            <p> = sha1("{something}123d60dK53A40I6HBTBNVoC") </p>
+                            <p> = ce855ac541231884f284e1e0994ef0aa590326a0 </p>
+                        </td>
+                    </tr>
+                </table>
                 <div style="margin-top:50px; height:500px; overflow:auto; font-size:12px">
-<pre class="prettyprint">GET http://staging.zapzapmath.com/api/game/play/225/request HTTP/1.1
+<pre class="prettyprint">
+POST http://staging.zapzapmath.com/api/game/play/225/result HTTP/1.1
 Host: staging.zapzapmath.com
-X-game-code: 0000015k
+X-game-code: 00000015k
+Content-Type: application/x-www-form-urlencoded
+
+random=ak55a4w78vx4a12cs&game_result=%7B%22score%22%3A%221%22%2C%22status%22%3A%22pass%22%2C%22badges%22%3A%7B%22speed%22%3A%221%22%2C%22accuracy%22%3A%221%22%7D%2C%22answers%22%3A%5B%7B%22question_id%22%3A215329%2C%22answer_x%22%3A%222%22%2C%22answer_y%22%3A%222%22%2C%22correct%22%3A1%7D%2C%7B%22question_id%22%3A215354%2C%22answer_x%22%3A%222%22%2C%22answer_y%22%3A%222%22%2C%22correct%22%3A1%7D%2C%7B%22question_id%22%3A215354%2C%22answer_x%22%3A%222%22%2C%22answer_y%22%3A%222%22%2C%22correct%22%3A1%7D%2C%7B%22question_id%22%3A215354%2C%22answer_x%22%3A%222%22%2C%22answer_y%22%3A%222%22%2C%22correct%22%3A1%7D%2C%7B%22question_id%22%3A215354%2C%22answer_x%22%3A%222%22%2C%22answer_y%22%3A%222%22%2C%22correct%22%3A1%7D%2C%7B%22question_id%22%3A215354%2C%22answer_x%22%3A%222%22%2C%22answer_y%22%3A%222%22%2C%22correct%22%3A1%7D%2C%7B%22question_id%22%3A215354%2C%22answer_x%22%3A%222%22%2C%22answer_y%22%3A%222%22%2C%22correct%22%3A1%7D%2C%7B%22question_id%22%3A215354%2C%22answer_x%22%3A%222%22%2C%22answer_y%22%3A%222%22%2C%22correct%22%3A1%7D%2C%7B%22question_id%22%3A215354%2C%22answer_x%22%3A%222%22%2C%22answer_y%22%3A%222%22%2C%22correct%22%3A1%7D%2C%7B%22question_id%22%3A215354%2C%22answer_x%22%3A%222%22%2C%22answer_y%22%3A%222%22%2C%22correct%22%3A1%7D%5D%7D&hash=e26eb5beea77788a09f20418f69cc7a554289435
 </pre>
                 </div>
             </div>
@@ -85,296 +117,7 @@ X-game-code: 0000015k
                 </table>
 <pre class="prettyprint">
 {
-  "status": "success",
-  "data": {
-    "planet": {
-      "id": 225,
-      "name": "calculator instructions 3",
-      "description": "calculator instructions 3",
-      "question_count": 10,
-      "badges": {
-        "speed": "1",
-        "accuracy": "1",
-        "score_mul_base": "1",
-        "score_mul_accuracy": "1",
-        "score_mul_speed": "1"
-      }
-    },
-    "status": {
-      "star": 1,
-      "difficulty": 2,
-      "top_score": 1
-    },
-    "planet_top_score": [
-      {
-        "nickname1": "Abscissa",
-        "nickname2": "Alpha",
-        "avatar": "default.jpg",
-        "score": 8375
-      }
-    "questions": [
-      {
-        "id": 215329,
-        "question": "(9, 6)",
-        "answer_x": 9,
-        "answer_y": 6,
-        "origin_x": 0,
-        "origin_y": 0,
-        "diff_x": 1,
-        "diff_y": 1,
-        "initial_x": 0,
-        "initial_y": 0,
-        "planet_1": "",
-        "planet_1_x": 0,
-        "planet_1_y": 0,
-        "planet_2": "",
-        "planet_2_x": 0,
-        "planet_2_y": 0,
-        "difficulty": 2,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": 215354,
-        "question": "(7, 4)",
-        "answer_x": 7,
-        "answer_y": 4,
-        "origin_x": 0,
-        "origin_y": 0,
-        "diff_x": 1,
-        "diff_y": 1,
-        "initial_x": 0,
-        "initial_y": 0,
-        "planet_1": "",
-        "planet_1_x": 0,
-        "planet_1_y": 0,
-        "planet_2": "",
-        "planet_2_x": 0,
-        "planet_2_y": 0,
-        "difficulty": 2,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": 215254,
-        "question": "(2, 4)",
-        "answer_x": 2,
-        "answer_y": 4,
-        "origin_x": 0,
-        "origin_y": 0,
-        "diff_x": 1,
-        "diff_y": 1,
-        "initial_x": 0,
-        "initial_y": 0,
-        "planet_1": "",
-        "planet_1_x": 0,
-        "planet_1_y": 0,
-        "planet_2": "",
-        "planet_2_x": 0,
-        "planet_2_y": 0,
-        "difficulty": 2,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": 215270,
-        "question": "(10, 3)",
-        "answer_x": 10,
-        "answer_y": 3,
-        "origin_x": 0,
-        "origin_y": 0,
-        "diff_x": 1,
-        "diff_y": 1,
-        "initial_x": 0,
-        "initial_y": 0,
-        "planet_1": "",
-        "planet_1_x": 0,
-        "planet_1_y": 0,
-        "planet_2": "",
-        "planet_2_x": 0,
-        "planet_2_y": 0,
-        "difficulty": 2,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": 215357,
-        "question": "(7, 7)",
-        "answer_x": 7,
-        "answer_y": 7,
-        "origin_x": 0,
-        "origin_y": 0,
-        "diff_x": 1,
-        "diff_y": 1,
-        "initial_x": 0,
-        "initial_y": 0,
-        "planet_1": "",
-        "planet_1_x": 0,
-        "planet_1_y": 0,
-        "planet_2": "",
-        "planet_2_x": 0,
-        "planet_2_y": 0,
-        "difficulty": 2,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": 215396,
-        "question": "(9, 6)",
-        "answer_x": 9,
-        "answer_y": 6,
-        "origin_x": 0,
-        "origin_y": 0,
-        "diff_x": 1,
-        "diff_y": 1,
-        "initial_x": 0,
-        "initial_y": 0,
-        "planet_1": "",
-        "planet_1_x": 0,
-        "planet_1_y": 0,
-        "planet_2": "",
-        "planet_2_x": 0,
-        "planet_2_y": 0,
-        "difficulty": 2,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": 215232,
-        "question": "(1, 2)",
-        "answer_x": 1,
-        "answer_y": 2,
-        "origin_x": 0,
-        "origin_y": 0,
-        "diff_x": 1,
-        "diff_y": 1,
-        "initial_x": 0,
-        "initial_y": 0,
-        "planet_1": "",
-        "planet_1_x": 0,
-        "planet_1_y": 0,
-        "planet_2": "",
-        "planet_2_x": 0,
-        "planet_2_y": 0,
-        "difficulty": 2,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": 215311,
-        "question": "(5, 1)",
-        "answer_x": 5,
-        "answer_y": 1,
-        "origin_x": 0,
-        "origin_y": 0,
-        "diff_x": 1,
-        "diff_y": 1,
-        "initial_x": 0,
-        "initial_y": 0,
-        "planet_1": "",
-        "planet_1_x": 0,
-        "planet_1_y": 0,
-        "planet_2": "",
-        "planet_2_x": 0,
-        "planet_2_y": 0,
-        "difficulty": 2,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": 215389,
-        "question": "(9, 9)",
-        "answer_x": 9,
-        "answer_y": 9,
-        "origin_x": 0,
-        "origin_y": 0,
-        "diff_x": 1,
-        "diff_y": 1,
-        "initial_x": 0,
-        "initial_y": 0,
-        "planet_1": "",
-        "planet_1_x": 0,
-        "planet_1_y": 0,
-        "planet_2": "",
-        "planet_2_x": 0,
-        "planet_2_y": 0,
-        "difficulty": 2,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": 215226,
-        "question": "(6, 1)",
-        "answer_x": 6,
-        "answer_y": 1,
-        "origin_x": 0,
-        "origin_y": 0,
-        "diff_x": 1,
-        "diff_y": 1,
-        "initial_x": 0,
-        "initial_y": 0,
-        "planet_1": "",
-        "planet_1_x": 0,
-        "planet_1_y": 0,
-        "planet_2": "",
-        "planet_2_x": 0,
-        "planet_2_y": 0,
-        "difficulty": 2,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      }
-    ]
-  }
+  "status": "success"
 }
 </pre>
             </div>
@@ -383,5 +126,6 @@ X-game-code: 0000015k
     </div>
     <!--END ROW -->
 </div>
+
 
 @stop
