@@ -91,7 +91,6 @@ X-game-code: 0000015k
       "id": 103,
       "name": "Space Taxi",
       "description": "What + What = What??",
-      "parameters": null,
       "question_count": 5,
       "badges": {
         "speed": "2",
@@ -102,8 +101,8 @@ X-game-code: 0000015k
       }
     },
     "status": {
-      "star": "1",
-      "difficulty": 2,
+      "star": 2,
+      "difficulty": 3,
       "top_score": 108
     },
     "planet_top_score": [
@@ -112,20 +111,26 @@ X-game-code: 0000015k
         "nickname2": "Oznin",
         "avatar": "default.jpg",
         "score": 108
+      },
+      {
+        "nickname1": "Mozviss",
+        "nickname2": "Oznin",
+        "avatar": "default.jpg",
+        "score": 1
       }
     ],
     "questions": [
       {
-        "id": 1060,
+        "id": 1111,
         "question": "9",
-        "answer_option_1": "3",
-        "answer_option_2": "6",
-        "answer_option_3": "1",
+        "answer_option_1": "2",
+        "answer_option_2": "7",
+        "answer_option_3": "3",
         "answer_option_4": "4",
-        "answer_option_5": "",
+        "answer_option_5": "4",
         "answer_option_6": "",
         "fixed_num": 0,
-        "difficulty": 2,
+        "difficulty": 3,
         "subject": [
           {
             "subject_code": "0",
@@ -135,16 +140,16 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": 1045,
-        "question": "4",
+        "id": 1071,
+        "question": "9",
         "answer_option_1": "2",
         "answer_option_2": "2",
-        "answer_option_3": "3",
+        "answer_option_3": "5",
         "answer_option_4": "3",
         "answer_option_5": "",
         "answer_option_6": "",
         "fixed_num": 0,
-        "difficulty": 2,
+        "difficulty": 3,
         "subject": [
           {
             "subject_code": "0",
@@ -154,54 +159,54 @@ X-game-code: 0000015k
         ]
       },
       {
-        "id": 1034,
+        "id": 1116,
+        "question": "10",
+        "answer_option_1": "3",
+        "answer_option_2": "7",
+        "answer_option_3": "2",
+        "answer_option_4": "6",
+        "answer_option_5": "7",
+        "answer_option_6": "",
+        "fixed_num": 0,
+        "difficulty": 3,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 1118,
+        "question": "10",
+        "answer_option_1": "5",
+        "answer_option_2": "5",
+        "answer_option_3": "4",
+        "answer_option_4": "8",
+        "answer_option_5": "9",
+        "answer_option_6": "",
+        "fixed_num": 0,
+        "difficulty": 3,
+        "subject": [
+          {
+            "subject_code": "0",
+            "name": null,
+            "description": null
+          }
+        ]
+      },
+      {
+        "id": 1085,
         "question": "7",
         "answer_option_1": "1",
-        "answer_option_2": "2",
-        "answer_option_3": "4",
-        "answer_option_4": "4",
-        "answer_option_5": "",
-        "answer_option_6": "",
-        "fixed_num": 0,
-        "difficulty": 2,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": 1038,
-        "question": "8",
-        "answer_option_1": "1",
-        "answer_option_2": "2",
+        "answer_option_2": "1",
         "answer_option_3": "5",
-        "answer_option_4": "4",
-        "answer_option_5": "",
-        "answer_option_6": "",
-        "fixed_num": 0,
-        "difficulty": 2,
-        "subject": [
-          {
-            "subject_code": "0",
-            "name": null,
-            "description": null
-          }
-        ]
-      },
-      {
-        "id": 1062,
-        "question": "10",
-        "answer_option_1": "1",
-        "answer_option_2": "9",
-        "answer_option_3": "2",
         "answer_option_4": "3",
-        "answer_option_5": "",
+        "answer_option_5": "8",
         "answer_option_6": "",
         "fixed_num": 0,
-        "difficulty": 2,
+        "difficulty": 3,
         "subject": [
           {
             "subject_code": "0",

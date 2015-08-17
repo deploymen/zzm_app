@@ -61,7 +61,7 @@ function eggyolk(){
 var ufo = document.getElementById('spacecraft');
 TweenLite.set(ufo, {x:-30, y:300});
 var ufoFlight = TweenMax.to(ufo, 4, { bezier:{
-			values: [{x:300, y:250}, {x:600, y:80}, {x:2000, y:550}],
+			values: [{x:300, y:250}, {x:600, y:80}, {x:3000, y:550}],
 			autoRotate: true },
 			delay: 2,
 			scale: 0.5,

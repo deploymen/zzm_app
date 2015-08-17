@@ -14,6 +14,11 @@ p, label {
 	}*/
 }
 
+h2 {
+	color: lighten($black, 50%);
+	font-family: 'museo-sans', sans-serif;
+}
+
 h6 {
 	color: lighten($black, 30%);
 	text-transform: uppercase;
@@ -75,6 +80,14 @@ a:active {
 	font-weight: normal;
 	text-align: center;
 	cursor: pointer;
+	font-size: rem(20px);
+	line-height: rem(23px);
+}
+
+.info-icon:hover,
+.info-icon:focus {
+	color: $white;
+	text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.55);
 }
 
 .info-icon.has-tip:hover {
@@ -87,6 +100,8 @@ a:active {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
+
 
 
 /** Account Settings STYLES **/
@@ -137,6 +152,24 @@ a:active {
 	color: lighten($black, 35%);
 }
 
+.incorrect-details {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1;
+	text-align: center;
+	background-color: $lightning-yellow;
+
+	p {
+		font-family: 'proxima-nova-soft', sans-serif;
+		font-weight: bold;
+		margin: rem(0px);
+		line-height: rem(45px);
+	}
+}
+
+
 button,
 .button,
 button.wide,
@@ -161,29 +194,39 @@ button.wide,
 }
 
 /** PROFILES STYLES **/
-.profile-name {
-	color: lighten($black, 30%);
+.profile-nickname {
+	color: lighten($black, 40%);
 	font-family: 'museo-sans', sans-serif;
 	font-size: rem(19px);
 	font-weight: bold;
 	margin-top: rem(-10px);
-	text-align: center;
+	margin-bottom: rem(5px);
+	/*text-align: center;*/
 }
 
-.profile-nickname {
+.profile-name {
 	font-size: rem(28px);
 	color: lighten($black, 60%);
 	font-family: 'museo-sans', sans-serif;
 	font-weight: lighter;
 	margin-bottom: rem(0px);
-	text-align: center;
+	padding-top: rem(25px);
+	text-transform: capitalize;
+}
+
+.profile-school-grade {
+	color: lighten($black, 40%);
+	font-family: 'museo-sans', sans-serif;
+	font-size: rem(19px);
+	font-weight: bold;
+	margin-bottom: rem(0px);
 }
 
 .nickname-middle {
 	margin-top: rem(40px);
 
 	.profile-nickname {
-		margin-left: rem(-45px); 
+		/*margin-left: rem(-45px);*/
 	}
 }
 
@@ -198,13 +241,29 @@ button.wide,
 	font-size: rem(14px);
 }
 
+.profile-code .user-id {
+	color: lighten($black, 60%);
+}
+
+.profile-label {
+	text-transform: uppercase;
+	font-weight: bold;
+}
+
 .profile-email {
 	font-style: italic;
 }
 
-.profile-school-name {
+.profile-school-name,
+.profile-last-seen,
+.results-table-name {
 	color: lighten($black, 60%);
-	font-size: rem(18px);
+	font-family: 'museo-sans', sans-serif;
+	font-size: rem(20px);
+}
+
+.profile-school-name,
+.profile-last-seen{
 	text-transform: uppercase;
 	margin-bottom: rem(0px);
 }
@@ -217,6 +276,16 @@ button.wide,
 	color: $curious-blue;
 	font-size: rem(40px);
 	/*margin-bottom: rem(0px);*/
+}
+
+.profile-attempts {
+	margin-bottom: rem(0px);
+}
+
+.profile-attempt-number {
+	font-size: rem(28px);
+	color: lighten($black, 60%);
+	margin-bottom: rem(0px);
 }
 
 .profile-subject-name {
@@ -244,11 +313,71 @@ button.wide,
 
 .profile-upgrade-cta {
 	text-align: center;
-	padding-top: rem(5px);
+	padding-top: rem(10px);
 }
 
 .profile-upgrade-cta a {
+	padding: 10px 20px;
+	text-transform: uppercase;
+	font-size: rem(16px);
+	font-family: 'museo-sans', sans-serif;
+	margin-bottom: rem(0px);
+}
 
+/** Diffiulty Meter Styles **/
+.difficuly-label-list li {
+	text-align: center;
+	color: lighten($black, 50%);
+}
+
+/** Results Styles **/
+.results-btn-holder a {
+	color: lighten($black, 40%);
+}
+
+/*.results-table-name {
+	color: $curious-blue;
+	font-family: 'museo-sans', sans-serif;
+	font-size: rem(16px);
+}*/
+
+
+.result-table-desc p {
+	color: lighten($black, 70%);
+	font-family: 'museo-sans', sans-serif;
+	font-size: rem(18px);
+	font-weight: 300;
+}
+
+.table-label {
+	color: $curious-blue;
+	font-family: 'museo-sans', sans-serif;
+	font-size: rem(16px);
+	font-weight: bold;
+	margin-bottom: rem(0px);
+}
+
+.results-table thead tr th.table-label-cell,
+.results-table .results-progress-column {
+	text-align: center;
+}
+
+.table-label-cell .info-icon {
+	font-size: rem(20px);
+	line-height: rem(23px);
+}
+
+.results-table .results-progress-column {
+
+}
+
+.profile-bar .profile-name,
+.profile-bar .profile-nickname {
+	text-align: left;
+}
+
+.progress .meter-percentage {
+	color: $white;
 }
 
 /** Edit Profile Form Styles **/
@@ -264,7 +393,15 @@ button.wide,
 	font-size: rem(11px);
 	font-family: 'museo-sans', sans-serif;
 	margin-bottom: rem(0px);
-	margin-left: rem(20px);
+	/*margin-left: rem(20px);*/
+}
+
+.privacydisclaimer {
+	margin-top: rem(20px);
+	margin-bottom: rem(20px);
+	color: $curious-blue;
+	font-size: rem(11px);
+	font-family: 'museo-sans', sans-serif;
 }
 
 

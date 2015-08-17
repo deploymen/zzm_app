@@ -62,7 +62,9 @@
                     <tr>
                         <td>game_result</td>
                         <td></td>
-                        <td>{"score":"70","opponet_play_id":"1","opponet_game_code":"1","set_id":"2","status":"win","answers":[{"question_id":1,"answer":"1","correct":1},{"question_id":3,"answer":"1","correct":1},{"question_id":5,"answer":"2","correct":1},{"question_id":7,"answer":"2","correct":0},{"question_id":9,"answer":"2","correct":0},{"question_id":8,"answer":"2","correct":1},{"question_id":10,"answer":"2","correct":1},{"question_id":6,"answer":"1","correct":1},{"question_id":4,"answer":"2","correct":0},{"question_id":2,"answer":"2","correct":1}]}</td>
+                        <td>
+                        {"score":"70","opponet_play_id":"1","opponet_game_code":"1","set_id":"2","status":"win","answers":[{"question_id":1,"answer":"1","correct":1},{"question_id":3,"answer":"1","correct":1},{"question_id":5,"answer":"2","correct":1},{"question_id":7,"answer":"2","correct":0},{"question_id":9,"answer":"2","correct":0},{"question_id":8,"answer":"2","correct":1},{"question_id":10,"answer":"2","correct":1},{"question_id":6,"answer":"1","correct":1},{"question_id":4,"answer":"2","correct":0},{"question_id":2,"answer":"2","correct":1}]}
+                        </td>
                     </tr>
                     <tr>
                         <td>random</td>
@@ -84,7 +86,7 @@
 Host: staging.zapzapmath.com
 X-game-code: 0000015k
 
-random=ak55a4w78vx4a12c&game_result={"score":"70","opponet_play_id":"1","opponet_game_code":"1","set_id":"2","status":"win","answers":[{"question_id":1,"answer":"1","correct":1},{"question_id":3,"answer":"1","correct":1},{"question_id":5,"answer":"2","correct":1},{"question_id":7,"answer":"2","correct":0},{"question_id":9,"answer":"2","correct":0},{"question_id":8,"answer":"2","correct":1},{"question_id":10,"answer":"2","correct":1},{"question_id":6,"answer":"1","correct":1},{"question_id":4,"answer":"2","correct":0},{"question_id":2,"answer":"2","correct":1}]}&hash=cad5aab9706f15c9bb4b06b52300173558627d63
+random=ak55a4w78vx4a12c&game_result={"score":70,"opponet_play_id":"1","opponet_game_code":"1","set_id":"2","status":"win","answers":[{"question_id":1,"answer":"1","correct":1},{"question_id":3,"answer":"1","correct":1},{"question_id":5,"answer":"2","correct":1},{"question_id":7,"answer":"2","correct":0},{"question_id":9,"answer":"2","correct":0},{"question_id":8,"answer":"2","correct":1},{"question_id":10,"answer":"2","correct":1},{"question_id":6,"answer":"1","correct":1},{"question_id":4,"answer":"2","correct":0},{"question_id":2,"answer":"2","correct":1}]}&hash=cad5aab9706f15c9bb4b06b52300173558627d63
 </pre>
                 </div>
             </div>

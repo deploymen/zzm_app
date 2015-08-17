@@ -9,15 +9,6 @@ body {
 
 }
 
-.info-icon {
-	position: relative;
-	display: block;
-	width: rem(25px);
-	height: rem(25px);
-	border-radius: rem(25px);
-	background-color: $curious-blue;
-}
-
 button,
 .button {
 	font-size: rem(12px);
@@ -87,6 +78,12 @@ ul.pagination li.current button {
 	background: $flamingo;
 }
 
+/** TABLE Styles **/
+table tr:nth-of-type(even) {
+	background: lighten($curious-blue, 35%);
+}
+
+
 .list-signup--services {
 	li {
 		display: inline-block;
@@ -101,6 +98,44 @@ ul.pagination li.current button {
 .f-dropdown li a {
 	text-align: left;
 }
+
+.info-icon {
+	position: relative;
+	display: block;
+	width: rem(25px);
+	height: rem(25px);
+	border-radius: rem(25px);
+	background-color: $curious-blue;
+
+	.profile-tooltip {
+		display: none;
+	}
+
+	.profile-tooltip:before {
+		top: 100%;
+		left: 50%;
+		border: solid transparent;
+		content: " ";
+		height: 0;
+		width: 0;
+		position: absolute;
+		pointer-events: none;
+		border-color: rgba(136, 183, 213, 0);
+		border-top-color: $fiord;
+		border-width: 10px;
+		margin-left: -10px;
+	}
+}
+
+.info-icon:hover {
+	box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.25);
+
+	.profile-tooltip {
+		display: block;
+	}
+}
+
+
 
 .profile-tooltip {
 	display: none;
@@ -135,6 +170,10 @@ ul.pagination li.current button {
 	bottom: rem(-18px);
 	left: 42%;
 	font-size: rem(30px);
+}
+
+.profile-school-name {
+	height: rem(28px);
 }
 
 /** Main Header Styles **/
@@ -188,7 +227,8 @@ input[type="color"],
 textarea,
 .login-form input[type=email],
 .login-form input[type=text],
-.login-form input[type=password] {
+.login-form input[type=password],
+select {
 	background-color: $loblolly;
 	border-radius: rem(5px);
 	padding-top: rem(5px);
@@ -197,8 +237,14 @@ textarea,
 
 .login-form input[type=email]:focus,
 .login-form input[type=text]:focus,
-.login-form input[type=password]:focus {
+.login-form input[type=password]:focus,
+select:focus,
+select:hover {
 	background-color: $loblolly;
+}
+
+select:hover {
+	border: none;
 }
 
 /* Base for label styling */
@@ -275,6 +321,7 @@ label:hover:before {
   border: 1px solid #4778d9!important;
 }
 
+
 /**Sidebar Styles**/
 .left-off-canvas-menu {
 	.logo {
@@ -301,6 +348,8 @@ label:hover:before {
 }
 
 /** ACCOUNT SETTINGS STYLES **/
+
+/** Profile Styles **/
 
 
 .profile-button button
@@ -363,9 +412,10 @@ label:hover:before {
 
 .profile-item {
 	/*text-align: center;*/
-	padding-top: rem(70px) !important;
-	width: rem(340px);
-	height: rem(500px);
+	margin-top: rem(50px) !important;
+	/*width: rem(340px);*/
+	width: rem(310px);
+	height: rem(410px);
 	margin-right: rem(10px);
 	margin-left: rem(10px);
 	float: left;
@@ -376,12 +426,14 @@ label:hover:before {
 	background-color: lighten($black, 80%);
 	text-align: center;
 	cursor: pointer;
-	padding-top: rem(110px);
+	/*padding-top: rem(110px);
+	min-height: rem(527px);*/
 }
 
 .add-button .profile-info p {
 	color: $white;
 	font-size: rem(20px);
+	line-height: rem(120px);
 }
 
 .add-button .profile-info a {
@@ -410,18 +462,18 @@ label:hover:before {
 
 .profile-pic-holder,
 .avatar-holder {
-	width: rem(140px);
-	height: rem(140px);
+	width: rem(110px);
+	height: rem(110px);
 	overflow: hidden;
 	border: 3px solid $curious-blue;
-	border-radius: rem(140px);
+	border-radius: rem(110px);
 	background-color: $white;
 }
 
 .profile-pic-holder {
 	margin-bottom: rem(20px);
-	margin: 0 auto;
-	margin-top: rem(-70px);
+	/*margin: 0 auto;*/
+	/*margin-top: rem(-70px);*/
 }
 
 .profile-code,
@@ -431,7 +483,20 @@ label:hover:before {
 	margin-bottom: rem(5px);
 }
 
+.profile-attempt-number {
+	height: rem(44px);
+}
+
+.profile-last-seen-wrapper {
+	text-align: right;
+}
+
+.profile-last-seen {
+	height: rem(32px);
+}
+
 .profile-item-group {
+	position: relative;
 	border-bottom: rem(2px) solid $curious-blue;
 	padding-top: rem(5px);
 	padding-right: rem(10px);
@@ -446,8 +511,10 @@ label:hover:before {
 	padding: rem(0px);
 }
 
-.avatar-holder {
-	width: rem(140px);
+.profile-item-group .info-icon {
+	position: absolute;
+	bottom: rem(10px);
+	right: rem(20px);
 }
 
 .profile-info,
@@ -522,6 +589,243 @@ label:hover:before {
 	}
 }
 
+/** Difficulty Meter **/
+.difficuly-meter-box {
+
+}
+
+.difficuly-meter li,
+.difficuly-label-list li {
+	display: block;
+	float: left;
+	width: 20%;
+}
+
+
+
+.difficuly-meter {
+	width: 100%;
+	margin: rem(0px);
+	border: 4px solid lighten($black, 30%);
+	border-radius: rem(50px);
+	overflow: hidden;
+	margin-bottom: rem(20px);
+}
+
+.difficuly-meter li {
+	
+	height: rem(25px);
+	border-right: 4px solid lighten($black, 30%);
+}
+
+.difficuly-meter li:first-child {
+	background-color: $flamingo;
+}
+
+.difficuly-meter li:nth-child(2) {
+	background-color: $crusta;
+}
+
+.difficuly-meter li:nth-child(3) {
+	background-color: $sea-buckthorn;
+}
+
+.difficuly-meter li:nth-child(4) {
+	background-color: $starship;
+}
+
+.difficuly-meter li:last-child {
+	background-color: $harlequin;
+	border-right: none;
+}
+
+.fa-check,
+.fa-times {
+	font-size: rem(24px);
+}
+
+.fa-check {
+	color: $jade;
+}
+
+.fa-times {
+	color: $crimson;
+}
+
+
+/** Results Styles **/
+.indicator-holder {
+	position: relative;
+	width: rem(500px);
+	margin: 0 auto;
+	padding-bottom: rem(20px);
+}
+
+.indicator-list {
+	position: relative;
+	text-align: center;
+	margin: rem(0px);
+}
+
+.indicator-list-item {
+	display: inline-block;
+	width: 80px;
+	height: 80px;
+	border-radius: 80px;
+	background-color: $fiord;
+	margin-right: 5%;
+	margin-left: 5%;
+	padding: 10px;
+}
+
+.indicator-list-item.active {
+	/*background-color: $curious-blue;*/
+}
+
+.indicator-list-item:first-child {
+	margin-left: rem(0px);
+}
+
+.indicator-list-item:last-child {
+	margin-right: rem(0px);
+}
+
+.indicator-list-item:first-child.active {
+	background-color: $curious-blue;
+}
+
+.indicator-list-item:nth-child(2).active {
+	background-color: $purple;
+}
+
+.indicator-list-item:nth-child(3).active {
+	background-color: $flamingo;
+}
+
+.indicator-list-item:nth-child(4).active {
+	background-color: $candlelight;
+}
+
+.indicator-bar {
+	position: absolute;
+	top: rem(38px);
+	left: rem(20px);
+	display: block;
+	height: 5px;
+	width: rem(425px);
+	background-color: $fiord;
+}
+
+.profile-bar {
+	padding: rem(10px) rem(30px) rem(10px) rem(20px);
+	border-bottom: rem(3px) solid $curious-blue;
+}
+
+.profile-bar .avatar-holder,
+.profile-bar .nickname {
+	/*float: left;*/
+}
+
+.profile-bar .avatar-holder {
+	/*border: none;*/
+	margin-right: rem(30px);
+}
+
+.profile-bar .nickname {
+	/*margin-top: rem(20px);*/
+	/*width: 70%;*/
+}
+
+.profile-bar .profile-name {
+	margin-top: rem(0px);
+	padding-top: rem(0px);
+}
+
+.results-container {
+	background-color: $white;
+	border-radius: rem(20px);
+	box-shadow: 0px 0px 12px 3px rgba(0,0,0,0.1);
+}
+
+.results-container ul.pagination {
+	display: inline-block;
+}
+
+table.results-table {
+	border: none;
+	width: 100%;
+}
+
+.table-label-cell {
+	position: relative;
+}
+
+.table-label-cell .info-icon {
+	position: absolute;
+	right: 0;
+}
+
+.table-label-cell .info-icon, {
+	top: 10px;
+}
+
+.results-table-name {
+	padding-left: 50px;
+}
+
+/*.results-more-column {
+	padding-right: 10px;
+}*/
+
+.results-table thead tr th {
+	/*border-top: rem(3px) solid $curious-blue;*/
+	padding-left: rem(50px);
+}
+
+.result-table-desc {
+	padding-right: 5%;
+	padding-left: 5%;
+	border-bottom: rem(3px) solid $curious-blue;
+}
+
+.results-btn-holder {
+	padding-top: rem(20px);
+}
+
+.button.btn-more-results {
+	padding: 6px 25px;
+	text-transform: uppercase;
+	font-family: 'museo-sans', sans-serif;
+	font-size: 16px;
+	border: none;
+	margin-bottom: rem(0px);
+}
+
+.button.btn-more-results .fa {
+	display: none;
+}
+
+.results-info-column {
+	position: relative;
+}
+
+
+
+/** Vanese Results Classes **/
+ul.pagination > li > a { color: #333 }
+.pagination .active a { background-color: #2B91D6; color: #fff; font-weight: bold;}
+
+.breadcrumbs {
+	margin-left: 0px;
+  	padding: 8px 15px;
+  	margin-bottom: 20px;
+  	list-style: none;
+  	background-color: $alto;
+  	border: none;
+  	border-radius: 4px;
+}
+.pull-left, .pull-left > li { float: left !important; }
+
 /** Edit Profile Form Styles **/
 .edit-profile-form {
 	font-family: 'museo-sans', sans-serif;
@@ -548,26 +852,7 @@ label:hover:before {
 	background: rgba(43, 145, 214, 0.7);
 }
 
-/** Loading Bar **/
-.pace {
-  -webkit-pointer-events: none;
-  pointer-events: none;
-
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-}
-
-.pace-inactive {
-  display: none;
-}
-
-.pace .pace-progress {
-  background: #2b6dbc;
-  position: fixed;
-  z-index: 2000;
-  top: 0;
-  right: 100%;
-  width: 100%;
-  height: rem(5px);
+/** Forgot Password **/
+.forgot-after {
+	margin-top: rem(30px);
 }

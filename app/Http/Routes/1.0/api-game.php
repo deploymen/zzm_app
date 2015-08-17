@@ -30,7 +30,8 @@ Route::group(['prefix' => 'api/game'], function () {
 		Route::post('/profile-transfer', 'ApiProfileController@profileTransfer');
 	});
 });
-		
+
+
 Route::get('/api/set/nick', 'ApiProfileController@getNick');
 
 Route::post('api/game/verify-code', 'ApiProfileController@verifyCode');
@@ -44,6 +45,16 @@ Route::get('/api/game/leaderboard/system/{id}', 'ApiGameController@leaderBoardSy
 Route::get('/api/game/leaderboard/planet/{id}', 'ApiGameController@leaderBoardPlanet');
 
 Route::get('/api/game/top-score', 'ApiGameController@GameScreenTopScore');
+
+Route::group(['middleware' => 'auth.game'], function () {
+	Route::group(['prefix' => 'api/game'], function () {
+/* fade domain name */
+		Route::get('/result/only-system', 'ResultController@onlySystem');
+		Route::get('/result/only-planet', 'ResultController@onlyPlanet');
+		Route::get('/result/only-play', 'ResultController@onlyPlay');
+		Route::get('/result/only-questions', 'ResultController@onlyQuestions');
+	});
+});
 
 
 

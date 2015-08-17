@@ -10,21 +10,7 @@
 @stop
 
 @section('js_include')
-<script type="text/javascript">
-var VARS = VARS || {};
 
-VARS = {
-	id         : '{{$profile->id}}',
-	first_name : '{{$profile->first_name}}',
-	last_name  : '{{$profile->last_name}}',
-	school     : '{{$profile->school}}',
-	city       : '{{$profile->city}}',
-	email      : '{{$profile->email}}',
-	avatar     : '{{$profile->avatar}}',
-	game_code  : '{{$profile->gameCode}}',
-	class_id   : '{{$profile->class_id}}'
-};
-</script>
 <script src="/../js/main/profiles.js"></script>
 @stop
 
@@ -52,34 +38,66 @@ VARS = {
 
 <div class="content-group--content small-12 medium-8">
 	<div class="row">
-		<div class="small-12 medium-8 columns">
+		<div class="small-12 medium-12 columns">
 			<div class="small-12 medium-5 columns">
 				<div class="avatar-holder">
 					<img src="/assets/main/img/avatars/{{$profile->avatar->filename}}" alt="">
-					<img src="/assets/img/global/logo-icon.png" alt=" ">
+					<!-- <img src="/assets/img/global/logo-icon.png" alt=" "> -->
 				</div>
 
 			</div>
 			<div class="small-12 medium-7 columns nickname-middle">
-				<p class="profile-nickname">Nickname</p>
+				<p class="profile-nickname">{{$profile->nickName1->name}} {{$profile->nickName2->name}}</p>
 			</div>
 		</div>
 		<div class="small-12 medium-4 columns text-right">
 			<p class="profile-code bold"><span class="blue-text">Class ID:</span> <span class="user-id">{{$profile->class_id}}</span></p>
 			<p class="profile-code bold"><span class="blue-text">Player ID:</span> <span class="user-id">{{$profile->gameCode->code}}</span></p>
+			<input type="hidden" id="profile-id" value="{{$profile->id}}" />
+			<input type="hidden" id="profile-email" value="{{$profile->email}}" />
 		</div>
 	</div><!--row-->
 
-	<form id="edit-profile-form" class="edit-profile-form">
+	<form data-abide="ajax" id="edit-profile-form" class="edit-profile-form" novalidate="novalidate">
 		<div class="row">
 			<div class="small-12 medium-6 columns">
 				<label>First Name
-					<input id="profile-first-name" class="profile-first-name" type="text" value="{{$profile->first_name}}" />
+					<input id="profile-first-name" class="profile-first-name" type="text" required value="{{$profile->first_name}}" />
 				</label>
 			</div>
 			<div class="small-12 medium-6 columns">
 				<label>Last Name
-					<input id="profile-last-initial" class="profile-last-initial" type="text" value="{{$profile->last_name}}" />
+					<input id="profile-last-initial" class="profile-last-initial" type="text" required value="{{$profile->last_name}}" />
+				</label>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="small-12 medium-6 columns">
+				<label>Age
+					<select id="profile-age-edit">
+						@foreach ($ages as $age)
+							@if ($age->age == $profile->age)
+								<option selected="selected" value="{{$age->age}}">{{$age->age_name}}</option>
+							@else
+								<option value="{{$age->age}}">{{$age->age_name}}</option>
+							@endif
+						@endforeach
+					</select>
+				</label>
+			</div>
+			<div class="small-12 medium-6 columns">
+				<label>Grade
+					<select id="profile-grade-edit">
+						@foreach ($grades as $grade)
+							@if ($grade->grade == $profile->grade)
+								<option selected="selected" value="{{$grade->grade}}">{{$grade->grade_name}}</option>
+							@else
+								<option value="{{$grade->grade}}">{{$grade->grade_name}}</option>
+							@endif
+							
+						@endforeach
+					</select>
 				</label>
 			</div>
 		</div>
@@ -108,7 +126,7 @@ VARS = {
 					<a href="/user/profiles" class="button wide radius grey">Back</a>
 				</div>
 				<div class="small-12 medium-6 columns">
-					<input type="button" value="Save Changes" id="btn-save-profile" class="button wide radius blue">
+					<a href="javascript:void(0)" id="btn-save-profile" class="button wide radius blue">Save Changes</a>
 				</div>
 			</div>
 		</div>
@@ -117,7 +135,7 @@ VARS = {
 
 <div class="row">
 	<div class="box-centered small-12 medium-7 text-center">
-		<p class="subline-desc">Your child's name is kept strictly confidential and is only visible to you.<br/>We do not use it for any purpose, it is just to associate your child with their profile.</p>
+		<p class="privacydisclaimer">Your child's name is kept strictly confidential and is only visible to you.<br/>We do not use it for any purpose, it is just to associate your child with their profile.</p>
 	</div>
 </div>
 
@@ -136,12 +154,51 @@ VARS = {
 	</form>
 </div>
 
+<div id="profiledelete" class="reveal-modal text-center" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" data-options="close_on_background_click:false">
+	<h3 id="modalTitle">Be Careful!</h3>
+	<p class="lead">You are about to delete this profile. Are you sure?</p>
+	<div class="row">
+		<div class="small-12 columns">
+			<div class="small-6 columns text-center">
+				<label>
+					<input type="button" value="Cancel" id="btn-delete-cancel" class="button wide radius blue" />
+				</label>
+			</div>
+			<div class="small-6 columns text-center">
+				<label>
+					<input type="button" value="Delete" id="btn-delete-ok" class="button wide radius alert" />
+				</label>
+			</div>
+		</div>
+	</div>
+</div>
 
-<!-- <div id="ssmodal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
-	<h2 id="modalTitle">Awesome. I have it.</h2>
-	<p class="lead">Your couch.  It is mine.</p>
-	<p>I'm a cool paragraph that lives inside of an even cooler modal. Wins!</p>
-	<a class="close-reveal-modal" aria-label="Close">&#215;</a>
-</div> -->
+<div id="cannotdelete" class="reveal-modal text-center" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" data-options="close_on_background_click:false">
+	<h3 id="modalTitle">Oops!</h3>
+	<p class="lead">You cannot delete the last profile.</p>
+	<div class="row">
+		<div class="small-12 columns">
+			<div class="small-12 columns text-center">
+				<label>
+					<input type="button" value="OK" id="btn-cannot-delete" class="button wide radius blue" />
+				</label>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div id="profilesaved" class="reveal-modal text-center" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" data-options="close_on_background_click:false">
+	<h3 id="modalTitle">Beautiful</h3>
+	<p class="lead">Your changes have been saved.</p>
+	<div class="row">
+		<div class="medium-5 box-centered text-center">
+			<label>
+				<input type="button" value="OK" id="btn-changes-ok" class="button wide radius blue" />
+			</label>
+		</div>
+	</div>
+	<!-- <a href="javascript:void(0)" class="close-reveal-modal" aria-label="Close">OK</a> -->
+</div>
 
 @stop

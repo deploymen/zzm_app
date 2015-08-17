@@ -202,7 +202,7 @@ KONAMI CODE MOFO
                         <ul>
                             <li><a href="/pre-launch/">Home</a></li>
                             <li class="divider">|</li>
-                            <li><a href="http://blog.zapzapmath.com" target="_blank">Blog</a></li>
+                            <li><a href="http://blog.zapzapmath.com">Blog</a></li>
                         </ul>
                     </div>
                 </footer>
