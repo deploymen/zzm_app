@@ -91,7 +91,7 @@ KONAMI CODE MOFO
                         <!-- <p id="signup-instruct" class="signup-instruct">Be the first in line for our preview release and get tons of goodies for free!</p> -->
                         <p id="signup-instruct" class="signup-instruct">Join our Facebook group and always be the first to test the preview release of Zap Zap Math!</p><br/>
                         <div id="signup-btn-holder" class="signup-btn-holder">
-                            <a href="https://www.facebook.com/groups/916373445085339/" class="btn btn--orange" target="_blank">Join Now!</a>
+                            <a href="http://bit.ly/zapzapmathfb" class="btn btn--orange" target="_blank">Join Now!</a>
                         </div>
                         <!-- <div id="signup-btn-holder" class="signup-btn-holder">
                             <div id="signup-form2" class="signup-form2">
@@ -395,13 +395,18 @@ KONAMI CODE MOFO
            <div class="modal">
                <img src="assets/img/exitpop/closebutton.png" class="close-button" onClick="closeModal()">
                <div class="modal-body">
-                   <p class="modal-body-text">We are shortlisting 200 people to be the first in the world to most awesome mathematical adventure of your life. If you are chosen, you will be entitled to full app and content worth $99 for free</p>
-                   <p class="modal-form-instruction">Fill in your email below and stay tune!</p>
+                   <!-- <p class="modal-body-text">We are shortlisting 200 people to be the first in the world to most awesome mathematical adventure of your life. If you are chosen, you will be entitled to full app and content worth $99 for free</p> -->
 
-                   <form id="signupform" action="" method="GET">
+                   <p class="modal-body-text">We are recruiting parents and their children as testers! Members of our Facebook group will be the first in the world to experience the most awesome mathematical adventure of a lifetime.</p>
+                   <!-- <p class="modal-form-instruction">Fill in your email below and stay tune!</p> -->
+                   <p class="modal-form-instruction">Click on the orange button to visit our Facebook Group</p>
+
+                   <!-- <form id="signupform" action="" method="GET">
                        <input id="signup-form-email-exitpop" name="formemail" type="text" placeholder="enter email here.." required>
                        <input id="email-address-submit" type="button" value=" Sign Up for free now!" onClick="submitForm()"></input>
-                   </form>
+                   </form> -->
+
+                   <a href="http://bit.ly/zapzapmathfb" class="btn btn--orange btn-join-fb" target="_blank">Join Now!</a>
                </div>
 
                <div class="modal-footer">

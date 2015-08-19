@@ -73,6 +73,25 @@ button.alert:hover,
 	background: $lightning-yellow;
 }
 
+span.error,
+small.error {
+	background: transparent;
+	color: $punch;
+	font-style: normal;
+	margin-top: rem(-15px);
+}
+
+button.disabled:hover,
+button.disabled:focus,
+button[disabled]:hover,
+button[disabled]:focus,
+.button.disabled:hover,
+.button.disabled:focus,
+.button[disabled]:hover,
+.button[disabled]:focus {
+	background-color: $picton-blue;
+}
+
 ul.pagination li.current a,
 ul.pagination li.current button {
 	background: $flamingo;
