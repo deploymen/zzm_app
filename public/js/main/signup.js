@@ -22,6 +22,8 @@ app.directive('ngFocus', [function() {
   }
 }]);
 
+app.service();
+
 app.controller('SignupController', function ($scope, $http, $log, promiseTracker, $timeout){
 
 		// Countries Dropdown
