@@ -1008,7 +1008,13 @@ class ZapZapQuestionHelper{
 				if($r->id != $prevQuestionId){
 					array_push($results, [
 						'id' => $r->id,
-						'question' => $r->question,
+						'param_1' => $r->param_1,
+						'param_2' => $r->param_2,
+						'param_3' => $r->param_3,
+						'param_4' => $r->param_4,
+						'param_5' => $r->param_5,
+						'param_6' => $r->param_6,
+						'param_7' => $r->param_7,
 						'hexagon_path' => $r->hexagon_path,
 						'difficulty' => $r->difficulty,
 						'subject' => []
