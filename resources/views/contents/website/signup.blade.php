@@ -57,11 +57,11 @@
 
                                 <div class="small-6 columns">
                                     <label for="radio-teacher" class="">
-                                        <input name="role" type="radio" id="radio-teacher" ng-model="role" required="!role" value="teacher" ng-focus> I am a teacher
+                                        <input name="role" type="radio" id="radio-teacher" ng-model="role" required="!role" value="teacher"> I am a teacher
                                     </label>
                                 </div>
                                 <div class="error-container" 
-                                     ng-show="signup_form.role.$dirty && signup_form.role.$invalid">
+                                     ng-show="signup_form.role.$dirty && signup_form.role.$invalid && signup_form.submitted">
                                   <small class="error" 
                                          ng-show="signup_form.role.$error.required">
                                          Please specify a role.
@@ -71,18 +71,18 @@
 
                             <div class="row">
                               <div class="small-12 columns">
-                                <label for="users_name" class="label-header">
+                                <label for="users-name" class="label-header">
                                 Name
-                                  <input type="text" id="users_name" placeholder="John Jones" name="users_name" required pattern="[a-zA-Z]+" ng-model="signup.name" ng-minlength=3 ng-focus>
+                                  <input type="text" id="users-name" placeholder="John Jones" name="name" required ng-model="name" ng-minlength=3>
                                 </label>
                                 <div class="error-container" 
-                                    ng-show="signup_form.users_name.$dirty && signup_form.users_name.$invalid">
+                                    ng-show="signup_form.uname.$dirty && signup_form.uname.$invalid && signup_form.submitted">
                                 <small class="error" 
-                                    ng-show="signup_form.users_name.$error.required">
+                                    ng-show="signup_form.uname.$error.required">
                                     Your name is required.
                                 </small>
                                 <small class="error" 
-                                        ng-show="signup_form.users_name.$error.minlength">
+                                        ng-show="signup_form.uname.$error.minlength">
                                         Your name is required to be at least 3 characters
                                 </small>
                               </div>
@@ -93,10 +93,10 @@
                               <div class="small-12 columns">
                                 <label for="users_email" class="label-header">
                                     Email
-                                  <input type="email" id="users_email" placeholder="johnjones@internet.com" name="email" required ng-model="signup.email" ng-focus>
+                                  <input type="email" id="users_email" placeholder="johnjones@internet.com" name="email" required ng-model="email">
                                 </label>
                                 <div class="error-container" 
-                                     ng-show="signup_form.email.$dirty && signup_form.email.$invalid">
+                                     ng-show="signup_form.email.$dirty && signup_form.email.$invalid && signup_form.submitted">
                                   <small class="error" 
                                          ng-show="signup_form.email.$error.required">
                                          Your email is required.
@@ -113,10 +113,10 @@
                               <div class="small-12 columns">
                                 <label for="users_password" class="label-header">
                                 Password
-                                  <input type="password" id="users_password" placeholder="......" name="users_password" ng-model="signup.password" required ng-minlength=6 ng-focus>
+                                  <input type="password" id="users_password" placeholder="......" name="users_password" ng-model="password" required ng-minlength=6>
                                 </label>
                                 <div class="error-container" 
-                                     ng-show="signup_form.users_password.$dirty && signup_form.users_password.$invalid">
+                                     ng-show="signup_form.users_password.$dirty && signup_form.users_password.$invalid && signup_form.submitted">
                                   <small class="error" 
                                          ng-show="signup_form.users_password.$error.required">
                                          You need to have a password.
@@ -133,12 +133,12 @@
                               <div class="small-12 columns">
                                 <label for="users_country" class="label-header">
                                 Country
-                                  <select id="users_country" name="country" required ng-model="country" ng-options="country.name for country in countries track by country.code" ng-focus>
+                                  <select id="users_country" name="country" required ng-model="country" ng-options="country.name for country in countries track by country.code">
                                     <option value="">-- Select a Country --</option>
                                   </select>
                                 </label>
                                 <div class="error-container" 
-                                     ng-show="signup_form.country.$dirty && signup_form.country.$invalid">
+                                     ng-show="signup_form.country.$dirty && signup_form.country.$invalid && signup_form.submitted">
                                   <small class="error" 
                                          ng-show="signup_form.country.$error.required">
                                          Please choose your country from the list.
@@ -149,7 +149,8 @@
 
                             <div class="row">
                               <div class="small-12 columns">
-                                <button type="submit" ng-disabled="signup_form.$invalid" class="button radius blue">Submit</button>
+                                <button data-ng-disabled="progress.active()" data-ng-click="submit(signup_form)" class="medium radius button expand blue">Submit</button>
+                                <!-- <button type="submit" ng-disabled="signup_form.$invalid" class="button radius blue">Submit</button> -->
                                 <!-- <button id="btn-signup" type="submit" ng-disabled="signup_form.$invalid" class="medium radius button expand blue">Sign me up!</button> -->
                               </div>
                             </div>

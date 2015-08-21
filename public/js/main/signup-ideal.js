@@ -22,86 +22,64 @@ app.directive('ngFocus', [function() {
     }
 }]);
 
-// app.service('signupService', function ($http, $q){
-//       signupService = this;
+app.service('signupService', function ($http, $q){
+      signupService = this;
 
-//       signupService.submitSignupData = function(data){
-//             var deferred = $q.defer();
+      signupService.submitSignupData = function(init){
+            var deferred = $q.defer();
 
-//             $http.post('/api/auth/sign-up', {data: data})
-//             .success(function (data, status, message){
-//                   deferred.resolve(data);
-//             })
-//             .error(function (error, status){
-//                   deferred.reject(error);
-//             })
+            $http.post('/api/auth/sign-up', {data: init})
+            .success(function (data, status, message){
+                  deferred.resolve(data);
+            })
+            .error(function (error, status){
+                  deferred.reject(error);
+            })
 
-//             return deferred.promise;
-//       }
+            return deferred.promise;
+      }
 
-//       return signupService;
-// });
+      return signupService;
+});
 
-app.controller('SignupController', function ($scope, $http, $log, promiseTracker, $timeout, $window){
-      //$scope.submitted = false;
+app.controller('SignupController', function ($scope, $http, $log, promiseTracker, $timeout, signupService, $window){
+      $scope.submitted = false;
 
-      $scope.init = function (){
-            $scope.signupService = {
+      $scope.init = function (data){
+            $scope.data = {
                   name:      $scope.name,
                   email:     $scope.email,
                   password:  $scope.password,
                   country:   $scope.country,
                   role:      $scope.role
             }
+
+            // console.log($scope.init.data.name);
       }
 
-      $http.post('/api/auth/sign-up', {
-            'name': $scope.name,
-            'email': $scope.email,
-            'password': $scope.password,
-            'country': $scope.country,
-            'role': $scope.role
-      })
-        .success(function (data, status, message){
-              var status = data['status'];
-              var message = data['message'];
+      $scope.submit = function (form){
+            signupService.submitSignupData($scope.signupService)
+            .then(function (data){
+                  var status = data['status'];
+                  var message = data['message'];
 
-              if(status === 'success'){
-                    $window.location.href = '/user/signin';
-              } else if (status === 'fail' && message === 'password must be atleast 6 chars'){
-                    console.log(message + '. you\'re a failure in life. I said it.');
-              } else if (status === 'fail' && message === 'missing parameters') {
-                    console.log(message + '. you\'re a failure in life. I said it.');
-                    console.log($scope.name);
-              } else if (status === 'fail' && message === 'email used'){
-                    console.log(message + '. you\'re a failure in life. I said it.');
-              }
-        })
-        .error(function (error, status){
-              //deferred.reject(error);
-        })
+                  $scope.init();
 
-      // $scope.submit = function (form){
-      //       signupService.submitSignupData($scope.signupService)
-      //       .then(function (data){
-      //             var status = data['status'];
-      //             var message = data['message'];
+                  if(status === 'success'){
+                        $window.location.href = '/user/signin';
+                  } else if (status === 'fail' && message === 'password must be atleast 6 chars'){
+                        console.log(message + '. you\'re a failure in life. I said it.');
+                  } else if (status === 'fail' && message === 'missing parameters') {
+                        console.log(message + '. you\'re a failure in life. I said it.');
+                        console.log($scope.name);
+                  } else if (status === 'fail' && message === 'email used'){
+                        console.log(message + '. you\'re a failure in life. I said it.');
+                  }
 
-      //             if(status === 'success'){
-      //                   $window.location.href = '/user/signin';
-      //             } else if (status === 'fail' && message === 'password must be atleast 6 chars'){
-      //                   console.log(message + '. you\'re a failure in life. I said it.');
-      //             } else if (status === 'fail' && message === 'missing parameters') {
-      //                   console.log(message + '. you\'re a failure in life. I said it.');
-      //                   console.log($scope.name);
-      //             } else if (status === 'fail' && message === 'email used'){
-      //                   console.log(message + '. you\'re a failure in life. I said it.');
-      //             }
-
-      //       }, function(){
-      //             console.log('you\'re a failure in life. I said it.');
-      //       })
-      // }
+            }, function(){
+                  console.log('you\'re a failure in life. I said it.');
+            })
+      }
 
       $scope.init();
 
