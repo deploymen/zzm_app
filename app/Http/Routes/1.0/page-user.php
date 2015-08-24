@@ -7,9 +7,6 @@ Route::group(['prefix' => 'user'], function(){
 	Route::get('/forgot-password', function(){ return view('contents.website.forgot-password'); });
 	Route::get('/reset-password/{secret_key}', function(){ return view('contents.website.reset-password'); });
 	
-	Route::get('/activate-success', function(){ return view('contents.website.activate-success'); });
-	Route::get('/activate-fail', function(){ return view('contents.website.activate-fail'); });
-	
 	Route::group(['middleware' => 'auth.user'], function () {
 		Route::group(['middleware' => 'auth.parent'], function () {
 			Route::get('/home', function(){ return view('contents.website.index'); });
@@ -31,3 +28,6 @@ Route::group(['prefix' => 'user'], function(){
 
 	
 });
+	
+	Route::get('/activate-success', function(){ return view('contents.website.activate-success'); });
+	Route::get('/activate-fail', function(){ return view('contents.website.activate-fail'); });
