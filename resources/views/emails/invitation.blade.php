@@ -44,7 +44,7 @@
 
 									<tr width="100%">
 										<td bgcolor="#FFFFFF" style="background-color: #FFFFFF; padding: 30px;">
-											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">Your little mathling has just signed up to explore the Zap Zap Math Galaxy! If you've received this transmission, chances are, you probably have the app already installed on your device. If you haven't downloaded the app yet, please navigate your browser starship to {{$app_store_address}}</p>
+											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">Your little mathling has just signed up to explore the Zap Zap Math Galaxy!</p><br/>
 
 											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">Please approve your kid's permission slip by visiting the link below:<br/>
 											{{$link}}<br/><br/>
