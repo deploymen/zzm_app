@@ -49,7 +49,7 @@
                 </div>
 
                 <p class="activation-text">
-                	Your account is successfully activated!
+                	You account activation failed.
                 </p>
             </section><!--signup-holder-inner-->
         </section>
