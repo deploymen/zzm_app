@@ -406,12 +406,12 @@ Class AuthUserController extends Controller {
 			->first();
 
 		if (!$logAccountActivate) {
-			return redirect::to('/activate-fail');
+			return redirect::to('/');
 		}
 
 		$user = $logAccountActivate->findUser()->first();
 		if (!$user) {
-			return redirect::to('/activate-fail');
+			return redirect::to('/');
 		}
 
 		try {
