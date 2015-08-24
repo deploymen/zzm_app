@@ -3,6 +3,7 @@
 use App;
 use DB;
 use Exception;
+use Redirect;
 use Config;
 use Request;
 use Session;
