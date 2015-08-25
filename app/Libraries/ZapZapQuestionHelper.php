@@ -363,6 +363,7 @@ class ZapZapQuestionHelper{
 						'answer' => $r->answer,
 						'answer_option_1' => $r->answer_option_1,
 						'answer_option_2' => $r->answer_option_2,
+						'image_id' => $r->image_id,
 						'difficulty' => $r->difficulty,
 						'subject' => []
 					]);
