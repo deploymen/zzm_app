@@ -49,10 +49,8 @@
                 </div>
 
                 <p class="activation-text">
-                	Your account is successfully activated!
+                	You account activation failed.
                 </p>
-
-                <a href="#" class="medium radius button expand blue">Resend Activation Code</a>
             </section><!--signup-holder-inner-->
         </section>
       </div>
