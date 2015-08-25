@@ -74,7 +74,7 @@ class ZapZapQuestionHelper{
 		try{
 			$sqlWherePlanet = "";
 
-			if($planetId != 0){
+			if(!$planetId){
 				$userMap = UserMap::where('profile_id', $profileId)->where('planet_id' , $planetId)->first();
 				if(!$userMap){
 					$userMap = new UserMap;
@@ -87,7 +87,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT um.`top_score` , s.`id` AS `system_id` , s.`name` AS `system_name` , p.`id` AS `planet_id` , p.`name` AS `planet_name` , p.`description` ,CAST(IFNULL(um.`star`, 0) AS UNSIGNED) AS `star`
+				SELECT um.`level`,um.`exp`, um.`top_score` , s.`id` AS `system_id` , s.`name` AS `system_name` , p.`id` AS `planet_id` , p.`name` AS `planet_name` , p.`description` ,CAST(IFNULL(um.`star`, 0) AS UNSIGNED) AS `star`
 					FROM (`t0122_game_system` s, `t0123_game_planet` p , `t0124_game_system_planet` sp) 
 						LEFT JOIN `t0501_game_user_map` um 
 							ON(
@@ -692,8 +692,11 @@ class ZapZapQuestionHelper{
 	public static function GetQuestionP18($planetId,$difficulty,$questionCount){
 
 		try{
-			$gamePlanet = GamePlanet::find($planetId);
-			$questionCount = $gamePlanet->question_count;
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
+			
 
 			$sql = "
 				  SELECT GROUP_CONCAT(ran.`target_id`)  AS `ids`
@@ -779,8 +782,10 @@ class ZapZapQuestionHelper{
 	public static function GetQuestionP23($planetId,$difficulty,$questionCount){
 
 		try{
-			$gamePlanet = GamePlanet::find($planetId);
-			$questionCount = $gamePlanet->question_count;
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
 			$sql = "
 				  SELECT GROUP_CONCAT(ran.`target_id`)  AS `ids`
 						FROM (SELECT  q.`target_id` , RAND() AS `rand`
@@ -863,8 +868,10 @@ class ZapZapQuestionHelper{
 
 	public static function GetQuestionP32($planetId,$difficulty,$questionCount){
 		try{
-			$gamePlanet = GamePlanet::find($planetId);
-			$questionCount = $gamePlanet->question_count;
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
 			$sql = "
 				  SELECT GROUP_CONCAT(ran.`target_id`)  AS `ids`
 						FROM (SELECT  q.`target_id` , RAND() AS `rand`
@@ -956,8 +963,10 @@ class ZapZapQuestionHelper{
 
 	public static function GetQuestionP08($planetId,$difficulty,$questionCount){
 		try{
-			$gamePlanet = GamePlanet::find($planetId);
-			$questionCount = $gamePlanet->question_count;
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
 			$sql = "
 				  SELECT GROUP_CONCAT(ran.`target_id`)  AS `ids`
 						FROM (SELECT  q.`target_id` , RAND() AS `rand`
@@ -1004,11 +1013,19 @@ class ZapZapQuestionHelper{
 
 			for($i=0; $i<count($result); $i++){
 				$r = $result[$i];
+				$param = str_split($r->question);
+				array_push($param, '', '');
 
 				if($r->id != $prevQuestionId){
 					array_push($results, [
 						'id' => $r->id,
-						'question' => $r->question,
+						'param_1' => $param[0],
+						'param_2' => $param[1],
+						'param_3' => $param[2],
+						'param_4' => $param[3],
+						'param_5' => $param[4],
+						'param_6' => $param[5],
+						'param_7' => $param[6],
 						'hexagon_path' => $r->hexagon_path,
 						'difficulty' => $r->difficulty,
 						'subject' => []
@@ -1034,105 +1051,223 @@ class ZapZapQuestionHelper{
 		}
 	}
 
-	public static function GetQuestionP99($planetId,$difficulty,$questionCount,$gameType){
-		// try{
-			// $gamePlanet = GamePlanet::find($planetId);
-			// $questionCount = $gamePlanet->question_count;
-			// $sql = "
-			// 	  SELECT GROUP_CONCAT(ran.`target_id`)  AS `ids`
-			// 			FROM (SELECT  q.`target_id` , RAND() AS `rand`
-	  //                       FROM `t0126_game_planet_question` pq ,`t0200_game_question` q , `t0123_game_planet` gp , `t0299_game_question_p99` p99
-	  //                           WHERE  pq.`question_id` = q.`id`
-	  //                           AND q.`target_type`  = 'p99'
-	  //                           AND pq.`enable` = '1'
-	  //                           AND q.`enable` = '1'
-	  //                           AND p99.`enable` = '1'
-	  //                           AND p99.`id` = q.`target_id`
-	  //                         	AND gp.`id` =  pq.`planet_id`
-		 //                        AND q.`difficulty` = :difficulty
-		 //                        AND pq.`planet_id` = :planet_id
+	public static function GetQuestionP99($planetId,$gameType,$level,$profileId,$planetId){
+		try{
+			if(!$level){
+				$userMap = UserMap::where('profile_id', $profileId)->where('planet_id' , $planetId)->first();
+				$userMap->level = 1;
+				$userMap->exp = 0;
+				$userMap->save();
+
+				$level = $userMap->level;
+			}
+
+			
+			if($level == '1'){
+				$easy = '25';
+				$average = '15';
+				$hard = '10';
+			}
+			if($level == '2'){
+				$easy = '20';
+				$average = '20';
+				$hard = '10';
+			
+			}
+			if($level == '3'){
+				$easy = '15';
+				$average = '25';
+				$hard = '10';
+			
+			}
+			if($level == '4'){
+				$easy = '15';
+				$average = '20';
+				$hard = '15';
+			
+			}
+			if($level == '5'){
+				$easy = '10';
+				$average = '25';
+				$hard = '15';
+			
+			}
+			if($level == '6'){
+				$easy = '5';
+				$average = '25';
+				$hard = '20';
+			
+			}
+			if($level == '7'){
+				$easy = '5';
+				$average = '20';
+				$hard = '25';
+			
+			}
+			if($level == '8'){
+				$easy = '5';
+				$average = '10';
+				$hard = '35';
+			
+			}
+			if($level == '9'){
+				$easy = '0';
+				$average = '10';
+				$hard = '40';
+			
+			}
+			if($level == '10'){
+				$easy = '0';
+				$average = '0';
+				$hard = '50';
+			
+			}
+		
+			$sql = "
+				  SELECT GROUP_CONCAT(a.`target_id`)  AS `ids`
+						FROM (
+							SELECT  q.`target_id` , RAND() AS `rand`
+	                        FROM `t0126_game_planet_question` pq ,`t0200_game_question` q , `t0123_game_planet` gp , `t0299_game_question_p99` p99
+	                            WHERE  pq.`question_id` = q.`id`
+	                            AND q.`target_type`  = 'p99'
+	                            AND pq.`enable` = '1'
+	                            AND q.`enable` = '1'
+	                            AND p99.`enable` = '1'
+	                            AND p99.`id` = q.`target_id`
+	                          	AND gp.`id` =  pq.`planet_id`
+		                        AND q.`difficulty` = 1
+		                        AND pq.`planet_id` = :planet_id
 	                       		
-	  //                      		ORDER BY  pq.`sequence` * ABS(gp.`question_random`-1) , `rand`
-	  //                          	LIMIT :questionCount
-	  //                   ) ran
+	                       		ORDER BY  pq.`sequence` * ABS(gp.`question_random`-1) , `rand`
+	                           	LIMIT {$easy}
+	                    ) a
+						
+						UNION
+
+					SELECT GROUP_CONCAT(b.`target_id`)  AS `ids`
+						FROM (
+							SELECT  q.`target_id` , RAND() AS `rand`
+	                        FROM `t0126_game_planet_question` pq ,`t0200_game_question` q , `t0123_game_planet` gp , `t0299_game_question_p99` p99
+	                            WHERE  pq.`question_id` = q.`id`
+	                            AND q.`target_type`  = 'p99'
+	                            AND pq.`enable` = '1'
+	                            AND q.`enable` = '1'
+	                            AND p99.`enable` = '1'
+	                            AND p99.`id` = q.`target_id`
+	                          	AND gp.`id` =  pq.`planet_id`
+		                        AND q.`difficulty` = 2
+		                        AND pq.`planet_id` = :planet_id
+	                       		
+	                       		ORDER BY  pq.`sequence` * ABS(gp.`question_random`-1) , `rand`
+	                           	LIMIT {$average}
+	                    ) b
+
+						UNION
+
+					SELECT GROUP_CONCAT(c.`target_id`)  AS `ids`
+						FROM (
+							SELECT  q.`target_id` , RAND() AS `rand`
+	                        FROM `t0126_game_planet_question` pq ,`t0200_game_question` q , `t0123_game_planet` gp , `t0299_game_question_p99` p99
+	                            WHERE  pq.`question_id` = q.`id`
+	                            AND q.`target_type`  = 'p99'
+	                            AND pq.`enable` = '1'
+	                            AND q.`enable` = '1'
+	                            AND p99.`enable` = '1'
+	                            AND p99.`id` = q.`target_id`
+	                          	AND gp.`id` =  pq.`planet_id`
+		                        AND q.`difficulty` = 3
+		                        AND pq.`planet_id` = :planet_id
+	                       		
+	                       		ORDER BY  pq.`sequence` * ABS(gp.`question_random`-1) , `rand`
+	                           	LIMIT {$hard}
+	                    ) c
 										
-			// ";
+			";
 
-			// $targetIds = DB::SELECT($sql, ['planet_id'=>$planetId , 'difficulty'=>$difficulty , 'questionCount' => $questionCount ])[0]->ids;
+			$targetIds = DB::SELECT($sql, ['planet_id'=>$planetId] )[0]->ids;
 
-			// $sql2 = "
-			// 	SELECT  p99.* ,  q.`difficulty`, q.`id` AS `id`, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description` 
-			// 		 FROM (`t0299_game_question_p99` p99 , `t0200_game_question` q)
+			$sql2 = "
+				SELECT  p99.* ,  q.`difficulty`, q.`id` AS `id`, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description` 
+					 FROM (`t0299_game_question_p99` p99 , `t0200_game_question` q)
 
-			// 			LEFT JOIN `t0199_game_question_subject` qs ON (qs.`question_id` = q.`id`)
-			// 			LEFT JOIN `t0131_game_subject` s ON(qs.`subject_id` = s.`id`  )
+						LEFT JOIN `t0199_game_question_subject` qs ON (qs.`question_id` = q.`id`)
+						LEFT JOIN `t0131_game_subject` s ON(qs.`subject_id` = s.`id`  )
                         
-   //                      WHERE p99.`id` IN( {$targetIds} )
-   //                      AND q.`target_id` = p99.`id`
-   //                      AND q.`target_type` = 'p99'
+                        WHERE p99.`id` IN( {$targetIds} )
+                        AND q.`target_id` = p99.`id`
+                        AND q.`target_type` = 'p99'
 
-   //                      ORDER BY q.`id`
-			// ";
-			// $result = DB::SELECT($sql2);
-			// $questionsMain = [];
+                        ORDER BY q.`id`
+			";
+			$result = DB::SELECT($sql2);
+			$questionsMain = [];
 
-			// $gamePlanet = GamePlanet::find($planetId);
-			// $questionCount = $gamePlanet->question_count;
+			$gamePlanet = GamePlanet::find($planetId);
+			$questionCount = $gamePlanet->question_count;
 
-			// $results = [];
-			// $prevQuestionId = 0;
+			$results = [];
+			$prevQuestionId = 0;
 
-			// for($i=0; $i<count($result); $i++){
-			// 	$r = $result[$i];
+			for($i=0; $i<count($result); $i++){
+				$r = $result[$i];
 
-			// 	if($r->id != $prevQuestionId){
-			// 		array_push($results, [
-			// 			'id' => $r->id,
-			// 			'question' => $r->question,
-			// 			'difficulty' => $r->difficulty,
-			// 			'subject' => [],
-			// 			'question_npc' => []
+				if($r->id != $prevQuestionId){
+					array_push($results, [
+						'id' => $r->id,
+						'question' => $r->question,
+						'difficulty' => $r->difficulty,
+						'subject' => [],
+						'question_npc' => []
 
-			// 		]);
-			// 	}
-			// 	array_push($results[count($results)-1]['subject'],[
-			// 					'subject_code'=>$r->subject_code,
-			// 						'name' => $r->name,
-			// 						'description'=>$r->description
-			// 					]);
+					]);
+				}
+				array_push($results[count($results)-1]['subject'],[
+								'subject_code'=>$r->subject_code,
+									'name' => $r->name,
+									'description'=>$r->description
+								]);
 
-			// 	$prevQuestionId = $r->id;
+				$prevQuestionId = $r->id;
+			}
+
+			//opponent
+			$opponent = []; 
+			$gameType = $gameType - 1;
+			$gamePlay = GamePlay::where('planet_id' , $planetId)->get();
+
+			if(count($gamePlay) != $gameType){
+				$setGenerate = $gameType - count($gamePlay);
+			}
+			// for($j=0; $j<$setGenerate; $j++){
+
+			// 	$resultP02 = new GameResultP02;
+			// 	$resultP02->correct = ;
+			// 	$resultP02->target_type = 'p00';
+			// 	$resultP02->save();
+
+			// 	$gameResults = new GameResult;
+			// 	$gameResults->play_id = $gamePlay->id;
+			// 	$gameResults->question_id = $inAnswer['question_id'];
+			// 	$gameResults->target_type = 'p02';
+			// 	$gameResults->target_id = $resultP02->id;
+			// 	$gameResults->game_type_id = '2';
+			// 	$gameResults->save();
 			// }
 
-			$gameType = $gameType - 1;
-			var_export($gameType); die();
-			
-			$playId = GameResult::where('planet_id' , $planetId)->where('difficulty',$difficulty)->LIMIT($gameType)->get();
+			// for($k=0; $k<$gameType; $k++){
+			// 	$sqlNpcQuestion = "
+			// 		SELECT r99.* , r.`complite_time` , p.`level` , p.`score`
+			// 			FROM `t0398_game_result_p98` r98 , `t0400_game_play` p ,`t0300_game_result` r
+			// 				WHERE p.`planet_id` = {$planetId}
+			// 				AND r.`play_id` = p.`id`
+			// 				AND r.game_type_id = XXX
+			// 				AND r99.`id` = r.`target_id`
+			// 		";
 
-			// $sqlNpcQuestion = "
-			// 	SELECT 
-			// 		FROM `t0398_game_result_p98` r98 , `t0299_game_question_p99` q98 , `t0400_game_play` p ,`t0300_game_result` r
-			// 			WHERE p.`play` = {$difficulty}
-			// 			AND p.`planet_id` = {$planetId}
-			// 			AND p.`id` = r.`play_id`
-			// ";
+			// 	$npcQuestion = DB::select($sqlNpcQuestion);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+			// 	array_push($opponent, )
+			// }
 
 
 
@@ -1145,13 +1280,13 @@ class ZapZapQuestionHelper{
 			// shuffle($results);
 			// return $results;
 
-		// }catch(Exception $ex){
-		// 	LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp99', ['environment' => json_encode([
-		// 		'ex' =>  $ex->getMessage(),
-		// 		'sql' =>  $sql,
-		// 	])]);
-		// return ResponseHelper::OutputJSON('exception');
-		// }
+		}catch(Exception $ex){
+			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp99', ['environment' => json_encode([
+				'ex' =>  $ex->getMessage(),
+				'sql' =>  $sql,
+			])]);
+		return ResponseHelper::OutputJSON('exception');
+		}
 	}
 
 	public static function SubmitResultP01($planetId,$gamePlay ,$gameResult,$profileId ) {

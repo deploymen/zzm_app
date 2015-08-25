@@ -44,7 +44,7 @@ Class ApiGameController extends Controller {
 
 		LogHelper::LogGetQuestions($planetId, $gameCode);
 
-		// try{
+		try{
 			$questionCount = Request::input('question_count');
 			$profileId =  Request::input('game_code_profile_id');
 			$gameType = Request::input('game_type');
@@ -87,6 +87,9 @@ Class ApiGameController extends Controller {
 			
 			$difficulty = $userMap[0]->star + 1;
 			if($difficulty > 5){ $difficulty = 5; }
+
+			$level = $userMap[0]->level;
+			
 			switch($planet->game_type){
 				case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId,$difficulty,$questionCount); break;
 				case 'p02':$questions = ZapZapQuestionHelper::GetQuestionP02($planetId,$difficulty,$questionCount); break;
@@ -98,7 +101,7 @@ Class ApiGameController extends Controller {
 				case 'p18':$questions = ZapZapQuestionHelper::GetQuestionP18($planetId,$difficulty,$questionCount); break;
 				case 'p23':$questions = ZapZapQuestionHelper::GetQuestionP23($planetId,$difficulty,$questionCount); break;
 				case 'p32':$questions = ZapZapQuestionHelper::GetQuestionP32($planetId,$difficulty,$questionCount); break;
-				case 'p99':$questions = ZapZapQuestionHelper::GetQuestionP99($planetId,$difficulty,$questionCount,$gameType); break;
+				case 'p99':$questions = ZapZapQuestionHelper::GetQuestionP99($planetId,$gameType,$level); break;
 
 				default: return ResponseHelper::OutputJSON('fail', 'question not found');
 
@@ -122,14 +125,14 @@ Class ApiGameController extends Controller {
 	            	'questions' => $questions,
 	            ]);
 
-	// 		} catch (Exception $ex) {
+			} catch (Exception $ex) {
 
-	// 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-	// 				'source' => 'ApiGameController > request',
-	// 				'inputs' => Request::all(),
-	// 			])]);
-	// 			return ResponseHelper::OutputJSON('exception');
-	// 		}
+				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+					'source' => 'ApiGameController > request',
+					'inputs' => Request::all(),
+				])]);
+				return ResponseHelper::OutputJSON('exception');
+			}
 	}
 
 	//SUBMIT RESULT
