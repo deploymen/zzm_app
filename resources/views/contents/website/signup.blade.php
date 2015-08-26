@@ -40,9 +40,9 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
     
-    <div class="site-wrapper sign-in-up">
+    <div id="sign-in-up" class="site-wrapper sign-in-up">
       <div class="row">
-        <section id="signup-holder" class="signup-holder cf">
+        <section class="signup-holder cf">
                     <section class="signup-holder-inner small-12 medium-4 medium-centered columns">
                         <div class="logo">
                             <img src="/assets/main/img/global/logo-main-white.png" alt=" ">

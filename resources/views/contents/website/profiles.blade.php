@@ -5,7 +5,10 @@
 
 @section('css_include')
 <style type="text/css">
-
+/* ng-cloak */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
 </style>
 @stop
 
