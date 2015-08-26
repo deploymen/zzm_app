@@ -74,8 +74,8 @@ class ZapZapQuestionHelper{
 		try{
 			$sqlWherePlanet = "";
 
-			if(!$planetId){
-				$userMap = UserMap::where('profile_id', $profileId)->where('planet_id' , $planetId)->first();
+			if($planetId){
+				$userMap = UserMap::where('profile_id', $profileId)->where('planet_id' , $planetId)->first();				
 				if(!$userMap){
 					$userMap = new UserMap;
 					$userMap->profile_id = $profileId;
@@ -85,6 +85,8 @@ class ZapZapQuestionHelper{
 
 				$sqlWherePlanet = " AND sp.`planet_id` = {$planetId} ";			
 			}
+
+
 
 			$sql = "
 				SELECT um.`level`,um.`exp`, um.`top_score` , s.`id` AS `system_id` , s.`name` AS `system_name` , p.`id` AS `planet_id` , p.`name` AS `planet_name` , p.`description` ,CAST(IFNULL(um.`star`, 0) AS UNSIGNED) AS `star`
@@ -101,7 +103,6 @@ class ZapZapQuestionHelper{
 				";
 
 			$result = DB::SELECT($sql, ['profileId'=>$profileId]);
-			
 			return $result;
 
 		}catch(Exception $ex){
@@ -1051,7 +1052,7 @@ class ZapZapQuestionHelper{
 		}
 	}
 
-	public static function GetQuestionP99($planetId,$gameType,$level,$profileId,$planetId){
+	public static function GetQuestionP00($planetId,$gameType,$level,$profileId){
 		try{
 			if(!$level){
 				$userMap = UserMap::where('profile_id', $profileId)->where('planet_id' , $planetId)->first();
@@ -1061,7 +1062,6 @@ class ZapZapQuestionHelper{
 
 				$level = $userMap->level;
 			}
-
 			
 			if($level == '1'){
 				$easy = '25';
@@ -1123,20 +1123,20 @@ class ZapZapQuestionHelper{
 			
 			}
 		
-			$sql = "
-				  SELECT GROUP_CONCAT(a.`target_id`)  AS `ids`
+			$sqlQuestionId = "
+				  SELECT GROUP_CONCAT(a.`target_id`)  AS `ids` 
 						FROM (
 							SELECT  q.`target_id` , RAND() AS `rand`
-	                        FROM `t0126_game_planet_question` pq ,`t0200_game_question` q , `t0123_game_planet` gp , `t0299_game_question_p99` p99
+	                        FROM `t0126_game_planet_question` pq ,`t0200_game_question` q , `t0123_game_planet` gp , `t0200_game_question_p00` p00
 	                            WHERE  pq.`question_id` = q.`id`
-	                            AND q.`target_type`  = 'p99'
+	                            AND q.`target_type`  = 'p00'
 	                            AND pq.`enable` = '1'
 	                            AND q.`enable` = '1'
-	                            AND p99.`enable` = '1'
-	                            AND p99.`id` = q.`target_id`
+	                            AND p00.`enable` = '1'
+	                            AND p00.`id` = q.`target_id`
 	                          	AND gp.`id` =  pq.`planet_id`
 		                        AND q.`difficulty` = 1
-		                        AND pq.`planet_id` = :planet_id
+		                        AND pq.`planet_id` = {$planetId}
 	                       		
 	                       		ORDER BY  pq.`sequence` * ABS(gp.`question_random`-1) , `rand`
 	                           	LIMIT {$easy}
@@ -1147,16 +1147,16 @@ class ZapZapQuestionHelper{
 					SELECT GROUP_CONCAT(b.`target_id`)  AS `ids`
 						FROM (
 							SELECT  q.`target_id` , RAND() AS `rand`
-	                        FROM `t0126_game_planet_question` pq ,`t0200_game_question` q , `t0123_game_planet` gp , `t0299_game_question_p99` p99
+	                        FROM `t0126_game_planet_question` pq ,`t0200_game_question` q , `t0123_game_planet` gp , `t0200_game_question_p00` p00
 	                            WHERE  pq.`question_id` = q.`id`
-	                            AND q.`target_type`  = 'p99'
+	                            AND q.`target_type`  = 'p00'
 	                            AND pq.`enable` = '1'
 	                            AND q.`enable` = '1'
-	                            AND p99.`enable` = '1'
-	                            AND p99.`id` = q.`target_id`
+	                            AND p00.`enable` = '1'
+	                            AND p00.`id` = q.`target_id`
 	                          	AND gp.`id` =  pq.`planet_id`
 		                        AND q.`difficulty` = 2
-		                        AND pq.`planet_id` = :planet_id
+		                        AND pq.`planet_id` = {$planetId}
 	                       		
 	                       		ORDER BY  pq.`sequence` * ABS(gp.`question_random`-1) , `rand`
 	                           	LIMIT {$average}
@@ -1167,16 +1167,16 @@ class ZapZapQuestionHelper{
 					SELECT GROUP_CONCAT(c.`target_id`)  AS `ids`
 						FROM (
 							SELECT  q.`target_id` , RAND() AS `rand`
-	                        FROM `t0126_game_planet_question` pq ,`t0200_game_question` q , `t0123_game_planet` gp , `t0299_game_question_p99` p99
+	                        FROM `t0126_game_planet_question` pq ,`t0200_game_question` q , `t0123_game_planet` gp , `t0200_game_question_p00` p00
 	                            WHERE  pq.`question_id` = q.`id`
-	                            AND q.`target_type`  = 'p99'
+	                            AND q.`target_type`  = 'p00'
 	                            AND pq.`enable` = '1'
 	                            AND q.`enable` = '1'
-	                            AND p99.`enable` = '1'
-	                            AND p99.`id` = q.`target_id`
+	                            AND p00.`enable` = '1'
+	                            AND p00.`id` = q.`target_id`
 	                          	AND gp.`id` =  pq.`planet_id`
 		                        AND q.`difficulty` = 3
-		                        AND pq.`planet_id` = :planet_id
+		                        AND pq.`planet_id` = {$planetId}
 	                       		
 	                       		ORDER BY  pq.`sequence` * ABS(gp.`question_random`-1) , `rand`
 	                           	LIMIT {$hard}
@@ -1184,26 +1184,25 @@ class ZapZapQuestionHelper{
 										
 			";
 
-			$targetIds = DB::SELECT($sql, ['planet_id'=>$planetId] )[0]->ids;
-
+			$questionId = DB::SELECT($sqlQuestionId);
+			$targetIds = $questionId[0]->ids.','.$questionId[1]->ids.','.$questionId[2]->ids;
+			
 			$sql2 = "
-				SELECT  p99.* ,  q.`difficulty`, q.`id` AS `id`, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description` 
-					 FROM (`t0299_game_question_p99` p99 , `t0200_game_question` q)
+				SELECT  p00.* ,  q.`difficulty`, q.`id` AS `id`, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description` 
+					 FROM (`t0200_game_question_p00` p00 , `t0200_game_question` q)
 
-						LEFT JOIN `t0199_game_question_subject` qs ON (qs.`question_id` = q.`id`)
+						LEFT JOIN `t0132_game_question_subject` qs ON (qs.`question_id` = q.`id`)
 						LEFT JOIN `t0131_game_subject` s ON(qs.`subject_id` = s.`id`  )
                         
-                        WHERE p99.`id` IN( {$targetIds} )
-                        AND q.`target_id` = p99.`id`
-                        AND q.`target_type` = 'p99'
+                        WHERE p00.`id` IN( {$targetIds} )
+                        AND q.`target_id` = p00.`id`
+                        AND q.`target_type` = 'p00'
 
                         ORDER BY q.`id`
 			";
 			$result = DB::SELECT($sql2);
-			$questionsMain = [];
 
-			$gamePlanet = GamePlanet::find($planetId);
-			$questionCount = $gamePlanet->question_count;
+			$questionsMain = [];
 
 			$results = [];
 			$prevQuestionId = 0;
@@ -1215,10 +1214,12 @@ class ZapZapQuestionHelper{
 					array_push($results, [
 						'id' => $r->id,
 						'question' => $r->question,
+						'question_option1' => $r->question_option1,
+						'question_option2' => $r->question_option2,
+						'question_option3' => $r->question_option3,
+						'question_option4' => $r->question_option4,
 						'difficulty' => $r->difficulty,
-						'subject' => [],
-						'question_npc' => []
-
+						'subject' => []
 					]);
 				}
 				array_push($results[count($results)-1]['subject'],[
@@ -1238,38 +1239,36 @@ class ZapZapQuestionHelper{
 			if(count($gamePlay) != $gameType){
 				$setGenerate = $gameType - count($gamePlay);
 			}
-			// for($j=0; $j<$setGenerate; $j++){
+			for($j=0; $j<$setGenerate; $j++){
 
-			// 	$resultP02 = new GameResultP02;
-			// 	$resultP02->correct = ;
-			// 	$resultP02->target_type = 'p00';
-			// 	$resultP02->save();
+				$resultP02 = new GameResultP02;
+				$resultP02->correct = ;
+				$resultP02->target_type = 'p00';
+				$resultP02->save();
 
-			// 	$gameResults = new GameResult;
-			// 	$gameResults->play_id = $gamePlay->id;
-			// 	$gameResults->question_id = $inAnswer['question_id'];
-			// 	$gameResults->target_type = 'p02';
-			// 	$gameResults->target_id = $resultP02->id;
-			// 	$gameResults->game_type_id = '2';
-			// 	$gameResults->save();
-			// }
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p02';
+				$gameResults->target_id = $resultP02->id;
+				$gameResults->game_type_id = '2';
+				$gameResults->save();
+			}
 
-			// for($k=0; $k<$gameType; $k++){
-			// 	$sqlNpcQuestion = "
-			// 		SELECT r99.* , r.`complite_time` , p.`level` , p.`score`
-			// 			FROM `t0398_game_result_p98` r98 , `t0400_game_play` p ,`t0300_game_result` r
-			// 				WHERE p.`planet_id` = {$planetId}
-			// 				AND r.`play_id` = p.`id`
-			// 				AND r.game_type_id = XXX
-			// 				AND r99.`id` = r.`target_id`
-			// 		";
+			for($k=0; $k<$gameType; $k++){
+				$sqlNpcQuestion = "
+					SELECT r99.* , r.`complite_time` , p.`level` , p.`score`
+						FROM `t0398_game_result_p98` r98 , `t0400_game_play` p ,`t0300_game_result` r
+							WHERE p.`planet_id` = {$planetId}
+							AND r.`play_id` = p.`id`
+							AND r.game_type_id = XXX
+							AND r99.`id` = r.`target_id`
+					";
 
-			// 	$npcQuestion = DB::select($sqlNpcQuestion);
+				$npcQuestion = DB::select($sqlNpcQuestion);
 
-			// 	array_push($opponent, )
-			// }
-
-
+				array_push($opponent, )
+			}
 
 
 
@@ -1277,13 +1276,14 @@ class ZapZapQuestionHelper{
 
 
 
-			// shuffle($results);
-			// return $results;
+
+
+			shuffle($results);
+			return $results;
 
 		}catch(Exception $ex){
 			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp99', ['environment' => json_encode([
 				'ex' =>  $ex->getMessage(),
-				'sql' =>  $sql,
 			])]);
 		return ResponseHelper::OutputJSON('exception');
 		}

@@ -44,7 +44,7 @@ Class ApiGameController extends Controller {
 
 		LogHelper::LogGetQuestions($planetId, $gameCode);
 
-		try{
+		// try{
 			$questionCount = Request::input('question_count');
 			$profileId =  Request::input('game_code_profile_id');
 			$gameType = Request::input('game_type');
@@ -66,10 +66,10 @@ Class ApiGameController extends Controller {
 			
 			//get user map
 			$userMap = ZapZapQuestionHelper::GetUserMap($profileId, $planetId);
-
 			if(!$userMap){
 				return ResponseHelper::OutputJSON('fail', 'system planet not enable');
 			}
+
 			$planetTopScore = ZapZapQuestionHelper::GameScreenPlanetTopScore($planetId);
 			$playerTopScore = ZapZapQuestionHelper::GameScreenPlayerTopScore($planetId,$profileId);
 
@@ -101,7 +101,7 @@ Class ApiGameController extends Controller {
 				case 'p18':$questions = ZapZapQuestionHelper::GetQuestionP18($planetId,$difficulty,$questionCount); break;
 				case 'p23':$questions = ZapZapQuestionHelper::GetQuestionP23($planetId,$difficulty,$questionCount); break;
 				case 'p32':$questions = ZapZapQuestionHelper::GetQuestionP32($planetId,$difficulty,$questionCount); break;
-				case 'p99':$questions = ZapZapQuestionHelper::GetQuestionP99($planetId,$gameType,$level); break;
+				case 'p00':$questions = ZapZapQuestionHelper::GetQuestionP00($planetId,$gameType,$level,$profileId); break;
 
 				default: return ResponseHelper::OutputJSON('fail', 'question not found');
 
@@ -125,14 +125,14 @@ Class ApiGameController extends Controller {
 	            	'questions' => $questions,
 	            ]);
 
-			} catch (Exception $ex) {
+			// } catch (Exception $ex) {
 
-				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-					'source' => 'ApiGameController > request',
-					'inputs' => Request::all(),
-				])]);
-				return ResponseHelper::OutputJSON('exception');
-			}
+			// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+			// 		'source' => 'ApiGameController > request',
+			// 		'inputs' => Request::all(),
+			// 	])]);
+			// 	return ResponseHelper::OutputJSON('exception');
+			// }
 	}
 
 	//SUBMIT RESULT
