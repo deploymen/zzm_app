@@ -206,6 +206,12 @@ table tr:nth-of-type(even) {
 	height: rem(28px);
 }
 
+.new-profile-validation-msg {
+	text-align: center;
+	color: $punch;
+	display: none;
+}
+
 /** Main Header Styles **/
 .main-header {
 	position: fixed;

@@ -42,7 +42,7 @@ function signup(){
 	var signUpEmail = $('#users_email');
 	var signUpPewPew = $('#users_password');
 	var signUpCountry = $('#users_country');
-	var loginformholder = $('#signup-holder');
+	var signupformholder = $('#sign-in-up');
 
 	signUpForm.on('valid.fndtn.abide', function(){
 		// The following variable "signupRole" NEEDS to be inside this function
@@ -70,9 +70,9 @@ function signup(){
 				var message = data['message'];
 
 				if(status === 'fail' && message === 'password must be atleast 6 chars'){
-					loginformholder.prepend('<span class="incorrect-details"><p>Password must be at least 6 characters long</p></span>');
+					signupformholder.prepend('<span class="incorrect-details"><p>Password must be at least 6 characters long</p></span>');
 				} else if(status === 'fail' && message === 'email used'){
-					loginformholder.prepend('<span class="incorrect-details"><p>E-mail address is already in use.</p></span>');
+					signupformholder.prepend('<span class="incorrect-details"><p>E-mail address is already in use.</p></span>');
 				} else if (status === 'success') {
 					window.location.href = '/user/signin';
 				}

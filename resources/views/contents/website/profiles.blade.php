@@ -68,13 +68,14 @@
 		<form data-abide="ajax" id="new-profile-form" class="new-profile-form">
 			<div class="row">
 				<div class="small-12 medium-6 columns">
-					<label for="first-name">First Name
+					<label for="first-name">First Name <small>required</small>
 						<input id="new-first-name" type="text" placeholder="Adam" name="first-name" required />
 					</label>
+
 				</div>
 				<div class="small-12 medium-6 columns">
-					<label>Last Name
-						<input id="new-last-name" type="text" placeholder="Lim" />
+					<label>Last Name <small>required</small>
+						<input id="new-last-name" type="text" placeholder="Lim" required />
 					</label>
 				</div>
 			</div>
@@ -87,8 +88,8 @@
 
 			<div class="row">
 				<div class="small-12 medium-6 columns">
-					<label>Age
-						<select id="profile-age-edit">
+					<label>Age <small>required</small>
+						<select id="profile-age-edit" required>
 							<option value="5">5 or younger</option>
 							<option value="6">6</option>
 							<option value="7">7</option>
@@ -107,8 +108,8 @@
 					</label>
 				</div>
 				<div class="small-12 medium-6 columns">
-					<label>Grade
-						<select id="profile-grade-edit">
+					<label>Grade <small>required</small>
+						<select id="profile-grade-edit" required>
 							<option value="prekindergarten">Pre-Kindergarten</option>
 							<option value="kindergarten">Kindergarten</option>
 							<option value="1">1</option>
@@ -131,26 +132,27 @@
 
 			<div class="row">
 				<div class="small-12 columns">
-					<label>School
+					<label>School <small>required</small>
 						<p class="subline-desc">This will be used to connect students and teachers from the same school</p>
-						<input id="new-school" type="text" />
+						<input id="new-school" type="text" required />
 					</label>
 				</div>
 			</div>
 			<div class="row">
 				<div class="small-12 columns">
-					<label>City
+					<label>City <small>required</small>
 						<p class="subline-desc">This will be used to compare results against other cities and places in the world</p>
-						<input id="new-city" type="text" />
+						<input id="new-city" type="text" required />
 					</label>
 				</div>
 			</div>
 			<div class="row">
-				<div class="medium-5 box-centered text-center">
+				<div class="medium-6 box-centered text-center">
 					<label>
-						<input type="button" value="Create My Profile" id="btn-create-profile" class="button wide radius blue" />
+						<input type="submit" value="Create My Profile" id="btn-create-profile" class="button wide radius blue" />
 					</label>
 				</div>
+				<p id="new-profile-validation-msg" class="new-profile-validation-msg">All fields are required</p>
 			</div>
 		</form>
 

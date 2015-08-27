@@ -89,6 +89,7 @@ var createbtn = $('#btn-create-profile');
 var btnnewprofile = $('#btn-show-profile-form');
 var addprofilemodal = $('#addProfileModal');
 var newprofileform = $('#new-profile-form');
+var newprofilevalidate = $('#new-profile-validation-msg');
 
 function createNewProfile(){
 	var addbtn = $('#btn-add-new-profile');
@@ -127,7 +128,8 @@ function createNewProfile(){
 			var message = data['message'];
 			//location.reload();
 			if(status === 'fail' && message === 'missing parameters'){
-				alert('Missing Parameters');
+				// alert('Missing Parameters');
+				newprofilevalidate.show();
 			} else {
 				addprofilemodal.foundation('reveal', 'close');
 				location.reload();
