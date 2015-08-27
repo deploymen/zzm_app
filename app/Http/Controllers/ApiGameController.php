@@ -66,7 +66,6 @@ Class ApiGameController extends Controller {
 			
 			//get user map
 			$userMap = ZapZapQuestionHelper::GetUserMap($profileId, $planetId);
-			var_export($userMap); die();
 			if(!$userMap){
 				return ResponseHelper::OutputJSON('fail', 'system planet not enable');
 			}
