@@ -134,8 +134,8 @@ ZZM.playId = '{{Request::input('play_id')}}';
 									<span class="meter-percentage">40%</span>
 								</div>
 							</td>
-							<td width="10%" class="">
-								<a href="/user/profiles/{{$profile->id}}/results?system_id=@{{s.id}}" class="button round btn-more-results">
+							<td width="10%" class="" ng-switch on="s">
+								<a ng-href="/user/profiles/{{$profile->id}}/results?system_id=@{{s.id}}" class="button round btn-more-results">
 									<span>More</span>
 									<i class="fa fa-chevron-right"></i>
 								</a>	
@@ -191,11 +191,16 @@ ZZM.playId = '{{Request::input('play_id')}}';
 									<span class="meter-percentage">100%</span>
 								</div>
 							</td>
-							<td width="10%">
-								<a href="/user/profiles/{{$profile->id}}/results?profile_id={{$profile->id}}&planet_id=@{{p.id}}" class="button round btn-more-results">
+							<td width="10%" ng-switch on="p.play_count">
+								<span ng-switch-when="0">
+									&nbsp;
+								</span>
+								<span ng-switch-default>
+									<a ng-href="/user/profiles/{{$profile->id}}/results?profile_id={{$profile->id}}&planet_id=@{{p.id}}" class="button round btn-more-results">
 									<span>More</span>
 									<i class="fa fa-chevron-right"></i>
 								</a>
+								</span>
 							</td>
 						</tr>
 					</tbody>

@@ -76,7 +76,8 @@ App.controller('MainController', function ($scope, $http){
                 $scope.showResult('system'); 
 
             } else {
-                alert(data.message);
+                console.log(data.message);
+                history.back();
             }
         });  	
     }  
@@ -90,13 +91,20 @@ App.controller('MainController', function ($scope, $http){
         	'system_id=' + system_id, 
             'page=' + page,
             'page_size=' + pageSize
-        ].join('&')).success(function(data, status, headers, config) {
+        ].join('&')).success(function(data, status, headers, config, i) {
             if (data.status == 'success') {
             	$scope.planets = data.data.planet;
             	$scope.breadcumbs = data.data.breakcrumb;
 
+                // console.log($scope.planets[0].play_count);
+
+                angular.forEach($scope.planets, function (planet){
+                    console.log(planet.play_count);
+                });
+
             } else {
-                alert(data.message);
+                console.log(data.message);
+                history.back();
             }
         }); 
 
@@ -176,7 +184,9 @@ App.controller('MainController', function ($scope, $http){
             	}
 
             } else {
-                alert(data.message);
+                console.log(data.message);
+                history.back();
+                $('.btn-more-results').addClass('disabled');
             }
         }); 
 

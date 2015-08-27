@@ -40,9 +40,9 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
     
-    <div class="site-wrapper sign-in-up">
+    <div id="sign-in-up" class="site-wrapper sign-in-up">
       <div class="row">
-        <section id="signup-holder" class="signup-holder cf">
+        <section class="signup-holder cf">
                     <section class="signup-holder-inner small-12 medium-4 medium-centered columns">
                         <div class="logo">
                             <img src="/assets/main/img/global/logo-main-white.png" alt=" ">
@@ -66,7 +66,7 @@
                   <div class="row">
                     <div class="small-12 columns">
                       <label for="users_name" class="label-header">
-                                Name
+                                Name <small>required</small>
                         <input type="text" id="users_name" placeholder="John Jones" name="users_name" required pattern="[a-zA-Z]+">
                       </label>
                       <small class="error">Please fill in your name, we like to address our friends properly!</small>
@@ -76,7 +76,7 @@
                   <div class="row">
                     <div class="small-12 columns">
                       <label for="email" class="label-header">
-                                    Email
+                                    Email <small>required</small>
                         <input type="email" id="users_email" placeholder="johnjones@internet.com" name="email" required>
                       </label>
                       <small class="error">Please input a valid email address. Like example@domain.com</small>
@@ -86,7 +86,7 @@
                   <div class="row">
                     <div class="small-12 columns">
                       <label for="password" class="label-header">
-                                Password
+                                Password <small>required</small>
                         <input type="password" id="users_password" placeholder="......" name="password" required>
                       </label>
                       <small class="error">Passwords must be at least 6 characters with 1 capital letter, 1 number, and one special character.</small>
@@ -96,7 +96,7 @@
                   <div class="row" ng-app="countrydropdown" ng-controller="countryController">
                     <div class="small-12 columns">
                       <label for="country" class="label-header">
-                          Country
+                          Country <small>required</small>
                             <select id="users_country" name="country" required ng-model="country" ng-options="country.name for country in countries track by country.code">
                               <option value="">-- Select a Country --</option>
                             </select>
