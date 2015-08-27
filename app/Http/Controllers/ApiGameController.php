@@ -44,7 +44,7 @@ Class ApiGameController extends Controller {
 
 		LogHelper::LogGetQuestions($planetId, $gameCode);
 
-		// try{
+		try{
 			$questionCount = Request::input('question_count');
 			$profileId =  Request::input('game_code_profile_id');
 			$gameType = Request::input('game_type');
@@ -66,6 +66,7 @@ Class ApiGameController extends Controller {
 			
 			//get user map
 			$userMap = ZapZapQuestionHelper::GetUserMap($profileId, $planetId);
+			var_export($userMap); die();
 			if(!$userMap){
 				return ResponseHelper::OutputJSON('fail', 'system planet not enable');
 			}
@@ -125,14 +126,14 @@ Class ApiGameController extends Controller {
 	            	'questions' => $questions,
 	            ]);
 
-			// } catch (Exception $ex) {
+			} catch (Exception $ex) {
 
-			// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-			// 		'source' => 'ApiGameController > request',
-			// 		'inputs' => Request::all(),
-			// 	])]);
-			// 	return ResponseHelper::OutputJSON('exception');
-			// }
+				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+					'source' => 'ApiGameController > request',
+					'inputs' => Request::all(),
+				])]);
+				return ResponseHelper::OutputJSON('exception');
+			}
 	}
 
 	//SUBMIT RESULT
