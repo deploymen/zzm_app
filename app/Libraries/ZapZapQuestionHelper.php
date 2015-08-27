@@ -22,6 +22,7 @@ use App\Models\GameSystem;
 use App\Models\GamePlanet;
 use App\Models\UserMap;
 use App\Models\GameResult;
+use App\Models\GameResultP00;
 use App\Models\GameResultP01;
 use App\Models\GameResultP02;
 use App\Models\GameResultP03;
@@ -344,7 +345,7 @@ class ZapZapQuestionHelper{
                         ORDER BY q.`id`
 			";
 
-			$questionsMain = [];
+			
 
 			$result = DB::SELECT($sql2);
 
@@ -643,7 +644,7 @@ class ZapZapQuestionHelper{
                         ORDER BY q.`id`
 			";
 
-			$questionsMain = [];
+			
 
 			$result = DB::SELECT($sql2);
 
@@ -734,7 +735,7 @@ class ZapZapQuestionHelper{
                         ORDER BY q.`id`
 			";
 
-			$questionsMain = [];
+			
 
 			$result = DB::SELECT($sql2);
 
@@ -823,7 +824,7 @@ class ZapZapQuestionHelper{
                         ORDER BY q.`id`
 			";
 
-			$questionsMain = [];
+			
 
 			$result = DB::SELECT($sql2);
 
@@ -909,7 +910,7 @@ class ZapZapQuestionHelper{
                         ORDER BY q.`id`
 			";
 			$result = DB::SELECT($sql2);
-			$questionsMain = [];
+			
 
 			$gamePlanet = GamePlanet::find($planetId);
 			$questionCount = $gamePlanet->question_count;
@@ -1004,7 +1005,7 @@ class ZapZapQuestionHelper{
                         ORDER BY q.`id`
 			";
 			$result = DB::SELECT($sql2);
-			$questionsMain = [];
+			
 
 			$gamePlanet = GamePlanet::find($planetId);
 			$questionCount = $gamePlanet->question_count;
@@ -1202,8 +1203,6 @@ class ZapZapQuestionHelper{
 			";
 			$result = DB::SELECT($sql2);
 
-			$questionsMain = [];
-
 			$results = [];
 			$prevQuestionId = 0;
 
@@ -1235,51 +1234,61 @@ class ZapZapQuestionHelper{
 			$opponent = []; 
 			$gameType = $gameType - 1;
 			$gamePlay = GamePlay::where('planet_id' , $planetId)->get();
-
-			if(count($gamePlay) != $gameType){
-				$setGenerate = $gameType - count($gamePlay);
+			if(!$gamePlay){
+				continue;
 			}
+			$setGenerate = $gameType - count($gamePlay);
+
 			for($j=0; $j<$setGenerate; $j++){
+				// $play = new GamePlay;
+				// $play->type = 'anonymous';
+				// $play->planet_id = '228';
+				// $play->target_type = 'p00';
 
-				$resultP02 = new GameResultP02;
-				$resultP02->correct = ;
-				$resultP02->target_type = 'p00';
-				$resultP02->save();
 
-				$gameResults = new GameResult;
-				$gameResults->play_id = $gamePlay->id;
-				$gameResults->question_id = $inAnswer['question_id'];
-				$gameResults->target_type = 'p02';
-				$gameResults->target_id = $resultP02->id;
-				$gameResults->game_type_id = '2';
-				$gameResults->save();
 			}
 
-			for($k=0; $k<$gameType; $k++){
-				$sqlNpcQuestion = "
-					SELECT r99.* , r.`complite_time` , p.`level` , p.`score`
-						FROM `t0398_game_result_p98` r98 , `t0400_game_play` p ,`t0300_game_result` r
-							WHERE p.`planet_id` = {$planetId}
-							AND r.`play_id` = p.`id`
-							AND r.game_type_id = XXX
-							AND r99.`id` = r.`target_id`
-					";
+			$smallest = $level -1;
+			$biggest = $level +1;
+			//get opponent result
+			$sqlNpcQuestion = "
+				SELECT  p.`id` AS `play_id` , p.`level`,p.`score`, r00.`answer` ,r00.`answer_option`, r00.`correct`  , r.`complite_time` 
+					FROM `t0300_game_result_p00` r00 , `t0400_game_play` p ,`t0300_game_result` r
+						WHERE r00.`id` = r.`target_id`
+						AND r.`play_id` = p.`id`
+						AND p.`planet_id` = {$planetId}
+						AND p.`level` > {$smallest}
+						AND p.`level` < {$biggest}
+						AND r.`game_type_id` = 0
 
+				";
 				$npcQuestion = DB::select($sqlNpcQuestion);
+				$prevPlayId = 0;
 
-				array_push($opponent, )
-			}
+				for($k=0; $k<count($npcQuestion); $k++){
+					$n = $npcQuestion[$k];
 
-
-
-
-
-
-
+					if($n->play_id != $prevPlayId){
+						array_push($opponent , []);
+					}
+					array_push($opponent[count($opponent) -1 ], [
+							'play_id' => $n->play_id,
+							'level' => $n->level,
+							'score' => $n->score,
+							'answer' => $n->answer,
+							'answer' => $n->answer_option,
+							'correct' => $n->correct,
+							'complite_time' => $n->complite_time
+					]);
+					$prevPlayId = $n->play_id;
+				}
 
 
 			shuffle($results);
-			return $results;
+			return [
+					'player' => $results, 
+					'opponent' => $opponent
+					];
 
 		}catch(Exception $ex){
 			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp99', ['environment' => json_encode([
@@ -1287,6 +1296,42 @@ class ZapZapQuestionHelper{
 			])]);
 		return ResponseHelper::OutputJSON('exception');
 		}
+	}
+
+	public static function SubmitResultP00($planetId,$gamePlay ,$gameResult,$profileId ) {
+		try{	
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+
+				$question = GameQuestion::find($inAnswer['question_id']);
+				$resultP00 = new GameResultP00;
+				$resultP00->correct = $inAnswer['correct'];
+				$resultP00->target_type = 'p00';
+				$resultP00->target_id = $question->target_id;
+				$resultP00->answer = $inAnswer['answer'];
+				$resultP00->answer_option = $inAnswer['answer_option'];
+				$resultP00->save();
+
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p00';
+				$gameResults->target_id = $resultP00->id;
+				$gameResults->game_type_id = '0';
+				if(isset($inAnswer['complite_time']) ){
+					$gameResults->complite_time = $inAnswer['complite_time'];
+				}
+			
+				$gameResults->save();
+
+				}
+
+			} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+			}
 	}
 
 	public static function SubmitResultP01($planetId,$gamePlay ,$gameResult,$profileId ) {
@@ -1628,6 +1673,11 @@ class ZapZapQuestionHelper{
 			$userMap->star = ($userMap->star > 5)?5:$userMap->star;
 			$userMap->top_score = ($userMap->top_score > $gamePlay->score)?$userMap->top_score:$gamePlay->score;
 			$userMap->played = '1';
+			$userMap->level =  $gamePlay->level;
+			if(isset($gameResult['experience']) ){
+				$userMap->exp =  $gameResult['experience'];
+			}
+			
 			$userMap->save();		
 		}
 
@@ -1673,7 +1723,6 @@ class ZapZapQuestionHelper{
 			$planetTopScore = [];
 		}
 		return $planetTopScore;
-
 	}
 
 	public static function GameScreenPlayerTopScore($planetId,$profileId){
