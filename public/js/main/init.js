@@ -34,14 +34,15 @@ function customiseMenubar(){
 
 // Sign Up Form
 var btnsignup = $('#btn-signup');
+var signUpForm = $('#signup-form');
+//var pagereferrer =  document.referrer;
 
 function signup(){
-	var signUpForm = $('#signup-form');
 	var signUpName = $('#users_name');
 	var signUpEmail = $('#users_email');
 	var signUpPewPew = $('#users_password');
 	var signUpCountry = $('#users_country');
-	var loginformholder = $('#signup-holder');
+	var signupformholder = $('#sign-in-up');
 
 	signUpForm.on('valid.fndtn.abide', function(){
 		// The following variable "signupRole" NEEDS to be inside this function
@@ -61,16 +62,19 @@ function signup(){
 			type	: 'POST',
 			url		: '/api/auth/sign-up',
 			data	: signUpCred,
+			beforeSend: function() {
+				$(document).ajaxStart(function() { Pace.restart(); });
+			},
 			success	: function(data){
 				var status = data['status'];
 				var message = data['message'];
-				// console.log('status: ' + status);
-				// console.log('message: ' + message);
 
 				if(status === 'fail' && message === 'password must be atleast 6 chars'){
-					loginformholder.prepend('<span class="incorrect-details"><p>Password must be at least 6 characters long</p></span>');
+					signupformholder.prepend('<span class="incorrect-details"><p>Password must be at least 6 characters long</p></span>');
 				} else if(status === 'fail' && message === 'email used'){
-					loginformholder.prepend('<span class="incorrect-details"><p>E-mail address is already in use.</p></span>');
+					signupformholder.prepend('<span class="incorrect-details"><p>E-mail address is already in use.</p></span>');
+				} else if (status === 'success') {
+					window.location.href = '/user/signin';
 				}
 			},
 
@@ -161,7 +165,7 @@ btnlogout.click(function(){
 
 (function($, window, document, undefined){
 	$(document).foundation();
-
+	$(document).ajaxStart(function() { Pace.restart(); });
 	// Sign Up and Login Form function calls
 	customiseMenubar();
 

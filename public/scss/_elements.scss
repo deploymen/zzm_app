@@ -81,6 +81,17 @@ small.error {
 	margin-top: rem(-15px);
 }
 
+button.disabled,
+button.disabled,
+button[disabled],
+button[disabled],
+.button.disabled,
+.button.disabled,
+.button[disabled],
+.button[disabled] {
+	background-color: $grey;
+}
+
 button.disabled:hover,
 button.disabled:focus,
 button[disabled]:hover,
@@ -89,7 +100,7 @@ button[disabled]:focus,
 .button.disabled:focus,
 .button[disabled]:hover,
 .button[disabled]:focus {
-	background-color: $picton-blue;
+	background-color: $grey;
 }
 
 ul.pagination li.current a,
@@ -193,6 +204,12 @@ table tr:nth-of-type(even) {
 
 .profile-school-name {
 	height: rem(28px);
+}
+
+.new-profile-validation-msg {
+	text-align: center;
+	color: $punch;
+	display: none;
 }
 
 /** Main Header Styles **/
