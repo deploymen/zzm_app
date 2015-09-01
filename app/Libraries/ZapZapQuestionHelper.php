@@ -1234,23 +1234,23 @@ class ZapZapQuestionHelper{
 			//opponent
 			$opponent = []; 
 			$gameType = $gameType - 1;
-			$gamePlay = GamePlay::where('planet_id' , $planetId)->get();
+			$smallest = $level -1;
+			$biggest = $level +1;
+
+			$gamePlay = GamePlay::where('planet_id' , $planetId)->where('level', '>',  $smallest)->where('level' ,'<', $biggest)->get();
 			if(!$gamePlay){
 				continue;
 			}
+
 			$setGenerate = $gameType - count($gamePlay);
 
 			for($j=0; $j<$setGenerate; $j++){
-				// $play = new GamePlay;
-				// $play->type = 'anonymous';
-				// $play->planet_id = '228';
-				// $play->target_type = 'p00';
-
-
+				$play = new GamePlay;
+				$play->type = 'anonymous';
+				$play->planet_id = '228';
+				$play->target_type = 'p00';
 			}
-
-			$smallest = $level -1;
-			$biggest = $level +1;
+			
 			//get opponent result
 			$sqlNpcQuestion = "
 				SELECT  p.`id` AS `play_id` , p.`level`,p.`score`, r00.`answer` ,r00.`answer_option`, r00.`correct`  , r.`complite_time` 
