@@ -164,7 +164,7 @@
 	</div><!--addProfileModal-->
 
 	<div class="row">
-		<div id="profile-list" class="cf">
+		<div id="profile-list" class="cf" ng-cloak>
 			<!-- <div ng-repeat=""></div> -->
 			<div class="profile-item" ng-repeat="gameprofile in gameprofiles">
 				<section class="profile-info">

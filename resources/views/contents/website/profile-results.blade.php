@@ -76,7 +76,7 @@ ZZM.playId = '{{Request::input('play_id')}}';
 	        </li>
 	    </ol>
 	</div>
-    <div class="results-container cf">
+    <div class="results-container cf" ng-cloak>
     	<div class="profile-bar cf">
 			<div class="small-12 columns cf">
 				<div class="small-12 medium-3 columns">
@@ -122,8 +122,8 @@ ZZM.playId = '{{Request::input('play_id')}}';
 							<td width="70%"><p class="results-table-name">@{{s.system_name}}</p></td>
 							<td width="20%" class="results-progress-column">
 								<div class="progress">
-									<span class="meter" style="width: 40%"></span>
-									<span class="meter-percentage">40%</span>
+									<span class="meter" style="width: 0%"></span>
+									<span class="meter-percentage">0%</span>
 								</div>
 							</td>
 							<td width="10%" class="" ng-switch on="s">
@@ -179,8 +179,8 @@ ZZM.playId = '{{Request::input('play_id')}}';
 							<td width="70%"><p class="results-table-name">@{{p.subtitle}}</p></td>
 							<td width="20%" class="">
 								<div class="progress">
-									<span class="meter" style="width: 100%"></span>
-									<span class="meter-percentage">100%</span>
+									<span class="meter" style="width: 0%"></span>
+									<span class="meter-percentage">0%</span>
 								</div>
 							</td>
 							<td width="10%" ng-switch on="p.play_count">
