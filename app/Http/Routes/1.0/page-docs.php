@@ -94,6 +94,7 @@ Route::group(['prefix' => 'docs'], function(){
 	Route::get('/api.game-play-result-post-p18', function(){ return view('contents.docs.api-game-play-result-post-p18'); });
 	Route::get('/api.game-play-result-post-p23', function(){ return view('contents.docs.api-game-play-result-post-p23'); });
 	Route::get('/api.game-play-result-post-p32', function(){ return view('contents.docs.api-game-play-result-post-p32'); });
+	Route::get('/api.game-play-result-post-p00', function(){ return view('contents.docs.api-game-play-result-post-p00'); });
 
 
 	Route::get('/api.game-result-progress-get', function(){ return view('contents.docs.api-game-result-progress-get'); });
