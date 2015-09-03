@@ -121,8 +121,8 @@
 	}
 
 	.results-table tr td {
-		padding-left: rem(0px);
-		padding-right: rem(0px);
+		padding-left: rem(10px);
+		padding-right: rem(10px);
 	}
 
 	.results-table-name {
@@ -169,6 +169,10 @@
 		width: 120%;
 		height: 20%;
 	}
+
+	.breadcrumb li a {
+		padding: 10px 0 10px 50px;
+	}
 }
 
 @media #{$medium-up} {
@@ -177,7 +181,8 @@
 	}
 
 	.page-content-wrapper {
-		padding-left: rem(300px);
+		/*Uncomment 'padding-left' when sidebar menu is not hidden*/
+		/*padding-left: rem(300px);*/
 		padding-top: rem(100px);
 	}
 
@@ -203,7 +208,8 @@
 	}
 
 	.page-content-wrapper {
-		padding-left: rem(100px);
+		/*Uncomment 'padding-left' when sidebar menu is not hidden*/
+		/*padding-left: rem(100px);*/
 	}
 }
 
@@ -234,6 +240,7 @@
 	}
 
 	.page-content-wrapper {
-		padding-left: rem(100px);
+		/*Uncomment 'padding-left' when sidebar menu is not hidden*/
+		/*padding-left: rem(100px);*/
 	}
 }

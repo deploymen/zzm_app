@@ -52,7 +52,8 @@ body, html {
 	padding-top: rem(100px);
 	padding-right: rem(30px);
 	padding-bottom: rem(85px);
-	padding-left: rem(30px);
+	/*Uncomment 'padding-left' when sidebar menu is not hidden*/
+	/*padding-left: rem(30px);*/
 }
 
 .box-centered {
