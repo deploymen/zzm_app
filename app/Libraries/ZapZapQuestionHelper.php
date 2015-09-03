@@ -1275,7 +1275,7 @@ class ZapZapQuestionHelper{
 					$gameResults->target_type = 'p00';
 					$gameResults->target_id = $resultP00->id;
 					$gameResults->game_type_id = '0';
-					$gameResults->complite_time = '3';
+					$gameResults->complete_time = '3';
 					$gameResults->save();
 
 					}
@@ -1286,7 +1286,7 @@ class ZapZapQuestionHelper{
 			$questionCount = $gameType * 50;
 			//get opponent result
 			$sqlNpcQuestion = "
-				SELECT  p.`id` AS `play_id` , p.`level`,p.`score`, r00.`answer` ,r00.`answer_option`, r00.`correct`  , r.`complite_time` 
+				SELECT  p.`id` AS `play_id` , p.`level`,p.`score`, r00.`answer` ,r00.`answer_option`, r00.`correct`  , r.`complete_time` 
 					FROM `t0300_game_result_p00` r00 , `t0400_game_play` p ,`t0300_game_result` r
 						WHERE r00.`id` = r.`target_id`
 						AND r.`play_id` = p.`id`
@@ -1318,7 +1318,7 @@ class ZapZapQuestionHelper{
 							'answer' => $n->answer,
 							'answer_option' => $n->answer_option,
 							'correct' => $n->correct,
-							'complite_time' => $n->complite_time
+							'complete_time' => $n->complete_time
 					]);
 					$prevPlayId = $n->play_id;
 				}
@@ -1356,8 +1356,8 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p00';
 				$gameResults->target_id = $resultP00->id;
 				$gameResults->game_type_id = '0';
-				if(isset($inAnswer['complite_time']) ){
-					$gameResults->complite_time = $inAnswer['complite_time'];
+				if(isset($inAnswer['complete_time']) ){
+					$gameResults->complete_time = $inAnswer['complete_time'];
 				}
 			
 				$gameResults->save();
