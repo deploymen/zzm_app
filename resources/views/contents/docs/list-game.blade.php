@@ -218,6 +218,13 @@
                     <td>p32 (Coordinate Game)</td>
                     <td align="center"><a href="/docs/api.game-play-request-get-p32-225" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
+                <tr>
+                    <td>15.</td>
+                    <td>GET </td>
+                    <td>/api/game/play/228/request </td>
+                    <td>p00 (Multiplayer Game)</td>
+                    <td align="center"><a href="/docs/api.game-play-request-get-p00-228" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                </tr> 
             </tbody>
         </table>
      
