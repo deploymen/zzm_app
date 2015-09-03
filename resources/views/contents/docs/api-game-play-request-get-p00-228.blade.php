@@ -23,7 +23,7 @@
 
 <div class="row">
     <div class="col-lg-8">
-        <h3>GET  /api/game/play/228/request</h3>
+        <h3>GET  /api/game/play/228/request?game_type=?</h3>
         <ul id="myTab" class="nav nav-tabs">
             <li class="active"><a href="#descriptions" data-toggle="tab">Explain</a>
             </li>
