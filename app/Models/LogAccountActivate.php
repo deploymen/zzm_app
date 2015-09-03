@@ -11,7 +11,7 @@ class LogAccountActivate extends Eloquent {
 	protected $hidden = [];
 
 	public function findUser() {
-		return $this->hasOne('Models\User', 'id', 'user_id');
+		return $this->hasOne('App\Models\User', 'id', 'user_id');
 	}
 
 }

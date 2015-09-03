@@ -1,9 +1,6 @@
 @section('menu')
 
-<aside class="left-off-canvas-menu">
-<!--     <div class="logo">
-        <img src="/assets/img/global/logo-icon.png" alt=" ">
-    </div> -->
+<!-- <aside class="left-off-canvas-menu">
     <ul class="off-canvas-list">
         <li>
             <label class="main-label">
@@ -12,37 +9,31 @@
         </li>
         <li>
             <a href="#">
-                <!-- <i class="fa fa-tachometer"></i> -->
                 Member Dashboard
             </a>
         </li>
         <li>
             <a href="#">
-                <!-- <i class="fa fa-user"></i> -->
                 My Account Settings
             </a>
         </li>
         <li>
             <a href="#">
-                <!-- <i class="fa fa-key"></i> -->
                 Change Password
             </a>
         </li>
         <li>
             <a href="/user/profiles">
-                <!-- <i class="fa fa-star"></i> -->
                 Game Profiles
             </a>
         </li>
         <li>
             <a href="#">
-                <!-- <i class="fa fa-users"></i> -->
                 Manage Classes
             </a>
         </li>
         <li>
             <a href="#">
-               <!--  <i class="fa fa-line-chart"></i> -->
                 Reports &amp; Analytics
             </a>
         </li>
@@ -56,9 +47,9 @@
             <a href="#">View Quiz</a>
         </li>
     </ul>
-</aside>
+</aside> -->
 
-<aside class="left-sidebar hide-for-small">
+<aside class="left-sidebar hide">
     <ul class="left-sidebar-list">
         <li>
             <label class="main-label">

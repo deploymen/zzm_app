@@ -28,4 +28,9 @@ Route::group(['prefix' => 'user'], function(){
 			Route::get('/results2', function(){ return view('contents.website.results-2'); });
 		});
 	});
+
+	
 });
+	
+	Route::get('/activate-success', function(){ return view('contents.website.activate-success'); });
+	Route::get('/activate-fail', function(){ return view('contents.website.activate-fail'); });

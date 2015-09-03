@@ -3,6 +3,7 @@
 use App;
 use DB;
 use Exception;
+use Redirect;
 use Config;
 use Request;
 use Session;
@@ -72,7 +73,7 @@ Class AuthUserController extends Controller {
 			return ResponseHelper::OutputJSON('fail', "email used");
 		}
 
-		// try {
+		try {
 			DB::transaction(function ()
 				 use ($role, $username, $password_sha1, $name, $email, $country, $deviceId, $accessToken) {
 
@@ -166,13 +167,13 @@ Class AuthUserController extends Controller {
 
 				$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
 				$list = User::select('role','name')->find($userAccess->user_id);
-			// } catch (Exception $ex) {
-			// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-			// 		'source' => 'AuthUserController > signUp',
-			// 		'inputs' => Request::all(),
-			// 	])]);
-			// 	return ResponseHelper::OutputJSON('exception');
-			// }
+			} catch (Exception $ex) {
+				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+					'source' => 'AuthUserController > signUp',
+					'inputs' => Request::all(),
+				])]);
+				return ResponseHelper::OutputJSON('exception');
+			}
 
 			return ResponseHelper::OutputJSON('success', '', $list, [
 				'X-access-token' => $accessToken
@@ -405,12 +406,12 @@ Class AuthUserController extends Controller {
 			->first();
 
 		if (!$logAccountActivate) {
-			return ResponseHelper::OutputJSON('fail', "invalid secret");
+			return redirect::to('/activate-fail');
 		}
 
 		$user = $logAccountActivate->findUser()->first();
 		if (!$user) {
-			return ResponseHelper::OutputJSON('fail', "user not found");
+			return redirect::to('/activate-fail');
 		}
 
 		try {
@@ -422,7 +423,7 @@ Class AuthUserController extends Controller {
 			$user->activated = 1;
 			$user->save();
 
-			return ResponseHelper::OutputJSON('success', "user activated");
+			return redirect::to('/activate-success');
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -467,7 +468,7 @@ Class AuthUserController extends Controller {
 				'username' => $email,
 				'zapzapmath_portal' => Config::get('app.website_url').'/sign-in',
 				'social_media_links' => Config::get('app.fanpage_url'),
-				'reset_url' => 'http://www.zapzapmath.com/user/reset-password/' . $secret,
+				'reset_url' => 'http://staging.zapzapmath.com/user/reset-password/' . $secret,
 			]);
 
 			EmailHelper::SendEmail([

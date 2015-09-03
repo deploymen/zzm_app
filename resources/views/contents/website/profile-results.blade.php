@@ -49,7 +49,7 @@ ZZM.playId = '{{Request::input('play_id')}}';
 			<span class="indicator-bar"></span>
 			<ul class="indicator-list">
 				<li class="indicator-list-item">
-					<img src="/assets/main/img/profiles/icon-profiles-1.png" alt="Icon Profiles">
+					<a href="/user/profiles"><img src="/assets/main/img/profiles/icon-profiles-1.png" alt="Icon Profiles"></a>
 				</li>
 				<li class="indicator-list-item">
 					<img src="/assets/main/img/profiles/icon-profiles-2.png" alt="Icon Systems">
@@ -64,23 +64,15 @@ ZZM.playId = '{{Request::input('play_id')}}';
 		</div>
 	</div>
 	<div class="row ng-cloak">
-	    <ol class="breadcrumbs">
+	    <ol class="breadcrumb">
 	        <li>
-	        	<span>
-	        		<a href="/user/profiles/{{$profile->id}}/results">All Result</a>
-	        	</span>
+	        	<a href="/user/profiles/{{$profile->id}}/results">All Result</a>
 	        </li>
 	        <li ng-if="breadcumbs.system_id = breadcumbs.system_id">
 	        	<a href="/user/profiles/{{$profile->id}}/results?system_id=@{{breadcumbs.system_id}}">@{{breadcumbs.system_name}}</a>
 	        </li>
 	        <li ng-if="breadcumbs.planet_id = breadcumbs.planet_id">
-	        	<a href="/user/profiles/{{$profile->id}}/results?planet_id=@{{breadcumbs.planet_id}}&planet_id=@{{breadcumbs.planet_id">@{{breadcumbs.planet_subtitle}}</a>
-	        </li>
-	        <!-- <li ng-if="breadcumbs.play_id = breadcumbs.play_id">
-	        	<a href="/user/profiles/{{$profile->id}}/results?play_id=@{{breadcumbs.play_id}}">@{{breadcumbs.play_id}}</a>
-	        </li> -->
-	        <li ng-if="breadcumbs.question_id = breadcumbs.question_id">
-	        	<a href="/user/profiles/{{$profile->id}}/results?question_id=@{{breadcumbs.question_id}}">@{{breadcumbs.question_id}}</a>
+	        	<a href="/user/profiles/{{$profile->id}}/results?planet_id=@{{breadcumbs.planet_id}}&planet_id=@{{breadcumbs.planet_id">{{breadcumbs.planet_subtitle}}</a>
 	        </li>
 	    </ol>
 	</div>
@@ -259,7 +251,7 @@ ZZM.playId = '{{Request::input('play_id')}}';
 		</div>
 	</div><!--content-group-->
     </div>
-	<div class="row results-btn-holder text-center">
+	<div class="row results-btn-holder text-center" ng-switch on="q.result.correct">
 		<a href="/user/profiles/" class="results-back-link">Go Back to Profiles</a>
 	</div>
 

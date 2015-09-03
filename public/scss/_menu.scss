@@ -4,11 +4,20 @@
 
 .title-tab-section {
 	padding-top: rem(5px);
+	position: relative;
+	text-align: left;
+	padding-left: 65px;
 }
 
 .title-tab-section .title img {
 	width: rem(40px);
 }
+
+
+.left-small {
+	z-index: 4;
+}
+
 
 /** Off-canvas menu **/
 .left-off-canvas-menu {
@@ -45,7 +54,7 @@ ul.off-canvas-list li a {
 	height: 100%;
 	padding-top: rem(55px);
 	padding-bottom: rem(45px);
-	z-index: 1;
+	z-index: 3;
 }
 
 .left-sidebar .left-sidebar-list {
