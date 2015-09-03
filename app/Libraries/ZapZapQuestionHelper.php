@@ -1190,7 +1190,15 @@ class ZapZapQuestionHelper{
 			";
 
 			$questionId = DB::SELECT($sqlQuestionId);
-			$targetIds = $questionId[0]->ids.','.$questionId[1]->ids.','.$questionId[2]->ids;
+			$count = count($questionId);
+
+			if(!$questionId[0]->ids){
+				$targetIds = $questionId[1]->ids;
+			}elseif($count == 2){
+				$targetIds = $questionId[0]->ids.','.$questionId[1]->ids;
+			}elseif($count == 3){
+				$targetIds = $questionId[0]->ids.','.$questionId[1]->ids.','.$questionId[2]->ids;
+			}
 			
 			$sql2 = "
 				SELECT  p00.* ,  q.`difficulty`, q.`id` AS `id`, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description` 
@@ -1205,8 +1213,8 @@ class ZapZapQuestionHelper{
 
                         ORDER BY q.`id`
 			";
+			
 			$result = DB::SELECT($sql2);
-
 			$results = [];
 			$prevQuestionId = 0;
 
