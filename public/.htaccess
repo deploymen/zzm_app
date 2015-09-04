@@ -4,6 +4,8 @@
     </IfModule>
 
     RewriteEngine On
+    RewriteCond %{HTTP_HOST} ^detdetacg.com$
+    RewriteRule (.*) http://www.detdetacg.com/$1 [R=301,L]
 
     # Redirect Trailing Slashes...
     RewriteRule ^(.*)/$ /$1 [L,R=301]
