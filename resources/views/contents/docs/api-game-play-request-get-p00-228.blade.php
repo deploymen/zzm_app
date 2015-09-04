@@ -293,55 +293,55 @@ X-game-code: 0000015k
               "answer": "2",
               "answer_option": 2,
               "correct": "0",
-              "complite_time": "3"
+              "complete_time": "3"
             },
             {
               "answer": "4",
               "answer_option": 4,
               "correct": "1",
-              "complite_time": "3"
+              "complete_time": "3"
             },
             {
               "answer": "4",
               "answer_option": 4,
               "correct": "0",
-              "complite_time": "3"
+              "complete_time": "3"
             },
             {
               "answer": "2",
               "answer_option": 2,
               "correct": "1",
-              "complite_time": "3"
+              "complete_time": "3"
             },
             {
               "answer": "4",
               "answer_option": 4,
               "correct": "0",
-              "complite_time": "3"
+              "complete_time": "3"
             },
             {
               "answer": "3",
               "answer_option": 3,
               "correct": "1",
-              "complite_time": "3"
+              "complete_time": "3"
             },
             {
               "answer": "3",
               "answer_option": 3,
               "correct": "0",
-              "complite_time": "3"
+              "complete_time": "3"
             },
             {
               "answer": "1",
               "answer_option": 1,
               "correct": "1",
-              "complite_time": "3"
+              "complete_time": "3"
             },
             {
               "answer": "3",
               "answer_option": 3,
               "correct": "0",
-              "complite_time": "3"
+              "complete_time": "3"
             }
           ]
         }
