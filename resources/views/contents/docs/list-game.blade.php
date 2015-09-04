@@ -308,7 +308,7 @@
                     <td>11.</td>
                     <td>POST</td>
                     <td>/api/game/play/228/result </td>
-                    <td>p32</td>
+                    <td>p00</td>
                     <td align="center"><a href="/docs/api.game-play-result-post-p00" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
             </tbody>
