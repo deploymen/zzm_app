@@ -42,51 +42,35 @@ Class ResultController extends Controller {
 
 		$page = Request::input("page", '1');
 		$pageSize = Request::input("page_size", '30');
-
+		$pagination = $pageSize*($page - 1);
 		try{
 			
-			/* pagination */
-			$startIndex = $pageSize*($page - 1);
-			$total = GameSystem::where('enable' , 1)->count();
-	       	//end 
-
-	       	/* get system id */
-	       	$resultSystemIds = GameSystem::where('enable', 1)->skip($startIndex)->take($pageSize)->select('id')->orderBy('sequence')->get();
-	       	$systemIds = [];
-	       	for($i=0; $i<count($resultSystemIds); $i++){
-	       		array_push($systemIds, $resultSystemIds[$i]->id);
-	       	}
-	       	$systemIds = implode(',', $systemIds);
-	       	//end 
-
-	       	if(!$systemIds){
-				return ResponseHelper::OutputJSON('fail','page not found');			
-	       	}
 			$sql = " 
-				SELECT s.`id` AS `system_id` , s.`name` AS `system_name` , IFNULL(p.`played`,0) AS `played`
-					FROM (`t0122_game_system` s)
-					LEFT JOIN(
-						SELECT sp.`system_id`, IF(SUM(um.`played`) > 0, 1, 0) AS `played`
-						FROM `t0124_game_system_planet` sp, `t0501_game_user_map` um
-						WHERE sp.`planet_id` = um.`planet_id` 
-						AND um.`profile_id` = 1
-							GROUP BY sp.`system_id`
-							ORDER BY sp.`system_id` ASC
-					) p ON(s.`id` = p.`system_id`)
-					WHERE s.`id` IN ({$systemIds}) 
-					GROUP BY s.`id` 
-					ORDER BY s.`sequence` ASC
+				SELECT s.`name` , sp.`system_id` , IF(SUM(um.`played`) > 0, 1, 0) AS `played` , IFNULL(SUM(um.`star`) , 0 ) AS `star` , count(sp.`planet_id`) AS `total_planet`
+                    FROM (`t0124_game_system_planet` sp , `t0122_game_system` s)
+                        LEFT JOIN `t0501_game_user_map` um ON (um.`planet_id` = sp.`planet_id` AND um.`profile_id`  = {$profileId})
+						
+						WHERE sp.`system_id` = s.`id`
+                        GROUP BY `system_id`
+                        ORDER BY `system_id` ASC
+
+                        LIMIT {$pagination} , {$pageSize}
 			";
 
 			$result = DB::SELECT($sql);
+			$total = count($result);
 
 			$system = [];
 			for($i=0; $i<count($result); $i++){
 				$r = $result[$i];
+				$totalPlanet = $r->total_planet * 5;
+				$percentage = $r->star / $totalPlanet * 100 / 1;
+
 				array_push($system, [
 					'id' => $r->system_id,
-					'system_name' => $r->system_name,
+					'system_name' => $r->name,
 					'played' => $r->played,
+					'percentage' => $percentage
 				]);
 			}
 
@@ -167,6 +151,7 @@ Class ResultController extends Controller {
 					'star' => $r->star,
 					'max_score' => $r->max_score,
 					'played' => $r->played,
+					'percentage' => $r->star * 20
 				]);
 			}
 

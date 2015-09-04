@@ -1056,6 +1056,9 @@ class ZapZapQuestionHelper{
 
 	public static function GetQuestionP00($planetId,$gameType,$level,$profileId){
 		try{
+			if(!$gameType){
+				return 'missing game_type';
+			}
 			if(!$level){
 				$userMap = UserMap::where('profile_id', $profileId)->where('planet_id' , $planetId)->first();
 				$userMap->level = 1;
@@ -1187,7 +1190,15 @@ class ZapZapQuestionHelper{
 			";
 
 			$questionId = DB::SELECT($sqlQuestionId);
-			$targetIds = $questionId[0]->ids.','.$questionId[1]->ids.','.$questionId[2]->ids;
+			$count = count($questionId);
+
+			if(!$questionId[0]->ids){
+				$targetIds = $questionId[1]->ids;
+			}elseif($count == 2){
+				$targetIds = $questionId[0]->ids.','.$questionId[1]->ids;
+			}elseif($count == 3){
+				$targetIds = $questionId[0]->ids.','.$questionId[1]->ids.','.$questionId[2]->ids;
+			}
 			
 			$sql2 = "
 				SELECT  p00.* ,  q.`difficulty`, q.`id` AS `id`, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description` 
@@ -1202,8 +1213,8 @@ class ZapZapQuestionHelper{
 
                         ORDER BY q.`id`
 			";
+			
 			$result = DB::SELECT($sql2);
-
 			$results = [];
 			$prevQuestionId = 0;
 
@@ -1239,21 +1250,51 @@ class ZapZapQuestionHelper{
 				continue;
 			}
 			$setGenerate = $gameType - count($gamePlay);
+			$targetId = explode(',', $targetIds);
 
 			for($j=0; $j<$setGenerate; $j++){
-				// $play = new GamePlay;
-				// $play->type = 'anonymous';
-				// $play->planet_id = '228';
-				// $play->target_type = 'p00';
+				$gamePlay = new GamePlay;
+				$gamePlay->user_id = 0;
+				$gamePlay->profile_id = 0;
+				$gamePlay->planet_id = $planetId;
+				$gamePlay->target_type = 'p00';
+				$gamePlay->type = 'anonymous';
+				$gamePlay->score = '75200';
+				$gamePlay->status = 'pass';
+				$gamePlay->level = $level;
+				$gamePlay->save();
+				for($l=0; $l< 50; $l++){
+					$rand = rand(0,1);
+					$randAnswer = rand(1,4);
+					$t = $targetId[$l];
 
+					$question = GameQuestion::find($t);
+					$resultP00 = new GameResultP00;
+					$resultP00->correct = $rand;
+					$resultP00->target_type = 'p00';
+					$resultP00->target_id = $question->target_id;
+					$resultP00->answer = $randAnswer;
+					$resultP00->answer_option = $randAnswer;
+					$resultP00->save();
 
+					$gameResults = new GameResult;
+					$gameResults->play_id = $gamePlay->id;
+					$gameResults->question_id = $t;
+					$gameResults->target_type = 'p00';
+					$gameResults->target_id = $resultP00->id;
+					$gameResults->game_type_id = '0';
+					$gameResults->complete_time = '3';
+					$gameResults->save();
+
+					}
 			}
 
 			$smallest = $level -1;
 			$biggest = $level +1;
+			$questionCount = $gameType * 50;
 			//get opponent result
 			$sqlNpcQuestion = "
-				SELECT  p.`id` AS `play_id` , p.`level`,p.`score`, r00.`answer` ,r00.`answer_option`, r00.`correct`  , r.`complite_time` 
+				SELECT  p.`id` AS `play_id` , p.`level`,p.`score`, r00.`answer` ,r00.`answer_option`, r00.`correct`  , r.`complete_time` 
 					FROM `t0300_game_result_p00` r00 , `t0400_game_play` p ,`t0300_game_result` r
 						WHERE r00.`id` = r.`target_id`
 						AND r.`play_id` = p.`id`
@@ -1261,6 +1302,9 @@ class ZapZapQuestionHelper{
 						AND p.`level` > {$smallest}
 						AND p.`level` < {$biggest}
 						AND r.`game_type_id` = 0
+
+						ORDER BY `play_id` DESC 
+						LIMIT {$questionCount};
 
 				";
 				$npcQuestion = DB::select($sqlNpcQuestion);
@@ -1270,21 +1314,22 @@ class ZapZapQuestionHelper{
 					$n = $npcQuestion[$k];
 
 					if($n->play_id != $prevPlayId){
-						array_push($opponent , []);
-					}
-					array_push($opponent[count($opponent) -1 ], [
+						array_push($opponent , [
 							'play_id' => $n->play_id,
 							'level' => $n->level,
 							'score' => $n->score,
+							'ghost_data' => []
+							]);
+					}
+					array_push($opponent[count($opponent) -1 ]['ghost_data'], [
+							
 							'answer' => $n->answer,
-							'answer' => $n->answer_option,
+							'answer_option' => $n->answer_option,
 							'correct' => $n->correct,
-							'complite_time' => $n->complite_time
+							'complete_time' => $n->complete_time
 					]);
 					$prevPlayId = $n->play_id;
 				}
-
-
 			shuffle($results);
 			return [
 					'player' => $results, 
@@ -1319,8 +1364,8 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p00';
 				$gameResults->target_id = $resultP00->id;
 				$gameResults->game_type_id = '0';
-				if(isset($inAnswer['complite_time']) ){
-					$gameResults->complite_time = $inAnswer['complite_time'];
+				if(isset($inAnswer['complete_time']) ){
+					$gameResults->complete_time = $inAnswer['complete_time'];
 				}
 			
 				$gameResults->save();
