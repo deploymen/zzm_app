@@ -554,7 +554,7 @@ class ResultHelper{
 
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
-			$answer = $r->answer_x.','.$->answer_y
+			$answer = $r->answer_x.','.$r->answer_y;
 			if($r->question_id != $prevQuestionId){
 				array_push($answers, [
 					'question_id' => $r->question_id,
