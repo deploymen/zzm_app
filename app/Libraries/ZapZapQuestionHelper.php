@@ -29,6 +29,7 @@ use App\Models\GameResultP03;
 use App\Models\GameResultP06;
 use App\Models\GameResultP07;
 use App\Models\GameResultP08;
+use App\Models\GameResultP09;
 use App\Models\GameResultP10;
 use App\Models\GameResultP18;
 use App\Models\GameResultP23;
@@ -602,6 +603,182 @@ class ZapZapQuestionHelper{
 		}
 	}
 
+	public static function GetQuestionP08($planetId,$difficulty,$questionCount){
+		try{
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
+			$sql = "
+				  SELECT GROUP_CONCAT(ran.`target_id`)  AS `ids`
+						FROM (SELECT  q.`target_id` , RAND() AS `rand`
+	                        FROM `t0126_game_planet_question` pq ,`t0200_game_question` q , `t0123_game_planet` gp , `t0208_game_question_p08` p08
+	                            WHERE  pq.`question_id` = q.`id`
+	                            AND q.`target_type`  = 'p08'
+	                            AND pq.`enable` = '1'
+	                            AND q.`enable` = '1'
+	                            AND p08.`enable` = '1'
+	                            AND p08.`id` = q.`target_id`
+	                          	AND gp.`id` =  pq.`planet_id`
+		                        AND q.`difficulty` = :difficulty
+		                        AND pq.`planet_id` = :planet_id
+	                       		
+	                       		ORDER BY  pq.`sequence` * ABS(gp.`question_random`-1) , `rand`
+	                           	LIMIT :questionCount
+	                    ) ran
+										
+			";
+
+			$targetIds = DB::SELECT($sql, ['planet_id'=>$planetId , 'difficulty'=>$difficulty , 'questionCount' => $questionCount ])[0]->ids;
+			
+			$sql2 = "
+				SELECT  p08.* ,  q.`difficulty`, q.`id` AS `id`, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description` 
+					 FROM (`t0208_game_question_p08` p08 , `t0200_game_question` q)
+
+						LEFT JOIN `t0132_game_question_subject` qs ON (qs.`question_id` = q.`id`)
+						LEFT JOIN `t0131_game_subject` s ON(qs.`subject_id` = s.`id`  )
+                        
+                        WHERE p08.`id` IN( {$targetIds} )
+                        AND q.`target_id` = p08.`id`
+                        AND q.`target_type` = 'p08'
+
+                        ORDER BY q.`id`
+			";
+			$result = DB::SELECT($sql2);
+			
+
+			$gamePlanet = GamePlanet::find($planetId);
+			$questionCount = $gamePlanet->question_count;
+
+			$results = [];
+			$prevQuestionId = 0;
+
+			for($i=0; $i<count($result); $i++){
+				$r = $result[$i];
+				$param = str_split($r->question);
+				array_push($param, '', '');
+
+				if($r->id != $prevQuestionId){
+					array_push($results, [
+						'id' => $r->id,
+						'param_1' => $param[0],
+						'param_2' => $param[1],
+						'param_3' => $param[2],
+						'param_4' => $param[3],
+						'param_5' => $param[4],
+						'param_6' => $param[5],
+						'param_7' => $param[6],
+						'hexagon_path' => $r->hexagon_path,
+						'difficulty' => $r->difficulty,
+						'subject' => []
+					]);
+				}
+				array_push($results[count($results)-1]['subject'],[
+								'subject_code'=>$r->subject_code,
+									'name' => $r->name,
+									'description'=>$r->description
+								]);
+
+				$prevQuestionId = $r->id;
+			}
+			shuffle($results);
+			return $results;
+
+		}catch(Exception $ex){
+			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp08', ['environment' => json_encode([
+				'ex' =>  $ex->getMessage(),
+				'sql' =>  $sql,
+			])]);
+		return ResponseHelper::OutputJSON('exception');
+		}
+	}
+
+	public static function GetQuestionP09($planetId,$difficulty,$questionCount){
+		try{
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
+			$sql = "
+				  SELECT GROUP_CONCAT(ran.`target_id`)  AS `ids`
+						FROM (SELECT  q.`target_id` , RAND() AS `rand`
+	                        FROM `t0126_game_planet_question` pq ,`t0200_game_question` q , `t0123_game_planet` gp , `t0209_game_question_p09` p09
+	                            WHERE  pq.`question_id` = q.`id`
+	                            AND q.`target_type`  = 'p09'
+	                            AND pq.`enable` = '1'
+	                            AND q.`enable` = '1'
+	                            AND p09.`enable` = '1'
+	                            AND p09.`id` = q.`target_id`
+	                          	AND gp.`id` =  pq.`planet_id`
+		                        AND q.`difficulty` = :difficulty
+		                        AND pq.`planet_id` = :planet_id
+	                       		
+	                       		ORDER BY  pq.`sequence` * ABS(gp.`question_random`-1) , `rand`
+	                           	LIMIT :questionCount
+	                    ) ran
+										
+			";
+
+			$targetIds = DB::SELECT($sql, ['planet_id'=>$planetId , 'difficulty'=>$difficulty , 'questionCount' => $questionCount ])[0]->ids;
+			
+			$sql2 = "
+				SELECT  p09.* ,  q.`difficulty`, q.`id` AS `id`, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description` 
+					 FROM (`t0209_game_question_p09` p09 , `t0200_game_question` q)
+
+						LEFT JOIN `t0132_game_question_subject` qs ON (qs.`question_id` = q.`id`)
+						LEFT JOIN `t0131_game_subject` s ON(qs.`subject_id` = s.`id`  )
+                        
+                        WHERE p09.`id` IN( {$targetIds} )
+                        AND q.`target_id` = p09.`id`
+                        AND q.`target_type` = 'p09'
+
+                        ORDER BY q.`id`
+			";
+			$result = DB::SELECT($sql2);
+			
+
+			$gamePlanet = GamePlanet::find($planetId);
+			$questionCount = $gamePlanet->question_count;
+
+			$results = [];
+			$prevQuestionId = 0;
+
+			for($i=0; $i<count($result); $i++){
+				$r = $result[$i];
+
+				if($r->id != $prevQuestionId){
+					array_push($results, [
+						'id' => $r->id,
+						'param_1' => $r->question_object1,
+						'param_2' => $r->question_object2,
+						'param_3' => $r->question_object3,
+						'param_4' => $r->question_object4,
+						'param_5' => $r->question_object5,
+						'answer' => $r->answer,
+						'difficulty' => $r->difficulty,
+						'subject' => []
+					]);
+				}
+				array_push($results[count($results)-1]['subject'],[
+								'subject_code'=>$r->subject_code,
+									'name' => $r->name,
+									'description'=>$r->description
+								]);
+
+				$prevQuestionId = $r->id;
+			}
+			shuffle($results);
+			return $results;
+
+		}catch(Exception $ex){
+			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp09', ['environment' => json_encode([
+				'ex' =>  $ex->getMessage(),
+				'sql' =>  $sql,
+			])]);
+		return ResponseHelper::OutputJSON('exception');
+		}
+	}
+
 	public static function GetQuestionP10($planetId,$difficulty,$questionCount){
 
 		try{
@@ -964,96 +1141,6 @@ class ZapZapQuestionHelper{
 		}
 	}
 
-	public static function GetQuestionP08($planetId,$difficulty,$questionCount){
-		try{
-			if(!$questionCount){
-				$gamePlanet = GamePlanet::find($planetId);
-				$questionCount = $gamePlanet->question_count;
-			}
-			$sql = "
-				  SELECT GROUP_CONCAT(ran.`target_id`)  AS `ids`
-						FROM (SELECT  q.`target_id` , RAND() AS `rand`
-	                        FROM `t0126_game_planet_question` pq ,`t0200_game_question` q , `t0123_game_planet` gp , `t0208_game_question_p08` p08
-	                            WHERE  pq.`question_id` = q.`id`
-	                            AND q.`target_type`  = 'p08'
-	                            AND pq.`enable` = '1'
-	                            AND q.`enable` = '1'
-	                            AND p08.`enable` = '1'
-	                            AND p08.`id` = q.`target_id`
-	                          	AND gp.`id` =  pq.`planet_id`
-		                        AND q.`difficulty` = :difficulty
-		                        AND pq.`planet_id` = :planet_id
-	                       		
-	                       		ORDER BY  pq.`sequence` * ABS(gp.`question_random`-1) , `rand`
-	                           	LIMIT :questionCount
-	                    ) ran
-										
-			";
-
-			$targetIds = DB::SELECT($sql, ['planet_id'=>$planetId , 'difficulty'=>$difficulty , 'questionCount' => $questionCount ])[0]->ids;
-			
-			$sql2 = "
-				SELECT  p08.* ,  q.`difficulty`, q.`id` AS `id`, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description` 
-					 FROM (`t0208_game_question_p08` p08 , `t0200_game_question` q)
-
-						LEFT JOIN `t0132_game_question_subject` qs ON (qs.`question_id` = q.`id`)
-						LEFT JOIN `t0131_game_subject` s ON(qs.`subject_id` = s.`id`  )
-                        
-                        WHERE p08.`id` IN( {$targetIds} )
-                        AND q.`target_id` = p08.`id`
-                        AND q.`target_type` = 'p08'
-
-                        ORDER BY q.`id`
-			";
-			$result = DB::SELECT($sql2);
-			
-
-			$gamePlanet = GamePlanet::find($planetId);
-			$questionCount = $gamePlanet->question_count;
-
-			$results = [];
-			$prevQuestionId = 0;
-
-			for($i=0; $i<count($result); $i++){
-				$r = $result[$i];
-				$param = str_split($r->question);
-				array_push($param, '', '');
-
-				if($r->id != $prevQuestionId){
-					array_push($results, [
-						'id' => $r->id,
-						'param_1' => $param[0],
-						'param_2' => $param[1],
-						'param_3' => $param[2],
-						'param_4' => $param[3],
-						'param_5' => $param[4],
-						'param_6' => $param[5],
-						'param_7' => $param[6],
-						'hexagon_path' => $r->hexagon_path,
-						'difficulty' => $r->difficulty,
-						'subject' => []
-					]);
-				}
-				array_push($results[count($results)-1]['subject'],[
-								'subject_code'=>$r->subject_code,
-									'name' => $r->name,
-									'description'=>$r->description
-								]);
-
-				$prevQuestionId = $r->id;
-			}
-			shuffle($results);
-			return $results;
-
-		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp08', ['environment' => json_encode([
-				'ex' =>  $ex->getMessage(),
-				'sql' =>  $sql,
-			])]);
-		return ResponseHelper::OutputJSON('exception');
-		}
-	}
-
 	public static function GetQuestionP00($planetId,$gameType,$level,$profileId){
 		try{
 			if(!$gameType){
@@ -1190,7 +1277,15 @@ class ZapZapQuestionHelper{
 			";
 
 			$questionId = DB::SELECT($sqlQuestionId);
-			$targetIds = $questionId[0]->ids.','.$questionId[1]->ids.','.$questionId[2]->ids;
+			$count = count($questionId);
+
+			if(!$questionId[0]->ids){
+				$targetIds = $questionId[1]->ids;
+			}elseif($count == 2){
+				$targetIds = $questionId[0]->ids.','.$questionId[1]->ids;
+			}elseif($count == 3){
+				$targetIds = $questionId[0]->ids.','.$questionId[1]->ids.','.$questionId[2]->ids;
+			}
 			
 			$sql2 = "
 				SELECT  p00.* ,  q.`difficulty`, q.`id` AS `id`, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description` 
@@ -1205,8 +1300,8 @@ class ZapZapQuestionHelper{
 
                         ORDER BY q.`id`
 			";
+			
 			$result = DB::SELECT($sql2);
-
 			$results = [];
 			$prevQuestionId = 0;
 
@@ -1275,7 +1370,7 @@ class ZapZapQuestionHelper{
 					$gameResults->target_type = 'p00';
 					$gameResults->target_id = $resultP00->id;
 					$gameResults->game_type_id = '0';
-					$gameResults->complite_time = '3';
+					$gameResults->complete_time = '3';
 					$gameResults->save();
 
 					}
@@ -1286,7 +1381,7 @@ class ZapZapQuestionHelper{
 			$questionCount = $gameType * 50;
 			//get opponent result
 			$sqlNpcQuestion = "
-				SELECT  p.`id` AS `play_id` , p.`level`,p.`score`, r00.`answer` ,r00.`answer_option`, r00.`correct`  , r.`complite_time` 
+				SELECT  p.`id` AS `play_id` , p.`level`,p.`score`, r00.`answer` ,r00.`answer_option`, r00.`correct`  , r.`complete_time` 
 					FROM `t0300_game_result_p00` r00 , `t0400_game_play` p ,`t0300_game_result` r
 						WHERE r00.`id` = r.`target_id`
 						AND r.`play_id` = p.`id`
@@ -1318,7 +1413,7 @@ class ZapZapQuestionHelper{
 							'answer' => $n->answer,
 							'answer_option' => $n->answer_option,
 							'correct' => $n->correct,
-							'complite_time' => $n->complite_time
+							'complete_time' => $n->complete_time
 					]);
 					$prevPlayId = $n->play_id;
 				}
@@ -1356,8 +1451,8 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p00';
 				$gameResults->target_id = $resultP00->id;
 				$gameResults->game_type_id = '0';
-				if(isset($inAnswer['complite_time']) ){
-					$gameResults->complite_time = $inAnswer['complite_time'];
+				if(isset($inAnswer['complete_time']) ){
+					$gameResults->complete_time = $inAnswer['complete_time'];
 				}
 			
 				$gameResults->save();
@@ -1565,6 +1660,36 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p08';
 				$gameResults->target_id = $resultP08->id;
 				$gameResults->game_type_id = '8';
+				$gameResults->save();
+			}	
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
+	}
+
+	public static function submitResultP09($planetId,$gamePlay ,$gameResult,$profileId ) {
+		try{
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				$resultP09 = new GameResultP09;
+				$resultP09->target_type = 'p09';
+				$resultP09->target_id = $question->target_id;
+				$resultP09->answer = $inAnswer['answer'];
+				$resultP09->correct = $inAnswer['correct'];
+				$resultP09->save();
+
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p09';
+				$gameResults->target_id = $resultP09->id;
+				$gameResults->game_type_id = '9';
 				$gameResults->save();
 			}	
 
