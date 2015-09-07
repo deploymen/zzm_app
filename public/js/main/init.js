@@ -144,7 +144,6 @@ function logout(){
 	$.ajax({
 		type	   : 'POST', 
 		url        : '/api/auth/sign-out',
-		data       : loginCred,
 		success    : function(data){
 			var status = data['status'];
 			var message = data['message'];
