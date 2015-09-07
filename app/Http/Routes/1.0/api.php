@@ -1,3 +1,4 @@
+
 <?php
 
 Route::pattern('role', '(parent)|(teacher)|(admin)|(content)|(investor)');
@@ -8,6 +9,8 @@ Route::pattern('role', '(parent)|(teacher)|(admin)|(content)|(investor)');
 Route::group(['prefix' => 'api/auth'], function () {
 	Route::post('/sign-up', 'AuthUserController@signUp'); //only for parent|teacher
 	Route::post('/sign-in', 'AuthUserController@signIn');
+	Route::post('/sign-out', 'AuthUserController@signOut');
+
 	Route::post('/connect/facebook', 'AuthUserController@connectFacebook');
 	Route::post('/connect/google', 'AuthUserController@connectGoogle');
 
