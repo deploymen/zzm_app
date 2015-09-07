@@ -14,10 +14,24 @@ p, label {
 	}*/
 }
 
+h1 {
+	font-family: 'museo-sans', sans-serif;
+}
+
+h1 a {
+	color: $white;
+	font-family: 'museo-sans', sans-serif;
+}
+
+h1 a:hover {
+	color: $white;
+}
+
 h2 {
 	color: lighten($black, 50%);
 	font-family: 'museo-sans', sans-serif;
 }
+
 
 h6 {
 	color: lighten($black, 30%);
@@ -101,7 +115,9 @@ a:active {
 	text-overflow: ellipsis;
 }
 
-
+.plan-label {
+	color: $white;
+}
 
 
 /** Account Settings STYLES **/

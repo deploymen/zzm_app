@@ -90,7 +90,7 @@ Class ApiProfileController extends Controller {
 			 			'grade' => $p->grade,
 			 			'city' => $p->city,
 			 			'email' => $p->email,
-			 			'questions_played' => $p->questions_played,
+			 			'questions_played' => $lp->questions_played,
 			 			'nickname1' => $p->nickname1,
 			 			'nickname2' => $p->nickname2,
 			 			'avatar_id' => $p->avatar_id,

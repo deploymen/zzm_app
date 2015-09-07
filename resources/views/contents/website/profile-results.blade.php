@@ -49,7 +49,7 @@ ZZM.playId = '{{Request::input('play_id')}}';
 			<span class="indicator-bar"></span>
 			<ul class="indicator-list">
 				<li class="indicator-list-item">
-					<img src="/assets/main/img/profiles/icon-profiles-1.png" alt="Icon Profiles">
+					<a href="/user/profiles"><img src="/assets/main/img/profiles/icon-profiles-1.png" alt="Icon Profiles"></a>
 				</li>
 				<li class="indicator-list-item">
 					<img src="/assets/main/img/profiles/icon-profiles-2.png" alt="Icon Systems">
@@ -64,27 +64,19 @@ ZZM.playId = '{{Request::input('play_id')}}';
 		</div>
 	</div>
 	<div class="row ng-cloak">
-	    <ol class="breadcrumbs">
+	    <ol class="breadcrumb">
 	        <li>
-	        	<span>
-	        		<a href="/user/profiles/{{$profile->id}}/results">All Result</a>
-	        	</span>
+	        	<a href="/user/profiles/{{$profile->id}}/results">All Result</a>
 	        </li>
 	        <li ng-if="breadcumbs.system_id = breadcumbs.system_id">
 	        	<a href="/user/profiles/{{$profile->id}}/results?system_id=@{{breadcumbs.system_id}}">@{{breadcumbs.system_name}}</a>
 	        </li>
 	        <li ng-if="breadcumbs.planet_id = breadcumbs.planet_id">
-	        	<a href="/user/profiles/{{$profile->id}}/results?planet_id=@{{breadcumbs.planet_id}}&planet_id=@{{breadcumbs.planet_id">@{{breadcumbs.planet_subtitle}}</a>
-	        </li>
-	        <!-- <li ng-if="breadcumbs.play_id = breadcumbs.play_id">
-	        	<a href="/user/profiles/{{$profile->id}}/results?play_id=@{{breadcumbs.play_id}}">@{{breadcumbs.play_id}}</a>
-	        </li> -->
-	        <li ng-if="breadcumbs.question_id = breadcumbs.question_id">
-	        	<a href="/user/profiles/{{$profile->id}}/results?question_id=@{{breadcumbs.question_id}}">@{{breadcumbs.question_id}}</a>
+	        	<a href="/user/profiles/{{$profile->id}}/results?planet_id=@{{breadcumbs.planet_id}}&planet_id=@{{breadcumbs.planet_id">{{breadcumbs.planet_subtitle}}</a>
 	        </li>
 	    </ol>
 	</div>
-    <div class="results-container cf">
+    <div class="results-container cf" ng-cloak>
     	<div class="profile-bar cf">
 			<div class="small-12 columns cf">
 				<div class="small-12 medium-3 columns">
@@ -130,8 +122,8 @@ ZZM.playId = '{{Request::input('play_id')}}';
 							<td width="70%"><p class="results-table-name">@{{s.system_name}}</p></td>
 							<td width="20%" class="results-progress-column">
 								<div class="progress">
-									<span class="meter" style="width: 40%"></span>
-									<span class="meter-percentage">40%</span>
+									<span class="meter meter-@{{s.percentage}}" style="width: @{{s.percentage}}%"></span>
+									<span class="meter-percentage">@{{s.percentage}}%</span>
 								</div>
 							</td>
 							<td width="10%" class="" ng-switch on="s">
@@ -187,8 +179,8 @@ ZZM.playId = '{{Request::input('play_id')}}';
 							<td width="70%"><p class="results-table-name">@{{p.subtitle}}</p></td>
 							<td width="20%" class="">
 								<div class="progress">
-									<span class="meter" style="width: 100%"></span>
-									<span class="meter-percentage">100%</span>
+									<span class="meter meter-@{{p.percentage}}" style="width: @{{p.percentage}}%"></span>
+									<span class="meter-percentage">@{{p.percentage}}%</span>
 								</div>
 							</td>
 							<td width="10%" ng-switch on="p.play_count">
@@ -240,18 +232,18 @@ ZZM.playId = '{{Request::input('play_id')}}';
 								<span class="profile-label">{{$profile->first_name}}'s Answer</span>
 							</th>
 							<th>&nbsp;</th>
-							<th>&nbsp;</th>
+							<!-- <th>&nbsp;</th> -->
 						</tr>
 					</thead>
 					<tbody>
 						<tr ng-repeat="q in questions">
 							<td width="60%" class="results-table-name">@{{q.question}}</td>
-							<td width="20%" class="results-table-name">@{{q.result.answer}}</td>
+							<td width="30%" class="results-table-name">@{{q.result.answer}}</td>
 							<td width="10%" ng-switch on="q.result.correct">
 								<span ng-switch-when="1"><i class="fa fa-check"></i></span>
 								<span ng-switch-when="0"><i class="fa fa-times"></i></span>
 							</td>
-							<td width="10%" class="results-info-column"><span class="info-icon">i</span></td>
+							<!-- <td width="10%" class="results-info-column"><span class="info-icon">i</span></td> -->
 						</tr>
 					</tbody>
 				</table>
@@ -259,7 +251,7 @@ ZZM.playId = '{{Request::input('play_id')}}';
 		</div>
 	</div><!--content-group-->
     </div>
-	<div class="row results-btn-holder text-center">
+	<div class="row results-btn-holder text-center" ng-switch on="q.result.correct">
 		<a href="/user/profiles/" class="results-back-link">Go Back to Profiles</a>
 	</div>
 

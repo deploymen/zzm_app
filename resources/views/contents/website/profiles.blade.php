@@ -164,7 +164,7 @@
 	</div><!--addProfileModal-->
 
 	<div class="row">
-		<div id="profile-list" class="cf">
+		<div id="profile-list" class="cf" ng-cloak>
 			<!-- <div ng-repeat=""></div> -->
 			<div class="profile-item" ng-repeat="gameprofile in gameprofiles">
 				<section class="profile-info">
@@ -219,7 +219,7 @@
 								<p class="profile-attempt-number" ng-switch-default>@{{gameprofile.questions_played}}</p>
 								<!-- <p class="profile-attempt-number">@{{gameprofile.questions_played}}</p> -->
 							</span>
-							<a href="javascript:void(0);" title="Proficiency is based on the average score of all games played." class="info-icon">i<span class="profile-tooltip"><p>Last Played shows the last time this child played Zap Zap Math.</p></span></a>
+							<a href="javascript:void(0);" title="Total attempts explanation can go here." class="info-icon">i<span class="profile-tooltip"><p>Total attempts explanation can go here.</p></span></a>
 						</div>
 					</div>
 

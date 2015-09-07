@@ -141,12 +141,24 @@ btnsignin.click(function(){
 var btnlogout = $('#button-logout');
 
 function logout(){
-	var sessionval = Cookies.get('access_token');
-	Cookies.remove('access_token');
-	// Cookies.remove('zzmcookie', { path: '' });
-	// console.log(Cookies.get());
-	// console.log('Wanna logout!');
-	console.log(Cookies.get());
+	$.ajax({
+		type	   : 'POST', 
+		url        : '/api/auth/sign-out',
+		success    : function(data){
+			var status = data['status'];
+			var message = data['message'];
+			//console.log('status: ' + status);
+			//repsonseMsg();
+			if(status === 'success') {
+				// window.location = '/user/profiles';
+				console.log('logout like a log');
+			} else if(status === 'fail'  && message === 'invalid username/password') {
+				// loginformholder.prepend('<span class="incorrect-details"><p>Invalid email or password</p></span>');
+				// loginUsername.val('');
+				// loginPewPew.val('');
+			}
+		}
+	});
 };
 
 btnlogout.click(function(){

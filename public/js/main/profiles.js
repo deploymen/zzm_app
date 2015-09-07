@@ -81,7 +81,8 @@ btnsaveprofile.click(function(){
 });
 
 btnchangesok.click(function(){
-	location.reload();
+	// location.reload();
+	window.location = "/user/profiles";
 });
 
 // Add Profile
@@ -132,7 +133,6 @@ function createNewProfile(){
 				newprofilevalidate.show();
 			} else {
 				addprofilemodal.foundation('reveal', 'close');
-				location.reload();
 			}
 			
 		},

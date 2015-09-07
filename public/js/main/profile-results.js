@@ -99,7 +99,7 @@ App.controller('MainController', function ($scope, $http){
                 // console.log($scope.planets[0].play_count);
 
                 angular.forEach($scope.planets, function (planet){
-                    console.log(planet.play_count);
+                    // console.log(planet.play_count);
                 });
 
             } else {

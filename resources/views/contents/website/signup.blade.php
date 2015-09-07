@@ -107,7 +107,8 @@
 
                   <div class="row">
                     <div class="small-12 columns">
-                      <button id="btn-signup" type="submit" class="medium radius button expand blue">Sign me up!</button>
+                      <input id="btn-signup" type="submit" class="medium radius button expand blue" value="Sign me up!">
+                      <!-- <button id="btn-signup" type="submit" class="medium radius button expand blue">Sign me up!</button> -->
                     </div>
                   </div>
                         </form>

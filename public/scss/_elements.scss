@@ -108,6 +108,8 @@ ul.pagination li.current button {
 	background: $flamingo;
 }
 
+
+
 /** TABLE Styles **/
 table tr:nth-of-type(even) {
 	background: lighten($curious-blue, 35%);
@@ -218,7 +220,7 @@ table tr:nth-of-type(even) {
 	width: 100%;
 	top: 0;
 	left: 0;
-	z-index: 2;
+	z-index: 4;
 }
 
 /** Global Form Elements **/
@@ -796,6 +798,12 @@ label:hover:before {
 	padding: 10px;
 }
 
+.indicator-list-item a {
+	display: block;
+	height: 100%;
+	width: 100%;
+}
+
 .indicator-list-item.active {
 	/*background-color: $curious-blue;*/
 }
@@ -928,20 +936,89 @@ table.results-table {
 }
 
 
-
 /** Vanese Results Classes **/
 ul.pagination > li > a { color: #333 }
 .pagination .active a { background-color: #2B91D6; color: #fff; font-weight: bold;}
 
-.breadcrumbs {
-	margin-left: 0px;
-  	padding: 8px 15px;
-  	margin-bottom: 20px;
-  	list-style: none;
-  	background-color: $alto;
-  	border: none;
-  	border-radius: 4px;
+/** Breadcrumbs **/
+
+
+.breadcrumb { 
+	list-style: none; 
+	overflow: hidden; 
+	font: rem(12px) 'museo-sans', sans-serif;
+	margin: 10px 15px;
 }
+.breadcrumb li { 
+	float: left; 
+	background-color: $picton-blue; 
+}
+.breadcrumb li a {
+	color: white;
+	text-decoration: none;
+	text-transform: uppercase;
+	padding: 10px 0 10px 65px;
+	background-color: $picton-blue;
+	background: hsla(204, 89%, 62%, 1);                /* fallback color */
+	/*background: hsla(34,85%,35%,1); */
+	position: relative; 
+	display: block;
+	float: left;
+
+}
+
+.breadcrumb li a:after { 
+	content: " "; 
+	display: block; 
+	width: 0; 
+	height: 0;
+	border-top: 50px solid transparent;           /* Go big on the size, and let overflow hide */
+	border-bottom: 50px solid transparent;
+	border-left: 30px solid hsla(204, 89%, 62%, 1);
+	position: absolute;
+	top: 50%;
+	margin-top: -50px; 
+	left: 100%;
+	z-index: 2; 
+}
+
+.breadcrumb li a:before { 
+	content: " "; 
+	display: block; 
+	width: 0; 
+	height: 0;
+	border-top: 50px solid transparent;       
+	border-bottom: 50px solid transparent;
+	border-left: 32px solid $alto;
+	position: absolute;
+	top: 50%;
+	margin-top: -50px; 
+	margin-left: 1px;
+	left: 100%;
+	z-index: 1; 
+}
+
+.breadcrumb li:first-child a {
+	padding-left: 10px;
+}
+.breadcrumb li:nth-child(2) a       { background:        hsla(204, 89%,45%,1); }
+.breadcrumb li:nth-child(2) a:after { border-left-color: hsla(204, 89%,45%,1); }
+.breadcrumb li:nth-child(3) a       { background:        hsla(204, 89%,55%,1); }
+.breadcrumb li:nth-child(3) a:after { border-left-color: hsla(204, 89%,55%,1); }
+.breadcrumb li:nth-child(4) a       { background:        hsla(204, 89%,65%,1); }
+.breadcrumb li:nth-child(4) a:after { border-left-color: hsla(204, 89%,65%,1); }
+.breadcrumb li:nth-child(5) a       { background:        hsla(204, 89%,75%,1); }
+.breadcrumb li:nth-child(5) a:after { border-left-color: hsla(204, 89%,75%,1); }
+.breadcrumb li:last-child a {
+	/*background: transparent !important;*/
+	color: lighten($black, 30%);
+	pointer-events: none;
+	cursor: default;
+}
+
+.breadcrumb li a:hover { background: hsla(204, 89%,25%,1); }
+.breadcrumb li a:hover:after { border-left-color: hsla(204, 89%,25%,1) !important; }
+
 .pull-left, .pull-left > li { float: left !important; }
 
 /** Edit Profile Form Styles **/

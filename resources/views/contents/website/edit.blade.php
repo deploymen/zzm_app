@@ -80,7 +80,7 @@
 							@if ($age->age == $profile->age)
 								<option selected="selected" value="{{$age->age}}">{{$age->age_name}}</option>
 							@else
-								<option value="{{$age->age}}">{{$age->age_name}}</option>
+								<option value="{{$age->age}}">{{{$age->age_name}}}</option>
 							@endif
 						@endforeach
 					</select>
@@ -93,9 +93,8 @@
 							@if ($grade->grade == $profile->grade)
 								<option selected="selected" value="{{$grade->grade}}">{{$grade->grade_name}}</option>
 							@else
-								<option value="{{$grade->grade}}">{{$grade->grade_name}}</option>
+								<option value="{{$grade->grade}}">{{{$grade->grade_name}}}</option>
 							@endif
-							
 						@endforeach
 					</select>
 				</label>
