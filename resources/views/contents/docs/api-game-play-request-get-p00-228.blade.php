@@ -23,7 +23,7 @@
 
 <div class="row">
     <div class="col-lg-8">
-        <h3>GET  /api/game/play/228/request</h3>
+        <h3>GET  /api/game/play/228/request?game_type=?</h3>
         <ul id="myTab" class="nav nav-tabs">
             <li class="active"><a href="#descriptions" data-toggle="tab">Explain</a>
             </li>
@@ -293,55 +293,55 @@ X-game-code: 0000015k
               "answer": "2",
               "answer_option": 2,
               "correct": "0",
-              "complite_time": "3"
+              "complete_time": "3"
             },
             {
               "answer": "4",
               "answer_option": 4,
               "correct": "1",
-              "complite_time": "3"
+              "complete_time": "3"
             },
             {
               "answer": "4",
               "answer_option": 4,
               "correct": "0",
-              "complite_time": "3"
+              "complete_time": "3"
             },
             {
               "answer": "2",
               "answer_option": 2,
               "correct": "1",
-              "complite_time": "3"
+              "complete_time": "3"
             },
             {
               "answer": "4",
               "answer_option": 4,
               "correct": "0",
-              "complite_time": "3"
+              "complete_time": "3"
             },
             {
               "answer": "3",
               "answer_option": 3,
               "correct": "1",
-              "complite_time": "3"
+              "complete_time": "3"
             },
             {
               "answer": "3",
               "answer_option": 3,
               "correct": "0",
-              "complite_time": "3"
+              "complete_time": "3"
             },
             {
               "answer": "1",
               "answer_option": 1,
               "correct": "1",
-              "complite_time": "3"
+              "complete_time": "3"
             },
             {
               "answer": "3",
               "answer_option": 3,
               "correct": "0",
-              "complite_time": "3"
+              "complete_time": "3"
             }
           ]
         }
