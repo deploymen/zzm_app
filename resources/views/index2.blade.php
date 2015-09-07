@@ -45,11 +45,19 @@
                 <nav class="top-bar" data-topbar role="navigation">
                     <ul class="title-area">
                         <li class="name">
-                            <h1><a href="#">My Site</a></h1>
+                            <h1><a href="/">Zap Zap Math</a></h1>
                         </li>
                         <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
                         <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
                     </ul>
+
+                    <section class="top-bar-section">
+                        <!-- Right Nav Section -->
+                        <ul class="right">
+                            <li class="active"><a href="#">Right Button Active</a></li>
+                            <li class="active"><a href="#">Right Button Active</a></li>
+                        </ul>
+                    </section>
                 </nav>
             </div>
             <!-- <header id="main-banner" class="main-banner-2 cf" role="banner" style="height:900px;">
@@ -59,23 +67,19 @@
 
             <div class="main-content">
                 <div class="row">
-                    <div class="medium-2 columns">
-                        jssksjdksjdksjdkjs
-                    </div>
-                    <div class="medium-10 columns">
-                        fkgjfkjflkgjflgkjk
+                    <div class="small-12 columns">
+                        <ul class="small-block-grid-3">
+                            <li>as seen on</li>
+                            <li>as seen on</li>
+                            <li>as seen on</li>
+                        </ul>
                     </div>
                 </div>
 
                 <div class="row">
-                    <a href="#" data-reveal-id="myModal">Click Me For A Modal</a>
-
-<div id="myModal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
-  <h2 id="modalTitle">Awesome. I have it.</h2>
-  <p class="lead">Your couch.  It is mine.</p>
-  <p>I'm a cool paragraph that lives inside of an even cooler modal. Wins!</p>
-  <a class="close-reveal-modal" aria-label="Close">&#215;</a>
-</div>
+                    <div class="small-12 columns">
+                        Testimonials
+                    </div>
                 </div>
             </div><!--main-content-->
 

@@ -8,7 +8,7 @@ Route::get('/pre-launch', function(){ return view('index'); });
 
 Route::get('/jobs', function(){ return view('website.jobs'); });
 
-Route::get('/index2', function(){ return view('website.index2'); });
+Route::get('/index2', function(){ return view('index2'); });
 
 Route::get('/terms', function(){ return view('website.terms'); });
 

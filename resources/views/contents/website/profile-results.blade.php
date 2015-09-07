@@ -232,18 +232,18 @@ ZZM.playId = '{{Request::input('play_id')}}';
 								<span class="profile-label">{{$profile->first_name}}'s Answer</span>
 							</th>
 							<th>&nbsp;</th>
-							<th>&nbsp;</th>
+							<!-- <th>&nbsp;</th> -->
 						</tr>
 					</thead>
 					<tbody>
 						<tr ng-repeat="q in questions">
 							<td width="60%" class="results-table-name">@{{q.question}}</td>
-							<td width="20%" class="results-table-name">@{{q.result.answer}}</td>
+							<td width="30%" class="results-table-name">@{{q.result.answer}}</td>
 							<td width="10%" ng-switch on="q.result.correct">
 								<span ng-switch-when="1"><i class="fa fa-check"></i></span>
 								<span ng-switch-when="0"><i class="fa fa-times"></i></span>
 							</td>
-							<td width="10%" class="results-info-column"><span class="info-icon">i</span></td>
+							<!-- <td width="10%" class="results-info-column"><span class="info-icon">i</span></td> -->
 						</tr>
 					</tbody>
 				</table>

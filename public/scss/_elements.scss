@@ -798,6 +798,12 @@ label:hover:before {
 	padding: 10px;
 }
 
+.indicator-list-item a {
+	display: block;
+	height: 100%;
+	width: 100%;
+}
+
 .indicator-list-item.active {
 	/*background-color: $curious-blue;*/
 }
