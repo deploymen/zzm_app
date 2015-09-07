@@ -261,25 +261,8 @@ Class AuthUserController extends Controller {
 	}
 
 	public function signOut() {
-		$accessToken = Request::header('X-access-token');
-		try {
-			$userAccess = UserAccess::where('access_token', $accessToken)->first();
-			if ($userAccess) {
-				$userAccess->access_token = '';
-				$userAccess->access_token_issue_at = DB::Raw('NOW()');
-				$userAccess->access_token_issue_ip = Request::ip();
-				$userAccess->access_token_expired_at = DB::Raw('NOW()');
-				$userAccess->save();
-			}
-
-			return ResponseHelper::OutputJSON('success');
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'AuthUserController > signOut',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		Session::forget('access_token');
+		return ResponseHelper::OutputJSON('success');
 	}
 
 	public function check() {

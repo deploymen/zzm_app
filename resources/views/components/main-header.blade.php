@@ -17,7 +17,7 @@
         <ul class="right">
             <li class="divider"></li>
             <li>
-            <a href="" class="">Logout</a>
+            <a id="button-logout" href="#" class="">Logout</a>
             </li>
         </ul>
     </section>
