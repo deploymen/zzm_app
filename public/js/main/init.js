@@ -131,7 +131,7 @@ function login(){
 		return false;
 	});
 };
-btnsignin.click(function(){
+btnsignin.unbind().click(function(){
 	login();
 });
 
@@ -141,27 +141,15 @@ btnsignin.click(function(){
 var btnlogout = $('#button-logout');
 
 function logout(){
-	$.ajax({
-		type	   : 'POST', 
-		url        : '/api/auth/sign-out',
-		success    : function(data){
-			var status = data['status'];
-			var message = data['message'];
-			//console.log('status: ' + status);
-			//repsonseMsg();
-			if(status === 'success') {
-				// window.location = '/user/profiles';
-				console.log('logout like a log');
-			} else if(status === 'fail'  && message === 'invalid username/password') {
-				// loginformholder.prepend('<span class="incorrect-details"><p>Invalid email or password</p></span>');
-				// loginUsername.val('');
-				// loginPewPew.val('');
-			}
-		}
-	});
+	var sessionval = Cookies.get('access_token');
+	Cookies.remove('access_token');
+	// Cookies.remove('zzmcookie', { path: '' });
+	// console.log(Cookies.get());
+	// console.log('Wanna logout!');
+	console.log(Cookies.get());
 };
 
-btnlogout.click(function(){
+btnlogout.unbind().click(function(){
 	logout();
 });
 

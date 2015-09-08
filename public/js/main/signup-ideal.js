@@ -78,6 +78,11 @@ app.controller('SignupController', function ($scope, $http, $log, promiseTracker
 
             }, function(){
                   console.log('you\'re a failure in life. I said it.');
+                  console.log(name);
+                  console.log(email);
+                  console.log(password);
+                  console.log(country);
+                  console.log(role);
             })
       }
 
