@@ -47,7 +47,7 @@
                 <div class="logo">
                     <img src="/assets/main/img/global/logo-main-white.png" alt=" ">
                 </div>
-                <div id="signup-form" class="signup-form">
+                <form data-abide id="signup-form" class="signup-form" novalidate="novalidate">
                     <div class="row" class="option_role">
                       <div class="small-6 columns">
                         <label for="radio-parent" class="">
@@ -60,6 +60,7 @@
                           <input name="role" type="radio" id="radio-teacher" required="" value="teacher"> I am a teacher
                         </label>
                       </div>
+                      <small class="error">Please select a role</small>
                     </div>
 
                       <div class="row">
@@ -68,6 +69,7 @@
                                     Name <small>required</small>
                             <input type="text" id="users_name" placeholder="John Jones" name="users_name" required pattern="[a-zA-Z]+" class="name">
                           </label>
+                          <small class="error">Please fill in your name, we like to address our friends properly!</small>
                         </div>
                       </div>
 
@@ -77,6 +79,7 @@
                                         Email <small>required</small>
                             <input type="email" id="users_email" placeholder="johnjones@internet.com" name="email" required class="email">
                           </label>
+                          <small class="error">Please input a valid email address. Like example@domain.com</small>
                         </div>
                       </div>
 
@@ -86,6 +89,7 @@
                                     Password <small>required</small>
                             <input type="password" id="users_password" placeholder="......" name="password" required class="password">
                           </label>
+                          <small class="error">Passwords must be at least 6 characters with 1 capital letter, 1 number, and one special character.</small>
                         </div>
                       </div>
 
@@ -97,6 +101,7 @@
                                   <option value="">-- Select a Country --</option>
                                 </select>
                           </label>
+                          <small class="error">Please specify a country</small>
                         </div>
                       </div>
 
@@ -107,7 +112,7 @@
                           <a href="#" id="btn-signup" ng-click="signUp()" type="submit" class="medium radius button expand blue">Sign me up!</a>
                         </div>
                       </div>
-                </div>
+                </form>
                 <hr>
                 <section class="prompt-login-wrapper">
                     <h6>Already have an account? <a href="/user/signin">Sign In!</a></h6> 
