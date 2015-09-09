@@ -1141,11 +1141,15 @@ class ZapZapQuestionHelper{
 
 	public static function GetQuestionP00($planetId,$gameType,$level,$profileId){
 		try{
+			
+
 			if(!$gameType){
 				return 'missing game_type';
 			}
+
+			$userMap = UserMap::where('profile_id', $profileId)->where('planet_id' , $planetId)->first();
+
 			if(!$level){
-				$userMap = UserMap::where('profile_id', $profileId)->where('planet_id' , $planetId)->first();
 				$userMap->level = 1;
 				$userMap->exp = 0;
 				$userMap->save();
@@ -1302,12 +1306,17 @@ class ZapZapQuestionHelper{
 			$result = DB::SELECT($sql2);
 			$results = [];
 			$prevQuestionId = 0;
-
+			array_push($results , [
+				'level' => $userMap->level,
+				'exp' => $userMap->exp,
+				'top_score' => $userMap->top_score,
+				'question' => [],
+			]);
 			for($i=0; $i<count($result); $i++){
 				$r = $result[$i];
 
 				if($r->id != $prevQuestionId){
-					array_push($results, [
+					array_push($results[0]['question'], [
 						'id' => $r->id,
 						'question' => $r->question,
 						'question_option1' => $r->question_option1,
@@ -1318,7 +1327,8 @@ class ZapZapQuestionHelper{
 						'subject' => []
 					]);
 				}
-				array_push($results[count($results)-1]['subject'],[
+
+				array_push($results[0]['question'][count($results[0]['question'])-1]['subject'],[
 								'subject_code'=>$r->subject_code,
 									'name' => $r->name,
 									'description'=>$r->description
