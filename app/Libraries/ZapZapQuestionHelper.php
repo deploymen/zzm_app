@@ -655,19 +655,17 @@ class ZapZapQuestionHelper{
 
 			for($i=0; $i<count($result); $i++){
 				$r = $result[$i];
-				$param = str_split($r->question);
-				array_push($param, '', '');
-
+			
 				if($r->id != $prevQuestionId){
 					array_push($results, [
 						'id' => $r->id,
-						'param_1' => $param[0],
-						'param_2' => $param[1],
-						'param_3' => $param[2],
-						'param_4' => $param[3],
-						'param_5' => $param[4],
-						'param_6' => $param[5],
-						'param_7' => $param[6],
+						'param_1' => $r->param_1,
+						'param_2' => $r->param_2,
+						'param_3' => $r->param_3,
+						'param_4' => $r->param_4,
+						'param_5' => $r->param_5,
+						'param_6' => $r->param_6,
+						'param_7' => $r->param_7,
 						'hexagon_path' => $r->hexagon_path,
 						'difficulty' => $r->difficulty,
 						'subject' => []
