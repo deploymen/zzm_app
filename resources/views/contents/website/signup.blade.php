@@ -35,88 +35,85 @@
         <link rel="icon" href="favicon.ico" type="image/x-icon">
         <link rel="stylesheet" href="/css/main/app.css">
     </head>
-    <body>
+    <body ng-app="detdetApp">
         <!--[if IE 8]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
     
-    <div id="sign-in-up" class="site-wrapper sign-in-up">
+    <div id="sign-in-up" class="site-wrapper sign-in-up" ng-controller="MainController">
       <div class="row">
         <section class="signup-holder cf">
-                    <section class="signup-holder-inner small-12 medium-4 medium-centered columns">
-                        <div class="logo">
-                            <img src="/assets/main/img/global/logo-main-white.png" alt=" ">
-                        </div>
-                        <form data-abide="ajax" id="signup-form" class="signup-form" novalidate="novalidate">
-                            <div class="row">
-                  <div class="small-6 columns">
-                    <label for="radio-parent" class="">
-                      <input name="role" type="radio" id="radio-parent" required="" value="parent"> I am a parent
-                    </label>
-                  </div>
-
-                  <div class="small-6 columns">
-                    <label for="radio-teacher" class="">
-                      <input name="role" type="radio" id="radio-teacher" required="" value="teacher"> I am a teacher
-                    </label>
-                  </div>
-                  <small class="error">Please select a role</small>
+            <section class="signup-holder-inner small-12 medium-4 medium-centered columns">
+                <div class="logo">
+                    <img src="/assets/main/img/global/logo-main-white.png" alt=" ">
                 </div>
+                <div id="signup-form" class="signup-form">
+                    <div class="row" class="option_role">
+                      <div class="small-6 columns">
+                        <label for="radio-parent" class="">
+                          <input name="role" type="radio" id="radio-parent" required="" value="parent"> I am a parent
+                        </label>
+                      </div>
 
-                  <div class="row">
-                    <div class="small-12 columns">
-                      <label for="users_name" class="label-header">
-                                Name <small>required</small>
-                        <input type="text" id="users_name" placeholder="John Jones" name="users_name" required pattern="[a-zA-Z]+">
-                      </label>
-                      <small class="error">Please fill in your name, we like to address our friends properly!</small>
+                      <div class="small-6 columns">
+                        <label for="radio-teacher" class="">
+                          <input name="role" type="radio" id="radio-teacher" required="" value="teacher"> I am a teacher
+                        </label>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="row">
-                    <div class="small-12 columns">
-                      <label for="email" class="label-header">
-                                    Email <small>required</small>
-                        <input type="email" id="users_email" placeholder="johnjones@internet.com" name="email" required>
-                      </label>
-                      <small class="error">Please input a valid email address. Like example@domain.com</small>
-                    </div>
-                  </div>
+                      <div class="row">
+                        <div class="small-12 columns">
+                          <label for="users_name" class="label-header">
+                                    Name <small>required</small>
+                            <input type="text" id="users_name" placeholder="John Jones" name="users_name" required pattern="[a-zA-Z]+" class="name">
+                          </label>
+                        </div>
+                      </div>
 
-                  <div class="row">
-                    <div class="small-12 columns">
-                      <label for="password" class="label-header">
-                                Password <small>required</small>
-                        <input type="password" id="users_password" placeholder="......" name="password" required>
-                      </label>
-                      <small class="error">Passwords must be at least 6 characters with 1 capital letter, 1 number, and one special character.</small>
-                    </div>
-                  </div>
+                      <div class="row">
+                        <div class="small-12 columns">
+                          <label for="email" class="label-header">
+                                        Email <small>required</small>
+                            <input type="email" id="users_email" placeholder="johnjones@internet.com" name="email" required class="email">
+                          </label>
+                        </div>
+                      </div>
 
-                  <div class="row" ng-app="countrydropdown" ng-controller="countryController">
-                    <div class="small-12 columns">
-                      <label for="country" class="label-header">
-                          Country <small>required</small>
-                            <select id="users_country" name="country" required ng-model="country" ng-options="country.name for country in countries track by country.code">
-                              <option value="">-- Select a Country --</option>
-                            </select>
-                      </label>
-                      <small class="error">Please specify a country</small>
-                    </div>
-                  </div>
+                      <div class="row">
+                        <div class="small-12 columns">
+                          <label for="password" class="label-header">
+                                    Password <small>required</small>
+                            <input type="password" id="users_password" placeholder="......" name="password" required class="password">
+                          </label>
+                        </div>
+                      </div>
 
-                  <div class="row">
-                    <div class="small-12 columns">
-                      <button id="btn-signup" type="submit" class="medium radius button expand blue">Sign me up!</button>
-                    </div>
-                  </div>
-                        </form>
-                        <hr>
-                        <section class="prompt-login-wrapper">
-                            <h6>Already have an account? <a href="/user/signin">Sign In!</a></h6> 
-                        </section>
-                    </section><!--signup-holder-inner-->
+                      <div class="row">
+                        <div class="small-12 columns">
+                          <label for="country" class="label-header">
+                              Country <small>required</small>
+                                <select id="users_country" name="country" required ng-model="country" ng-options="country.name for country in countries track by country.code">
+                                  <option value="">-- Select a Country --</option>
+                                </select>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="small-12 columns">
+                          <!-- <input id="btn-signup" type="submit" class="medium radius button expand blue" value="Sign me up!"> -->
+                          <!-- <button id="btn-signup" type="submit" class="medium radius button expand blue">Sign me up!</button> -->
+                          <a href="#" id="btn-signup" ng-click="signUp()" type="submit" class="medium radius button expand blue">Sign me up!</a>
+                        </div>
+                      </div>
+                </div>
+                <hr>
+                <section class="prompt-login-wrapper">
+                    <h6>Already have an account? <a href="/user/signin">Sign In!</a></h6> 
                 </section>
+            </section><!--signup-holder-inner-->
+        </section>
       </div>
       <div class="blue-bg-overlay"></div>
     </div><!--site-wrapper-->
@@ -126,8 +123,9 @@
         <script>window.jQuery || document.write('<script src="js/jquery/dist/jquery.min.js"><\/script>')</script>
 
         <script src="/js/main/app.js"></script>
-        <script src="/js/main/init.js"></script>
-        <script src="/js/main/signup.js"></script>
+        <!-- <script src="/js/main/init.js"></script> -->
+        <!-- <script src="/js/main/signup.js"></script> -->
+        <script src="/js/main/signup-ng.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
