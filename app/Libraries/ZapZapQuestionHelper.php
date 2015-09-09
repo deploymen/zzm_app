@@ -1323,6 +1323,7 @@ class ZapZapQuestionHelper{
 						'question_option2' => $r->question_option2,
 						'question_option3' => $r->question_option3,
 						'question_option4' => $r->question_option4,
+						'answer' => $r->answer,
 						'difficulty' => $r->difficulty,
 						'subject' => []
 					]);
