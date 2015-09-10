@@ -104,13 +104,7 @@ X-game-code: 0000015k
       "name": "Multiplayer",
       "description": "Multiplayer",
       "question_count": 50,
-      "badges": {
-        "speed": "1",
-        "accuracy": "1",
-        "score_mul_base": "1",
-        "score_mul_accuracy": "1",
-        "score_mul_speed": "1"
-      }
+      "badges": {}
     },
     "status": {
       "star": 0,
