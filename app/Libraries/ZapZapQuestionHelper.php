@@ -1350,6 +1350,7 @@ class ZapZapQuestionHelper{
 				continue;
 			}
 			$setGenerate = $gameType - count($gamePlay);
+			var_export($setGenerate); die();
 			$targetId = explode(',', $targetIds);
 
 			for($j=0; $j<$setGenerate; $j++){
