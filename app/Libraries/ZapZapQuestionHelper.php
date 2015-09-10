@@ -1341,7 +1341,11 @@ class ZapZapQuestionHelper{
 			//opponent
 			$opponent = []; 
 			$gameType = $gameType - 1;
-			$gamePlay = GamePlay::where('planet_id' , $planetId)->get();
+			$smallest = $level -1;
+			$biggest = $level +1;
+
+			$gamePlay = GamePlay::where('planet_id', $planetId)->where('level' , '>' , $smallest)->where('level', '<' ,$biggest)->take($gameType)->get();
+
 			if(!$gamePlay){
 				continue;
 			}
@@ -1384,26 +1388,40 @@ class ZapZapQuestionHelper{
 
 					}
 			}
+			$lenght = $gameType * 2;
+			$sqlPlayIds = "
+				SELECT GROUP_CONCAT(`id`)  AS `ids`
+					FROM `t0400_game_play`
+						WHERE `planet_id` = {$planetId}
+						AND `level` > {$smallest}
+						AND `level` < {$biggest}
 
-			$smallest = $level -1;
-			$biggest = $level +1;
-			$questionCount = $gameType * 50;
+						ORDER BY `id` DESC
+			";
+
+			$playId = DB::select($sqlPlayIds);
+
+			$playIds = $playId[0]->ids;
+			$playIds = str_split($playIds , $lenght);
+			$playIds = $playIds[0];
+
+			if($gameType != 7){
+				$playIds = substr_replace($playIds, "", -1);
+			}
 			//get opponent result
 			$sqlNpcQuestion = "
-				SELECT  p.`id` AS `play_id` , p.`level`,p.`score`, r00.`answer` ,r00.`answer_option`, r00.`correct`  , r.`complete_time` 
+				SELECT  p.`id` AS `play_id` , p.`level`, p.`score`, r00.`answer` ,r00.`answer_option`, r00.`correct`  ,r00.`difficulty`, r.`complete_time` 
 					FROM `t0300_game_result_p00` r00 , `t0400_game_play` p ,`t0300_game_result` r
 						WHERE r00.`id` = r.`target_id`
+						AND p.`id` IN ({$playIds}) 
 						AND r.`play_id` = p.`id`
-						AND p.`planet_id` = {$planetId}
-						AND p.`level` > {$smallest}
-						AND p.`level` < {$biggest}
 						AND r.`game_type_id` = 0
 
 						ORDER BY `play_id` DESC 
-						LIMIT {$questionCount};
 
 				";
 				$npcQuestion = DB::select($sqlNpcQuestion);
+
 				$prevPlayId = 0;
 
 				for($k=0; $k<count($npcQuestion); $k++){
@@ -1422,7 +1440,8 @@ class ZapZapQuestionHelper{
 							'answer' => $n->answer,
 							'answer_option' => $n->answer_option,
 							'correct' => $n->correct,
-							'complete_time' => $n->complete_time
+							'complete_time' => $n->complete_time,
+							'difficulty' => $n->difficulty
 					]);
 					$prevPlayId = $n->play_id;
 				}
