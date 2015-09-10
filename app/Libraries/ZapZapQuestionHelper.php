@@ -36,6 +36,7 @@ use App\Models\GameResultP23;
 use App\Models\GameResultP32;
 use App\Models\GameQuestion;
 use App\Models\GameQuestionP03;
+use App\Models\GameQuestionP00;
 use App\Models\GameQuestionP04ChallengeSet;
 use App\Models\GameSystemPlanet;
 use App\Models\UserExternalId;
@@ -1140,7 +1141,7 @@ class ZapZapQuestionHelper{
 	}
 
 	public static function GetQuestionP00($planetId,$gameType,$level,$profileId){
-		try{
+		// try{
 			
 
 			if(!$gameType){
@@ -1281,14 +1282,18 @@ class ZapZapQuestionHelper{
 			$questionId = DB::SELECT($sqlQuestionId);
 			$count = count($questionId);
 
-			if(!$questionId[0]->ids){
-				$targetIds = $questionId[1]->ids;
-			}elseif($count == 2){
-				$targetIds = $questionId[0]->ids.','.$questionId[1]->ids;
-			}elseif($count == 3){
+			if($level <= 8){
 				$targetIds = $questionId[0]->ids.','.$questionId[1]->ids.','.$questionId[2]->ids;
 			}
-			
+
+			if($level == 9){
+				$targetIds = $questionId[1]->ids.','.$questionId[2]->ids;
+			}
+
+			if($level == 10){
+				$targetIds = $questionId[1]->ids;
+			}
+
 			$sql2 = "
 				SELECT  p00.* ,  q.`difficulty`, q.`id` AS `id`, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description` 
 					 FROM (`t0200_game_question_p00` p00 , `t0200_game_question` q)
@@ -1350,10 +1355,11 @@ class ZapZapQuestionHelper{
 				continue;
 			}
 			$setGenerate = $gameType - count($gamePlay);
-			var_export($setGenerate); die();
-			$targetId = explode(',', $targetIds);
+
+			$targetId = explode(',' , $targetIds);
 
 			for($j=0; $j<$setGenerate; $j++){
+
 				$gamePlay = new GamePlay;
 				$gamePlay->user_id = 0;
 				$gamePlay->profile_id = 0;
@@ -1368,14 +1374,15 @@ class ZapZapQuestionHelper{
 					$rand = rand(0,1);
 					$randAnswer = rand(1,4);
 					$t = $targetId[$l];
+					$question = GameQuestionP00::find($t);
 
-					$question = GameQuestion::find($t);
 					$resultP00 = new GameResultP00;
 					$resultP00->correct = $rand;
 					$resultP00->target_type = 'p00';
-					$resultP00->target_id = $question->target_id;
+					$resultP00->target_id = $t;
 					$resultP00->answer = $randAnswer;
 					$resultP00->answer_option = $randAnswer;
+					$resultP00->difficulty = $question->difficulty;
 					$resultP00->save();
 
 					$gameResults = new GameResult;
@@ -1389,26 +1396,26 @@ class ZapZapQuestionHelper{
 
 					}
 			}
-			$lenght = $gameType * 2;
+		
 			$sqlPlayIds = "
-				SELECT GROUP_CONCAT(`id`)  AS `ids`
+				SELECT `id`
 					FROM `t0400_game_play`
 						WHERE `planet_id` = {$planetId}
 						AND `level` > {$smallest}
 						AND `level` < {$biggest}
 
 						ORDER BY `id` DESC
+						LIMIT {$gameType}
 			";
-
 			$playId = DB::select($sqlPlayIds);
 
-			$playIds = $playId[0]->ids;
-			$playIds = str_split($playIds , $lenght);
-			$playIds = $playIds[0];
-
-			if($gameType != 7){
-				$playIds = substr_replace($playIds, "", -1);
+			$pi = [];
+			for($o=0; $o<count($playId); $o++){
+				array_push($pi , $playId[$o]->id);
 			}
+			$playIds = implode(",", $pi);	
+
+
 			//get opponent result
 			$sqlNpcQuestion = "
 				SELECT  p.`id` AS `play_id` , p.`level`, p.`score`, r00.`answer` ,r00.`answer_option`, r00.`correct`  ,r00.`difficulty`, r.`complete_time` 
@@ -1422,7 +1429,6 @@ class ZapZapQuestionHelper{
 
 				";
 				$npcQuestion = DB::select($sqlNpcQuestion);
-
 				$prevPlayId = 0;
 
 				for($k=0; $k<count($npcQuestion); $k++){
@@ -1446,18 +1452,18 @@ class ZapZapQuestionHelper{
 					]);
 					$prevPlayId = $n->play_id;
 				}
-			shuffle($results);
+			shuffle($results[0]['question']);
 			return [
 					'player' => $results, 
 					'opponent' => $opponent
 					];
 
-		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp99', ['environment' => json_encode([
-				'ex' =>  $ex->getMessage(),
-			])]);
-		return ResponseHelper::OutputJSON('exception');
-		}
+		// }catch(Exception $ex){
+		// 	LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp99', ['environment' => json_encode([
+		// 		'ex' =>  $ex->getMessage(),
+		// 	])]);
+		// return ResponseHelper::OutputJSON('exception');
+		// }
 	}
 
 	public static function SubmitResultP00($planetId,$gamePlay ,$gameResult,$profileId ) {
