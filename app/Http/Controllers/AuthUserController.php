@@ -560,7 +560,6 @@ Class AuthUserController extends Controller {
 	}
 
 	public function signUpApp() {
-
 		$email = Request::input('email');
 		$deviceId = Request::input('deviceId');
 		if (!$email) {
@@ -626,19 +625,19 @@ Class AuthUserController extends Controller {
 				//to do...
 			}
 
-			$secretKey = sha1(time() . $email);
-			$edmHtml = (string) view('emails.set-password-app-signup', [
-				'set_url' => config('app.website_url') ."/user/set-password",
-				'social_media_links' => config('app.fanpage_url'),
-			]);
+			// $secretKey = sha1(time() . $email);
+			// $edmHtml = (string) view('emails.set-password-app-signup', [
+			// 	'set_url' => config('app.website_url') ."/user/set-password/{$secretKey}",
+			// 	'social_media_links' => config('app.fanpage_url')
+			// ]);
 
-			EmailHelper::SendEmail([
-				'about' => 'Welcome',
-				'subject' => 'Please Confirm Your Password for Zap Zap Math',
-				'body' => $edmHtml,
-				'bodyHtml' => $edmHtml,
-				'toAddresses' => [$email],
-			]);
+			// EmailHelper::SendEmail([
+			// 	'about' => 'Welcome',
+			// 	'subject' => 'Please Confirm Your Password for Zap Zap Math',
+			// 	'body' => $edmHtml,
+			// 	'bodyHtml' => $edmHtml,
+			// 	'toAddresses' => [$email],
+			// ]);
 
 			$logOpenAcc = new LogAccountActivate;
 			$logOpenAcc->user_id = $user->id;
@@ -656,6 +655,8 @@ Class AuthUserController extends Controller {
 			Session::put('access_token', $accessToken);
 			setcookie('access_token', $accessToken, time() + (86400 * 30), "/"); // 86400 = 1 day*/
 
+			return ResponseHelper::OutputJSON('success', '', $code->code);	
+
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 				'source' => 'AuthUserController > signUp',
@@ -664,6 +665,5 @@ Class AuthUserController extends Controller {
 			return ResponseHelper::OutputJSON('exception');
 		}
 
-		return ResponseHelper::OutputJSON('success');	
 	}
 }
