@@ -1141,7 +1141,7 @@ class ZapZapQuestionHelper{
 	}
 
 	public static function GetQuestionP00($planetId,$gameType,$level,$profileId){
-		// try{
+		try{
 			
 
 			if(!$gameType){
@@ -1412,10 +1412,9 @@ class ZapZapQuestionHelper{
 			$pi = [];
 			for($o=0; $o<count($playId); $o++){
 				array_push($pi , $playId[$o]->id);
+				shuffle($pi);
 			}
 			$playIds = implode(",", $pi);	
-
-
 			//get opponent result
 			$sqlNpcQuestion = "
 				SELECT  p.`id` AS `play_id` , p.`level`, p.`score`, r00.`answer` ,r00.`answer_option`, r00.`correct`  ,r00.`difficulty`, r.`complete_time` 
@@ -1425,7 +1424,7 @@ class ZapZapQuestionHelper{
 						AND r.`play_id` = p.`id`
 						AND r.`game_type_id` = 0
 
-						ORDER BY `play_id` DESC 
+ 
 
 				";
 				$npcQuestion = DB::select($sqlNpcQuestion);
@@ -1458,12 +1457,12 @@ class ZapZapQuestionHelper{
 					'opponent' => $opponent
 					];
 
-		// }catch(Exception $ex){
-		// 	LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp99', ['environment' => json_encode([
-		// 		'ex' =>  $ex->getMessage(),
-		// 	])]);
-		// return ResponseHelper::OutputJSON('exception');
-		// }
+		}catch(Exception $ex){
+			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp99', ['environment' => json_encode([
+				'ex' =>  $ex->getMessage(),
+			])]);
+		return ResponseHelper::OutputJSON('exception');
+		}
 	}
 
 	public static function SubmitResultP00($planetId,$gamePlay ,$gameResult,$profileId ) {

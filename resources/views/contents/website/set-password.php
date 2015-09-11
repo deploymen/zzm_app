@@ -7,7 +7,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Zap Zap Math | Set Password</title>
+        <title>Zap Zap Math | Reset Password</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -69,7 +69,7 @@
 
                             <div class="row">
                               <div class="small-12 columns">
-                                <a id="btn-reset-password" class="medium button expand radius blue">Set Password</a>
+                                <a id="btn-reset-password" class="medium button expand radius blue">Set Your Password</a>
                               </div>
                             </div>
                         </form>

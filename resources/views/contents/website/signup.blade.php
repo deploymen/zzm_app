@@ -124,7 +124,7 @@
 
         <script src="/js/main/app.js"></script>
         <!-- <script src="/js/main/init.js"></script> -->
-        <script src="/js/main/signup.js"></script>
+        <!-- <script src="/js/main/signup.js"></script> -->
         <script src="/js/main/signup-ng.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
