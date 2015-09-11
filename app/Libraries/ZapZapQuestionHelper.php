@@ -1478,6 +1478,7 @@ class ZapZapQuestionHelper{
 				$resultP00->target_id = $question->target_id;
 				$resultP00->answer = $inAnswer['answer'];
 				$resultP00->answer_option = $inAnswer['answer_option'];
+				$resultP00->difficulty = $inAnswer['difficulty'];
 				$resultP00->save();
 
 				$gameResults = new GameResult;
