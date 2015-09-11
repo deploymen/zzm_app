@@ -566,7 +566,7 @@ Class AuthUserController extends Controller {
 
 
 		$deviceId = Request::input('deviceId');
-		if (!$email) {
+		if (!$email || !$firstName || !$lastName) {
 			return ResponseHelper::OutputJSON('fail', "missing parameters");
 		}
 
@@ -657,9 +657,6 @@ Class AuthUserController extends Controller {
 			DatabaseUtilHelper::LogInsert($user->id, $extId->table, $user->id);
 			DatabaseUtilHelper::LogInsert($user->id, $profile->table, $profile->id);
 			DatabaseUtilHelper::LogInsert($user->id, $code->table, $code->id);
-
-			Session::put('access_token', $accessToken);
-			setcookie('access_token', $accessToken, time() + (86400 * 30), "/"); // 86400 = 1 day*/
 
 			return ResponseHelper::OutputJSON('success', '', $code->code);	
 
