@@ -639,10 +639,10 @@ Class AuthUserController extends Controller {
 			// 	'toAddresses' => [$email],
 			// ]);
 
-			$logOpenAcc = new LogAccountActivate;
-			$logOpenAcc->user_id = $user->id;
-			$logOpenAcc->secret = $secretKey;
-			$logOpenAcc->save();
+			// $logOpenAcc = new LogAccountActivate;
+			// $logOpenAcc->user_id = $user->id;
+			// $logOpenAcc->secret = $secretKey;
+			// $logOpenAcc->save();
 
 			//job done - log it!
 			DatabaseUtilHelper::LogInsert($user->id, $user->table, $user->id);
