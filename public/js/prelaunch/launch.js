@@ -11,6 +11,16 @@
 		responsiveWidth: 900
 	});
 
+	// Navbar Buttons
+    // var pagenum = 
+ //    var url = window.location.href;
+	// var hash = url.substring(url.indexOf("#")+1);
+	// if(hash){
+	// 	$('.btn-hideshow-signup').hide();
+	// } else {
+	// 	$('.btn-hideshow-signup').show();
+	// }
+
 })(jQuery, this, this.document);
 
 

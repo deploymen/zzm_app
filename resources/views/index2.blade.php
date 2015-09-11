@@ -41,8 +41,8 @@
         <![endif]-->
 
         <div class="site-wrapper" style="height:9000px;">
-            <div class="launch-main-nav">
-                <nav class="top-bar" data-topbar role="navigation">
+            <siv class="fixed sticky">
+                <nav class="top-bar launch-top-bar fixed" data-topbar="" role="navigation">
                     <ul class="title-area">
                         <li class="name">
                             <h1>
@@ -55,22 +55,35 @@
                         <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
                     </ul>
 
-                    <section class="top-bar-section">
+
+                    <section class="top-bar-section" style="left: 0%;">
                         <!-- Right Nav Section -->
-                        <ul class="right">
+                        <ul class="right show-for-large-up">
                             <li><a href="#">Contributors</a></li>
                             <li><a href="#">Blog</a></li>
                             <li><a href="#">Jobs</a></li>
                             <li>
-                                <button class="btn-launch-orange">Sign In</button>
+                                <button class="btn-orange round">Sign In</button>
+                            </li>
+                            <li class="btn-hideshow-signup">
+                                <button class="btn-orange round">Free Sign Up</button>
+                            </li>
+                        </ul>
+
+                        <ul class="right hide-for-large-up">
+                            <li><a href="#">Contributors</a></li>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Jobs</a></li>
+                            <li>
+                                <button class="btn-orange round">Sign In</button>
                             </li>
                             <li>
-                                <button class="btn-launch-orange">Free Sign Up</button>
+                                <button class="btn-orange round">Free Sign Up</button>
                             </li>
                         </ul>
                     </section>
                 </nav>
-            </div>
+            </siv>
             <!-- <header id="main-banner" class="main-banner-2 cf" role="banner" style="height:900px;">
 
             </header> -->
@@ -276,7 +289,7 @@
 
         <script src="js/prelaunch/foundation.min.js"></script>
         <script src="js/prelaunch/jquery.fullPage.min.js"></script>
-        <script src='js/prelaunch/quintus-all.js'></script>
+        <!-- <script src='js/prelaunch/quintus-all.js'></script> -->
         <!-- <script src="js/prelaunch/perspective.js"></script> -->
         <!-- <script src="js/prelaunch/platformer.js"></script> -->
         <script src="js/prelaunch/launch.js"></script>

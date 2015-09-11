@@ -34,7 +34,7 @@ $bush: #15411b;
 	height: auto !important;
 }*/
 
-.top-bar {
+/*.top-bar {
 	height: auto !important;
 }
 
@@ -50,7 +50,32 @@ $bush: #15411b;
 .launch-main-nav .top-bar-section li:not(.has-form) a:not(.button),
 .launch-main-nav .top-bar-section ul li {
 	background: transparent;
+}*/
+
+.launch-top-bar {
+	background: rgba(0, 84, 166, 0.6);
 }
+
+.launch-top-bar.top-bar {
+	height: auto;
+}
+
+.launch-top-bar .name img {
+	height: 45px;
+}
+
+.launch-top-bar .top-bar-section ul li,
+.launch-top-bar .top-bar-section li:not(.has-form) a:not(.button){
+	background: transparent;
+}
+
+/*.btn-hideshow-signup {
+	display: none;
+}
+
+.btn-hideshow-signup.showonbar {
+	display: block;
+}*/
 
 .full-page .section {
 	padding-top: 100px;
@@ -136,10 +161,6 @@ $bush: #15411b;
 	outline: none;
 }
 
-.top-bar-section ul li:last-child {
-	display: none;
-}
-
 .page-info-bottom-bar {
 	background-color: $gallery;
 	position: absolute;
@@ -159,7 +180,7 @@ $bush: #15411b;
 
 /** PAGE 1: HERO PAGE/PANEL STYLES **/
 .page1 {
-	background-image: url('../../assets/launch/bg-hero.jpg');
+	background-image: url('../../assets/launch/bg-hero-small.jpg');
 	background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
