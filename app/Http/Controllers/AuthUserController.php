@@ -579,7 +579,7 @@ Class AuthUserController extends Controller {
 			return ResponseHelper::OutputJSON('fail', "email used");
 		}
 
-		try {
+		// try {
 			$user = new User;
 			$user->role = 'parent';
 			$user->email = $email;
@@ -631,24 +631,24 @@ Class AuthUserController extends Controller {
 				//to do...
 			}
 
-			// $secretKey = sha1(time() . $email);
-			// $edmHtml = (string) view('emails.set-password-app-signup', [
-			// 	'set_url' => config('app.website_url') ."/user/set-password/{$secretKey}",
-			// 	'social_media_links' => config('app.fanpage_url')
-			// ]);
+			$secretKey = sha1(time() . $email);
+			$edmHtml = (string) view('emails.set-password-app-signup', [
+				'set_url' => config('app.website_url') ."/user/set-password/{$secretKey}",
+				'social_media_links' => config('app.fanpage_url')
+			]);
 
-			// EmailHelper::SendEmail([
-			// 	'about' => 'Welcome',
-			// 	'subject' => 'Please Confirm Your Password for Zap Zap Math',
-			// 	'body' => $edmHtml,
-			// 	'bodyHtml' => $edmHtml,
-			// 	'toAddresses' => [$email],
-			// ]);
+			EmailHelper::SendEmail([
+				'about' => 'Welcome',
+				'subject' => 'Please Confirm Your Password for Zap Zap Math',
+				'body' => $edmHtml,
+				'bodyHtml' => $edmHtml,
+				'toAddresses' => [$email],
+			]);
 
-			// $logOpenAcc = new LogAccountActivate;
-			// $logOpenAcc->user_id = $user->id;
-			// $logOpenAcc->secret = $secretKey;
-			// $logOpenAcc->save();
+			$logOpenAcc = new LogAccountActivate;
+			$logOpenAcc->user_id = $user->id;
+			$logOpenAcc->secret = $secretKey;
+			$logOpenAcc->save();
 
 			//job done - log it!
 			DatabaseUtilHelper::LogInsert($user->id, $user->table, $user->id);
@@ -660,13 +660,13 @@ Class AuthUserController extends Controller {
 
 			return ResponseHelper::OutputJSON('success', '', $code->code);	
 
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'AuthUserController > signUp',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		// } catch (Exception $ex) {
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		'source' => 'AuthUserController > signUp',
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 
 	}
 }
