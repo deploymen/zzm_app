@@ -7,6 +7,8 @@ Route::group(['prefix' => 'user'], function(){
 	Route::get('/forgot-password', function(){ return view('contents.website.forgot-password'); });
 	Route::get('/reset-password/{secret_key}', function(){ return view('contents.website.reset-password'); });
 
+	Route::get('/set-password', function(){ return view('contents.website.set-password'); });
+
 	Route::get('/activate-success', function(){ return view('contents.website.activate-success'); });
 	Route::get('/activate-fail', function(){ return view('contents.website.activate-fail'); });
 	
