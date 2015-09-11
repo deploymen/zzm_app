@@ -561,6 +561,10 @@ Class AuthUserController extends Controller {
 
 	public function signUpApp() {
 		$email = Request::input('email');
+		$firstName = Request::input('first_name');
+		$lastName = Request::input('last_name');
+
+
 		$deviceId = Request::input('deviceId');
 		if (!$email) {
 			return ResponseHelper::OutputJSON('fail', "missing parameters");
@@ -603,6 +607,8 @@ Class AuthUserController extends Controller {
 
 			$profile = new GameProfile;
 			$profile->user_id = $user->id;
+			$profile->first_name = $firstName;
+			$profile->last_name = $lastName;
 			$profile->nickname1= 1;
 			$profile->nickname2= 1;
 			$profile->avatar_id = 1;
