@@ -8,7 +8,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Zap Zap Math</title>
         <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
 
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
         <!-- Open Graph Tags -->
@@ -40,8 +40,8 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        <div class="site-wrapper" style="height:9000px;">
-            <siv class="fixed sticky">
+        <div class="site-wrapper">
+            <div>
                 <nav class="top-bar launch-top-bar fixed" data-topbar="" role="navigation">
                     <ul class="title-area">
                         <li class="name">
@@ -51,14 +51,13 @@
                                 </a>
                             </h1>
                         </li>
-                        <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
-                        <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
                     </ul>
+                    <a href="#" class="small-menu-icon show-for-small-only"><i class="fa fa-bars"></i></a>
 
 
                     <section class="top-bar-section" style="left: 0%;">
                         <!-- Right Nav Section -->
-                        <ul class="right show-for-large-up">
+                        <ul class="right menu-items-list">
                             <li><a href="#">Contributors</a></li>
                             <li><a href="#">Blog</a></li>
                             <li><a href="#">Jobs</a></li>
@@ -69,21 +68,9 @@
                                 <button class="btn-orange round">Free Sign Up</button>
                             </li>
                         </ul>
-
-                        <ul class="right hide-for-large-up">
-                            <li><a href="#">Contributors</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Jobs</a></li>
-                            <li>
-                                <button class="btn-orange round">Sign In</button>
-                            </li>
-                            <li>
-                                <button class="btn-orange round">Free Sign Up</button>
-                            </li>
-                        </ul>
                     </section>
                 </nav>
-            </siv>
+            </div>
             <!-- <header id="main-banner" class="main-banner-2 cf" role="banner" style="height:900px;">
 
             </header> -->
@@ -160,12 +147,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="enthusiastic-teacher">
-                        <img src="/assets/launch/enthusiastic-teacher.png" alt="">
-                    </div>
+
                     <div class="peekaboo-zzm">
                         <img src="/assets/launch/peekaboo-zzm.png" alt="">
                     </div>
+                    <div class="enthusiastic-teacher">
+                        <img src="/assets/launch/enthusiastic-teacher.png" alt="">
+                    </div>
+                    
                     <div class="page-info-bottom-bar">
                         <div class="row">
                             <p>Parents or Teachers can track progress &amp; competencies quickly &amp; easilly</p>
@@ -178,7 +167,23 @@
                         <div class="small-12 medium-6 columns">
                             <h1>Play &amp; Learn!</h1>
                             <div class="tablet-swipe">
-                                <div class="slide-holder"></div>
+                                <div class="slide-holder">
+                                    <div>
+                                        <img src="/assets/launch/ss1.PNG" alt="">
+                                    </div>
+                                    <div>
+                                        <img src="/assets/launch/ss2.PNG" alt="">
+                                    </div>
+                                    <div>
+                                        <img src="/assets/launch/ss3.PNG" alt="">
+                                    </div>
+                                    <div>
+                                        <img src="/assets/launch/ss4.PNG" alt="">
+                                    </div>
+                                    <div>
+                                        <img src="/assets/launch/ss5.PNG" alt="">
+                                    </div>
+                                </div>
                                 <img src="/assets/launch/tablet-nexus.png" alt="Nexus 9">
                             </div>
                         </div>
@@ -285,13 +290,13 @@
 
         <!-- SCRIPTS START HERE -->
         <script src="js/prelaunch/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.2/js/foundation.js"></script>
 
         <script src="js/prelaunch/foundation.min.js"></script>
         <script src="js/prelaunch/jquery.fullPage.min.js"></script>
         <!-- <script src='js/prelaunch/quintus-all.js'></script> -->
         <!-- <script src="js/prelaunch/perspective.js"></script> -->
         <!-- <script src="js/prelaunch/platformer.js"></script> -->
+        <script src="js/prelaunch/slick/slick.min.js"></script>
         <script src="js/prelaunch/launch.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->

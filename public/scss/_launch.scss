@@ -25,6 +25,7 @@ $bush: #15411b;
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b32f83', endColorstr='#0b0e5a',GradientType=0 );
 }
 
+
 /*.launch-main-nav {
 	position: fixed;
 	top: 0;
@@ -54,6 +55,7 @@ $bush: #15411b;
 
 .launch-top-bar {
 	background: rgba(0, 84, 166, 0.6);
+	position: fixed;
 }
 
 .launch-top-bar.top-bar {
@@ -64,10 +66,21 @@ $bush: #15411b;
 	height: 45px;
 }
 
+.launch-top-bar .small-menu-icon {
+	position: absolute;
+	top: 0px;
+	right: 10px;
+	color: yellow;
+	font-size: 30px;
+	outline: none;
+}
+
 .launch-top-bar .top-bar-section ul li,
 .launch-top-bar .top-bar-section li:not(.has-form) a:not(.button){
 	background: transparent;
 }
+
+
 
 /*.btn-hideshow-signup {
 	display: none;
