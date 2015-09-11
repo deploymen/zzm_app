@@ -37,7 +37,7 @@
 									<tr width="100%">
 										<td bgcolor="#FFFFFF" style="background-color: #FFFFFF; padding: 30px;">
 											<h1 style="font-family:Century Gothic; font-size:40px; font-weight:100; line-height:45px; margin:0; color:#8F8F8F">
-												Congratulations Mathling! {{$aaa}}
+												Congratulations Mathling!
 											</h1>
 										</td>
 									</tr>

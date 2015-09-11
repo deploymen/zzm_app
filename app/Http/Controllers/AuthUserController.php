@@ -634,7 +634,7 @@ Class AuthUserController extends Controller {
 			$secretKey = sha1(time() . $email);
 			$edmHtml = (string) view('emails.set-password-app-signup', [
 				'set_url' => config('app.website_url').'/user/set-password/{$secretKey}',
-				'social_media_links' => config('app.fanpage_url')
+				'social_media_links' => config('app.fanpage_url'),
 			]);
 
 			EmailHelper::SendEmail([
