@@ -563,68 +563,68 @@ Class AuthUserController extends Controller {
 		$email = Request::input('email');
 		$firstName = Request::input('first_name');
 		$lastName = Request::input('last_name');
-
-
 		$deviceId = Request::input('deviceId');
-		if (!$email || !$firstName || !$lastName) {
-			return ResponseHelper::OutputJSON('fail', "missing parameters");
-		}
 
-		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-			return ResponseHelper::OutputJSON('fail', "invalid email format");
-		}
 
-		$access = UserAccess::where('username', $email)->first();
-		if($access){
-			return ResponseHelper::OutputJSON('fail', "email used");
-		}
+		// if (!$email || !$firstName || !$lastName) {
+		// 	return ResponseHelper::OutputJSON('fail', "missing parameters");
+		// }
 
-		// try {
-			$user = new User;
-			$user->role = 'parent';
-			$user->email = $email;
-			$user->save();
+		// if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+		// 	return ResponseHelper::OutputJSON('fail', "invalid email format");
+		// }
 
-			$accessToken = AuthHelper::GenerateAccessToken($user->id);
+		// $access = UserAccess::where('username', $email)->first();
+		// if($access){
+		// 	return ResponseHelper::OutputJSON('fail', "email used");
+		// }
 
-			$access = new UserAccess;
-			$access->user_id = $user->id;
-			$access->username = $email;
-			$access->access_token = $accessToken;
-			$access->access_token_issue_at = DB::raw('NOW()');
-			$access->access_token_issue_ip = Request::ip();
-			$access->access_token_expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 10 YEAR)'); //we dont kick them out
-			$access->save();
+		// // try {
+		// 	$user = new User;
+		// 	$user->role = 'parent';
+		// 	$user->email = $email;
+		// 	$user->save();
 
-			$extId = new UserExternalId;
-			$extId->user_id = $user->id;
-			if ($deviceId) {$extId->device_id = $deviceId;}
-			$extId->save();
+		// 	$accessToken = AuthHelper::GenerateAccessToken($user->id);
 
-			$setting = new UserSetting;
-			$setting->user_id = $user->id;
-			$setting->save();
+		// 	$access = new UserAccess;
+		// 	$access->user_id = $user->id;
+		// 	$access->username = $email;
+		// 	$access->access_token = $accessToken;
+		// 	$access->access_token_issue_at = DB::raw('NOW()');
+		// 	$access->access_token_issue_ip = Request::ip();
+		// 	$access->access_token_expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 10 YEAR)'); //we dont kick them out
+		// 	$access->save();
 
-			$profile = new GameProfile;
-			$profile->user_id = $user->id;
-			$profile->first_name = $firstName;
-			$profile->last_name = $lastName;
-			$profile->nickname1= 1;
-			$profile->nickname2= 1;
-			$profile->avatar_id = 1;
-			$profile->save();
+		// 	$extId = new UserExternalId;
+		// 	$extId->user_id = $user->id;
+		// 	if ($deviceId) {$extId->device_id = $deviceId;}
+		// 	$extId->save();
 
-			$idCounter = IdCounter::find(1);
-			$gameCodeSeed = $idCounter->game_code_seed;
-			$idCounter->game_code_seed = $gameCodeSeed + 1;
-			$idCounter->save();
+		// 	$setting = new UserSetting;
+		// 	$setting->user_id = $user->id;
+		// 	$setting->save();
 
-			$code = new GameCode;
-			$code->type = 'profile';
-			$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
-			$code->seed = $gameCodeSeed;
-			$code->profile_id = $profile->id;
-			$code->save();
+		// 	$profile = new GameProfile;
+		// 	$profile->user_id = $user->id;
+		// 	$profile->first_name = $firstName;
+		// 	$profile->last_name = $lastName;
+		// 	$profile->nickname1= 1;
+		// 	$profile->nickname2= 1;
+		// 	$profile->avatar_id = 1;
+		// 	$profile->save();
+
+		// 	$idCounter = IdCounter::find(1);
+		// 	$gameCodeSeed = $idCounter->game_code_seed;
+		// 	$idCounter->game_code_seed = $gameCodeSeed + 1;
+		// 	$idCounter->save();
+
+		// 	$code = new GameCode;
+		// 	$code->type = 'profile';
+		// 	$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
+		// 	$code->seed = $gameCodeSeed;
+		// 	$code->profile_id = $profile->id;
+		// 	$code->save();
 
 			if ($deviceId) {
 				//claim back previous game result played from this device id
@@ -633,10 +633,11 @@ Class AuthUserController extends Controller {
 
 			$secretKey = sha1(time() . $email);
 			$edmHtml = (string) view('emails.set-password-app-signup', [
-				'set_url' => config('app.website_url') ."/user/set-password/{$secretKey}",
-				'social_media_links' => config('app.fanpage_url')
+				'set_url' => config('app.website_url').'/user/set-password/{$secretKey}',
+				'social_media_links' => config('app.fanpage_url'),
+				'aaa' => 'aaa'
 			]);
-
+var_export($edmHtml); die();
 			EmailHelper::SendEmail([
 				'about' => 'Welcome',
 				'subject' => 'Please Confirm Your Password for Zap Zap Math',
