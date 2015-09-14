@@ -13,6 +13,8 @@ Route::group(['middleware' => 'auth.game'], function () {
 
 
 Route::group(['prefix' => 'api/game'], function () {
+	Route::post('/sign-up', 'AuthUserController@signUpApp');
+	
 	Route::post('/map/system', 'ApiGameController@mapSystem');
 	Route::post('/map/system/{id}/planet', 'ApiGameController@mapPlanet');
 	

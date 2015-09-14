@@ -75,7 +75,7 @@
             <div class="jobs-main-content">
                 <div class="inner-job-wrapper">
                     <div class="row">
-                        <ul class="collaborator-list">
+                        <ul class="collaborator-list cf">
                             <li>
                                 <div class="collab-profile-holder">
                                     <div class="profile-pic-holder">

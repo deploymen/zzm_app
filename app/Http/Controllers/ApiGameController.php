@@ -97,6 +97,7 @@ Class ApiGameController extends Controller {
 				case 'p06':$questions = ZapZapQuestionHelper::GetQuestionP06($planetId,$difficulty,$questionCount); break;
 				case 'p07':$questions = ZapZapQuestionHelper::GetQuestionP07($planetId,$difficulty,$questionCount); break;
 				case 'p08':$questions = ZapZapQuestionHelper::GetQuestionP08($planetId,$difficulty,$questionCount); break;
+				case 'p09':$questions = ZapZapQuestionHelper::GetQuestionP09($planetId,$difficulty,$questionCount); break;
 				case 'p10':$questions = ZapZapQuestionHelper::GetQuestionP10($planetId,$difficulty,$questionCount); break;
 				case 'p18':$questions = ZapZapQuestionHelper::GetQuestionP18($planetId,$difficulty,$questionCount); break;
 				case 'p23':$questions = ZapZapQuestionHelper::GetQuestionP23($planetId,$difficulty,$questionCount); break;
@@ -170,7 +171,7 @@ Class ApiGameController extends Controller {
 			}
 
 			$gameResult = json_decode($jsonGameResult, true);
-			if(!isset($gameResult['score']) || !isset($gameResult['answers'])|| !isset($gameResult['status']) || !isset($gameResult['badges'])){ 
+			if(!isset($gameResult['score']) || !isset($gameResult['answers'])|| !isset($gameResult['status']) ){ 
 					return  [
 					'status' => "fail",
 					'message' => "invalid game result format",
@@ -227,18 +228,6 @@ Class ApiGameController extends Controller {
 			}elseif($gameStatus == 'True'){
 				$gameStatus = 'pass';
 			}
-
-			if($gameResult['badges']['speed'] == 'True'){
-				$gameResult['badges']['speed'] = '1';
-			}elseif($gameResult['badges']['speed'] == 'False'){
-				$gameResult['badges']['speed'] = '0';
-			}
-
-			if($gameResult['badges']['accuracy'] == 'True'){
-				$gameResult['badges']['accuracy'] = '1';
-			}elseif($gameResult['badges']['accuracy'] == 'False'){
-				$gameResult['badges']['accuracy'] = '0';
-			}
 				
 			$gamePlay = new GamePlay;
 			$gamePlay->user_id = $userId;
@@ -251,8 +240,23 @@ Class ApiGameController extends Controller {
 			$gamePlay->code = $gameCode;
 			$gamePlay->hash = $hash1;
 			$gamePlay->status = $gameStatus;
-			$gamePlay->badges_matrick = json_encode($gameResult['badges']);
 
+			if(isset($gameResult['badges']) ){
+				
+				if($gameResult['badges']['speed'] == 'True'){
+					$gameResult['badges']['speed'] = '1';
+				}elseif($gameResult['badges']['speed'] == 'False'){
+					$gameResult['badges']['speed'] = '0';
+				}
+
+				if($gameResult['badges']['accuracy'] == 'True'){
+					$gameResult['badges']['accuracy'] = '1';
+				}elseif($gameResult['badges']['accuracy'] == 'False'){
+					$gameResult['badges']['accuracy'] = '0';
+				}
+
+				$gamePlay->badges_matrick = json_encode($gameResult['badges']);		
+			}
 			if(isset($gameResult['level']) ){
 				$gamePlay->level =  $gameResult['level'];
 			}
@@ -270,6 +274,7 @@ Class ApiGameController extends Controller {
 				case 'p06': $status = ZapZapQuestionHelper::SubmitResultP06($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p07': $status = ZapZapQuestionHelper::SubmitResultP07($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p08': $status = ZapZapQuestionHelper::SubmitResultP08($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p09': $status = ZapZapQuestionHelper::SubmitResultP09($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p10': $status = ZapZapQuestionHelper::SubmitResultP10($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p18': $status = ZapZapQuestionHelper::SubmitResultP18($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p23': $status = ZapZapQuestionHelper::SubmitResultP23($planetId,$gamePlay,$gameResult,$profileId); break;

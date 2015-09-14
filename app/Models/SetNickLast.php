@@ -2,9 +2,9 @@
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
-class SetNickname2 extends Eloquent{
+class SetNickLast extends Eloquent{
 
-	public $table = 't8902_set_nickname2';
+	public $table = 't8902_set_nick_lastname';
 	protected $primaryKey = 'id';
 	public $timestamps = true;
 

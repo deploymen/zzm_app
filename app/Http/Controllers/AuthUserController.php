@@ -323,7 +323,6 @@ Class AuthUserController extends Controller {
 			])]);
 			return ResponseHelper::OutputJSON('exception');
 		}
-
 	}
 
 	public function resetPassword() {
@@ -415,7 +414,6 @@ Class AuthUserController extends Controller {
 			])]);
 			return ResponseHelper::OutputJSON('exception');
 		}
-
 	}
 
 	public function forgotPassword() {
@@ -470,7 +468,6 @@ Class AuthUserController extends Controller {
 			])]);
 			return ResponseHelper::OutputJSON('exception');
 		}
-
 	}
 
 	public function invite() {
@@ -519,7 +516,6 @@ Class AuthUserController extends Controller {
 		}
 	}
 
-
 	public function update() {
 		$userId = Request::input('user_id');
 
@@ -563,4 +559,114 @@ Class AuthUserController extends Controller {
 		}
 	}
 
+	public function signUpApp() {
+		$email = Request::input('email');
+		$firstName = Request::input('first_name');
+		$lastName = Request::input('last_name');
+		$deviceId = Request::input('deviceId');
+
+
+		if (!$email || !$firstName || !$lastName) {
+			return ResponseHelper::OutputJSON('fail', "missing parameters");
+		}
+
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			return ResponseHelper::OutputJSON('fail', "invalid email format");
+		}
+
+		$access = UserAccess::where('username', $email)->first();
+		if($access){
+			return ResponseHelper::OutputJSON('fail', "email used");
+		}
+
+		try {
+			$user = new User;
+			$user->role = 'parent';
+			$user->email = $email;
+			$user->save();
+
+			$accessToken = AuthHelper::GenerateAccessToken($user->id);
+
+			$access = new UserAccess;
+			$access->user_id = $user->id;
+			$access->username = $email;
+			$access->access_token = $accessToken;
+			$access->access_token_issue_at = DB::raw('NOW()');
+			$access->access_token_issue_ip = Request::ip();
+			$access->access_token_expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 10 YEAR)'); //we dont kick them out
+			$access->save();
+
+			$extId = new UserExternalId;
+			$extId->user_id = $user->id;
+			if ($deviceId) {$extId->device_id = $deviceId;}
+			$extId->save();
+
+			$setting = new UserSetting;
+			$setting->user_id = $user->id;
+			$setting->save();
+
+			$profile = new GameProfile;
+			$profile->user_id = $user->id;
+			$profile->first_name = $firstName;
+			$profile->last_name = $lastName;
+			$profile->nickname1= 1;
+			$profile->nickname2= 1;
+			$profile->avatar_id = 1;
+			$profile->save();
+
+			$idCounter = IdCounter::find(1);
+			$gameCodeSeed = $idCounter->game_code_seed;
+			$idCounter->game_code_seed = $gameCodeSeed + 1;
+			$idCounter->save();
+
+			$code = new GameCode;
+			$code->type = 'profile';
+			$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
+			$code->seed = $gameCodeSeed;
+			$code->profile_id = $profile->id;
+			$code->save();
+
+			if ($deviceId) {
+				//claim back previous game result played from this device id
+				//to do...
+			}
+
+			$secretKey = sha1(time() . $email);
+			$edmHtml = (string) view('emails.set-password-app-signup', [
+				'set_url' => config('app.website_url').'/user/set-password/{$secretKey}',
+				'social_media_links' => config('app.fanpage_url'),
+			]);
+
+			EmailHelper::SendEmail([
+				'about' => 'Welcome',
+				'subject' => 'Please Confirm Your Password for Zap Zap Math',
+				'body' => $edmHtml,
+				'bodyHtml' => $edmHtml,
+				'toAddresses' => [$email],
+			]);
+
+			$logOpenAcc = new LogAccountActivate;
+			$logOpenAcc->user_id = $user->id;
+			$logOpenAcc->secret = $secretKey;
+			$logOpenAcc->save();
+
+			//job done - log it!
+			DatabaseUtilHelper::LogInsert($user->id, $user->table, $user->id);
+			DatabaseUtilHelper::LogInsert($user->id, $access->table, $user->id);
+			DatabaseUtilHelper::LogInsert($user->id, $extId->table, $user->id);
+			DatabaseUtilHelper::LogInsert($user->id, $extId->table, $user->id);
+			DatabaseUtilHelper::LogInsert($user->id, $profile->table, $profile->id);
+			DatabaseUtilHelper::LogInsert($user->id, $code->table, $code->id);
+
+			return ResponseHelper::OutputJSON('success', '', $code->code);	
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'AuthUserController > signUp',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
+
+	}
 }
