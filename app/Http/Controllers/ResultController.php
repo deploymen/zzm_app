@@ -346,6 +346,7 @@ Class ResultController extends Controller {
 			}	
 
 			return ResponseHelper::OutputJSON('success', '' , [
+				'game_type' => $play[0]->target_type,
 				'questions' =>$question,
 				'breakcrumb' => [
 					'system_id' => $breakcrumb->system_id,
