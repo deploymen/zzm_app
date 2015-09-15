@@ -78,13 +78,50 @@
 
             <div id="fullpage" class="full-page">
                 <div id="page1" class="section page1" id="section0">
+                    <div class="intro">
+                        <div class="row">
+                            <h1>The Most Fun Way<br/>to Practice Math!</h1>
+                            <h3>Suitable for K-6</h3>
+                            <button class="btn-launch-orange">Free Sign Up!</button>
+                        </div>
+                    </div>
                     <div class="hero-secret-world">
-                        <div class="intro">
-                            <div class="row">
-                                <h1>The Most Fun Way<br/>to Practice Math!</h1>
-                                <h3>Suitable for K-6</h3>
-                                <button class="btn-launch-orange">Free Sign Up!</button>
-                            </div>
+                        <img src="/assets/launch/bg-planet-main.png" alt="Main Planet" class="bgel-planet-main">
+
+                        <div class="asteroids">
+                            <img class="floating-up-slow" src="assets/img/banner/asteroid-background.png" alt="">
+                            <img class="floating-down" src="assets/img/banner/asteroid-midground.png" alt="">
+                            <img class="floating-up" src="assets/img/banner/asteroid-foreground.png" alt="">
+                        </div>
+
+                        <div class="asteroids-orange">
+                            <img class="floating-down-slow-o" src="assets/launch/bg-asteroid-orange-back.png" alt="">
+                            <img class="floating-down-o" src="assets/launch/bg-asteroid-orange-middle.png" alt="">
+                            <img class="floating-up-o" src="assets/launch/bg-asteroid-orange-front.png" alt="">
+                        </div>
+
+                        <div class="asteroids-dark">
+                            <img class="floating-down-slow-d" src="assets/launch/bg-asteroid-dark-back.png" alt="">
+                            <img class="floating-down-d" src="assets/launch/bg-asteroid-dark-middle.png" alt="">
+                            <img class="floating-up-o" src="assets/launch/bg-asteroid-dark-front.png" alt="">
+                        </div>
+
+                        <div class="cloud-small">
+                            <img class="fade-slow" src="assets/launch/bg-clouds-small.png" alt="">
+                        </div>
+
+                        <div class="cloud-big">
+                            <img class="fade-slower" src="assets/launch/bg-clouds-big.png" alt="">
+                        </div>
+
+                        <div class="comet-flight">
+                            <img id="comet1" class="comet" src="assets/launch/bg-comet-top.png" alt="">
+                            <img id="comet2" class="comet" src="assets/launch/bg-comet-middle.png" alt="">
+                            <img id="comet3" class="comet" src="assets/launch/bg-comet-bottom.png" alt="">
+                        </div>
+
+                        <div class="row">
+                            <div id="ufo-shooter" class="ufo"></div>
                         </div>
                     </div>
                 </div>
@@ -286,7 +323,7 @@
                                 </div>
                             </div>
                         </div>
-                        <p class="copyright">&copy; Visual Math Interactive 2015 | <a href="#">T&amp;C</a></p>
+                        <p class="copyright">&copy; Visual Math Interactive <span id="year" class="year"></span> <a href="javascript:void(0);"> | <a href="#">T&amp;C</a></p>
                     </footer>
                 </div>
             </div>
@@ -296,6 +333,7 @@
 
         <!-- SCRIPTS START HERE -->
         <script src="js/prelaunch/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.16.0/TweenMax.min.js"></script>
 
         <script src="js/prelaunch/foundation.min.js"></script>
         <script src="js/prelaunch/jquery.fullPage.min.js"></script>

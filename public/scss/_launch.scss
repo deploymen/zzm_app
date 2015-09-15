@@ -25,6 +25,19 @@ $bush: #15411b;
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b32f83', endColorstr='#0b0e5a',GradientType=0 );
 }
 
+.purple-horizontal-gradient {
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#b32f83+0,0b0e5a+100 */
+background: #b32f83; /* Old browsers */
+background: -moz-linear-gradient(left,  #b32f83 0%, #0b0e5a 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, right top, color-stop(0%,#b32f83), color-stop(100%,#0b0e5a)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(left,  #b32f83 0%,#0b0e5a 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(left,  #b32f83 0%,#0b0e5a 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(left,  #b32f83 0%,#0b0e5a 100%); /* IE10+ */
+background: linear-gradient(to right,  #b32f83 0%,#0b0e5a 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b32f83', endColorstr='#0b0e5a',GradientType=1 ); /* IE6-9 */
+
+}
+
 
 /*.launch-main-nav {
 	position: fixed;
@@ -166,6 +179,8 @@ $bush: #15411b;
 .top-bar-section ul li>button {
 	background-color: $flush-orange;
 	border-color: darken($flush-orange, 10%);
+	margin-left: 10px;
+	margin-right: 10px;
 }
 .top-bar-section ul li>button:hover,
 .top-bar-section ul li>button:focus,
@@ -197,13 +212,28 @@ $bush: #15411b;
 
 /** PAGE 1: HERO PAGE/PANEL STYLES **/
 .page1 {
-	background-image: url('../../assets/launch/bg-hero-small.jpg');
+	/*background-image: url('../../assets/launch/bg-hero-small.jpg');
 	background-repeat: no-repeat;
     background-size: cover;
-    background-position: center;
+    background-position: center;*/
+    background: #b32f83; /* Old browsers */
+	background: -moz-linear-gradient(left,  #b32f83 0%, #0b0e5a 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,#b32f83), color-stop(100%,#0b0e5a)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(left,  #b32f83 0%,#0b0e5a 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(left,  #b32f83 0%,#0b0e5a 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(left,  #b32f83 0%,#0b0e5a 100%); /* IE10+ */
+	background: linear-gradient(to right,  #b32f83 0%,#0b0e5a 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b32f83', endColorstr='#0b0e5a',GradientType=1 ); /* IE6-9 */
 
 	.intro {
 		text-align: center;
+		position: relative;
+		z-index: 1;
+	}
+
+	.btn-launch-orange {
+		margin: 0 auto;
+		margin-top: 60px;
 	}
 
 	.intro h1,
@@ -222,9 +252,110 @@ $bush: #15411b;
 }
 
 .hero-secret-world {
-	.btn-launch-orange {
-		margin: 0 auto;
-	}
+	background-image: url('../../assets/launch/bg-gradient.png');
+	background-repeat: no-repeat;
+    background-size: cover;
+    /*background-attachment: fixed;*/
+    background-position: center;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+}
+
+/*Main Header Elements*/
+.bgel-planet-main {
+	width: 60%;
+	margin-top: -30%;
+	margin-left: 20%;
+}
+
+.asteroids {
+    display: block;
+    position: absolute;
+    z-index: 2;
+    top: 25%;
+    left: 0;
+    width: 450px;
+    height: 423px;
+}
+
+.asteroids img {
+    position: absolute;
+    top: 0;
+    left: 0
+}
+
+.asteroids-orange {
+	display: block;
+    position: absolute;
+    z-index: 2;
+    bottom: 0px;
+    right: 0;
+    width: 650px;
+    height: 336px;
+}
+
+.asteroids-orange img {
+    position: absolute;
+    top: 0;
+    left: 0
+}
+
+.asteroids-dark {
+	display: block;
+    position: absolute;
+    z-index: 2;
+    top: -40px;
+    left: 0;
+    width: 104%;
+    height: 325px;
+}
+
+.asteroids-dark img {
+    position: absolute;
+    top: 0;
+    left: 0
+}
+
+.cloud-small {
+	position: absolute;
+	top: 0;
+	left: 9px;
+	width: 30%;
+}
+
+.cloud-big {
+	position: absolute;
+	top: 10%;
+	right: -5%;
+	width: 50%;
+}
+
+.comet-flight {
+	display: block;
+    position: absolute;
+    z-index: 2;
+    top: -44%;
+    left: 44%;
+    width: 323px;
+    height: 379px;
+}
+
+.comet-flight img {
+    position: absolute;
+    top: 0;
+    left: 0
+}
+
+.comet {
+	/*width:50px;
+	height:50px;*/
+	position:relative;
+	border-radius:6px;
+	margin-top:4px;
+	display:inline-block;
 }
 
 /** PAGE 2: TESTIMONIAL STYLES **/
