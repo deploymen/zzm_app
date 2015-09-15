@@ -118,6 +118,19 @@
     display: none;
 }
 
+/*CUSTOM SLICK STYLES*/
+.slide-holder button {
+    background-color: transparent;
+    border: none;
+    content: '';
+    /*text-indent: -9999px;*/
+    height:20px;
+    width: 20px;
+    color: transparent;
+    outline: none;
+}
+
+
 .slick-prev,
 .slick-next {
     position: absolute;
@@ -129,14 +142,28 @@
     left: 0;
 }
 
+.slick-prev:before,
+.slick-next:before {
+    color: $white;
+    position: absolute;
+    top:0px;
+    height:20px;
+    width: 20px;
+    /*background-color: red;*/
+}
+
 .slick-next:before {
     content: '\f138';
+    /*content: '>';*/
     font-family: 'fontawesome';
+    left: 0px;
 }
 
 .slick-prev:before {
     content: '\f137';
+    /*content: '<';*/
     font-family: 'fontawesome';
+    right: 0px;
 }
 
 .slick-next {

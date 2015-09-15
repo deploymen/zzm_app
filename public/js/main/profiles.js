@@ -143,7 +143,7 @@ function createNewProfile(){
 };
 
 createbtn.click(function(){
-	console.log(newprofileform);
+	// console.log(newprofileform);
 	// newprofileform.on('valid.fndtn.abide', function(){
 	// 	createNewProfile();
 	// });

@@ -3,6 +3,10 @@
 		display: none;
 	}
 
+	.page1 {
+		background-position: left;
+	}
+
 	/*Page2 Styles*/
 	.interested-kid,
 	.page-info-bottom-bar {
@@ -18,6 +22,24 @@
 	.page-info-bottom-bar {
 		padding-top: 10px;
 		padding-bottom: 10px;
+	}
+
+	.page-info-bottom-bar,
+	.newsletter-opt-in,
+	.page6 .intro {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+	
+	.page2 .intro,
+	.page3 .intro,
+	.page5 .intro,
+	.page6 .intro {
+		padding-top: 0px;
+	}
+
+	.page5 .intro h1 {
+		text-align: center;
 	}
 
 	.page-info-bottom-bar p {
@@ -66,6 +88,35 @@
 		padding-left: 10px;
 		padding-top: 20px;
 	}
+
+	.page5 form {
+		margin-bottom: 30px;
+	}
+
+	.menu-items-list li {
+		text-align: center;
+	}
+
+	.menu-items-list li button {
+		margin-bottom: 20px;
+	}
+
+	.footer-info-column {
+		text-align: center;
+	}
+
+	footer p {
+		margin-top: 20px;
+	}
+
+	.footer-follow {
+		padding-top: 30px;
+	}
+
+	.connect-list {
+		margin-left: 0px;
+	}
+
 }
 
 @media #{$medium-up} {

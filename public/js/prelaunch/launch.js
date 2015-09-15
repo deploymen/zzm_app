@@ -14,7 +14,8 @@
 			navigation: true,
 			navigationPosition: 'right',
 			navigationTooltips: ['Zap Zap Math', 'As Seen On', 'Worlds of Content', 'Detailed Reports', 'Play & Learn', 'Newsletter Signup'],
-			responsiveWidth: 900
+			responsiveWidth: 900,
+			scrollBar: true
 		});
 
 		console.log('medium up');
@@ -35,15 +36,23 @@
   		autoplaySpeed: 2000
 	});
 
-	// Navbar Buttons
-    // var pagenum = 
- //    var url = window.location.href;
-	// var hash = url.substring(url.indexOf("#")+1);
-	// if(hash){
-	// 	$('.btn-hideshow-signup').hide();
-	// } else {
-	// 	$('.btn-hideshow-signup').show();
-	// }
+	// Navbar Buttons - Little sign up button
+    var topOfOthDiv = $("#page1").offset().top;
+    var orangesignupbtn = $('#btn-hideshow-signup');
+    orangesignupbtn.hide();
+
+    if(vpw < 641) {
+    	orangesignupbtn.show();
+    } else {
+    	$(window).scroll(function (){
+	    	if ($(window).scrollTop() > topOfOthDiv ){
+	    		orangesignupbtn.show();
+	    	} else {
+	    		orangesignupbtn.hide();
+	    	}
+	    });
+    }
+    
 
 })(jQuery, this, this.document);
 

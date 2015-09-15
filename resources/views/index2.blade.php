@@ -64,7 +64,7 @@
                             <li>
                                 <button class="btn-orange round">Sign In</button>
                             </li>
-                            <li class="btn-hideshow-signup">
+                            <li id="btn-hideshow-signup" class="btn-hideshow-signup">
                                 <button class="btn-orange round">Free Sign Up</button>
                             </li>
                         </ul>
@@ -77,7 +77,7 @@
             <!--main-banner-->
 
             <div id="fullpage" class="full-page">
-                <div class="section page1" id="section0">
+                <div id="page1" class="section page1" id="section0">
                     <div class="hero-secret-world">
                         <div class="intro">
                             <div class="row">
@@ -87,12 +87,15 @@
                             </div>
                         </div>
                     </div>
-                    <canvas id='quintus_container' width='300' height='300'></canvas>
                 </div>
 
                 <div class="section page2" id="section1">
+                    <div class="intro">
+                        <div class="row">
+                            <h1>Praise for Zap Zap Math</h1>
+                        </div>
+                    </div>
                     <div class="row">
-                        <h1>Praise for Zap Zap Math</h1>
                         <ul class="testimonial-list small-block-grid-1 medium-block-grid-3">
                             <li class="wow slideInLeft" data-wow-delay="0s">
                                 <div class="testimonial-inner">
@@ -164,8 +167,11 @@
 
                 <div class="section page5" id="section4">
                     <div class="row">
-                        <div class="small-12 medium-6 columns">
+                        <div class="intro">
                             <h1>Play &amp; Learn!</h1>
+                        </div>
+                        <div class="small-12 medium-6 columns">
+                            
                             <div class="tablet-swipe">
                                 <div class="slide-holder">
                                     <div>
@@ -212,7 +218,7 @@
                     <div class="intro">
                         <div class="row">
                             <div class="newsletter-opt-in">
-                                <div class="small-5 small-centered columns">
+                                <div class="small-12 medium-5 small-centered columns">
                                     <h1>Stay in the loop!</h1>
                                     <p>Sign up with your email address to<br/>receive news and updates.</p>
                                     <form>
