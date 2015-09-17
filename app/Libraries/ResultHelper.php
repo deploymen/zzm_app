@@ -414,6 +414,11 @@ class ResultHelper{
 
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
+			$thousands = floor(($r->answer % 10000)/1000);
+			$hundreds = floor(($r->answer % 1000)/100);
+			$tens = floor(($r->answer % 100)/10);
+			$ones = floor(($r->answer % 10)/1);
+
 			if($r->question_id != $prevQuestionId){
 				array_push($answers, [
 					'question_id' => $r->question_id,
@@ -422,7 +427,12 @@ class ResultHelper{
 					'result' => [
 						'result_id' => $r->result_id,
 						'correct'=> $r->correct,
-						'answer'=>$r->answer,
+						'answer'=> [
+							'thousands' => $thousands,
+							'hundreds' => $hundreds,
+							'tens' => $tens,
+							'ones' => $ones,
+						]
 					],
 					'subjects' => []
 				]);
