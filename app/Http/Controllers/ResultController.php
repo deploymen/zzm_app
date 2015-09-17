@@ -321,6 +321,7 @@ Class ResultController extends Controller {
 				SELECT  `id`, `target_type`
 					FROM  `t0400_game_play` 
 						WHERE `planet_id` = {$planetId}
+						AND `profile_id` = {$profileId}
 						ORDER BY `id`
 			";
 			$play = DB::SELECT($sqlGameType);
