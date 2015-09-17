@@ -1,0 +1,124 @@
+@media #{$small-only} {
+	.top-bar-section ul.menu-items-list {
+		display: none;
+	}
+
+	.page1 {
+		background-position: left;
+	}
+
+	/*Page2 Styles*/
+	.interested-kid,
+	.page-info-bottom-bar {
+		position: relative;
+	}
+
+	.interested-kid {
+		bottom: -15px;
+		right: -45%;
+		width: 50%;
+	}
+
+	.page-info-bottom-bar {
+		padding-top: 10px;
+		padding-bottom: 10px;
+	}
+
+	.page-info-bottom-bar,
+	.newsletter-opt-in,
+	.page6 .intro {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+	
+	.page2 .intro,
+	.page3 .intro,
+	.page5 .intro,
+	.page6 .intro {
+		padding-top: 0px;
+	}
+
+	.page5 .intro h1 {
+		text-align: center;
+	}
+
+	.page-info-bottom-bar p {
+		font-size: 16px;
+		margin-bottom: 0px;
+	}
+
+	/*Page3 Styles*/
+	.enthusiastic-teacher,
+	.peekaboo-zzm {
+		position: relative;
+		width: 100%;
+	}
+
+	.enthusiastic-teacher {
+		
+		bottom: -28px;
+    	right: 0px;
+	}
+
+	/*Footer Styles*/
+	.page6 footer {
+		position: relative;
+	}
+
+	.full-page .section {
+		padding-top: 50px;
+	}
+
+	.section {
+		/*padding-right: 10px;
+		padding-left: 10px;*/
+	}
+
+	.btn-launch-orange,
+	.btn-launch-green {
+		padding: 15px 30px;
+	}
+
+	.page2 h1 {
+		font-size: 25px;
+	}
+
+	.testimonial-list {
+		padding-right: 10px;
+		padding-left: 10px;
+		padding-top: 20px;
+	}
+
+	.page5 form {
+		margin-bottom: 30px;
+	}
+
+	.menu-items-list li {
+		text-align: center;
+	}
+
+	.menu-items-list li button {
+		margin-bottom: 20px;
+	}
+
+	.footer-info-column {
+		text-align: center;
+	}
+
+	footer p {
+		margin-top: 20px;
+	}
+
+	.footer-follow {
+		padding-top: 30px;
+	}
+
+	.connect-list {
+		margin-left: 0px;
+	}
+
+}
+
+@media #{$medium-up} {
+	.menu-items-list {}
+}

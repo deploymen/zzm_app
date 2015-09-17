@@ -1,0 +1,309 @@
+@-webkit-keyframes Floatingx {
+    from {
+        -webkit-transform: translate(0, 0px)
+    }
+    65% {
+        -webkit-transform: translate(0, 9px)
+    }
+    to {
+        -webkit-transform: translate(0, 0px)
+    }
+}
+@-moz-keyframes Floating {
+    from {
+        -moz-transform: translate(0, 0px)
+    }
+    65% {
+        -moz-transform: translate(0, 9px)
+    }
+    to {
+        -moz-transform: translate(0, 0px)
+    }
+}
+@-webkit-keyframes Floatingxdown {
+    from {
+        -webkit-transform: translate(0, 0px)
+    }
+    65% {
+        -webkit-transform: translate(0, -5px)
+    }
+    to {
+        -webkit-transform: translate(0, 0px)
+    }
+}
+@-moz-keyframes Floatingdown {
+    from {
+        -webkit-transform: translate(0, 0px)
+    }
+    65% {
+        -webkit-transform: translate(0, -5px)
+    }
+    to {
+        -webkit-transform: translate(0, 0px)
+    }
+}
+
+@-webkit-keyframes Floatingxodown {
+    from {
+        -webkit-transform: translate(0, -10px)
+    }
+    50% {
+        -webkit-transform: translate(0, 0px)
+    }
+    to {
+        -webkit-transform: translate(0, -10px)
+    }
+}
+
+.floating-up {
+    -webkit-animation-name: Floatingx;
+    -webkit-animation-duration: 3s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: ease-in-out;
+    -moz-animation-name: Floating;
+    -moz-animation-duration: 3s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-timing-function: ease-in-out;
+}
+
+.floating-up-slow {
+    -webkit-animation-name: Floatingx;
+    -webkit-animation-duration: 5s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: ease-in-out;
+    -moz-animation-name: Floating;
+    -moz-animation-duration: 5s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-timing-function: ease-in-out;
+}
+
+.floating-down {
+    -webkit-animation-name: Floatingxdown;
+    -webkit-animation-duration: 3s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: ease-in-out;
+    -moz-animation-name: Floatingdown;
+    -moz-animation-duration: 3s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-timing-function: ease-in-out;
+}
+
+.floating-down-slow {
+    -webkit-animation-name: Floatingxdown;
+    -webkit-animation-duration: 5s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: ease-in-out;
+    -moz-animation-name: Floatingdown;
+    -moz-animation-duration: 5s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-timing-function: ease-in-out;
+}
+
+/* Orange Asteroids */
+.floating-down-slow-o {
+    -webkit-animation-name: Floatingxodown;
+    -webkit-animation-duration: 8s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: ease-in-out;
+    -moz-animation-name: Floatingdown;
+    -moz-animation-duration: 8s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-timing-function: ease-in-out;
+}
+
+.floating-up-o {
+    -webkit-animation-name: Floatingupo;
+    -webkit-animation-duration: 5s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: ease-in-out;
+    -moz-animation-name: Floating;
+    -moz-animation-duration: 5s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-timing-function: ease-in-out;
+}
+
+.floating-down-o {
+    -webkit-animation-name: Floatingxdowno;
+    -webkit-animation-duration: 6s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: ease-in-out;
+    -moz-animation-name: Floatingdown;
+    -moz-animation-duration: 6s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-timing-function: ease-in-out;
+}
+
+@-webkit-keyframes Floatingxodown {
+    from {
+        -webkit-transform: translate(0, 0px)
+    }
+    65% {
+        -webkit-transform: translate(0, -5px)
+    }
+    to {
+        -webkit-transform: translate(0, 0px)
+    }
+}
+
+@-webkit-keyframes Floatingupo {
+    from {
+        -webkit-transform: translate(0, 0px)
+    }
+    65% {
+        -webkit-transform: translate(0, -5px)
+    }
+    to {
+        -webkit-transform: translate(0, 0px)
+    }
+}
+
+@-webkit-keyframes Floatingxdowno {
+    from {
+        -webkit-transform: translate(0, -10px)
+    }
+    50% {
+        -webkit-transform: translate(0, 0px)
+    }
+    to {
+        -webkit-transform: translate(0, -10px)
+    }
+}
+
+/* Cloud animation */
+.fade-slow {
+    -webkit-animation-name: Fadeslow;
+    -webkit-animation-duration: 15s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: ease-in-out;
+    -moz-animation-name: Floatingdown;
+    -moz-animation-duration: 15s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-timing-function: ease-in-out;
+}
+
+@-webkit-keyframes Fadeslow {
+    from {
+        -webkit-transform: translate(0, -10px);
+        opacity: 1;
+    }
+    50% {
+        -webkit-transform: translate(0, 0px);
+        opacity: 0.5;
+    }
+    to {
+        -webkit-transform: translate(0, -10px);
+        opacity: 1;
+    }
+}
+
+.fade-slower {
+    -webkit-animation-name: Fadeslower;
+    -webkit-animation-duration: 25s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: ease-in-out;
+    -moz-animation-name: Floatingdown;
+    -moz-animation-duration: 25s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-timing-function: ease-in-out;
+}
+
+@-webkit-keyframes Fadeslower {
+    from {
+        -webkit-transform: translate(0, -10px);
+        opacity: 0.8;
+    }
+    50% {
+        -webkit-transform: translate(0, 0px);
+        opacity: 0.3;
+    }
+    to {
+        -webkit-transform: translate(0, -10px);
+        opacity: 0.8;
+    }
+}
+
+/* Ship Shooter */
+.ufo {
+	position: relative;
+	z-index: 3;
+	background-image: url('../../assets/launch/png-sprite-static.png');
+	width: 1000px;
+    height: 389px;
+}
+
+.spacecraft-shoot {
+    background-image: url('../../assets/launch/png-sprite.png');
+
+    -webkit-animation: sshoot 1s steps(14);
+    -moz-animation:    sshoot 1s steps(14);
+    -ms-animation:     sshoot 1s steps(14);
+    -o-animation:      sshoot 1s steps(14);
+    animation:         sshoot 1s steps(14);
+}
+
+/*@-webkit-keyframes sshoot {
+    from {
+        background-position: 0px;
+    }
+    to {
+        background-position: -14000px;
+    }
+}
+@-moz-keyframes sshoot {
+    from {
+        background-position: 0px
+    }
+    to {
+        background-position: -14000px;
+    }
+}
+@-ms-keyframes sshoot {
+    from {
+        background-position: 0px
+    }
+    to {
+        background-position: -14000px;
+    }
+}
+@-o-keyframes sshoot {
+    from {
+        background-position: 0px
+    }
+    to {
+        background-position: -14000px;
+    }
+}
+@keyframes sshoot {
+    from {
+        background-position: 0px
+    }
+    to {
+        background-position: -14000px;
+    }
+}*/
+
+@-webkit-keyframes sshoot {
+    100% {
+    	background-position: -14000px;
+    }
+}
+@-moz-keyframes sshoot {
+    100% {
+    	background-position: -14000px;
+    }
+}
+@-ms-keyframes sshoot {
+    100% {
+    	background-position: -14000px;
+    }
+}
+@-o-keyframes sshoot {
+    100% {
+    	background-position: -14000px;
+    }
+}
+@keyframes sshoot {
+    100% {
+    	background-position: -14000px;
+    }
+}

@@ -265,6 +265,14 @@ table {
     -webkit-box-sizing: border-box;
     box-sizing: border-box
 }
+
+/* apply a natural box layout model to all elements, but allowing components to change */
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
 /*!
  *  Font Awesome 4.3.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
@@ -6612,6 +6620,7 @@ footer {
 .collaborator-list {
     padding-left: 10px;
     padding-right: 10px;
+    padding-bottom: 60px;
     display: inline-flex;
 }
 
@@ -6623,6 +6632,7 @@ footer {
     /*display: inline-block;*/
     margin-left: 10px;
     margin-right: 10px;
+    float: left;
 }
 
 .collab-profile-holder {
