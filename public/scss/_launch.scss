@@ -108,7 +108,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b32f83', end
 }
 
 .btn-launch-orange,
-.btn-launch-green {
+.btn-launch-green,
+.btn-orange {
 	position:relative;
 	color:#FFF;
 	display:block;
@@ -145,6 +146,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b32f83', end
 .btn-launch-orange:active,
 .btn-launch-orange:focus {
 	background-color: darken($flush-orange, 5%);
+}
+
+.btn-orange {
+	background-color: $flush-orange !important;
+	display: inline !important;
+	padding: 10px;
+	margin-left: 2px;
+	margin-right: 2px;
 }
 
 .btn-launch-orange:active{
@@ -228,7 +237,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b32f83', end
 	.intro {
 		text-align: center;
 		position: relative;
-		z-index: 1;
+		z-index: 95;
 	}
 
 	.btn-launch-orange {

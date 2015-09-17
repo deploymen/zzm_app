@@ -83,9 +83,9 @@
 	var comet1 = document.getElementById('comet1');
 	var comet2 = document.getElementById('comet2');
 	var comet3 = document.getElementById('comet3');
-	var tlcomet1 = TweenMax.to(comet1, 1, {x:-1000, y:1000, delay: 1, repeat: 50, repeatDelay: 10});
-	var tlcomet2 = TweenMax.to(comet2, 1, {x:-1000, y:1000, delay: 4, repeat: 50, repeatDelay: 10});
-	var tlcomet2 = TweenMax.to(comet3, 1, {x:-1000, y:1000, delay: 6, repeat: 50, repeatDelay: 10});
+	var tlcomet1 = TweenMax.to(comet1, 3, {x:-2000, y:2000, delay: 1, repeat: 50, repeatDelay: 10});
+	var tlcomet2 = TweenMax.to(comet2, 2, {x:-2000, y:2000, delay: 4, repeat: 50, repeatDelay: 10});
+	var tlcomet2 = TweenMax.to(comet3, 5, {x:-2000, y:2000, delay: 6, repeat: 50, repeatDelay: 10});
 
     // Shooting UFO
     function ufoshoot(){
@@ -95,6 +95,7 @@
 		    ufo.addClass('spacecraft-shoot');
 		    setTimeout(function() {
 		        ufo.removeClass('spacecraft-shoot');
+		        ufoshoot(duration);
 		    }, 1000);
 		}, duration);
 	};

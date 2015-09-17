@@ -58,14 +58,18 @@
                     <section class="top-bar-section" style="left: 0%;">
                         <!-- Right Nav Section -->
                         <ul class="right menu-items-list">
-                            <li><a href="#">Contributors</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Jobs</a></li>
+                            <li><a href="/contributors">Contributors</a></li>
+                            <li><a href="http://blog.zapzapmath.com">Blog</a></li>
+                            <li><a href="/jobs">Jobs</a></li>
                             <li>
-                                <button class="btn-orange round">Sign In</button>
+                                <form action="/user/signin">
+                                    <button class="btn-orange round">Sign In</button>
+                                </form>
                             </li>
                             <li id="btn-hideshow-signup" class="btn-hideshow-signup">
-                                <button class="btn-orange round">Free Sign Up</button>
+                                <form action="/user/signup">
+                                    <button class="btn-orange round">Free Sign Up</button>
+                                </form>
                             </li>
                         </ul>
                     </section>
@@ -82,7 +86,11 @@
                         <div class="row">
                             <h1>The Most Fun Way<br/>to Practice Math!</h1>
                             <h3>Suitable for K-6</h3>
-                            <button class="btn-launch-orange">Free Sign Up!</button>
+                            <div class="small-12 medium-5 small-centered columns">
+                                <form action="/user/signup">
+                                    <button class="btn-launch-orange">Free Sign Up!</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                     <div class="hero-secret-world">
@@ -121,7 +129,9 @@
                         </div>
 
                         <div class="row">
-                            <div id="ufo-shooter" class="ufo"></div>
+                            <div id="ufo-shooter" class="ufo floating-down">
+                                <img src="assets/launch/png-sprite-static.png" alt="">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -182,7 +192,9 @@
                         <div class="row">
                             <div class="medium-6 columns end">
                                 <h1>Detailed Reports</h1>
-                                <button class="btn-launch-green">Sign Up Free</button>
+                                <form action="/user/signup">
+                                    <button class="btn-launch-green">Sign Up Free</button>
+                                </form>
                                 <p class="intro-subline">to login to YOUR DASHBOARD</p>
                             </div>
                         </div>

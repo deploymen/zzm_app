@@ -48,7 +48,8 @@
 
 											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">Now that you have your username, you still need to set your password. Choose something secure to protect your account from being accessed by unauthorized math-haters!<br/><br/></p>
 
-											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">Click on the link below to set your password: <br/>{{$set_url}}<br/><br/></p>
+											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">Click on the link below to set your password: <br/>
+											<a href="{{$set_url}}">{{$set_url}}</a><br/><br/></p>
 
 											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">We look forward to adventuring with you!<br/><br/></p>
 
