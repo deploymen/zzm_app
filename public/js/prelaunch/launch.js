@@ -5,6 +5,9 @@
 
 	var vpw = window.innerWidth;
 	var fullpageEl = $('#fullpage');
+	var hamburger = $('.small-menu-icon');
+	var menuitems = $('.menu-items-list');
+	var topbar = $('.launch-top-bar');
 
 	if(vpw < 1023) {
 		console.log('small down');
@@ -22,15 +25,12 @@
 
 		console.log('medium up');
 	} else if (vpw < 640) {
-		var hamburger = $('.small-menu-icon');
-		var menuitems = $('.menu-items-list');
-		var topbar = $('.launch-top-bar');
-
 		hamburger.click(function(event){
 			menuitems.stop().slideToggle('fast');
 			menuitems.parent().toggleClass('menu-opened');
 			topbar.toggleClass('solid');
-			event.stopPropagation();
+			// event.stopPropagation();
+			console.log('clicked hamburger');
 		});
 
 		$(document).click(function(){
