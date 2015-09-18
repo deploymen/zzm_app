@@ -47,7 +47,7 @@
             <a href="#">View Quiz</a>
         </li> -->
         <li>
-            <a href="#">Logout</a>
+            <a href="#" class="btn-logout">Logout</a>
         </li>
     </ul>
 </aside>
@@ -190,7 +190,7 @@
         @endif -->
 
         <li>
-            <a href="/user/signin" id="button-logout" class="button-logout">
+            <a href="#" class="btn-logout">
                 <i class="fa fa-bolt"></i>
                 Logout
             </a>
@@ -331,7 +331,7 @@
             </li>
         @endif -->
         <li>
-            <a href="/user/signin" id="button-logout" class="button-logout">
+            <a href="#" class="btn-logout">
                 <i class="fa fa-bolt"></i>
                 Logout
             </a>
