@@ -152,7 +152,6 @@
 						<input type="submit" value="Create My Profile" id="btn-create-profile" class="button wide radius blue" />
 					</label>
 				</div>
-				<p id="new-profile-validation-msg" class="new-profile-validation-msg">All fields are required</p>
 			</div>
 		</form>
 
