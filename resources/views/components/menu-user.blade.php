@@ -1,6 +1,6 @@
 @section('menu')
 
-<!-- <aside class="left-off-canvas-menu">
+<aside class="left-off-canvas-menu">
     <ul class="off-canvas-list">
         <li>
             <label class="main-label">
@@ -8,16 +8,16 @@
             </label>
         </li>
         <li>
-            <a href="#">
+            <a href="/user/profiles">
                 Member Dashboard
             </a>
         </li>
         <li>
-            <a href="#">
-                My Account Settings
+            <a href="/user/account">
+                My Account
             </a>
         </li>
-        <li>
+ <!--        <li>
             <a href="#">
                 Change Password
             </a>
@@ -45,9 +45,12 @@
         </li>
         <li>
             <a href="#">View Quiz</a>
+        </li> -->
+        <li>
+            <a href="#">Logout</a>
         </li>
     </ul>
-</aside> -->
+</aside>
 
 <aside class="left-sidebar hide">
     <ul class="left-sidebar-list">
@@ -58,35 +61,37 @@
         </li>
         @if ($sidebar_item === 'dashboard')
             <li>
-                <a href="#" class="active">
+                <a href="/user/profiles" class="active">
                     <i class="fa fa-tachometer"></i>
                     Member Dashboard
                 </a>
             </li>
         @else
             <li>
-                <a href="#">
+                <a href="/user/profiles">
                     <i class="fa fa-tachometer"></i>
                     Member Dashboard
                 </a>
             </li>
         @endif
+
         @if ($sidebar_item === 'setting')
             <li>
-                <a href="#" class="active">
+                <a href="/user/account" class="active">
                     <i class="fa fa-user"></i>
-                    My Account Settings
+                    My Account
                 </a>
             </li>
         @else
             <li>
-                <a href="#">
+                <a href="/user/account">
                     <i class="fa fa-user"></i>
-                    My Account Settings
+                    My Account
                 </a>
             </li>
         @endif
-        @if ($sidebar_item === 'change_password')
+
+<!--         @if ($sidebar_item === 'change_password')
             <li>
                 <a href="#" class="active">
                     <i class="fa fa-key"></i>
@@ -100,8 +105,9 @@
                     Change Password
                 </a>
             </li>
-        @endif
-        @if ($sidebar_item === 'game_profiles')
+        @endif -->
+
+<!--         @if ($sidebar_item === 'game_profiles')
             <li>
                 <a href="/user/profiles" class="active">
                     <i class="fa fa-star"></i>
@@ -115,8 +121,9 @@
                     Game Profiles
                 </a>
             </li>
-        @endif
-        @if ($sidebar_item === 'classes')
+        @endif -->
+
+<!--         @if ($sidebar_item === 'classes')
             <li>
                 <a href="#" class="active">
                     <i class="fa fa-users"></i>
@@ -130,8 +137,9 @@
                     Manage Classes
                 </a>
             </li>
-        @endif
-        @if ($sidebar_item === 'reports')
+        @endif -->
+
+<!--         @if ($sidebar_item === 'reports')
             <li>
                 <a href="#" class="active">
                     <i class="fa fa-line-chart"></i>
@@ -145,8 +153,9 @@
                     Reports &amp; Analytics
                 </a>
             </li>
-        @endif
-        <li>
+        @endif -->
+
+        <!-- <li>
             <label class="secondary-label">Quiz Options</label>
         </li>
         @if ($sidebar_item === 'new_quiz')
@@ -178,7 +187,8 @@
                     View Quiz
                 </a>
             </li>
-        @endif
+        @endif -->
+
         <li>
             <a href="/user/signin" id="button-logout" class="button-logout">
                 <i class="fa fa-bolt"></i>
@@ -187,7 +197,7 @@
         </li>
     </ul>
 </aside>
-<!-- 
+
 <aside class="left-sidebar hide-for-small">
     <ul class="left-sidebar-list">
         <li>
@@ -197,14 +207,14 @@
         </li>
         @if ($sidebar_item === 'dashboard')
             <li>
-                <a href="/user/home" class="active">
+                <a href="/user/profiles" class="active">
                     <i class="fa fa-tachometer"></i>
                     Member Dashboard
                 </a>
             </li>
         @else
             <li>
-                <a href="/user/home">
+                <a href="/user/profiles">
                     <i class="fa fa-tachometer"></i>
                     Member Dashboard
                 </a>
@@ -214,18 +224,19 @@
             <li>
                 <a href="/user/account" class="active">
                     <i class="fa fa-user"></i>
-                    My Account Settings
+                    My Account
                 </a>
             </li>
         @else
             <li>
                 <a href="/user/account">
                     <i class="fa fa-user"></i>
-                    My Account Settings
+                    My Account
                 </a>
             </li>
         @endif
-        @if ($sidebar_item === 'change_password')
+
+        <!-- @if ($sidebar_item === 'change_password')
             <li>
                 <a href="/user/change-password" class="active">
                     <i class="fa fa-key"></i>
@@ -284,8 +295,9 @@
                     Reports &amp; Analytics
                 </a>
             </li>
-        @endif
-        <li>
+        @endif -->
+
+  <!--       <li>
             <label class="secondary-label">Quiz Options</label>
         </li>
         @if ($sidebar_item === 'new_quiz')
@@ -317,9 +329,15 @@
                     View Quiz
                 </a>
             </li>
-        @endif
+        @endif -->
+        <li>
+            <a href="/user/signin" id="button-logout" class="button-logout">
+                <i class="fa fa-bolt"></i>
+                Logout
+            </a>
+        </li>
     </ul>
 </aside>
- -->
+
 
 @stop
