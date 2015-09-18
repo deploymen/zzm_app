@@ -1451,6 +1451,7 @@ class ZapZapQuestionHelper{
 			$targetId = explode(',' , $targetIds);
 
 			for($j=0; $j<$setGenerate; $j++){
+				$preVal = 0;
 
 				$gamePlay = new GamePlay;
 				$gamePlay->user_id = 0;
@@ -1462,11 +1463,15 @@ class ZapZapQuestionHelper{
 				$gamePlay->status = 'pass';
 				$gamePlay->level = $level;
 				$gamePlay->save();
+
 				for($l=0; $l< 50; $l++){
 					$rand = rand(0,1);
 					$randAnswer = rand(1,4);
 					$t = $targetId[$l];
 					$question = GameQuestionP00::find($t);
+
+					$time = rand(0, 1000) / 1000;
+					$val = (1.5 * $time + 0.5);
 
 					$resultP00 = new GameResultP00;
 					$resultP00->correct = $rand;
@@ -1475,7 +1480,11 @@ class ZapZapQuestionHelper{
 					$resultP00->answer = $randAnswer;
 					$resultP00->answer_option = $randAnswer;
 					$resultP00->difficulty = $question->difficulty;
+					$resultP00->answer_at = $val + $preVal;
+					$resultP00->answer_use = $val;
 					$resultP00->save();
+
+					$preVal = $val + $preVal;
 
 					$gameResults = new GameResult;
 					$gameResults->play_id = $gamePlay->id;
@@ -1483,7 +1492,6 @@ class ZapZapQuestionHelper{
 					$gameResults->target_type = 'p00';
 					$gameResults->target_id = $resultP00->id;
 					$gameResults->game_type_id = '0';
-					$gameResults->complete_time = '3';
 					$gameResults->save();
 
 					}
@@ -1509,7 +1517,7 @@ class ZapZapQuestionHelper{
 			$playIds = implode(",", $pi);	
 			//get opponent result
 			$sqlNpcQuestion = "
-				SELECT  p.`id` AS `play_id` , p.`level`, p.`score`, r00.`answer` ,r00.`answer_option`, r00.`correct`  ,r00.`difficulty`, r.`complete_time` 
+				SELECT  p.`id` AS `play_id` , p.`level`, p.`score`, r00.`answer` ,r00.`answer_option`, r00.`correct`  ,r00.`difficulty`, r00.`answer_at` 
 					FROM `t0300_game_result_p00` r00 , `t0400_game_play` p ,`t0300_game_result` r
 						WHERE r00.`id` = r.`target_id`
 						AND p.`id` IN ({$playIds}) 
@@ -1538,7 +1546,7 @@ class ZapZapQuestionHelper{
 							'answer' => $n->answer,
 							'answer_option' => $n->answer_option,
 							'correct' => $n->correct,
-							'complete_time' => $n->complete_time,
+							'complete_time' => $n->answer_at,
 							'difficulty' => $n->difficulty
 					]);
 					$prevPlayId = $n->play_id;
@@ -1559,17 +1567,21 @@ class ZapZapQuestionHelper{
 
 	public static function SubmitResultP00($planetId,$gamePlay ,$gameResult,$profileId ) {
 		try{	
+				$preUse = 0;
 			for($i=0; $i<count($gameResult['answers']); $i++){
 				$inAnswer = $gameResult['answers'][$i];
 
 				$question = GameQuestion::find($inAnswer['question_id']);
+
 				$resultP00 = new GameResultP00;
 				$resultP00->correct = $inAnswer['correct'];
 				$resultP00->target_type = 'p00';
 				$resultP00->target_id = $question->target_id;
 				$resultP00->answer = $inAnswer['answer'];
 				$resultP00->answer_option = $inAnswer['answer_option'];
-				$resultP00->difficulty = $inAnswer['difficulty'];
+				$resultP00->difficulty = 1;
+				$resultP00->answer_at = $inAnswer['complete_time'];
+				$resultP00->answer_use = $inAnswer['complete_time'] - $preUse;
 				$resultP00->save();
 
 				$gameResults = new GameResult;
@@ -1578,11 +1590,9 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p00';
 				$gameResults->target_id = $resultP00->id;
 				$gameResults->game_type_id = '0';
-				if(isset($inAnswer['complete_time']) ){
-					$gameResults->complete_time = $inAnswer['complete_time'];
-				}
-			
 				$gameResults->save();
+
+				$preUse = $inAnswer['complete_time'];
 
 				}
 

@@ -664,6 +664,7 @@ Class AuthUserController extends Controller {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 				'source' => 'AuthUserController > signUp',
 				'inputs' => Request::all(),
+				
 			])]);
 			return ResponseHelper::OutputJSON('exception');
 		}
