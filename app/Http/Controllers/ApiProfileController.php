@@ -157,7 +157,7 @@ Class ApiProfileController extends Controller {
 		$avatarId = Request::input('avatar_id', 1);
 
 
-		if (!$firstName || !$email || !$lastName || !$school ||!$city||!$age||!$grade) {
+		if (!$firstName || !$email || !$school ||!$city||!$age||!$grade) {
 			return ResponseHelper::OutputJSON('fail', "missing parameters");
 		}
 
