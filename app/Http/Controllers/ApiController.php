@@ -16,13 +16,13 @@ use App\Libraries\DatabaseUtilHelper;
 
 use App\Models;
 use App\Models\Subscribe;
+use App\Models\LaunchNotification;
 
 class ApiController extends Controller {
 
 
 
-	public function subscribe($source = 'pre-launch')
-	{
+	public function subscribe($source = 'pre-launch'){
 
 		$email = Request::input("email");
 		$ip = Request::ip();
@@ -97,8 +97,7 @@ class ApiController extends Controller {
 		return ResponseHelper::OutputJSON('success');
 	}
 
-	public function subscribeExternal()
-	{
+	public function subscribeExternal(){
 		$source = Request::input('source', 'unknown');
 		$callback = Request::input('callback', 'welldone');
 		$this->subscribe($source);
@@ -146,5 +145,63 @@ class ApiController extends Controller {
 		return ResponseHelper::OutputJSON('success');
 	}
 	
-	
+	public function launchNotification(){
+		$email = Request::input("email");
+		$newsLetter = Request::input("news_letter");
+		$launchNotified = Request::input("launch_notified");
+
+		$ip = Request::ip();
+		$secret = 'SAK6B2WE8688VT69G9DZ';
+
+		// try {
+
+			if (!$email) {
+				return ResponseHelper::OutputJSON('fail', "missing parameters");
+			}
+
+			if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+				return ResponseHelper::OutputJSON('fail', "invalid email format");
+			}
+
+			$emails =  LaunchNotification::where('email' , $email)->first();
+
+			if(!$emails){
+				$emails = new LaunchNotification;
+				$emails->email = $email;
+
+				$res = file_get_contents("http://api.apigurus.com/iplocation/v1.8/locateip?key={$secret}&ip={$ip}&format=json&compact=y");			
+				$ipDetail = json_decode($res, true);
+
+				$emails->ip = $ip;
+				if(isset($ipDetail['geolocation_data']))
+				{ 
+					$geolocationData = $ipDetail['geolocation_data'];
+					$emails->ip_detail = json_encode($geolocationData );
+					$emails->ip_country = $geolocationData['country_name'];
+				}
+			}
+
+			if($newsLetter){
+				$emails->news_letter = $newsLetter;
+			}
+
+			if($launchNotified){
+				$emails->launch_notified = $launchNotified;
+			}
+		
+			$emails->save();
+
+			DatabaseUtilHelper::LogInsert(0, 't0101_launch_notification', $emails->id);
+
+			return ResponseHelper::OutputJSON('success');
+
+		// } catch (Exception $ex) {
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment'=>json_encode([
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }		
+
+
+	}
 }

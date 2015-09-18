@@ -44,3 +44,5 @@ Route::group(['prefix' => 'api/pre-launch'], function(){
 	Route::get('/subscribe-external', 'ApiController@subscribeExternal');
 
 });
+
+	Route::post('api/launch-notification', 'ApiController@launchNotification');
