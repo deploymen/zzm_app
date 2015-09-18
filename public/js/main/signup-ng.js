@@ -37,7 +37,7 @@ App.controller('MainController', function($scope, $http) {
 
             if (status == 'success') {
                 console.log('Your account has successfullly created. Welcome!');
-                location = "/user/sign-in";
+                location = "/user/signin";
             } else {
                 // alert(data.message);
                 console.log(message);

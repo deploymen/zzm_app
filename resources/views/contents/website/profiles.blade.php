@@ -176,14 +176,16 @@
 						</div>
 						<div class="small-7 columns">
 							<div class="cf">
-								<p class="profile-name">
-									<span class="first-name">@{{gameprofile.first_name}} </span>
-									<span class="first-name">@{{gameprofile.last_name}}</span>
-								</p>
-								<p class="profile-nickname">
+								<p class="profile-nickname truncate">
 									<span class="first-name">@{{gameprofile.nick_name1.name}} </span>
 									<span class="last-name">@{{gameprofile.nick_name2.name}}</span>
 								</p>
+
+								<p class="profile-name truncate">
+									<span class="first-name">@{{gameprofile.first_name}} </span>
+									<span class="first-name">@{{gameprofile.last_name}}</span>
+								</p>
+								
 								<p class="profile-code bold"><span class="profile-label">Player ID:</span> <span class="user-id">@{{gameprofile.game_code.code}}</span></p>
 							</div>
 						</div>

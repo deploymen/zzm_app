@@ -64,7 +64,7 @@ function saveProfile(){
 		url     : '/api/profiles/'+editedInfo.id+'/edit',
 		data    : editedInfo,
 		success : function(data){
-			//window.location = "/user/profiles";
+			window.location = "/user/profiles";
 			modalprofilesaved.foundation('reveal', 'open');
 		},
 		error   : function(data){

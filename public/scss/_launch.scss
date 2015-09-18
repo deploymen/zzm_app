@@ -7,6 +7,7 @@ $green-haze: #00a651;
 $chateau-green: #39b54a;
 $mercury: #e4e4e4;
 $bush: #15411b;
+$silver-chalice: #A9A9A9;
 
 
 .section {
@@ -69,6 +70,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b32f83', end
 .launch-top-bar {
 	background: rgba(0, 84, 166, 0.6);
 	position: fixed;
+}
+
+.launch-top-bar.solid {
+	background: rgba(0, 84, 166, 1);
 }
 
 .launch-top-bar.top-bar {
@@ -534,7 +539,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b32f83', end
 
 .slide-holder {
 	background-color: $white;
-	width: 90%;
+	/*width: 90%;*/
+	width: 84%;
 	height: 80%;
 	position: absolute;
 	top: 10%;
@@ -552,7 +558,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b32f83', end
 	text-align: center;
 }
 
-.form-get-notified input[type="text"] {
+.form-get-notified input[type="text"],
+.form-register-interest select {
 	background-color: $mercury;
 	border: none;
 	font-size: 24px;
@@ -561,6 +568,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b32f83', end
 	text-align: center;
 	font-family: 'museo-sans', sans-serif;
 	font-weight: 300;
+}
+
+.form-register-interest select option:first-child {
+	font-family: 'museo-sans', sans-serif;
+	color: $silver-chalice;
 }
 
 .form-get-notified button {

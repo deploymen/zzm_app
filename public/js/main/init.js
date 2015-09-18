@@ -138,15 +138,27 @@ btnsignin.unbind().click(function(){
 //End Login Form
 
 
-var btnlogout = $('#button-logout');
+var btnlogout = $('.btn-logout');
 
 function logout(){
-	var sessionval = Cookies.get('access_token');
-	Cookies.remove('access_token');
-	// Cookies.remove('zzmcookie', { path: '' });
-	// console.log(Cookies.get());
-	// console.log('Wanna logout!');
-	console.log(Cookies.get());
+	$.ajax({
+		type	   : 'POST', 
+		url        : '/api/auth/sign-out',
+		success    : function(data){
+			var status = data['status'];
+			var message = data['message'];
+			//console.log('status: ' + status);
+			//repsonseMsg();
+			if(status === 'success') {
+				window.location = '/user/signin';
+			} else if(status === 'fail'  && message === 'invalid username/password') {
+				window.location = '/user/profiles';
+				console.log('log out fail lah')
+			}
+		}
+	});
+
+	return false;
 };
 
 btnlogout.unbind().click(function(){

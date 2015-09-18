@@ -4,11 +4,16 @@
 	$(document).foundation();
 
 	var vpw = window.innerWidth;
+	var fullpageEl = $('#fullpage');
+	var hamburger = $('.small-menu-icon');
+	var menuitems = $('.menu-items-list');
+	var topbar = $('.launch-top-bar');
 
-	if(vpw < 641) {
+	if(vpw < 1023) {
 		console.log('small down');
-	} else {
-		$('#fullpage').fullpage({
+		fullpageEl.removeClass('full-page')
+	} else if (vpw > 1024) {
+		$('.full-page').fullpage({
 			anchors: ['1stPage', '2ndPage', '3rdPage', '4thPage', '5thPage', '6thPage'],
 			sectionsColor: ['#C63D0F', '#f0f0f0', '#7E8F7C'],
 			navigation: true,
@@ -19,17 +24,22 @@
 		});
 
 		console.log('medium up');
+	} else if (vpw < 640) {
+		hamburger.click(function(event){
+			menuitems.stop().slideToggle('fast');
+			menuitems.parent().toggleClass('menu-opened');
+			topbar.toggleClass('solid');
+			// event.stopPropagation();
+			console.log('clicked hamburger');
+		});
+
+		$(document).click(function(){
+			menuitems.slideUp('fast');
+			topbar.removeClass('solid');
+		});
 	}
 
-	console.log(vpw);
-
-	var hamburger = $('.small-menu-icon');
-	var menuitems = $('.menu-items-list');
-
-	hamburger.click(function(){
-		menuitems.stop().slideToggle();
-		menuitems.parent().toggleClass('menu-opened');
-	});
+	
 
 	$('.slide-holder').slick({
 		autoplay: true,
@@ -60,35 +70,16 @@
 	};
 	dynamicYear();
 
-	// TweenMax
-	// var ufo = document.getElementById('spacecraft');
-	// TweenLite.set(ufo, {x:-30, y:300});
-	// var ufoFlight = TweenMax.to(ufo, 4, { bezier:{
-	// 			values: [{x:300, y:250}, {x:600, y:80}, {x:3000, y:550}],
-	// 			autoRotate: true },
-	// 			delay: 2,
-	// 			scale: 0.5,
-	// 			zIndex: 1,
-	// 			repeat: 10,
-	// 			repeatDelay: 6,
-	// 			ease: Power1.easeOut, y: 0 });
-	//var tlcomet = new TimelineLite({paused:false});
-	// tlcomet.to("#comet1", 1, {x:750})
-	// 		.to("#comet2", 1, {x:750})
-	// 		.to("#comet3", 1, {x:750})
-	// TweenMax.staggerTo(".comet", 1, {rotation:360, y:100}, 0.5);
-
-	// TweenLite.fromTo(photo, 1.5, {width:0, height:0}, {width:100, height:200});
-
+	// Comet Animation
 	var comet1 = document.getElementById('comet1');
 	var comet2 = document.getElementById('comet2');
 	var comet3 = document.getElementById('comet3');
-	var tlcomet1 = TweenMax.to(comet1, 3, {x:-2000, y:2000, delay: 1, repeat: 50, repeatDelay: 10});
-	var tlcomet2 = TweenMax.to(comet2, 2, {x:-2000, y:2000, delay: 4, repeat: 50, repeatDelay: 10});
-	var tlcomet2 = TweenMax.to(comet3, 5, {x:-2000, y:2000, delay: 6, repeat: 50, repeatDelay: 10});
-
-    // Shooting UFO
+	// Shooting UFO
     function ufoshoot(){
+    	var tlcomet1 = TweenMax.to(comet1, 3, {x:-2000, y:2000, delay: 1, repeat: 50, repeatDelay: 10});
+		var tlcomet2 = TweenMax.to(comet2, 2, {x:-2000, y:2000, delay: 4, repeat: 50, repeatDelay: 10});
+		var tlcomet2 = TweenMax.to(comet3, 5, {x:-2000, y:2000, delay: 6, repeat: 50, repeatDelay: 10});
+
 		var ufo = $('#ufo-shooter');
 		var duration = (Math.floor(Math.random() * (8)) + 1) * 1000;
 		setTimeout(function() {
@@ -99,7 +90,15 @@
 		    }, 1000);
 		}, duration);
 	};
-	ufoshoot();
+	if(vpw > 641) {
+		ufoshoot();
+	} else {
+		// comet1.style.display = 'none';
+		// comet2.style.display = 'none';
+		// comet3.style.display = 'none';
+	}
+
+	
 
 })(jQuery, this, this.document);
 
