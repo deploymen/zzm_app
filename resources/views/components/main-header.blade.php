@@ -2,7 +2,7 @@
 
 <header class="main-header">
     <nav class="tab-bar">
-        <section class="left-small">
+        <section class="left-small show-for-small-only">
             <a class="left-off-canvas-toggle menu-icon" aria-expanded="false">
                 <span></span>
             </a>
