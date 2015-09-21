@@ -14,7 +14,7 @@
 		fullpageEl.removeClass('full-page')
 	} else if (vpw > 1024) {
 		$('.full-page').fullpage({
-			anchors: ['1stPage', '2ndPage', '3rdPage', '4thPage', '5thPage', '6thPage'],
+			// anchors: ['1stPage', '2ndPage', '3rdPage', '4thPage', '5thPage', '6thPage'],
 			sectionsColor: ['#C63D0F', '#f0f0f0', '#7E8F7C'],
 			navigation: true,
 			navigationPosition: 'right',
@@ -122,7 +122,7 @@
 				var message = message;
 				
 				if (status === 'success') {
-					console.log('You gon get notified!');
+					console.log('You  have successfully signed up for iOS Launch Notification');
 				} else if (status === 'fail'){
 					console.log('You are failed');
 				}
@@ -148,7 +148,7 @@
 				var message = message;
 
 				if (status === 'success') {
-					console.log('You gon get newsletterified!');
+					alert('You have successfully signed up for our Newsletter');
 				} else if (status === 'fail'){
 					console.log('You are failed');
 				}
