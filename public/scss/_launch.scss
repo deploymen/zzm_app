@@ -98,6 +98,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b32f83', end
 	background: transparent;
 }
 
+.top-bar-section ul li>a {
+	font-family: 'museo-sans', sans-serif;
+	font-weight: 900;
+	font-size: 16px;
+}
+
 
 
 /*.btn-hideshow-signup {
@@ -548,6 +554,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b32f83', end
 }
 
 .btn-gplaystore {
+	display: block;
+	margin-bottom: 40px;
+
 	img {
 		width: 90%;
 		margin: 0 auto;
@@ -556,6 +565,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b32f83', end
 
 .form-get-notified {
 	text-align: center;
+	margin-top: 50px;
+}
+
+.form-register-interest {
+	margin-top: 40px;
 }
 
 .form-get-notified input[type="text"],
@@ -701,7 +715,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b32f83', end
 	display: inline-block;
 }
 
-.connect-list li a {
+.page6 .connect-list li a {
 	color: $ship-grey;
 	font-size: 45px;
 	margin-right: 16px;

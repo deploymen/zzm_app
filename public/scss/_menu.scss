@@ -1,16 +1,39 @@
 .tab-bar {
-	height: rem(55px);
+	height: rem(45px);
+	background: rgba(0, 84, 166, 0.6);
+}
+
+.top-bar-section ul li,
+.top-bar-section li:not(.has-form) a:not(.button) {
+	background: transparent;
+}
+
+.top-bar-section ul li a,
+.top-bar-section ul li>a {
+	font-family: 'museo-sans', sans-serif;
+	font-weight: 900;
+	font-size: 16px;
+}
+
+.top-bar-section ul li a:hover,
+.top-bar-section ul li a:focus,
+.top-bar-section ul li a:active,
+.top-bar-section ul li:hover,
+.top-bar-section ul li:focus,
+.top-bar-section ul li:active,
+.top-bar-section li:not(.has-form) a:not(.button):hover {
+	background: transparent;
 }
 
 .title-tab-section {
-	padding-top: rem(5px);
-	position: relative;
+	/*padding-top: rem(5px);*/
+	/*position: relative;*/
 	text-align: left;
-	padding-left: 65px;
+	/*padding-left: 65px;*/
 }
 
 .title-tab-section .title img {
-	width: rem(40px);
+	height: rem(45px);
 }
 
 
@@ -52,7 +75,7 @@ ul.off-canvas-list li a {
 	position: fixed;
 	background-color: $curious-blue;
 	height: 100%;
-	padding-top: rem(55px);
+	padding-top: rem(45px);
 	padding-bottom: rem(45px);
 	z-index: 3;
 }
@@ -74,7 +97,8 @@ ul.off-canvas-list li label {
 	text-transform: uppercase;
 	font-family: 'proxima-nova-soft', sans-serif;
 	font-size: rem(16px);
-	border-top: 1px solid #5e5e5e;
+	/*border-top: 1px solid #5e5e5e;*/
+	border-top: none;
 	border-bottom: none;
 	margin: 0;
 }

@@ -98,6 +98,83 @@
 		// comet3.style.display = 'none';
 	}
 
+	// Forms
+	var emailnotify = $('#notify-email-field');
+	var emailnewsletter = $('#newsletter-email-field');
+	var btnnotify = $('#btn-register-interest');
+	var btnnewspaper = $('#btn-register-newsletter');
+	var formnotify = $('#form-register-interest');
+	var formnewsletter = $('#form-register-newsletter');
+
+	function optNotify(){
+		var data = {
+			email: emailnotify.val(),
+			launch_notified: 1,
+			news_letter: 0
+		}
+
+		$.ajax({
+			type : 'POST',
+			url  : '/api/launch-notification',
+			data : data,
+			success : function(status, message){
+				var status = status;
+				var message = message;
+				
+				if (status === 'success') {
+					console.log('You gon get notified!');
+				} else if (status === 'fail'){
+					console.log('You are failed');
+				}
+			}
+		});
+
+		return false;
+	}
+
+	function optNewsletter() {
+		var data = {
+			email: emailnewsletter.val(),
+			launch_notified: 0,
+			news_letter: 1
+		}
+
+		$.ajax({
+			type : 'POST',
+			url  : '/api/launch-notification',
+			data : data,
+			success : function(status, message){
+				var status = status;
+				var message = message;
+
+				if (status === 'success') {
+					console.log('You gon get newsletterified!');
+				} else if (status === 'fail'){
+					console.log('You are failed');
+				}
+			}
+		});
+
+		return false;
+	}
+
+	// btnnotify.click(function(){
+	// 	console.log('notify me when ios launches');
+	// });
+	// btnnewspaper.click(function(){
+	// 	console.log('send me a newsletter');
+	// });
+
+	formnotify.submit(function() {
+		// console.log('notify me when ios launches');
+		optNotify();
+	});
+	formnewsletter.submit(function() {
+		// console.log('send me a newsletter');
+		optNewsletter();
+	});
+	
+
 	
 
 })(jQuery, this, this.document);

@@ -10,11 +10,18 @@
         <section id="title-tab-section" class="title-tab-section tab-bar-section">
             <h1 class="title">
                 <a href="/user/profiles">
-                    <img src="/assets/main/img/global/logo-icon.png" alt=" ">
-                    Zap Zap Math
-                    <span class="plan-label basic">Beta</span>
+                    <img src="/assets/launch/main-logo.png" alt="">
+                    <!-- <span class="plan-label basic">Beta</span> -->
                 </a>
             </h1>
+        </section>
+        <section class="top-bar-section" style="left: 0%;">
+            <!-- Right Nav Section -->
+            <ul class="right menu-items-list">
+                <li><a href="/contributors">Contributors</a></li>
+                <li><a href="http://blog.zapzapmath.com">Blog</a></li>
+                <li><a href="/jobs">Jobs</a></li>
+            </ul>
         </section>
     </nav>
 

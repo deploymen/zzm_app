@@ -131,6 +131,7 @@ function createNewProfile(){
 				// alert('Missing Parameters');
 				newprofilevalidate.show();
 			} else {
+				location.reload();
 				addprofilemodal.foundation('reveal', 'close');
 				location.reload();
 			}
