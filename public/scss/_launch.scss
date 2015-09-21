@@ -535,6 +535,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b32f83', end
 
 	.btn-launch-orange {
 		margin: 0 auto;
+		margin-top: 10px;
 	}
 }
 
@@ -584,6 +585,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b32f83', end
 	font-weight: 300;
 }
 
+.form-get-notified input[type="text"] {
+	margin-bottom: 0px;
+}
+
+.form-get-notified input[type="text"].opt-form-error {
+	border: 2px solid $punch;
+}
+
+.form-get-notified input[type="text"].opt-form-success {
+	border: 2px solid $chateau-green;
+}
+
 .form-register-interest select option:first-child {
 	font-family: 'museo-sans', sans-serif;
 	color: $silver-chalice;
@@ -591,6 +604,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b32f83', end
 
 .form-get-notified button {
 	width: 90%;
+	margin-top: 10px;
 }
 
 .form-get-notified p {
@@ -676,6 +690,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b32f83', end
 	button {
 		width: 100%;
 		margin: 0 auto;
+		margin-top: 10px;
 	}
 
 	input[type="text"] {
@@ -687,7 +702,34 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b32f83', end
 		text-align: center;
 		font-family: 'museo-sans', sans-serif;
 		font-weight: 300;
+		margin-bottom: 0px;
 	}
+
+	input[type="text"].opt-form-error {
+		border: 2px solid $punch;
+	}
+
+	input[type="text"].opt-form-success {
+		border: 2px solid $chateau-green;
+	}
+}
+
+.opt-notify-feedback,
+.opt-newsletter-feedback {
+	font-family: 'museo-sans', sans-serif;
+	font-size: 14px;
+    font-weight: bold;
+}
+
+.opt-notify-feedback.error,
+.opt-newsletter-feedback.error {
+	color: $punch;
+}
+
+.opt-notify-feedback.success,
+.opt-newsletter-feedback.success {
+	color: darken($chateau-green, 30%);
+	/*text-shadow: 1px 1px 1px darken($chateau-green, 30%);*/
 }
 
 .footer-info-column {

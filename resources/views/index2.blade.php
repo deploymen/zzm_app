@@ -249,6 +249,7 @@
                             <p>TO APP STORE</p>
                             <form id="form-register-interest" class="form-register-interest">
                                 <input type="text" placeholder="Enter Your Email" id="notify-email-field" name="notify-email-field" class="notify-email-field" />
+                                <small class="opt-notify-feedback"></small>
                                 <button type="submit" id="btn-register-interest" class="btn-launch-orange">Get Notified</button>
                             </form>
                         </div>
@@ -269,6 +270,7 @@
                                     <p>Sign up with your email address to <br class="hide-for-small"/>receive news and updates.</p>
                                     <form id="form-register-newsletter">
                                         <input type="text" placeholder="Enter Your Email" id="newsletter-email-field" name="newsletter-email-field" class="newsletter-email-field" />
+                                        <small class="opt-newsletter-feedback"></small>
                                         <button type="submit" id="btn-register-newsletter" class="btn-launch-green">Submit</button>
                                     </form>
                                 </div>
