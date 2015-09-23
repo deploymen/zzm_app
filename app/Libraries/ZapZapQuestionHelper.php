@@ -1516,7 +1516,6 @@ class ZapZapQuestionHelper{
 				shuffle($pi);
 			}
 			$playIds = implode(",", $pi);	
-			var_export($playIds); die();
 			//get opponent result
 			$sqlNpcQuestion = "
 				SELECT  p.`id` AS `play_id` , p.`level`, p.`score`, r00.`answer` ,r00.`answer_option`, r00.`correct`  ,r00.`difficulty`, r00.`answer_at` 
@@ -1553,6 +1552,8 @@ class ZapZapQuestionHelper{
 					]);
 					$prevPlayId = $n->play_id;
 				}
+			var_export($opponent); die();
+				
 			shuffle($results[0]['question']);
 			return [
 					'player' => $results, 
