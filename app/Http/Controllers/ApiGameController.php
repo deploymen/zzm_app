@@ -491,5 +491,81 @@ Class ApiGameController extends Controller {
 		}
 	}
 
+	public function createPackage(){
+		$planetId = Request::input('planet_id');
+
+		$planet = ZapZapQuestionHelper::GetPlanetInfo($planetId);
+		if(!$planet || !$planet->enable){
+			return ResponseHelper::OutputJSON('fail , planet not found');
+		}
+		$set = [
+			[1, 20], //0
+			[2, 20], //1
+			[3, 30], //2
+			[4, 30], //3
+			[5, 50], //4
+		];
+
+		for($i=0; $i<5; $i++){
+			$difficulty = $set[$i][0];
+
+			for($j=0; $j<$set[$i][1]; $j++){
+				switch($planet->game_type){
+					case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId,$difficulty,$planet->question_count); break;
+					case 'p02':$questions = ZapZapQuestionHelper::GetQuestionP02($planetId,$difficulty,$planet->question_count); break;
+					case 'p03':$questions = ZapZapQuestionHelper::GetQuestionP03($planetId,$difficulty,$planet->question_count); break;
+					case 'p06':$questions = ZapZapQuestionHelper::GetQuestionP06($planetId,$difficulty,$planet->question_count); break;
+					case 'p07':$questions = ZapZapQuestionHelper::GetQuestionP07($planetId,$difficulty,$planet->question_count); break;
+					case 'p08':$questions = ZapZapQuestionHelper::GetQuestionP08($planetId,$difficulty,$planet->question_count); break;
+					case 'p09':$questions = ZapZapQuestionHelper::GetQuestionP09($planetId,$difficulty,$planet->question_count); break;
+					case 'p10':$questions = ZapZapQuestionHelper::GetQuestionP10($planetId,$difficulty,$planet->question_count); break;
+					case 'p11':$questions = ZapZapQuestionHelper::GetQuestionP11($planetId,$difficulty,$planet->question_count); break;
+					case 'p18':$questions = ZapZapQuestionHelper::GetQuestionP18($planetId,$difficulty,$planet->question_count); break;
+					case 'p23':$questions = ZapZapQuestionHelper::GetQuestionP23($planetId,$difficulty,$planet->question_count); break;
+					case 'p32':$questions = ZapZapQuestionHelper::GetQuestionP32($planetId,$difficulty,$planet->question_count); break;
+
+					default: return ResponseHelper::OutputJSON('fail', 'question not found');
+				}	
+				
+				$file = [
+					'planet' => [
+						'id' => $planet->id,
+						'name' => $planet->name,
+						'description' => $planet->description,
+						'question_count' => $planet->question_count,
+						'badges' => json_decode($planet->badges_metrics),
+					],
+					'status' => [
+						'star' => '-1',	
+						'difficulty' => '-1',
+						'top_score' => '-1',
+					],
+					'planet_top_score'=> '-1',
+	            	'questions' => $questions,
+	           	];
+
+	           	$dir1 = 'package/'.$planet->id;
+	           	$dir2 = 'package/'.$planet->id.'/'.$difficulty;
+	           
+	           	if (!is_dir($dir1) ){
+					mkdir($dir1); //create the directory
+					chmod($dir1, 0777); //make it writable
+				}
+
+				if (!is_dir($dir2) ){
+					mkdir($dir2); //create the directory
+					chmod($dir2, 0777); //make it writable
+				}
+
+		        file_put_contents($dir2.'/'.$j.'.json', json_encode($file));
+				}
+		}
+
+
+		return ResponseHelper::OutputJSON('success');
+
+
+	}
+
 }
  

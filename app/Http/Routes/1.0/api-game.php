@@ -59,4 +59,4 @@ Route::group(['middleware' => 'auth.game'], function () {
 });
 
 
-
+Route::get('/api/game/create-package', 'ApiGameController@createPackage');

@@ -153,10 +153,10 @@ class ApiController extends Controller {
 		$ip = Request::ip();
 		$secret = 'SAK6B2WE8688VT69G9DZ';
 
-		// try {
+		try {
 
 			if (!$email) {
-				return ResponseHelper::OutputJSON('fail', "missing parameters");
+				return ResponseHelper::OutputJSON('fail', "missing parameter");
 			}
 
 			if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -195,12 +195,12 @@ class ApiController extends Controller {
 
 			return ResponseHelper::OutputJSON('success');
 
-		// } catch (Exception $ex) {
-		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment'=>json_encode([
-		// 		'inputs' => Request::all(),
-		// 	])]);
-		// 	return ResponseHelper::OutputJSON('exception');
-		// }		
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment'=>json_encode([
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}		
 
 
 	}

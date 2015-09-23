@@ -1441,7 +1441,7 @@ class ZapZapQuestionHelper{
 			$smallest = $level -1;
 			$biggest = $level +1;
 
-			$gamePlay = GamePlay::where('planet_id', $planetId)->where('level' , '>' , $smallest)->where('level', '<' ,$biggest)->take($gameType)->get();
+			$gamePlay = GamePlay::where('planet_id', $planetId)->where('level' , '>=' , $smallest)->where('level', '<=' ,$biggest)->take($gameType)->get();
 
 			if(!$gamePlay){
 				continue;
@@ -1471,7 +1471,7 @@ class ZapZapQuestionHelper{
 					$question = GameQuestionP00::find($t);
 
 					$time = rand(0, 1000) / 1000;
-					$val = (1.5 * $time + 0.5);
+					$val = (2 * $time + 2);
 
 					$resultP00 = new GameResultP00;
 					$resultP00->correct = $rand;
@@ -1501,8 +1501,8 @@ class ZapZapQuestionHelper{
 				SELECT `id`
 					FROM `t0400_game_play`
 						WHERE `planet_id` = {$planetId}
-						AND `level` > {$smallest}
-						AND `level` < {$biggest}
+						AND `level` >= {$smallest}
+						AND `level` <= {$biggest}
 
 						ORDER BY `id` DESC
 						LIMIT {$gameType}
@@ -2061,5 +2061,6 @@ class ZapZapQuestionHelper{
 		$playerTopScore = GamePlay::where('planet_id' , $planetId)->where('profile_id',$profileId)->select('score')->orderBy('score' , 'DESC');
 		return $playerTopScore;
 	}
+
 }
 
