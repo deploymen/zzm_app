@@ -69,7 +69,7 @@
 			<div class="row">
 				<div class="small-12 columns">
 					<label for="first-name">First Name <small>required</small>
-						<input id="new-first-name" type="text" placeholder="Adam" name="first-name" required />
+						<input id="new-first-name" type="text" placeholder="" name="first-name" required />
 					</label>
 
 				</div>
