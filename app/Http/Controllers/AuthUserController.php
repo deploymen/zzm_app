@@ -451,7 +451,7 @@ Class AuthUserController extends Controller {
 				'username' => $email,
 				'zapzapmath_portal' => Config::get('app.website_url').'/sign-in',
 				'social_media_links' => Config::get('app.fanpage_url'),
-				'reset_url' => 'http://staging.zapzapmath.com/user/reset-password/' . $secret,
+				'reset_url' => Config::get('app.website_url').'/user/reset-password/' . $secret,
 			]);
 
 			EmailHelper::SendEmail([
