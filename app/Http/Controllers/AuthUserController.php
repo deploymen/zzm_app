@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App;
+use Cookie;
 use DB;
 use Exception;
 use Redirect;
@@ -261,8 +262,9 @@ Class AuthUserController extends Controller {
 	}
 
 	public function signOut() {
-		Session::forget('access_token');
-		return ResponseHelper::OutputJSON('success');
+            Session::forget('access_token');
+            $cookie = Cookie::forget('access_token');
+            return redirect('user/signin')->withCookie($cookie);
 	}
 
 	public function check() {
