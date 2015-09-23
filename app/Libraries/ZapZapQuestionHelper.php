@@ -1441,7 +1441,7 @@ class ZapZapQuestionHelper{
 			$smallest = $level -1;
 			$biggest = $level +1;
 
-			$gamePlay = GamePlay::where('planet_id', $planetId)->where('level' , '>=' , $smallest)->where('level', '<=' ,$biggest)->take($gameType)->get();
+			$gamePlay = GamePlay::where('planet_id', $planetId)->where('level' , '>=' , $smallest)->where('level', '<=' ,$biggest)->where('status', 'pass')->take($gameType)->get();
 
 			if(!$gamePlay){
 				continue;
@@ -1503,6 +1503,7 @@ class ZapZapQuestionHelper{
 						WHERE `planet_id` = {$planetId}
 						AND `level` >= {$smallest}
 						AND `level` <= {$biggest}
+						AND `status` = 'pass'
 
 						ORDER BY `id` DESC
 						LIMIT {$gameType}
@@ -1515,6 +1516,7 @@ class ZapZapQuestionHelper{
 				shuffle($pi);
 			}
 			$playIds = implode(",", $pi);	
+			var_export($playIds); die();
 			//get opponent result
 			$sqlNpcQuestion = "
 				SELECT  p.`id` AS `play_id` , p.`level`, p.`score`, r00.`answer` ,r00.`answer_option`, r00.`correct`  ,r00.`difficulty`, r00.`answer_at` 
