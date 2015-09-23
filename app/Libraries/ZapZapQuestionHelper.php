@@ -1552,7 +1552,6 @@ class ZapZapQuestionHelper{
 					]);
 					$prevPlayId = $n->play_id;
 				}
-			var_export($opponent); die();
 				
 			shuffle($results[0]['question']);
 			return [
