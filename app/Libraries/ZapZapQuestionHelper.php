@@ -1993,7 +1993,7 @@ class ZapZapQuestionHelper{
 		}
 	}
 
-	public static function UserMap($profileId,$planetId,$gamePlay){
+	public static function UserMap($profileId,$planetId,$gamePlay,$gameResult){
 		$userMap = UserMap::where('profile_id', $profileId)->where('planet_id' , $planetId)->first();
 			if(!$userMap){
 				$userMap = new UserMap;
@@ -2002,7 +2002,6 @@ class ZapZapQuestionHelper{
 				$userMap->played = '1';
 				$userMap->save();
 			}
-
 			$userMap->star += ($gamePlay->status == 'pass')?1:0;
 			$userMap->star = ($userMap->star > 5)?5:$userMap->star;
 			$userMap->top_score = ($userMap->top_score > $gamePlay->score)?$userMap->top_score:$gamePlay->score;
