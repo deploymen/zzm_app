@@ -4,7 +4,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>Zap Zap Math | Account Activation</title>
+		<title>Zap Zap Math | Set Your Password</title>
 		<style>
 			/* Client-specific Styles */
 			#outlook a{padding:0;} /* Force Outlook to provide a "view in browser" button. */
@@ -37,28 +37,26 @@
 									<tr width="100%">
 										<td bgcolor="#FFFFFF" style="background-color: #FFFFFF; padding: 30px;">
 											<h1 style="font-family:Century Gothic; font-size:40px; font-weight:100; line-height:45px; margin:0; color:#8F8F8F">
-												Hello there, traveller!
+												Congratulations Mathling!
 											</h1>
 										</td>
 									</tr>
 
 									<tr width="100%">
 										<td bgcolor="#FFFFFF" style="background-color: #FFFFFF; padding: 30px;">
-											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">Thank you for getting on board for this Math Voyage through the Zap Zap Galaxy!<br/><br/>You're a little early. We're still testing the app to make sure we get the itinerary sorted out. So, in the meantime, while we wait together, here are a few links that will help you prepare for the adventure:</p>
+											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">You're almost done with your signup.<br/><br/></p>
 
-											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">- The video log of our previous adventure: {{$zapzap_fractions_video_link}}<br/>
-											- {{$techcrunch_disrupt_article}}<br/>
-											- {{$math_expression_link}}<br/><br/>
-											</p>
+											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">Now that you have your username, you still need to set your password. Choose something secure to protect your account from being accessed by unauthorized math-haters!<br/><br/></p>
 
-											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">Now that we're friends, we can send you updates as soon as they come in! And if you have questions for us, we'd love to answer them<br/><br/></p>
+											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">Click on the link below to set your password: <br/>
+											<a href="">{set_url}</a><br/><br/></p>
 
 											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">We look forward to adventuring with you!<br/><br/></p>
 
 											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">
 												The Zap Zap Math Team<br/>
 												http://www.zapzapmath.com <br/>
-												{{$social_media_links}}<br/>
+												{social_media_links}<br/>
 											</p>
 										</td>
 									</tr>
