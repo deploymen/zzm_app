@@ -547,7 +547,7 @@ Class ApiGameController extends Controller {
 							'difficulty' => $difficulty,
 							'top_score' => 0,
 						],
-						'planet_top_score'=> 0,
+						'planet_top_score'=> [],
 		            	'questions' => $questions,
 		            ],
 	           	];
