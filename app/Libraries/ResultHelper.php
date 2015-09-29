@@ -96,7 +96,7 @@ class ResultHelper{
 		$answers = [];
 
 		$sql = "
-       		SELECT q1.`id` AS `question_id` , q1.`question`, r1.`angle3`, r1.`angle2`, r1.`angle4` , r1.`angle5` , r1.`angle6` , r1.`id` AS `result_id` ,r1.`correct` , q1.`difficulty`, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description`
+       		SELECT q1.`id` AS `question_id` , q1.`question`, r1.`angle3`, r1.`angle4` , r1.`angle5` , r1.`angle6` , r1.`id` AS `result_id` ,r1.`correct` , q1.`difficulty`, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description`
        			FROM (`t0300_game_result` r , `t0201_game_question_p01` q1 , `t0301_game_result_p01` r1)
 
        			LEFT JOIN `t0132_game_question_subject` qs ON (qs.`question_id` =r.`question_id`)
