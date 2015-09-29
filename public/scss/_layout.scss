@@ -52,6 +52,7 @@ body, html {
 	padding-top: rem(100px);
 	padding-right: rem(30px);
 	padding-bottom: rem(85px);
+	/*Uncomment 'padding-left' when sidebar menu is not hidden*/
 	padding-left: rem(30px);
 }
 
@@ -114,12 +115,12 @@ body, html {
 
 /** Footer Styles **/
 .main-site-footer {
-	position: absolute;
-	bottom: 0;
+	/*position: absolute;
+	bottom: 0;*/
 	background-color: $fiord;
-	width: 100%;
+	/*width: 100%;
 	padding-top: rem(10px);
-	padding-bottom: rem(10px);
+	padding-bottom: rem(10px);*/
 }
 
 .footer-link-list {
@@ -129,6 +130,56 @@ body, html {
 
 .footer-link-list li {
 	display: inline-block;
+}
+
+.link-bar {
+		background-color: darken($fiord, 10%);
+	}
+
+.link-bar ul {
+	padding-top: 20px;
+}
+
+.link-bar ul li {
+	list-style: none;
+	display: inline-block;
+}
+
+.link-bar ul li.divider {
+	color: $white;
+}
+
+.link-bar ul li a {
+	color: $white;
+	font-family: 'museo-sans', sans-serif;
+}
+
+.copyright {
+	color: $white;
+	text-align: center;
+	margin-top: 10px;
+	font-family: 'museo-sans', sans-serif;
+	font-weight: 300;
+	text-transform: uppercase;
+	margin-bottom: 0px;
+	padding-bottom: 10px;
+
+	a {
+		color: $white;
+	}
+}
+
+.footer-info-column {
+	padding-top: 20px;
+}
+
+.footer-info-column .connect-list li a {
+	color: lighten($grey, 20%);
+}
+
+.footer-info-column .btn-android-download {
+	display: block;
+	margin-bottom: 20px;
 }
 
 /** CREATE NEW QUIZ STYLES **/

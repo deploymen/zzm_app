@@ -44,7 +44,7 @@ function saveProfile(){
 
 	var editedInfo = {
 		first_name : profilefirstname.val(),
-		last_name  : profilelastinitial.val(),
+		last_name  : null,
 		school     : profileschool.val(),
 		city       : profilecity.val(),
 		id         : profileid.val(),
@@ -64,7 +64,7 @@ function saveProfile(){
 		url     : '/api/profiles/'+editedInfo.id+'/edit',
 		data    : editedInfo,
 		success : function(data){
-			//window.location = "/user/profiles";
+			window.location = "/user/profiles";
 			modalprofilesaved.foundation('reveal', 'open');
 		},
 		error   : function(data){
@@ -81,7 +81,8 @@ btnsaveprofile.click(function(){
 });
 
 btnchangesok.click(function(){
-	location.reload();
+	// location.reload();
+	window.location = "/user/profiles";
 });
 
 // Add Profile
@@ -89,6 +90,7 @@ var createbtn = $('#btn-create-profile');
 var btnnewprofile = $('#btn-show-profile-form');
 var addprofilemodal = $('#addProfileModal');
 var newprofileform = $('#new-profile-form');
+var newprofilevalidate = $('#new-profile-validation-msg');
 
 function createNewProfile(){
 	var addbtn = $('#btn-add-new-profile');
@@ -103,7 +105,7 @@ function createNewProfile(){
 
 	var newprofileinfo = {
 		first_name   : newfirstname.val(),
-		last_name    : newlastname.val(),
+		last_name    : null,
 		school       : newschool.val(),
 		city         : newcity.val(),
 		email        : 'marypoppins@nanny.com',
@@ -127,10 +129,11 @@ function createNewProfile(){
 			var message = data['message'];
 			//location.reload();
 			if(status === 'fail' && message === 'missing parameters'){
-				alert('Missing Parameters');
+				// alert('Missing Parameters');
+				newprofilevalidate.show();
 			} else {
-				addprofilemodal.foundation('reveal', 'close');
 				location.reload();
+				addprofilemodal.foundation('reveal', 'close');
 			}
 			
 		},
@@ -141,7 +144,7 @@ function createNewProfile(){
 };
 
 createbtn.click(function(){
-	console.log(newprofileform);
+	// console.log(newprofileform);
 	// newprofileform.on('valid.fndtn.abide', function(){
 	// 	createNewProfile();
 	// });

@@ -5,7 +5,10 @@
 
 @section('css_include')
 <style type="text/css">
-
+/* ng-cloak */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
 </style>
 @stop
 
@@ -64,14 +67,15 @@
 		<p class="subline-desc">Profiles allow you to follow the progress of each individual child</p>
 		<form data-abide="ajax" id="new-profile-form" class="new-profile-form">
 			<div class="row">
-				<div class="small-12 medium-6 columns">
-					<label for="first-name">First Name
-						<input id="new-first-name" type="text" placeholder="Adam" name="first-name" required />
+				<div class="small-12 columns">
+					<label for="first-name">First Name <small>required</small>
+						<input id="new-first-name" type="text" placeholder="" name="first-name" required />
 					</label>
+
 				</div>
 				<div class="small-12 medium-6 columns">
-					<label>Last Name
-						<input id="new-last-name" type="text" placeholder="Lim" />
+					<label hidden>Last Name <small>required</small>
+						<input id="new-last-name" type="text" placeholder="Lim" required />
 					</label>
 				</div>
 			</div>
@@ -84,8 +88,8 @@
 
 			<div class="row">
 				<div class="small-12 medium-6 columns">
-					<label>Age
-						<select id="profile-age-edit">
+					<label>Age <small>required</small>
+						<select id="profile-age-edit" required>
 							<option value="5">5 or younger</option>
 							<option value="6">6</option>
 							<option value="7">7</option>
@@ -104,8 +108,8 @@
 					</label>
 				</div>
 				<div class="small-12 medium-6 columns">
-					<label>Grade
-						<select id="profile-grade-edit">
+					<label>Grade <small>required</small>
+						<select id="profile-grade-edit" required>
 							<option value="prekindergarten">Pre-Kindergarten</option>
 							<option value="kindergarten">Kindergarten</option>
 							<option value="1">1</option>
@@ -128,24 +132,24 @@
 
 			<div class="row">
 				<div class="small-12 columns">
-					<label>School
+					<label>School <small>required</small>
 						<p class="subline-desc">This will be used to connect students and teachers from the same school</p>
-						<input id="new-school" type="text" />
+						<input id="new-school" type="text" required />
 					</label>
 				</div>
 			</div>
 			<div class="row">
 				<div class="small-12 columns">
-					<label>City
+					<label>City <small>required</small>
 						<p class="subline-desc">This will be used to compare results against other cities and places in the world</p>
-						<input id="new-city" type="text" />
+						<input id="new-city" type="text" required />
 					</label>
 				</div>
 			</div>
 			<div class="row">
-				<div class="medium-5 box-centered text-center">
+				<div class="medium-6 box-centered text-center">
 					<label>
-						<input type="button" value="Create My Profile" id="btn-create-profile" class="button wide radius blue" />
+						<input type="submit" value="Create My Profile" id="btn-create-profile" class="button wide radius blue" />
 					</label>
 				</div>
 			</div>
@@ -159,7 +163,7 @@
 	</div><!--addProfileModal-->
 
 	<div class="row">
-		<div id="profile-list" class="cf">
+		<div id="profile-list" class="cf" ng-cloak>
 			<!-- <div ng-repeat=""></div> -->
 			<div class="profile-item" ng-repeat="gameprofile in gameprofiles">
 				<section class="profile-info">
@@ -171,14 +175,16 @@
 						</div>
 						<div class="small-7 columns">
 							<div class="cf">
-								<p class="profile-name">
-									<span class="first-name">@{{gameprofile.first_name}} </span>
-									<span class="first-name">@{{gameprofile.last_name}}</span>
-								</p>
-								<p class="profile-nickname">
+								<p class="profile-nickname truncate">
 									<span class="first-name">@{{gameprofile.nick_name1.name}} </span>
 									<span class="last-name">@{{gameprofile.nick_name2.name}}</span>
 								</p>
+
+								<p class="profile-name truncate">
+									<span class="first-name">@{{gameprofile.first_name}} </span>
+									<!-- <span class="first-name">@{{gameprofile.last_name}}</span> -->
+								</p>
+								
 								<p class="profile-code bold"><span class="profile-label">Player ID:</span> <span class="user-id">@{{gameprofile.game_code.code}}</span></p>
 							</div>
 						</div>
@@ -214,7 +220,7 @@
 								<p class="profile-attempt-number" ng-switch-default>@{{gameprofile.questions_played}}</p>
 								<!-- <p class="profile-attempt-number">@{{gameprofile.questions_played}}</p> -->
 							</span>
-							<a href="javascript:void(0);" title="Proficiency is based on the average score of all games played." class="info-icon">i<span class="profile-tooltip"><p>Last Played shows the last time this child played Zap Zap Math.</p></span></a>
+							<a href="javascript:void(0);" title="Total attempts explanation can go here." class="info-icon">i<span class="profile-tooltip"><p>Total attempts explanation can go here.</p></span></a>
 						</div>
 					</div>
 

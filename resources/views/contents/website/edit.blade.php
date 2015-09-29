@@ -60,16 +60,16 @@
 
 	<form data-abide="ajax" id="edit-profile-form" class="edit-profile-form" novalidate="novalidate">
 		<div class="row">
-			<div class="small-12 medium-6 columns">
+			<div class="small-12 columns">
 				<label>First Name
 					<input id="profile-first-name" class="profile-first-name" type="text" required value="{{$profile->first_name}}" />
 				</label>
 			</div>
-			<div class="small-12 medium-6 columns">
+			<!-- <div class="small-12 medium-6 columns">
 				<label>Last Name
 					<input id="profile-last-initial" class="profile-last-initial" type="text" required value="{{$profile->last_name}}" />
 				</label>
-			</div>
+			</div> -->
 		</div>
 
 		<div class="row">
@@ -80,7 +80,7 @@
 							@if ($age->age == $profile->age)
 								<option selected="selected" value="{{$age->age}}">{{$age->age_name}}</option>
 							@else
-								<option value="{{$age->age}}">{{$age->age_name}}</option>
+								<option value="{{$age->age}}">{{{$age->age_name}}}</option>
 							@endif
 						@endforeach
 					</select>
@@ -93,9 +93,8 @@
 							@if ($grade->grade == $profile->grade)
 								<option selected="selected" value="{{$grade->grade}}">{{$grade->grade_name}}</option>
 							@else
-								<option value="{{$grade->grade}}">{{$grade->grade_name}}</option>
+								<option value="{{$grade->grade}}">{{{$grade->grade_name}}}</option>
 							@endif
-							
 						@endforeach
 					</select>
 				</label>
