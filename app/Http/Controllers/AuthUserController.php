@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App;
+use Cookie;
 use DB;
 use Exception;
 use Redirect;
@@ -261,8 +262,9 @@ Class AuthUserController extends Controller {
 	}
 
 	public function signOut() {
-		Session::forget('access_token');
-		return ResponseHelper::OutputJSON('success');
+            Session::forget('access_token');
+            $cookie = Cookie::forget('access_token');
+            return redirect('user/signin')->withCookie($cookie);
 	}
 
 	public function check() {
@@ -449,7 +451,7 @@ Class AuthUserController extends Controller {
 				'username' => $email,
 				'zapzapmath_portal' => Config::get('app.website_url').'/sign-in',
 				'social_media_links' => Config::get('app.fanpage_url'),
-				'reset_url' => 'http://staging.zapzapmath.com/user/reset-password/' . $secret,
+				'reset_url' => Config::get('app.website_url').'/user/reset-password/' . $secret,
 			]);
 
 			EmailHelper::SendEmail([

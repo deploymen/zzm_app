@@ -8,6 +8,15 @@
 		position: relative;
 	}
 
+	.title-tab-section {
+		text-align: center;
+	}
+
+	.tab-bar {
+		background: rgba(0, 84, 166, 1);
+	}
+	
+
 	.title .plan-label {
 		position: absolute;
 		line-height: rem(16px);
@@ -182,9 +191,13 @@
 
 	.page-content-wrapper {
 		/*Uncomment 'padding-left' when sidebar menu is not hidden*/
-		/*padding-left: rem(300px);*/
+		padding-left: rem(300px);
 		padding-top: rem(100px);
 	}
+
+	/*.footer-info-column {
+		padding-left: rem(300px);
+	}*/
 
 	.reveal-modal {
 		width: 50%;
@@ -209,11 +222,23 @@
 
 	.page-content-wrapper {
 		/*Uncomment 'padding-left' when sidebar menu is not hidden*/
+		padding-left: rem(100px);
+	}
+
+	.footer-info-column {
 		/*padding-left: rem(100px);*/
+	}
+
+	.link-bar {
+		padding-left: 60px;
 	}
 }
 
 @media #{$large-only} {
+	.title-tab-section {
+		padding-left: 65px;
+	}
+
 	.left-sidebar:hover {
 		.left-sidebar-list {
 			width: rem(225px);
@@ -241,6 +266,10 @@
 
 	.page-content-wrapper {
 		/*Uncomment 'padding-left' when sidebar menu is not hidden*/
+		padding-left: rem(100px);
+	}
+
+	.footer-info-column {
 		/*padding-left: rem(100px);*/
 	}
 }

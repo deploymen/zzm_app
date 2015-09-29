@@ -60,16 +60,16 @@
 
 	<form data-abide="ajax" id="edit-profile-form" class="edit-profile-form" novalidate="novalidate">
 		<div class="row">
-			<div class="small-12 medium-6 columns">
+			<div class="small-12 columns">
 				<label>First Name
 					<input id="profile-first-name" class="profile-first-name" type="text" required value="{{$profile->first_name}}" />
 				</label>
 			</div>
-			<div class="small-12 medium-6 columns">
+			<!-- <div class="small-12 medium-6 columns">
 				<label>Last Name
 					<input id="profile-last-initial" class="profile-last-initial" type="text" required value="{{$profile->last_name}}" />
 				</label>
-			</div>
+			</div> -->
 		</div>
 
 		<div class="row">

@@ -67,14 +67,14 @@
 		<p class="subline-desc">Profiles allow you to follow the progress of each individual child</p>
 		<form data-abide="ajax" id="new-profile-form" class="new-profile-form">
 			<div class="row">
-				<div class="small-12 medium-6 columns">
+				<div class="small-12 columns">
 					<label for="first-name">First Name <small>required</small>
-						<input id="new-first-name" type="text" placeholder="Adam" name="first-name" required />
+						<input id="new-first-name" type="text" placeholder="" name="first-name" required />
 					</label>
 
 				</div>
 				<div class="small-12 medium-6 columns">
-					<label>Last Name <small>required</small>
+					<label hidden>Last Name <small>required</small>
 						<input id="new-last-name" type="text" placeholder="Lim" required />
 					</label>
 				</div>
@@ -152,7 +152,6 @@
 						<input type="submit" value="Create My Profile" id="btn-create-profile" class="button wide radius blue" />
 					</label>
 				</div>
-				<p id="new-profile-validation-msg" class="new-profile-validation-msg">All fields are required</p>
 			</div>
 		</form>
 
@@ -183,7 +182,7 @@
 
 								<p class="profile-name truncate">
 									<span class="first-name">@{{gameprofile.first_name}} </span>
-									<span class="first-name">@{{gameprofile.last_name}}</span>
+									<!-- <span class="first-name">@{{gameprofile.last_name}}</span> -->
 								</p>
 								
 								<p class="profile-code bold"><span class="profile-label">Player ID:</span> <span class="user-id">@{{gameprofile.game_code.code}}</span></p>

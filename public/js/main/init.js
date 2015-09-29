@@ -131,39 +131,11 @@ function login(){
 		return false;
 	});
 };
-btnsignin.unbind().click(function(){
+btnsignin.click(function(){
 	login();
 });
 
 //End Login Form
-
-
-var btnlogout = $('.btn-logout');
-
-function logout(){
-	$.ajax({
-		type	   : 'POST', 
-		url        : '/api/auth/sign-out',
-		success    : function(data){
-			var status = data['status'];
-			var message = data['message'];
-			//console.log('status: ' + status);
-			//repsonseMsg();
-			if(status === 'success') {
-				window.location = '/user/signin';
-			} else if(status === 'fail'  && message === 'invalid username/password') {
-				window.location = '/user/profiles';
-				console.log('log out fail lah')
-			}
-		}
-	});
-
-	return false;
-};
-
-btnlogout.unbind().click(function(){
-	logout();
-});
 
 // Wrong Password
 // function unableToLogin() {

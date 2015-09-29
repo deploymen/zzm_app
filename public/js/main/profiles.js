@@ -44,7 +44,7 @@ function saveProfile(){
 
 	var editedInfo = {
 		first_name : profilefirstname.val(),
-		last_name  : profilelastinitial.val(),
+		last_name  : null,
 		school     : profileschool.val(),
 		city       : profilecity.val(),
 		id         : profileid.val(),
@@ -105,7 +105,7 @@ function createNewProfile(){
 
 	var newprofileinfo = {
 		first_name   : newfirstname.val(),
-		last_name    : newlastname.val(),
+		last_name    : null,
 		school       : newschool.val(),
 		city         : newcity.val(),
 		email        : 'marypoppins@nanny.com',
@@ -132,6 +132,7 @@ function createNewProfile(){
 				// alert('Missing Parameters');
 				newprofilevalidate.show();
 			} else {
+				location.reload();
 				addprofilemodal.foundation('reveal', 'close');
 			}
 			
