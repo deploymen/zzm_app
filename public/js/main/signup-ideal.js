@@ -28,7 +28,7 @@ app.service('signupService', function ($http, $q){
       signupService.submitSignupData = function(init){
             var deferred = $q.defer();
 
-            $http.post('/api/auth/sign-up', {data: init})
+            $http.post('/api/1.0/auth/sign-up', {data: init})
             .success(function (data, status, message){
                   deferred.resolve(data);
             })

@@ -4,7 +4,7 @@ var App = App || angular.module('zapzapProfile', []),
 App.service('profileService', function($http, $q){
 	var deferred = $q.defer();
 	
-	$http.get('/api/profiles').then(function(data){
+	$http.get('/api/1.0/profiles').then(function(data){
 		deferred.resolve(data);
 	});
 

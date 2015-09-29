@@ -114,7 +114,7 @@ function signup(){
 
 		$.ajax({
 			type : 'POST',
-			url  : '/api/pre-launch/subscribe',
+			url  : '/api/1.0/pre-launch/subscribe',
 			data : email,
 			
 			success : function(){
@@ -173,7 +173,7 @@ function signup2(){
 
 		$.ajax({
 			type : 'POST',
-			url  : '/api/pre-launch/subscribe',
+			url  : '/api/1.0/pre-launch/subscribe',
 			data : email,
 			
 			success : function(){
@@ -233,7 +233,7 @@ function sendmsg(){
 
 		$.ajax({
 			type : 'POST',
-			url  : '/api/pre-launch/contact-us',
+			url  : '/api/1.0/pre-launch/contact-us',
 			data : msg,
 
 			success : function(msg){

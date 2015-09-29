@@ -509,6 +509,11 @@ Class ApiGameController extends Controller {
 		for($i=0; $i<5; $i++){
 			$difficulty = $set[$i][0];
 
+			$star = $difficulty;
+			if($difficulty != 5){ 
+				$star = $star-1; 
+			}
+
 			for($j=0; $j<$set[$i][1]; $j++){
 				switch($planet->game_type){
 					case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId,$difficulty,$planet->question_count); break;
@@ -528,20 +533,23 @@ Class ApiGameController extends Controller {
 				}	
 				
 				$file = [
-					'planet' => [
-						'id' => $planet->id,
-						'name' => $planet->name,
-						'description' => $planet->description,
-						'question_count' => $planet->question_count,
-						'badges' => json_decode($planet->badges_metrics),
-					],
-					'status' => [
-						'star' => '-1',	
-						'difficulty' => '-1',
-						'top_score' => '-1',
-					],
-					'planet_top_score'=> '-1',
-	            	'questions' => $questions,
+					'status' => "success",
+					'data' => [
+						'planet' => [
+							'id' => $planet->id,
+							'name' => $planet->name,
+							'description' => $planet->description,
+							'question_count' => $planet->question_count,
+							'badges' => json_decode($planet->badges_metrics),
+						],
+						'status' => [
+							'star' => $star,	
+							'difficulty' => $difficulty,
+							'top_score' => 0,
+						],
+						'planet_top_score'=> [],
+		            	'questions' => $questions,
+		            ],
 	           	];
 
 	           	$dir1 = 'package/'.$planet->id;
