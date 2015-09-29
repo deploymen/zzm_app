@@ -58,7 +58,7 @@ App.controller('MainController', function ($scope, $http){
 		$('li.indicator-list-item:nth-child(2)').addClass('active');
         // $('a.results-back-link').html('Go Back to Profiles');
         //$('a.results-back-link').attr('href', '/user/profiles');
-        $http.get('/api/profiles/result/only-system?' + [
+        $http.get('/api/1.0/profiles/result/only-system?' + [
             'page=' + page,
             'page_size=' + pageSize,
             'profile_id=' + $scope.profileId
@@ -86,7 +86,7 @@ App.controller('MainController', function ($scope, $http){
 
 		$('li.indicator-list-item:nth-child(3)').addClass('active');
 
-		$http.get('/api/profiles/result/only-planet?' + [
+		$http.get('/api/1.0/profiles/result/only-planet?' + [
 			'profile_id=' + profile_id,
         	'system_id=' + system_id, 
             'page=' + page,
@@ -115,7 +115,7 @@ App.controller('MainController', function ($scope, $http){
 
 	// 	$('li.indicator-list-item:nth-child(4)').addClass('active');
 
-	// 	$http.get('/api/profiles/result/only-play?' + [
+	// 	$http.get('/api/1.0/profiles/result/only-play?' + [
 	// 		'profile_id=' + profile_id,
  //        	'planet_id=' + planet_id, 
  //            'page=' + page,
@@ -139,7 +139,7 @@ App.controller('MainController', function ($scope, $http){
     //     var i, q;
     //     $('li.indicator-list-item:nth-child(4)').addClass('active');
     //     // $('a.results-back-link').text('Go Back to Plays');
-    //     $http.get('/api/profiles/result/only-questions?' + [
+    //     $http.get('/api/1.0/profiles/result/only-questions?' + [
     //         'profile_id=' + profile_id,
     //         'play_id=' + play_id, 
     //         'page=' + page,
@@ -168,7 +168,7 @@ App.controller('MainController', function ($scope, $http){
 		var i, q;
 		$('li.indicator-list-item:nth-child(4)').addClass('active');
 
-		$http.get('/api/profiles/result/only-questions?' + [
+		$http.get('/api/1.0/profiles/result/only-questions?' + [
 			'profile_id=' + profile_id,
         	'planet_id=' + planet_id, 
             'page=' + page,
