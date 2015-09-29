@@ -60,7 +60,7 @@ function signup(){
 
 		$.ajax({
 			type	: 'POST',
-			url		: '/api/auth/sign-up',
+			url		: '/api/1.0/auth/sign-up',
 			data	: signUpCred,
 			beforeSend: function() {
 				$(document).ajaxStart(function() { Pace.restart(); });
@@ -111,7 +111,7 @@ function login(){
 
 		$.ajax({
 			type	   : 'POST', 
-			url        : '/api/auth/sign-in',
+			url        : '/api/1.0/auth/sign-in',
 			data       : loginCred,
 			success    : function(data){
 				var status = data['status'];
@@ -138,27 +138,15 @@ btnsignin.unbind().click(function(){
 //End Login Form
 
 
-var btnlogout = $('.btn-logout');
+var btnlogout = $('#button-logout');
 
 function logout(){
-	$.ajax({
-		type	   : 'POST', 
-		url        : '/api/auth/sign-out',
-		success    : function(data){
-			var status = data['status'];
-			var message = data['message'];
-			//console.log('status: ' + status);
-			//repsonseMsg();
-			if(status === 'success') {
-				window.location = '/user/signin';
-			} else if(status === 'fail'  && message === 'invalid username/password') {
-				window.location = '/user/profiles';
-				console.log('log out fail lah')
-			}
-		}
-	});
-
-	return false;
+	var sessionval = Cookies.get('access_token');
+	Cookies.remove('access_token');
+	// Cookies.remove('zzmcookie', { path: '' });
+	// console.log(Cookies.get());
+	// console.log('Wanna logout!');
+	console.log(Cookies.get());
 };
 
 btnlogout.unbind().click(function(){

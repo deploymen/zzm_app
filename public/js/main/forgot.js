@@ -13,7 +13,7 @@ function forgotPassword(){
 
 	$.ajax({
 		type     	: 'PUT',
-		url      	: '/api/auth/forgot-password',
+		url      	: '/api/1.0/auth/forgot-password',
 		data        : recoverydata,
 		success  	: function(data){
 			var status = data['status'];

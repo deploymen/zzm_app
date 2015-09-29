@@ -8,7 +8,7 @@ function allVars(){
 
 	$.ajax({
 		type    : 'GET',
-		url     : '/api/profiles',
+		url     : '/api/1.0/profiles',
 		dataType: 'json',
 		success : function(data){
 			datal = data["data"];
@@ -42,7 +42,7 @@ function displayProfiles(){
 
 	$.ajax({
 		type    : 'GET',
-		url     : '/api/profiles',
+		url     : '/api/1.0/profiles',
 		dataType: 'json',
 		success : function(data){
 			allVars.datal = data["data"];
@@ -174,7 +174,7 @@ function saveProfile(){
 	$.ajax({
 		type    : 'PUT',
 		dataType: 'json',
-		url     : '/api/profiles/'+editedInfo.id+'/edit',
+		url     : '/api/1.0/profiles/'+editedInfo.id+'/edit',
 		data    : editedInfo,
 		success : function(data){
 			//window.location = "/user/profiles";
@@ -233,7 +233,7 @@ function createNewProfile(){
 	$.ajax({
 		type     : 'POST',
 		dataType : 'json',
-		url      : '/api/profiles',
+		url      : '/api/1.0/profiles',
 		data     : newprofileinfo,
 		success  : function(data){
 			var status = data['status'];
@@ -294,7 +294,7 @@ function deleteProfile(){
 	$.ajax({
 		type     : 'DELETE',
 		dataType : 'json',
-		url      : '/api/profiles/'+profiletodelete.id,
+		url      : '/api/1.0/profiles/'+profiletodelete.id,
 		data     : profiletodelete,
 		success  : function(data){
 			var status = data['status'];

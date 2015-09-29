@@ -25,7 +25,7 @@ App.controller('MainController', function($scope, $http) {
             return;
         }        
 
-        $http.post('/api/auth/sign-up', {
+        $http.post('/api/1.0/auth/sign-up', {
             name : name,
             email : email,
             role : role,
@@ -37,7 +37,7 @@ App.controller('MainController', function($scope, $http) {
 
             if (status == 'success') {
                 console.log('Your account has successfullly created. Welcome!');
-                location = "/user/signin";
+                location = "/user/sign-in";
             } else {
                 // alert(data.message);
                 console.log(message);
