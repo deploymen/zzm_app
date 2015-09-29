@@ -265,6 +265,14 @@ table {
     -webkit-box-sizing: border-box;
     box-sizing: border-box
 }
+
+/* apply a natural box layout model to all elements, but allowing components to change */
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
 /*!
  *  Font Awesome 4.3.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
@@ -5504,6 +5512,89 @@ Copyright (c) 2014 Daniel Eden
     color: white;
     box-shadow: inset 0 0px 0px #F26522, 0 5px 0px #d44d0d
 }
+
+.btn-join-fb {
+    margin: 0 auto;
+    margin-left: 130px;
+}
+
+.btn-fb--group {
+    position: relative;
+    display: inline-block;
+    padding: 0px 20px 0px 12px;
+    margin-left: 120px;
+
+    background: #5171b2; /* Old browsers */
+    background: -moz-linear-gradient(top,  #5171b2 0%, #354f87 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#5171b2), color-stop(100%,#354f87)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #5171b2 0%,#354f87 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #5171b2 0%,#354f87 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #5171b2 0%,#354f87 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #5171b2 0%,#354f87 100%); /* W3C */
+}
+
+.btn-fb--group:hover {
+    box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.3);
+}
+
+.btn-fb--group .fb-icon-holder {
+    position: relative;
+    display: inline-block;
+    float: left;
+    width: 32px;
+    height: 32px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 32px;
+
+    text-shadow: 0px 2px 3px #555;
+
+    background: -moz-linear-gradient(top,  #1b223d 0%, #2c3c60 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#1b223d), color-stop(100%,#2c3c60));
+    background: -webkit-linear-gradient(top,  #1b223d 0%,#2c3c60 100%);
+    background: -o-linear-gradient(top,  #1b223d 0%,#2c3c60 100%);
+    background: -ms-linear-gradient(top,  #1b223d 0%,#2c3c60 100%);
+    background: linear-gradient(to bottom,  #1b223d 0%,#2c3c60 100%);
+}
+
+.btn-fb--group .fb-icon-holder .fa-facebook {
+    color: #FFFFFF;
+    line-height: 35px;
+    text-shadow: 1px 1px 0px rgba(19, 24, 43, 1);
+}
+
+.fb-icon-vertical-divider {
+    position: relative;
+    float: left;
+    height: 50px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.divider-line {
+    display: block;
+    height: 100%;
+    float: left;
+}
+
+.divider-line.line-shadow {
+    border-left: 1px solid #354377;
+}
+
+.divider-line.line-highlight {
+    border-right: 1px solid #566E9E;
+}
+
+/*.top{border-bottom:#333 solid 1px;}
+.bot{border-top:#777 solid 1px;}*/
+
+.fb-btn-copy {
+    float: left;
+    color: #FFFFFF !important;
+    margin: 0px;
+    padding-top: 10px;
+}
+
 .btn-to-top {
     display: none;
     position: fixed;
@@ -6529,6 +6620,7 @@ footer {
 .collaborator-list {
     padding-left: 10px;
     padding-right: 10px;
+    padding-bottom: 60px;
     display: inline-flex;
 }
 
@@ -6540,6 +6632,7 @@ footer {
     /*display: inline-block;*/
     margin-left: 10px;
     margin-right: 10px;
+    float: left;
 }
 
 .collab-profile-holder {
@@ -7070,6 +7163,7 @@ p.dummy-text:nth-child(3) {
 #ouibounce-modal {
     font-family: 'Open Sans', sans-serif;
     display: none;
+    /*display: block !important;*/
     position: fixed;
     top: 0;
     left: 0;
@@ -7308,14 +7402,16 @@ p.dummy-text:nth-child(3) {
 }
 #ouibounce-modal p.modal-body-text {
     color: #517fdd;
-    padding-top: 70px;
-    padding-left: 130px
+    padding-top: 90px;
+    padding-left: 130px;
+    font-size: 26px;
 }
 #ouibounce-modal p.modal-form-instruction {
     font-size: 13px;
     color: #517fdd;
     padding-left: 150px;
-    padding-top: 10px
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 .close-button {
     position: absolute;

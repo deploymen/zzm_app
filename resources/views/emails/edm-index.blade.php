@@ -42,22 +42,27 @@
 				<tr>
 					<td>1.</td>
 					<td>Account Activation</td>
-					<td><a href="/edm/account-activation-sample" target="blank">{{url('/edm/account-activation-sample')}}</a></td>
+					<td><a href="/edm/account-activation" target="blank">{{url('/edm/account-activation-sample')}}</a></td>
 				</tr>
 				<tr>
 					<td>2.</td>
 					<td>Forgot Password</td>
-					<td><a href="/edm/forgot-password-sample" target="blank">{{url('/edm/forgot-password-sample')}}</a></td>
+					<td><a href="/edm/forgot-password" target="blank">{{url('/edm/forgot-password-sample')}}</a></td>
 				</tr>
 				<tr>
 					<td>3.</td>
 					<td>Invitation</td>
-					<td><a href="/edm/invitation-sample" target="blank">{{url('/edm/invitation-sample')}}</a></td>
+					<td><a href="/edm/invitation" target="blank">{{url('/edm/invitation-sample')}}</a></td>
 				</tr>
 				<tr>
 					<td>4.</td>
-					<td>Subscribe Responder</td>
-					<td><a href="/edm/subscribe-responder-sample" target="blank">{{url('/edm/subscribe-responder-sample')}}</a></td>
+					<td>Prelaunch Thank You</td>
+					<td><a href="/edm/prelaunch-thank-you" target="blank">{{url('/edm/prelaunch-thank-you')}}</a></td>
+				</tr>
+				<tr>
+					<td>5.</td>
+					<td>Set Password For App Signup</td>
+					<td><a href="/edm/set-password-app-signup" target="blank">{{url('/edm/set-password-app-signup')}}</a></td>
 				</tr>
 			</tbody>
 		</table>

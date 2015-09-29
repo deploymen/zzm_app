@@ -1,14 +1,63 @@
-.tab-bar {
+.top-bar {
+	height: rem(55px);
+}
+
+.tab-bar,
+.top-bar-section>ul>.divider, .top-bar-section>ul>[role="separator"]  {
+	height: rem(55px);
+}
+
+.top-bar ul,
+.tab-bar ul,
+.top-bar ul li,
+.tab-bar ul li,
+.top-bar ul li a,
+.tab-bar ul li a {
 	height: rem(55px);
 }
 
 .title-tab-section {
-	padding-top: rem(5px);
+	position: relative;
+	text-align: left;
+	padding-left: 65px;
+	padding-top: 5px;
 }
 
-.title-tab-section .title img {
+.title-tab-section .title img,
+.left-off-canvas-toggle .title img,
+.mobile-title img {
 	width: rem(40px);
 }
+
+.mobile-title {
+	display: block;
+	padding-top: 5px;
+}
+
+.mobile-title .plan-label {
+	display: inline;
+	float: none;
+}
+
+.left-small {
+	z-index: 4;
+}
+
+.name img {
+	width: rem(30px);
+}
+
+.title-area,
+.title-link,
+.plan-label {
+	float: left;
+	margin: 0;
+}
+
+.tab-bar .menu-icon {
+	float: left;
+}
+
 
 /** Off-canvas menu **/
 .left-off-canvas-menu {
@@ -26,12 +75,15 @@ ul.off-canvas-list li a {
 
 /**Plan Label**/
 .plan-label {
+	display: block;
 	border-radius: 5px;
 	padding: 5px;
 	font-family: 'museo-sans', sans-serif;
 	font-size: rem(16px);
 	font-weight: lighter;
+	margin-top: rem(5px);
 	margin-left: rem(5px);
+	line-height: rem(16px) !important;
 }
 
 .plan-label.basic {
@@ -45,7 +97,7 @@ ul.off-canvas-list li a {
 	height: 100%;
 	padding-top: rem(55px);
 	padding-bottom: rem(45px);
-	z-index: 1;
+	z-index: 3;
 }
 
 .left-sidebar .left-sidebar-list {
@@ -97,7 +149,7 @@ ul.off-canvas-list li label.main-label {
 }
 
 .left-sidebar-list li:nth-child(2) a{
-	padding-top: rem(20px);
+	/*padding-top: rem(20px);*/
 }
 
 .left-sidebar-list li a:hover,

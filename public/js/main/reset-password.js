@@ -18,7 +18,7 @@ function resetPassword(){
 
 	$.ajax({
 		type     : 'PUT',
-		url      : '/api/auth/reset-password',
+		url      : '/api/auth/set-password',
 		data     : resetdetails,
 		success  : function(){
 			// modalbg.unbind();

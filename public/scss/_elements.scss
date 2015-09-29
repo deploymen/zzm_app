@@ -73,10 +73,42 @@ button.alert:hover,
 	background: $lightning-yellow;
 }
 
+span.error,
+small.error {
+	background: transparent;
+	color: $punch;
+	font-style: normal;
+	margin-top: rem(-15px);
+}
+
+button.disabled,
+button.disabled,
+button[disabled],
+button[disabled],
+.button.disabled,
+.button.disabled,
+.button[disabled],
+.button[disabled] {
+	background-color: $grey;
+}
+
+button.disabled:hover,
+button.disabled:focus,
+button[disabled]:hover,
+button[disabled]:focus,
+.button.disabled:hover,
+.button.disabled:focus,
+.button[disabled]:hover,
+.button[disabled]:focus {
+	background-color: $grey;
+}
+
 ul.pagination li.current a,
 ul.pagination li.current button {
 	background: $flamingo;
 }
+
+
 
 /** TABLE Styles **/
 table tr:nth-of-type(even) {
@@ -176,13 +208,19 @@ table tr:nth-of-type(even) {
 	height: rem(28px);
 }
 
+.new-profile-validation-msg {
+	text-align: center;
+	color: $punch;
+	display: none;
+}
+
 /** Main Header Styles **/
 .main-header {
 	position: fixed;
 	width: 100%;
 	top: 0;
 	left: 0;
-	z-index: 2;
+	z-index: 4;
 }
 
 /** Global Form Elements **/
@@ -321,6 +359,88 @@ label:hover:before {
   border: 1px solid #4778d9!important;
 }
 
+/** PACE Styling **/
+.pace {
+  -webkit-pointer-events: none;
+  pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.pace-inactive {
+  display: none;
+}
+
+.pace .pace-progress {
+  background: darken($curious-blue, 10%);
+  position: fixed;
+  z-index: 2000;
+  top: 0;
+  right: 100%;
+  width: 100%;
+  height: 4px;
+}
+
+.pace .pace-progress-inner {
+  display: block;
+  position: absolute;
+  right: 0px;
+  width: 100px;
+  height: 100%;
+  box-shadow: 0 0 10px darken($curious-blue, 10%), 0 0 5px darken($curious-blue, 10%);
+  opacity: 1.0;
+  -webkit-transform: rotate(3deg) translate(0px, -4px);
+  -moz-transform: rotate(3deg) translate(0px, -4px);
+  -ms-transform: rotate(3deg) translate(0px, -4px);
+  -o-transform: rotate(3deg) translate(0px, -4px);
+  transform: rotate(3deg) translate(0px, -4px);
+}
+
+.pace .pace-activity {
+  display: block;
+  position: fixed;
+  z-index: 2000;
+  top: 15px;
+  right: 15px;
+  width: 30px;
+  height: 30px;
+  border: solid 2px transparent;
+  border-top-color: darken($curious-blue, 10%);;
+  border-left-color: darken($curious-blue, 10%);;
+  border-radius: 30px;
+  -webkit-animation: pace-spinner 400ms linear infinite;
+  -moz-animation: pace-spinner 400ms linear infinite;
+  -ms-animation: pace-spinner 400ms linear infinite;
+  -o-animation: pace-spinner 400ms linear infinite;
+  animation: pace-spinner 400ms linear infinite;
+}
+
+@-webkit-keyframes pace-spinner {
+  0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+}
+@-moz-keyframes pace-spinner {
+  0% { -moz-transform: rotate(0deg); transform: rotate(0deg); }
+  100% { -moz-transform: rotate(360deg); transform: rotate(360deg); }
+}
+@-o-keyframes pace-spinner {
+  0% { -o-transform: rotate(0deg); transform: rotate(0deg); }
+  100% { -o-transform: rotate(360deg); transform: rotate(360deg); }
+}
+@-ms-keyframes pace-spinner {
+  0% { -ms-transform: rotate(0deg); transform: rotate(0deg); }
+  100% { -ms-transform: rotate(360deg); transform: rotate(360deg); }
+}
+@keyframes pace-spinner {
+  0% { transform: rotate(0deg); transform: rotate(0deg); }
+  100% { transform: rotate(360deg); transform: rotate(360deg); }
+}
+/** Activation Styles **/
+.activation-text {
+	margin-top: rem(20px);
+	text-align: center;
+}
 
 /**Sidebar Styles**/
 .left-off-canvas-menu {
@@ -678,6 +798,12 @@ label:hover:before {
 	padding: 10px;
 }
 
+.indicator-list-item a {
+	display: block;
+	height: 100%;
+	width: 100%;
+}
+
 .indicator-list-item.active {
 	/*background-color: $curious-blue;*/
 }
@@ -810,20 +936,89 @@ table.results-table {
 }
 
 
-
 /** Vanese Results Classes **/
 ul.pagination > li > a { color: #333 }
 .pagination .active a { background-color: #2B91D6; color: #fff; font-weight: bold;}
 
-.breadcrumbs {
-	margin-left: 0px;
-  	padding: 8px 15px;
-  	margin-bottom: 20px;
-  	list-style: none;
-  	background-color: $alto;
-  	border: none;
-  	border-radius: 4px;
+/** Breadcrumbs **/
+
+
+.breadcrumb { 
+	list-style: none; 
+	overflow: hidden; 
+	font: rem(12px) 'museo-sans', sans-serif;
+	margin: 10px 15px;
 }
+.breadcrumb li { 
+	float: left; 
+	background-color: $picton-blue; 
+}
+.breadcrumb li a {
+	color: white;
+	text-decoration: none;
+	text-transform: uppercase;
+	padding: 10px 0 10px 65px;
+	background-color: $picton-blue;
+	background: hsla(204, 89%, 62%, 1);                /* fallback color */
+	/*background: hsla(34,85%,35%,1); */
+	position: relative; 
+	display: block;
+	float: left;
+
+}
+
+.breadcrumb li a:after { 
+	content: " "; 
+	display: block; 
+	width: 0; 
+	height: 0;
+	border-top: 50px solid transparent;           /* Go big on the size, and let overflow hide */
+	border-bottom: 50px solid transparent;
+	border-left: 30px solid hsla(204, 89%, 62%, 1);
+	position: absolute;
+	top: 50%;
+	margin-top: -50px; 
+	left: 100%;
+	z-index: 2; 
+}
+
+.breadcrumb li a:before { 
+	content: " "; 
+	display: block; 
+	width: 0; 
+	height: 0;
+	border-top: 50px solid transparent;       
+	border-bottom: 50px solid transparent;
+	border-left: 32px solid $alto;
+	position: absolute;
+	top: 50%;
+	margin-top: -50px; 
+	margin-left: 1px;
+	left: 100%;
+	z-index: 1; 
+}
+
+.breadcrumb li:first-child a {
+	padding-left: 10px;
+}
+.breadcrumb li:nth-child(2) a       { background:        hsla(204, 89%,45%,1); }
+.breadcrumb li:nth-child(2) a:after { border-left-color: hsla(204, 89%,45%,1); }
+.breadcrumb li:nth-child(3) a       { background:        hsla(204, 89%,55%,1); }
+.breadcrumb li:nth-child(3) a:after { border-left-color: hsla(204, 89%,55%,1); }
+.breadcrumb li:nth-child(4) a       { background:        hsla(204, 89%,65%,1); }
+.breadcrumb li:nth-child(4) a:after { border-left-color: hsla(204, 89%,65%,1); }
+.breadcrumb li:nth-child(5) a       { background:        hsla(204, 89%,75%,1); }
+.breadcrumb li:nth-child(5) a:after { border-left-color: hsla(204, 89%,75%,1); }
+.breadcrumb li:last-child a {
+	/*background: transparent !important;*/
+	color: lighten($black, 30%);
+	pointer-events: none;
+	cursor: default;
+}
+
+.breadcrumb li a:hover { background: hsla(204, 89%,25%,1); }
+.breadcrumb li a:hover:after { border-left-color: hsla(204, 89%,25%,1) !important; }
+
 .pull-left, .pull-left > li { float: left !important; }
 
 /** Edit Profile Form Styles **/

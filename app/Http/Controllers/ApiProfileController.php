@@ -90,7 +90,7 @@ Class ApiProfileController extends Controller {
 			 			'grade' => $p->grade,
 			 			'city' => $p->city,
 			 			'email' => $p->email,
-			 			'questions_played' => $p->questions_played,
+			 			'questions_played' => $lp->questions_played,
 			 			'nickname1' => $p->nickname1,
 			 			'nickname2' => $p->nickname2,
 			 			'avatar_id' => $p->avatar_id,
@@ -157,7 +157,7 @@ Class ApiProfileController extends Controller {
 		$avatarId = Request::input('avatar_id', 1);
 
 
-		if (!$firstName || !$email || !$lastName || !$school ||!$city||!$age||!$grade) {
+		if (!$firstName || !$email || !$school ||!$city||!$age||!$grade) {
 			return ResponseHelper::OutputJSON('fail', "missing parameters");
 		}
 
@@ -427,7 +427,7 @@ Class ApiProfileController extends Controller {
 
 
 	public function gameUpdate() {
-		$profileId = Request::input('profile_id');
+		$profileId = Request::input('game_code_profile_id');
 		$userId = Request::input('user_id');
 
 		
@@ -437,13 +437,14 @@ Class ApiProfileController extends Controller {
 
 		try {
 			$wiped = [];
-
 			// if(!$userId){
 			// 	return ResponseHelper::OutputJSON('fail','wrong user id');
 			// }
 
 			$profile = GameProfile::find($profileId);
-
+			if(!$profile){
+				return ResponseHelper::OutputJSON('fail', "profile not found");
+			}
 
 			if ($nickname1) {
 				$nicknameSet = SetNickname1::find($nickname1);

@@ -3,35 +3,28 @@
 <header class="main-header">
     <nav class="tab-bar">
         <section class="left-small show-for-small-only">
-            <a class="left-off-canvas-toggle menu-icon" href="#">
+            <a class="left-off-canvas-toggle menu-icon" aria-expanded="false">
                 <span></span>
             </a>
         </section>
         <section id="title-tab-section" class="title-tab-section tab-bar-section">
             <h1 class="title">
-                <img src="/assets/main/img/global/logo-icon.png" alt=" ">
-                Zap Zap Math
-                <span class="plan-label basic">Beta</span>
+                <a href="/user/profiles">
+                    <img src="/assets/launch/main-logo.png" alt="">
+                    <!-- <span class="plan-label basic">Beta</span> -->
+                </a>
             </h1>
         </section>
+        <section class="top-bar-section" style="left: 0%;">
+            <!-- Right Nav Section -->
+            <ul class="right menu-items-list">
+                <li><a href="/contributors">Contributors</a></li>
+                <li><a href="http://blog.zapzapmath.com">Blog</a></li>
+                <li><a href="/jobs">Jobs</a></li>
+            </ul>
+        </section>
     </nav>
-    <!-- @yield('breadcrumb') -->
-    
-    <!-- <nav class="breadcrumbs" role="menubar" aria-label="breadcrumbs">
-        <li role="menuitem">
-            <a href="#">Level 1</a>
-        </li>
-        <li role="menuitem">
-            <a href="#">Level 2</a>
-        </li>
-        <li role="menuitem" class="unavailable" role="button" aria-disabled="true">
-            <a href="#">Level 3</a>
-        </li>
-        <li role="menuitem" class="current">
-            <a href="#">Level 4</a>
-        </li>
-    </nav> -->
-    <!--breadcrumbs-->
+
 </header><!--main-header-->
 
 <section class="page-content-wrapper">

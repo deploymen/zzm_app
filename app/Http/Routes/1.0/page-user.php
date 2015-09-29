@@ -4,8 +4,14 @@ Route::group(['prefix' => 'user'], function(){
 
 	Route::get('/signup', function(){ return view('contents.website.signup'); });
 	Route::get('/signin', function(){ return view('contents.website.signin'); });
+        Route::get('/signout', 'AuthUserController@signOut');
 	Route::get('/forgot-password', function(){ return view('contents.website.forgot-password'); });
 	Route::get('/reset-password/{secret_key}', function(){ return view('contents.website.reset-password'); });
+
+	Route::get('/set-password/{sercet_key}', function(){ return view('contents.website.set-password'); });
+
+	Route::get('/activate-success', function(){ return view('contents.website.activate-success'); });
+	Route::get('/activate-fail', function(){ return view('contents.website.activate-fail'); });
 	
 	Route::group(['middleware' => 'auth.user'], function () {
 		Route::group(['middleware' => 'auth.parent'], function () {
@@ -25,4 +31,9 @@ Route::group(['prefix' => 'user'], function(){
 			Route::get('/results2', function(){ return view('contents.website.results-2'); });
 		});
 	});
+
+	
 });
+	
+	Route::get('/activate-success', function(){ return view('contents.website.activate-success'); });
+	Route::get('/activate-fail', function(){ return view('contents.website.activate-fail'); });

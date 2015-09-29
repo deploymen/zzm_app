@@ -14,10 +14,24 @@ p, label {
 	}*/
 }
 
+h1 {
+	font-family: 'museo-sans', sans-serif;
+}
+
+h1 a {
+	color: $white;
+	font-family: 'museo-sans', sans-serif;
+}
+
+h1 a:hover {
+	color: $white;
+}
+
 h2 {
 	color: lighten($black, 50%);
 	font-family: 'museo-sans', sans-serif;
 }
+
 
 h6 {
 	color: lighten($black, 30%);
@@ -101,7 +115,9 @@ a:active {
 	text-overflow: ellipsis;
 }
 
-
+.plan-label {
+	color: $white;
+}
 
 
 /** Account Settings STYLES **/
@@ -126,8 +142,13 @@ a:active {
 
 }
 
+.title a,
+.title a span {
+	color: $white;
+}
+
 /** Sign Up/In Form Styles **/
-.login-form .label-header {
+.label-header {
 	text-transform: uppercase;
 	font-size: rem(13px);
 	font-weight: bold;
@@ -194,18 +215,19 @@ button.wide,
 }
 
 /** PROFILES STYLES **/
-.profile-nickname {
+.profile-name {
 	color: lighten($black, 40%);
 	font-family: 'museo-sans', sans-serif;
 	font-size: rem(19px);
 	font-weight: bold;
-	margin-top: rem(-10px);
+	margin-top: rem(0px);
 	margin-bottom: rem(5px);
 	/*text-align: center;*/
+	line-height: rem(21px);
 }
 
-.profile-name {
-	font-size: rem(28px);
+.profile-nickname {
+	font-size: rem(20px);
 	color: lighten($black, 60%);
 	font-family: 'museo-sans', sans-serif;
 	font-weight: lighter;
@@ -415,4 +437,13 @@ button.wide,
 
 .footer-link-list .footer-link-divider {
 	color: darken($chateau-green, 25%);;
+}
+
+.footer-follow h3 {
+	text-align: center;
+	color: $white;
+}
+
+.footer-info-column p {
+	font-size: 17px;
 }
