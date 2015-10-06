@@ -501,11 +501,11 @@ Class ApiGameController extends Controller {
 			return ResponseHelper::OutputJSON('fail , planet not found');
 		}
 		$set = [
-			[1, 10], //0
-			[2, 10], //1
-			[3, 10], //2
-			[4, 10], //3
-			[5, 10], //4
+			[1, 5], //0
+			[2, 5], //1
+			[3, 5], //2
+			[4, 5], //3
+			[5, 5], //4
 		];
 
 		for($i=0; $i<5; $i++){
