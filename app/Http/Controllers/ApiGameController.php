@@ -577,7 +577,7 @@ Class ApiGameController extends Controller {
 		
 	    header('Content-Description: File Transfer');
 	    header('Content-Type: application/octet-stream');
-	    header('Content-Disposition: attachment; filename="1.zip"');
+	    header('Content-Disposition: attachment; filename="1.jpg"');
 	    header('Expires: 0');
 	    header('Cache-Control: must-revalidate');
 	    header('Pragma: public');
