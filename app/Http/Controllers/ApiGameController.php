@@ -581,8 +581,8 @@ Class ApiGameController extends Controller {
 	    header('Expires: 0');
 	    header('Cache-Control: must-revalidate');
 	    header('Pragma: public');
-	    header('Content-Length: ' . filesize('/var/www/apps/zapzapmath/public/package/application.zip'));
-		readfile('/var/www/apps/zapzapmath/public/package/application.zip');
+	    header('Content-Length: ' . filesize('/var/www/apps/zapzapmath/public/package/1.jpg'));
+		readfile('/var/www/apps/zapzapmath/public/package/1.jpg');
 	    
 		return ResponseHelper::OutputJSON('success');
 
