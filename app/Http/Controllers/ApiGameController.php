@@ -581,6 +581,7 @@ Class ApiGameController extends Controller {
 		header("Cache-Control: public");
 		header("Content-Description: File Transfer");
 		header("Content-type: application/zip");
+   		header('Content-disposition: attachment; filename=application.zip');
 		header("Content-Transfer-Encoding: binary");
 		header("Content-Length: ".filesize('/var/www/apps/zapzapmath/public/package/application.zip'));
 		readfile('/var/www/apps/zapzapmath/public/package/application.zip');
