@@ -575,11 +575,7 @@ Class ApiGameController extends Controller {
 		$try = Zipper::make(public_path().'/package/application.zip')->add($files);
 
 		
-		$headers = [
-			"Content-type" => " image/jpeg",
-		];
-		
-		return response()->download('/var/www/apps/zapzapmath/public/package/1.jpg', '123.jpg', $headers);
+		return (new Response('/var/www/apps/zapzapmath/public/package/application.zip', 200))->header('Content-Type', 'application/zip');
 
 	}
 
