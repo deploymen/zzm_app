@@ -570,8 +570,6 @@ Class ApiGameController extends Controller {
 		        file_put_contents($dir2.'/'.$j.'.json', json_encode($file));
 				}
 		}
-			return ResponseHelper::OutputJSON('success');
-
 
      	$files = glob(public_path().'/package/download/');
 		$try = Zipper::make(public_path().'/package/application.zip')->add($files);
@@ -586,6 +584,8 @@ Class ApiGameController extends Controller {
 		header("Content-Transfer-Encoding: binary");
 		header("Content-Length: ".filesize(public_path().'/package/application.zip'));
 		readfile(public_path().'/package/application.zip');
+
+		return ResponseHelper::OutputJSON('success');
 
 	}
 
