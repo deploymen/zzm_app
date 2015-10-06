@@ -575,7 +575,16 @@ Class ApiGameController extends Controller {
 		$try = Zipper::make(public_path().'/package/application.zip')->add($files);
 
 		
-		return (new Response('/var/www/apps/zapzapmath/public/package/application.zip', 200))->header('Content-Type', 'application/zip');
+	    header('Content-Description: File Transfer');
+	    header('Content-Type: application/octet-stream');
+	    header('Content-Disposition: attachment; filename="'.basename($file).'"');
+	    header('Expires: 0');
+	    header('Cache-Control: must-revalidate');
+	    header('Pragma: public');
+	    header('Content-Length: ' . filesize('/var/www/apps/zapzapmath/public/package/application.zip'));
+		readfile('/var/www/apps/zapzapmath/public/package/application.zip');
+	    
+		return ResponseHelper::OutputJSON('success');
 
 	}
 
