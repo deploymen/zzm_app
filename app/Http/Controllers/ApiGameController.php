@@ -571,8 +571,8 @@ Class ApiGameController extends Controller {
 		// 		}
 		// }
 
-     	$files = glob(public_path().'/package/download/');
-		$try = Zipper::make(public_path().'/package/application.zip')->add($files);
+  //    	$files = glob(public_path().'/package/download/');
+		// $try = Zipper::make(public_path().'/package/application.zip')->add($files);
 
 		
 	 //    header('Content-Description: File Transfer');
@@ -585,7 +585,7 @@ Class ApiGameController extends Controller {
 		// readfile('/var/www/apps/zapzapmath/public/package/1.jpg');
 	    
 		// return ResponseHelper::OutputJSON('success');
-return response()->download('/var/www/apps/zapzapmath/public/package/1.jpg');
+return response()->download(public_path().'/package/1.jpg');
 	}
 
 }
