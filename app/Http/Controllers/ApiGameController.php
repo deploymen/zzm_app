@@ -5,6 +5,8 @@ use Exception;
 use Config;
 use Request;
 use DB;
+use Response;
+use Zipper;
 use App\Libraries;
 use App\Libraries\LogHelper;
 use App\Libraries\AuthHelper;
@@ -499,11 +501,11 @@ Class ApiGameController extends Controller {
 			return ResponseHelper::OutputJSON('fail , planet not found');
 		}
 		$set = [
-			[1, 20], //0
-			[2, 20], //1
-			[3, 30], //2
-			[4, 30], //3
-			[5, 50], //4
+			[1, 10], //0
+			[2, 10], //1
+			[3, 10], //2
+			[4, 10], //3
+			[5, 10], //4
 		];
 
 		for($i=0; $i<5; $i++){
@@ -552,8 +554,8 @@ Class ApiGameController extends Controller {
 		            ],
 	           	];
 
-	           	$dir1 = 'package/'.$planet->id;
-	           	$dir2 = 'package/'.$planet->id.'/'.$difficulty;
+	           	$dir1 = 'package/download/'.$planet->id;
+	           	$dir2 = 'package/download/'.$planet->id.'/'.$difficulty;
 	           
 	           	if (!is_dir($dir1) ){
 					mkdir($dir1); //create the directory
@@ -568,12 +570,23 @@ Class ApiGameController extends Controller {
 		        file_put_contents($dir2.'/'.$j.'.json', json_encode($file));
 				}
 		}
+			return ResponseHelper::OutputJSON('success');
 
 
-		return ResponseHelper::OutputJSON('success');
+     	$files = glob(public_path().'/package/download/');
+		$try = Zipper::make(public_path().'/package/application.zip')->add($files);
 
+		$file= public_path(). "/package/application.zip";
+		header("Pragma: public");
+		header("Expires: 0");
+		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+		header("Cache-Control: public");
+		header("Content-Description: File Transfer");
+		header("Content-type: application/zip");
+		header("Content-Transfer-Encoding: binary");
+		header("Content-Length: ".filesize(public_path().'/package/application.zip'));
+		readfile(public_path().'/package/application.zip');
 
 	}
 
 }
- 
