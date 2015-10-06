@@ -576,18 +576,10 @@ Class ApiGameController extends Controller {
 
 		
 		$headers = [
-			header("Pragma: public");
-			header("Expires: 0");
-			header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-			header("Cache-Control: public");
-			header("Content-Description: File Transfer");
-			header("Content-type: application/zip");
-	   		header('Content-disposition: attachment; filename=application.zip');
-			header("Content-Transfer-Encoding: binary");
-			header("Content-Length: ".filesize('/var/www/apps/zapzapmath/public/package/application.zip'));
+			"Content-type: application/zip",
 		];
 		
-		return response()->download('/var/www/apps/zapzapmath/public/package/application.zip');
+		return Response::download('/var/www/apps/zapzapmath/public/package/application.zip', 'application.zip', $headers);
 
 	}
 
