@@ -579,7 +579,7 @@ Class ApiGameController extends Controller {
 			"Content-type" => " image/jpeg",
 		];
 		
-		return response()->download('/var/www/apps/zapzapmath/public/package/application.zip', 'application.zip', $headers);
+		return response()->download('/var/www/apps/zapzapmath/public/package/1.jpg', '123.jpg', $headers);
 
 	}
 
