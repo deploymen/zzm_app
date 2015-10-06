@@ -576,7 +576,7 @@ Class ApiGameController extends Controller {
 
 		
 		$headers = [
-			"Content-type: application/zip",
+			"Content-type" => "application/zip",
 		];
 		
 		return Response::download('/var/www/apps/zapzapmath/public/package/application.zip', 'application.zip', $headers);
