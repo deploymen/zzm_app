@@ -508,6 +508,13 @@ Class ApiGameController extends Controller {
 			[5, 5], //4
 		];
 
+
+		$path = public_path().'/package/'.$planetId.'.zip';
+
+		if(file_exists($path)){
+			unlink($path);
+		}
+
 		for($i=0; $i<5; $i++){
 			$difficulty = $set[$i][0];
 
@@ -553,7 +560,6 @@ Class ApiGameController extends Controller {
 		            	'questions' => $questions,
 		            ],
 	           	];
-
 	           	$dir1 = 'package/download/'.$planet->id;
 	           	$dir2 = 'package/download/'.$planet->id.'/'.$difficulty;
 	           
@@ -571,10 +577,15 @@ Class ApiGameController extends Controller {
 				}
 		}
 
-     	$files = glob(public_path().'/package/download/');
-		$try = Zipper::make(public_path().'/package/application.zip')->add($files);
+     	$files = glob(public_path().'/package/download/'.$planetId);     	
+		$zipper = Zipper::make($path)->add($files);
+		$zipper->close();
 
-	    return Response::download(public_path().'/package/application');
+	    $response = Response::download($path);
+		ob_end_clean();
+
+
+		return $response;
 
 	}
 
