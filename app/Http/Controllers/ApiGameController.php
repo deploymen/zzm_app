@@ -573,8 +573,8 @@ Class ApiGameController extends Controller {
 
      	$files = glob(public_path().'/package/download/');
 		$try = Zipper::make(public_path().'/package/application.zip')->add($files);
-		
-	    return Response::download(public_path().'/package/application.zip');
+
+	    return Response::download(public_path().'/package/application');
 
 	}
 
