@@ -9,7 +9,7 @@ require __DIR__.'/Routes/1.0/api-game.php';
 require __DIR__.'/Routes/1.0/api-cron.php';
 
 //page api come later
-require __DIR__.'/Routes/1.0/page.php';
+// require __DIR__.'/Routes/1.0/page.php';
 require __DIR__.'/Routes/1.0/page-user.php';
 require __DIR__.'/Routes/1.0/page-admin.php';
 require __DIR__.'/Routes/1.0/page-docs.php';

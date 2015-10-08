@@ -1,5 +1,7 @@
-
 <?php
+Route::get('/',  function(){ return die('api'); });
+Route::get('/version',  function(){ return die('1.0'); });
+
 
 Route::pattern('role', '(parent)|(teacher)|(admin)|(content)|(investor)');
 
@@ -46,3 +48,5 @@ Route::group(['prefix' => 'api/1.0/pre-launch'], function(){
 });
 
 	Route::post('api/1.0/launch-notification', 'ApiController@launchNotification');
+
+
