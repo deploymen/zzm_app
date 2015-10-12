@@ -43,6 +43,7 @@ Class ApiGameController extends Controller {
 	//GET QUESTION
 	public function request($planetId) {	
 		$gameCode = Request::input('game_code');
+		$difficulty = Request::input('difficulty');
 
 		LogHelper::LogGetQuestions($planetId, $gameCode);
 
@@ -87,8 +88,10 @@ Class ApiGameController extends Controller {
 
 			}
 			
-			$difficulty = $userMap[0]->star + 1;
-			if($difficulty > 5){ $difficulty = 5; }
+			if(!$difficulty || $difficulty > 5){
+				$difficulty = $userMap[0]->star + 1;
+				if($difficulty > 5){ $difficulty = 5; }
+			}
 
 			$level = $userMap[0]->level;
 			
@@ -501,19 +504,12 @@ Class ApiGameController extends Controller {
 			return ResponseHelper::OutputJSON('fail , planet not found');
 		}
 		$set = [
-			[1, 5], //0
-			[2, 5], //1
-			[3, 5], //2
-			[4, 5], //3
-			[5, 5], //4
+			[1, 10], //0
+			[2, 10], //1
+			[3, 10], //2
+			[4, 10], //3
+			[5, 10], //4
 		];
-
-
-		$path = public_path().'/package/'.$planetId.'.zip';
-
-		if(file_exists($path)){
-			unlink($path);
-		}
 
 		for($i=0; $i<5; $i++){
 			$difficulty = $set[$i][0];
@@ -560,6 +556,7 @@ Class ApiGameController extends Controller {
 		            	'questions' => $questions,
 		            ],
 	           	];
+
 	           	$dir1 = 'package/download/'.$planet->id;
 	           	$dir2 = 'package/download/'.$planet->id.'/'.$difficulty;
 	           
@@ -576,16 +573,22 @@ Class ApiGameController extends Controller {
 		        file_put_contents($dir2.'/'.$j.'.json', json_encode($file));
 				}
 		}
-
-     	$files = glob(public_path().'/package/download/'.$planetId);     	
-		$zipper = Zipper::make($path)->add($files);
-		$zipper->close();
-
-	    $response = Response::download($path);
-		ob_end_clean();
+			return ResponseHelper::OutputJSON('success');
 
 
-		return $response;
+     	$files = glob(public_path().'/package/download/');
+		$try = Zipper::make(public_path().'/package/application.zip')->add($files);
+
+		$file= public_path(). "/package/application.zip";
+		header("Pragma: public");
+		header("Expires: 0");
+		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+		header("Cache-Control: public");
+		header("Content-Description: File Transfer");
+		header("Content-type: application/zip");
+		header("Content-Transfer-Encoding: binary");
+		header("Content-Length: ".filesize(public_path().'/package/application.zip'));
+		readfile(public_path().'/package/application.zip');
 
 	}
 
