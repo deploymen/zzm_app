@@ -47,7 +47,6 @@ class AuthenticateGamePlay {
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next) {
-		$isApi = (strpos($request->path(), 'api/') !== FALSE);
 		$route = $request->route();
 
 		$gameCode = Request::cookie('game-code');
@@ -56,34 +55,22 @@ class AuthenticateGamePlay {
 
 
 		if (!$gameCode) {
-			if ($isApi) {
-				return ResponseHelper::OutputJSON('fail', 'missing game code');
-			} else {
-				return Redirect::to('/?missing-game-code');
-			}
+			return ResponseHelper::OutputJSON('fail', 'missing game code');
 		}
 
 		$gameCodeObj = GameCode::where('code' , $gameCode)->first();
 
-
 		if(!$gameCodeObj){
-			if ($isApi) {
-				return ResponseHelper::OutputJSON('fail', 'invalid game code');
-			} else {
-				return Redirect::to('/?invalid-code');
-			}
+			return ResponseHelper::OutputJSON('fail', 'invalid game code');
 		}
+
 		$inputs = \Request::all();
 		$inputs['game_code'] = $gameCode;
 		$inputs['game_code_type'] = $gameCodeObj->type;
 	
 		$userId = GameProfile::find($gameCodeObj->profile_id);
 		if(!$userId){
-			if ($isApi) {
-				return ResponseHelper::OutputJSON('fail', 'invalid game code');
-			} else {
-				return Redirect::to('/?invalid-game-code');
-			}					
+			return ResponseHelper::OutputJSON('fail', 'invalid game code');		
 		}
 		$inputs['user_id'] = $userId->user_id;
 

@@ -203,6 +203,7 @@ Class AuthUserController extends Controller {
 		try {
 	
 			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
+			$user = User::where('id', $userAccess->user_id)->where('activated' , 1)->first();
 			if (!$userAccess) {
 				$log = new LogSignInUser;
 				$log->username = $username;
@@ -211,6 +212,15 @@ Class AuthUserController extends Controller {
 				$log->created_ip = Request::ip();
 				$log->save();
 				return ResponseHelper::OutputJSON('fail', 'invalid username/password');
+			}
+			if(!$user){
+				$log = new LogSignInUser;
+				$log->username = $username;
+				$log->password_sha1 = $password_sha1;
+				$log->success = 0;
+				$log->created_ip = Request::ip();
+				$log->save();
+				return ResponseHelper::OutputJSON('fail', 'account is not activated');
 			}
 
 			if ($userAccess->access_token == '') {
