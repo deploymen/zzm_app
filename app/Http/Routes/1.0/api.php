@@ -1,6 +1,6 @@
 <?php
 Route::get('/',  function(){ return die('api'); });
-Route::get('/version',  function(){ return die('1.0'); });
+Route::get('/version',  function(){dd($request->path()); return die('2.0'); });
 
 
 Route::pattern('role', '(parent)|(teacher)|(admin)|(content)|(investor)');

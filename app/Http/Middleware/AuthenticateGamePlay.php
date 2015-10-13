@@ -47,7 +47,7 @@ class AuthenticateGamePlay {
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next) {
-		dd($request->path());
+		
 		$isApi = (strpos($request->path(), 'api/') !== FALSE);
 		$route = $request->route();
 
