@@ -2,8 +2,6 @@
   
 // Route::get('/', function(){ die('www.zapzapmath.com'); });
 
-Route::get('/', function(){ return Redirect::to('/pre-launch'); });
-
 Route::get('/pre-launch', function(){ return view('index'); });
 
 Route::get('/jobs', function(){ return view('website.jobs'); });
