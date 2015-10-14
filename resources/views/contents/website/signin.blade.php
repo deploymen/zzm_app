@@ -41,9 +41,8 @@
         <![endif]-->
 		
 		<div class="site-wrapper sign-in-up">
-
 			<div class="row">
-                <section class="signup-holder cf">
+                <section id="signup-holder" class="signup-holder cf">
                     <section class="signup-holder-inner small-12 medium-4 medium-centered columns">
                         <div class="logo">
                             <img src="/assets/main/img/global/logo-main-white.png" alt=" ">
@@ -71,7 +70,9 @@
 
                             <div class="row">
                               <div class="small-12 columns">
+                                <!-- <input id="btn-signin" type="submit" class="medium button expand radius blue" value="Sign in"> -->
                                 <button id="btn-signin" type="submit" class="medium button expand radius blue">Sign in</button>
+                                <!-- <a id="btn-signin" type="submit" class="medium button expand radius blue">Sign in</a> -->
                               </div>
                             </div>
 
@@ -101,6 +102,7 @@
         <script>window.jQuery || document.write('<script src="js/jquery/dist/jquery.min.js"><\/script>')</script>
 
         <script src="/js/main/app.js"></script>
+        <script src="/js/main/init.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>

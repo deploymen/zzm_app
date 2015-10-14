@@ -7,7 +7,7 @@
 Route::group(['middleware' => 'auth.user'], function () {
 	Route::group(['middleware' => 'auth.content'], function () {
 
-		Route::group(['prefix' => 'api/system'], function () {
+		Route::group(['prefix' => '1.0/system'], function () {
 			Route::get('/', 'ApiGameMapController@getSystem');
 			Route::post('/', 'ApiGameMapController@createSystem');
 			Route::put('/{id}', 'ApiGameMapController@updateSystem');
@@ -15,18 +15,18 @@ Route::group(['middleware' => 'auth.user'], function () {
 		});
 
 
-		Route::group(['prefix' => 'api/planet/'], function () {
+		Route::group(['prefix' => '1.0/planet/'], function () {
 			Route::get('/{id}', 'ApiGameMapController@getPlanet');
 			Route::post('/', 'ApiGameMapController@createPlanet');
 			Route::put('/{id}', 'ApiGameMapController@updatePlanet');
 			Route::delete('/{id}', 'ApiGameMapController@deletePlanet');
 		});
 
-		Route::group(['prefix' => 'api/system-planet/'], function () {
+		Route::group(['prefix' => '1.0/system-planet/'], function () {
 			Route::post('/', 'ApiGameMapController@addToSystem');
 		});
 
-		Route::group(['prefix' => 'api/question-bank'], function () {
+		Route::group(['prefix' => '1.0/question-bank'], function () {
 			Route::get('/', 'ApiQuestionBankController@get');
 			Route::post('/', 'ApiQuestionBankController@create');
 			Route::put('/{id}', 'ApiQuestionBankController@update');

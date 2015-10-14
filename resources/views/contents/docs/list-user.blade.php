@@ -140,6 +140,41 @@
                     <td>This api is to execute Profile Transfer(PT). By calling this, anonymous play history will transfer to provided game code. And it is no undo-able api to recover this, take note.</td>
                     <td align="center"><a href="/docs/api.user-profile-transfer-post" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
+                  <tr>
+                    <td>16.</td>
+                    <td>GET</td>
+                    <td>/api/profiles/report/profile-details</td>
+                    <td></td>
+                    <td align="center"><a href="/docs/api.user-report-profile-details-get" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                </tr>
+                  <tr>
+                    <td>17.</td>
+                    <td>GET</td>
+                    <td>/api/profiles/result/only-system</td>
+                    <td></td>
+                    <td align="center"><a href="/docs/api.user-profiles-result-only-system-get" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                </tr>
+                  <tr>
+                    <td>18.</td>
+                    <td>GET</td>
+                    <td>/api/profiles/result/only-planet</td>
+                    <td></td>
+                    <td align="center"><a href="/docs/api.user-profiles-result-only-planet-get" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                </tr>
+                  <tr>
+                    <td>19.</td>
+                    <td>GET</td>
+                    <td>/api/profiles/result/only-play</td>
+                    <td></td>
+                    <td align="center"><a href="/docs/api.user-profiles-result-only-play-get" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                </tr>
+                  <tr>
+                    <td>20.</td>
+                    <td>GET</td>
+                    <td>/api/profiles/result/only-questions</td>
+                    <td></td>
+                    <td align="center"><a href="/docs/api.user-profiles-result-only-questions-get" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                </tr>
                 
             </tbody>
         </table>

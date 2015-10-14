@@ -1,0 +1,142 @@
+.progress {
+	position: relative;
+	border: 3px solid lighten($black, 30%);
+	background-color: lighten($black, 40%);
+	border-radius: 1000px;
+	padding: rem(0px);
+	height: rem(15px);
+}
+
+.progress .meter-percentage {
+	position: absolute;
+	top: rem(-10px);
+	left: 42%;
+	font-weight: bold;
+	font-size: rem(18px);
+
+	text-shadow:
+	-1px -1px 0 lighten($black, 20%),  
+	1px -1px 0 lighten($black, 20%),
+	-1px  1px 0 lighten($black, 20%),
+	1px  1px 0 lighten($black, 20%);
+}
+
+.progress .meter {
+	border-radius: 1000px;
+}
+
+.progress .meter-1,
+.progress .meter-2,
+.progress .meter-3,
+.progress .meter-4,
+.progress .meter-5,
+.progress .meter-6,
+.progress .meter-7,
+.progress .meter-8,
+.progress .meter-9,
+.progress .meter-10,
+.progress .meter-11,
+.progress .meter-12,
+.progress .meter-13,
+.progress .meter-14,
+.progress .meter-15,
+.progress .meter-16,
+.progress .meter-17,
+.progress .meter-18,
+.progress .meter-19,
+.progress .meter-20 {
+	background-color: $flamingo;
+}
+
+.progress .meter-20,
+.progress .meter-21,
+.progress .meter-22,
+.progress .meter-23,
+.progress .meter-24,
+.progress .meter-25,
+.progress .meter-26,
+.progress .meter-27,
+.progress .meter-28,
+.progress .meter-29,
+.progress .meter-30,
+.progress .meter-31,
+.progress .meter-32,
+.progress .meter-33,
+.progress .meter-34,
+.progress .meter-35,
+.progress .meter-36,
+.progress .meter-37,
+.progress .meter-38,
+.progress .meter-39,
+.progress .meter-40 {
+	background-color: $crusta;
+}
+
+.progress .meter-41,
+.progress .meter-42,
+.progress .meter-43,
+.progress .meter-44,
+.progress .meter-45,
+.progress .meter-46,
+.progress .meter-47,
+.progress .meter-48,
+.progress .meter-49,
+.progress .meter-50,
+.progress .meter-51,
+.progress .meter-52,
+.progress .meter-53,
+.progress .meter-54,
+.progress .meter-55,
+.progress .meter-56,
+.progress .meter-57,
+.progress .meter-58,
+.progress .meter-59,
+.progress .meter-60 {
+	background-color: $sea-buckthorn;
+}
+
+.progress .meter-61,
+.progress .meter-62,
+.progress .meter-63,
+.progress .meter-64,
+.progress .meter-65,
+.progress .meter-66,
+.progress .meter-67,
+.progress .meter-68,
+.progress .meter-69,
+.progress .meter-70,
+.progress .meter-71,
+.progress .meter-72,
+.progress .meter-73,
+.progress .meter-74,
+.progress .meter-75,
+.progress .meter-76,
+.progress .meter-77,
+.progress .meter-78,
+.progress .meter-79,
+.progress .meter-80 {
+	background-color: $starship;
+}
+
+.progress .meter-81,
+.progress .meter-82,
+.progress .meter-83,
+.progress .meter-84,
+.progress .meter-85,
+.progress .meter-86,
+.progress .meter-87,
+.progress .meter-88,
+.progress .meter-89,
+.progress .meter-90,
+.progress .meter-91,
+.progress .meter-92,
+.progress .meter-93,
+.progress .meter-94,
+.progress .meter-95,
+.progress .meter-96,
+.progress .meter-97,
+.progress .meter-98,
+.progress .meter-99,
+.progress .meter-100 {
+	background-color: $harlequin;
+}

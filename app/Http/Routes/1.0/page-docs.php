@@ -67,14 +67,24 @@ Route::group(['prefix' => 'docs'], function(){
 
 	Route::get('/api.game-play-request-get-p01-150', function(){ return view('contents.docs.api-game-play-request-get-p01-150'); });
 	Route::get('/api.game-play-request-get-p02-103', function(){ return view('contents.docs.api-game-play-request-get-p02-103'); });
+	Route::get('/api.game-play-request-get-p02-106', function(){ return view('contents.docs.api-game-play-request-get-p02-106'); });
+	Route::get('/api.game-play-request-get-p02-115', function(){ return view('contents.docs.api-game-play-request-get-p02-115'); });
 	Route::get('/api.game-play-request-get-p03-166', function(){ return view('contents.docs.api-game-play-request-get-p03-166'); });
 	Route::get('/api.game-play-request-get-p03-102', function(){ return view('contents.docs.api-game-play-request-get-p03-102'); });
 	Route::get('/api.game-play-request-get-p03-141', function(){ return view('contents.docs.api-game-play-request-get-p03-141'); });
 	Route::get('/api.game-play-request-get-p06-155', function(){ return view('contents.docs.api-game-play-request-get-p06-155'); });
 	Route::get('/api.game-play-request-get-p06-104', function(){ return view('contents.docs.api-game-play-request-get-p06-104'); });
 	Route::get('/api.game-play-request-get-p07-114', function(){ return view('contents.docs.api-game-play-request-get-p07-114'); });
+	Route::get('/api.game-play-request-get-p10-105', function(){ return view('contents.docs.api-game-play-request-get-p10-105'); });
+	Route::get('/api.game-play-request-get-p10-123', function(){ return view('contents.docs.api-game-play-request-get-p10-123'); });
+	Route::get('/api.game-play-request-get-p10-131', function(){ return view('contents.docs.api-game-play-request-get-p10-131'); });
+	Route::get('/api.game-play-request-get-p18-129', function(){ return view('contents.docs.api-game-play-request-get-p18-129'); });
+	Route::get('/api.game-play-request-get-p23-185', function(){ return view('contents.docs.api-game-play-request-get-p23-185'); });
+	Route::get('/api.game-play-request-get-p32-225', function(){ return view('contents.docs.api-game-play-request-get-p32-225'); });
+	Route::get('/api.game-play-request-get-p00-228', function(){ return view('contents.docs.api-game-play-request-get-p00-228'); });
 
 
+	Route::get('/api.game-play-result-post-p00', function(){ return view('contents.docs.api-game-play-result-post-p00'); });
 	Route::get('/api.game-play-result-post-p01', function(){ return view('contents.docs.api-game-play-result-post-p01'); });
 	Route::get('/api.game-play-result-post-p02', function(){ return view('contents.docs.api-game-play-result-post-p02'); });
 	Route::get('/api.game-play-result-post-p03', function(){ return view('contents.docs.api-game-play-result-post-p03'); });
@@ -83,6 +93,8 @@ Route::group(['prefix' => 'docs'], function(){
 	Route::get('/api.game-play-result-post-p07', function(){ return view('contents.docs.api-game-play-result-post-p07'); });
 	Route::get('/api.game-play-result-post-p10', function(){ return view('contents.docs.api-game-play-result-post-p10'); });
 	Route::get('/api.game-play-result-post-p18', function(){ return view('contents.docs.api-game-play-result-post-p18'); });
+	Route::get('/api.game-play-result-post-p23', function(){ return view('contents.docs.api-game-play-result-post-p23'); });
+	Route::get('/api.game-play-result-post-p32', function(){ return view('contents.docs.api-game-play-result-post-p32'); });
 
 
 	Route::get('/api.game-result-progress-get', function(){ return view('contents.docs.api-game-result-progress-get'); });

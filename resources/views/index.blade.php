@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
@@ -48,9 +48,9 @@ KONAMI CODE MOFO
             <header id="main-banner" class="main-banner-2 cf" role="banner" style="height:900px;">
                 <nav class="main-menu">
                     <ul class="menu-list">
-                        <li><a href="/jobs" target="_blank">Jobs</a></li>
-                        <li><a href="blog.zapzapmath.com" target="_blank">Blog</a></li>
-                        <li><a href="/contributors" target="_blank">Contributors</a></li>
+                        <li><a href="/jobs">Jobs</a></li>
+                        <li><a href="http://blog.zapzapmath.com">Blog</a></li>
+                        <li><a href="/contributors">Contributors</a></li>
                     </ul>
                 </nav>
                 <!-- Background Elements -->
@@ -88,16 +88,21 @@ KONAMI CODE MOFO
                     <div class="form-inner-wrapper">
                         <h1>Students struggling with math homework? Zap Zap Math can change that!</h1>
                         <!-- <p class="signup-instruct">Sign up to be the first to get a full ZAP ZAP MATH subscription for 1 year worth $99.99</p> -->
-                        <p id="signup-instruct" class="signup-instruct">Be the first in line for our preview release and get tons of goodies for free!</p>
+                        <!-- <p id="signup-instruct" class="signup-instruct">Be the first in line for our preview release and get tons of goodies for free!</p> -->
+                        <p id="signup-instruct" class="signup-instruct">Join our Facebook group and always be the first to try the preview release of Zap Zap Math!</p><br/>
                         <div id="signup-btn-holder" class="signup-btn-holder">
+                            <a href="http://bit.ly/zapzapmathfb" class="btn btn--orange" target="_blank">Join Now!</a>
+                        </div>
+                        <!-- <div id="signup-btn-holder" class="signup-btn-holder">
                             <div id="signup-form2" class="signup-form2">
                                 <form id="signupform2" class="signupform2">
                                     <input id="signup-form-email2" class="signup-form-email2" name="foremail" type="email" placeholder="Email" required>
                                     <p></p>
                                     <input id="email-address-submit2" class="btn btn--orange email-address-submit2" type="submit" value=" Sign Up!" onClick="signup2();"></input>
                                 </form>
-                            </div><!--signup-form-->
-                        </div><!--signup-btn-holder-->
+                            </div>
+                        </div> -->
+                        <!--signup-btn-holder-->
                     </div><!--form-inner-wrapper-->
                 </div>
                 <!-- End Background Elements -->
@@ -166,6 +171,72 @@ KONAMI CODE MOFO
                         </ul>
                     </div>
                 </div><!-- End features-->
+
+                <!-- Screenshot -->
+                <div id="contributors" class="contributors wrapper">
+                    <div class="row">
+                        <h2>Collaborators</h2>
+                        <ul class="contributors-list">
+                            <li class="wow bounceInDown" data-wow-delay="0s">
+                                <a href="/contributors" class="contributor-link"></a>
+                                <div class="collab-profile-holder">
+                                    <div class="profile-pic-holder">
+                                        <img src="assets/img/contributors/dp/henri-holm.jpg" alt="Henri Holm">
+                                    </div>
+                                    <div class="profile-item-group">
+                                        <div class="collab-details">
+                                            <p class="collab-name">Henri Holm,</p>
+                                            <p class="country-name">Finland</p>
+                                            <p class="profile-position">Fun Learning and Content Advisor</p>
+                                        </div>
+                                        <hr>
+                                        <p class="collab-quote">
+                                            "ZAP ZAP MATH is of the highest quality educational &amp; game content"
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="wow bounceInUp" data-wow-delay="0.25s">
+                                <a href="/contributors" class="contributor-link"></a>
+                                <div class="collab-profile-holder">
+                                    <div class="profile-pic-holder">
+                                        <img src="assets/img/contributors/dp/david-fingerote.jpg" alt="Avatar 3">
+                                    </div>
+                                    <div class="profile-item-group">
+                                        <div class="collab-details">
+                                            <p class="collab-name">David W. Fingerote,</p>
+                                            <p class="country-name">U.S.A</p>
+                                            <p class="profile-position">International Educational Consultant</p>
+                                        </div>
+                                        <hr>
+                                        <p class="collab-quote">
+                                            "Zap Zap Math is an application that will grow as your child grows."
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="wow bounceInDown" data-wow-delay="0.5s">
+                                <a href="/contributors" class="contributor-link"></a>
+                                <div class="collab-profile-holder">
+                                    <div class="profile-pic-holder">
+                                        <img src="assets/img/contributors/dp/py-teow.jpg" alt="Avatar 3">
+                                    </div>
+                                    <div class="profile-item-group">
+                                        <div class="collab-details">
+                                            <p class="collab-name">Teoh Poh Yew,</p>
+                                            <p class="country-name">Malaysia</p>
+                                            <p class="profile-position">Higher-Order Thinking Expert</p>
+                                        </div>
+                                        <hr>
+                                        <p class="collab-quote">
+                                            "Zap Zap Math develops higher-order thinking skills (HOTS)."
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div><!-- End Screenshot -->
 
                 <div id="testimonials" class="testimonials wrapper">
                     <div class="row">
@@ -250,9 +321,9 @@ KONAMI CODE MOFO
                         <ul>
                             <li><a href="/jobs">Jobs</a></li>
                             <li class="divider">|</li>
-                            <li><a href="http://blog.zapzapmath.com" target="_blank">Blog</a></li>
+                            <li><a href="http://blog.zapzapmath.com">Blog</a></li>
                             <li class="divider">|</li>
-                            <li><a href="/contributors" target="_blank">Contributors</a></li>
+                            <li><a href="/contributors">Contributors</a></li>
                         </ul>
                     </div>
                 </footer>
@@ -324,13 +395,27 @@ KONAMI CODE MOFO
            <div class="modal">
                <img src="assets/img/exitpop/closebutton.png" class="close-button" onClick="closeModal()">
                <div class="modal-body">
-                   <p class="modal-body-text">We are shortlisting 200 people to be the first in the world to most awesome mathematical adventure of your life. If you are chosen, you will be entitled to full app and content worth $99 for free</p>
-                   <p class="modal-form-instruction">Fill in your email below and stay tune!</p>
+                   <!-- <p class="modal-body-text">We are shortlisting 200 people to be the first in the world to most awesome mathematical adventure of your life. If you are chosen, you will be entitled to full app and content worth $99 for free</p> -->
 
-                   <form id="signupform" action="" method="GET">
+                   <p class="modal-body-text">Join our FB group to download ZapZapMath Free today!</p>
+                   <!-- <p class="modal-form-instruction">Fill in your email below and stay tune!</p> -->
+                   <!-- <p class="modal-form-instruction">Click on the orange button to visit our Facebook Group and</p> -->
+
+                   <!-- <form id="signupform" action="" method="GET">
                        <input id="signup-form-email-exitpop" name="formemail" type="text" placeholder="enter email here.." required>
                        <input id="email-address-submit" type="button" value=" Sign Up for free now!" onClick="submitForm()"></input>
-                   </form>
+                   </form> -->
+
+                    <a href="http://bit.ly/zapzapmathfb" class="btn btn-fb--group cf" target="_blank">
+                        <span class="fb-icon-holder">
+                            <i class="fa fa-facebook"></i>
+                        </span>
+                        <div class="fb-icon-vertical-divider">
+                            <span class="divider-line line-highlight"></span>
+                            <span class="divider-line line-shadow"></span>
+                        </div>
+                        <p class="fb-btn-copy">Join our Facebook Group</p>
+                    </a>
                </div>
 
                <div class="modal-footer">
@@ -347,7 +432,7 @@ KONAMI CODE MOFO
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/jquery/dist/jquery.min.js"><\/script>')</script>
 
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.16.0/TweenMax.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.16.0/TweenMax.min.js"></script>
         <script src="js/prelaunch/app.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->

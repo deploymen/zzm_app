@@ -1,6 +1,7 @@
 var App = App || angular.module('zapzapApp', []),
 	ZZM = ZZM || {};
 
+
 App.controller('MainController', function ($scope, $http){
 
 	$scope.systems = [];
@@ -40,9 +41,10 @@ App.controller('MainController', function ($scope, $http){
     	$(".result").addClass('hide');
 		switch(mode){
 			case '': $scope.fetchSystemResult(1, $scope.pageSize); break;  	
-			case 'system_id': $scope.fetchPlanetsResult($scope.profileId, $scope.systemId, 1, $scope.pageSize); break;  	
-			case 'planet_id': $scope.fetchPlayResult($scope.profileId, $scope.planetId, 1, $scope.pageSize); break;  	
-			case 'play_id': $scope.fetchQuestionsResult($scope.profileId, $scope.playId, 1, $scope.pageSize); break;  	
+			case 'system_id': $scope.fetchPlanetsResult($scope.profileId, $scope.systemId, 1, $scope.pageSize); break;
+            case 'planet_id': $scope.fetchQuestionsResult($scope.profileId, $scope.planetId, 1, $scope.pageSize); break; 	
+			// case 'planet_id': $scope.fetchPlayResult($scope.profileId, $scope.planetId, 1, $scope.pageSize); break;  	
+			// case 'play_id': $scope.fetchQuestionsResult($scope.profileId, $scope.playId, 1, $scope.pageSize); break;  	
 		} 
     }
 
@@ -53,10 +55,13 @@ App.controller('MainController', function ($scope, $http){
     	page = (page < 1)?1:page;
 		page = (page > $scope.pageTotal)?$scope.pageTotal:page;
 		$scope.page = page;
-		$('li.indicator-list-item:nth-child(1)').addClass('active');
-        $http.get('/api/profiles/result/only-system?' + [
+		$('li.indicator-list-item:nth-child(2)').addClass('active');
+        // $('a.results-back-link').html('Go Back to Profiles');
+        //$('a.results-back-link').attr('href', '/user/profiles');
+        $http.get('/api/1.0/profiles/result/only-system?' + [
             'page=' + page,
-            'page_size=' + pageSize
+            'page_size=' + pageSize,
+            'profile_id=' + $scope.profileId
         ].join('&')).success(function(data, status, headers, config) {
             if (data.status == 'success') {
             	$scope.systems = data.data.system;
@@ -71,60 +76,101 @@ App.controller('MainController', function ($scope, $http){
                 $scope.showResult('system'); 
 
             } else {
-                alert(data.message);
+                console.log(data.message);
+                history.back();
             }
         });  	
     }  
 
 	$scope.fetchPlanetsResult = function(profile_id, system_id, page, pageSize){
 
-		$('li.indicator-list-item:nth-child(2)').addClass('active');
-		$http.get('/api/profiles/result/only-planet?' + [
+		$('li.indicator-list-item:nth-child(3)').addClass('active');
+
+		$http.get('/api/1.0/profiles/result/only-planet?' + [
 			'profile_id=' + profile_id,
         	'system_id=' + system_id, 
             'page=' + page,
             'page_size=' + pageSize
-        ].join('&')).success(function(data, status, headers, config) {
+        ].join('&')).success(function(data, status, headers, config, i) {
             if (data.status == 'success') {
             	$scope.planets = data.data.planet;
             	$scope.breadcumbs = data.data.breakcrumb;
 
+                // console.log($scope.planets[0].play_count);
+
+                angular.forEach($scope.planets, function (planet){
+                    // console.log(planet.play_count);
+                });
+
             } else {
-                alert(data.message);
+                console.log(data.message);
+                history.back();
             }
         }); 
 
 		$scope.showResult('planet');    	
 	}
 
-	$scope.fetchPlayResult = function(profile_id, planet_id, page, pageSize){
+	// $scope.fetchPlayResult = function(profile_id, planet_id, page, pageSize){
 
-		$('li.indicator-list-item:nth-child(3)').addClass('active');
-		$http.get('/api/profiles/result/only-play?' + [
-			'profile_id=' + profile_id,
-        	'planet_id=' + planet_id, 
-            'page=' + page,
-            'page_size=' + pageSize
-        ].join('&')).success(function(data, status, headers, config) {
-            if (data.status == 'success') {
-            	$scope.plays = data.data.play;
-            	$scope.breadcumbs = data.data.breakcrumb;
+	// 	$('li.indicator-list-item:nth-child(4)').addClass('active');
 
-            } else {
-                alert(data.message);
-            }
-        }); 
+	// 	$http.get('/api/1.0/profiles/result/only-play?' + [
+	// 		'profile_id=' + profile_id,
+ //        	'planet_id=' + planet_id, 
+ //            'page=' + page,
+ //            'page_size=' + pageSize
+ //        ].join('&')).success(function(data, status, headers, config) {
+ //            if (data.status == 'success') {
+ //            	$scope.plays = data.data.play;
+ //            	$scope.breadcumbs = data.data.breakcrumb;
 
-		$scope.showResult('play');    	
-	}
+ //            } else {
+ //                alert(data.message);
+ //            }
+ //        }); 
 
-	$scope.fetchQuestionsResult = function(profile_id, play_id, page, pageSize){
+	// 	$scope.showResult('play');    	
+	// }
+
+    // Vanese's Original fetchQuestionsResult
+    // $scope.fetchQuestionsResult = function(profile_id, play_id, page, pageSize){
+
+    //     var i, q;
+    //     $('li.indicator-list-item:nth-child(4)').addClass('active');
+    //     // $('a.results-back-link').text('Go Back to Plays');
+    //     $http.get('/api/1.0/profiles/result/only-questions?' + [
+    //         'profile_id=' + profile_id,
+    //         'play_id=' + play_id, 
+    //         'page=' + page,
+    //         'page_size=' + pageSize
+    //     ].join('&')).success(function(data, status, headers, config) {
+    //         if (data.status == 'success') {
+    //             $scope.questions = data.data.questions;
+    //             $scope.breadcumbs = data.data.breakcrumb;
+
+    //             for(i=0; i<$scope.questions.length; i++ ) {
+    //                 r = $scope.questions[i].result;
+    //                 $scope.answer = r.correct;
+    //             }
+
+    //         } else {
+    //             alert(data.message);
+    //         }
+    //     }); 
+
+    //     $scope.showResult('question');     
+    // }
+    // END of Vanese's Original fetchQuestionsResult
+
+	$scope.fetchQuestionsResult = function(profile_id, planet_id, page, pageSize){
 
 		var i, q;
 		$('li.indicator-list-item:nth-child(4)').addClass('active');
-		$http.get('/api/profiles/result/only-questions?' + [
+
+		$http.get('/api/1.0/profiles/result/only-questions?' + [
 			'profile_id=' + profile_id,
-        	'play_id=' + play_id, 
+        	'planet_id=' + planet_id, 
             'page=' + page,
             'page_size=' + pageSize
         ].join('&')).success(function(data, status, headers, config) {
@@ -138,11 +184,16 @@ App.controller('MainController', function ($scope, $http){
             	}
 
             } else {
-                alert(data.message);
+                console.log(data.message);
+                history.back();
+                $('.btn-more-results').addClass('disabled');
             }
         }); 
 
-		$scope.showResult('question');    	
+		$scope.showResult('question'); 
+
+        // console.log($scope.questions);
+        // console.log($scope.questions); 	
 	}
 
 	$scope.showResult = function(mode){
@@ -167,4 +218,11 @@ App.controller('MainController', function ($scope, $http){
 		}
 	}
 
+
 });
+
+// App.filter("newdate", function () {
+//     return function (x) {
+//         return new Date(parseInt(x.substr(6)));
+//     };
+// });

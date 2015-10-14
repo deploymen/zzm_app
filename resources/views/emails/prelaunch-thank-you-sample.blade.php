@@ -1,141 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"><html><head><META http-equiv="Content-Type" content="text/html; charset=utf-8"></head><body>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>Zap Zap Math | Account Activation</title>
-		<style>
-			/* Client-specific Styles */
-			#outlook a{padding:0;} /* Force Outlook to provide a "view in browser" button. */
-			body{width:100% !important;} .ReadMsgBody{width:100%;} .ExternalClass{width:100%;} /* Force Hotmail to display emails at full width */
-			body{-webkit-text-size-adjust:none;} /* Prevent Webkit platforms from changing default text sizes. */
 
-			/* Reset Styles */
-			body{margin:0; padding:0;}
-			img{border:0; height:auto; line-height:100%; outline:none; text-decoration:none;}
-			table td{border-collapse:collapse;}
-			#backgroundTable{height:100% !important; margin:0; padding:0; width:100% !important;}
-		</style>
-	</head>
+    
+        
+        
+        
+    
 
-	<body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="padding: 0px; margin: 0px;">
-		<center>
-			<table align="center" border="0px" cellpadding="0" cellspacing="0" width="100%" style="background-color: #448ccb; font:15px/1.25em 'Helvetica Neue',Arial,Helvetica;">
-				<tbody>
-					<tr width="100%">
-						<!--START-outer-table-holding-cell-->
-						<td valign="top" align="left" style="background-color:#448ccb; font:15px/1.25em 'Helvetica Neue',Arial,Helvetica;">
-							<!-- START-inner-table-content -->
-							<table cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" style="background-color:#FFFFFF; border: none; padding-bottom:50px; margin: 50px auto 0px auto; width: 600px">
-								<tbody>
-									<tr width="100%">
-										<td valign="top" align="left" bgcolor="#FFFFFF" style="background-color: #FFFFFF; text-align:center">
-											<img width="600" src="http://www.zapzapmath.com/assets/img/edm/zapzap-banner.png" title="Zap Zap" style="vertical-align:top" class="zapzap-banner">
-										</td>
-									</tr>
-									<tr width="100%">
-										<td bgcolor="#FFFFFF" style="background-color: #FFFFFF; padding: 30px;">
-											<h1 style="font-family:Century Gothic; font-size:40px; font-weight:100; line-height:45px; margin:0; color:#8F8F8F">
-												Hello there, traveller!
-											</h1>
-										</td>
-									</tr>
+    <div marginwidth="0" marginheight="0" style="padding:0px;margin:0px">
+        <center>
+            <table align="center" border="0px" cellpadding="0" cellspacing="0" width="100%" style="background-color:#448ccb;font:15px/1.25em &#39;Helvetica Neue&#39;,Arial,Helvetica">
+                <tbody>
+                    <tr width="100%">
+                        
+                        <td valign="top" align="left">
+                            
+                            <table cellpadding="0" cellspacing="0" bgcolor="##F7F7F1" style="background-color:#f7f7f1;border:none;padding-bottom:50px;margin:50px auto 0px auto;width:600px;margin-bottom:50px">
+                                <tbody>
+                                    <tr width="100%">
+                                        <td valign="top" align="left" bgcolor="#F7F7F1" style="background-color:#f7f7f1;text-align:center">
+                                            <img width="100%" src="http://www.zapzapmath.com/assets/img/edm/zapzap-banner.png" title="Zap Zap" style="vertical-align:top">
+                                        </td>
+                                    </tr>
+                                    <tr width="100%">
+                                        <td bgcolor="#F7F7F1" style="background-color:#f7f7f1;padding-top:30px;padding-left:30px;padding-right:30px">
+                                            <h1 style="font-family:Century Gothic;font-size:40px;font-weight:100;line-height:45px;margin:0;color:#8f8f8f">
+                                                Hello again, traveler!
+                                            </h1>
+                                        </td>
+                                    </tr>
 
-									<tr width="100%">
-										<td bgcolor="#FFFFFF" style="background-color: #FFFFFF; padding: 30px;">
-											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">Thank you for getting on board for this Math Voyage through the Zap Zap Galaxy!<br/><br/>You're a little early. We're still testing the app to make sure we get the itinerary sorted out. So, in the meantime, while we wait together, here are a few links that will help you prepare for the adventure:</p>
+                                    <tr width="100%">
+                                        <td bgcolor="#F7F7F1" style="background-color:#f7f7f1;text-align:center">
+                                            <img width="150px" src="http://zapzapmath.com/assets/img/thankyou/mathling-thanks-you.gif" title="Zap Zap Mathling" style="vertical-align:top">
+                                        </td>
+                                    </tr>
 
-											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">- The video log of our previous adventure: https://www.youtube.com/watch?v=arEgKabqdwI<br/>
-											- http://techcrunch.com/2014/06/30/zap-zap-fractions-makes-learning-math-fun/<br/>
-											- http://www.mathexpression.com<br/><br/>
-											</p>
+                                    <tr width="100%">
+                                        <td bgcolor="#F7F7F1" style="background-color:#f7f7f1;padding:30px">
+                                            <p style="font-family:&#39;Open Sans&#39;,Calibri,Arial,Helvetica,sans-serif;font:15px/1.25em;margin:0;color:#8f8f8f">Thank you for getting on board for this Math Voyage exploring the Zap Zap Galaxy!</p><br>
 
-											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">Now that we're friends, we can send you updates as soon as they come in! And if you have questions for us, we'd love to answer them<br/><br/></p>
+                                            <p style="font-family:&#39;Open Sans&#39;,Calibri,Arial,Helvetica,sans-serif;font:15px/1.25em;margin:0;color:#8f8f8f">Here are a few links that will help you prepare for the adventure:</p>
 
-											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">We look forward to adventuring with you!<br/><br/></p>
+                                            <p style="font-family:&#39;Open Sans&#39;,Calibri,Arial,Helvetica,sans-serif;font:15px/1.25em;margin:0;color:#8f8f8f">
+                                            - <a href="https://www.youtube.com/watch?v=arEgKabqdwI" target="_blank">The video log of our previous adventure</a><br>
+                                            - <a href="http://techcrunch.com/2014/06/30/zap-zap-fractions-makes-learning-math-fun/" target="_blank">TechCrunch: Zap Zap Fractions Makes Learning Math Fun</a><br>
+                                            - <a href="http://www.mathexpression.com" target="_blank">MathExpression.com</a><br><br>
+                                            </p>
 
-											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">
-												The Zap Zap Math Team<br/>
-												XXX<br/>
-												XXX<br/>
-												XXX<br/>
-											</p>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-							<!-- START-email-signature -->
-							<table cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF" align="center" style="width: 600px; text-align:center; margin-bottom:50px;">
-								<tbody>
-									<tr>
-										<td>
-											<table cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF" style="margin-bottom:20px; width: 400px; text-align:center;">
-												<tbody>
-													<tr align="center" valign="middle">
-														<td bgcolor="#FFFFFF" width="150" rowspan="8" style="background-color:#FFFFFF;">
-															<a href="http://www.zapzapmath.com" target="_blank" style="text-decoration:none;">
-																<img src="http://www.zapzapmath.com/assets/img/edm/zapzap-logo.png" alt="Zap Zap Math Icon Logo" width="100" height="100">
-															</a>
-														</td>
-													</tr>
-													<tr align="left" valign="top">
-														<td bgcolor="#FFFFFF" colspan="5" style="background-color:#FFFFFF; border-bottom:1px dotted #E3E3E3;">
-															<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif;font-size:14px;color:#636363;"><strong>Zap Zap Math</strong></p>
-														</td>
-													</tr>
-													
-													<tr align="left" valign="top">
-														<td bgcolor="#FFFFFF" colspan="5" height="16" style="background-color:#FFFFFF;">
-															<a href="http://goo.gl/0Ugux8" target="_blank" style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif;font-size:12px;color:#838383; font-style: italic; text-decoration:none;">
-																No 1129, Block A3,
-																Leisure Commerce Square,
-																No. 9, Jalan PJS 8/9,
-																Bandar Sunway,
-																46150 Petaling Jaya
-															</a>
-														</td>
-													</tr>
-													<tr align="left" valign="top">
-														<td bgcolor="#FFFFFF" colspan="5" style="background-color:#FFFFFF; border-bottom:1px dotted #E3E3E3;font-size:3px;" height="5">&nbsp;</td>
-													</tr>
-													<tr align="left" valign="top">
-														<td bgcolor="#FFFFFF" colspan="5" height="16" style="background-color:#FFFFFF;">
-															<a style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif;font-size:13px;color:#838383; text-decoration:none;" href="http://www.zapzapmath.com" target="_blank">www.zapzapmath.com</a> <span style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif;font-size:13px;color:#838383;">|</span> <a style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif;font-size:13px;color:#838383; text-decoration:none;" href="tel:+60378659023">+603 7865 9023</a>
-														</td>
-													</tr>
-													<tr align="left" valign="top">
-														<td bgcolor="#FFFFFF" colspan="5" style="background-color:#FFFFFF; border-bottom:1px dotted #E3E3E3;font-size:3px;" height="5">&nbsp;</td>
-													</tr>
-													<tr align="left" valign="bottom">
-														<td bgcolor="#FFFFFF" height="30" style="background-color:#FFFFFF;">
-															<a href="#" target="_blank"><img src="http://www.zapzapmath.com/assets/img/edm/icon-twitter.png" alt="Twitter Icon"></a>
-														</td>
-														<td bgcolor="#FFFFFF" height="30" style="background-color:#FFFFFF;">
-															<a href="#" target="_blank"><img src="http://www.zapzapmath.com/assets/img/edm/icon-pinterest.png" alt="Pinterest Icon"></a>
-														</td>
-														<td bgcolor="#FFFFFF" height="30" style="background-color:#FFFFFF;">
-															<a href="#" target="_blank"><img src="http://www.zapzapmath.com/assets/img/edm/icon-youtube.png" alt="YouTube Icon"></a>
-														</td>
-														<td bgcolor="#FFFFFF" height="30" style="background-color:#FFFFFF;">
-															<a href="#" target="_blank"><img src="http://www.zapzapmath.com/assets/img/edm/icon-facebook.png" alt="Facebook Icon"></a>
-														</td>
-														<td bgcolor="#FFFFFF" height="30" style="background-color:#FFFFFF;">
-															<a href="#" target="_blank"><img src="http://www.zapzapmath.com/assets/img/edm/icon-instagram.png" alt="Instagram Icon"></a>
-														</td>
-													</tr>
-												</tbody>
-											</table>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-							<!-- END-inner-table-content -->
-						</td>
-						<!--END-outer-table-holding-cell-->
-					</tr>
-				</tbody>
-			</table>
-		</center>
-	</body>
-</html>
+                                            <p style="font-family:&#39;Open Sans&#39;,Calibri,Arial,Helvetica,sans-serif;font:15px/1.25em;margin:0;color:#8f8f8f">A journey through the Zap Zap Galaxy is one of Mathematical proportions. Follow the instructions below to take a giant leap for mathkind.</p><br>
+
+                                            
+                                            <p style="font-family:&#39;Open Sans&#39;,Calibri,Arial,Helvetica,sans-serif;font:15px/1.25em;margin:0;color:#8f8f8f;font-style:italic"><span style="font-weight:bold">Important note:</span> You will need an Internet connection to use this preview of Zap Zap Math. (This will not be a requirement in the main release)</p><br><br>
+
+                                            <p style="font-family:&#39;Open Sans&#39;,Calibri,Arial,Helvetica,sans-serif;font:15px/1.25em;margin:0;color:#555555;font-weight:bold">Step By Step Android</p>
+                                            <ol style="font-family:&#39;Open Sans&#39;,Calibri,Arial,Helvetica,sans-serif;font:15px/1.25em;margin:0;color:#777777">
+                                                <li>Go to the <a href="https://plus.google.com/communities/108691803677340389559" target="_blank">Zap Zap Math Community</a></li>
+                                                <li>Click &#39;Join Community&#39;</li>
+                                                <li>Wait for 5 minutes</li>
+                                                <li>Click on this link from your device  - <a href="https://play.google.com/apps/testing/com.visualmathinteractive.zapzapmath" target="_blank">https://play.google.com/apps/<wbr>testing/com.<wbr>visualmathinteractive.<wbr>zapzapmath</a></li>
+                                                <li>Download and Install the app</li>
+                                                <li>Enjoy the preview</li>
+                                                <li>Don&#39;t forget to send us your feedback</li>
+                                            </ol><br>
+
+                                            <p style="font-family:&#39;Open Sans&#39;,Calibri,Arial,Helvetica,sans-serif;font:15px/1.25em;margin:0;color:#555555;font-weight:bold">Step By Step iOS</p>
+                                            <ol style="font-family:&#39;Open Sans&#39;,Calibri,Arial,Helvetica,sans-serif;font:15px/1.25em;margin:0;color:#777777">
+                                                <li>Reply to this email to let us know that you are an iOS user so that we can add you to the tester list.</li>
+                                                <li>You will receive an email from iTunes Connect with the subject &quot;Testflight&quot; within a day or two (please open the email from your Apple device). If you don&#39;t see the message, please check your spam or junk folder.</li>
+                                                <li>Open the iTunes Store email with the subject title &quot;Testflight&quot;</li>
+                                                <li>Click on &quot;Open in Testflight&quot;</li>
+                                                <li>Install the app</li>
+                                                <li>Enjoy the preview</li>
+                                                <li>Don&#39;t forget to send us your feedback</li>
+                                                <li>If you still do not receive the email after three days, please let us know.</li>
+                                            </ol><br><br>
+
+                                            <p style="font-family:&#39;Open Sans&#39;,Calibri,Arial,Helvetica,sans-serif;font:15px/1.25em;margin:0;color:#8f8f8f">Remember to tell us all about your journey.</p><br>
+
+                                            <p style="font-family:&#39;Open Sans&#39;,Calibri,Arial,Helvetica,sans-serif;font:15px/1.25em;margin:0;color:#8f8f8f">We look forward to adventuring with you!<br><br></p>
+
+                                            <p style="font-family:&#39;Open Sans&#39;,Calibri,Arial,Helvetica,sans-serif;font:15px/1.25em;margin:0;color:#555555">
+                                                The Zap Zap Math Team<br>
+                                            </p>
+
+                                            <p style="font-family:&#39;Open Sans&#39;,Calibri,Arial,Helvetica,sans-serif;font:15px/1.25em;margin:0;color:#8f8f8f">
+                                                <a href="http://www.zapzapmath.com" target="_blank">http://www.zapzapmath.com</a><br>
+                                                <a href="http://www.facebook.com/zapzapmath" target="_blank">http://www.facebook.com/<wbr>zapzapmath</a><br>
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            
+                        </td>
+                        
+                    </tr>
+                </tbody>
+            </table>
+        </center>
+    </div>
+</body></html>

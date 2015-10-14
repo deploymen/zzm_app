@@ -14,6 +14,25 @@ p, label {
 	}*/
 }
 
+h1 {
+	font-family: 'museo-sans', sans-serif;
+}
+
+h1 a {
+	color: $white;
+	font-family: 'museo-sans', sans-serif;
+}
+
+h1 a:hover {
+	color: $white;
+}
+
+h2 {
+	color: lighten($black, 50%);
+	font-family: 'museo-sans', sans-serif;
+}
+
+
 h6 {
 	color: lighten($black, 30%);
 	text-transform: uppercase;
@@ -75,6 +94,8 @@ a:active {
 	font-weight: normal;
 	text-align: center;
 	cursor: pointer;
+	font-size: rem(20px);
+	line-height: rem(23px);
 }
 
 .info-icon:hover,
@@ -92,6 +113,10 @@ a:active {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+.plan-label {
+	color: $white;
 }
 
 
@@ -117,8 +142,13 @@ a:active {
 
 }
 
+.title a,
+.title a span {
+	color: $white;
+}
+
 /** Sign Up/In Form Styles **/
-.login-form .label-header {
+.label-header {
 	text-transform: uppercase;
 	font-size: rem(13px);
 	font-weight: bold;
@@ -142,6 +172,24 @@ a:active {
 .login-form input[type=password]:focus {
 	color: lighten($black, 35%);
 }
+
+.incorrect-details {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1;
+	text-align: center;
+	background-color: $lightning-yellow;
+
+	p {
+		font-family: 'proxima-nova-soft', sans-serif;
+		font-weight: bold;
+		margin: rem(0px);
+		line-height: rem(45px);
+	}
+}
+
 
 button,
 .button,
@@ -168,28 +216,39 @@ button.wide,
 
 /** PROFILES STYLES **/
 .profile-name {
-	color: lighten($black, 30%);
+	color: lighten($black, 40%);
 	font-family: 'museo-sans', sans-serif;
 	font-size: rem(19px);
 	font-weight: bold;
-	margin-top: rem(-10px);
-	text-align: center;
+	margin-top: rem(0px);
+	margin-bottom: rem(5px);
+	/*text-align: center;*/
+	line-height: rem(21px);
 }
 
 .profile-nickname {
-	font-size: rem(28px);
+	font-size: rem(20px);
 	color: lighten($black, 60%);
 	font-family: 'museo-sans', sans-serif;
 	font-weight: lighter;
 	margin-bottom: rem(0px);
-	text-align: center;
+	padding-top: rem(25px);
+	text-transform: capitalize;
+}
+
+.profile-school-grade {
+	color: lighten($black, 40%);
+	font-family: 'museo-sans', sans-serif;
+	font-size: rem(19px);
+	font-weight: bold;
+	margin-bottom: rem(0px);
 }
 
 .nickname-middle {
 	margin-top: rem(40px);
 
 	.profile-nickname {
-		margin-left: rem(-45px); 
+		/*margin-left: rem(-45px);*/
 	}
 }
 
@@ -204,13 +263,29 @@ button.wide,
 	font-size: rem(14px);
 }
 
+.profile-code .user-id {
+	color: lighten($black, 60%);
+}
+
+.profile-label {
+	text-transform: uppercase;
+	font-weight: bold;
+}
+
 .profile-email {
 	font-style: italic;
 }
 
-.profile-school-name {
+.profile-school-name,
+.profile-last-seen,
+.results-table-name {
 	color: lighten($black, 60%);
-	font-size: rem(18px);
+	font-family: 'museo-sans', sans-serif;
+	font-size: rem(20px);
+}
+
+.profile-school-name,
+.profile-last-seen{
 	text-transform: uppercase;
 	margin-bottom: rem(0px);
 }
@@ -223,6 +298,16 @@ button.wide,
 	color: $curious-blue;
 	font-size: rem(40px);
 	/*margin-bottom: rem(0px);*/
+}
+
+.profile-attempts {
+	margin-bottom: rem(0px);
+}
+
+.profile-attempt-number {
+	font-size: rem(28px);
+	color: lighten($black, 60%);
+	margin-bottom: rem(0px);
 }
 
 .profile-subject-name {
@@ -254,7 +339,17 @@ button.wide,
 }
 
 .profile-upgrade-cta a {
+	padding: 10px 20px;
+	text-transform: uppercase;
+	font-size: rem(16px);
+	font-family: 'museo-sans', sans-serif;
+	margin-bottom: rem(0px);
+}
 
+/** Diffiulty Meter Styles **/
+.difficuly-label-list li {
+	text-align: center;
+	color: lighten($black, 50%);
 }
 
 /** Results Styles **/
@@ -262,11 +357,11 @@ button.wide,
 	color: lighten($black, 40%);
 }
 
-.results-table-name {
+/*.results-table-name {
 	color: $curious-blue;
 	font-family: 'museo-sans', sans-serif;
 	font-size: rem(16px);
-}
+}*/
 
 
 .result-table-desc p {
@@ -290,7 +385,7 @@ button.wide,
 }
 
 .table-label-cell .info-icon {
-	font-size: rem(16px);
+	font-size: rem(20px);
 	line-height: rem(23px);
 }
 
@@ -342,4 +437,13 @@ button.wide,
 
 .footer-link-list .footer-link-divider {
 	color: darken($chateau-green, 25%);;
+}
+
+.footer-follow h3 {
+	text-align: center;
+	color: $white;
+}
+
+.footer-info-column p {
+	font-size: 17px;
 }

@@ -4,7 +4,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>Zap Zap Math | Reset Password</title>
+		<title>Zap Zap Math | Forgot Password</title>
 		<style>
 			/* Client-specific Styles */
 			#outlook a{padding:0;} /* Force Outlook to provide a "view in browser" button. */
@@ -37,29 +37,23 @@
 									<tr width="100%">
 										<td bgcolor="#FFFFFF" style="background-color: #FFFFFF; padding: 30px;">
 											<h1 style="font-family:Century Gothic; font-size:40px; font-weight:100; line-height:45px; margin:0; color:#8F8F8F">
-												Hello there XXX,
+												Hello there {name},
 											</h1>
 										</td>
 									</tr>
 
 									<tr width="100%">
 										<td bgcolor="#FFFFFF" style="background-color: #FFFFFF; padding: 30px;">
-											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">It appears you've lost the password to your starship.</p>
+											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">It appears you've lost the password to your starship.<br/><br/></p>
 
-											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">To help you prepare for the trip ahead, here are a few vital things to remember:<br />
-											Your login is: XXX<br/>
-											Login Portal: XXX<br/><br/>
-											</p>
-
-											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">Fear not! You can reset it by clicking the link below:<br/>XXX<br/><br/></p>
+											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">Fear not! You can reset it by clicking the link below:<br/>{reset_url}<br/><br/></p>
 
 											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">Thank you for adventuring with us!<br/><br/></p>
 
 											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">
 												The Zap Zap Math Team<br/>
-												XXX<br/>
-												XXX<br/>
-												XXX<br/>
+												http://www.zapzapmath.com <br/>
+												{social_media_links}<br/>
 											</p>
 										</td>
 									</tr>

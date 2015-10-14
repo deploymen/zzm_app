@@ -1,5 +1,6 @@
 var forgotbtn = $('#btn-reset-password');
 var btnokreset = $('#btn-ok-reset');
+var forgotholder = $('#forgot-pw-holder');
 
 function forgotPassword(){
 	var forgotform = $('#forgot-password-form');
@@ -12,15 +13,28 @@ function forgotPassword(){
 
 	$.ajax({
 		type     	: 'PUT',
-		url      	: '/api/auth/forgot-password',
+		url      	: '/api/1.0/auth/forgot-password',
 		data        : recoverydata,
-		success  	: function(){
-			forgotform.css({
-				display: 'none'
-			});
+		success  	: function(data){
+			var status = data['status'];
+			var message = data['message'];
 
-			forgotafter.removeClass('hideit');
-			emailforreset.text(emailresetinput.val());
+			console.log(status);
+
+			if (status === 'success') {
+				// forgotform.css({
+				// 	display: 'none'
+				// });
+
+				// forgotafter.removeClass('hideit');
+				// emailforreset.text(emailresetinput.val());
+				forgotholder.prepend('<span class="incorrect-details"><p>A reset email has been sent to '+ emailresetinput.val() +'</p></span>');
+				emailresetinput.val('');
+			} else if (status === 'fail' && message === 'user not found') {
+				forgotholder.prepend('<span class="incorrect-details"><p>User not found</p></span>');
+			} else if (status === 'fail' && message === 'invalid email format') {
+				forgotholder.prepend('<span class="incorrect-details"><p>Invalid email format</p></span>');
+			}
 		}
 	});
 };

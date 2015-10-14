@@ -10,22 +10,7 @@
 @stop
 
 @section('js_include')
-<script type="text/javascript">
-var VARS = VARS || {};
 
-VARS = {
-	id         : '{{$profile->id}}',
-	first_name : '{{$profile->first_name}}',
-	last_name  : '{{$profile->last_name}}',
-	school     : '{{$profile->school}}',
-	city       : '{{$profile->city}}',
-	email      : '{{$profile->email}}',
-	avatar     : '{{$profile->avatar}}',
-	game_code  : '{{$profile->gameCode}}',
-	class_id   : '{{$profile->class_id}}',
-	nickname1  : '{{$profile->nickname1}}'
-};
-</script>
 <script src="/../js/main/profiles.js"></script>
 @stop
 
@@ -53,7 +38,7 @@ VARS = {
 
 <div class="content-group--content small-12 medium-8">
 	<div class="row">
-		<div class="small-12 medium-8 columns">
+		<div class="small-12 medium-12 columns">
 			<div class="small-12 medium-5 columns">
 				<div class="avatar-holder">
 					<img src="/assets/main/img/avatars/{{$profile->avatar->filename}}" alt="">
@@ -62,68 +47,55 @@ VARS = {
 
 			</div>
 			<div class="small-12 medium-7 columns nickname-middle">
-				<p class="profile-nickname">{{$profile->nickname1}}</p>
+				<p class="profile-nickname">{{$profile->nickName1->name}} {{$profile->nickName2->name}}</p>
 			</div>
 		</div>
 		<div class="small-12 medium-4 columns text-right">
 			<p class="profile-code bold"><span class="blue-text">Class ID:</span> <span class="user-id">{{$profile->class_id}}</span></p>
 			<p class="profile-code bold"><span class="blue-text">Player ID:</span> <span class="user-id">{{$profile->gameCode->code}}</span></p>
+			<input type="hidden" id="profile-id" value="{{$profile->id}}" />
+			<input type="hidden" id="profile-email" value="{{$profile->email}}" />
 		</div>
 	</div><!--row-->
 
-	<form id="edit-profile-form" class="edit-profile-form">
+	<form data-abide="ajax" id="edit-profile-form" class="edit-profile-form" novalidate="novalidate">
 		<div class="row">
-			<div class="small-12 medium-6 columns">
+			<div class="small-12 columns">
 				<label>First Name
-					<input id="profile-first-name" class="profile-first-name" type="text" value="{{$profile->first_name}}" />
+					<input id="profile-first-name" class="profile-first-name" type="text" required value="{{$profile->first_name}}" />
 				</label>
 			</div>
-			<div class="small-12 medium-6 columns">
+			<!-- <div class="small-12 medium-6 columns">
 				<label>Last Name
-					<input id="profile-last-initial" class="profile-last-initial" type="text" value="{{$profile->last_name}}" />
+					<input id="profile-last-initial" class="profile-last-initial" type="text" required value="{{$profile->last_name}}" />
 				</label>
-			</div>
+			</div> -->
 		</div>
 
 		<div class="row">
 			<div class="small-12 medium-6 columns">
 				<label>Age
-					<select>
-						<option value="5">0 - 5</option>
-						<option value="6">6</option>
-						<option value="7">7</option>
-						<option value="8">8</option>
-						<option value="8">9</option>
-						<option value="8">10</option>
-						<option value="8">11</option>
-						<option value="8">12</option>
-						<option value="8">13</option>
-						<option value="8">14</option>
-						<option value="8">15</option>
-						<option value="8">16</option>
-						<option value="8">17</option>
-						<option value="8">18 +</option>
+					<select id="profile-age-edit">
+						@foreach ($ages as $age)
+							@if ($age->age == $profile->age)
+								<option selected="selected" value="{{$age->age}}">{{$age->age_name}}</option>
+							@else
+								<option value="{{$age->age}}">{{{$age->age_name}}}</option>
+							@endif
+						@endforeach
 					</select>
 				</label>
 			</div>
 			<div class="small-12 medium-6 columns">
 				<label>Grade
-					<select>
-						<option value="prekindergarten">Pre-Kindergarten</option>
-						<option value="kindergarten">Kindergarten</option>
-						<option value="grade1">Grade 1</option>
-						<option value="grade2">Grade 2</option>
-						<option value="grade3">Grade 3</option>
-						<option value="grade4">Grade 4</option>
-						<option value="grade5">Grade 5</option>
-						<option value="grade6">Grade 6</option>
-						<option value="grade7">Grade 7</option>
-						<option value="grade8">Grade 8</option>
-						<option value="grade9">Grade 9</option>
-						<option value="grade10">Grade 10</option>
-						<option value="grade11">Grade 11</option>
-						<option value="grade12">Grade 12</option>
-						<option value="continue">Continuous Learner</option>
+					<select id="profile-grade-edit">
+						@foreach ($grades as $grade)
+							@if ($grade->grade == $profile->grade)
+								<option selected="selected" value="{{$grade->grade}}">{{$grade->grade_name}}</option>
+							@else
+								<option value="{{$grade->grade}}">{{{$grade->grade_name}}}</option>
+							@endif
+						@endforeach
 					</select>
 				</label>
 			</div>
@@ -181,8 +153,41 @@ VARS = {
 	</form>
 </div>
 
+<div id="profiledelete" class="reveal-modal text-center" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" data-options="close_on_background_click:false">
+	<h3 id="modalTitle">Be Careful!</h3>
+	<p class="lead">You are about to delete this profile. Are you sure?</p>
+	<div class="row">
+		<div class="small-12 columns">
+			<div class="small-6 columns text-center">
+				<label>
+					<input type="button" value="Cancel" id="btn-delete-cancel" class="button wide radius blue" />
+				</label>
+			</div>
+			<div class="small-6 columns text-center">
+				<label>
+					<input type="button" value="Delete" id="btn-delete-ok" class="button wide radius alert" />
+				</label>
+			</div>
+		</div>
+	</div>
+</div>
 
-<div id="profilesaved" class="reveal-modal text-center" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+<div id="cannotdelete" class="reveal-modal text-center" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" data-options="close_on_background_click:false">
+	<h3 id="modalTitle">Oops!</h3>
+	<p class="lead">You cannot delete the last profile.</p>
+	<div class="row">
+		<div class="small-12 columns">
+			<div class="small-12 columns text-center">
+				<label>
+					<input type="button" value="OK" id="btn-cannot-delete" class="button wide radius blue" />
+				</label>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div id="profilesaved" class="reveal-modal text-center" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" data-options="close_on_background_click:false">
 	<h3 id="modalTitle">Beautiful</h3>
 	<p class="lead">Your changes have been saved.</p>
 	<div class="row">
@@ -192,7 +197,7 @@ VARS = {
 			</label>
 		</div>
 	</div>
-	<a href="javascript:void(0)" class="close-reveal-modal" aria-label="Close">OK</a>
+	<!-- <a href="javascript:void(0)" class="close-reveal-modal" aria-label="Close">OK</a> -->
 </div>
 
 @stop

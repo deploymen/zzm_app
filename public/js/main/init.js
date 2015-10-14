@@ -34,13 +34,15 @@ function customiseMenubar(){
 
 // Sign Up Form
 var btnsignup = $('#btn-signup');
+var signUpForm = $('#signup-form');
+//var pagereferrer =  document.referrer;
 
 function signup(){
-	var signUpForm = $('#signup-form');
 	var signUpName = $('#users_name');
 	var signUpEmail = $('#users_email');
 	var signUpPewPew = $('#users_password');
 	var signUpCountry = $('#users_country');
+	var signupformholder = $('#sign-in-up');
 
 	signUpForm.on('valid.fndtn.abide', function(){
 		// The following variable "signupRole" NEEDS to be inside this function
@@ -58,11 +60,21 @@ function signup(){
 
 		$.ajax({
 			type	: 'POST',
-			url		: '/api/auth/sign-up',
+			url		: '/api/1.0/auth/sign-up',
 			data	: signUpCred,
-			success	: function(data, status){
-				if(data && status==='success'){
-					window.location = '/user/profiles';
+			beforeSend: function() {
+				$(document).ajaxStart(function() { Pace.restart(); });
+			},
+			success	: function(data){
+				var status = data['status'];
+				var message = data['message'];
+
+				if(status === 'fail' && message === 'password must be atleast 6 chars'){
+					signupformholder.prepend('<span class="incorrect-details"><p>Password must be at least 6 characters long</p></span>');
+				} else if(status === 'fail' && message === 'email used'){
+					signupformholder.prepend('<span class="incorrect-details"><p>E-mail address is already in use.</p></span>');
+				} else if (status === 'success') {
+					window.location.href = '/user/signin';
 				}
 			},
 
@@ -70,19 +82,6 @@ function signup(){
 				//alert('Harlp, this is not an error!');
 			}
 		});
-
-		function repsonseMsg(){
-			// if(signUpCred){
-			// 	window.location = '/user/profiles';	
-			// } else {
-			// 	alert("Please fill in the form");
-			// }
-			alert("Please fill in the form");
-		};
-
-		function errorMsg(){
-			alert('Harlp, this is not an error!');
-		};
 
 		return false;
 	});
@@ -100,6 +99,9 @@ function login(){
 	var loginUsername = $('#users_login_email');
 	var loginPewPew = $('#users_login_password');
 	var loginForm = $('#login-form');
+
+	var loginformholder = $('#signup-holder');
+	var incorrectdetails = $('#incorrect-details');
 	
 	loginForm.on('valid.fndtn.abide', function(){
 		var loginCred = {
@@ -109,37 +111,27 @@ function login(){
 
 		$.ajax({
 			type	   : 'POST', 
-			url        : '/api/auth/sign-in',
-			beforeSend : function(){ btnsignin.val('Connecting...');},
+			url        : '/api/1.0/auth/sign-in',
 			data       : loginCred,
-			success    : function(data, status){
-				// repsonseMsg();
-				if(data && status === 'success') {
+			success    : function(data){
+				var status = data['status'];
+				var message = data['message'];
+				//console.log('status: ' + status);
+				//repsonseMsg();
+				if(status === 'success') {
 					window.location = '/user/profiles';
-				} else {
-					console.log('DEFEAT');
-				}
-			},
-			error      : function(data, status){
-				if(status === 'fail'){
-					errorMsg();
+				} else if(status === 'fail'  && message === 'invalid username/password') {
+					loginformholder.prepend('<span class="incorrect-details"><p>Invalid email or password</p></span>');
+					loginUsername.val('');
+					loginPewPew.val('');
 				}
 			}
 		});
 
-		function repsonseMsg(){
-			// if()
-			//window.location = "/user/profiles";	
-		};
-
-		function errorMsg(){
-			console.log('DEFEAT!');
-		};
-
 		return false;
 	});
 };
-btnsignin.click(function(){
+btnsignin.unbind().click(function(){
 	login();
 });
 
@@ -157,13 +149,23 @@ function logout(){
 	console.log(Cookies.get());
 };
 
-btnlogout.click(function(){
+btnlogout.unbind().click(function(){
 	logout();
 });
 
+// Wrong Password
+// function unableToLogin() {
+// 	var loginformholder = $('#signup-holder');
+
+// 	var pageurl = document.URL.split('?')[1];
+// 	if(pageurl === 'no-access'){
+// 		loginformholder.prepend('<p class="incorrect-details">You are not signed in. Please check that your username or password is incorrect and try again.</p>');
+// 	}
+// }
+
 (function($, window, document, undefined){
 	$(document).foundation();
-
+	$(document).ajaxStart(function() { Pace.restart(); });
 	// Sign Up and Login Form function calls
 	customiseMenubar();
 

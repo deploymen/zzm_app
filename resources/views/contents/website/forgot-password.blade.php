@@ -40,7 +40,7 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 		
-		<div class="site-wrapper sign-in-up">
+		<div id="forgot-pw-holder" class="site-wrapper sign-in-up">
 
 			<div class="row">
                 <section class="signup-holder cf">

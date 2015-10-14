@@ -8,6 +8,15 @@
 		position: relative;
 	}
 
+	.title-tab-section {
+		text-align: center;
+	}
+
+	.tab-bar {
+		background: rgba(0, 84, 166, 1);
+	}
+	
+
 	.title .plan-label {
 		position: absolute;
 		line-height: rem(16px);
@@ -21,6 +30,10 @@
 		padding: rem(10px);
 	}
 
+	.profile-bar .columns {
+		padding: 0px;
+	}
+
 	.profile-bar .avatar-holder,
 	.profile-bar .nickname {
 		float: none;
@@ -28,6 +41,20 @@
 
 	.profile-bar .avatar-holder {
 		margin: 0 auto;
+	}
+
+	.profile-bar .profile-name,
+	.profile-bar .profile-nickname,
+	.profile-bar .profile-code,
+	.profile-bar .profile-school-name,
+	.profile-bar .profile-school-grade,
+	.profile-bar .profile-last-seen-wrapper {
+		text-align: center;
+	}
+
+	.profile-bar .profile-name {
+		line-height: rem(36px);
+		margin-bottom: rem(10px);
 	}
 
 	.profile-bar .nickname {
@@ -40,6 +67,14 @@
 
 	.star-group.small {
 		display: none;
+	}
+
+	.profile-name{
+		font-size: rem(20px);
+	}
+
+	.profile-nickname {
+		font-size: rem(18px);
 	}
 	
 	/** Results Styles **/
@@ -56,11 +91,15 @@
 	.progress .meter-percentage {
 		position: relative;
 		color: $curious-blue;
+		top: 0;
+		left: 0;
+		color: $white;
 	}
 
 
 	.button.btn-more-results {
 		padding: rem(6px) rem(15px);
+		margin-right: rem(10px);
 	}
 
 	.button.btn-more-results span {
@@ -89,6 +128,60 @@
 		left: 2px;
 		width: 98%;
 	}
+
+	.results-table tr td {
+		padding-left: rem(10px);
+		padding-right: rem(10px);
+	}
+
+	.results-table-name {
+		padding-left: 10px;
+	}
+
+	.profile-school-name,
+	.profile-last-seen,
+	.results-table-name {
+		font-size: rem(16px);
+	}
+
+	/*.results-more-column {
+		padding-right: 10px;
+	}*/
+
+	/*Difficulty Bar Styles*/
+	.difficuly-meter {
+		width: 20%;
+		height: rem(150px);
+		float: left;
+	}
+
+	.difficuly-label-list {
+		float: right;
+		width: 75%;
+		margin: 0;
+		/*margin-left: rem(15px);*/
+		margin-top: rem(10px);
+	}
+
+	.difficuly-meter li,
+	.difficuly-label-list li {
+		float: none;
+	}
+
+	.difficuly-label-list li {
+		width: 100%;
+		text-align: left;
+		line-height: rem(27px);
+	}
+
+	.difficuly-meter li {
+		width: 120%;
+		height: 20%;
+	}
+
+	.breadcrumb li a {
+		padding: 10px 0 10px 50px;
+	}
 }
 
 @media #{$medium-up} {
@@ -97,9 +190,14 @@
 	}
 
 	.page-content-wrapper {
+		/*Uncomment 'padding-left' when sidebar menu is not hidden*/
 		padding-left: rem(300px);
 		padding-top: rem(100px);
 	}
+
+	/*.footer-info-column {
+		padding-left: rem(300px);
+	}*/
 
 	.reveal-modal {
 		width: 50%;
@@ -123,11 +221,24 @@
 	}
 
 	.page-content-wrapper {
+		/*Uncomment 'padding-left' when sidebar menu is not hidden*/
 		padding-left: rem(100px);
+	}
+
+	.footer-info-column {
+		/*padding-left: rem(100px);*/
+	}
+
+	.link-bar {
+		padding-left: 60px;
 	}
 }
 
 @media #{$large-only} {
+	.title-tab-section {
+		padding-left: 65px;
+	}
+
 	.left-sidebar:hover {
 		.left-sidebar-list {
 			width: rem(225px);
@@ -154,6 +265,11 @@
 	}
 
 	.page-content-wrapper {
+		/*Uncomment 'padding-left' when sidebar menu is not hidden*/
 		padding-left: rem(100px);
+	}
+
+	.footer-info-column {
+		/*padding-left: rem(100px);*/
 	}
 }

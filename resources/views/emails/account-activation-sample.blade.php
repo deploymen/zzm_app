@@ -14,7 +14,7 @@
 			/* Reset Styles */
 			body{margin:0; padding:0;}
 			img{border:0; height:auto; line-height:100%; outline:none; text-decoration:none;}
-			table td{border-collapse:collapse;}
+			table td{border-collapse:collapse;} 
 			#backgroundTable{height:100% !important; margin:0; padding:0; width:100% !important;}
 		</style>
 	</head>
@@ -37,32 +37,31 @@
 									<tr width="100%">
 										<td bgcolor="#FFFFFF" style="background-color: #FFFFFF; padding: 30px;">
 											<h1 style="font-family:Century Gothic; font-size:40px; font-weight:100; line-height:45px; margin:0; color:#8F8F8F">
-												Welcome XXX,
+												Welcome {name},
 											</h1>
 										</td>
 									</tr>
 
 									<tr width="100%">
 										<td bgcolor="#FFFFFF" style="background-color: #FFFFFF; padding: 30px;">
-											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">You've just signed your little mathling up for the most exciting math adventure this side of the Universe! If you haven't downloaded the app yet, please navigate your browser starship to XXX</p>
+											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">You've just signed your little mathling up for the most exciting math adventure this side of the Universe!</p><br/>
 
 											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">To help you prepare for the trip ahead, here are a few vital things to remember:<br />
-											Your login is: XXX<br/>
-											Login Portal: XXXX<br/><br/>
+											Your login is: {username}<br/>
+											Login Portal: {zapzapmath_portal}<br/><br/>
 											</p>
 
 											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">To activate your account, please click on the link below:<br/>
-											XXX<br/><br/></p>
+											{activation_link}<br/><br/></p>
 
-											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">Further instructions will be transmitted to your inbox as the mission progresses. However, if you have any questions about this journey, please feel free to get in touch ( XXX )<br/><br/></p>
+											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">Further instructions will be transmitted to your inbox as the mission progresses. However, if you have any questions about this journey, please feel free to get in touch ( {email_support} )<br/><br/></p>
 
 											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">We look forward to adventuring with you!<br/><br/></p>
 
 											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">
 												The Zap Zap Math Team<br/>
-												XXX<br/>
-												XXX<br/>
-												XXX<br/>
+												http://www.zapzapmath.com <br/>
+												{social_media_links}<br/>
 											</p>
 										</td>
 									</tr>

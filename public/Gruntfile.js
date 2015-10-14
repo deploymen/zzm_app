@@ -49,12 +49,10 @@ module.exports = function (grunt) {
           'js/main/foundation.min.js',
           'js/main/jquery-ui.min.js',
           'js/main/angular/angular.min.js',
-          // 'js/jquery-ui.structure.min.js',
           'js/main/js.cookie.js',
           'js/main/jeditable.min.js',
           'js/main/pace.min.js',
-          // 'js/main/tooltip.js',
-          'js/main/init.js'
+
         ],
 
         dest: 'js/main/app.js'

@@ -29,7 +29,7 @@ App.controller('MainController', function ($scope, $http){
 
 		if(!(page in $scope.pageSystem)){
 
-	        $http.get('/api/game/profile/'+VARS.id+'/result/system-planet/progress?' + [
+	        $http.get('/api/1.0/game/profile/'+VARS.id+'/result/system-planet/progress?' + [
 	            'page=' + page,
 	            'page_size=' + pageSize
 	        ].join('&')).success(function(data, status, headers, config) {
@@ -80,7 +80,7 @@ App.controller('MainController', function ($scope, $http){
 
 		if(!(page in $scope.pagePlay)){
 
-	        $http.get('/api/game/profile/'+VARS.id+'/result/system-planet/planet/'+$scope.planetid+'?' + [
+	        $http.get('/api/1.0/game/profile/'+VARS.id+'/result/system-planet/planet/'+$scope.planetid+'?' + [
 	            'page=' + page,
 	            'page_size=' + pageSize
 	        ].join('&')).success(function(data, status, headers, config) {
