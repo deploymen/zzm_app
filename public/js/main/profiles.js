@@ -190,7 +190,7 @@ function deleteProfile(){
 			var status = data['status'];
 			var message = data['message'];
 			console.log(profiletodelete.id);
-			if(status === 'fail' && message === 'at least once profile in account'){
+			if(status === 'fail' && message === 'account must have at least one profile'){
 				console.log('You cannot delete the last profile.');
 				modalcannotdelete.foundation('reveal', 'open');
 
