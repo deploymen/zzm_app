@@ -1,6 +1,7 @@
 /vendor
 /cron
 /shell
+/_ref
 /public/bower_components
 /public/node_modules
 /public/package
@@ -9,4 +10,3 @@ composer.lock
 .env*
 *.log
 *.sql
-
