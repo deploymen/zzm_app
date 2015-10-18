@@ -1,6 +1,6 @@
 <?php
-Route::get('/',  function(){ return die('api'); });
-Route::get('/version',  function(){ return die('1.0'); });
+Route::get('/',  function(){ return die('zzm-api'); });
+Route::get('/version',  function(){return die('1.0'); });
 
 
 Route::pattern('role', '(parent)|(teacher)|(admin)|(content)|(investor)');
