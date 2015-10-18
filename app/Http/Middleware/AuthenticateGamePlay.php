@@ -47,6 +47,8 @@ class AuthenticateGamePlay {
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next) {
+		
+		$isApi = (strpos($request->path(), 'api/') !== FALSE);
 		$route = $request->route();
 
 		$gameCode = Request::cookie('game-code');
