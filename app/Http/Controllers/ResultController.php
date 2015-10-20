@@ -145,7 +145,7 @@ Class ResultController extends Controller {
 
 			return ResponseHelper::OutputJSON('success', '', [
 				'planet' => $planet,
-				'breakcrumb' => [
+				'breadcrumb' => [
 					'system_id' => $systmeId,
 					'system_name' => $system->name,
 				],
@@ -193,7 +193,7 @@ Class ResultController extends Controller {
 	// 			$gameCode = $gameCode->code;
 	// 		}
 
-	// 		$breakcrumbSql = "
+	// 		$breadcrumbSql = "
 	// 			SELECT sp.`system_id`, s.`name` , sp.`planet_id` , p.`description`
 	// 				FROM `t0124_game_system_planet` sp , `t0123_game_planet` p , `t0122_game_system` s
 	// 					WHERE s.`id` = sp.`system_id`
@@ -202,8 +202,8 @@ Class ResultController extends Controller {
 
 	// 		";
 
-	// 		$breakcrumb = DB::select($breakcrumbSql);
-	// 		$breakcrumb = $breakcrumb[0];
+	// 		$breadcrumb = DB::select($breadcrumbSql);
+	// 		$breadcrumb = $breadcrumb[0];
 
 	// 		$startIndex = $pageSize*($page - 1);
 	// 		$total = GameSystem::where('enable' , 1)->count();
@@ -234,11 +234,11 @@ Class ResultController extends Controller {
 
 	// 		return ResponseHelper::OutputJSON('success', '' , [
 	// 			'play' =>$play,
-	// 			'breakcrumb' => [
-	// 				'system_id' => $breakcrumb->system_id,
-	// 				'system_name' => $breakcrumb->name,
+	// 			'breadcrumb' => [
+	// 				'system_id' => $breadcrumb->system_id,
+	// 				'system_name' => $breadcrumb->name,
 	// 				'planet_id' => $planetId,
-	// 				'planet_subtitle' => $breakcrumb->description
+	// 				'planet_subtitle' => $breadcrumb->description
 
 	// 			],
 	// 			'page' => $page,
@@ -293,7 +293,7 @@ Class ResultController extends Controller {
 
 		}
 
-		$breakcrumbSql = "
+		$breadcrumbSql = "
 				SELECT sp.`system_id`, s.`name` , sp.`planet_id` , p.`description`
 					FROM `t0124_game_system_planet` sp , `t0123_game_planet` p , `t0122_game_system` s
 						WHERE s.`id` = sp.`system_id`
@@ -302,8 +302,8 @@ Class ResultController extends Controller {
 
 			";
 
-		$breakcrumb = DB::select($breakcrumbSql);
-		$breakcrumb = $breakcrumb[0];
+		$breadcrumb = DB::select($breadcrumbSql);
+		$breadcrumb = $breadcrumb[0];
 
 		$startIndex = $pageSize * ($page - 1);
 		$total = GameSystem::where('enable', 1)->count();
@@ -352,11 +352,11 @@ Class ResultController extends Controller {
 		return ResponseHelper::OutputJSON('success', '', [
 			'game_type' => $play[0]->target_type,
 			'questions' => $question,
-			'breakcrumb' => [
-				'system_id' => $breakcrumb->system_id,
-				'system_name' => $breakcrumb->name,
-				'planet_id' => $breakcrumb->planet_id,
-				'planet_subtitle' => $breakcrumb->description,
+			'breadcrumb' => [
+				'system_id' => $breadcrumb->system_id,
+				'system_name' => $breadcrumb->name,
+				'planet_id' => $breadcrumb->planet_id,
+				'planet_subtitle' => $breadcrumb->description,
 			],
 			'page' => $page,
 			'page_size' => $pageSize,

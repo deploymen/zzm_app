@@ -12,6 +12,10 @@ class ResponseHelper {
 		$ip = $_SERVER['REMOTE_ADDR'];
 
 		if ($status == 'exception') {$statusCode = 500;}
+		if ($status == 'fail-unauthorised') {
+			$statusCode = 401;
+			$status == 'fail';
+		}
 
 		if ($message != "") {
 			$payload['message'] = $message;
