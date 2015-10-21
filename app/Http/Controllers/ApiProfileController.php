@@ -26,7 +26,6 @@ Class ApiProfileController extends Controller {
 	// ! Parent | Teacher												      //
 	// =======================================================================//
 	public function get() {
-
 		$userId = Request::input('user_id');
 		$profileInfo = [];
 		try {
@@ -85,8 +84,8 @@ Class ApiProfileController extends Controller {
 					'last_played' => $lp->created_at,
 
 				]);
-				$best_score = ApiProfileHelper::ProfileBestScore($p, $scoreType = 'best_score');
-				$weak_score = ApiProfileHelper::ProfileBestScore($p, $scoreType = 'weak_score');
+				$best_score = ApiProfileHelper::ProfileBestScore($p, 'best_score');
+				$weak_score = ApiProfileHelper::ProfileBestScore($p, 'weak_score');
 				for ($j = 0; $j < count($best_score); $j++) {
 					$b = $best_score[$j];
 					array_push($profileInfo[$i]['best_score'], [
@@ -127,22 +126,22 @@ Class ApiProfileController extends Controller {
 		$userId = Request::input('user_id');
 
 		$firstName = Request::input('first_name');
-		$lastName = Request::input('last_name');
+		$lastName = Request::input('last_name', '');
 		$age = Request::input('age');
 		$school = Request::input('school');
 		$grade = Request::input('grade');
 		$city = Request::input('city');
-		$email = Request::input('email');
+		$email = Request::input('email', '');
 
 		$nickname1 = Request::input('nickname1', 1);
 		$nickname2 = Request::input('nickname2', 1);
 		$avatarId = Request::input('avatar_id', 1);
 
-		if (!$firstName || !$email || !$school || !$city || !$age || !$grade) {
+		if (!$firstName || !$school || !$city || !$age || !$grade) {
 			return ResponseHelper::OutputJSON('fail', "missing parameters");
 		}
 
-		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+		if ($email != '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			return ResponseHelper::OutputJSON('fail', "invalid email format");
 		}
 
@@ -201,7 +200,7 @@ Class ApiProfileController extends Controller {
 		}
 
 		return ResponseHelper::OutputJSON('success', '', [
-			'profile' => $gamePro,
+			'profile' => $profile,
 		]);
 	}
 
@@ -376,7 +375,7 @@ Class ApiProfileController extends Controller {
 
 		try {
 
-			$profile = GameProfile::select('id', 'user_id', 'class_id', 'first_name', 'last_name', 'school', 'city', 'email', 'nickname1', 'nickname2', 'avatar_id')->find($id);
+			$profile = GameProfile::select('id', 'user_id', 'class_id', 'first_name', 'last_name', 'age', 'school', 'grade', 'city', 'email', 'nickname1', 'nickname2', 'avatar_id')->find($id);
 
 			if (!$profile) {
 				return ResponseHelper::OutputJSON('fail', 'profile not found');

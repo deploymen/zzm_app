@@ -1,15 +1,12 @@
 <?php namespace App\Http\Middleware;
 
+use App\Libraries\ResponseHelper;
+use App\Models;
+use App\Models\UserAccess;
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
 use Request;
-use Redirect;
 use Session;
-use App\Libraries;
-use App\Libraries\ResponseHelper;
-
-use App\Models;
-use App\Models\UserAccess;
 
 class AuthenticateUser {
 
@@ -42,38 +39,26 @@ class AuthenticateUser {
 
 		$accessToken = false;
 
-		$accessToken = (!$accessToken)?Request::header('X-access-token'):$accessToken;
-		$accessToken = (!$accessToken)?Request::cookie('access_token'):$accessToken;
-		$accessToken = (!$accessToken)?Session::get('access_token'):$accessToken;
+		$accessToken = (!$accessToken) ? Request::header('X-access-token') : $accessToken;
+		$accessToken = (!$accessToken) ? Request::cookie('access_token') : $accessToken;
+		$accessToken = (!$accessToken) ? Session::get('access_token') : $accessToken;
 
 		if (!$accessToken) {
-			if ($isApi) {
-				return ResponseHelper::OutputJSON('fail', 'missing token.' ,[
-					Request::cookie('access_token'),
-					Session::get('access_token'),
-					Request::header('X-access-token'),
-				]);
-			} else {
-				return Redirect::to('/user/signin?no-access');
-			}
+			return ResponseHelper::OutputJSON('fail-unauthorised', 'missing token.', [
+				Request::cookie('access_token'),
+				Session::get('access_token'),
+				Request::header('X-access-token'),
+			]);
 		}
-		
+
 		$userAccess = UserAccess::where('access_token', $accessToken)->whereRaw('access_token_expired_at > NOW()')->first();
 		if (!$userAccess) {
-			if ($isApi) {
-				return ResponseHelper::OutputJSON('fail', 'invalid access token');
-			} else {
-				return Redirect::to('/user/signin?no-access');
-			}
+			return ResponseHelper::OutputJSON('fail-unauthorised', 'invalid access token');
 		}
 
 		$user = Models\User::find($userAccess->user_id);
 		if (!$user) {
-			if ($isApi) {
-				return ResponseHelper::OutputJSON('fail', 'user not found: ' . $userAccess->user_id);
-			} else {
-				return Redirect::to('/user/signin?no-access');
-			}
+			return ResponseHelper::OutputJSON('fail-unauthorised', 'user not found: ' . $userAccess->user_id);
 		}
 
 		$inputs = Request::all();

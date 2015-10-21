@@ -3,7 +3,6 @@
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
 use Libraries;
-use Models;
 
 class AuthenticateContent {
 
@@ -32,7 +31,6 @@ class AuthenticateContent {
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next) {
-		$isApi = (strpos($request->path(), 'api/') !== FALSE);
 		$route = $request->route();
 
 		$role = \Request::input('user_role');
@@ -40,11 +38,7 @@ class AuthenticateContent {
 		switch ($role) {
 			case 'content':break;
 			default:
-				if ($isApi) {
-					 return Libraries\ResponseHelper::OutputJSON('fail', "invalid role");
-				} else {
-					return \Redirect::to('/?no-access');
-				}
+				return Libraries\ResponseHelper::OutputJSON('fail-unauthorised', "invalid role");
 		}
 
 		return $next($request);
