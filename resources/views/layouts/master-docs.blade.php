@@ -51,7 +51,7 @@
                 <button type="button" data-toggle="collapse" data-target=".sidebar-collapse" class="navbar-toggle"><span
                         class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
                         class="icon-bar"></span><span class="icon-bar"></span></button>
-                <a id="logo" href="/docs/index" class="navbar-brand"><span class="fa fa-rocket"></span><span
+                <a id="logo" href="api/docs/index" class="navbar-brand"><span class="fa fa-rocket"></span><span
                         class="logo-text">API DOC</span><span style="display: none" class="logo-text-icon">µ</span></a>
             </div>
             <div class="topbar-main"><a id="menu-toggle" href="#" class="hidden-xs"><i class="fa fa-bars"></i></a>
@@ -67,38 +67,38 @@
                 <ul id="side-menu" class="nav">
                     <div class="clearfix"></div>
                     @if ($sidebar_item === 'list-general')
-                        <li class="active"><a href="/docs/list-general"><i class="fa fa-list fa-fw">
+                        <li class="active"><a href="/api/docs/list-general"><i class="fa fa-list fa-fw">
                             <div class="icon-bg bg-orange"></div>
                         </i><span class="menu-title">AUTH API</span></a></li>
                     @else
-                        <li><a href="/docs/list-general"><i class="fa fa-list fa-fw">
+                        <li><a href="/api/docs/list-general"><i class="fa fa-list fa-fw">
                             <div class="icon-bg bg-orange"></div>
                         </i><span class="menu-title">AUTH API</span></a></li>
                     @endif 
                     @if ($sidebar_item === 'list-user')
-                        <li class="active"><a href="/docs/list-user"><i class="fa fa-user fa-fw">
+                        <li class="active"><a href="/api/docs/list-user"><i class="fa fa-user fa-fw">
                             <div class="icon-bg bg-orange"></div>
                         </i><span class="menu-title">USER API</span></a></li>
                     @else
-                        <li><a href="/docs/list-user"><i class="fa fa-user fa-fw">
+                        <li><a href="/api/docs/list-user"><i class="fa fa-user fa-fw">
                             <div class="icon-bg bg-orange"></div>
                         </i><span class="menu-title">USER API</span></a></li>
                     @endif 
                     @if ($sidebar_item === 'list-admin')
-                        <li class="active"><a href="/docs/list-admin"><i class="fa fa-desktop fa-fw">
+                        <li class="active"><a href="/api/docs/list-admin"><i class="fa fa-desktop fa-fw">
                             <div class="icon-bg bg-orange"></div>
                         </i><span class="menu-title">ADMIN API</span></a></li>
                     @else
-                        <li><a href="/docs/list-admin"><i class="fa fa-desktop fa-fw">
+                        <li><a href="/api/docs/list-admin"><i class="fa fa-desktop fa-fw">
                             <div class="icon-bg bg-orange"></div>
                         </i><span class="menu-title">ADMIN API</span></a></li>
                     @endif 
                     @if ($sidebar_item === 'list-game')
-                        <li class="active"><a href="/docs/list-game"><i class="fa fa-gamepad fa-fw">
+                        <li class="active"><a href="/api/docs/list-game"><i class="fa fa-gamepad fa-fw">
                             <div class="icon-bg bg-orange"></div>
                         </i><span class="menu-title">GAME API</span></a></li>
                     @else
-                        <li><a href="/docs/list-game"><i class="fa fa-gamepad fa-fw">
+                        <li><a href="/api/docs/list-game"><i class="fa fa-gamepad fa-fw">
                             <div class="icon-bg bg-orange"></div>
                         </i><span class="menu-title">GAME API</span></a></li>
                     @endif 

@@ -95,84 +95,84 @@
                     <td>GET</td>
                     <td>/api/system </td>
                     <td></td>
-                    <td align="center"><a href="/docs/api.admin-system-get" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                    <td align="center"><a href="/api/docs/api.admin-system-get" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
                 <tr>
                     <td>2.</td>
                     <td>POST</td>
                     <td>/api/system </td>
                     <td></td>
-                    <td align="center"><a href="/docs/api.admin-system-post" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                    <td align="center"><a href="/api/docs/api.admin-system-post" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
                 <tr>
                     <td>3.</td>
                     <td>PUT</td>
                     <td>/api/system/{id} </td>
                     <td></td>
-                    <td align="center"><a href="/docs/api.admin-system-put" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                    <td align="center"><a href="/api/docs/api.admin-system-put" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
                 <tr>
                     <td>4.</td>
                     <td>DELETE</td>
                     <td>/api/system/{id} </td>
                     <td></td>
-                    <td align="center"><a href="/docs/api.admin-system-delete" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                    <td align="center"><a href="/api/docs/api.admin-system-delete" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
                 <tr>
                     <td>5.</td>
                     <td>GET</td>
                     <td>/api/planet </td>
                     <td></td>
-                    <td align="center"><a href="/docs/api.admin-planet-get" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                    <td align="center"><a href="/api/docs/api.admin-planet-get" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
                 <tr>
                     <td>6.</td>
                     <td>POST</td>
                     <td>/api/planet </td>
                     <td></td>
-                    <td align="center"><a href="/docs/api.admin-planet-post" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                    <td align="center"><a href="/api/docs/api.admin-planet-post" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
                 <tr>
                     <td>7.</td>
                     <td>PUT</td>
                     <td>/api/planet/{id} </td>
                     <td></td>
-                    <td align="center"><a href="/docs/api.admin-planet-put" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                    <td align="center"><a href="/api/docs/api.admin-planet-put" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
                 <tr>
                     <td>8.</td>
                     <td>DELETE</td>
                     <td>/api/planet/{id} </td>
                     <td></td>
-                    <td align="center"><a href="/docs/api.admin-planet-delete" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                    <td align="center"><a href="/api/docs/api.admin-planet-delete" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
                 <tr>
                     <td>9.</td>
                     <td>GET</td>
                     <td>/api/question-bank </td>
                     <td></td>
-                    <td align="center"><a href="/docs/api.admin-questbank-get" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                    <td align="center"><a href="/api/docs/api.admin-questbank-get" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
                 <tr>
                     <td>10.</td>
                     <td>POST</td>
                     <td>/api/question-bank </td>
                     <td></td>
-                    <td align="center"><a href="/docs/api.admin-questbank-post" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                    <td align="center"><a href="/api/docs/api.admin-questbank-post" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
                 <tr>
                     <td>11.</td>
                     <td>PUT</td>
                     <td>/api/question-bank/{id} </td>
                     <td></td>
-                    <td align="center"><a href="/docs/api.admin-questbank-put" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                    <td align="center"><a href="/api/docs/api.admin-questbank-put" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
                 <tr>
                     <td>12.</td>
                     <td>DELETE</td>
                     <td>/api/question-bank/{id} </td>
                     <td></td>
-                    <td align="center"><a href="/docs/api.admin-questbank-delete" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                    <td align="center"><a href="/api/docs/api.admin-questbank-delete" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
             </tbody>
         </table>
