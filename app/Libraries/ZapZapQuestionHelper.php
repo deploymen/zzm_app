@@ -32,6 +32,8 @@ use App\Models\GameResultP08;
 use App\Models\GameResultP09;
 use App\Models\GameResultP10;
 use App\Models\GameResultP11;
+use App\Models\GameResultP12;
+use App\Models\GameResultP13;
 use App\Models\GameResultP18;
 use App\Models\GameResultP23;
 use App\Models\GameResultP32;
@@ -147,6 +149,10 @@ class ZapZapQuestionHelper{
 			";
 
 			$targetIds = DB::SELECT($sql, ['planet_id'=>$planetId , 'difficulty'=>$difficulty , 'questionCount' => $questionCount ])[0]->ids;
+			
+			if(!$targetIds){
+				return false;
+			}
 
 			$sql2 = "
 				SELECT p01.* , q.`difficulty` , q.`id` AS `id` , IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description`
@@ -202,7 +208,6 @@ class ZapZapQuestionHelper{
 				$prevQuestionId = $r->id;
 			}
 			shuffle($results);
-
 			return $results;
 
 		}catch(Exception $ex){
@@ -243,6 +248,10 @@ class ZapZapQuestionHelper{
 			";
 
 			$targetIds = DB::SELECT($sql, ['planet_id'=>$planetId , 'difficulty'=>$difficulty , 'questionCount' => $questionCount ])[0]->ids;
+
+			if(!$targetIds){
+				return false;
+			}
 
 			$sql2 = "
 				SELECT p02.* , q.`difficulty` , q.`id` AS `id` , IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description` 
@@ -334,6 +343,11 @@ class ZapZapQuestionHelper{
 			";
 
 			$targetIds = DB::SELECT($sql, ['planet_id'=>$planetId , 'difficulty'=>$difficulty , 'questionCount' => $questionCount ])[0]->ids;
+
+			if(!$targetIds){
+				return false;
+			}
+
 			$sql2 = "
 				SELECT  p03.* ,  q.`difficulty`, q.`id` AS `id`, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description` 
 					 FROM (`t0203_game_question_p03` p03 , `t0200_game_question` q)
@@ -424,6 +438,10 @@ class ZapZapQuestionHelper{
 			";
 
 			$targetIds = DB::SELECT($sql, ['planet_id'=>$planetId , 'difficulty'=>$difficulty , 'questionCount' => $questionCount ])[0]->ids;
+
+			if(!$targetIds){
+				return false;
+			}
 
 			$sql2 = "
 				SELECT q.`id` , p06.`template_id`, p06.`tpl_param_1` , p06.`tpl_param_2`, p06.`tpl_param_3`, p06.`game_param_1`,p06.`game_param_2`,p06.`game_param_3`,
@@ -543,6 +561,10 @@ class ZapZapQuestionHelper{
 
 			$targetIds = DB::SELECT($sql, ['planet_id'=>$planetId , 'difficulty'=>$difficulty , 'questionCount' => $questionCount ])[0]->ids;
 
+			if(!$targetIds){
+				return false;
+			}
+
 			$sql2 = "
 				SELECT p07.* , q.`difficulty` ,q.`id` AS `id` , IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description`
                      FROM (`t0207_game_question_p07` p07 , `t0200_game_question` q)
@@ -632,6 +654,10 @@ class ZapZapQuestionHelper{
 			";
 
 			$targetIds = DB::SELECT($sql, ['planet_id'=>$planetId , 'difficulty'=>$difficulty , 'questionCount' => $questionCount ])[0]->ids;
+
+			if(!$targetIds){
+				return false;
+			}
 			
 			$sql2 = "
 				SELECT  p08.* ,  q.`difficulty`, q.`id` AS `id`, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description` 
@@ -720,6 +746,10 @@ class ZapZapQuestionHelper{
 			";
 
 			$targetIds = DB::SELECT($sql, ['planet_id'=>$planetId , 'difficulty'=>$difficulty , 'questionCount' => $questionCount ])[0]->ids;
+
+			if(!$targetIds){
+				return false;
+			}
 			
 			$sql2 = "
 				SELECT  p09.* ,  q.`difficulty`, q.`id` AS `id`, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description` 
@@ -808,6 +838,10 @@ class ZapZapQuestionHelper{
 			";
 
 			$targetIds = DB::SELECT($sql, ['planet_id'=>$planetId , 'difficulty'=>$difficulty , 'questionCount' => $questionCount ])[0]->ids;
+
+			if(!$targetIds){
+				return false;
+			}
 			$sql2 = "
 				SELECT  p10.* ,  q.`difficulty`, q.`id` AS `id`, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description` 
 					 FROM (`t0210_game_question_p10` p10 , `t0200_game_question` q)
@@ -898,6 +932,11 @@ class ZapZapQuestionHelper{
 			";
 
 			$targetIds = DB::SELECT($sql, ['planet_id'=>$planetId , 'difficulty'=>$difficulty , 'questionCount' => $questionCount ])[0]->ids;
+
+			if(!$targetIds){
+				return false;
+			}
+
 			$sql2 = "
 				SELECT  p11.* ,  q.`difficulty`, q.`id` AS `id`, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description` 
 					 FROM (`t0211_game_question_p11` p11 , `t0200_game_question` q)
@@ -988,6 +1027,10 @@ class ZapZapQuestionHelper{
 			";
 
 			$targetIds = DB::SELECT($sql, ['planet_id'=>$planetId , 'difficulty'=>$difficulty , 'questionCount' => $questionCount ])[0]->ids;
+
+			if(!$targetIds){
+				return false;
+			}
 
 			$sql2 = "
 				SELECT  p12.* ,  q.`difficulty`, q.`id` AS `id`, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description` 
@@ -1085,6 +1128,10 @@ class ZapZapQuestionHelper{
 			";
 
 			$targetIds = DB::SELECT($sql, ['planet_id'=>$planetId , 'difficulty'=>$difficulty , 'questionCount' => $questionCount ])[0]->ids;
+
+			if(!$targetIds){
+				return false;
+			}
 			$sql2 = "
 				SELECT  p13.* ,  q.`difficulty`, q.`id` AS `id`, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description` 
 					 FROM (`t0213_game_question_p13` p13 , `t0200_game_question` q)
@@ -1192,6 +1239,11 @@ class ZapZapQuestionHelper{
 			";
 
 			$targetIds = DB::SELECT($sql, ['planet_id'=>$planetId , 'difficulty'=>$difficulty , 'questionCount' => $questionCount ])[0]->ids;
+
+			if(!$targetIds){
+				return false;
+			}
+
 			$sql2 = "
 				SELECT  p18.* ,  q.`difficulty`, q.`id` AS `id`, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description` 
 					 FROM (`t0218_game_question_p18` p18 , `t0200_game_question` q)
@@ -1281,6 +1333,10 @@ class ZapZapQuestionHelper{
 
 			$targetIds = DB::SELECT($sql, ['planet_id'=>$planetId , 'difficulty'=>$difficulty , 'questionCount' => $questionCount ])[0]->ids;
 
+			if(!$targetIds){
+				return false;
+			}
+
 			$sql2 = "
 				SELECT  p23.* ,  q.`difficulty`, q.`id` AS `id`, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description` 
 					 FROM (`t0223_game_question_p23` p23 , `t0200_game_question` q)
@@ -1366,6 +1422,10 @@ class ZapZapQuestionHelper{
 			";
 
 			$targetIds = DB::SELECT($sql, ['planet_id'=>$planetId , 'difficulty'=>$difficulty , 'questionCount' => $questionCount ])[0]->ids;
+
+			if(!$targetIds){
+				return false;
+			}
 
 			$sql2 = "
 				SELECT  p32.* ,  q.`difficulty`, q.`id` AS `id`, IFNULL(s.`subject_code`, 0) AS `subject_code` , s.`name` ,s.`description` 
