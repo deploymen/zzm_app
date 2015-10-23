@@ -45,3 +45,5 @@ Route::group(['prefix' => '1.0/pre-launch'], function () {
 });
 
 Route::post('1.0/launch-notification', 'ApiController@launchNotification');
+
+Route::get('1.0/status', 'ApiCheckingController@CheckGameStatus');

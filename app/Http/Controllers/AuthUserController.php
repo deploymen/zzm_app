@@ -131,8 +131,8 @@ Class AuthUserController extends Controller {
 						'name' => $name,
 						'app_store_address' => config('app.app_store_url'),
 						'username' => $email,
-						'zapzapmath_portal' => config('app.website_url') . '/sign-in',
-						'activation_link' => config('app.website_url') . "/api/auth/activate/{$secretKey}",
+						'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
+						'activation_link' => config('app.website_url') . "/api/1.0/auth/activate/{$secretKey}",
 						'email_support' => config('app.support_email'),
 						'social_media_links' => config('app.fanpage_url'),
 					]);
@@ -452,7 +452,7 @@ Class AuthUserController extends Controller {
 			$edmHtml = (string) view('emails.forgot-password', [
 				'name' => $user->name,
 				'username' => $email,
-				'zapzapmath_portal' => Config::get('app.website_url') . '/sign-in',
+				'zapzapmath_portal' => Config::get('app.website_url') . '/user/sign-in',
 				'social_media_links' => Config::get('app.fanpage_url'),
 				'reset_url' => Config::get('app.website_url') . '/user/reset-password/' . $secret,
 			]);
@@ -672,7 +672,6 @@ Class AuthUserController extends Controller {
 			])]);
 			return ResponseHelper::OutputJSON('exception');
 		}
-
 	}
 
 	public function setPassword() {

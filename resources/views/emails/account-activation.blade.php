@@ -31,7 +31,7 @@
 								<tbody>
 									<tr width="100%">
 										<td valign="top" align="left" bgcolor="#FFFFFF" style="background-color: #FFFFFF; text-align:center">
-											<img width="600" src="http://www.zapzapmath.com/assets/img/edm/zapzap-banner.png" title="Zap Zap" style="vertical-align:top" class="zapzap-banner">
+											<img width="600" src="https://www.zapzapmath.com/assets/img/edm/zapzap-banner.png" title="Zap Zap" style="vertical-align:top" class="zapzap-banner">
 										</td>
 									</tr>
 									<tr width="100%">
@@ -60,7 +60,7 @@
 
 											<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif; font:15px/1.25em; margin:0; color:#8F8F8F">
 												The Zap Zap Math Team<br/>
-												http://www.zapzapmath.com <br/>
+												https://www.zapzapmath.com <br/>
 												{{$social_media_links}}<br/>
 											</p>
 										</td>
@@ -76,8 +76,8 @@
 												<tbody>
 													<tr align="center" valign="middle">
 														<td bgcolor="#FFFFFF" width="150" rowspan="8" style="background-color:#FFFFFF;">
-															<a href="http://www.zapzapmath.com" target="_blank" style="text-decoration:none;">
-																<img src="http://www.zapzapmath.com/assets/img/edm/zapzap-logo.png" alt="Zap Zap Math Icon Logo" width="100" height="100">
+															<a href="https://www.zapzapmath.com" target="_blank" style="text-decoration:none;">
+																<img src="https://www.zapzapmath.com/assets/img/edm/zapzap-logo.png" alt="Zap Zap Math Icon Logo" width="100" height="100">
 															</a>
 														</td>
 													</tr>
@@ -89,7 +89,7 @@
 													
 													<tr align="left" valign="top">
 														<td bgcolor="#FFFFFF" colspan="5" height="16" style="background-color:#FFFFFF;">
-															<a href="http://goo.gl/0Ugux8" target="_blank" style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif;font-size:12px;color:#838383; font-style: italic; text-decoration:none;">
+															<a href="https://goo.gl/0Ugux8" target="_blank" style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif;font-size:12px;color:#838383; font-style: italic; text-decoration:none;">
 																No 1129, Block A3,
 																Leisure Commerce Square,
 																No. 9, Jalan PJS 8/9,
@@ -103,7 +103,7 @@
 													</tr>
 													<tr align="left" valign="top">
 														<td bgcolor="#FFFFFF" colspan="5" height="16" style="background-color:#FFFFFF;">
-															<a style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif;font-size:13px;color:#838383; text-decoration:none;" href="http://www.zapzapmath.com" target="_blank">www.zapzapmath.com</a> <span style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif;font-size:13px;color:#838383;">|</span> <a style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif;font-size:13px;color:#838383; text-decoration:none;" href="tel:+60378659023">+603 7865 9023</a>
+															<a style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif;font-size:13px;color:#838383; text-decoration:none;" href="https://www.zapzapmath.com" target="_blank">www.zapzapmath.com</a> <span style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif;font-size:13px;color:#838383;">|</span> <a style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif;font-size:13px;color:#838383; text-decoration:none;" href="tel:+60378659023">+603 7865 9023</a>
 														</td>
 													</tr>
 													<tr align="left" valign="top">
@@ -111,19 +111,19 @@
 													</tr>
 													<tr align="left" valign="bottom">
 														<td bgcolor="#FFFFFF" height="30" style="background-color:#FFFFFF;">
-															<a href="#" target="_blank"><img src="http://www.zapzapmath.com/assets/img/edm/icon-twitter.png" alt="Twitter Icon"></a>
+															<a href="#" target="_blank"><img src="https://www.zapzapmath.com/assets/img/edm/icon-twitter.png" alt="Twitter Icon"></a>
 														</td>
 														<td bgcolor="#FFFFFF" height="30" style="background-color:#FFFFFF;">
-															<a href="#" target="_blank"><img src="http://www.zapzapmath.com/assets/img/edm/icon-pinterest.png" alt="Pinterest Icon"></a>
+															<a href="#" target="_blank"><img src="https://www.zapzapmath.com/assets/img/edm/icon-pinterest.png" alt="Pinterest Icon"></a>
 														</td>
 														<td bgcolor="#FFFFFF" height="30" style="background-color:#FFFFFF;">
-															<a href="#" target="_blank"><img src="http://www.zapzapmath.com/assets/img/edm/icon-youtube.png" alt="YouTube Icon"></a>
+															<a href="#" target="_blank"><img src="https://www.zapzapmath.com/assets/img/edm/icon-youtube.png" alt="YouTube Icon"></a>
 														</td>
 														<td bgcolor="#FFFFFF" height="30" style="background-color:#FFFFFF;">
-															<a href="#" target="_blank"><img src="http://www.zapzapmath.com/assets/img/edm/icon-facebook.png" alt="Facebook Icon"></a>
+															<a href="#" target="_blank"><img src="https://www.zapzapmath.com/assets/img/edm/icon-facebook.png" alt="Facebook Icon"></a>
 														</td>
 														<td bgcolor="#FFFFFF" height="30" style="background-color:#FFFFFF;">
-															<a href="#" target="_blank"><img src="http://www.zapzapmath.com/assets/img/edm/icon-instagram.png" alt="Instagram Icon"></a>
+															<a href="#" target="_blank"><img src="https://www.zapzapmath.com/assets/img/edm/icon-instagram.png" alt="Instagram Icon"></a>
 														</td>
 													</tr>
 												</tbody>
