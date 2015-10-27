@@ -7,6 +7,8 @@ use Request;
 use DB;
 use Response;
 use Zipper;
+use Cache;
+use Carbon\Carbon;
 use App\Libraries;
 use App\Libraries\LogHelper;
 use App\Libraries\AuthHelper;
@@ -22,6 +24,7 @@ use App\Models\GamePlay;
 use App\Models\GameCode;
 use App\Models\GameSystem;
 use App\Models\GamePlanet;
+use App\Models\GameType;
 use App\Models\UserMap;
 use App\Models\GameResult;
 use App\Models\GameResultP01;
@@ -47,7 +50,7 @@ Class ApiGameController extends Controller {
 
 		LogHelper::LogGetQuestions($planetId, $gameCode);
 
-		try{
+		// try{
 			$questionCount = Request::input('question_count');
 			$profileId =  Request::input('game_code_profile_id');
 			$gameType = Request::input('game_type');
@@ -57,25 +60,30 @@ Class ApiGameController extends Controller {
 			}
 
 			//get planet info
-			$planet = ZapZapQuestionHelper::GetPlanetInfo($planetId);
+			if (!Cache::has($planetId)){
+				$planet = GamePlanet::find($planetId);
+
+			    $expiresAt = Carbon::now()->addMinutes(60);
+				Cache::put($planetId, $planet , $expiresAt);
+			}
+
+			$planet = Cache::get($planetId);
 
 			if(!$planet){
 				return ResponseHelper::OutputJSON('fail', 'planet not found');
 			}
       
-			if(!$planet->enable){
+			if(!$planet->available){
 				return ResponseHelper::OutputJSON('fail', 'planet is not enable');
 			}	
-			
-			//get user map
-			$userMap = ZapZapQuestionHelper::GetUserMap($profileId, $planetId);
+
+			//NEED UPDATE 26/10/2015
+			$userMap = ZapZapQuestionHelper::GetUserMapPersonal($profileId, $planetId);
 			if(!$userMap){
 				return ResponseHelper::OutputJSON('fail', 'system planet not enable');
 			}
 
 			$planetTopScore = ZapZapQuestionHelper::GameScreenPlanetTopScore($planetId);
-			$playerTopScore = ZapZapQuestionHelper::GameScreenPlayerTopScore($planetId,$profileId);
-
 			$top_scre_result =[];
 			for($i=0; $i<count($planetTopScore); $i++){
 
@@ -89,13 +97,14 @@ Class ApiGameController extends Controller {
 			}
 			
 			if(!$difficulty || $difficulty > 5){
-				$difficulty = $userMap[0]->star + 1;
+				$difficulty = $userMap->star + 1;
 				if($difficulty > 5){ $difficulty = 5; }
 			}
 
-			$level = $userMap[0]->level;
-			
-			switch($planet->game_type){
+			$level = $userMap->level;
+
+			$type = GameType::find($planet->game_type_id);
+			switch($type->name){
 				case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId,$difficulty,$questionCount); break;
 				case 'p02':$questions = ZapZapQuestionHelper::GetQuestionP02($planetId,$difficulty,$questionCount); break;
 				case 'p03':$questions = ZapZapQuestionHelper::GetQuestionP03($planetId,$difficulty,$questionCount); break;
@@ -125,23 +134,23 @@ Class ApiGameController extends Controller {
 						'badges' => json_decode($planet->badges_metrics),
 					],
 					'status' => [
-						'star' => $userMap[0]->star,	
+						'star' => $userMap->star,	
 						'difficulty' =>$difficulty,
-						'top_score' => $userMap[0]->top_score,
+						'top_score' => $userMap->top_score,
 					],
 					'planet_top_score'=>$top_scre_result,
 						
 	            	'questions' => $questions,
 	            ]);
 
-			} catch (Exception $ex) {
+			// } catch (Exception $ex) {
 
-				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-					'source' => 'ApiGameController > request',
-					'inputs' => Request::all(),
-				])]);
-				return ResponseHelper::OutputJSON('exception');
-			}
+			// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+			// 		'source' => 'ApiGameController > request',
+			// 		'inputs' => Request::all(),
+			// 	])]);
+			// 	return ResponseHelper::OutputJSON('exception');
+			// }
 	}
 
 	//SUBMIT RESULT
