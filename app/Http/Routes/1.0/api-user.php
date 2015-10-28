@@ -56,5 +56,3 @@ Route::group(['middleware' => 'auth.user'], function () {
 
 	});
 });
-
-Route::get('1.0/test/cache', function() {return die('d'); });
