@@ -61,10 +61,9 @@ Class ApiGameController extends Controller {
 
 			//get planet info
 			if (Cache::has('ApiGameController@request('.$planetId.')') ) {
-				die('123');
+
 				$planet = Cache::get('ApiGameController@request('.$planetId.')');
 			}else{
-
 				$planet = GamePlanet::find($planetId);
 
 			    $expiresAt = Carbon::now()->addMinutes(60);
