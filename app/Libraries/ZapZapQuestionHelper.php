@@ -5,6 +5,8 @@ use Exception;
 use Config;
 use Request;
 use DB;
+use Cache;
+use Carbon\Carbon;
 use App\Libraries;
 use App\Libraries\LogHelper;
 use App\Libraries\AuthHelper;
@@ -136,13 +138,13 @@ class ZapZapQuestionHelper{
 
 	public static function GetQuestionP01($planetId, $difficulty, $questionCount){
 		try{
-			
+
 			if(!$questionCount){
 				$gamePlanet = GamePlanet::find($planetId);
 				$questionCount = $gamePlanet->question_count;
 			}
 
-			$sql2 = "
+			$sql = "
 				SELECT p01.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
 					FROM `t0201_game_question_p01` p01, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
@@ -153,7 +155,7 @@ class ZapZapQuestionHelper{
                         	LIMIT {$questionCount}
 			";
 			
-			$result = DB::SELECT($sql2);
+			$result = DB::SELECT($sql);
 
 			$results = [];
 			$prevQuestionId = 0;
@@ -189,12 +191,15 @@ class ZapZapQuestionHelper{
 				$prevQuestionId = $r->id;
 			}
 			shuffle($results);
+
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
 			return $results;
 
 		}catch(Exception $ex){
 		LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp01', ['environment' => json_encode([
 			'ex' =>  $ex->getMessage(),
-			// 'sql' =>  $sql,
+			'sql' =>  $sql,
 		])]);	
 		return ResponseHelper::OutputJSON('exception');				
 		}
@@ -208,7 +213,7 @@ class ZapZapQuestionHelper{
 				$questionCount = $gamePlanet->question_count;
 			}
 
-			$sql2 = "
+			$sql = "
 				SELECT p02.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
 					FROM `t0202_game_question_p02` p02, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
@@ -219,7 +224,7 @@ class ZapZapQuestionHelper{
                         	LIMIT {$questionCount}
 			";
 
-			$result = DB::SELECT($sql2);
+			$result = DB::SELECT($sql);
 
 			$results = [];
 			$prevQuestionId = 0;
@@ -253,6 +258,8 @@ class ZapZapQuestionHelper{
 
 			shuffle($results);
 
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
 			return $results;
 
 		}catch(Exception $ex){
@@ -272,7 +279,7 @@ class ZapZapQuestionHelper{
 				$questionCount = $gamePlanet->question_count;
 			}
 
-			$sql2 = "
+			$sql = "
 				SELECT p03.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
 					FROM `t0203_game_question_p03` p03, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
@@ -283,7 +290,7 @@ class ZapZapQuestionHelper{
                         	LIMIT {$questionCount}
 			";
 			
-			$result = DB::SELECT($sql2);
+			$result = DB::SELECT($sql);
 
 			$results = [];
 			$prevQuestionId = 0;
@@ -314,7 +321,8 @@ class ZapZapQuestionHelper{
 
 			shuffle($results);
 
-
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
 			return $results;
 
 		}catch(Exception $ex){
@@ -333,18 +341,19 @@ class ZapZapQuestionHelper{
 				$questionCount = $gamePlanet->question_count;
 			}
 
-			$sql2 = "
-				SELECT p06.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
-					FROM `t0206_game_question_p06` p06, `t0126_game_planet_question_cache` qc
+			$sql = "
+				SELECT p06.*, t.`part_1`, t.`part_2`, t.`part_3`, t.`expression`,  t.`answer`,  qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
+					FROM `t0206_game_question_p06` p06, `t0206_game_question_p06_template` t, `t0126_game_planet_question_cache` qc 
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
                         	AND p06.`id` = qc.`target_id`
+                        	AND p06.`template_id` = t.`id`
 
                         	ORDER BY RAND() 
                         	LIMIT {$questionCount}
 			";
 
-			$result = DB::SELECT($sql2);
+			$result = DB::SELECT($sql);
 
 			$results = [];
 			$prevQuestionId = 0;
@@ -402,6 +411,8 @@ class ZapZapQuestionHelper{
 
 			shuffle($results);
 
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
 			return $results;
 
 		}catch(Exception $ex){
@@ -420,8 +431,7 @@ class ZapZapQuestionHelper{
 				$gamePlanet = GamePlanet::find($planetId);
 				$questionCount = $gamePlanet->question_count;
 			}
-
-			$sql2 = "
+			$sql = "
 				SELECT p07.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
 					FROM `t0207_game_question_p07` p07, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
@@ -432,9 +442,8 @@ class ZapZapQuestionHelper{
                         	LIMIT {$questionCount}
 			";
 			
-			$result = DB::SELECT($sql2);
+			$result = DB::SELECT($sql);
 			$results = [];
-
 			$prevQuestionId = 0;
 			
 			for($i=0; $i<count($result); $i++){
@@ -469,6 +478,8 @@ class ZapZapQuestionHelper{
 
 			shuffle($results);
 
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
 			return $results;
 
 		}catch(Exception $ex){
@@ -488,7 +499,7 @@ class ZapZapQuestionHelper{
 				$questionCount = $gamePlanet->question_count;
 			}
 
-			$sql2 = "
+			$sql = "
 				SELECT p08.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
 					FROM `t0208_game_question_p08` p08, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
@@ -499,7 +510,7 @@ class ZapZapQuestionHelper{
                         	LIMIT {$questionCount}
 			";
 
-			$result = DB::SELECT($sql2);
+			$result = DB::SELECT($sql);
 			
 			$results = [];
 			$prevQuestionId = 0;
@@ -531,6 +542,9 @@ class ZapZapQuestionHelper{
 				$prevQuestionId = $r->id;
 			}
 			shuffle($results);
+
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
 			return $results;
 
 		}catch(Exception $ex){
@@ -549,7 +563,7 @@ class ZapZapQuestionHelper{
 				$questionCount = $gamePlanet->question_count;
 			}
 
-			$sql2 = "
+			$sql = "
 				SELECT p09.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
 					FROM `t0209_game_question_p09` p09, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
@@ -559,7 +573,7 @@ class ZapZapQuestionHelper{
                         	ORDER BY RAND() 
                         	LIMIT {$questionCount}
 			";
-			$result = DB::SELECT($sql2);
+			$result = DB::SELECT($sql);
 			
 
 			$gamePlanet = GamePlanet::find($planetId);
@@ -593,6 +607,9 @@ class ZapZapQuestionHelper{
 				$prevQuestionId = $r->id;
 			}
 			shuffle($results);
+
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
 			return $results;
 
 		}catch(Exception $ex){
@@ -612,7 +629,7 @@ class ZapZapQuestionHelper{
 				$questionCount = $gamePlanet->question_count;
 			}
 
-			$sql2 = "
+			$sql = "
 				SELECT p10.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
 					FROM `t0210_game_question_p10` p10, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
@@ -622,7 +639,7 @@ class ZapZapQuestionHelper{
                         	ORDER BY RAND() 
                         	LIMIT {$questionCount}
 			";
-			$result = DB::SELECT($sql2);
+			$result = DB::SELECT($sql);
 
 			$results = [];
 			$prevQuestionId = 0;
@@ -652,7 +669,8 @@ class ZapZapQuestionHelper{
 
 			shuffle($results);
 
-
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
 			return $results;
 
 		}catch(Exception $ex){
@@ -672,7 +690,7 @@ class ZapZapQuestionHelper{
 				$questionCount = $gamePlanet->question_count;
 			}
 
-			$sql2 = "
+			$sql = "
 				SELECT p11.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
 					FROM `t0211_game_question_p11` p11, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
@@ -682,7 +700,7 @@ class ZapZapQuestionHelper{
                         	ORDER BY RAND() 
                         	LIMIT {$questionCount}
 			";
-			$result = DB::SELECT($sql2);
+			$result = DB::SELECT($sql);
 
 			$results = [];
 			$prevQuestionId = 0;
@@ -714,7 +732,8 @@ class ZapZapQuestionHelper{
 
 			shuffle($results);
 
-
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
 			return $results;
 
 		}catch(Exception $ex){
@@ -733,7 +752,7 @@ class ZapZapQuestionHelper{
 				$questionCount = $gamePlanet->question_count;
 			}
 
-			$sql2 = "
+			$sql = "
 				SELECT p12.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
 					FROM `t0212_game_question_p12` p12, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
@@ -744,7 +763,7 @@ class ZapZapQuestionHelper{
                         	LIMIT {$questionCount}
 			";			
 
-			$result = DB::SELECT($sql2);
+			$result = DB::SELECT($sql);
 
 			$results = [];
 			$prevQuestionId = 0;
@@ -781,7 +800,8 @@ class ZapZapQuestionHelper{
 
 			shuffle($results);
 
-
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
 			return $results;
 
 		}catch(Exception $ex){
@@ -801,7 +821,7 @@ class ZapZapQuestionHelper{
 				$questionCount = $gamePlanet->question_count;
 			}
 
-			$sql2 = "
+			$sql = "
 				SELECT p13.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
 					FROM `t0213_game_question_p13` p13, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
@@ -812,7 +832,7 @@ class ZapZapQuestionHelper{
                         	LIMIT {$questionCount}
 			";
 
-			$result = DB::SELECT($sql2);
+			$result = DB::SELECT($sql);
 
 			$results = [];
 			$prevQuestionId = 0;
@@ -859,7 +879,8 @@ class ZapZapQuestionHelper{
 
 			shuffle($results);
 
-
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
 			return $results;
 
 		}catch(Exception $ex){
@@ -879,7 +900,7 @@ class ZapZapQuestionHelper{
 				$questionCount = $gamePlanet->question_count;
 			}
 			
-			$sql2 = "
+			$sql = "
 				SELECT p18.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
 					FROM `t0218_game_question_p18` p18, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
@@ -890,7 +911,7 @@ class ZapZapQuestionHelper{
                         	LIMIT {$questionCount}
 			";
 
-			$result = DB::SELECT($sql2);
+			$result = DB::SELECT($sql);
 
 			$results = [];
 			$prevQuestionId = 0;
@@ -920,6 +941,9 @@ class ZapZapQuestionHelper{
 			}
 
 			shuffle($results);
+
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
 			return $results;
 
 		}catch(Exception $ex){
@@ -939,7 +963,7 @@ class ZapZapQuestionHelper{
 				$questionCount = $gamePlanet->question_count;
 			}
 
-			$sql2 = "
+			$sql = "
 				SELECT p23.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
 					FROM `t0223_game_question_p23` p23, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
@@ -950,7 +974,7 @@ class ZapZapQuestionHelper{
                         	LIMIT {$questionCount}
 			";
 
-			$result = DB::SELECT($sql2);
+			$result = DB::SELECT($sql);
 
 			$results = [];
 			$prevQuestionId = 0;
@@ -978,6 +1002,9 @@ class ZapZapQuestionHelper{
 			}
 
 			shuffle($results);
+
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
 			return $results;
 
 		}catch(Exception $ex){
@@ -996,7 +1023,7 @@ class ZapZapQuestionHelper{
 				$questionCount = $gamePlanet->question_count;
 			}
 
-			$sql2 = "
+			$sql = "
 				SELECT p32.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
 					FROM `t0232_game_question_p32` p32, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
@@ -1006,7 +1033,7 @@ class ZapZapQuestionHelper{
                         	ORDER BY RAND() 
                         	LIMIT {$questionCount}
 			";
-			$result = DB::SELECT($sql2);
+			$result = DB::SELECT($sql);
 
 			$results = [];
 			$prevQuestionId = 0;
@@ -1045,6 +1072,9 @@ class ZapZapQuestionHelper{
 				$prevQuestionId = $r->id;
 			}
 			shuffle($results);
+
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
 			return $results;
 
 		}catch(Exception $ex){
@@ -1134,7 +1164,7 @@ class ZapZapQuestionHelper{
 			
 			}
 		
-			$sql2 = "
+			$sql = "
 				SELECT p00.* , qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
 					FROM `t0200_game_question_p00` p00, (    
 						SELECT * 
@@ -1176,7 +1206,7 @@ class ZapZapQuestionHelper{
                         ORDER BY RAND() 			
 			";
 
-			$result = DB::SELECT($sql2);
+			$result = DB::SELECT($sql);
 
 			$results = [];
 			$prevQuestionId = 0;
@@ -1224,11 +1254,8 @@ class ZapZapQuestionHelper{
 				continue;
 			}
 
-			
 			$setGenerate = $gameType - count($gamePlay);
-			$targetId = explode(',' , $targetIds);
-		die('123');
-
+	
 			for($j=0; $j<$setGenerate; $j++){
 				$preVal = 0;
 
@@ -1246,7 +1273,7 @@ class ZapZapQuestionHelper{
 				for($l=0; $l< 50; $l++){
 					$rand = rand(0,1);
 					$randAnswer = rand(1,4);
-					$t = $targetId[$l];
+					$t = $result[$l]->id;
 					$question = GameQuestionP00::find($t);
 
 					$time = rand(0, 1000) / 1000;
@@ -1275,6 +1302,7 @@ class ZapZapQuestionHelper{
 
 					}
 			}
+
 			$sqlPlayIds = "
 				SELECT `id`
 					FROM `t0400_game_play`
@@ -1294,6 +1322,7 @@ class ZapZapQuestionHelper{
 				shuffle($pi);
 			}
 			$playIds = implode(",", $pi);	
+
 			//get opponent result
 			$sqlNpcQuestion = "
 				SELECT  p.`id` AS `play_id` , p.`level`, p.`score`, r00.`answer` ,r00.`answer_option`, r00.`correct`  ,r00.`difficulty`, r00.`answer_at` 
@@ -1302,9 +1331,6 @@ class ZapZapQuestionHelper{
 						AND p.`id` IN ({$playIds}) 
 						AND r.`play_id` = p.`id`
 						AND r.`game_type_id` = 0
-
- 
-
 				";
 				$npcQuestion = DB::select($sqlNpcQuestion);
 				$prevPlayId = 0;
