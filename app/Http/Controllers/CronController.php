@@ -19,4 +19,10 @@ class CronController extends Controller {
 		if(!$execute_result){ die('fail s1001_planet_available'); }	
 	}
 
+	public function s1002_question_cache(){
+		$stmt = DB::connection()->getPdo()->prepare('CALL s1002_question_cache()');
+		$execute_result = $stmt->execute();
+		if(!$execute_result){ die('fail s1002_question_cache'); }	
+	}
+
 }
