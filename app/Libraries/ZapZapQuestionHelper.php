@@ -145,7 +145,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p01.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
+				SELECT p01.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
 					FROM `t0201_game_question_p01` p01, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -185,13 +185,15 @@ class ZapZapQuestionHelper{
 				}
 				array_push($results[count($results)-1]['subject'],[
 								'subject_code'=>$r->subject_code,
-								'name' => $r->name,
-								'description'=>$r->description
+								'name' => $r->subject_name,
+								'description'=>$r->subject_description
 								]);
 				$prevQuestionId = $r->id;
 			}
 			shuffle($results);
-
+			if(!$results){
+				return 'question not found';
+			}
 			$expiresAt = Carbon::now()->addMinutes(5);
 			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
 			return $results;
@@ -214,7 +216,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p02.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
+				SELECT p02.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
 					FROM `t0202_game_question_p02` p02, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -250,14 +252,17 @@ class ZapZapQuestionHelper{
 
 				array_push($results[count($results)-1]['subject'],[
 								'subject_code'=>$r->subject_code,
-									'name' => $r->name,
-									'description'=>$r->description
+									'name' => $r->subject_name,
+									'description'=>$r->subject_description
 								]);
 				$prevQuestionId = $r->id;
 			}
 
 			shuffle($results);
 
+			if(!$results){
+				return 'question not found';
+			}
 			$expiresAt = Carbon::now()->addMinutes(5);
 			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
 			return $results;
@@ -280,7 +285,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p03.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
+				SELECT p03.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
 					FROM `t0203_game_question_p03` p03, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -312,15 +317,17 @@ class ZapZapQuestionHelper{
 				}
 				array_push($results[count($results)-1]['subject'],[
 								'subject_code'=>$r->subject_code,
-									'name' => $r->name,
-									'description'=>$r->description
+									'name' => $r->subject_name,
+									'description'=>$r->subject_description
 								]);
 
 				$prevQuestionId = $r->id;
 			}
 
 			shuffle($results);
-
+			if(!$results){
+				return 'question not found';
+			}
 			$expiresAt = Carbon::now()->addMinutes(5);
 			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
 			return $results;
@@ -342,7 +349,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p06.*, t.`part_1`, t.`part_2`, t.`part_3`, t.`expression`,  t.`answer`,  qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
+				SELECT p06.*, t.`part_1`, t.`part_2`, t.`part_3`, t.`expression`,  t.`answer`,  qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
 					FROM `t0206_game_question_p06` p06, `t0206_game_question_p06_template` t, `t0126_game_planet_question_cache` qc 
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -401,8 +408,8 @@ class ZapZapQuestionHelper{
 				}
 				array_push($results[count($results)-1]['subject'],[
 								'subject_code'=>$r->subject_code,
-									'name' => $r->name,
-									'description'=>$r->description
+									'name' => $r->subject_name,
+									'description'=>$r->subject_description
 								]);
 
 				$prevQuestionId = $r->id;
@@ -410,7 +417,9 @@ class ZapZapQuestionHelper{
 			}
 
 			shuffle($results);
-
+			if(!$results){
+				return 'question not found';
+			}
 			$expiresAt = Carbon::now()->addMinutes(5);
 			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
 			return $results;
@@ -432,7 +441,7 @@ class ZapZapQuestionHelper{
 				$questionCount = $gamePlanet->question_count;
 			}
 			$sql = "
-				SELECT p07.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
+				SELECT p07.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
 					FROM `t0207_game_question_p07` p07, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -470,13 +479,17 @@ class ZapZapQuestionHelper{
 
 				array_push($results[count($results)-1]['subject'],[
 								'subject_code'=>$r->subject_code,
-									'name' => $r->name,
-									'description'=>$r->description
+									'name' => $r->subject_name,
+									'description'=>$r->subject_description
 								]);
 				$prevQuestionId = $r->id;
 			}
 
 			shuffle($results);
+
+			if(!$results){
+				return 'question not found';
+			}
 
 			$expiresAt = Carbon::now()->addMinutes(5);
 			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
@@ -500,7 +513,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p08.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
+				SELECT p08.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
 					FROM `t0208_game_question_p08` p08, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -535,13 +548,17 @@ class ZapZapQuestionHelper{
 				}
 				array_push($results[count($results)-1]['subject'],[
 								'subject_code'=>$r->subject_code,
-									'name' => $r->name,
-									'description'=>$r->description
+									'name' => $r->subject_name,
+									'description'=>$r->subject_description
 								]);
 
 				$prevQuestionId = $r->id;
 			}
 			shuffle($results);
+
+			if(!$results){
+				return 'question not found';
+			}
 
 			$expiresAt = Carbon::now()->addMinutes(5);
 			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
@@ -564,7 +581,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p09.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
+				SELECT p09.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
 					FROM `t0209_game_question_p09` p09, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -600,13 +617,17 @@ class ZapZapQuestionHelper{
 				}
 				array_push($results[count($results)-1]['subject'],[
 								'subject_code'=>$r->subject_code,
-									'name' => $r->name,
-									'description'=>$r->description
+									'name' => $r->subject_name,
+									'description'=>$r->subject_description
 								]);
 
 				$prevQuestionId = $r->id;
 			}
 			shuffle($results);
+
+			if(!$results){
+				return 'question not found';
+			}
 
 			$expiresAt = Carbon::now()->addMinutes(5);
 			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
@@ -630,7 +651,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p10.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
+				SELECT p10.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
 					FROM `t0210_game_question_p10` p10, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -640,7 +661,6 @@ class ZapZapQuestionHelper{
                         	LIMIT {$questionCount}
 			";
 			$result = DB::SELECT($sql);
-
 			$results = [];
 			$prevQuestionId = 0;
 
@@ -660,14 +680,18 @@ class ZapZapQuestionHelper{
 				}
 				array_push($results[count($results)-1]['subject'],[
 								'subject_code'=>$r->subject_code,
-									'name' => $r->name,
-									'description'=>$r->description
+									'name' => $r->subject_name,
+									'description'=>$r->subject_description
 								]);
 
 				$prevQuestionId = $r->id;
 			}
 
 			shuffle($results);
+
+			if(!$results){
+				return 'question not found';
+			}
 
 			$expiresAt = Carbon::now()->addMinutes(5);
 			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
@@ -691,7 +715,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p11.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
+				SELECT p11.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
 					FROM `t0211_game_question_p11` p11, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -723,14 +747,18 @@ class ZapZapQuestionHelper{
 				}
 				array_push($results[count($results)-1]['subject'],[
 								'subject_code'=>$r->subject_code,
-									'name' => $r->name,
-									'description'=>$r->description
+									'name' => $r->subject_name,
+									'description'=>$r->subject_description
 								]);
 
 				$prevQuestionId = $r->id;
 			}
 
 			shuffle($results);
+
+			if(!$results){
+				return 'question not found';
+			}
 
 			$expiresAt = Carbon::now()->addMinutes(5);
 			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
@@ -753,7 +781,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p12.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
+				SELECT p12.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
 					FROM `t0212_game_question_p12` p12, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -791,14 +819,18 @@ class ZapZapQuestionHelper{
 				}
 				array_push($results[count($results)-1]['subject'],[
 								'subject_code'=>$r->subject_code,
-									'name' => $r->name,
-									'description'=>$r->description
+									'name' => $r->subject_name,
+									'description'=>$r->subject_description
 								]);
 
 				$prevQuestionId = $r->id;
 			}
 
 			shuffle($results);
+
+			if(!$results){
+				return 'question not found';
+			}
 
 			$expiresAt = Carbon::now()->addMinutes(5);
 			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
@@ -822,7 +854,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p13.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
+				SELECT p13.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
 					FROM `t0213_game_question_p13` p13, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -870,8 +902,8 @@ class ZapZapQuestionHelper{
 				}
 				array_push($results[count($results)-1]['subject'],[
 								'subject_code'=>$r->subject_code,
-									'name' => $r->name,
-									'description'=>$r->description
+									'name' => $r->subject_name,
+									'description'=>$r->subject_description
 								]);
 
 				$prevQuestionId = $r->id;
@@ -879,12 +911,151 @@ class ZapZapQuestionHelper{
 
 			shuffle($results);
 
+			if(!$results){
+				return 'question not found';
+			}
+
 			$expiresAt = Carbon::now()->addMinutes(5);
 			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
 			return $results;
 
 		}catch(Exception $ex){
 			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp13', ['environment' => json_encode([
+				'ex' =>  $ex->getMessage(),
+				'sql' =>  $sql,
+			])]);
+		return ResponseHelper::OutputJSON('exception');
+		}
+	}
+
+	public static function GetQuestionP14($planetId,$difficulty,$questionCount){
+		try{
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
+			$sql = "
+				SELECT p14.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
+					FROM `t0214_game_question_p14` p14, `t0126_game_planet_question_cache` qc
+                        WHERE qc.`planet_id` = {$planetId}
+                        	AND qc.`difficulty` = {$difficulty}
+                        	AND p14.`id` = qc.`target_id`
+
+                        	ORDER BY RAND() 
+                        	LIMIT {$questionCount}
+			";			
+
+			$result = DB::SELECT($sql);
+
+			$results = [];
+			$prevQuestionId = 0;
+
+			for($i=0; $i<count($result); $i++){
+				$r = $result[$i];
+
+
+				if($r->id != $prevQuestionId){
+					array_push($results, [
+						'id' => $r->id,
+						'answer' => $r->answer,
+						'operator' => $r->operator,
+						'number1' => $r->number1,
+						'number1_multiplier' => $r->number1_multiplier,
+						'number2' => $r->number2,
+						'number2_multiplier' => $r->number2_multiplier,
+						'number3' => $r->number3,
+						'number3_multiplier' => $r->number3_multiplier,
+						'answer_option_1' => $r->answer_option_1,
+						'answer_option_2' => $r->answer_option_2,
+						'answer_option_3' => $r->answer_option_3,
+						'answer_option_4' => $r->answer_option_4,
+						'difficulty' => $r->difficulty,
+						'subject' => []
+					]);
+				}
+				array_push($results[count($results)-1]['subject'],[
+								'subject_code'=>$r->subject_code,
+									'name' => $r->subject_name,
+									'description'=>$r->subject_description
+								]);
+
+				$prevQuestionId = $r->id;
+			}
+
+			shuffle($results);
+			if(!$results){
+				return 'question not found';
+			}
+
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			return $results;
+
+		}catch(Exception $ex){
+			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp14', ['environment' => json_encode([
+				'ex' =>  $ex->getMessage(),
+				'sql' =>  $sql,
+			])]);
+		return ResponseHelper::OutputJSON('exception');
+		}
+	}
+
+	public static function GetQuestionP15($planetId,$difficulty,$questionCount){
+		try{
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
+			$sql = "
+				SELECT p15.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
+					FROM `t0215_game_question_p15` p15, `t0126_game_planet_question_cache` qc
+                        WHERE qc.`planet_id` = {$planetId}
+                        	AND qc.`difficulty` = {$difficulty}
+                        	AND p15.`id` = qc.`target_id`
+
+                        	ORDER BY RAND() 
+                        	LIMIT {$questionCount}
+			";			
+
+			$result = DB::SELECT($sql);
+
+			$results = [];
+			$prevQuestionId = 0;
+			
+			for($i=0; $i<count($result); $i++){
+				$r = $result[$i];
+
+
+				if($r->id != $prevQuestionId){
+					array_push($results, [
+						'id' => $r->id,
+						'question' => $r->question,
+						'option_hour' => $r->option_hour,
+						'option_minute' => $r->option_minute,
+						'difficulty' => $r->difficulty,
+						'subject' => []
+					]);
+				}
+				array_push($results[count($results)-1]['subject'],[
+								'subject_code'=>$r->subject_code,
+									'name' => $r->subject_name,
+									'description'=>$r->subject_description
+								]);
+
+				$prevQuestionId = $r->id;
+			}
+
+			shuffle($results);
+			if(!$results){
+				return 'question not found';
+			}
+
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			return $results;
+
+		}catch(Exception $ex){
+			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp15', ['environment' => json_encode([
 				'ex' =>  $ex->getMessage(),
 				'sql' =>  $sql,
 			])]);
@@ -901,7 +1072,7 @@ class ZapZapQuestionHelper{
 			}
 			
 			$sql = "
-				SELECT p18.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
+				SELECT p18.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
 					FROM `t0218_game_question_p18` p18, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -933,14 +1104,18 @@ class ZapZapQuestionHelper{
 				}
 				array_push($results[count($results)-1]['subject'],[
 								'subject_code'=>$r->subject_code,
-									'name' => $r->name,
-									'description'=>$r->description
+									'name' => $r->subject_name,
+									'description'=>$r->subject_description
 								]);
 
 				$prevQuestionId = $r->id;
 			}
 
 			shuffle($results);
+
+			if(!$results){
+				return 'question not found';
+			}
 
 			$expiresAt = Carbon::now()->addMinutes(5);
 			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
@@ -964,7 +1139,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p23.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
+				SELECT p23.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
 					FROM `t0223_game_question_p23` p23, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -994,14 +1169,18 @@ class ZapZapQuestionHelper{
 				}
 				array_push($results[count($results)-1]['subject'],[
 								'subject_code'=>$r->subject_code,
-									'name' => $r->name,
-									'description'=>$r->description
+									'name' => $r->subject_name,
+									'description'=>$r->subject_description
 								]);
 
 				$prevQuestionId = $r->id;
 			}
 
 			shuffle($results);
+
+			if(!$results){
+				return 'question not found';
+			}
 
 			$expiresAt = Carbon::now()->addMinutes(5);
 			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
@@ -1024,7 +1203,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p32.*, qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
+				SELECT p32.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
 					FROM `t0232_game_question_p32` p32, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -1065,13 +1244,17 @@ class ZapZapQuestionHelper{
 				}
 				array_push($results[count($results)-1]['subject'],[
 								'subject_code'=>$r->subject_code,
-									'name' => $r->name,
-									'description'=>$r->description
+									'name' => $r->subject_name,
+									'description'=>$r->subject_description
 								]);
 
 				$prevQuestionId = $r->id;
 			}
 			shuffle($results);
+
+			if(!$results){
+				return 'question not found';
+			}
 
 			$expiresAt = Carbon::now()->addMinutes(5);
 			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
@@ -1165,7 +1348,7 @@ class ZapZapQuestionHelper{
 			}
 		
 			$sql = "
-				SELECT p00.* , qc.`question_id` , qc.`subject_code` , qc.`name` , qc.`description`
+				SELECT p00.* , qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
 					FROM `t0200_game_question_p00` p00, (    
 						SELECT * 
 						    	FROM (
@@ -1235,8 +1418,8 @@ class ZapZapQuestionHelper{
 
 				array_push($results[0]['question'][count($results[0]['question'])-1]['subject'],[
 								'subject_code'=>$r->subject_code,
-									'name' => $r->name,
-									'description'=>$r->description
+									'name' => $r->subject_name,
+									'description'=>$r->subject_description
 								]);
 
 				$prevQuestionId = $r->id;

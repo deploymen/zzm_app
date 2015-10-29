@@ -61,19 +61,23 @@ Class ApiGameController extends Controller {
 
 			//get planet info
 			if (Cache::has('ApiGameController@request('.$planetId.')') ) {
+
 				$planet = Cache::get('ApiGameController@request('.$planetId.')');
+
+
 			}else{
 				$planet = GamePlanet::find($planetId);
+
+				if(!$planet){
+					return ResponseHelper::OutputJSON('fail', 'planet not found');
+				}
 
 			    $expiresAt = Carbon::now()->addMinutes(60);
 				Cache::put('ApiGameController@request('.$planetId.')', $planet , $expiresAt);
 			}
 
-			if(!$planet){
-				return ResponseHelper::OutputJSON('fail', 'planet not found');
-			}
-      
 			if(!$planet->available){
+				Cache::forget('ApiGameController@request('.$planetId.')');
 				return ResponseHelper::OutputJSON('fail', 'planet is not enable');
 			}	
 
@@ -104,8 +108,10 @@ Class ApiGameController extends Controller {
 			$level = $userMap->level;
 
 			if ( Cache::has('ApiGameController@request('.$planetId.','.$difficulty.')') ){
+
 				$questions = Cache::get('ApiGameController@request('.$planetId.','.$difficulty.')');
 			}else{
+
 				$type = GameType::find($planet->game_type_id);
 				switch($type->name){
 					case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId,$difficulty,$questionCount); break;
@@ -119,12 +125,14 @@ Class ApiGameController extends Controller {
 					case 'p11':$questions = ZapZapQuestionHelper::GetQuestionP11($planetId,$difficulty,$questionCount); break;
 					case 'p12':$questions = ZapZapQuestionHelper::GetQuestionP12($planetId,$difficulty,$questionCount); break;
 					case 'p13':$questions = ZapZapQuestionHelper::GetQuestionP13($planetId,$difficulty,$questionCount); break;
+					case 'p14':$questions = ZapZapQuestionHelper::GetQuestionP14($planetId,$difficulty,$questionCount); break;
+					case 'p15':$questions = ZapZapQuestionHelper::GetQuestionP15($planetId,$difficulty,$questionCount); break;
 					case 'p18':$questions = ZapZapQuestionHelper::GetQuestionP18($planetId,$difficulty,$questionCount); break;
 					case 'p23':$questions = ZapZapQuestionHelper::GetQuestionP23($planetId,$difficulty,$questionCount); break;
 					case 'p32':$questions = ZapZapQuestionHelper::GetQuestionP32($planetId,$difficulty,$questionCount); break;
 					case 'p00':$questions = ZapZapQuestionHelper::GetQuestionP00($planetId,$gameType,$level,$profileId); break;
 
-					default: return ResponseHelper::OutputJSON('fail', 'question not found');
+					default: return ResponseHelper::OutputJSON('fail', $type->name.' not found');
 				}	
 			}
 
