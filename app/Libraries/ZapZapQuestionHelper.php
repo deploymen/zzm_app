@@ -1949,6 +1949,66 @@ class ZapZapQuestionHelper{
 		}
 	}
 
+	public static function submitResultP14($planetId,$gamePlay ,$gameResult,$profileId ) {
+		try{
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				$resultP14 = new GameResultP14;
+				$resultP14->target_type = 'p14';
+				$resultP14->target_id = $question->target_id;
+				$resultP14->answer = $inAnswer['answer']['answer'];
+				$resultP14->correct = $inAnswer['correct'];
+				$resultP14->save();
+
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p14';
+				$gameResults->target_id = $resultP14->id;
+				$gameResults->game_type_id = '14';
+				$gameResults->save();
+			}	
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
+	}
+
+	public static function submitResultP15($planetId,$gamePlay ,$gameResult,$profileId ) {
+		try{
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				$resultP15 = new GameResultP15;
+				$resultP15->target_type = 'p15';
+				$resultP15->target_id = $question->target_id;
+				$resultP15->answer = $inAnswer['answer']['answer'];
+				$resultP15->correct = $inAnswer['correct'];
+				$resultP15->save();
+
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p15';
+				$gameResults->target_id = $resultP15->id;
+				$gameResults->game_type_id = '15';
+				$gameResults->save();
+			}	
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
+	}
+
 	public static function submitResultP18($planetId,$gamePlay ,$gameResult,$profileId ) {
 		try{
 			for($i=0; $i<count($gameResult['answers']); $i++){
