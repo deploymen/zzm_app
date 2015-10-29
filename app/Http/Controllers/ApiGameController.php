@@ -83,9 +83,6 @@ Class ApiGameController extends Controller {
 
 			//NEED UPDATE 26/10/2015
 			$userMap = ZapZapQuestionHelper::GetUserMapPersonal($profileId, $planetId);
-			if(!$userMap){
-				return ResponseHelper::OutputJSON('fail', 'system planet not enable');
-			}
 
 			$planetTopScore = ZapZapQuestionHelper::GameScreenPlanetTopScore($planetId);
 			$top_scre_result =[];
@@ -127,6 +124,7 @@ Class ApiGameController extends Controller {
 					case 'p13':$questions = ZapZapQuestionHelper::GetQuestionP13($planetId,$difficulty,$questionCount); break;
 					case 'p14':$questions = ZapZapQuestionHelper::GetQuestionP14($planetId,$difficulty,$questionCount); break;
 					case 'p15':$questions = ZapZapQuestionHelper::GetQuestionP15($planetId,$difficulty,$questionCount); break;
+					case 'p16':$questions = ZapZapQuestionHelper::GetQuestionP16($planetId,$difficulty,$questionCount); break;
 					case 'p18':$questions = ZapZapQuestionHelper::GetQuestionP18($planetId,$difficulty,$questionCount); break;
 					case 'p23':$questions = ZapZapQuestionHelper::GetQuestionP23($planetId,$difficulty,$questionCount); break;
 					case 'p32':$questions = ZapZapQuestionHelper::GetQuestionP32($planetId,$difficulty,$questionCount); break;
