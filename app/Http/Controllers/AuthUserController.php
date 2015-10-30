@@ -188,7 +188,6 @@ Class AuthUserController extends Controller {
 		$username = Request::input('username');
 		$password = Request::input('password');
 		$password_sha1 = sha1($password . Config::get('app.auth_salt'));
-
 		$deviceId = Request::input('device_id'); //optional
 
 		if (!$username || !$password) {
@@ -196,10 +195,12 @@ Class AuthUserController extends Controller {
 		}
 
 		//trial control //will implement here
-		try {
+		// try {
 
 			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
+			var_export($userAccess); die();
 			$user = User::where('id', $userAccess->user_id)->where('activated', 1)->first();
+
 			if (!$userAccess) {
 				$log = new LogSignInUser;
 				$log->username = $username;
@@ -249,13 +250,13 @@ Class AuthUserController extends Controller {
 				'access_token' => $accessToken,
 			]);
 
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'AuthUserController > signIn',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		// } catch (Exception $ex) {
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		'source' => 'AuthUserController > signIn',
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 	}
 
 	public function connectFacebook() {
