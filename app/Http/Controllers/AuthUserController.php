@@ -195,13 +195,12 @@ Class AuthUserController extends Controller {
 		}
 
 		//trial control //will implement here
-		// try {
+		try {
 
 			// $userAccess = UserAccess::all();
 			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
 
 			if (!$userAccess) {
-				die('123');
 				$log = new LogSignInUser;
 				$log->username = $username;
 				$log->password_sha1 = $password_sha1;
@@ -253,13 +252,13 @@ Class AuthUserController extends Controller {
 				'access_token' => $accessToken,
 			]);
 
-		// } catch (Exception $ex) {
-		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-		// 		'source' => 'AuthUserController > signIn',
-		// 		'inputs' => Request::all(),
-		// 	])]);
-		// 	return ResponseHelper::OutputJSON('exception');
-		// }
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'AuthUserController > signIn',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 	}
 
 	public function connectFacebook() {
