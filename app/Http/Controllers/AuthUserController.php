@@ -197,8 +197,9 @@ Class AuthUserController extends Controller {
 		//trial control //will implement here
 		// try {
 
+			// $userAccess = UserAccess::all();
 			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
-			var_export($userAccess); die();
+			var_export($username); die();
 			$user = User::where('id', $userAccess->user_id)->where('activated', 1)->first();
 
 			if (!$userAccess) {
