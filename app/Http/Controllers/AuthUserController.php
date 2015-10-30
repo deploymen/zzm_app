@@ -199,10 +199,9 @@ Class AuthUserController extends Controller {
 
 			// $userAccess = UserAccess::all();
 			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
-			var_export($username); die();
-			$user = User::where('id', $userAccess->user_id)->where('activated', 1)->first();
 
 			if (!$userAccess) {
+				die('123');
 				$log = new LogSignInUser;
 				$log->username = $username;
 				$log->password_sha1 = $password_sha1;
@@ -211,6 +210,9 @@ Class AuthUserController extends Controller {
 				$log->save();
 				return ResponseHelper::OutputJSON('fail', 'invalid username/password');
 			}
+
+			$user = User::where('id', $userAccess->user_id)->where('activated', 1)->first();
+			
 			if (!$user) {
 				$log = new LogSignInUser;
 				$log->username = $username;
