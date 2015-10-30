@@ -203,11 +203,11 @@ class ZapZapQuestionHelper{
 			return $results;
 
 		}catch(Exception $ex){
-		LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp01', ['environment' => json_encode([
-			'ex' =>  $ex->getMessage(),
-			'sql' =>  $sql,
-		])]);	
-		return ResponseHelper::OutputJSON('exception');				
+			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp01', ['environment' => json_encode([
+				'ex' =>  $ex->getMessage(),
+				'sql' =>  $sql,
+			])]);	
+			return false;				
 		}
 	}
 
@@ -276,7 +276,7 @@ class ZapZapQuestionHelper{
 			'ex' =>  $ex->getMessage(),
 			'sql' =>  $sql,
 		])]);
-		return ResponseHelper::OutputJSON('exception');
+		return false;
 		}
 	}
 
@@ -341,7 +341,7 @@ class ZapZapQuestionHelper{
 				'ex' =>  $ex->getMessage(),
 				'sql' =>  $sql,
 			])]);
-		return ResponseHelper::OutputJSON('exception');
+		return false;
 		}
 	}
 
@@ -433,7 +433,7 @@ class ZapZapQuestionHelper{
 			'ex' =>  $ex->getMessage(),
 			'sql' =>  $sql,
 		])]);
-		return ResponseHelper::OutputJSON('exception');
+		return false;
 		}
 	}
 
@@ -504,7 +504,7 @@ class ZapZapQuestionHelper{
 				'ex' =>  $ex->getMessage(),
 				'sql' =>  $sql,
 		])]);
-			return ResponseHelper::OutputJSON('exception');
+			return false;
 		}
 	}
 
@@ -573,7 +573,7 @@ class ZapZapQuestionHelper{
 				'ex' =>  $ex->getMessage(),
 				'sql' =>  $sql,
 			])]);
-		return ResponseHelper::OutputJSON('exception');
+		return false;
 		}
 	}
 
@@ -642,7 +642,7 @@ class ZapZapQuestionHelper{
 				'ex' =>  $ex->getMessage(),
 				'sql' =>  $sql,
 			])]);
-		return ResponseHelper::OutputJSON('exception');
+		return false;
 		}
 	}
 
@@ -706,7 +706,7 @@ class ZapZapQuestionHelper{
 				'ex' =>  $ex->getMessage(),
 				'sql' =>  $sql,
 			])]);
-		return ResponseHelper::OutputJSON('exception');
+		return false;
 		}
 	}
 
@@ -773,7 +773,7 @@ class ZapZapQuestionHelper{
 				'ex' =>  $ex->getMessage(),
 				'sql' =>  $sql,
 			])]);
-		return ResponseHelper::OutputJSON('exception');
+		return false;
 		}
 	}
 
@@ -845,7 +845,7 @@ class ZapZapQuestionHelper{
 				'ex' =>  $ex->getMessage(),
 				'sql' =>  $sql,
 			])]);
-		return ResponseHelper::OutputJSON('exception');
+		return false;
 		}
 	}
 
@@ -928,7 +928,7 @@ class ZapZapQuestionHelper{
 				'ex' =>  $ex->getMessage(),
 				'sql' =>  $sql,
 			])]);
-		return ResponseHelper::OutputJSON('exception');
+		return false;
 		}
 	}
 
@@ -1000,7 +1000,7 @@ class ZapZapQuestionHelper{
 				'ex' =>  $ex->getMessage(),
 				'sql' =>  $sql,
 			])]);
-		return ResponseHelper::OutputJSON('exception');
+		return false;
 		}
 	}
 
@@ -1063,7 +1063,7 @@ class ZapZapQuestionHelper{
 				'ex' =>  $ex->getMessage(),
 				'sql' =>  $sql,
 			])]);
-		return ResponseHelper::OutputJSON('exception');
+		return false;
 		}
 	}
 
@@ -1127,7 +1127,7 @@ class ZapZapQuestionHelper{
 				'ex' =>  $ex->getMessage(),
 				'sql' =>  $sql,
 			])]);
-		return ResponseHelper::OutputJSON('exception');
+		return false;
 		}
 	}
 
@@ -1194,7 +1194,7 @@ class ZapZapQuestionHelper{
 				'ex' =>  $ex->getMessage(),
 				'sql' =>  $sql,
 			])]);
-		return ResponseHelper::OutputJSON('exception');
+		return false;
 		}
 	}
 
@@ -1259,7 +1259,7 @@ class ZapZapQuestionHelper{
 				'ex' =>  $ex->getMessage(),
 				'sql' =>  $sql,
 			])]);
-		return ResponseHelper::OutputJSON('exception');
+		return false;
 		}
 	}
 
@@ -1333,7 +1333,7 @@ class ZapZapQuestionHelper{
 				'ex' =>  $ex->getMessage(),
 				'sql' =>  $sql,
 			])]);
-		return ResponseHelper::OutputJSON('exception');
+		return false;
 		}
 	}
 
@@ -1420,7 +1420,7 @@ class ZapZapQuestionHelper{
 					FROM `t0200_game_question_p00` p00, (    
 						SELECT * 
 						    	FROM (
-						    		SELECT  `target_id` , `question_id` , `subject_code` , `name` , `description`
+						    		SELECT  `target_id` , `question_id` , `subject_code` , `subject_name` , `subject_description`
 										FROM `t0126_game_planet_question_cache`
 										    WHERE `difficulty` = 1
 										    AND `planet_id` = 228
@@ -1432,7 +1432,7 @@ class ZapZapQuestionHelper{
 
 							SELECT * 
 						    	FROM (
-									SELECT  `target_id` , `question_id` , `subject_code` , `name` , `description`
+									SELECT  `target_id` , `question_id` , `subject_code` , `subject_name` , `subject_description`
 								        FROM `t0126_game_planet_question_cache`
 								            WHERE `difficulty` = 2
 								            AND `planet_id` = 228
@@ -1444,7 +1444,7 @@ class ZapZapQuestionHelper{
 							UNION
 							SELECT * 
 						    	FROM (
-									SELECT  `target_id` , `question_id` , `subject_code` , `name` , `description`
+									SELECT  `target_id` , `question_id` , `subject_code` , `subject_name` , `subject_description`
 								        FROM `t0126_game_planet_question_cache`
 								            WHERE `difficulty` = 3
 								            AND `planet_id` = 228
@@ -1618,7 +1618,7 @@ class ZapZapQuestionHelper{
 			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp99', ['environment' => json_encode([
 				'ex' =>  $ex->getMessage(),
 			])]);
-		return ResponseHelper::OutputJSON('exception');
+		return false;
 		}
 	}
 
