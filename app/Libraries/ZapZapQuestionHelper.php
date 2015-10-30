@@ -37,6 +37,8 @@ use App\Models\GameResultP10;
 use App\Models\GameResultP11;
 use App\Models\GameResultP12;
 use App\Models\GameResultP13;
+use App\Models\GameResultP14;
+use App\Models\GameResultP15;
 use App\Models\GameResultP18;
 use App\Models\GameResultP23;
 use App\Models\GameResultP32;
