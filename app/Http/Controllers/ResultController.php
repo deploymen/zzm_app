@@ -257,7 +257,6 @@ Class ResultController extends Controller {
 
 	public function onlyQuestions() {
 		$userId = Request::input('user_id');
-
 		$gameCode = Request::input('game_code');
 
 		// $playId = Request::input('play_id');
@@ -269,7 +268,7 @@ Class ResultController extends Controller {
 
 		$fake = Request::input('fake', 0);
 		if ($fake) {
-			$profileId = 365;
+			$profileId = 3613;
 		}
 
 		// try{
@@ -323,7 +322,6 @@ Class ResultController extends Controller {
 		}
 		$playId = implode(',', $playId);
 
-		var_export($playId); die();
 		switch ($play[0]->target_type) {
 			case 'p00':$question = ResultHelper::ResultQuestionP00($playId);
 				break;

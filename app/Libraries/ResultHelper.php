@@ -404,7 +404,7 @@ class ResultHelper{
 				LEFT JOIN `t0131_game_subject` s ON(qs.`subject_id` = s.`id`  )
 
        				WHERE r.`target_id` = r10.`id`
-       				AND r.`target_id` = q10.`id`
+       				AND r10.`target_id` = q10.`id`
        				AND r.`play_id` IN ($playId)
 
        				ORDER BY r.`id` ASC;
