@@ -1,6 +1,5 @@
-
 <?php
-
+Route::get('/', function(){ return ('1.0'); });
 Route::pattern('role', '(parent)|(teacher)|(admin)|(content)|(investor)');
 
 // =======================================================================//
