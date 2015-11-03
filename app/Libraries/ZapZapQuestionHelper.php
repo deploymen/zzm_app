@@ -1937,7 +1937,7 @@ class ZapZapQuestionHelper{
 				$resultP11->target_type = 'p11';
 				$resultP11->target_id = $question->target_id;
 				$resultP11->patty = $inAnswer['answer']['patty'];
-				$resultP11->greens = $inAnswer['answer']['greens'];
+				$resultP11->green = $inAnswer['answer']['green'];
 				$resultP11->cheese = $inAnswer['answer']['cheese'];
 				$resultP11->correct = $inAnswer['correct'];
 				$resultP11->save();
