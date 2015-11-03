@@ -301,7 +301,7 @@ class ResultHelper{
 		$answers = [];
 
 		 $sql = "
-       		SELECT q8.`id` AS `question_id` ,q8.`param_1` , q8.`param_2` , q8.`param_3` , q8.`param_4` , q8.`param_5` , q8.`param_6` , q8.`param_7` , q8.`hexagon_path` , r8.`id` AS `result_id` ,r8.`correct` , q8.`difficulty`
+       		SELECT q8.`id` AS `question_id` ,q8.`param_1` , q8.`param_2` , q8.`param_3` , q8.`param_4` , q8.`param_5` , q8.`param_6` , q8.`param_7` , q8.`hexagon_path` , r8.`id` AS `result_id` , r8.`answer` ,r8.`correct` , q8.`difficulty`
        			FROM `t0300_game_result` r , `t0208_game_question_p08` q8 , `t0308_game_result_p08` r8
 
        				WHERE r.`target_id` = r8.`id`
@@ -315,14 +315,16 @@ class ResultHelper{
 
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
+     		$question = 'The equation '.$r->param_1.$r->param_2.$r->param_3.$r->param_4.$r->param_5.$r->param_6.$r->param_7.' is jumbled.';
+
 			if($r->question_id != $prevQuestionId){
-				$question = 'The equation '.$r->param_1.$r->param_2.$r->param_3.$r->param_4.$r->param_5.$r->param_6.$r->param_7.' is jumbled.'
+				array_push($answers, [
 					'question' => $question,
 					'difficulty'=>$r->difficulty,
 					'result' => [
 						'result_id' => $r->result_id,
-						'correct'=> $r->correct,
-						'answer'=>$r->answer,
+						'correct' => $r->correct,
+						'answer' =>$r->answer,
 					]
 				]);
 			}
@@ -432,7 +434,6 @@ class ResultHelper{
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
 			if($r->question_id != $prevQuestionId){
-				
 				array_push($answers, [
 					'question' => '',
 					'difficulty'=>$r->difficulty,
@@ -599,7 +600,7 @@ class ResultHelper{
 		$answers = [];
 
 		 $sql = "
-       		SELECT q18.`id` AS `question_id` , q18.`question` , r18.`answer` , r18.`id` AS `result_id` ,r18.`correct` , q18.`difficulty`
+       		SELECT q18.`id` AS `question_id` , q18.`question`,q18.`option_from` , r18.`answer` , r18.`id` AS `result_id` ,r18.`correct` , q18.`difficulty`
        			FROM `t0300_game_result` r , `t0218_game_question_p18` q18 , `t0318_game_result_p18` r18
 
        				WHERE r.`target_id` = r18.`id`
@@ -613,10 +614,17 @@ class ResultHelper{
 
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
+
+			if(!$r->option_from){
+				$question = "Locate ".$r->question." on the number line.";
+			}else{
+				$question = "Locate ".$r->question." from ".$r->option_from." on the number line.";
+			}
+
 			if($r->question_id != $prevQuestionId){
 				array_push($answers, [
 					'question_id' => $r->question_id,
-					'question'=>$r->question,
+					'question'=> $question,
 					'difficulty'=>$r->difficulty,
 					'result' => [
 						'result_id' => $r->result_id,
