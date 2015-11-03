@@ -188,7 +188,6 @@ Class AuthUserController extends Controller {
 		$username = Request::input('username');
 		$password = Request::input('password');
 		$password_sha1 = sha1($password . Config::get('app.auth_salt'));
-
 		$deviceId = Request::input('device_id'); //optional
 
 		if (!$username || !$password) {
@@ -198,8 +197,9 @@ Class AuthUserController extends Controller {
 		//trial control //will implement here
 		try {
 
+			// $userAccess = UserAccess::all();
 			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
-			$user = User::where('id', $userAccess->user_id)->where('activated', 1)->first();
+
 			if (!$userAccess) {
 				$log = new LogSignInUser;
 				$log->username = $username;
@@ -209,6 +209,9 @@ Class AuthUserController extends Controller {
 				$log->save();
 				return ResponseHelper::OutputJSON('fail', 'invalid username/password');
 			}
+
+			$user = User::where('id', $userAccess->user_id)->where('activated', 1)->first();
+			
 			if (!$user) {
 				$log = new LogSignInUser;
 				$log->username = $username;
