@@ -521,85 +521,87 @@ Class ApiGameController extends Controller {
 	}
 
 	public function createPackage(){
-		$planetId = Request::input('planet_id');
 
-		$planet = ZapZapQuestionHelper::GetPlanetInfo($planetId);
-		if(!$planet || !$planet->enable){
-			return ResponseHelper::OutputJSON('fail , planet not found');
-		}
+		$planet = GamePlanet::where('available', 1)->get();
+
 		$set = [
-			[1, 10], //0
-			[2, 10], //1
-			[3, 10], //2
-			[4, 10], //3
-			[5, 10], //4
+			[1, 5], //0
+			[2, 5], //1
+			[3, 5], //2
+			[4, 5], //3
+			[5, 5], //4
 		];
+		for($k=0; $k<count($planet); $k++){
+			$p = $planet[$k];
 
-		for($i=0; $i<5; $i++){
-			$difficulty = $set[$i][0];
+			for($i=0; $i<5; $i++){
+				$difficulty = $set[$i][0];
 
-			$star = $difficulty;
-			if($difficulty != 5){ 
-				$star = $star-1; 
-			}
+				$star = $difficulty;
+				if($difficulty != 5){ 
+					$star = $star-1; 
+				}
 
-			for($j=0; $j<$set[$i][1]; $j++){
-				switch($planet->game_type){
-					case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId,$difficulty,$planet->question_count); break;
-					case 'p02':$questions = ZapZapQuestionHelper::GetQuestionP02($planetId,$difficulty,$planet->question_count); break;
-					case 'p03':$questions = ZapZapQuestionHelper::GetQuestionP03($planetId,$difficulty,$planet->question_count); break;
-					case 'p06':$questions = ZapZapQuestionHelper::GetQuestionP06($planetId,$difficulty,$planet->question_count); break;
-					case 'p07':$questions = ZapZapQuestionHelper::GetQuestionP07($planetId,$difficulty,$planet->question_count); break;
-					case 'p08':$questions = ZapZapQuestionHelper::GetQuestionP08($planetId,$difficulty,$planet->question_count); break;
-					case 'p09':$questions = ZapZapQuestionHelper::GetQuestionP09($planetId,$difficulty,$planet->question_count); break;
-					case 'p10':$questions = ZapZapQuestionHelper::GetQuestionP10($planetId,$difficulty,$planet->question_count); break;
-					case 'p11':$questions = ZapZapQuestionHelper::GetQuestionP11($planetId,$difficulty,$planet->question_count); break;
-					case 'p18':$questions = ZapZapQuestionHelper::GetQuestionP18($planetId,$difficulty,$planet->question_count); break;
-					case 'p23':$questions = ZapZapQuestionHelper::GetQuestionP23($planetId,$difficulty,$planet->question_count); break;
-					case 'p32':$questions = ZapZapQuestionHelper::GetQuestionP32($planetId,$difficulty,$planet->question_count); break;
-
-					default: return ResponseHelper::OutputJSON('fail', 'question not found');
-				}	
+				for($j=0; $j<$set[$i][1]; $j++){
+					switch($p->game_type_id){
+						case '1':$questions = ZapZapQuestionHelper::GetQuestionP01($p->id,$difficulty,$p->question_count); break;
+						case '2':$questions = ZapZapQuestionHelper::GetQuestionP02($p->id,$difficulty,$p->question_count); break;
+						case '3':$questions = ZapZapQuestionHelper::GetQuestionP03($p->id,$difficulty,$p->question_count); break;
+						case '6':$questions = ZapZapQuestionHelper::GetQuestionP06($p->id,$difficulty,$p->question_count); break;
+						case '7':$questions = ZapZapQuestionHelper::GetQuestionP07($p->id,$difficulty,$p->question_count); break;
+						case '8':$questions = ZapZapQuestionHelper::GetQuestionP08($p->id,$difficulty,$p->question_count); break;
+						case '9':$questions = ZapZapQuestionHelper::GetQuestionP09($p->id,$difficulty,$p->question_count); break;
+						case '10':$questions = ZapZapQuestionHelper::GetQuestionP10($p->id,$difficulty,$p->question_count); break;
+						case '11':$questions = ZapZapQuestionHelper::GetQuestionP11($p->id,$difficulty,$p->question_count); break;
+						case '12':$questions = ZapZapQuestionHelper::GetQuestionP12($p->id,$difficulty,$p->question_count); break;
+						case '13':$questions = ZapZapQuestionHelper::GetQuestionP13($p->id,$difficulty,$p->question_count); break;
+						case '14':$questions = ZapZapQuestionHelper::GetQuestionP14($p->id,$difficulty,$p->question_count); break;
+						case '15':$questions = ZapZapQuestionHelper::GetQuestionP15($p->id,$difficulty,$p->question_count); break;
+						case '16':$questions = ZapZapQuestionHelper::GetQuestionP16($p->id,$difficulty,$p->question_count); break;
+						case '18':$questions = ZapZapQuestionHelper::GetQuestionP18($p->id,$difficulty,$p->question_count); break;
+						case '23':$questions = ZapZapQuestionHelper::GetQuestionP23($p->id,$difficulty,$p->question_count); break;
+						case '32':$questions = ZapZapQuestionHelper::GetQuestionP32($p->id,$difficulty,$p->question_count); break;
 				
-				$file = [
-					'status' => "success",
-					'data' => [
-						'planet' => [
-							'id' => $planet->id,
-							'name' => $planet->name,
-							'description' => $planet->description,
-							'question_count' => $planet->question_count,
-							'badges' => json_decode($planet->badges_metrics),
-						],
-						'status' => [
-							'star' => $star,	
-							'difficulty' => $difficulty,
-							'top_score' => 0,
-						],
-						'planet_top_score'=> [],
-		            	'questions' => $questions,
-		            ],
-	           	];
+						default: continue;
+					}	
+					
+					$file = [
+						'status' => "success",
+						'data' => [
+							'planet' => [
+								'id' => $p->id,
+								'name' => $p->name,
+								'description' => $p->description,
+								'question_count' => $p->question_count,
+								'badges' => json_decode($p->badges_metrics),
+							],
+							'status' => [
+								'star' => $star,	
+								'difficulty' => $difficulty,
+								'top_score' => 0,
+							],
+							'planet_top_score'=> [],
+			            	'questions' => $questions,
+			            ],
+		           	];
 
-	           	$dir1 = 'package/download/'.$planet->id;
-	           	$dir2 = 'package/download/'.$planet->id.'/'.$difficulty;
-	           
-	           	if (!is_dir($dir1) ){
-					mkdir($dir1); //create the directory
-					chmod($dir1, 0777); //make it writable
-				}
+		           	$dir1 = 'package/download/'.$p->id;
+		           	$dir2 = 'package/download/'.$p->id.'/'.$difficulty;
+		           
+		           	if (!is_dir($dir1) ){
+						mkdir($dir1); //create the directory
+						chmod($dir1, 0777); //make it writable
+					}
 
-				if (!is_dir($dir2) ){
-					mkdir($dir2); //create the directory
-					chmod($dir2, 0777); //make it writable
-				}
+					if (!is_dir($dir2) ){
+						mkdir($dir2); //create the directory
+						chmod($dir2, 0777); //make it writable
+					}
 
-		        file_put_contents($dir2.'/'.$j.'.json', json_encode($file));
-				}
+			        file_put_contents($dir2.'/'.$j.'.json', json_encode($file));
+					}
+			}
 		}
-			return ResponseHelper::OutputJSON('success');
-
-
      	$files = glob(public_path().'/package/download/');
 		$try = Zipper::make(public_path().'/package/application.zip')->add($files);
 
