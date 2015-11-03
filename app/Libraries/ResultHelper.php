@@ -145,7 +145,7 @@ class ResultHelper{
 
 			if($r->question_id != $prevQuestionId){
 				$answer = $r->answer_1.','.$r->answer_2.','.$r->answer_3.','.$r->answer_4.','.$r->answer_5.','.$r->answer_6;
-				$question = 'Makes '.$r->question.' given the following numbers '.$r->answer_1.','.$r->answer_2.','.$r->answer_3.','.$r->answer_4.','.$r->answer_5.','.$r->answer_6;
+				$question = 'Makes '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3.','.$r->answer_option_4.','.$r->answer_option_5.','.$r->answer_option_6;
 				
 				array_push($answers, [
 						'question_id' => $r->question_id,
@@ -187,7 +187,7 @@ class ResultHelper{
 				
 				array_push($answers, [
 					'question_id' => $r->question_id,
-					'question' => $r->question,
+					'question' => $r->question.' True or False?',
 					'difficulty'=>$r->difficulty,
 					'result' => [
 						'result_id' => $r->result_id,
@@ -280,8 +280,43 @@ class ResultHelper{
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
 			if($r->question_id != $prevQuestionId){
-				$question = $r->left_question_1.$r->left_question_2.$r->left_question_3." "."?"." ".$r->right_question_1.$r->right_question_2.$r->right_question_3;
+				$question = $r->left_question_1.$r->left_question_2.$r->left_question_3." [box] ".$r->right_question_1.$r->right_question_2.$r->right_question_3;
 				array_push($answers, [
+					'question' => $question,
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->result_id,
+						'correct'=> $r->correct,
+						'answer'=>$r->answer,
+					]
+				]);
+			}
+
+			$prevQuestionId = $r->question_id;
+		}
+		return $answers;
+	}
+
+	public static function ResultQuestionP08($playId){
+		$answers = [];
+
+		 $sql = "
+       		SELECT q8.`id` AS `question_id` ,q8.`param_1` , q8.`param_2` , q8.`param_3` , q8.`param_4` , q8.`param_5` , q8.`param_6` , q8.`param_7` , q8.`hexagon_path` , r8.`id` AS `result_id` ,r8.`correct` , q8.`difficulty`
+       			FROM `t0300_game_result` r , `t0208_game_question_p08` q8 , `t0308_game_result_p08` r8
+
+       				WHERE r.`target_id` = r8.`id`
+       				AND r8.`target_id` = q8.`id`
+       				AND r.`play_id` IN ($playId)
+
+       				ORDER BY r.`id` ASC;
+       ";
+       $result = DB::select($sql);
+       $prevQuestionId = 0;
+
+        for($i=0; $i<count($result); $i++){
+			$r = $result[$i];
+			if($r->question_id != $prevQuestionId){
+				$question = 'The equation '.$r->param_1.$r->param_2.$r->param_3.$r->param_4.$r->param_5.$r->param_6.$r->param_7.' is jumbled.'
 					'question' => $question,
 					'difficulty'=>$r->difficulty,
 					'result' => [
@@ -453,7 +488,8 @@ class ResultHelper{
 		return $answers;
 	}
 
-	public static function ResultQuestionP13($playId){		$answers = [];
+	public static function ResultQuestionP13($playId){		
+		$answers = [];
 
 		 $sql = "
        		SELECT q13.`id` AS `question_id` , r13.`answer`, r13.`id` AS `result_id` ,r13.`correct` , q13.`difficulty`

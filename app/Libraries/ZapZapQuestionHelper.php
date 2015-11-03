@@ -151,7 +151,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p01.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
+				SELECT p01.*, qc.`question_id`
 					FROM `t0201_game_question_p01` p01, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -186,14 +186,10 @@ class ZapZapQuestionHelper{
 							'angle5' => $r->answer_angle5,
 							'angle6' => $r->answer_angle6,
 						],
-						'subject' => []
+						
 					]);
 				}
-				array_push($results[count($results)-1]['subject'],[
-								'subject_code'=>$r->subject_code,
-								'name' => $r->subject_name,
-								'description'=>$r->subject_description
-								]);
+				
 				$prevQuestionId = $r->id;
 			}
 			shuffle($results);
@@ -222,7 +218,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p02.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
+				SELECT p02.*, qc.`question_id`
 					FROM `t0202_game_question_p02` p02, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -252,15 +248,11 @@ class ZapZapQuestionHelper{
 						'answer_option_6' => $r->answer_option_6,
 						'fixed_num' => $r->fixed,
 						'difficulty' => $r->difficulty,
-						'subject' => []
+						
 					]);
 				}
 
-				array_push($results[count($results)-1]['subject'],[
-								'subject_code'=>$r->subject_code,
-									'name' => $r->subject_name,
-									'description'=>$r->subject_description
-								]);
+				
 				$prevQuestionId = $r->id;
 			}
 
@@ -291,7 +283,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p03.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
+				SELECT p03.*, qc.`question_id`
 					FROM `t0203_game_question_p03` p03, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -318,14 +310,10 @@ class ZapZapQuestionHelper{
 						'answer_option_2' => $r->answer_option_2,
 						'image_id' => $r->image_id,
 						'difficulty' => $r->difficulty,
-						'subject' => []
+						
 					]);
 				}
-				array_push($results[count($results)-1]['subject'],[
-								'subject_code'=>$r->subject_code,
-									'name' => $r->subject_name,
-									'description'=>$r->subject_description
-								]);
+				
 
 				$prevQuestionId = $r->id;
 			}
@@ -355,7 +343,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p06.*, t.`part_1`, t.`part_2`, t.`part_3`, t.`expression`,  t.`answer`,  qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
+				SELECT p06.*, t.`part_1`, t.`part_2`, t.`part_3`, t.`expression`,  t.`answer`,  qc.`question_id`
 					FROM `t0206_game_question_p06` p06, `t0206_game_question_p06_template` t, `t0126_game_planet_question_cache` qc 
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -409,14 +397,10 @@ class ZapZapQuestionHelper{
 						'part_3' => $part3,
 						'expression' => $expression,
 						'answer' => $answer,
-						'subject' => []
+						
 					]);
 				}
-				array_push($results[count($results)-1]['subject'],[
-								'subject_code'=>$r->subject_code,
-									'name' => $r->subject_name,
-									'description'=>$r->subject_description
-								]);
+				
 
 				$prevQuestionId = $r->id;
 
@@ -447,7 +431,7 @@ class ZapZapQuestionHelper{
 				$questionCount = $gamePlanet->question_count;
 			}
 			$sql = "
-				SELECT p07.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
+				SELECT p07.*, qc.`question_id`
 					FROM `t0207_game_question_p07` p07, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -479,15 +463,11 @@ class ZapZapQuestionHelper{
 						'answers' => [
 							'answer' => $r->answer,
 						],
-						'subject' => []
+						
 					]);
 				}
 
-				array_push($results[count($results)-1]['subject'],[
-								'subject_code'=>$r->subject_code,
-									'name' => $r->subject_name,
-									'description'=>$r->subject_description
-								]);
+				
 				$prevQuestionId = $r->id;
 			}
 
@@ -519,7 +499,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p08.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
+				SELECT p08.*, qc.`question_id`
 					FROM `t0208_game_question_p08` p08, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -549,14 +529,9 @@ class ZapZapQuestionHelper{
 						'param_7' => $r->param_7,
 						'hexagon_path' => $r->hexagon_path,
 						'difficulty' => $r->difficulty,
-						'subject' => []
+						
 					]);
 				}
-				array_push($results[count($results)-1]['subject'],[
-								'subject_code'=>$r->subject_code,
-									'name' => $r->subject_name,
-									'description'=>$r->subject_description
-								]);
 
 				$prevQuestionId = $r->id;
 			}
@@ -587,7 +562,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p09.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
+				SELECT p09.*, qc.`question_id`
 					FROM `t0209_game_question_p09` p09, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -618,14 +593,10 @@ class ZapZapQuestionHelper{
 						'param_5' => $r->question_object5,
 						'answer' => $r->answer,
 						'difficulty' => $r->difficulty,
-						'subject' => []
+						
 					]);
 				}
-				array_push($results[count($results)-1]['subject'],[
-								'subject_code'=>$r->subject_code,
-									'name' => $r->subject_name,
-									'description'=>$r->subject_description
-								]);
+				
 
 				$prevQuestionId = $r->id;
 			}
@@ -657,7 +628,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p10.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
+				SELECT p10.*, qc.`question_id`
 					FROM `t0210_game_question_p10` p10, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -681,14 +652,10 @@ class ZapZapQuestionHelper{
 						'option_type' => $r->option_type,
 						'option_generate' => $r->option_generate,
 						'difficulty' => $r->difficulty,
-						'subject' => []
+						
 					]);
 				}
-				array_push($results[count($results)-1]['subject'],[
-								'subject_code'=>$r->subject_code,
-									'name' => $r->subject_name,
-									'description'=>$r->subject_description
-								]);
+				
 
 				$prevQuestionId = $r->id;
 			}
@@ -721,7 +688,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p11.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
+				SELECT p11.*, qc.`question_id`
 					FROM `t0211_game_question_p11` p11, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -742,20 +709,16 @@ class ZapZapQuestionHelper{
 					array_push($results, [
 						'id' => $r->id,
 						'patty' => $r->patty,
-						'greens' => $r->greens,
+						'green' => $r->greens,
 						'cheese' => $r->cheese,
 						'preset_patty' => $r->preset_patty,
 						'preset_greens' => $r->preset_greens,
 						'preset_cheese' => $r->preset_cheese,
 						'difficulty' => $r->difficulty,
-						'subject' => []
+						
 					]);
 				}
-				array_push($results[count($results)-1]['subject'],[
-								'subject_code'=>$r->subject_code,
-									'name' => $r->subject_name,
-									'description'=>$r->subject_description
-								]);
+				
 
 				$prevQuestionId = $r->id;
 			}
@@ -787,7 +750,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p12.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
+				SELECT p12.*, qc.`question_id`
 					FROM `t0212_game_question_p12` p12, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -820,14 +783,10 @@ class ZapZapQuestionHelper{
 						'prefix1' => $r->prefix1,
 						'prefix2' => $r->prefix2,
 						'difficulty' => $r->difficulty,
-						'subject' => []
+						
 					]);
 				}
-				array_push($results[count($results)-1]['subject'],[
-								'subject_code'=>$r->subject_code,
-									'name' => $r->subject_name,
-									'description'=>$r->subject_description
-								]);
+				
 
 				$prevQuestionId = $r->id;
 			}
@@ -860,7 +819,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p13.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
+				SELECT p13.*, qc.`question_id`
 					FROM `t0213_game_question_p13` p13, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -903,14 +862,10 @@ class ZapZapQuestionHelper{
 						'c4ad' => $r->c4ad ,
 						
 						'difficulty' => $r->difficulty,
-						'subject' => []
+						
 					]);
 				}
-				array_push($results[count($results)-1]['subject'],[
-								'subject_code'=>$r->subject_code,
-									'name' => $r->subject_name,
-									'description'=>$r->subject_description
-								]);
+				
 
 				$prevQuestionId = $r->id;
 			}
@@ -941,7 +896,7 @@ class ZapZapQuestionHelper{
 				$questionCount = $gamePlanet->question_count;
 			}
 			$sql = "
-				SELECT p14.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
+				SELECT p14.*, qc.`question_id`
 					FROM `t0214_game_question_p14` p14, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -976,14 +931,10 @@ class ZapZapQuestionHelper{
 						'answer_option_3' => $r->answer_option_3,
 						'answer_option_4' => $r->answer_option_4,
 						'difficulty' => $r->difficulty,
-						'subject' => []
+						
 					]);
 				}
-				array_push($results[count($results)-1]['subject'],[
-								'subject_code'=>$r->subject_code,
-									'name' => $r->subject_name,
-									'description'=>$r->subject_description
-								]);
+				
 
 				$prevQuestionId = $r->id;
 			}
@@ -1013,7 +964,7 @@ class ZapZapQuestionHelper{
 				$questionCount = $gamePlanet->question_count;
 			}
 			$sql = "
-				SELECT p15.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
+				SELECT p15.*, qc.`question_id`
 					FROM `t0215_game_question_p15` p15, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -1039,14 +990,10 @@ class ZapZapQuestionHelper{
 						'option_hour' => $r->option_hour,
 						'option_minute' => $r->option_minute,
 						'difficulty' => $r->difficulty,
-						'subject' => []
+						
 					]);
 				}
-				array_push($results[count($results)-1]['subject'],[
-								'subject_code'=>$r->subject_code,
-									'name' => $r->subject_name,
-									'description'=>$r->subject_description
-								]);
+				
 
 				$prevQuestionId = $r->id;
 			}
@@ -1076,7 +1023,7 @@ class ZapZapQuestionHelper{
 				$questionCount = $gamePlanet->question_count;
 			}
 			$sql = "
-				SELECT p16.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
+				SELECT p16.*, qc.`question_id`
 					FROM `t0216_game_question_p16` p16, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -1103,14 +1050,10 @@ class ZapZapQuestionHelper{
 						'option_boxes' => $r->option_boxes,
 						'option_product' => $r->option_product,
 						'difficulty' => $r->difficulty,
-						'subject' => []
+						
 					]);
 				}
-				array_push($results[count($results)-1]['subject'],[
-								'subject_code'=>$r->subject_code,
-									'name' => $r->subject_name,
-									'description'=>$r->subject_description
-								]);
+				
 
 				$prevQuestionId = $r->id;
 			}
@@ -1142,7 +1085,7 @@ class ZapZapQuestionHelper{
 			}
 			
 			$sql = "
-				SELECT p18.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
+				SELECT p18.*, qc.`question_id`
 					FROM `t0218_game_question_p18` p18, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -1169,14 +1112,10 @@ class ZapZapQuestionHelper{
 						'answer' => $r->answer,
 						'ruler_type' => $r->ruler_type,
 						'difficulty' => $r->difficulty,
-						'subject' => []
+						
 					]);
 				}
-				array_push($results[count($results)-1]['subject'],[
-								'subject_code'=>$r->subject_code,
-									'name' => $r->subject_name,
-									'description'=>$r->subject_description
-								]);
+				
 
 				$prevQuestionId = $r->id;
 			}
@@ -1209,7 +1148,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p23.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
+				SELECT p23.*, qc.`question_id`
 					FROM `t0223_game_question_p23` p23, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -1234,14 +1173,10 @@ class ZapZapQuestionHelper{
 						'answer' => $r->answer,
 						'plane' => $r->plane,
 						'difficulty' => $r->difficulty,
-						'subject' => []
+						
 					]);
 				}
-				array_push($results[count($results)-1]['subject'],[
-								'subject_code'=>$r->subject_code,
-									'name' => $r->subject_name,
-									'description'=>$r->subject_description
-								]);
+				
 
 				$prevQuestionId = $r->id;
 			}
@@ -1273,7 +1208,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p32.*, qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
+				SELECT p32.*, qc.`question_id`
 					FROM `t0232_game_question_p32` p32, `t0126_game_planet_question_cache` qc
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
@@ -1309,14 +1244,10 @@ class ZapZapQuestionHelper{
 						'planet_2_x' => $r->planet_2_x,
 						'planet_2_y' => $r->planet_2_y,
 						'difficulty' => $r->difficulty,
-						'subject' => []
+						
 					]);
 				}
-				array_push($results[count($results)-1]['subject'],[
-								'subject_code'=>$r->subject_code,
-									'name' => $r->subject_name,
-									'description'=>$r->subject_description
-								]);
+				
 
 				$prevQuestionId = $r->id;
 			}
@@ -1418,11 +1349,11 @@ class ZapZapQuestionHelper{
 			}
 		
 			$sql = "
-				SELECT p00.* , qc.`question_id` , qc.`subject_code` , qc.`subject_name` , qc.`subject_description`
+				SELECT p00.* , qc.`question_id`
 					FROM `t0200_game_question_p00` p00, (    
 						SELECT * 
 						    	FROM (
-						    		SELECT  `target_id` , `question_id` , `subject_code` , `subject_name` , `subject_description`
+						    		SELECT  `target_id` , `question_id` 
 										FROM `t0126_game_planet_question_cache`
 										    WHERE `difficulty` = 1
 										    AND `planet_id` = 228
@@ -1434,7 +1365,7 @@ class ZapZapQuestionHelper{
 
 							SELECT * 
 						    	FROM (
-									SELECT  `target_id` , `question_id` , `subject_code` , `subject_name` , `subject_description`
+									SELECT  `target_id` , `question_id` 
 								        FROM `t0126_game_planet_question_cache`
 								            WHERE `difficulty` = 2
 								            AND `planet_id` = 228
@@ -1446,7 +1377,7 @@ class ZapZapQuestionHelper{
 							UNION
 							SELECT * 
 						    	FROM (
-									SELECT  `target_id` , `question_id` , `subject_code` , `subject_name` , `subject_description`
+									SELECT  `target_id` , `question_id` 
 								        FROM `t0126_game_planet_question_cache`
 								            WHERE `difficulty` = 3
 								            AND `planet_id` = 228
@@ -1482,15 +1413,9 @@ class ZapZapQuestionHelper{
 						'question_option4' => $r->question_option4,
 						'answer' => $r->answer,
 						'difficulty' => $r->difficulty,
-						'subject' => []
+						
 					]);
 				}
-
-				array_push($results[0]['question'][count($results[0]['question'])-1]['subject'],[
-								'subject_code'=>$r->subject_code,
-									'name' => $r->subject_name,
-									'description'=>$r->subject_description
-								]);
 
 				$prevQuestionId = $r->id;
 			}
