@@ -3,7 +3,7 @@ use Response;
 
 class ResponseHelper {
 
-	public static function OutputJSON($status, $message = "", $data = [], $headers = [], $cookies = []) {
+	public static function OutputJSON($status, $message = "", $data = [], $headers = [], $cookies = [] , $cmd = '' , $cmdParam = '') {
 		$payload = array(
 			'status' => $status,
 		);
@@ -19,6 +19,14 @@ class ResponseHelper {
 
 		if ($message != "") {
 			$payload['message'] = $message;
+		}
+
+		if ($cmd != ""){
+			$payload['cmd'] = $cmd;
+		}
+
+		if ($cmdParam != ""){
+			$payload['cmd_param'] = $cmdParam;
 		}
 
 		if (count($data) > 0) {$payload['data'] = $data;}
