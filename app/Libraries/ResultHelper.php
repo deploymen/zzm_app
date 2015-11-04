@@ -61,28 +61,26 @@ class ResultHelper{
        ";
 
        $result = DB::select($sql);
-       $prevQuestionId = 0;
+
+		$total = count( $result);
 
        for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
 
-			if($r->question_id != $prevQuestionId){
-				array_push($answers, [
-					'question_id' => $r->question_id,
-					'question' => $r->question,
-					'difficulty'=>$r->difficulty,
-					'result' => [
-						'result_id' => $r->result_id,
-						'correct'=> $r->correct,
-						'answer' => $r->answer,
-						]
-				]);
-			}
-				
-			$prevQuestionId = $r->question_id;
+			array_push($answers, [
+				'question_id' => $r->question_id,
+				'question' => $r->question,
+				'difficulty'=>$r->difficulty,
+				'result' => [
+					'result_id' => $r->result_id,
+					'correct'=> $r->correct,
+					'answer' => $r->answer,
+					]
+			]);
+			
 		}
 
-		return $answers;
+		return [$answers,  $total];
 	}
 
 	public static function ResultQuestionP01($playId , $startIndex , $pageSize){
@@ -103,28 +101,27 @@ class ResultHelper{
        $result = DB::select($sql);
        $prevQuestionId = 0;
 
+		$total = count( $result);
+
        for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
+		
+			$answer = 'Triangle = '.$r->angle3.' , Quadrilateral = '.$r->angle4.' , Pentagon = '.$r->angle5.' , Hexagon = '.$r->angle6;
 
-			if($r->question_id != $prevQuestionId){
-				$answer = 'Triangle = '.$r->angle3.' , Quadrilateral = '.$r->angle4.' , Pentagon = '.$r->angle5.' , Hexagon = '.$r->angle6;
-
-				array_push($answers, [
-					'question_id' => $r->question_id,
-					'question' => $r->question,
-					'difficulty'=>$r->difficulty,
-					'result' => [
-						'result_id' => $r->result_id,
-						'correct'=> $r->correct,
-						'answer' => $answer,
-						]
-				]);
-			}
-				
-			$prevQuestionId = $r->question_id;
+			array_push($answers, [
+				'question_id' => $r->question_id,
+				'question' => $r->question,
+				'difficulty'=>$r->difficulty,
+				'result' => [
+					'result_id' => $r->result_id,
+					'correct'=> $r->correct,
+					'answer' => $answer,
+					]
+			]);
+			
 		}
 
-		return $answers;
+		return [$answers,  $total];
 	}
 
 	public static function ResultQuestionP02($playId , $startIndex , $pageSize){
@@ -144,28 +141,27 @@ class ResultHelper{
        $result = DB::select($sql);
        $prevQuestionId = 0;
 
+		$total = count( $result);
+
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
 
-			if($r->question_id != $prevQuestionId){
-				$answer = $r->answer_1.','.$r->answer_2.','.$r->answer_3.','.$r->answer_4.','.$r->answer_5.','.$r->answer_6;
-				$question = 'Makes '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3.','.$r->answer_option_4.','.$r->answer_option_5.','.$r->answer_option_6;
-				
-				array_push($answers, [
-						'question_id' => $r->question_id,
-						'question'=> $question,
-						'difficulty'=>$r->difficulty,
-						'result' => [
-							'result_id' => $r->id,
-							'correct' => $r->correct,
-							'answer' => $answer,
-						]
-					]);
-			}
-				
-			$prevQuestionId = $r->question_id;
+			$answer = $r->answer_1.','.$r->answer_2.','.$r->answer_3.','.$r->answer_4.','.$r->answer_5.','.$r->answer_6;
+			$question = 'Makes '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3.','.$r->answer_option_4.','.$r->answer_option_5.','.$r->answer_option_6;
+			
+			array_push($answers, [
+					'question_id' => $r->question_id,
+					'question'=> $question,
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->id,
+						'correct' => $r->correct,
+						'answer' => $answer,
+					]
+				]);
+			
 		}
-		return $answers;
+		return [$answers,  $total];
 	}
 
 	public static function ResultQuestionP03($playId , $startIndex , $pageSize){
@@ -184,27 +180,24 @@ class ResultHelper{
        ";
        $result = DB::select($sql);
        $prevQuestionId = 0;
+		$total = count( $result);
 
        for($i=0; $i<count($result); $i++){
-			$r = $result[$i];
-
-			if($r->question_id != $prevQuestionId){
+			$r = $result[$i];		
 				
-				array_push($answers, [
-					'question_id' => $r->question_id,
-					'question' => $r->question.' True or False?',
-					'difficulty'=>$r->difficulty,
-					'result' => [
-						'result_id' => $r->result_id,
-						'correct'=> $r->correct,
-						'answer'=>$r->answer_text,
-					]
-				]);
-			}
-			
-			$prevQuestionId = $r->question_id;
+			array_push($answers, [
+				'question_id' => $r->question_id,
+				'question' => $r->question.' True or False?',
+				'difficulty'=>$r->difficulty,
+				'result' => [
+					'result_id' => $r->result_id,
+					'correct'=> $r->correct,
+					'answer'=>$r->answer_text,
+				]
+			]);
+		
 		}
-		return $answers;
+		return [$answers,  $total];
 	}
 
 	public static function ResultQuestionP06($playId , $startIndex , $pageSize){
@@ -226,44 +219,42 @@ class ResultHelper{
 
        $prevQuestionId = 0;
 
+		$total = count( $result);
+
        for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
 
-				$part1 =  str_replace("@1", $r->tpl_param_1, $r->part_1);
-				$part1 =  str_replace("@2", $r->tpl_param_2, $part1);
-				$part1 =  str_replace("@3", $r->tpl_param_3, $part1);
+			$part1 =  str_replace("@1", $r->tpl_param_1, $r->part_1);
+			$part1 =  str_replace("@2", $r->tpl_param_2, $part1);
+			$part1 =  str_replace("@3", $r->tpl_param_3, $part1);
 
-				$part2 =  str_replace("@1", $r->tpl_param_1, $r->part_2);
-				$part2 =  str_replace("@2", $r->tpl_param_2, $part2);
-				$part2 =  str_replace("@3", $r->tpl_param_3, $part2);
+			$part2 =  str_replace("@1", $r->tpl_param_1, $r->part_2);
+			$part2 =  str_replace("@2", $r->tpl_param_2, $part2);
+			$part2 =  str_replace("@3", $r->tpl_param_3, $part2);
 
-				$part3 =  str_replace("@1", $r->tpl_param_1, $r->part_3);
-				$part3 =  str_replace("@2", $r->tpl_param_2, $part3);
-				$part3 =  str_replace("@3", $r->tpl_param_3, $part3);
+			$part3 =  str_replace("@1", $r->tpl_param_1, $r->part_3);
+			$part3 =  str_replace("@2", $r->tpl_param_2, $part3);
+			$part3 =  str_replace("@3", $r->tpl_param_3, $part3);
 
-				$expression =  str_replace("@1", $r->tpl_param_1, $r->expression);
-				$expression =  str_replace("@2", $r->tpl_param_2, $expression);
-				$expression =  str_replace("@3", $r->tpl_param_3, $expression);
+			$expression =  str_replace("@1", $r->tpl_param_1, $r->expression);
+			$expression =  str_replace("@2", $r->tpl_param_2, $expression);
+			$expression =  str_replace("@3", $r->tpl_param_3, $expression);
 
-			if($r->question_id != $prevQuestionId){
+			$question = $part1.' '.$part2.' '.$part3;
 
-				$question = $part1.' '.$part2.' '.$part3;
-
-				array_push($answers, [
-					'question_id' => $r->question_id,
-					'question' => $question,
-					'difficulty'=>$r->difficulty,
-					'result' => [
-						'result_id' => $r->result_id,
-						'correct'=> $r->correct,
-						'answer'=>$r->result_answer,
-					]
-				]);
-			}
-		
-			$prevQuestionId = $r->question_id;
+			array_push($answers, [
+				'question_id' => $r->question_id,
+				'question' => $question,
+				'difficulty'=>$r->difficulty,
+				'result' => [
+					'result_id' => $r->result_id,
+					'correct'=> $r->correct,
+					'answer'=>$r->result_answer,
+				]
+			]);
+	
 		}
-			return $answers;
+			return [$answers,  $total];
 	}
 
 	public static function ResultQuestionP07($playId , $startIndex , $pageSize){
@@ -283,24 +274,23 @@ class ResultHelper{
        $result = DB::select($sql);
        $prevQuestionId = 0;
 
+		$total = count( $result);
+
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
-			if($r->question_id != $prevQuestionId){
-				$question = $r->left_question_1.$r->left_question_2.$r->left_question_3." [box] ".$r->right_question_1.$r->right_question_2.$r->right_question_3;
-				array_push($answers, [
-					'question' => $question,
-					'difficulty'=>$r->difficulty,
-					'result' => [
-						'result_id' => $r->result_id,
-						'correct'=> $r->correct,
-						'answer'=>$r->answer,
-					]
-				]);
-			}
-
-			$prevQuestionId = $r->question_id;
+			
+			$question = $r->left_question_1.$r->left_question_2.$r->left_question_3." [box] ".$r->right_question_1.$r->right_question_2.$r->right_question_3;
+			array_push($answers, [
+				'question' => $question,
+				'difficulty'=>$r->difficulty,
+				'result' => [
+					'result_id' => $r->result_id,
+					'correct'=> $r->correct,
+					'answer'=>$r->answer,
+				]
+			]);
 		}
-		return $answers;
+		return [$answers,  $total];
 	}
 
 	public static function ResultQuestionP08($playId , $startIndex , $pageSize){
@@ -320,25 +310,23 @@ class ResultHelper{
        $result = DB::select($sql);
        $prevQuestionId = 0;
 
+		$total = count( $result);
+
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
      		$question = 'The equation '.$r->param_1.$r->param_2.$r->param_3.$r->param_4.$r->param_5.$r->param_6.$r->param_7.' is jumbled.';
-
-			if($r->question_id != $prevQuestionId){
-				array_push($answers, [
-					'question' => $question,
-					'difficulty'=>$r->difficulty,
-					'result' => [
-						'result_id' => $r->result_id,
-						'correct' => $r->correct,
-						'answer' =>$r->answer,
-					]
-				]);
-			}
-
-			$prevQuestionId = $r->question_id;
+			
+			array_push($answers, [
+				'question' => $question,
+				'difficulty'=>$r->difficulty,
+				'result' => [
+					'result_id' => $r->result_id,
+					'correct' => $r->correct,
+					'answer' =>$r->answer,
+				]
+			]);
 		}
-		return $answers;
+		return [$answers,  $total];
 	}
 
 	public static function ResultQuestionP09($playId , $startIndex , $pageSize){
@@ -357,24 +345,22 @@ class ResultHelper{
        $result = DB::select($sql);
        $prevQuestionId = 0;
 
-        for($i=0; $i<count($result); $i++){
-			$r = $result[$i];
-			if($r->question_id != $prevQuestionId){
-				
-				array_push($answers, [
-					'question' => '',
-					'difficulty'=>$r->difficulty,
-					'result' => [
-						'result_id' => $r->result_id,
-						'correct'=> $r->correct,
-						'answer'=>$r->answer,
-					]
-				]);
-			}
+		$total = count( $result);
 
-			$prevQuestionId = $r->question_id;
+        for($i=0; $i<count($result); $i++){
+			$r = $result[$i];		
+			
+			array_push($answers, [
+				'question' => '',
+				'difficulty'=>$r->difficulty,
+				'result' => [
+					'result_id' => $r->result_id,
+					'correct'=> $r->correct,
+					'answer'=>$r->answer,
+				]
+			]);
 		}
-		return $answers;
+		return [$answers,  $total];
 	}
 
 	public static function ResultQuestionP10($playId , $startIndex , $pageSize){
@@ -395,6 +381,8 @@ class ResultHelper{
        $result = DB::select($sql);
 		  $prevQuestionId = 0;
 
+		$total = count( $result);
+
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
 			$thousands = floor(($r->answer % 10000)/1000);
@@ -402,27 +390,24 @@ class ResultHelper{
 			$tens = floor(($r->answer % 100)/10);
 			$ones = floor(($r->answer % 10)/1);
 
-			if($r->question_id != $prevQuestionId){
-				array_push($answers, [
-					'question_id' => $r->question_id,
-					'question'=>$r->question,
-					'difficulty'=>$r->difficulty,
-					'result' => [
-						'result_id' => $r->result_id,
-						'correct'=> $r->correct,
-						'answer'=> [
-							'thousands' => $thousands,
-							'hundreds' => $hundreds,
-							'tens' => $tens,
-							'ones' => $ones,
-						]
+			array_push($answers, [
+				'question_id' => $r->question_id,
+				'question'=>$r->question,
+				'difficulty'=>$r->difficulty,
+				'result' => [
+					'result_id' => $r->result_id,
+					'correct'=> $r->correct,
+					'answer'=> [
+						'thousands' => $thousands,
+						'hundreds' => $hundreds,
+						'tens' => $tens,
+						'ones' => $ones,
 					]
-				]);
-			}
-				
-			$prevQuestionId = $r->question_id;
+				]
+			]);
+			
 		}
-		return $answers;
+		return [$answers,  $total];
 	}
 
 	public static function ResultQuestionP11($playId , $startIndex , $pageSize){
@@ -441,27 +426,27 @@ class ResultHelper{
        $result = DB::select($sql);
        $prevQuestionId = 0;
 
+		$total = count( $result);
+
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
-			if($r->question_id != $prevQuestionId){
-				array_push($answers, [
-					'question' => '',
-					'difficulty'=>$r->difficulty,
-					'result' => [
-						'result_id' => $r->result_id,
-						'correct'=> $r->correct,
-						'answer'=>[
-							'patty' => $r->patty,
-							'greens' => $r->greens,
-							'cheese' => $r->cheese,
-						]
+
+			array_push($answers, [
+				'question' => '',
+				'difficulty'=>$r->difficulty,
+				'result' => [
+					'result_id' => $r->result_id,
+					'correct'=> $r->correct,
+					'answer'=>[
+						'patty' => $r->patty,
+						'greens' => $r->greens,
+						'cheese' => $r->cheese,
 					]
-				]);
-			}
-				
-			$prevQuestionId = $r->question_id;
+				]
+			]);
+			
 		}
-		return $answers;
+		return [$answers,  $total];
 	}
 
 	public static function ResultQuestionP12($playId , $startIndex , $pageSize){
@@ -480,24 +465,22 @@ class ResultHelper{
        $result = DB::select($sql);
        $prevQuestionId = 0;
 
+		$total = count( $result);
+
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
-			if($r->question_id != $prevQuestionId){
-				
-				array_push($answers, [
-					'question' => '',
-					'difficulty'=>$r->difficulty,
-					'result' => [
-						'result_id' => $r->result_id,
-						'correct'=> $r->correct,
-						'answer'=> $r->answer,
-					]
-				]);
-			}
-
-			$prevQuestionId = $r->question_id;
+			
+			array_push($answers, [
+				'question' => '',
+				'difficulty'=>$r->difficulty,
+				'result' => [
+					'result_id' => $r->result_id,
+					'correct'=> $r->correct,
+					'answer'=> $r->answer,
+				]
+			]);
 		}
-		return $answers;
+		return [$answers,  $total];
 	}
 
 	public static function ResultQuestionP13($playId , $startIndex , $pageSize){
@@ -516,24 +499,24 @@ class ResultHelper{
        $result = DB::select($sql);
        $prevQuestionId = 0;
 
+		$total = count( $result);
+
+
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
-			if($r->question_id != $prevQuestionId){
-				
-				array_push($answers, [
-					'question' => '',
-					'difficulty'=>$r->difficulty,
-					'result' => [
-						'result_id' => $r->result_id,
-						'correct'=> $r->correct,
-						'answer'=> $r->answer,
-					]
-				]);
-			}
-				
-			$prevQuestionId = $r->question_id;
+			
+			array_push($answers, [
+				'question' => '',
+				'difficulty'=>$r->difficulty,
+				'result' => [
+					'result_id' => $r->result_id,
+					'correct'=> $r->correct,
+					'answer'=> $r->answer,
+				]
+			]);
+			
 		}
-		return $answers;
+		return [$answers,  $total];
 	}
 
 	public static function ResultQuestionP14($playId , $startIndex , $pageSize){
@@ -553,24 +536,22 @@ class ResultHelper{
        $result = DB::select($sql);
        $prevQuestionId = 0;
 
+		$total = count( $result);
+
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
-			if($r->question_id != $prevQuestionId){
 				
-				array_push($answers, [
-					'question' => '',
-					'difficulty'=>$r->difficulty,
-					'result' => [
-						'result_id' => $r->result_id,
-						'correct'=> $r->correct,
-						'answer'=> $r->answer,
-					]
-				]);
-			}
-
-			$prevQuestionId = $r->question_id;
+			array_push($answers, [
+				'question' => '',
+				'difficulty'=>$r->difficulty,
+				'result' => [
+					'result_id' => $r->result_id,
+					'correct'=> $r->correct,
+					'answer'=> $r->answer,
+				]
+			]);
 		}
-		return $answers;
+		return [$answers,  $total];
 	}
 
 	public static function ResultQuestionP15($playId , $startIndex , $pageSize){
@@ -590,24 +571,22 @@ class ResultHelper{
        $result = DB::select($sql);
        $prevQuestionId = 0;
 
-        for($i=0; $i<count($result); $i++){
-			$r = $result[$i];
-			if($r->question_id != $prevQuestionId){
-				
-				array_push($answers, [
-					'question' => $r->question,
-					'difficulty'=>$r->difficulty,
-					'result' => [
-						'result_id' => $r->result_id,
-						'correct'=> $r->correct,
-						'answer'=> $r->answer,
-					]
-				]);
-			}
+		$total = count( $result);
 
-			$prevQuestionId = $r->question_id;
+        for($i=0; $i<count($result); $i++){
+			$r = $result[$i];		
+				
+			array_push($answers, [
+				'question' => $r->question,
+				'difficulty'=>$r->difficulty,
+				'result' => [
+					'result_id' => $r->result_id,
+					'correct'=> $r->correct,
+					'answer'=> $r->answer,
+				]
+			]);
 		}
-		return $answers;
+		return [$answers,  $total];
 	}
 
 	public static function ResultQuestionP18($playId , $startIndex , $pageSize){
@@ -627,6 +606,8 @@ class ResultHelper{
        $result = DB::select($sql);
 		  $prevQuestionId = 0;
 
+		$total = count( $result);
+
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
 
@@ -635,23 +616,19 @@ class ResultHelper{
 			}else{
 				$question = "Locate ".$r->question." from ".$r->option_from." on the number line.";
 			}
-
-			if($r->question_id != $prevQuestionId){
-				array_push($answers, [
-					'question_id' => $r->question_id,
-					'question'=> $question,
-					'difficulty'=>$r->difficulty,
-					'result' => [
-						'result_id' => $r->result_id,
-						'correct'=> $r->correct,
-						'answer'=>$r->answer,
-					]
-				]);
-			}
-
-			$prevQuestionId = $r->question_id;
+			
+			array_push($answers, [
+				'question_id' => $r->question_id,
+				'question'=> $question,
+				'difficulty'=>$r->difficulty,
+				'result' => [
+					'result_id' => $r->result_id,
+					'correct'=> $r->correct,
+					'answer'=>$r->answer,
+				]
+			]);
 		}
-		return $answers;
+		return [$answers,  $total];
 	}
 
 	public static function ResultQuestionP23($playId , $startIndex , $pageSize){
@@ -668,29 +645,28 @@ class ResultHelper{
        				ORDER BY r.`id` ASC
        				LIMIT {$startIndex} , {$pageSize}
        ";
-       $result = DB::select($sql);
-		  $prevQuestionId = 0;
+       	$result = DB::select($sql);
+		$prevQuestionId = 0;
+
+		$total = count( $result);
 
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
 			$question = "Stop the indicator at the angle ".$r->question;
 			$answer = $r->answer."° from A (180 - ".$r->answer."° from B";
-			if($r->question_id != $prevQuestionId){
-				array_push($answers, [
-					'question_id' => $r->question_id,
-					'question'=> $question,
-					'difficulty'=>$r->difficulty,
-					'result' => [
-						'result_id' => $r->result_id,
-						'correct'=> $r->correct,
-						'answer'=>$answer
-					]
-				]);
-			}
-
-			$prevQuestionId = $r->question_id;
+			
+			array_push($answers, [
+				'question_id' => $r->question_id,
+				'question'=> $question,
+				'difficulty'=>$r->difficulty,
+				'result' => [
+					'result_id' => $r->result_id,
+					'correct'=> $r->correct,
+					'answer'=>$answer
+				]
+			]);
 		}
-		return $answers;
+		return [$answers,  $total];
 	}
 
 	public static function ResultQuestionP32($playId , $startIndex , $pageSize){
@@ -707,29 +683,28 @@ class ResultHelper{
        				ORDER BY r.`id` ASC
        				LIMIT {$startIndex} , {$pageSize}
        ";
-       $result = DB::select($sql);
-		 $prevQuestionId = 0;
+        $result = DB::select($sql);
+
+        $total = count( $result);
+		$prevQuestionId = 0;
 
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
 			$question = "Plot the coordinate ".$r->question." when the X-axis begins at ".$r->origin_x." and the Y-axis begins at ".$r->origin_y.", the difference in X is ".$r->diff_x." and the difference in Y is ".$r->diff_y.".";
 			$answer = '('.$r->answer_x.','.$r->answer_y.')';
-			if($r->question_id != $prevQuestionId){
-				array_push($answers, [
-					'question_id' => $r->question_id,
-					'question'=> $question,
-					'difficulty'=>$r->difficulty,
-					'result' => [
-						'result_id' => $r->result_id,
-						'correct'=> $r->correct,
-						'answer'=>$answer,
-					]
-				]);
-			}
-
-			$prevQuestionId = $r->question_id;
+			
+			array_push($answers, [
+				'question_id' => $r->question_id,
+				'question'=> $question,
+				'difficulty'=>$r->difficulty,
+				'result' => [
+					'result_id' => $r->result_id,
+					'correct'=> $r->correct,
+					'answer'=>$answer,
+				]
+			]);
 		}
-		return $answers;
+		return [$answers,  $total];
 	}
 
 }

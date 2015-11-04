@@ -362,7 +362,7 @@ Class ResultController extends Controller {
 
 		return ResponseHelper::OutputJSON('success', '', [
 			'game_type' => $play[0]->target_type,
-			'questions' => $question,
+			'questions' => $question[0],
 			'breadcrumb' => [
 				'system_id' => $breadcrumb->system_id,
 				'system_name' => $breadcrumb->name,
@@ -371,7 +371,7 @@ Class ResultController extends Controller {
 			],
 			'page' => $page,
 			'page_size' => $pageSize,
-			'pageTotal' => ceil($total / $pageSize),
+			'pageTotal' => ceil($question[1] / $pageSize),
 		]);
 		// } catch (Exception $ex) {
 
