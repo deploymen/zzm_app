@@ -39,20 +39,17 @@ Class ApiProfileController extends Controller {
 			}
 
 			$sql = "
-				SELECT  *
-					FROM  (
-				        	SELECT p.`id` , gp.`created_at` , count(r.`id`) AS `questions_played`
-				        		FROM (`t0111_game_profile` p)
-				        			LEFT JOIN `t0400_game_play` gp ON (gp.`profile_id` = p.`id`)
-                        			LEFT JOIN `t0300_game_result` r ON (gp.`id` = r.`play_id`)
-				        		WHERE p.`user_id` = {$userId}
-				        		AND p.`deleted_at` IS NULL
-                        GROUP BY p.`id`
-				        		ORDER BY gp.`created_at` DESC
-
-
-				            )t
-				           GROUP BY `id`
+				SELECT g1.* , g2.`score`
+					FROM (
+						  SELECT p.`id` , MAX(gp.`created_at`) AS `created_at`, count(r.`id`) AS `questions_played`
+				    		FROM `t0111_game_profile` p
+								LEFT JOIN `t0400_game_play` gp ON (gp.`profile_id` = p.`id` AND gp.`user_id` = p.`user_id`)
+								LEFT JOIN `t0300_game_result` r ON (gp.`id` = r.`play_id` AND r.`target_type` = gp.`target_type`)
+						    		WHERE p.`user_id` = {userId}
+						    		AND p.`deleted_at` IS NULL
+				    					GROUP BY p.`id`
+						) g1
+						LEFT JOIN `t0400_game_play` g2 ON (g2.`profile_id` = g1.`id` AND g2.`user_id` = {$userId} AND g1.`created_at` = g2.`created_at`)
 			";
 
 			$lastPlayed = DB::select($sql);
@@ -79,35 +76,10 @@ Class ApiProfileController extends Controller {
 					'nick_name2' => $p->nickName2,
 					'avatar' => $p->avatar,
 					'game_code' => $p->gameCode,
-					'best_score' => [],
-					'weak_score' => [],
 					'last_played' => $lp->created_at,
 
 				]);
-				$best_score = ApiProfileHelper::ProfileBestScore($p, 'best_score');
-				$weak_score = ApiProfileHelper::ProfileBestScore($p, 'weak_score');
-				for ($j = 0; $j < count($best_score); $j++) {
-					$b = $best_score[$j];
-					array_push($profileInfo[$i]['best_score'], [
-						'system_name' => $b->name,
-						'planet_id' => $b->planet_id,
-						'description' => $b->description,
-						'best_score' => $b->score,
-						'status' => $b->status,
-						'play_id' => $b->play_id,
-					]);
-				}
-				for ($k = 0; $k < count($weak_score); $k++) {
-					$w = $weak_score[$k];
-					array_push($profileInfo[$i]['weak_score'], [
-						'system_name' => $w->name,
-						'planet_id' => $w->planet_id,
-						'description' => $w->description,
-						'weak_score' => $w->score,
-						'status' => $w->status,
-						'play_id' => $w->play_id,
-					]);
-				}
+
 			}
 
 			return ResponseHelper::OutputJSON('success', '', ['list' => $profileInfo]);
