@@ -55,7 +55,7 @@ class ResultHelper{
        				AND r0.`target_id` = q0.`id`
        				AND r.`play_id` IN ($playId)
 
-       				ORDER BY r.`id` ASC;
+       				ORDER BY r.`id` ASC
     
        				LIMIT {$startIndex} , {$pageSize}
        ";
@@ -96,7 +96,7 @@ class ResultHelper{
        				AND r1.`target_id` = q1.`id`
        				AND r.`play_id` IN ($playId)
 
-       				ORDER BY r.`id` ASC;
+       				ORDER BY r.`id` ASC
        				LIMIT {$startIndex} , {$pageSize}
        ";
 
@@ -138,7 +138,7 @@ class ResultHelper{
        				AND r2.`target_id` = q2.`id`
        				AND r.`play_id` IN ($playId)
 
-       				ORDER BY r.`id` ASC;
+       				ORDER BY r.`id` ASC
        				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
@@ -179,7 +179,7 @@ class ResultHelper{
        				AND r3.`target_id` = q3.`id`
        				AND r.`play_id` IN ($playId)
 
-       				ORDER BY r.`id` ASC;
+       				ORDER BY r.`id` ASC
        				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
@@ -219,7 +219,7 @@ class ResultHelper{
        				AND q6t.`id` = q6.`template_id`
        				AND r.`play_id` IN ($playId)
 
-       				ORDER BY r.`id` ASC;
+       				ORDER BY r.`id` ASC
        				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
@@ -277,7 +277,7 @@ class ResultHelper{
        				AND r7.`target_id` = q7.`id`
        				AND r.`play_id` IN ($playId)
 
-       				ORDER BY r.`id` ASC;
+       				ORDER BY r.`id` ASC
        				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
@@ -314,7 +314,7 @@ class ResultHelper{
        				AND r8.`target_id` = q8.`id`
        				AND r.`play_id` IN ($playId)
 
-       				ORDER BY r.`id` ASC;
+       				ORDER BY r.`id` ASC
        				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
@@ -351,7 +351,7 @@ class ResultHelper{
        				AND r9.`target_id` = q9.`id`
        				AND r.`play_id` IN ( {$playId} )
 
-       				ORDER BY r.`id` ASC;
+       				ORDER BY r.`id` ASC
        				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
@@ -389,7 +389,7 @@ class ResultHelper{
        				AND r10.`target_id` = q10.`id`
        				AND r.`play_id` IN ($playId)
 
-       				ORDER BY r.`id` ASC;
+       				ORDER BY r.`id` ASC
        				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
@@ -435,7 +435,7 @@ class ResultHelper{
        				AND r11.`target_id` = q11.`id`
        				AND r.`play_id` IN ( {$playId} )
 
-       				ORDER BY r.`id` ASC;
+       				ORDER BY r.`id` ASC
        				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
@@ -474,7 +474,7 @@ class ResultHelper{
        				AND r12.`target_id` = q12.`id`
        				AND r.`play_id` IN ( {$playId} )
 
-       				ORDER BY r.`id` ASC;
+       				ORDER BY r.`id` ASC
        				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
@@ -510,7 +510,7 @@ class ResultHelper{
        				AND r13.`target_id` = q13.`id`
        				AND r.`play_id` IN ( {$playId} )
 
-       				ORDER BY r.`id` ASC;
+       				ORDER BY r.`id` ASC
        				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
@@ -547,7 +547,7 @@ class ResultHelper{
        				AND r14.`target_id` = q14.`id`
        				AND r.`play_id` IN ( {$playId} )
 
-       				ORDER BY r.`id` ASC;
+       				ORDER BY r.`id` ASC
        				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
@@ -584,7 +584,7 @@ class ResultHelper{
        				AND r15.`target_id` = q15.`id`
        				AND r.`play_id` IN ( {$playId} )
 
-       				ORDER BY r.`id` ASC;
+       				ORDER BY r.`id` ASC
        				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
@@ -621,7 +621,7 @@ class ResultHelper{
        				AND r18.`target_id` = q18.`id`
        				AND r.`play_id` IN ($playId)
 
-       				ORDER BY r.`id` ASC;
+       				ORDER BY r.`id` ASC
        				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
@@ -665,7 +665,7 @@ class ResultHelper{
 					AND r23.`target_id` = q23.`id`
        				AND r.`play_id` IN ({$playId})
 
-       				ORDER BY r.`id` ASC;
+       				ORDER BY r.`id` ASC
        				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
@@ -704,7 +704,7 @@ class ResultHelper{
 					AND r32.`target_id` = q32.`id`
        				AND r.`play_id` IN ({$playId})
 
-       				ORDER BY r.`id` ASC;
+       				ORDER BY r.`id` ASC
        				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
