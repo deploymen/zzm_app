@@ -45,7 +45,7 @@ Class ApiProfileController extends Controller {
 				    		FROM `t0111_game_profile` p
 								LEFT JOIN `t0400_game_play` gp ON (gp.`profile_id` = p.`id` AND gp.`user_id` = p.`user_id`)
 								LEFT JOIN `t0300_game_result` r ON (gp.`id` = r.`play_id` AND r.`target_type` = gp.`target_type`)
-						    		WHERE p.`user_id` = {userId}
+						    		WHERE p.`user_id` = {$userId}
 						    		AND p.`deleted_at` IS NULL
 				    					GROUP BY p.`id`
 						) g1
