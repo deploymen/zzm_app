@@ -110,7 +110,7 @@ Class ResultController extends Controller {
 			$system = GameSystem::find($systmeId);
 
 			$startIndex = $pageSize * ($page - 1);
-			$total = GamePlanet::where('enable', 1)->count();
+			$total = GamePlanet::where('available', 1)->count();
 
 			$sql = "
 				SELECT p.`id` AS `planet_id`, p.`description` AS `subtitle`, COUNT(gp.`id`) AS `play_count` ,IFNULL(MAX(gp.`score`), 0) AS `max_score` , IFNULL(um.`star`, 0) AS `star` , IFNULL(um.`played`,0) AS `played`
@@ -125,6 +125,8 @@ Class ResultController extends Controller {
 								AND sp.`enable` = 1
 		                                GROUP BY s.`id`, p.`id`
 										ORDER BY p.`id` ASC
+
+										LIMIT {$startIndex} , {$pageSize}
 			";
 
 			$result = DB::SELECT($sql, ['game_code' => $gameCode, 'profileId' => $profileId]);
@@ -304,9 +306,6 @@ Class ResultController extends Controller {
 		$breadcrumb = DB::select($breadcrumbSql);
 		$breadcrumb = $breadcrumb[0];
 
-		$startIndex = $pageSize * ($page - 1);
-		$total = GameSystem::where('enable', 1)->count();
-
 		$sqlGameType = "
 				SELECT  `id`, `target_type`
 					FROM  `t0400_game_play`
@@ -322,40 +321,42 @@ Class ResultController extends Controller {
 		}
 		$playId = implode(',', $playId);
 
+		$startIndex = $pageSize * ($page - 1);
+
 		switch ($play[0]->target_type) {
-			case 'p00':$question = ResultHelper::ResultQuestionP00($playId);
+			case 'p00':$question = ResultHelper::ResultQuestionP00($playId , $startIndex , $pageSize);
 				break;
-			case 'p01':$question = ResultHelper::ResultQuestionP01($playId);
+			case 'p01':$question = ResultHelper::ResultQuestionP01($playId , $startIndex , $pageSize);
 				break;
-			case 'p02':$question = ResultHelper::ResultQuestionP02($playId);
+			case 'p02':$question = ResultHelper::ResultQuestionP02($playId , $startIndex , $pageSize);
 				break;
-			case 'p03':$question = ResultHelper::ResultQuestionP03($playId);
+			case 'p03':$question = ResultHelper::ResultQuestionP03($playId , $startIndex , $pageSize);
 				break;
-			case 'p06':$question = ResultHelper::ResultQuestionP06($playId);
+			case 'p06':$question = ResultHelper::ResultQuestionP06($playId , $startIndex , $pageSize);
 				break;
-			case 'p07':$question = ResultHelper::ResultQuestionP07($playId);
+			case 'p07':$question = ResultHelper::ResultQuestionP07($playId , $startIndex , $pageSize);
 				break;
-			case 'p08':$question = ResultHelper::ResultQuestionP08($playId);
+			case 'p08':$question = ResultHelper::ResultQuestionP08($playId , $startIndex , $pageSize);
 				break;
-			case 'p09':$question = ResultHelper::ResultQuestionP09($playId);
+			case 'p09':$question = ResultHelper::ResultQuestionP09($playId , $startIndex , $pageSize);
 				break;
-			case 'p10':$question = ResultHelper::ResultQuestionP10($playId);
+			case 'p10':$question = ResultHelper::ResultQuestionP10($playId , $startIndex , $pageSize);
 				break;
-			case 'p11':$question = ResultHelper::ResultQuestionP11($playId);
+			case 'p11':$question = ResultHelper::ResultQuestionP11($playId , $startIndex , $pageSize);
 				break;
-			case 'p12':$question = ResultHelper::ResultQuestionP12($playId);
+			case 'p12':$question = ResultHelper::ResultQuestionP12($playId , $startIndex , $pageSize);
 				break;
-			case 'p13':$question = ResultHelper::ResultQuestionP13($playId);
+			case 'p13':$question = ResultHelper::ResultQuestionP13($playId , $startIndex , $pageSize);
 				break;
-			case 'p14':$question = ResultHelper::ResultQuestionP14($playId);
+			case 'p14':$question = ResultHelper::ResultQuestionP14($playId , $startIndex , $pageSize);
 				break;
-			case 'p15':$question = ResultHelper::ResultQuestionP15($playId);
+			case 'p15':$question = ResultHelper::ResultQuestionP15($playId , $startIndex , $pageSize);
 				break;
-			case 'p18':$question = ResultHelper::ResultQuestionP18($playId);
+			case 'p18':$question = ResultHelper::ResultQuestionP18($playId , $startIndex , $pageSize);
 				break;
-			case 'p23':$question = ResultHelper::ResultQuestionP23($playId);
+			case 'p23':$question = ResultHelper::ResultQuestionP23($playId , $startIndex , $pageSize);
 				break;
-			case 'p32':$question = ResultHelper::ResultQuestionP32($playId);
+			case 'p32':$question = ResultHelper::ResultQuestionP32($playId , $startIndex , $pageSize);
 				break;
 		}
 

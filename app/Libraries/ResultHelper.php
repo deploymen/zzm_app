@@ -44,7 +44,7 @@ use App\Models\LeaderboardPlanet;
 
 class ResultHelper{
 
-	public static function ResultQuestionP00($playId){
+	public static function ResultQuestionP00($playId , $startIndex , $pageSize){
 		$answers = [];
 
 		$sql = "
@@ -56,6 +56,8 @@ class ResultHelper{
        				AND r.`play_id` IN ($playId)
 
        				ORDER BY r.`id` ASC;
+    
+       				LIMIT {$startIndex} , {$pageSize}
        ";
 
        $result = DB::select($sql);
@@ -83,7 +85,7 @@ class ResultHelper{
 		return $answers;
 	}
 
-	public static function ResultQuestionP01($playId){
+	public static function ResultQuestionP01($playId , $startIndex , $pageSize){
 		$answers = [];
 
 		$sql = "
@@ -95,6 +97,7 @@ class ResultHelper{
        				AND r.`play_id` IN ($playId)
 
        				ORDER BY r.`id` ASC;
+       				LIMIT {$startIndex} , {$pageSize}
        ";
 
        $result = DB::select($sql);
@@ -124,7 +127,7 @@ class ResultHelper{
 		return $answers;
 	}
 
-	public static function ResultQuestionP02($playId){
+	public static function ResultQuestionP02($playId , $startIndex , $pageSize){
 		$answers = [];
 
        $sql = "
@@ -136,6 +139,7 @@ class ResultHelper{
        				AND r.`play_id` IN ($playId)
 
        				ORDER BY r.`id` ASC;
+       				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
        $prevQuestionId = 0;
@@ -164,7 +168,7 @@ class ResultHelper{
 		return $answers;
 	}
 
-	public static function ResultQuestionP03($playId){
+	public static function ResultQuestionP03($playId , $startIndex , $pageSize){
 		$answers = [];
 
 		 $sql = "
@@ -176,6 +180,7 @@ class ResultHelper{
        				AND r.`play_id` IN ($playId)
 
        				ORDER BY r.`id` ASC;
+       				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
        $prevQuestionId = 0;
@@ -202,7 +207,7 @@ class ResultHelper{
 		return $answers;
 	}
 
-	public static function ResultQuestionP06($playId){
+	public static function ResultQuestionP06($playId , $startIndex , $pageSize){
 		$answers = [];
 
 		 $sql = "
@@ -215,7 +220,7 @@ class ResultHelper{
        				AND r.`play_id` IN ($playId)
 
        				ORDER BY r.`id` ASC;
-
+       				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
 
@@ -261,7 +266,7 @@ class ResultHelper{
 			return $answers;
 	}
 
-	public static function ResultQuestionP07($playId){
+	public static function ResultQuestionP07($playId , $startIndex , $pageSize){
 		$answers = [];
 
 		 $sql = "
@@ -273,6 +278,7 @@ class ResultHelper{
        				AND r.`play_id` IN ($playId)
 
        				ORDER BY r.`id` ASC;
+       				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
        $prevQuestionId = 0;
@@ -297,7 +303,7 @@ class ResultHelper{
 		return $answers;
 	}
 
-	public static function ResultQuestionP08($playId){
+	public static function ResultQuestionP08($playId , $startIndex , $pageSize){
 		$answers = [];
 
 		 $sql = "
@@ -309,6 +315,7 @@ class ResultHelper{
        				AND r.`play_id` IN ($playId)
 
        				ORDER BY r.`id` ASC;
+       				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
        $prevQuestionId = 0;
@@ -334,7 +341,7 @@ class ResultHelper{
 		return $answers;
 	}
 
-	public static function ResultQuestionP09($playId){
+	public static function ResultQuestionP09($playId , $startIndex , $pageSize){
 		$answers = [];
 
 		 $sql = "
@@ -345,6 +352,7 @@ class ResultHelper{
        				AND r.`play_id` IN ( {$playId} )
 
        				ORDER BY r.`id` ASC;
+       				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
        $prevQuestionId = 0;
@@ -369,7 +377,7 @@ class ResultHelper{
 		return $answers;
 	}
 
-	public static function ResultQuestionP10($playId){
+	public static function ResultQuestionP10($playId , $startIndex , $pageSize){
 		$answers = [];
 
 		 $sql = "
@@ -382,6 +390,7 @@ class ResultHelper{
        				AND r.`play_id` IN ($playId)
 
        				ORDER BY r.`id` ASC;
+       				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
 		  $prevQuestionId = 0;
@@ -416,7 +425,7 @@ class ResultHelper{
 		return $answers;
 	}
 
-	public static function ResultQuestionP11($playId){
+	public static function ResultQuestionP11($playId , $startIndex , $pageSize){
 		$answers = [];
 
 		 $sql = "
@@ -427,6 +436,7 @@ class ResultHelper{
        				AND r.`play_id` IN ( {$playId} )
 
        				ORDER BY r.`id` ASC;
+       				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
        $prevQuestionId = 0;
@@ -454,7 +464,7 @@ class ResultHelper{
 		return $answers;
 	}
 
-	public static function ResultQuestionP12($playId){
+	public static function ResultQuestionP12($playId , $startIndex , $pageSize){
 		$answers = [];
 
 		 $sql = "
@@ -465,6 +475,7 @@ class ResultHelper{
        				AND r.`play_id` IN ( {$playId} )
 
        				ORDER BY r.`id` ASC;
+       				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
        $prevQuestionId = 0;
@@ -489,7 +500,7 @@ class ResultHelper{
 		return $answers;
 	}
 
-	public static function ResultQuestionP13($playId){		
+	public static function ResultQuestionP13($playId , $startIndex , $pageSize){
 		$answers = [];
 
 		 $sql = "
@@ -500,6 +511,7 @@ class ResultHelper{
        				AND r.`play_id` IN ( {$playId} )
 
        				ORDER BY r.`id` ASC;
+       				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
        $prevQuestionId = 0;
@@ -524,7 +536,7 @@ class ResultHelper{
 		return $answers;
 	}
 
-	public static function ResultQuestionP14($playId){
+	public static function ResultQuestionP14($playId , $startIndex , $pageSize){
 		$answers = [];
 
 		 $sql = "
@@ -536,6 +548,7 @@ class ResultHelper{
        				AND r.`play_id` IN ( {$playId} )
 
        				ORDER BY r.`id` ASC;
+       				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
        $prevQuestionId = 0;
@@ -560,7 +573,7 @@ class ResultHelper{
 		return $answers;
 	}
 
-	public static function ResultQuestionP15($playId){
+	public static function ResultQuestionP15($playId , $startIndex , $pageSize){
 		$answers = [];
 
 		 $sql = "
@@ -572,6 +585,7 @@ class ResultHelper{
        				AND r.`play_id` IN ( {$playId} )
 
        				ORDER BY r.`id` ASC;
+       				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
        $prevQuestionId = 0;
@@ -596,7 +610,7 @@ class ResultHelper{
 		return $answers;
 	}
 
-	public static function ResultQuestionP18($playId){
+	public static function ResultQuestionP18($playId , $startIndex , $pageSize){
 		$answers = [];
 
 		 $sql = "
@@ -608,6 +622,7 @@ class ResultHelper{
        				AND r.`play_id` IN ($playId)
 
        				ORDER BY r.`id` ASC;
+       				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
 		  $prevQuestionId = 0;
@@ -639,7 +654,7 @@ class ResultHelper{
 		return $answers;
 	}
 
-	public static function ResultQuestionP23($playId){
+	public static function ResultQuestionP23($playId , $startIndex , $pageSize){
 		$answers = [];
 
 		 $sql = "
@@ -651,6 +666,7 @@ class ResultHelper{
        				AND r.`play_id` IN ({$playId})
 
        				ORDER BY r.`id` ASC;
+       				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
 		  $prevQuestionId = 0;
@@ -677,7 +693,7 @@ class ResultHelper{
 		return $answers;
 	}
 
-	public static function ResultQuestionP32($playId){
+	public static function ResultQuestionP32($playId , $startIndex , $pageSize){
 		$answers = [];
 
 		 $sql = "
@@ -689,6 +705,7 @@ class ResultHelper{
        				AND r.`play_id` IN ({$playId})
 
        				ORDER BY r.`id` ASC;
+       				LIMIT {$startIndex} , {$pageSize}
        ";
        $result = DB::select($sql);
 		 $prevQuestionId = 0;
