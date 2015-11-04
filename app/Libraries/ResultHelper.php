@@ -646,8 +646,8 @@ class ResultHelper{
        		SELECT q23.`id` AS `question_id` ,q23.`question`, r23.`answer` , r23.`id` AS `result_id` ,r23.`correct` , q23.`difficulty`
        			FROM `t0300_game_result` r , `t0223_game_question_p23` q23 , `t0323_game_result_p23` r23
 	
-       				WHERE r23.`target_id` = q23.`id`
-					AND r23.`target_id` = r23.`id`
+       				WHERE r.`target_id` = r23.`id`
+					AND r23.`target_id` = q23.`id`
        				AND r.`play_id` IN ({$playId})
 
        				ORDER BY r.`id` ASC;
@@ -657,15 +657,17 @@ class ResultHelper{
 
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
+			$question = "Stop the indicator at the angle ".$r->question;
+			$answer = $r->answer."° from A (180 - ".$r->answer."° from B";
 			if($r->question_id != $prevQuestionId){
 				array_push($answers, [
 					'question_id' => $r->question_id,
-					'question'=>$r->question,
+					'question'=> $question,
 					'difficulty'=>$r->difficulty,
 					'result' => [
 						'result_id' => $r->result_id,
 						'correct'=> $r->correct,
-						'answer'=>$r->answer,
+						'answer'=>$answer
 					]
 				]);
 			}
@@ -679,25 +681,26 @@ class ResultHelper{
 		$answers = [];
 
 		 $sql = "
-       		SELECT q32.`id` AS `question_id` ,q32.`question`, r32.`answer_x`, r32.`answer_y` , r32.`id` AS `result_id` ,r32.`correct` , q32.`difficulty`
+       		SELECT q32.`id` AS `question_id` ,q32.`question`,q32.`origin_x`, q32.`origin_y`,q32.`diff_x`,q32.`diff_y`, r32.`answer_x`, r32.`answer_y` , r32.`id` AS `result_id` ,r32.`correct` , q32.`difficulty`
        			FROM `t0300_game_result` r , `t0232_game_question_p32` q32 , `t0332_game_result_p32` r32
 	
-       				WHERE r32.`target_id` = q32.`id`
-					AND r32.`target_id` = r32.`id`
+       				WHERE r.`target_id` = r32.`id`
+					AND r32.`target_id` = q32.`id`
        				AND r.`play_id` IN ({$playId})
 
        				ORDER BY r.`id` ASC;
        ";
        $result = DB::select($sql);
-		  $prevQuestionId = 0;
+		 $prevQuestionId = 0;
 
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
-			$answer = $r->answer_x.','.$r->answer_y;
+			$question = "Plot the coordinate ".$r->question." when the X-axis begins at ".$r->origin_x." and the Y-axis begins at ".$r->origin_y.", the difference in X is ".$r->diff_x." and the difference in Y is ".$r->diff_y.".";
+			$answer = '('.$r->answer_x.','.$r->answer_y.')';
 			if($r->question_id != $prevQuestionId){
 				array_push($answers, [
 					'question_id' => $r->question_id,
-					'question'=>$r->question,
+					'question'=> $question,
 					'difficulty'=>$r->difficulty,
 					'result' => [
 						'result_id' => $r->result_id,
