@@ -390,12 +390,12 @@ Class AuthUserController extends Controller {
 			->first();
 
 		if (!$logAccountActivate) {
-			return redirect::to('/activate-fail');
+			return redirect::to('../user/activate-fail');
 		}
 
 		$user = $logAccountActivate->findUser()->first();
 		if (!$user) {
-			return redirect::to('/activate-fail');
+			return redirect::to('../user/activate-fail');
 		}
 
 		try {
@@ -407,7 +407,7 @@ Class AuthUserController extends Controller {
 			$user->activated = 1;
 			$user->save();
 
-			return redirect::to('/activate-success');
+			return redirect::to('../user/activate-success');
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
