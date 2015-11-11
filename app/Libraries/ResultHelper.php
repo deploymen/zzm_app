@@ -145,7 +145,7 @@ class ResultHelper{
 
 			if($r->question_id != $prevQuestionId){
 				$answer = $r->answer_1.','.$r->answer_2.','.$r->answer_3.','.$r->answer_4.','.$r->answer_5.','.$r->answer_6;
-				$question = 'Makes '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3.','.$r->answer_option_4.','.$r->answer_option_5.','.$r->answer_option_6;
+				$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3.','.$r->answer_option_4.','.$r->answer_option_5.','.$r->answer_option_6;
 				
 				array_push($answers, [
 						'question_id' => $r->question_id,
@@ -280,7 +280,7 @@ class ResultHelper{
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
 			if($r->question_id != $prevQuestionId){
-				$question = $r->left_question_1.$r->left_question_2.$r->left_question_3." [box] ".$r->right_question_1.$r->right_question_2.$r->right_question_3;
+				$question = $r->left_question_1.$r->left_question_2.$r->left_question_3." □ ".$r->right_question_1.$r->right_question_2.$r->right_question_3;
 				array_push($answers, [
 					'question' => $question,
 					'difficulty'=>$r->difficulty,
