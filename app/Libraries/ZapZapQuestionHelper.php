@@ -709,7 +709,7 @@ class ZapZapQuestionHelper{
 					array_push($results, [
 						'id' => $r->id,
 						'patty' => $r->patty,
-						'green' => $r->greens,
+						'greens' => $r->greens,
 						'cheese' => $r->cheese,
 						'preset_patty' => $r->preset_patty,
 						'preset_greens' => $r->preset_greens,
@@ -919,7 +919,7 @@ class ZapZapQuestionHelper{
 					array_push($results, [
 						'id' => $r->id,
 						'answer' => $r->answer,
-						'operator' => $r->operator,
+						'op' => $r->operator,
 						'number1' => $r->number1,
 						'number1_multiplier' => $r->number1_multiplier,
 						'number2' => $r->number2,
