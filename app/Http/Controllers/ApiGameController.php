@@ -320,7 +320,7 @@ Class ApiGameController extends Controller {
 			$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();
 
 			ZapZapQuestionHelper::LeaderboardUpdate($profile,$systemPlanet,$gameResult);
-			LogHelper::LogPostResult($jsonGameResult, $gameCode);//log post result
+			LogHelper::LogPostResult($planetId , $jsonGameResult, $gameCode);//log post result
 			} catch (Exception $ex) {
 
 				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
