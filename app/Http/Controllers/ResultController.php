@@ -371,7 +371,7 @@ Class ResultController extends Controller {
 			],
 			'page' => $page,
 			'page_size' => $pageSize,
-			'pageTotal' => ceil($question[1] / $pageSize),
+			'pageTotal' => ceil($question / $pageSize),
 		]);
 		// } catch (Exception $ex) {
 
