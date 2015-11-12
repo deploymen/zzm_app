@@ -73,11 +73,13 @@ class ZapZapQuestionHelper{
 			return $result[0];
 
 		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetPlanetInfo', ['environment' => json_encode([
-				'ex' =>  $ex->getMessage(),
-				'sql' =>  $sql,
-			])]);		
-			return ResponseHelper::OutputJSON('exception');			
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetPlanetInfo', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);
+			return false;			
 		}
 	}
 
@@ -117,11 +119,13 @@ class ZapZapQuestionHelper{
 			return $result;
 
 		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetUserMap', ['environment' => json_encode([
-				'ex' =>  $ex->getMessage(),
-				'sql' =>  $sql,
-			])]);		
-			return ResponseHelper::OutputJSON('exception');			
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetUserMap', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
+			return false;			
 		}
 	}
 
@@ -201,10 +205,12 @@ class ZapZapQuestionHelper{
 			return $results;
 
 		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp01', ['environment' => json_encode([
-				'ex' =>  $ex->getMessage(),
-				'sql' =>  $sql,
-			])]);	
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp01', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
 			return false;				
 		}
 	}
@@ -266,10 +272,12 @@ class ZapZapQuestionHelper{
 			return $results;
 
 		}catch(Exception $ex){
-		LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp02', ['environment' => json_encode([
-			'ex' =>  $ex->getMessage(),
-			'sql' =>  $sql,
-		])]);
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp02', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
 		return false;
 		}
 	}
@@ -327,10 +335,12 @@ class ZapZapQuestionHelper{
 			return $results;
 
 		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp03', ['environment' => json_encode([
-				'ex' =>  $ex->getMessage(),
-				'sql' =>  $sql,
-			])]);
+				LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp03', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
 		return false;
 		}
 	}
@@ -415,10 +425,12 @@ class ZapZapQuestionHelper{
 			return $results;
 
 		}catch(Exception $ex){
-		LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp06', ['environment' => json_encode([
-			'ex' =>  $ex->getMessage(),
-			'sql' =>  $sql,
-		])]);
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp06', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
 		return false;
 		}
 	}
@@ -482,10 +494,12 @@ class ZapZapQuestionHelper{
 			return $results;
 
 		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp07', ['environment' => json_encode([
-				'ex' =>  $ex->getMessage(),
-				'sql' =>  $sql,
-		])]);
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp07', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
 			return false;
 		}
 	}
@@ -546,10 +560,12 @@ class ZapZapQuestionHelper{
 			return $results;
 
 		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp08', ['environment' => json_encode([
-				'ex' =>  $ex->getMessage(),
-				'sql' =>  $sql,
-			])]);
+				LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp08', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
 		return false;
 		}
 	}
@@ -611,10 +627,12 @@ class ZapZapQuestionHelper{
 			return $results;
 
 		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp09', ['environment' => json_encode([
-				'ex' =>  $ex->getMessage(),
-				'sql' =>  $sql,
-			])]);
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp09', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
 		return false;
 		}
 	}
@@ -671,10 +689,12 @@ class ZapZapQuestionHelper{
 			return $results;
 
 		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp10', ['environment' => json_encode([
-				'ex' =>  $ex->getMessage(),
-				'sql' =>  $sql,
-			])]);
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp10', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
 		return false;
 		}
 	}
@@ -734,10 +754,12 @@ class ZapZapQuestionHelper{
 			return $results;
 
 		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp11', ['environment' => json_encode([
-				'ex' =>  $ex->getMessage(),
-				'sql' =>  $sql,
-			])]);
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp11', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
 		return false;
 		}
 	}
@@ -802,10 +824,12 @@ class ZapZapQuestionHelper{
 			return $results;
 
 		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp12', ['environment' => json_encode([
-				'ex' =>  $ex->getMessage(),
-				'sql' =>  $sql,
-			])]);
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp12', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
 		return false;
 		}
 	}
@@ -881,10 +905,12 @@ class ZapZapQuestionHelper{
 			return $results;
 
 		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp13', ['environment' => json_encode([
-				'ex' =>  $ex->getMessage(),
-				'sql' =>  $sql,
-			])]);
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp13', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
 		return false;
 		}
 	}
@@ -949,10 +975,12 @@ class ZapZapQuestionHelper{
 			return $results;
 
 		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp14', ['environment' => json_encode([
-				'ex' =>  $ex->getMessage(),
-				'sql' =>  $sql,
-			])]);
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp14', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
 		return false;
 		}
 	}
@@ -1008,10 +1036,12 @@ class ZapZapQuestionHelper{
 			return $results;
 
 		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp15', ['environment' => json_encode([
-				'ex' =>  $ex->getMessage(),
-				'sql' =>  $sql,
-			])]);
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp15', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
 		return false;
 		}
 	}
@@ -1068,10 +1098,12 @@ class ZapZapQuestionHelper{
 			return $results;
 
 		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp16', ['environment' => json_encode([
-				'ex' =>  $ex->getMessage(),
-				'sql' =>  $sql,
-			])]);
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp16', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
 		return false;
 		}
 	}
@@ -1131,10 +1163,12 @@ class ZapZapQuestionHelper{
 			return $results;
 
 		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp18', ['environment' => json_encode([
-				'ex' =>  $ex->getMessage(),
-				'sql' =>  $sql,
-			])]);
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp18', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
 		return false;
 		}
 	}
@@ -1192,10 +1226,12 @@ class ZapZapQuestionHelper{
 			return $results;
 
 		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp23', ['environment' => json_encode([
-				'ex' =>  $ex->getMessage(),
-				'sql' =>  $sql,
-			])]);
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp23', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
 		return false;
 		}
 	}
@@ -1262,10 +1298,12 @@ class ZapZapQuestionHelper{
 			return $results;
 
 		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp32', ['environment' => json_encode([
-				'ex' =>  $ex->getMessage(),
-				'sql' =>  $sql,
-			])]);
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp32', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
 		return false;
 		}
 	}
@@ -1542,10 +1580,13 @@ class ZapZapQuestionHelper{
 					];
 
 		}catch(Exception $ex){
-			LogHelper::LogToDatabase('ZapZapQuestionHelper::GetQuestionp99', ['environment' => json_encode([
-				'ex' =>  $ex->getMessage(),
-			])]);
-		return false;
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp00', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
+			return false;
 		}
 	}
 
@@ -1581,10 +1622,13 @@ class ZapZapQuestionHelper{
 				}
 
 			} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
+				LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP00', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
 			}
 	}
 
@@ -1614,10 +1658,13 @@ class ZapZapQuestionHelper{
 				}
 
 			} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
+				LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP01', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
 			}
 	}
 
@@ -1655,10 +1702,13 @@ class ZapZapQuestionHelper{
 
 
 			} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
+				LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP02', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
 			}
 	}
 
@@ -1695,11 +1745,14 @@ class ZapZapQuestionHelper{
 			}
 
 		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-			}
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP03', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
+			return false;
+		}
 	}
 
 	public static function submitResultP06($planetId,$gamePlay ,$gameResult,$profileId ) {
@@ -1725,10 +1778,13 @@ class ZapZapQuestionHelper{
 			}	
 
 		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP06', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
 		}
 	}
 
@@ -1755,10 +1811,13 @@ class ZapZapQuestionHelper{
 			}	
 
 		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP07', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
 		}
 	}
 
@@ -1785,10 +1844,13 @@ class ZapZapQuestionHelper{
 			}	
 
 		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP08', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
 		}
 	}
 
@@ -1815,10 +1877,13 @@ class ZapZapQuestionHelper{
 			}	
 
 		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP09', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
 		}
 	}
 
@@ -1845,10 +1910,13 @@ class ZapZapQuestionHelper{
 			}	
 
 		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP10', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
 		}
 	}
 
@@ -1877,10 +1945,13 @@ class ZapZapQuestionHelper{
 			}	
 
 		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP11', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
 		}
 	}
 
@@ -1893,7 +1964,7 @@ class ZapZapQuestionHelper{
 				$resultP12 = new GameResultP12;
 				$resultP12->target_type = 'p12';
 				$resultP12->target_id = $question->target_id;
-				$resultP12->answer = $inAnswer['answer']['answer'];
+				$resultP12->answer = $inAnswer['answer'];
 				$resultP12->correct = $inAnswer['correct'];
 				$resultP12->save();
 
@@ -1907,10 +1978,13 @@ class ZapZapQuestionHelper{
 			}	
 
 		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP12', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
 		}
 	}
 
@@ -1923,7 +1997,7 @@ class ZapZapQuestionHelper{
 				$resultP13 = new GameResultP13;
 				$resultP13->target_type = 'p13';
 				$resultP13->target_id = $question->target_id;
-				$resultP13->answer = $inAnswer['answer']['answer'];
+				$resultP13->answer = $inAnswer['answer'];
 				$resultP13->correct = $inAnswer['correct'];
 				$resultP13->save();
 
@@ -1937,10 +2011,13 @@ class ZapZapQuestionHelper{
 			}	
 
 		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP13', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
 		}
 	}
 
@@ -1953,7 +2030,7 @@ class ZapZapQuestionHelper{
 				$resultP14 = new GameResultP14;
 				$resultP14->target_type = 'p14';
 				$resultP14->target_id = $question->target_id;
-				$resultP14->answer = $inAnswer['answer']['answer'];
+				$resultP14->answer = $inAnswer['answer'];
 				$resultP14->correct = $inAnswer['correct'];
 				$resultP14->save();
 
@@ -1967,10 +2044,13 @@ class ZapZapQuestionHelper{
 			}	
 
 		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP14', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
 		}
 	}
 
@@ -1983,7 +2063,7 @@ class ZapZapQuestionHelper{
 				$resultP15 = new GameResultP15;
 				$resultP15->target_type = 'p15';
 				$resultP15->target_id = $question->target_id;
-				$resultP15->answer = $inAnswer['answer']['answer'];
+				$resultP15->answer = $inAnswer['answer'];
 				$resultP15->correct = $inAnswer['correct'];
 				$resultP15->save();
 
@@ -1997,10 +2077,46 @@ class ZapZapQuestionHelper{
 			}	
 
 		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP15', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
+		}
+	}
+
+	public static function submitResultP16($planetId,$gamePlay ,$gameResult,$profileId ) {
+		try{
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				$resultP16 = new GameResultP16;
+				$resultP16->target_type = 'p16';
+				$resultP16->target_id = $question->target_id;
+				$resultP16->answer = $inAnswer['answer'];
+				$resultP16->correct = $inAnswer['correct'];
+				$resultP16->save();
+
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p16';
+				$gameResults->target_id = $resultP16->id;
+				$gameResults->game_type_id = '16';
+				$gameResults->save();
+			}	
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP16', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
 		}
 	}
 
@@ -2027,10 +2143,13 @@ class ZapZapQuestionHelper{
 			}	
 
 		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP18', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
 		}
 	}
 
@@ -2057,10 +2176,13 @@ class ZapZapQuestionHelper{
 			}	
 
 		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP23', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
 		}
 	}
 
@@ -2088,10 +2210,13 @@ class ZapZapQuestionHelper{
 			}	
 
 		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP32', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
 		}
 	}
 
@@ -2143,10 +2268,13 @@ class ZapZapQuestionHelper{
 			DB::UPDATE($sql , $param);
 
 		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@LeaderboardUpdate', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
 		}
 	}
 

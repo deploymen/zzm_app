@@ -106,7 +106,7 @@ Class AuthUserController extends Controller {
 					$profile->user_id = $user->id;
 					$profile->nickname1 = 1;
 					$profile->nickname2 = 1;
-					$profile->avatar_id = 1;
+					$profile->avatar_id = 999;
 					$profile->save();
 
 					$idCounter = IdCounter::find(1);
@@ -618,7 +618,7 @@ Class AuthUserController extends Controller {
 			$profile->last_name = $lastName;
 			$profile->nickname1 = 1;
 			$profile->nickname2 = 1;
-			$profile->avatar_id = 1;
+			$profile->avatar_id = 999;
 			$profile->save();
 
 			$idCounter = IdCounter::find(1);

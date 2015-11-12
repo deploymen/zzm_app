@@ -108,7 +108,7 @@ Class ApiProfileController extends Controller {
 
 		$nickname1 = Request::input('nickname1', 1);
 		$nickname2 = Request::input('nickname2', 1);
-		$avatarId = Request::input('avatar_id', 1);
+		$avatarId = Request::input('avatar_id', 999);
 
 		if (!$firstName || !$school || !$city || !$age || !$grade) {
 			return ResponseHelper::OutputJSON('fail', "missing parameters");
