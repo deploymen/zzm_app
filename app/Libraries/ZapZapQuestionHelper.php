@@ -171,7 +171,7 @@ class ZapZapQuestionHelper{
 
 				if($r->id != $prevQuestionId){
 					array_push($results, [
-						'id' => $r->id,
+						'id' => $r->question_id,
 						'question' => $r->question,
 						'difficulty' => $r->difficulty,
 						'questions' => [
@@ -238,7 +238,7 @@ class ZapZapQuestionHelper{
 
 				if($r->id != $prevQuestionId){
 					array_push($results, [
-						'id' => $r->id,
+						'id' => $r->question_id,
 						'question' => $r->question,
 						'answer_option_1' => $r->answer_option_1,
 						'answer_option_2' => $r->answer_option_2,
@@ -303,7 +303,7 @@ class ZapZapQuestionHelper{
 
 				if($r->id != $prevQuestionId){
 					array_push($results, [
-						'id' => $r->id,
+						'id' => $r->question_id,
 						'question' => $r->question,
 						'answer' => $r->answer,
 						'answer_option_1' => $r->answer_option_1,
@@ -384,7 +384,7 @@ class ZapZapQuestionHelper{
 					$answer = eval('return '.$expression.';');//COME BACK TO CHANGE AGAIN
 
 					array_push($results, [
-						'id' => $r->id,
+						'id' => $r->question_id,
 						'param_1' => $r->game_param_1,
 						'param_2' => $r->game_param_2,
 						'param_3' => $r->game_param_3,
@@ -450,7 +450,7 @@ class ZapZapQuestionHelper{
 
 				if($r->id != $prevQuestionId){
 					array_push($results, [
-						'id' => $r->id,
+						'id' => $r->question_id,
 						'difficulty' => $r->difficulty,
 						'questions' => [
 							'left_question_1'=>$r->left_question_1,
@@ -519,7 +519,7 @@ class ZapZapQuestionHelper{
 			
 				if($r->id != $prevQuestionId){
 					array_push($results, [
-						'id' => $r->id,
+						'id' => $r->question_id,
 						'param_1' => $r->param_1,
 						'param_2' => $r->param_2,
 						'param_3' => $r->param_3,
@@ -585,7 +585,7 @@ class ZapZapQuestionHelper{
 
 				if($r->id != $prevQuestionId){
 					array_push($results, [
-						'id' => $r->id,
+						'id' => $r->question_id,
 						'param_1' => $r->question_object1,
 						'param_2' => $r->question_object2,
 						'param_3' => $r->question_object3,
@@ -646,7 +646,7 @@ class ZapZapQuestionHelper{
 
 				if($r->id != $prevQuestionId){
 					array_push($results, [
-						'id' => $r->id,
+						'id' => $r->question_id,
 						'question' => $r->question,
 						'answer' => $r->answer,
 						'option_type' => $r->option_type,
@@ -707,7 +707,7 @@ class ZapZapQuestionHelper{
 
 				if($r->id != $prevQuestionId){
 					array_push($results, [
-						'id' => $r->id,
+						'id' => $r->question_id,
 						'patty' => $r->patty,
 						'greens' => $r->greens,
 						'cheese' => $r->cheese,
@@ -770,7 +770,7 @@ class ZapZapQuestionHelper{
 
 				if($r->id != $prevQuestionId){
 					array_push($results, [
-						'id' => $r->id,
+						'id' => $r->question_id,
 						'question' => $r->question,
 						'option1' => $r->option1,
 						'option1_num' => $r->option1_num,
@@ -839,7 +839,7 @@ class ZapZapQuestionHelper{
 
 				if($r->id != $prevQuestionId){
 					array_push($results, [
-						'id' => $r->id,
+						'id' => $r->question_id,
 						'c1' => $r->c1 ,
 						'c1u' => $r->c1u ,
 						'c1d' => $r->c1d ,
@@ -917,7 +917,7 @@ class ZapZapQuestionHelper{
 
 				if($r->id != $prevQuestionId){
 					array_push($results, [
-						'id' => $r->id,
+						'id' => $r->question_id,
 						'answer' => $r->answer,
 						'op' => $r->operator,
 						'number1' => $r->number1,
@@ -985,7 +985,7 @@ class ZapZapQuestionHelper{
 
 				if($r->id != $prevQuestionId){
 					array_push($results, [
-						'id' => $r->id,
+						'id' => $r->question_id,
 						'question' => $r->question,
 						'option_hour' => $r->option_hour,
 						'option_minute' => $r->option_minute,
@@ -1043,7 +1043,7 @@ class ZapZapQuestionHelper{
 
 				if($r->id != $prevQuestionId){
 					array_push($results, [
-						'id' => $r->id,
+						'id' => $r->question_id,
 						'answer' => $r->answer,
 						'option_rows' => $r->option_rows,
 						'option_columns' => $r->option_columns,
@@ -1105,7 +1105,7 @@ class ZapZapQuestionHelper{
 
 				if($r->id != $prevQuestionId){
 					array_push($results, [
-						'id' => $r->id,
+						'id' => $r->question_id,
 						'question' => $r->question,
 						'option_from' => $r->option_from,
 						'option_until_total' => $r->option_until_total,
@@ -1168,7 +1168,7 @@ class ZapZapQuestionHelper{
 
 				if($r->id != $prevQuestionId){
 					array_push($results, [
-						'id' => $r->id,
+						'id' => $r->question_id,
 						'question' => $r->question,
 						'answer' => $r->answer,
 						'plane' => $r->plane,
@@ -1227,7 +1227,7 @@ class ZapZapQuestionHelper{
 
 				if($r->id != $prevQuestionId){
 					array_push($results, [
-						'id' => $r->id,
+						'id' => $r->question_id,
 						'question' => $r->question,
 						'answer_x' => $r->answer_x,
 						'answer_y' => $r->answer_y,
@@ -1405,7 +1405,7 @@ class ZapZapQuestionHelper{
 
 				if($r->id != $prevQuestionId){
 					array_push($results[0]['question'], [
-						'id' => $r->id,
+						'id' => $r->question_id,
 						'question' => $r->question,
 						'question_option1' => $r->question_option1,
 						'question_option2' => $r->question_option2,

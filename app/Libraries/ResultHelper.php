@@ -44,7 +44,7 @@ use App\Models\LeaderboardPlanet;
 
 class ResultHelper{
 
-	public static function ResultQuestionP00($playId , $startIndex , $pageSize){
+	public static function ResultQuestionP00($playId){
 		$answers = [];
 
 		$sql = "
@@ -55,35 +55,35 @@ class ResultHelper{
        				AND r0.`target_id` = q0.`id`
        				AND r.`play_id` IN ($playId)
 
-       				ORDER BY r.`id` ASC
-    
-       				LIMIT {$startIndex} , {$pageSize}
+       				ORDER BY r.`id` ASC;
        ";
 
        $result = DB::select($sql);
-
-		$total = count( $result);
+       $prevQuestionId = 0;
 
        for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
 
-			array_push($answers, [
-				'question_id' => $r->question_id,
-				'question' => $r->question,
-				'difficulty'=>$r->difficulty,
-				'result' => [
-					'result_id' => $r->result_id,
-					'correct'=> $r->correct,
-					'answer' => $r->answer,
-					]
-			]);
-			
+			if($r->question_id != $prevQuestionId){
+				array_push($answers, [
+					'question_id' => $r->question_id,
+					'question' => $r->question,
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->result_id,
+						'correct'=> $r->correct,
+						'answer' => $r->answer,
+						]
+				]);
+			}
+				
+			$prevQuestionId = $r->question_id;
 		}
 
-		return [$answers,  $total];
+		return $answers;
 	}
 
-	public static function ResultQuestionP01($playId , $startIndex , $pageSize){
+	public static function ResultQuestionP01($playId){
 		$answers = [];
 
 		$sql = "
@@ -94,37 +94,37 @@ class ResultHelper{
        				AND r1.`target_id` = q1.`id`
        				AND r.`play_id` IN ($playId)
 
-       				ORDER BY r.`id` ASC
-       				LIMIT {$startIndex} , {$pageSize}
+       				ORDER BY r.`id` ASC;
        ";
 
        $result = DB::select($sql);
        $prevQuestionId = 0;
 
-		$total = count( $result);
-
        for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
-		
-			$answer = 'Triangle = '.$r->angle3.' , Quadrilateral = '.$r->angle4.' , Pentagon = '.$r->angle5.' , Hexagon = '.$r->angle6;
 
-			array_push($answers, [
-				'question_id' => $r->question_id,
-				'question' => $r->question,
-				'difficulty'=>$r->difficulty,
-				'result' => [
-					'result_id' => $r->result_id,
-					'correct'=> $r->correct,
-					'answer' => $answer,
-					]
-			]);
-			
+			if($r->question_id != $prevQuestionId){
+				$answer = 'Triangle = '.$r->angle3.' , Quadrilateral = '.$r->angle4.' , Pentagon = '.$r->angle5.' , Hexagon = '.$r->angle6;
+
+				array_push($answers, [
+					'question_id' => $r->question_id,
+					'question' => $r->question,
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->result_id,
+						'correct'=> $r->correct,
+						'answer' => $answer,
+						]
+				]);
+			}
+				
+			$prevQuestionId = $r->question_id;
 		}
 
-		return [$answers,  $total];
+		return $answers;
 	}
 
-	public static function ResultQuestionP02($playId , $startIndex , $pageSize){
+	public static function ResultQuestionP02($playId){
 		$answers = [];
 
        $sql = "
@@ -135,36 +135,36 @@ class ResultHelper{
        				AND r2.`target_id` = q2.`id`
        				AND r.`play_id` IN ($playId)
 
-       				ORDER BY r.`id` ASC
-       				LIMIT {$startIndex} , {$pageSize}
+       				ORDER BY r.`id` ASC;
        ";
        $result = DB::select($sql);
        $prevQuestionId = 0;
 
-		$total = count( $result);
-
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
 
-			$answer = $r->answer_1.','.$r->answer_2.','.$r->answer_3.','.$r->answer_4.','.$r->answer_5.','.$r->answer_6;
-			$question = 'Makes '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3.','.$r->answer_option_4.','.$r->answer_option_5.','.$r->answer_option_6;
-			
-			array_push($answers, [
-					'question_id' => $r->question_id,
-					'question'=> $question,
-					'difficulty'=>$r->difficulty,
-					'result' => [
-						'result_id' => $r->id,
-						'correct' => $r->correct,
-						'answer' => $answer,
-					]
-				]);
-			
+			if($r->question_id != $prevQuestionId){
+				$answer = $r->answer_1.','.$r->answer_2.','.$r->answer_3.','.$r->answer_4.','.$r->answer_5.','.$r->answer_6;
+				$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3.','.$r->answer_option_4.','.$r->answer_option_5.','.$r->answer_option_6;
+				
+				array_push($answers, [
+						'question_id' => $r->question_id,
+						'question'=> $question,
+						'difficulty'=>$r->difficulty,
+						'result' => [
+							'result_id' => $r->id,
+							'correct' => $r->correct,
+							'answer' => $answer,
+						]
+					]);
+			}
+				
+			$prevQuestionId = $r->question_id;
 		}
-		return [$answers,  $total];
+		return $answers;
 	}
 
-	public static function ResultQuestionP03($playId , $startIndex , $pageSize){
+	public static function ResultQuestionP03($playId){
 		$answers = [];
 
 		 $sql = "
@@ -175,32 +175,34 @@ class ResultHelper{
        				AND r3.`target_id` = q3.`id`
        				AND r.`play_id` IN ($playId)
 
-       				ORDER BY r.`id` ASC
-       				LIMIT {$startIndex} , {$pageSize}
+       				ORDER BY r.`id` ASC;
        ";
        $result = DB::select($sql);
        $prevQuestionId = 0;
-		$total = count( $result);
 
        for($i=0; $i<count($result); $i++){
-			$r = $result[$i];		
+			$r = $result[$i];
+
+			if($r->question_id != $prevQuestionId){
 				
-			array_push($answers, [
-				'question_id' => $r->question_id,
-				'question' => $r->question.' True or False?',
-				'difficulty'=>$r->difficulty,
-				'result' => [
-					'result_id' => $r->result_id,
-					'correct'=> $r->correct,
-					'answer'=>$r->answer_text,
-				]
-			]);
-		
+				array_push($answers, [
+					'question_id' => $r->question_id,
+					'question' => $r->question.' True or False?',
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->result_id,
+						'correct'=> $r->correct,
+						'answer'=>$r->answer_text,
+					]
+				]);
+			}
+			
+			$prevQuestionId = $r->question_id;
 		}
-		return [$answers,  $total];
+		return $answers;
 	}
 
-	public static function ResultQuestionP06($playId , $startIndex , $pageSize){
+	public static function ResultQuestionP06($playId){
 		$answers = [];
 
 		 $sql = "
@@ -212,52 +214,54 @@ class ResultHelper{
        				AND q6t.`id` = q6.`template_id`
        				AND r.`play_id` IN ($playId)
 
-       				ORDER BY r.`id` ASC
-       				LIMIT {$startIndex} , {$pageSize}
+       				ORDER BY r.`id` ASC;
+
        ";
        $result = DB::select($sql);
 
        $prevQuestionId = 0;
 
-		$total = count( $result);
-
        for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
 
-			$part1 =  str_replace("@1", $r->tpl_param_1, $r->part_1);
-			$part1 =  str_replace("@2", $r->tpl_param_2, $part1);
-			$part1 =  str_replace("@3", $r->tpl_param_3, $part1);
+				$part1 =  str_replace("@1", $r->tpl_param_1, $r->part_1);
+				$part1 =  str_replace("@2", $r->tpl_param_2, $part1);
+				$part1 =  str_replace("@3", $r->tpl_param_3, $part1);
 
-			$part2 =  str_replace("@1", $r->tpl_param_1, $r->part_2);
-			$part2 =  str_replace("@2", $r->tpl_param_2, $part2);
-			$part2 =  str_replace("@3", $r->tpl_param_3, $part2);
+				$part2 =  str_replace("@1", $r->tpl_param_1, $r->part_2);
+				$part2 =  str_replace("@2", $r->tpl_param_2, $part2);
+				$part2 =  str_replace("@3", $r->tpl_param_3, $part2);
 
-			$part3 =  str_replace("@1", $r->tpl_param_1, $r->part_3);
-			$part3 =  str_replace("@2", $r->tpl_param_2, $part3);
-			$part3 =  str_replace("@3", $r->tpl_param_3, $part3);
+				$part3 =  str_replace("@1", $r->tpl_param_1, $r->part_3);
+				$part3 =  str_replace("@2", $r->tpl_param_2, $part3);
+				$part3 =  str_replace("@3", $r->tpl_param_3, $part3);
 
-			$expression =  str_replace("@1", $r->tpl_param_1, $r->expression);
-			$expression =  str_replace("@2", $r->tpl_param_2, $expression);
-			$expression =  str_replace("@3", $r->tpl_param_3, $expression);
+				$expression =  str_replace("@1", $r->tpl_param_1, $r->expression);
+				$expression =  str_replace("@2", $r->tpl_param_2, $expression);
+				$expression =  str_replace("@3", $r->tpl_param_3, $expression);
 
-			$question = $part1.' '.$part2.' '.$part3;
+			if($r->question_id != $prevQuestionId){
 
-			array_push($answers, [
-				'question_id' => $r->question_id,
-				'question' => $question,
-				'difficulty'=>$r->difficulty,
-				'result' => [
-					'result_id' => $r->result_id,
-					'correct'=> $r->correct,
-					'answer'=>$r->result_answer,
-				]
-			]);
-	
+				$question = $part1.' '.$part2.' '.$part3;
+
+				array_push($answers, [
+					'question_id' => $r->question_id,
+					'question' => $question,
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->result_id,
+						'correct'=> $r->correct,
+						'answer'=>$r->result_answer,
+					]
+				]);
+			}
+		
+			$prevQuestionId = $r->question_id;
 		}
-			return [$answers,  $total];
+			return $answers;
 	}
 
-	public static function ResultQuestionP07($playId , $startIndex , $pageSize){
+	public static function ResultQuestionP07($playId){
 		$answers = [];
 
 		 $sql = "
@@ -268,32 +272,32 @@ class ResultHelper{
        				AND r7.`target_id` = q7.`id`
        				AND r.`play_id` IN ($playId)
 
-       				ORDER BY r.`id` ASC
-       				LIMIT {$startIndex} , {$pageSize}
+       				ORDER BY r.`id` ASC;
        ";
        $result = DB::select($sql);
        $prevQuestionId = 0;
 
-		$total = count( $result);
-
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
-			
-			$question = $r->left_question_1.$r->left_question_2.$r->left_question_3." [box] ".$r->right_question_1.$r->right_question_2.$r->right_question_3;
-			array_push($answers, [
-				'question' => $question,
-				'difficulty'=>$r->difficulty,
-				'result' => [
-					'result_id' => $r->result_id,
-					'correct'=> $r->correct,
-					'answer'=>$r->answer,
-				]
-			]);
+			if($r->question_id != $prevQuestionId){
+				$question = $r->left_question_1.$r->left_question_2.$r->left_question_3." □ ".$r->right_question_1.$r->right_question_2.$r->right_question_3;
+				array_push($answers, [
+					'question' => $question,
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->result_id,
+						'correct'=> $r->correct,
+						'answer'=>$r->answer,
+					]
+				]);
+			}
+
+			$prevQuestionId = $r->question_id;
 		}
-		return [$answers,  $total];
+		return $answers;
 	}
 
-	public static function ResultQuestionP08($playId , $startIndex , $pageSize){
+	public static function ResultQuestionP08($playId){
 		$answers = [];
 
 		 $sql = "
@@ -304,32 +308,33 @@ class ResultHelper{
        				AND r8.`target_id` = q8.`id`
        				AND r.`play_id` IN ($playId)
 
-       				ORDER BY r.`id` ASC
-       				LIMIT {$startIndex} , {$pageSize}
+       				ORDER BY r.`id` ASC;
        ";
        $result = DB::select($sql);
        $prevQuestionId = 0;
 
-		$total = count( $result);
-
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
      		$question = 'The equation '.$r->param_1.$r->param_2.$r->param_3.$r->param_4.$r->param_5.$r->param_6.$r->param_7.' is jumbled.';
-			
-			array_push($answers, [
-				'question' => $question,
-				'difficulty'=>$r->difficulty,
-				'result' => [
-					'result_id' => $r->result_id,
-					'correct' => $r->correct,
-					'answer' =>$r->answer,
-				]
-			]);
+
+			if($r->question_id != $prevQuestionId){
+				array_push($answers, [
+					'question' => $question,
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->result_id,
+						'correct' => $r->correct,
+						'answer' =>$r->answer,
+					]
+				]);
+			}
+
+			$prevQuestionId = $r->question_id;
 		}
-		return [$answers,  $total];
+		return $answers;
 	}
 
-	public static function ResultQuestionP09($playId , $startIndex , $pageSize){
+	public static function ResultQuestionP09($playId){
 		$answers = [];
 
 		 $sql = "
@@ -339,31 +344,32 @@ class ResultHelper{
        				AND r9.`target_id` = q9.`id`
        				AND r.`play_id` IN ( {$playId} )
 
-       				ORDER BY r.`id` ASC
-       				LIMIT {$startIndex} , {$pageSize}
+       				ORDER BY r.`id` ASC;
        ";
        $result = DB::select($sql);
        $prevQuestionId = 0;
 
-		$total = count( $result);
-
         for($i=0; $i<count($result); $i++){
-			$r = $result[$i];		
-			
-			array_push($answers, [
-				'question' => '',
-				'difficulty'=>$r->difficulty,
-				'result' => [
-					'result_id' => $r->result_id,
-					'correct'=> $r->correct,
-					'answer'=>$r->answer,
-				]
-			]);
+			$r = $result[$i];
+			if($r->question_id != $prevQuestionId){
+				
+				array_push($answers, [
+					'question' => '',
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->result_id,
+						'correct'=> $r->correct,
+						'answer'=>$r->answer,
+					]
+				]);
+			}
+
+			$prevQuestionId = $r->question_id;
 		}
-		return [$answers,  $total];
+		return $answers;
 	}
 
-	public static function ResultQuestionP10($playId , $startIndex , $pageSize){
+	public static function ResultQuestionP10($playId){
 		$answers = [];
 
 		 $sql = "
@@ -375,13 +381,10 @@ class ResultHelper{
        				AND r10.`target_id` = q10.`id`
        				AND r.`play_id` IN ($playId)
 
-       				ORDER BY r.`id` ASC
-       				LIMIT {$startIndex} , {$pageSize}
+       				ORDER BY r.`id` ASC;
        ";
        $result = DB::select($sql);
 		  $prevQuestionId = 0;
-
-		$total = count( $result);
 
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
@@ -390,27 +393,30 @@ class ResultHelper{
 			$tens = floor(($r->answer % 100)/10);
 			$ones = floor(($r->answer % 10)/1);
 
-			array_push($answers, [
-				'question_id' => $r->question_id,
-				'question'=>$r->question,
-				'difficulty'=>$r->difficulty,
-				'result' => [
-					'result_id' => $r->result_id,
-					'correct'=> $r->correct,
-					'answer'=> [
-						'thousands' => $thousands,
-						'hundreds' => $hundreds,
-						'tens' => $tens,
-						'ones' => $ones,
+			if($r->question_id != $prevQuestionId){
+				array_push($answers, [
+					'question_id' => $r->question_id,
+					'question'=>$r->question,
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->result_id,
+						'correct'=> $r->correct,
+						'answer'=> [
+							'thousands' => $thousands,
+							'hundreds' => $hundreds,
+							'tens' => $tens,
+							'ones' => $ones,
+						]
 					]
-				]
-			]);
-			
+				]);
+			}
+				
+			$prevQuestionId = $r->question_id;
 		}
-		return [$answers,  $total];
+		return $answers;
 	}
 
-	public static function ResultQuestionP11($playId , $startIndex , $pageSize){
+	public static function ResultQuestionP11($playId){
 		$answers = [];
 
 		 $sql = "
@@ -420,36 +426,35 @@ class ResultHelper{
        				AND r11.`target_id` = q11.`id`
        				AND r.`play_id` IN ( {$playId} )
 
-       				ORDER BY r.`id` ASC
-       				LIMIT {$startIndex} , {$pageSize}
+       				ORDER BY r.`id` ASC;
        ";
        $result = DB::select($sql);
        $prevQuestionId = 0;
 
-		$total = count( $result);
-
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
-
-			array_push($answers, [
-				'question' => '',
-				'difficulty'=>$r->difficulty,
-				'result' => [
-					'result_id' => $r->result_id,
-					'correct'=> $r->correct,
-					'answer'=>[
-						'patty' => $r->patty,
-						'greens' => $r->greens,
-						'cheese' => $r->cheese,
+			if($r->question_id != $prevQuestionId){
+				array_push($answers, [
+					'question' => '',
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->result_id,
+						'correct'=> $r->correct,
+						'answer'=>[
+							'patty' => $r->patty,
+							'greens' => $r->greens,
+							'cheese' => $r->cheese,
+						]
 					]
-				]
-			]);
-			
+				]);
+			}
+				
+			$prevQuestionId = $r->question_id;
 		}
-		return [$answers,  $total];
+		return $answers;
 	}
 
-	public static function ResultQuestionP12($playId , $startIndex , $pageSize){
+	public static function ResultQuestionP12($playId){
 		$answers = [];
 
 		 $sql = "
@@ -459,31 +464,32 @@ class ResultHelper{
        				AND r12.`target_id` = q12.`id`
        				AND r.`play_id` IN ( {$playId} )
 
-       				ORDER BY r.`id` ASC
-       				LIMIT {$startIndex} , {$pageSize}
+       				ORDER BY r.`id` ASC;
        ";
        $result = DB::select($sql);
        $prevQuestionId = 0;
 
-		$total = count( $result);
-
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
-			
-			array_push($answers, [
-				'question' => '',
-				'difficulty'=>$r->difficulty,
-				'result' => [
-					'result_id' => $r->result_id,
-					'correct'=> $r->correct,
-					'answer'=> $r->answer,
-				]
-			]);
+			if($r->question_id != $prevQuestionId){
+				
+				array_push($answers, [
+					'question' => '',
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->result_id,
+						'correct'=> $r->correct,
+						'answer'=> $r->answer,
+					]
+				]);
+			}
+
+			$prevQuestionId = $r->question_id;
 		}
-		return [$answers,  $total];
+		return $answers;
 	}
 
-	public static function ResultQuestionP13($playId , $startIndex , $pageSize){
+	public static function ResultQuestionP13($playId){		
 		$answers = [];
 
 		 $sql = "
@@ -493,33 +499,32 @@ class ResultHelper{
        				AND r13.`target_id` = q13.`id`
        				AND r.`play_id` IN ( {$playId} )
 
-       				ORDER BY r.`id` ASC
-       				LIMIT {$startIndex} , {$pageSize}
+       				ORDER BY r.`id` ASC;
        ";
        $result = DB::select($sql);
        $prevQuestionId = 0;
 
-		$total = count( $result);
-
-
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
-			
-			array_push($answers, [
-				'question' => '',
-				'difficulty'=>$r->difficulty,
-				'result' => [
-					'result_id' => $r->result_id,
-					'correct'=> $r->correct,
-					'answer'=> $r->answer,
-				]
-			]);
-			
+			if($r->question_id != $prevQuestionId){
+				
+				array_push($answers, [
+					'question' => '',
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->result_id,
+						'correct'=> $r->correct,
+						'answer'=> $r->answer,
+					]
+				]);
+			}
+				
+			$prevQuestionId = $r->question_id;
 		}
-		return [$answers,  $total];
+		return $answers;
 	}
 
-	public static function ResultQuestionP14($playId , $startIndex , $pageSize){
+	public static function ResultQuestionP14($playId){
 		$answers = [];
 
 		 $sql = "
@@ -530,31 +535,32 @@ class ResultHelper{
        				AND r14.`target_id` = q14.`id`
        				AND r.`play_id` IN ( {$playId} )
 
-       				ORDER BY r.`id` ASC
-       				LIMIT {$startIndex} , {$pageSize}
+       				ORDER BY r.`id` ASC;
        ";
        $result = DB::select($sql);
        $prevQuestionId = 0;
 
-		$total = count( $result);
-
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
+			if($r->question_id != $prevQuestionId){
 				
-			array_push($answers, [
-				'question' => '',
-				'difficulty'=>$r->difficulty,
-				'result' => [
-					'result_id' => $r->result_id,
-					'correct'=> $r->correct,
-					'answer'=> $r->answer,
-				]
-			]);
+				array_push($answers, [
+					'question' => '',
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->result_id,
+						'correct'=> $r->correct,
+						'answer'=> $r->answer,
+					]
+				]);
+			}
+
+			$prevQuestionId = $r->question_id;
 		}
-		return [$answers,  $total];
+		return $answers;
 	}
 
-	public static function ResultQuestionP15($playId , $startIndex , $pageSize){
+	public static function ResultQuestionP15($playId){
 		$answers = [];
 
 		 $sql = "
@@ -565,31 +571,32 @@ class ResultHelper{
        				AND r15.`target_id` = q15.`id`
        				AND r.`play_id` IN ( {$playId} )
 
-       				ORDER BY r.`id` ASC
-       				LIMIT {$startIndex} , {$pageSize}
+       				ORDER BY r.`id` ASC;
        ";
        $result = DB::select($sql);
        $prevQuestionId = 0;
 
-		$total = count( $result);
-
         for($i=0; $i<count($result); $i++){
-			$r = $result[$i];		
+			$r = $result[$i];
+			if($r->question_id != $prevQuestionId){
 				
-			array_push($answers, [
-				'question' => $r->question,
-				'difficulty'=>$r->difficulty,
-				'result' => [
-					'result_id' => $r->result_id,
-					'correct'=> $r->correct,
-					'answer'=> $r->answer,
-				]
-			]);
+				array_push($answers, [
+					'question' => $r->question,
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->result_id,
+						'correct'=> $r->correct,
+						'answer'=> $r->answer,
+					]
+				]);
+			}
+
+			$prevQuestionId = $r->question_id;
 		}
-		return [$answers,  $total];
+		return $answers;
 	}
 
-	public static function ResultQuestionP18($playId , $startIndex , $pageSize){
+	public static function ResultQuestionP18($playId){
 		$answers = [];
 
 		 $sql = "
@@ -600,13 +607,10 @@ class ResultHelper{
        				AND r18.`target_id` = q18.`id`
        				AND r.`play_id` IN ($playId)
 
-       				ORDER BY r.`id` ASC
-       				LIMIT {$startIndex} , {$pageSize}
+       				ORDER BY r.`id` ASC;
        ";
        $result = DB::select($sql);
 		  $prevQuestionId = 0;
-
-		$total = count( $result);
 
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
@@ -616,22 +620,26 @@ class ResultHelper{
 			}else{
 				$question = "Locate ".$r->question." from ".$r->option_from." on the number line.";
 			}
-			
-			array_push($answers, [
-				'question_id' => $r->question_id,
-				'question'=> $question,
-				'difficulty'=>$r->difficulty,
-				'result' => [
-					'result_id' => $r->result_id,
-					'correct'=> $r->correct,
-					'answer'=>$r->answer,
-				]
-			]);
+
+			if($r->question_id != $prevQuestionId){
+				array_push($answers, [
+					'question_id' => $r->question_id,
+					'question'=> $question,
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->result_id,
+						'correct'=> $r->correct,
+						'answer'=>$r->answer,
+					]
+				]);
+			}
+
+			$prevQuestionId = $r->question_id;
 		}
-		return [$answers,  $total];
+		return $answers;
 	}
 
-	public static function ResultQuestionP23($playId , $startIndex , $pageSize){
+	public static function ResultQuestionP23($playId){
 		$answers = [];
 
 		 $sql = "
@@ -642,34 +650,34 @@ class ResultHelper{
 					AND r23.`target_id` = q23.`id`
        				AND r.`play_id` IN ({$playId})
 
-       				ORDER BY r.`id` ASC
-       				LIMIT {$startIndex} , {$pageSize}
+       				ORDER BY r.`id` ASC;
        ";
-       	$result = DB::select($sql);
-		$prevQuestionId = 0;
-
-		$total = count( $result);
+       $result = DB::select($sql);
+		  $prevQuestionId = 0;
 
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
 			$question = "Stop the indicator at the angle ".$r->question;
 			$answer = $r->answer."° from A (180 - ".$r->answer."° from B";
-			
-			array_push($answers, [
-				'question_id' => $r->question_id,
-				'question'=> $question,
-				'difficulty'=>$r->difficulty,
-				'result' => [
-					'result_id' => $r->result_id,
-					'correct'=> $r->correct,
-					'answer'=>$answer
-				]
-			]);
+			if($r->question_id != $prevQuestionId){
+				array_push($answers, [
+					'question_id' => $r->question_id,
+					'question'=> $question,
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->result_id,
+						'correct'=> $r->correct,
+						'answer'=>$answer
+					]
+				]);
+			}
+
+			$prevQuestionId = $r->question_id;
 		}
-		return [$answers,  $total];
+		return $answers;
 	}
 
-	public static function ResultQuestionP32($playId , $startIndex , $pageSize){
+	public static function ResultQuestionP32($playId){
 		$answers = [];
 
 		 $sql = "
@@ -680,31 +688,31 @@ class ResultHelper{
 					AND r32.`target_id` = q32.`id`
        				AND r.`play_id` IN ({$playId})
 
-       				ORDER BY r.`id` ASC
-       				LIMIT {$startIndex} , {$pageSize}
+       				ORDER BY r.`id` ASC;
        ";
-        $result = DB::select($sql);
-
-        $total = count( $result);
-		$prevQuestionId = 0;
+       $result = DB::select($sql);
+		 $prevQuestionId = 0;
 
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
 			$question = "Plot the coordinate ".$r->question." when the X-axis begins at ".$r->origin_x." and the Y-axis begins at ".$r->origin_y.", the difference in X is ".$r->diff_x." and the difference in Y is ".$r->diff_y.".";
 			$answer = '('.$r->answer_x.','.$r->answer_y.')';
-			
-			array_push($answers, [
-				'question_id' => $r->question_id,
-				'question'=> $question,
-				'difficulty'=>$r->difficulty,
-				'result' => [
-					'result_id' => $r->result_id,
-					'correct'=> $r->correct,
-					'answer'=>$answer,
-				]
-			]);
+			if($r->question_id != $prevQuestionId){
+				array_push($answers, [
+					'question_id' => $r->question_id,
+					'question'=> $question,
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->result_id,
+						'correct'=> $r->correct,
+						'answer'=>$answer,
+					]
+				]);
+			}
+
+			$prevQuestionId = $r->question_id;
 		}
-		return [$answers,  $total];
+		return $answers;
 	}
 
 }
