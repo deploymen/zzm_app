@@ -103,5 +103,5 @@ Route::group(['prefix' => 'docs'], function(){
 	Route::get('/api.game-result-play-get', function(){ return view('contents.docs.api-game-result-play-get'); });
 	Route::get('/api.game-user-map-get', function(){ return view('contents.docs.api-game-user-map-get'); });
 
-
 });
+	Route::get('/edm-sample', function(){ return view('emails.edm-index'); });
