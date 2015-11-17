@@ -60,9 +60,10 @@ class LogHelper{
 		$logGetQuestions->save();
 	}
 
-	public static function LogPostResult($jsonGameResult,$gameCode){
+	public static function LogPostResult($planetId , $jsonGameResult,$gameCode){
 		$logGetQuestions = new LogPostResult;
 		$logGetQuestions->result = $jsonGameResult;
+		$logGetQuestions->planet_id = $planetId;
 		$logGetQuestions->game_code = $gameCode;
 		$logGetQuestions->created_ip = Request::ip();
 		$logGetQuestions->save();

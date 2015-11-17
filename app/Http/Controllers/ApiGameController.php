@@ -5,6 +5,10 @@ use Exception;
 use Config;
 use Request;
 use DB;
+use Response;
+use Zipper;
+use Cache;
+use Carbon\Carbon;
 use App\Libraries;
 use App\Libraries\LogHelper;
 use App\Libraries\AuthHelper;
@@ -20,6 +24,7 @@ use App\Models\GamePlay;
 use App\Models\GameCode;
 use App\Models\GameSystem;
 use App\Models\GamePlanet;
+use App\Models\GameType;
 use App\Models\UserMap;
 use App\Models\GameResult;
 use App\Models\GameResultP01;
@@ -41,6 +46,7 @@ Class ApiGameController extends Controller {
 	//GET QUESTION
 	public function request($planetId) {	
 		$gameCode = Request::input('game_code');
+		$difficulty = Request::input('difficulty');
 
 		LogHelper::LogGetQuestions($planetId, $gameCode);
 
@@ -54,25 +60,31 @@ Class ApiGameController extends Controller {
 			}
 
 			//get planet info
-			$planet = ZapZapQuestionHelper::GetPlanetInfo($planetId);
+			if (Cache::has('ApiGameController@request('.$planetId.')') ) {
 
-			if(!$planet){
-				return ResponseHelper::OutputJSON('fail', 'planet not found');
+				$planet = Cache::get('ApiGameController@request('.$planetId.')');
+
+
+			}else{
+				$planet = GamePlanet::find($planetId);
+
+				if(!$planet){
+					return ResponseHelper::OutputJSON('fail', 'planet not found');
+				}
+
+			    $expiresAt = Carbon::now()->addMinutes(60);
+				Cache::put('ApiGameController@request('.$planetId.')', $planet , $expiresAt);
 			}
-      
-			if(!$planet->enable){
+
+			if(!$planet->available){
+				Cache::forget('ApiGameController@request('.$planetId.')');
 				return ResponseHelper::OutputJSON('fail', 'planet is not enable');
 			}	
-			
-			//get user map
-			$userMap = ZapZapQuestionHelper::GetUserMap($profileId, $planetId);
-			if(!$userMap){
-				return ResponseHelper::OutputJSON('fail', 'system planet not enable');
-			}
+
+			//NEED UPDATE 26/10/2015
+			$userMap = ZapZapQuestionHelper::GetUserMapPersonal($profileId, $planetId);
 
 			$planetTopScore = ZapZapQuestionHelper::GameScreenPlanetTopScore($planetId);
-			$playerTopScore = ZapZapQuestionHelper::GameScreenPlayerTopScore($planetId,$profileId);
-
 			$top_scre_result =[];
 			for($i=0; $i<count($planetTopScore); $i++){
 
@@ -85,30 +97,43 @@ Class ApiGameController extends Controller {
 
 			}
 			
-			$difficulty = $userMap[0]->star + 1;
-			if($difficulty > 5){ $difficulty = 5; }
+			if(!$difficulty || $difficulty > 5){
+				$difficulty = $userMap->star + 1;
+				if($difficulty > 5){ $difficulty = 5; }
+			}
 
-			$level = $userMap[0]->level;
-			
-			switch($planet->game_type){
-				case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId,$difficulty,$questionCount); break;
-				case 'p02':$questions = ZapZapQuestionHelper::GetQuestionP02($planetId,$difficulty,$questionCount); break;
-				case 'p03':$questions = ZapZapQuestionHelper::GetQuestionP03($planetId,$difficulty,$questionCount); break;
-				case 'p06':$questions = ZapZapQuestionHelper::GetQuestionP06($planetId,$difficulty,$questionCount); break;
-				case 'p07':$questions = ZapZapQuestionHelper::GetQuestionP07($planetId,$difficulty,$questionCount); break;
-				case 'p08':$questions = ZapZapQuestionHelper::GetQuestionP08($planetId,$difficulty,$questionCount); break;
-				case 'p09':$questions = ZapZapQuestionHelper::GetQuestionP09($planetId,$difficulty,$questionCount); break;
-				case 'p10':$questions = ZapZapQuestionHelper::GetQuestionP10($planetId,$difficulty,$questionCount); break;
-				case 'p11':$questions = ZapZapQuestionHelper::GetQuestionP11($planetId,$difficulty,$questionCount); break;
-				case 'p13':$questions = ZapZapQuestionHelper::GetQuestionP13($planetId,$difficulty,$questionCount); break;
-				case 'p18':$questions = ZapZapQuestionHelper::GetQuestionP18($planetId,$difficulty,$questionCount); break;
-				case 'p23':$questions = ZapZapQuestionHelper::GetQuestionP23($planetId,$difficulty,$questionCount); break;
-				case 'p32':$questions = ZapZapQuestionHelper::GetQuestionP32($planetId,$difficulty,$questionCount); break;
-				case 'p00':$questions = ZapZapQuestionHelper::GetQuestionP00($planetId,$gameType,$level,$profileId); break;
+			$level = $userMap->level;
 
-				default: return ResponseHelper::OutputJSON('fail', 'question not found');
+			if ( Cache::has('ApiGameController@request('.$planetId.','.$difficulty.')') ){
 
-			}	
+				$questions = Cache::get('ApiGameController@request('.$planetId.','.$difficulty.')');
+			}else{
+
+				$type = GameType::find($planet->game_type_id);
+				switch($type->name){
+					case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId,$difficulty,$questionCount); break;
+					case 'p02':$questions = ZapZapQuestionHelper::GetQuestionP02($planetId,$difficulty,$questionCount); break;
+					case 'p03':$questions = ZapZapQuestionHelper::GetQuestionP03($planetId,$difficulty,$questionCount); break;
+					case 'p06':$questions = ZapZapQuestionHelper::GetQuestionP06($planetId,$difficulty,$questionCount); break;
+					case 'p07':$questions = ZapZapQuestionHelper::GetQuestionP07($planetId,$difficulty,$questionCount); break;
+					case 'p08':$questions = ZapZapQuestionHelper::GetQuestionP08($planetId,$difficulty,$questionCount); break;
+					case 'p09':$questions = ZapZapQuestionHelper::GetQuestionP09($planetId,$difficulty,$questionCount); break;
+					case 'p10':$questions = ZapZapQuestionHelper::GetQuestionP10($planetId,$difficulty,$questionCount); break;
+					case 'p11':$questions = ZapZapQuestionHelper::GetQuestionP11($planetId,$difficulty,$questionCount); break;
+					case 'p12':$questions = ZapZapQuestionHelper::GetQuestionP12($planetId,$difficulty,$questionCount); break;
+					case 'p13':$questions = ZapZapQuestionHelper::GetQuestionP13($planetId,$difficulty,$questionCount); break;
+					case 'p14':$questions = ZapZapQuestionHelper::GetQuestionP14($planetId,$difficulty,$questionCount); break;
+					case 'p15':$questions = ZapZapQuestionHelper::GetQuestionP15($planetId,$difficulty,$questionCount); break;
+					case 'p16':$questions = ZapZapQuestionHelper::GetQuestionP16($planetId,$difficulty,$questionCount); break;
+					case 'p17':$questions = ZapZapQuestionHelper::GetQuestionP17($planetId,$difficulty,$questionCount); break;
+					case 'p18':$questions = ZapZapQuestionHelper::GetQuestionP18($planetId,$difficulty,$questionCount); break;
+					case 'p23':$questions = ZapZapQuestionHelper::GetQuestionP23($planetId,$difficulty,$questionCount); break;
+					case 'p32':$questions = ZapZapQuestionHelper::GetQuestionP32($planetId,$difficulty,$questionCount); break;
+					case 'p00':$questions = ZapZapQuestionHelper::GetQuestionP00($planetId,$gameType,$level,$profileId); break;
+
+					default: return ResponseHelper::OutputJSON('fail', $type->name.' not found');
+				}	
+			}
 
 			return ResponseHelper::OutputJSON('success', '', [
 					'planet' => [
@@ -119,9 +144,9 @@ Class ApiGameController extends Controller {
 						'badges' => json_decode($planet->badges_metrics),
 					],
 					'status' => [
-						'star' => $userMap[0]->star,	
+						'star' => $userMap->star,	
 						'difficulty' =>$difficulty,
-						'top_score' => $userMap[0]->top_score,
+						'top_score' => $userMap->top_score,
 					],
 					'planet_top_score'=>$top_scre_result,
 						
@@ -279,6 +304,12 @@ Class ApiGameController extends Controller {
 				case 'p09': $status = ZapZapQuestionHelper::SubmitResultP09($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p10': $status = ZapZapQuestionHelper::SubmitResultP10($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p11': $status = ZapZapQuestionHelper::SubmitResultP11($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p12': $status = ZapZapQuestionHelper::SubmitResultP12($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p13': $status = ZapZapQuestionHelper::SubmitResultP13($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p14': $status = ZapZapQuestionHelper::SubmitResultP14($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p15': $status = ZapZapQuestionHelper::SubmitResultP15($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p16': $status = ZapZapQuestionHelper::SubmitResultP16($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p17': $status = ZapZapQuestionHelper::SubmitResultP17($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p18': $status = ZapZapQuestionHelper::SubmitResultP18($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p23': $status = ZapZapQuestionHelper::SubmitResultP23($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p32': $status = ZapZapQuestionHelper::SubmitResultP32($planetId,$gamePlay,$gameResult,$profileId); break;
@@ -292,7 +323,7 @@ Class ApiGameController extends Controller {
 			$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();
 
 			ZapZapQuestionHelper::LeaderboardUpdate($profile,$systemPlanet,$gameResult);
-			LogHelper::LogPostResult($jsonGameResult, $gameCode);//log post result
+			LogHelper::LogPostResult($planetId , $jsonGameResult, $gameCode);//log post result
 			} catch (Exception $ex) {
 
 				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -493,88 +524,101 @@ Class ApiGameController extends Controller {
 	}
 
 	public function createPackage(){
-		$planetId = Request::input('planet_id');
 
-		$planet = ZapZapQuestionHelper::GetPlanetInfo($planetId);
-		if(!$planet || !$planet->enable){
-			return ResponseHelper::OutputJSON('fail , planet not found');
-		}
+		$planet = GamePlanet::where('available', 1)->get();
+
 		$set = [
-			[1, 20], //0
-			[2, 20], //1
-			[3, 30], //2
-			[4, 30], //3
-			[5, 50], //4
+			[1, 5], //0
+			[2, 5], //1
+			[3, 5], //2
+			[4, 5], //3
+			[5, 5], //4
 		];
+		for($k=0; $k<count($planet); $k++){
+			$p = $planet[$k];
 
-		for($i=0; $i<5; $i++){
-			$difficulty = $set[$i][0];
+			for($i=0; $i<5; $i++){
+				$difficulty = $set[$i][0];
 
-			$star = $difficulty;
-			if($difficulty != 5){ 
-				$star = $star-1; 
-			}
+				$star = $difficulty;
+				if($difficulty != 5){ 
+					$star = $star-1; 
+				}
 
-			for($j=0; $j<$set[$i][1]; $j++){
-				switch($planet->game_type){
-					case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId,$difficulty,$planet->question_count); break;
-					case 'p02':$questions = ZapZapQuestionHelper::GetQuestionP02($planetId,$difficulty,$planet->question_count); break;
-					case 'p03':$questions = ZapZapQuestionHelper::GetQuestionP03($planetId,$difficulty,$planet->question_count); break;
-					case 'p06':$questions = ZapZapQuestionHelper::GetQuestionP06($planetId,$difficulty,$planet->question_count); break;
-					case 'p07':$questions = ZapZapQuestionHelper::GetQuestionP07($planetId,$difficulty,$planet->question_count); break;
-					case 'p08':$questions = ZapZapQuestionHelper::GetQuestionP08($planetId,$difficulty,$planet->question_count); break;
-					case 'p09':$questions = ZapZapQuestionHelper::GetQuestionP09($planetId,$difficulty,$planet->question_count); break;
-					case 'p10':$questions = ZapZapQuestionHelper::GetQuestionP10($planetId,$difficulty,$planet->question_count); break;
-					case 'p11':$questions = ZapZapQuestionHelper::GetQuestionP11($planetId,$difficulty,$planet->question_count); break;
-					case 'p18':$questions = ZapZapQuestionHelper::GetQuestionP18($planetId,$difficulty,$planet->question_count); break;
-					case 'p23':$questions = ZapZapQuestionHelper::GetQuestionP23($planetId,$difficulty,$planet->question_count); break;
-					case 'p32':$questions = ZapZapQuestionHelper::GetQuestionP32($planetId,$difficulty,$planet->question_count); break;
-
-					default: return ResponseHelper::OutputJSON('fail', 'question not found');
-				}	
+				for($j=0; $j<$set[$i][1]; $j++){
+					switch($p->game_type_id){
+						case '1':$questions = ZapZapQuestionHelper::GetQuestionP01($p->id,$difficulty,$p->question_count); break;
+						case '2':$questions = ZapZapQuestionHelper::GetQuestionP02($p->id,$difficulty,$p->question_count); break;
+						case '3':$questions = ZapZapQuestionHelper::GetQuestionP03($p->id,$difficulty,$p->question_count); break;
+						case '6':$questions = ZapZapQuestionHelper::GetQuestionP06($p->id,$difficulty,$p->question_count); break;
+						case '7':$questions = ZapZapQuestionHelper::GetQuestionP07($p->id,$difficulty,$p->question_count); break;
+						case '8':$questions = ZapZapQuestionHelper::GetQuestionP08($p->id,$difficulty,$p->question_count); break;
+						case '9':$questions = ZapZapQuestionHelper::GetQuestionP09($p->id,$difficulty,$p->question_count); break;
+						case '10':$questions = ZapZapQuestionHelper::GetQuestionP10($p->id,$difficulty,$p->question_count); break;
+						case '11':$questions = ZapZapQuestionHelper::GetQuestionP11($p->id,$difficulty,$p->question_count); break;
+						case '12':$questions = ZapZapQuestionHelper::GetQuestionP12($p->id,$difficulty,$p->question_count); break;
+						case '13':$questions = ZapZapQuestionHelper::GetQuestionP13($p->id,$difficulty,$p->question_count); break;
+						case '14':$questions = ZapZapQuestionHelper::GetQuestionP14($p->id,$difficulty,$p->question_count); break;
+						case '15':$questions = ZapZapQuestionHelper::GetQuestionP15($p->id,$difficulty,$p->question_count); break;
+						case '16':$questions = ZapZapQuestionHelper::GetQuestionP16($p->id,$difficulty,$p->question_count); break;
+						case '18':$questions = ZapZapQuestionHelper::GetQuestionP18($p->id,$difficulty,$p->question_count); break;
+						case '23':$questions = ZapZapQuestionHelper::GetQuestionP23($p->id,$difficulty,$p->question_count); break;
+						case '32':$questions = ZapZapQuestionHelper::GetQuestionP32($p->id,$difficulty,$p->question_count); break;
 				
-				$file = [
-					'status' => "success",
-					'data' => [
-						'planet' => [
-							'id' => $planet->id,
-							'name' => $planet->name,
-							'description' => $planet->description,
-							'question_count' => $planet->question_count,
-							'badges' => json_decode($planet->badges_metrics),
-						],
-						'status' => [
-							'star' => $star,	
-							'difficulty' => $difficulty,
-							'top_score' => 0,
-						],
-						'planet_top_score'=> [],
-		            	'questions' => $questions,
-		            ],
-	           	];
+						default: continue;
+					}	
+					
+					$file = [
+						'status' => "success",
+						'data' => [
+							'planet' => [
+								'id' => $p->id,
+								'name' => $p->name,
+								'description' => $p->description,
+								'question_count' => $p->question_count,
+								'badges' => json_decode($p->badges_metrics),
+							],
+							'status' => [
+								'star' => $star,	
+								'difficulty' => $difficulty,
+								'top_score' => 0,
+							],
+							'planet_top_score'=> [],
+			            	'questions' => $questions,
+			            ],
+		           	];
 
-	           	$dir1 = 'package/'.$planet->id;
-	           	$dir2 = 'package/'.$planet->id.'/'.$difficulty;
-	           
-	           	if (!is_dir($dir1) ){
-					mkdir($dir1); //create the directory
-					chmod($dir1, 0777); //make it writable
-				}
+		           	$dir1 = 'package/download/'.$p->id;
+		           	$dir2 = 'package/download/'.$p->id.'/'.$difficulty;
+		           
+		           	if (!is_dir($dir1) ){
+						mkdir($dir1); //create the directory
+						chmod($dir1, 0777); //make it writable
+					}
 
-				if (!is_dir($dir2) ){
-					mkdir($dir2); //create the directory
-					chmod($dir2, 0777); //make it writable
-				}
+					if (!is_dir($dir2) ){
+						mkdir($dir2); //create the directory
+						chmod($dir2, 0777); //make it writable
+					}
 
-		        file_put_contents($dir2.'/'.$j.'.json', json_encode($file));
-				}
+			        file_put_contents($dir2.'/'.$j.'.json', json_encode($file));
+					}
+			}
 		}
+     	$files = glob(public_path().'/package/download/');
+		$try = Zipper::make(public_path().'/package/application.zip')->add($files);
 
-
-		return ResponseHelper::OutputJSON('success');
-
+		$file= public_path(). "/package/application.zip";
+		header("Pragma: public");
+		header("Expires: 0");
+		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+		header("Cache-Control: public");
+		header("Content-Description: File Transfer");
+		header("Content-type: application/zip");
+		header("Content-Transfer-Encoding: binary");
+		header("Content-Length: ".filesize(public_path().'/package/application.zip'));
+		readfile(public_path().'/package/application.zip');
 
 	}
 
 }
- 

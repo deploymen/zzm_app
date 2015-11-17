@@ -3,7 +3,6 @@
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
 use Libraries;
-use Models;
 
 class AuthenticateParent {
 
@@ -32,19 +31,14 @@ class AuthenticateParent {
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next) {
-		$isApi = (strpos($request->path(), 'api/') !== FALSE);
 		$route = $request->route();
 
 		$role = \Request::input('user_role');
-	
+
 		switch ($role) {
 			case 'teacher':case 'parent':break;
 			default:
-				if ($isApi) {
-					 return Libraries\ResponseHelper::OutputJSON('fail', "invalid role");
-				} else {
-					return \Redirect::to('/user/signin?no-access');
-				}
+				return Libraries\ResponseHelper::OutputJSON('fail-unauthorised', "invalid role");
 		}
 
 		return $next($request);
