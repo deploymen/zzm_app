@@ -52,6 +52,6 @@ Route::group(['prefix' => '1.0/game'], function () {
 });
 
 
-Route::get('/1.0/set/nick', 'ApiProfileController@getNick');
+Route::get('1.0/set/nick', 'ApiProfileController@getNick');
 
 

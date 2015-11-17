@@ -27,10 +27,17 @@ th, td {
 <br>
 <table style="width:920px;">
 <caption>Game GET Question</caption>
-@for($i = 0; $i < 27; $i++)
+
+@for($i = 0; $i < $status['planet_count'] ; $i++)
   <tr>
-    <td style="width:50%;">{{$status['planet'][$i]['planet_name']}}</td>
-    <td style="width:50%;">{{$status['planet'][$i]['status']}}</td> 
+    <td style="width:48%;">{{$status['planet'][$i]['planet_name']}}</td>
+    <td style="width:48%;">{{$status['planet'][$i]['game_type']}}</td>
+    @if ($status['planet'][$i]['status'] === 1)
+       <td style="width:100%;background-color: #10FF00;"></td> 
+    @else
+       <td style="width:100%;background-color: #FF0A0A;"></td> 
+    @endif
+
   </tr>
 @endfor
 

@@ -16,6 +16,8 @@ Route::group(['prefix' => 'docs'], function(){
 	Route::get('/api.auth-check-post', function(){ return view('contents.docs.api-auth-check-post'); });
 	Route::get('/api.auth-change-password-post', function(){ return view('contents.docs.api-auth-change-password-post'); });
 	Route::get('/api.auth-worksheets-post', function(){ return view('contents.docs.api-auth-worksheets-post'); });
+	Route::get('/api.auth-launch-notification-post', function(){ return view('contents.docs.api-auth-launch-notification-post'); });
+
 
 	Route::get('/list-user', function(){ return view('contents.docs.list-user'); });
 	Route::get('/api.user-profile-get', function(){ return view('contents.docs.api-user-profile-get'); });
@@ -40,8 +42,6 @@ Route::group(['prefix' => 'docs'], function(){
 	Route::get('/api.user-profiles-result-only-questions-get', function(){ return view('contents.docs.api-user-profiles-result-only-questions-get'); });
 
 
-
-
 	Route::get('/list-admin', function(){ return view('contents.docs.list-admin'); });
 	Route::get('/api.admin-system-get', function(){ return view('contents.docs.api-admin-system-get'); });
 	Route::get('/api.admin-system-post', function(){ return view('contents.docs.api-admin-system-post'); });
@@ -56,6 +56,7 @@ Route::group(['prefix' => 'docs'], function(){
 	Route::get('/api.admin-questbank-put', function(){ return view('contents.docs.api-admin-questbank-put'); });
 	Route::get('/api.admin-questbank-delete', function(){ return view('contents.docs.api-admin-questbank-delete'); });
 
+
 	Route::get('/list-game', function(){ return view('contents.docs.list-game'); });
 	Route::get('/api.game-map-system-post', function(){ return view('contents.docs.api-game-map-system-post'); });
 	Route::get('/api.game-map-system-worksheets-post', function(){ return view('contents.docs.api-game-map-system-worksheets-post'); });
@@ -64,6 +65,7 @@ Route::group(['prefix' => 'docs'], function(){
 	Route::get('/api.game-leaderboard-world-get', function(){ return view('contents.docs.api-game-leaderboard-world-get'); });
 	Route::get('/api.game-leaderboard-system-get', function(){ return view('contents.docs.api-game-leaderboard-system-get'); });
 	Route::get('/api.game-leaderboard-planet-get', function(){ return view('contents.docs.api-game-leaderboard-planet-get'); });
+
 
 	Route::get('/api.game-play-request-get-p01-150', function(){ return view('contents.docs.api-game-play-request-get-p01-150'); });
 	Route::get('/api.game-play-request-get-p02-103', function(){ return view('contents.docs.api-game-play-request-get-p02-103'); });
@@ -101,5 +103,10 @@ Route::group(['prefix' => 'docs'], function(){
 	Route::get('/api.game-result-play-get', function(){ return view('contents.docs.api-game-result-play-get'); });
 	Route::get('/api.game-user-map-get', function(){ return view('contents.docs.api-game-user-map-get'); });
 
-
 });
+	Route::get('/edm-sample', function(){ return view('emails.edm-index'); });
+	Route::get('/edm/account-activation', function(){ return view('emails.account-activation-sample'); });
+	Route::get('/edm/forgot-password', function(){ return view('emails.forgot-password-sample'); });
+	Route::get('/edm/invitation', function(){ return view('emails.edm-invitation-sample'); });
+	Route::get('/edm/prelaunch-thank-you', function(){ return view('emails.prelaunch-thank-you'); });
+	Route::get('/edm/set-password-app-signup', function(){ return view('emails.set-password-app-signup'); });

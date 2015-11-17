@@ -1,6 +1,6 @@
 <?php
-Route::get('/',  function(){ return die('zzm-api'); });
-Route::get('/version',  function(){return die('1.0'); });
+Route::get('/', function () {return die('zzm-api');});
+Route::get('/version', function () {return die('1.0');});
 
 Route::pattern('role', '(parent)|(teacher)|(admin)|(content)|(investor)');
 
@@ -33,17 +33,17 @@ Route::group(['prefix' => '1.0/auth'], function () {
 // ! Content											          //
 // =======================================================================//
 
-Route::post('1.0/worksheets', 'ApiQuestionBankController@createGameWorksheet');
+Route::post('/1.0/worksheets', 'ApiQuestionBankController@createGameWorksheet');
 
+Route::get('/1.0/flag', 'ApiCmsController@getFlag');
 
-Route::get('1.0/flag', 'ApiCmsController@getFlag');
-
-
-Route::group(['prefix' => '1.0/pre-launch'], function(){
+Route::group(['prefix' => '1.0/pre-launch'], function () {
 	Route::post('/subscribe', 'ApiController@subscribe');
 	Route::post('/contact-us', 'ApiController@contactUs');
 	Route::get('/subscribe-external', 'ApiController@subscribeExternal');
 
 });
 
-	Route::post('1.0/launch-notification', 'ApiController@launchNotification');
+Route::post('1.0/launch-notification', 'ApiController@launchNotification');
+
+Route::get('1.0/status', 'ApiCheckingController@CheckGameStatus');

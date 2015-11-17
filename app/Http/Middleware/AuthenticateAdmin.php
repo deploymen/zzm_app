@@ -32,40 +32,25 @@ class AuthenticateAdmin {
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next) {
-		$isApi = (strpos($request->path(), 'api/') !== FALSE);
 		$route = $request->route();
 
-		if ($isApi) {
-			$accessToken = \Request::header('X-access-token');
-		} else {
-			$accessToken = \Session::get('access_token');
-		}
+		$accessToken = (!$accessToken) ? Request::header('X-access-token') : $accessToken;
+		$accessToken = (!$accessToken) ? Request::cookie('access_token') : $accessToken;
+		$accessToken = (!$accessToken) ? Session::get('access_token') : $accessToken;
 
 		if (!$accessToken) {
-			if ($isApi) {
-				return Libraries\ResponseHelper::OutputJSON('fail', 'missing access token');
-			} else {
-				return \Redirect::to('/');
-			}
+			return Libraries\ResponseHelper::OutputJSON('fail-unauthorised', 'missing access token');
 		}
 
 		$adminAccess = Models\AdminAccess::where('access_token', $accessToken)->whereRaw('access_token_expired_at > NOW()')->first();
 		if (!$adminAccess) {
-			if ($isApi) {
-				return Libraries\ResponseHelper::OutputJSON('fail', 'invalid access token');
-			} else {
-				return \Redirect::to('/');
-			}
+			return Libraries\ResponseHelper::OutputJSON('fail-unauthorised', 'invalid access token');
 		}
 
 		$admin = Models\User::find($adminAccess->user_id);
 
 		if (!$admin || ($admin->role != $route->role)) {
-			if ($isApi) {
-				return Libraries\ResponseHelper::OutputJSON('fail', 'user not found: ' . $adminAccess->user_id);
-			} else {
-				return \Redirect::to('/');
-			}
+			return Libraries\ResponseHelper::OutputJSON('fail-unauthorised', 'user not found: ' . $adminAccess->user_id);
 		}
 
 		$inputs = \Request::all();
