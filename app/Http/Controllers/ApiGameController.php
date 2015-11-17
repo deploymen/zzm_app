@@ -100,6 +100,7 @@ Class ApiGameController extends Controller {
 				case 'p09':$questions = ZapZapQuestionHelper::GetQuestionP09($planetId,$difficulty,$questionCount); break;
 				case 'p10':$questions = ZapZapQuestionHelper::GetQuestionP10($planetId,$difficulty,$questionCount); break;
 				case 'p11':$questions = ZapZapQuestionHelper::GetQuestionP11($planetId,$difficulty,$questionCount); break;
+				case 'p13':$questions = ZapZapQuestionHelper::GetQuestionP13($planetId,$difficulty,$questionCount); break;
 				case 'p18':$questions = ZapZapQuestionHelper::GetQuestionP18($planetId,$difficulty,$questionCount); break;
 				case 'p23':$questions = ZapZapQuestionHelper::GetQuestionP23($planetId,$difficulty,$questionCount); break;
 				case 'p32':$questions = ZapZapQuestionHelper::GetQuestionP32($planetId,$difficulty,$questionCount); break;
@@ -291,7 +292,7 @@ Class ApiGameController extends Controller {
 			$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();
 
 			ZapZapQuestionHelper::LeaderboardUpdate($profile,$systemPlanet,$gameResult);
-			LogHelper::LogPostResult($jsonGameResult, $gameCode);//log post result
+			LogHelper::LogPostResult($planetId , $jsonGameResult, $gameCode);//log post result
 			} catch (Exception $ex) {
 
 				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
