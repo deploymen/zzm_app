@@ -19,8 +19,6 @@ Route::group(['prefix' => '1.0/auth'], function () {
 	Route::put('/forgot-password', 'AuthUserController@forgotPassword');
 	Route::put('/reset-password', 'AuthUserController@resetPassword');
 
-	Route::put('/setup-password', 'AuthUserController@setPassword');
-
 	Route::post('/invite-parent', 'AuthUserController@invite');
 
 	Route::group(['middleware' => 'auth.user'], function () {
