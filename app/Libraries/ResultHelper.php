@@ -144,8 +144,43 @@ class ResultHelper{
 			$r = $result[$i];
 
 			if($r->question_id != $prevQuestionId){
-				$answer = $r->answer_1.','.$r->answer_2.','.$r->answer_3.','.$r->answer_4.','.$r->answer_5.','.$r->answer_6;
-				$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3.','.$r->answer_option_4.','.$r->answer_option_5.','.$r->answer_option_6;
+				if($r->answer_1){
+					$answer = $r->answer_1;
+					if($r->answer_2){
+						$answer = $r->answer_1.','.$r->answer_2;
+						if($r->answer_3){
+							$answer = $r->answer_1.','.$r->answer_2.','.$r->answer_3;
+							if($r->answer_4){
+								$answer = $r->answer_1.','.$r->answer_2.','.$r->answer_3.','.$r->answer_4;
+								if($r->answer_5){
+									$answer = $r->answer_1.','.$r->answer_2.','.$r->answer_3.','.$r->answer_4.','.$r->answer_5;
+									if($r->answer_6){
+										$answer = $r->answer_1.','.$r->answer_2.','.$r->answer_3.','.$r->answer_4.','.$r->answer_5.','.$r->answer_6;
+									}
+								}
+							}
+						}
+					}
+				}
+				
+				if($r->answer_option_1){
+					$answer = $r->answer_option_1;
+					if($r->answer_option_2){
+						$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2;
+						if($r->answer_option_3){
+							$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3;
+							if($r->answer_option_4){
+								$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3.','.$r->answer_option_4;
+								if($r->answer_option_5){
+									$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3.','.$r->answer_option_4.','.$r->answer_option_5;
+									if($r->answer_option_6){
+										$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3.','.$r->answer_option_4.','.$r->answer_option_5.','.$r->answer_option_6;
+									}
+								}
+							}
+						}
+					}
+				}
 				
 				array_push($answers, [
 						'question_id' => $r->question_id,
@@ -569,6 +604,78 @@ class ResultHelper{
 
        				WHERE r.`target_id` = r15.`id`
        				AND r15.`target_id` = q15.`id`
+       				AND r.`play_id` IN ( {$playId} )
+
+       				ORDER BY r.`id` ASC;
+       ";
+       $result = DB::select($sql);
+       $prevQuestionId = 0;
+
+        for($i=0; $i<count($result); $i++){
+			$r = $result[$i];
+			if($r->question_id != $prevQuestionId){
+				
+				array_push($answers, [
+					'question' => $r->question,
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->result_id,
+						'correct'=> $r->correct,
+						'answer'=> $r->answer,
+					]
+				]);
+			}
+
+			$prevQuestionId = $r->question_id;
+		}
+		return $answers;
+	}
+
+	public static function ResultQuestionP16($playId){
+		$answers = [];
+
+		 $sql = "
+       		SELECT q16.`id` AS `question_id` , q16.`question` , r16.`answer`, r16.`id` AS `result_id` ,r16.`correct` , q16.`difficulty`
+       			FROM `t0300_game_result` r , `t0216_game_question_p16` q16 , `t0316_game_result_p16` r16
+
+       				WHERE r.`target_id` = r16.`id`
+       				AND r16.`target_id` = q16.`id`
+       				AND r.`play_id` IN ( {$playId} )
+
+       				ORDER BY r.`id` ASC;
+       ";
+       $result = DB::select($sql);
+       $prevQuestionId = 0;
+
+        for($i=0; $i<count($result); $i++){
+			$r = $result[$i];
+			if($r->question_id != $prevQuestionId){
+				
+				array_push($answers, [
+					'question' => $r->question,
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->result_id,
+						'correct'=> $r->correct,
+						'answer'=> $r->answer,
+					]
+				]);
+			}
+
+			$prevQuestionId = $r->question_id;
+		}
+		return $answers;
+	}
+
+	public static function ResultQuestionP17($playId){
+		$answers = [];
+
+		 $sql = "
+       		SELECT q17.`id` AS `question_id` , q17.`question` , r17.`answer`, r17.`id` AS `result_id` ,r17.`correct` , q17.`difficulty`
+       			FROM `t0300_game_result` r , `t0217_game_question_p17` q17 , `t0317_game_result_p17` r17
+
+       				WHERE r.`target_id` = r17.`id`
+       				AND r17.`target_id` = q17.`id`
        				AND r.`play_id` IN ( {$playId} )
 
        				ORDER BY r.`id` ASC;
