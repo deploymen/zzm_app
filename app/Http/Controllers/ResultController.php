@@ -88,7 +88,7 @@ Class ResultController extends Controller {
 			$profileId = 365;
 		}
 
-		try {
+		// try {
 
 			if (!$profileId) {
 				return ResponseHelper::OutputJSON('fail', 'missing profile id');
@@ -155,14 +155,14 @@ Class ResultController extends Controller {
 				'page_size' => $pageSize,
 				'pageTotal' => ceil($total / $pageSize),
 			]);
-		} catch (Exception $ex) {
+		// } catch (Exception $ex) {
 
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ResultController > onlyPlanet',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		'source' => 'ResultController > onlyPlanet',
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 	}
 
 	// public function onlyPlay(){
@@ -324,40 +324,25 @@ Class ResultController extends Controller {
 		$startIndex = $pageSize * ($page - 1);
 
 		switch ($play[0]->target_type) {
-			case 'p00':$question = ResultHelper::ResultQuestionP00($playId , $startIndex , $pageSize);
-				break;
-			case 'p01':$question = ResultHelper::ResultQuestionP01($playId , $startIndex , $pageSize);
-				break;
-			case 'p02':$question = ResultHelper::ResultQuestionP02($playId , $startIndex , $pageSize);
-				break;
-			case 'p03':$question = ResultHelper::ResultQuestionP03($playId , $startIndex , $pageSize);
-				break;
-			case 'p06':$question = ResultHelper::ResultQuestionP06($playId , $startIndex , $pageSize);
-				break;
-			case 'p07':$question = ResultHelper::ResultQuestionP07($playId , $startIndex , $pageSize);
-				break;
-			case 'p08':$question = ResultHelper::ResultQuestionP08($playId , $startIndex , $pageSize);
-				break;
-			case 'p09':$question = ResultHelper::ResultQuestionP09($playId , $startIndex , $pageSize);
-				break;
-			case 'p10':$question = ResultHelper::ResultQuestionP10($playId , $startIndex , $pageSize);
-				break;
-			case 'p11':$question = ResultHelper::ResultQuestionP11($playId , $startIndex , $pageSize);
-				break;
-			case 'p12':$question = ResultHelper::ResultQuestionP12($playId , $startIndex , $pageSize);
-				break;
-			case 'p13':$question = ResultHelper::ResultQuestionP13($playId , $startIndex , $pageSize);
-				break;
-			case 'p14':$question = ResultHelper::ResultQuestionP14($playId , $startIndex , $pageSize);
-				break;
-			case 'p15':$question = ResultHelper::ResultQuestionP15($playId , $startIndex , $pageSize);
-				break;
-			case 'p18':$question = ResultHelper::ResultQuestionP18($playId , $startIndex , $pageSize);
-				break;
-			case 'p23':$question = ResultHelper::ResultQuestionP23($playId , $startIndex , $pageSize);
-				break;
-			case 'p32':$question = ResultHelper::ResultQuestionP32($playId , $startIndex , $pageSize);
-				break;
+			case 'p00':$question = ResultHelper::ResultQuestionP00($playId , $startIndex , $pageSize); break;
+			case 'p01':$question = ResultHelper::ResultQuestionP01($playId , $startIndex , $pageSize); break;
+			case 'p02':$question = ResultHelper::ResultQuestionP02($playId , $startIndex , $pageSize); break;
+			case 'p03':$question = ResultHelper::ResultQuestionP03($playId , $startIndex , $pageSize); break;
+			case 'p06':$question = ResultHelper::ResultQuestionP06($playId , $startIndex , $pageSize); break;
+			case 'p07':$question = ResultHelper::ResultQuestionP07($playId , $startIndex , $pageSize); break;
+			case 'p08':$question = ResultHelper::ResultQuestionP08($playId , $startIndex , $pageSize); break;
+			case 'p09':$question = ResultHelper::ResultQuestionP09($playId , $startIndex , $pageSize); break;
+			case 'p10':$question = ResultHelper::ResultQuestionP10($playId , $startIndex , $pageSize); break;
+			case 'p11':$question = ResultHelper::ResultQuestionP11($playId , $startIndex , $pageSize); break;
+			case 'p12':$question = ResultHelper::ResultQuestionP12($playId , $startIndex , $pageSize); break;
+			case 'p13':$question = ResultHelper::ResultQuestionP13($playId , $startIndex , $pageSize); break;
+			case 'p14':$question = ResultHelper::ResultQuestionP14($playId , $startIndex , $pageSize); break;
+			case 'p15':$question = ResultHelper::ResultQuestionP15($playId , $startIndex , $pageSize); break;
+			case 'p16':$question = ResultHelper::ResultQuestionP15($playId , $startIndex , $pageSize); break;
+			case 'p17':$question = ResultHelper::ResultQuestionP15($playId , $startIndex , $pageSize); break;
+			case 'p18':$question = ResultHelper::ResultQuestionP18($playId , $startIndex , $pageSize); break;
+			case 'p23':$question = ResultHelper::ResultQuestionP23($playId , $startIndex , $pageSize); break;
+			case 'p32':$question = ResultHelper::ResultQuestionP32($playId , $startIndex , $pageSize); break;
 		}
 
 		return ResponseHelper::OutputJSON('success', '', [

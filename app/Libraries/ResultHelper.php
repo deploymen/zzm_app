@@ -102,9 +102,25 @@ class ResultHelper{
 
        for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
+			$answer = '';
 
 			if($r->question_id != $prevQuestionId){
-				$answer = 'Triangle = '.$r->angle3.' , Quadrilateral = '.$r->angle4.' , Pentagon = '.$r->angle5.' , Hexagon = '.$r->angle6;
+
+				if($r->angle6){
+					$answer = $r->angle6.' Hexagon';
+				}
+
+				if($r->angle5){
+					$answer = $r->angle5.' Pentagon, '.$answer;
+				}
+
+				if($r->angle4){
+					$answer = $r->angle4.' Quadrilateral, '.$answer;
+				}
+
+				if($r->angle3){
+					$answer = $r->angle3.' Triangle, '.$answer;
+				}
 
 				array_push($answers, [
 					'question_id' => $r->question_id,
@@ -144,8 +160,44 @@ class ResultHelper{
 			$r = $result[$i];
 
 			if($r->question_id != $prevQuestionId){
-				$answer = $r->answer_1.','.$r->answer_2.','.$r->answer_3.','.$r->answer_4.','.$r->answer_5.','.$r->answer_6;
-				$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3.','.$r->answer_option_4.','.$r->answer_option_5.','.$r->answer_option_6;
+
+				if($r->answer_1){
+					$answer = $r->answer_1;
+					if($r->answer_2){
+						$answer = $r->answer_1.','.$r->answer_2;
+						if($r->answer_3){
+							$answer = $r->answer_1.','.$r->answer_2.','.$r->answer_3;
+							if($r->answer_4){
+								$answer = $r->answer_1.','.$r->answer_2.','.$r->answer_3.','.$r->answer_4;
+								if($r->answer_5){
+									$answer = $r->answer_1.','.$r->answer_2.','.$r->answer_3.','.$r->answer_4.','.$r->answer_5;
+									if($r->answer_6){
+										$answer = $r->answer_1.','.$r->answer_2.','.$r->answer_3.','.$r->answer_4.','.$r->answer_5.','.$r->answer_6;
+									}
+								}
+							}
+						}
+					}
+				}
+		
+				if($r->answer_option_1){
+					$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1;
+					if($r->answer_option_2){
+						$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2;
+						if($r->answer_option_3){
+							$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3;
+							if($r->answer_option_4){
+								$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3.','.$r->answer_option_4;
+								if($r->answer_option_5){
+									$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3.','.$r->answer_option_4.','.$r->answer_option_5;
+									if($r->answer_option_6){
+										$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3.','.$r->answer_option_4.','.$r->answer_option_5.','.$r->answer_option_6;
+									}
+								}
+							}
+						}
+					}
+				}
 				
 				array_push($answers, [
 						'question_id' => $r->question_id,
@@ -383,15 +435,33 @@ class ResultHelper{
 
        				ORDER BY r.`id` ASC;
        ";
-       $result = DB::select($sql);
-		  $prevQuestionId = 0;
+       	$result = DB::select($sql);
+		$prevQuestionId = 0;
 
         for($i=0; $i<count($result); $i++){
+        	$answer = '';
 			$r = $result[$i];
 			$thousands = floor(($r->answer % 10000)/1000);
 			$hundreds = floor(($r->answer % 1000)/100);
 			$tens = floor(($r->answer % 100)/10);
 			$ones = floor(($r->answer % 10)/1);
+
+			if($ones){
+				$answer = $ones.' ones;';
+			}
+
+			if($tens){
+				$answer = $tens.' tens; '.$answer;
+			}
+
+			if($hundreds){
+				$answer = $hundreds.' hundreds; '.$answer;
+			}
+
+			if($thousands){
+				$answer = $thousands.' thousands; '.$answer;
+			}
+
 
 			if($r->question_id != $prevQuestionId){
 				array_push($answers, [
@@ -401,12 +471,7 @@ class ResultHelper{
 					'result' => [
 						'result_id' => $r->result_id,
 						'correct'=> $r->correct,
-						'answer'=> [
-							'thousands' => $thousands,
-							'hundreds' => $hundreds,
-							'tens' => $tens,
-							'ones' => $ones,
-						]
+						'answer'=> $answer,
 					]
 				]);
 			}
@@ -420,8 +485,8 @@ class ResultHelper{
 		$answers = [];
 
 		 $sql = "
-       		SELECT q11.`id` AS `question_id` , r11.`patty`, r11.`greens`, r11.`cheese` , r11.`id` AS `result_id` ,r11.`correct` , q11.`difficulty`
-       			FROM `t0300_game_result` r , `t0211_game_question_p11` q11 , `t0311_game_result_p11`
+       		SELECT q11.`id` AS `question_id` , q11.`patty`, q11.`greens`, q11.`cheese`, r11.`patty` AS `answer_patty`, r11.`green` AS `answer_green`, r11.`cheese` AS `answer_cheese`, r11.`id` AS `result_id` ,r11.`correct` , q11.`difficulty`
+       			FROM `t0300_game_result` r , `t0211_game_question_p11` q11 , `t0311_game_result_p11` r11
        				WHERE r.`target_id` = r11.`id`
        				AND r11.`target_id` = q11.`id`
        				AND r.`play_id` IN ( {$playId} )
@@ -430,21 +495,47 @@ class ResultHelper{
        ";
        $result = DB::select($sql);
        $prevQuestionId = 0;
+       $answer = '';
 
         for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
 			if($r->question_id != $prevQuestionId){
+
+				if($r->answer_patty){
+					$answer = $r->answer_patty.':';
+				}
+
+				if($r->answer_green){
+					$answer = $answer.$r->answer_green.':';
+				}
+
+				if($r->answer_cheese){
+					$answer = $answer.$r->answer_cheese;
+				}
+
+				rtrim($answer, ',');
+
+				if($r->patty){
+					$question = $r->patty.':';
+				}
+
+				if($r->greens){
+					$question = $question.$r->greens.':';
+				}
+
+				if($r->cheese){
+					$question = $question.$r->cheese;
+				}
+
+				rtrim($question, ',');
+
 				array_push($answers, [
-					'question' => '',
+					'question' => $question,
 					'difficulty'=>$r->difficulty,
 					'result' => [
 						'result_id' => $r->result_id,
 						'correct'=> $r->correct,
-						'answer'=>[
-							'patty' => $r->patty,
-							'greens' => $r->greens,
-							'cheese' => $r->cheese,
-						]
+						'answer'=> $answer,
 					]
 				]);
 			}
@@ -569,6 +660,78 @@ class ResultHelper{
 
        				WHERE r.`target_id` = r15.`id`
        				AND r15.`target_id` = q15.`id`
+       				AND r.`play_id` IN ( {$playId} )
+
+       				ORDER BY r.`id` ASC;
+       ";
+       $result = DB::select($sql);
+       $prevQuestionId = 0;
+
+        for($i=0; $i<count($result); $i++){
+			$r = $result[$i];
+			if($r->question_id != $prevQuestionId){
+				
+				array_push($answers, [
+					'question' => $r->question,
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->result_id,
+						'correct'=> $r->correct,
+						'answer'=> $r->answer,
+					]
+				]);
+			}
+
+			$prevQuestionId = $r->question_id;
+		}
+		return $answers;
+	}
+
+	public static function ResultQuestionP16($playId){
+		$answers = [];
+
+		 $sql = "
+       		SELECT q16.`id` AS `question_id` , q16.`question` , r16.`answer`, r16.`id` AS `result_id` ,r16.`correct` , q16.`difficulty`
+       			FROM `t0300_game_result` r , `t0216_game_question_p16` q16 , `t0316_game_result_p16` r16
+
+       				WHERE r.`target_id` = r16.`id`
+       				AND r16.`target_id` = q16.`id`
+       				AND r.`play_id` IN ( {$playId} )
+
+       				ORDER BY r.`id` ASC;
+       ";
+       $result = DB::select($sql);
+       $prevQuestionId = 0;
+
+        for($i=0; $i<count($result); $i++){
+			$r = $result[$i];
+			if($r->question_id != $prevQuestionId){
+				
+				array_push($answers, [
+					'question' => $r->question,
+					'difficulty'=>$r->difficulty,
+					'result' => [
+						'result_id' => $r->result_id,
+						'correct'=> $r->correct,
+						'answer'=> $r->answer,
+					]
+				]);
+			}
+
+			$prevQuestionId = $r->question_id;
+		}
+		return $answers;
+	}
+
+	public static function ResultQuestionP17($playId){
+		$answers = [];
+
+		 $sql = "
+       		SELECT q17.`id` AS `question_id` , q17.`question` , r17.`answer`, r17.`id` AS `result_id` ,r17.`correct` , q17.`difficulty`
+       			FROM `t0300_game_result` r , `t0217_game_question_p17` q17 , `t0317_game_result_p17` r17
+
+       				WHERE r.`target_id` = r17.`id`
+       				AND r17.`target_id` = q17.`id`
        				AND r.`play_id` IN ( {$playId} )
 
        				ORDER BY r.`id` ASC;
