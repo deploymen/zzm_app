@@ -505,8 +505,8 @@ class ResultHelper{
 					$answer = $r->answer_patty.':';
 				}
 
-				if($r->answer_greens){
-					$answer = $answer.$r->answer_greens.':';
+				if($r->answer_green){
+					$answer = $answer.$r->answer_green.':';
 				}
 
 				if($r->answer_cheese){
