@@ -102,9 +102,25 @@ class ResultHelper{
 
        for($i=0; $i<count($result); $i++){
 			$r = $result[$i];
+			$answer = '';
 
 			if($r->question_id != $prevQuestionId){
-				$answer = 'Triangle = '.$r->angle3.' , Quadrilateral = '.$r->angle4.' , Pentagon = '.$r->angle5.' , Hexagon = '.$r->angle6;
+
+				if($r->angle6){
+					$answer = $r->angle6.' Hexagon';
+				}
+
+				if($r->angle5){
+					$answer = $r->angle5.' Pentagon, '.$answer;
+				}
+
+				if($r->angle4){
+					$answer = $r->angle4.' Quadrilateral, '.$answer;
+				}
+
+				if($r->angle3){
+					$answer = $r->angle3.' Triangle, '.$answer;
+				}
 
 				array_push($answers, [
 					'question_id' => $r->question_id,
@@ -431,19 +447,19 @@ class ResultHelper{
 			$ones = floor(($r->answer % 10)/1);
 
 			if($ones){
-				$answer = 'ones :'.$ones;
+				$answer = $ones.' ones;';
 			}
 
 			if($tens){
-				$answer = 'tens :'.$tens.'; '.$answer;
+				$answer = $tens.' tens; '.$answer;
 			}
 
 			if($hundreds){
-				$answer = 'hundreds :'.$hundreds.'; '.$answer;
+				$answer = $hundreds.' hundreds; '.$answer;
 			}
 
 			if($thousands){
-				$answer = 'thousands :'.$thousands.'; '.$answer;
+				$answer = $thousands.' thousands; '.$answer;
 			}
 
 
