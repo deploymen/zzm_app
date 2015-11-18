@@ -144,6 +144,7 @@ class ResultHelper{
 			$r = $result[$i];
 
 			if($r->question_id != $prevQuestionId){
+
 				if($r->answer_1){
 					$answer = $r->answer_1;
 					if($r->answer_2){
@@ -162,9 +163,9 @@ class ResultHelper{
 						}
 					}
 				}
-				
+		
 				if($r->answer_option_1){
-					$answer = $r->answer_option_1;
+					$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1;
 					if($r->answer_option_2){
 						$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2;
 						if($r->answer_option_3){
