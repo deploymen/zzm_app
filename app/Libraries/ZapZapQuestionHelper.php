@@ -2222,36 +2222,6 @@ class ZapZapQuestionHelper{
 		}
 	}
 
-	public static function submitResultP13($planetId,$gamePlay ,$gameResult,$profileId ) {
-		try{
-			for($i=0; $i<count($gameResult['answers']); $i++){
-				$inAnswer = $gameResult['answers'][$i];
-				$question = GameQuestion::find($inAnswer['question_id']);
-
-				$resultP13 = new GameResultP13;
-				$resultP13->target_type = 'p13';
-				$resultP13->target_id = $question->target_id;
-				$resultP13->answer = $inAnswer['answer'];
-				$resultP13->correct = $inAnswer['correct'];
-				$resultP13->save();
-
-				$gameResults = new GameResult;
-				$gameResults->play_id = $gamePlay->id;
-				$gameResults->question_id = $inAnswer['question_id'];
-				$gameResults->target_type = 'p13';
-				$gameResults->target_id = $resultP13->id;
-				$gameResults->game_type_id = '11';
-				$gameResults->save();
-			}	
-
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
-	}
-
 	public static function submitResultP18($planetId,$gamePlay ,$gameResult,$profileId ) {
 		try{
 			for($i=0; $i<count($gameResult['answers']); $i++){
