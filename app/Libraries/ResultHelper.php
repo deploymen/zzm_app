@@ -527,6 +527,8 @@ class ResultHelper{
 					$question = $question.$r->cheese;
 				}
 
+				rtrim($question, ',');
+
 				array_push($answers, [
 					'question' => $question,
 					'difficulty'=>$r->difficulty,
