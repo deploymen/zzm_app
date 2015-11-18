@@ -528,16 +528,12 @@ class ResultHelper{
 				}
 
 				array_push($answers, [
-					'question' => '',
+					'question' => $question,
 					'difficulty'=>$r->difficulty,
 					'result' => [
 						'result_id' => $r->result_id,
 						'correct'=> $r->correct,
-						'answer'=>[
-							'patty' => $r->patty,
-							'greens' => $r->greens,
-							'cheese' => $r->cheese,
-						]
+						'answer'=> $answer,
 					]
 				]);
 			}
