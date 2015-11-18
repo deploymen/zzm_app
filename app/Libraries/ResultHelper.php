@@ -429,6 +429,21 @@ class ResultHelper{
 			$tens = floor(($r->answer % 100)/10);
 			$ones = floor(($r->answer % 10)/1);
 
+			if($ones){
+				$answer = 'ones :'.$ones;
+			}
+
+			if($tens){
+				$answer = 'tens :'.$tens.'; '.$answer;
+			}
+
+			if($hundreds){
+				$answer = 'hundreds :'.$hundreds.'; '.$answer;
+			}
+
+			if($thousands){
+				$answer = 'thousands :'.$thousands.'; '.$answer;
+			}
 			if($r->question_id != $prevQuestionId){
 				array_push($answers, [
 					'question_id' => $r->question_id,
@@ -437,12 +452,7 @@ class ResultHelper{
 					'result' => [
 						'result_id' => $r->result_id,
 						'correct'=> $r->correct,
-						'answer'=> [
-							'thousands' => $thousands,
-							'hundreds' => $hundreds,
-							'tens' => $tens,
-							'ones' => $ones,
-						]
+						'answer'=> $answer,
 					]
 				]);
 			}
