@@ -419,10 +419,11 @@ class ResultHelper{
 
        				ORDER BY r.`id` ASC;
        ";
-       $result = DB::select($sql);
-		  $prevQuestionId = 0;
+       	$result = DB::select($sql);
+		$prevQuestionId = 0;
 
         for($i=0; $i<count($result); $i++){
+        	$answer = '';
 			$r = $result[$i];
 			$thousands = floor(($r->answer % 10000)/1000);
 			$hundreds = floor(($r->answer % 1000)/100);
@@ -444,6 +445,8 @@ class ResultHelper{
 			if($thousands){
 				$answer = 'thousands :'.$thousands.'; '.$answer;
 			}
+
+
 			if($r->question_id != $prevQuestionId){
 				array_push($answers, [
 					'question_id' => $r->question_id,
