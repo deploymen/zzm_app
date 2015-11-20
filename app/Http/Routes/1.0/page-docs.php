@@ -103,5 +103,10 @@ Route::group(['prefix' => 'docs'], function(){
 	Route::get('/api.game-result-play-get', function(){ return view('contents.docs.api-game-result-play-get'); });
 	Route::get('/api.game-user-map-get', function(){ return view('contents.docs.api-game-user-map-get'); });
 
-
 });
+	Route::get('/edm-sample', function(){ return view('emails.edm-index'); });
+	Route::get('/edm/account-activation', function(){ return view('emails.account-activation-sample'); });
+	Route::get('/edm/forgot-password', function(){ return view('emails.forgot-password-sample'); });
+	Route::get('/edm/invitation', function(){ return view('emails.edm-invitation-sample'); });
+	Route::get('/edm/prelaunch-thank-you', function(){ return view('emails.prelaunch-thank-you'); });
+	Route::get('/edm/set-password-app-signup', function(){ return view('emails.set-password-app-signup'); });

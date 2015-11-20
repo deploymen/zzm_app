@@ -1,33 +1,29 @@
 <?php namespace App\Http\Controllers;
 
 use App;
-use Cookie;
-use DB;
-use Exception;
-use Redirect;
-use Config;
-use Request;
-use Session;
-use App\Libraries;
-use App\Libraries\LogHelper;
 use App\Libraries\AuthHelper;
-use App\Libraries\ZapZapHelper;
-use App\Libraries\EmailHelper;
-use App\Libraries\ResponseHelper;
 use App\Libraries\DatabaseUtilHelper;
-
-use App\Models;
+use App\Libraries\EmailHelper;
+use App\Libraries\LogHelper;
+use App\Libraries\ResponseHelper;
+use App\Libraries\ZapZapHelper;
+use App\Models\GameCode;
+use App\Models\GameProfile;
+use App\Models\IdCounter;
+use App\Models\LogAccountActivate;
+use App\Models\LogPasswordReset;
+use App\Models\LogSignInUser;
 use App\Models\User;
 use App\Models\UserAccess;
 use App\Models\UserExternalId;
 use App\Models\UserSetting;
-use App\Models\LogSignInUser;
-use App\Models\LogAccountActivate;
-use App\Models\GameProfile;
-use App\Models\GameCode;
-use App\Models\IdCounter;
-use App\Models\LogPasswordReset;
-
+use Config;
+use Cookie;
+use DB;
+use Exception;
+use Redirect;
+use Request;
+use Session;
 
 Class AuthUserController extends Controller {
 
@@ -57,7 +53,7 @@ Class AuthUserController extends Controller {
 		}
 
 		switch ($role) {
-			case 'parent': case 'teacher': break;
+			case 'parent':case 'teacher':break;
 			default:return ResponseHelper::OutputJSON('fail', "invalid role");
 		}
 
@@ -70,7 +66,7 @@ Class AuthUserController extends Controller {
 		}
 
 		$access = UserAccess::where('username', $username)->first();
-		if($access){
+		if ($access) {
 			return ResponseHelper::OutputJSON('fail', "email used");
 		}
 
@@ -108,9 +104,9 @@ Class AuthUserController extends Controller {
 
 					$profile = new GameProfile;
 					$profile->user_id = $user->id;
-					$profile->nickname1= 1;
-					$profile->nickname2= 1;
-					$profile->avatar_id = 1;
+					$profile->nickname1 = 1;
+					$profile->nickname2 = 1;
+					$profile->avatar_id = 999;
 					$profile->save();
 
 					$idCounter = IdCounter::find(1);
@@ -135,8 +131,8 @@ Class AuthUserController extends Controller {
 						'name' => $name,
 						'app_store_address' => config('app.app_store_url'),
 						'username' => $email,
-						'zapzapmath_portal' => config('app.website_url') . '/sign-in',
-						'activation_link' => config('app.website_url') ."/api/auth/activate/{$secretKey}",
+						'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
+						'activation_link' => config('app.website_url') . "/api/1.0/auth/activate/{$secretKey}",
 						'email_support' => config('app.support_email'),
 						'social_media_links' => config('app.fanpage_url'),
 					]);
@@ -166,21 +162,21 @@ Class AuthUserController extends Controller {
 					setcookie('access_token', $accessToken, time() + (86400 * 30), "/"); // 86400 = 1 day*/
 				});
 
-				$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
-				$list = User::select('role','name')->find($userAccess->user_id);
-			} catch (Exception $ex) {
-				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-					'source' => 'AuthUserController > signUp',
-					'inputs' => Request::all(),
-				])]);
-				return ResponseHelper::OutputJSON('exception');
-			}
+			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
+			$list = User::select('role', 'name')->find($userAccess->user_id);
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'AuthUserController > signUp',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 
-			return ResponseHelper::OutputJSON('success', '', $list, [
-				'X-access-token' => $accessToken
-			],[
-				'access_token' => $accessToken
-			]);	
+		return ResponseHelper::OutputJSON('success', '', $list, [
+			'X-access-token' => $accessToken,
+		], [
+			'access_token' => $accessToken,
+		]);
 	}
 
 	public function signIn() {
@@ -191,8 +187,7 @@ Class AuthUserController extends Controller {
 
 		$username = Request::input('username');
 		$password = Request::input('password');
-		$password_sha1 = sha1($password.Config::get('app.auth_salt'));
-
+		$password_sha1 = sha1($password . Config::get('app.auth_salt'));
 		$deviceId = Request::input('device_id'); //optional
 
 		if (!$username || !$password) {
@@ -201,8 +196,10 @@ Class AuthUserController extends Controller {
 
 		//trial control //will implement here
 		try {
-	
+
+			// $userAccess = UserAccess::all();
 			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
+
 			if (!$userAccess) {
 				$log = new LogSignInUser;
 				$log->username = $username;
@@ -211,6 +208,18 @@ Class AuthUserController extends Controller {
 				$log->created_ip = Request::ip();
 				$log->save();
 				return ResponseHelper::OutputJSON('fail', 'invalid username/password');
+			}
+
+			$user = User::where('id', $userAccess->user_id)->where('activated', 1)->first();
+			
+			if (!$user) {
+				$log = new LogSignInUser;
+				$log->username = $username;
+				$log->password_sha1 = $password_sha1;
+				$log->success = 0;
+				$log->created_ip = Request::ip();
+				$log->save();
+				return ResponseHelper::OutputJSON('fail', 'account is not activated');
 			}
 
 			if ($userAccess->access_token == '') {
@@ -231,18 +240,17 @@ Class AuthUserController extends Controller {
 			$log->success = 1;
 			$log->created_ip = Request::ip();
 			$log->save();
-			
-			$list = User::select('role','name')->find($userAccess->user_id);
 
+			$list = User::select('role', 'name')->find($userAccess->user_id);
 
 			Session::put('access_token', $accessToken);
 			setcookie('access_token', $accessToken, time() + (86400 * 30), "/"); // 86400 = 1 day*/
 
 			return ResponseHelper::OutputJSON('success', '', [], [
-				'X-access-token' => $accessToken
-			],[
-				'access_token' => $accessToken
-			]);				
+				'X-access-token' => $accessToken,
+			], [
+				'access_token' => $accessToken,
+			]);
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -262,9 +270,9 @@ Class AuthUserController extends Controller {
 	}
 
 	public function signOut() {
-            Session::forget('access_token');
-            $cookie = Cookie::forget('access_token');
-            return redirect('user/signin')->withCookie($cookie);
+		Session::forget('access_token');
+		$cookie = Cookie::forget('access_token');
+		return redirect('user/signin')->withCookie($cookie);
 	}
 
 	public function check() {
@@ -308,14 +316,13 @@ Class AuthUserController extends Controller {
 
 		try {
 			$wipedData = [
-				'password_sha1'=>$userAccess->password_sha1
+				'password_sha1' => $userAccess->password_sha1,
 			];
 
-			
 			$userAccess->password_sha1 = $password2Sha1;
 			$userAccess->save();
 
-			DatabaseUtilHelper::LogUpdate($userId, $userAccess->table, $userId ,$wipedData);
+			DatabaseUtilHelper::LogUpdate($userId, $userAccess->table, $userId, $wipedData);
 			return ResponseHelper::OutputJSON('success');
 
 		} catch (Exception $ex) {
@@ -351,7 +358,6 @@ Class AuthUserController extends Controller {
 			return ResponseHelper::OutputJSON('fail', 'user not found');
 		}
 
-
 		try {
 			$accessToken = AuthHelper::GenerateAccessToken($userId);
 
@@ -364,14 +370,14 @@ Class AuthUserController extends Controller {
 			$userAccess->access_token = $accessToken;
 			$userAccess->save();
 
-			DatabaseUtilHelper::LogUpdate($userId, $userAccess->table, $userId ,json_encode(['password_sha1' => $userAccess->password_sha1]));
+			DatabaseUtilHelper::LogUpdate($userId, $userAccess->table, $userId, json_encode(['password_sha1' => $userAccess->password_sha1]));
 
 			Session::put('access_token', $accessToken);
 			return ResponseHelper::OutputJSON('success', '', [], [
-				'X-access-token' => $accessToken
-			],[
-				'access_token' => $accessToken
-			]);		
+				'X-access-token' => $accessToken,
+			], [
+				'access_token' => $accessToken,
+			]);
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -390,12 +396,12 @@ Class AuthUserController extends Controller {
 			->first();
 
 		if (!$logAccountActivate) {
-			return redirect::to('/activate-fail');
+			return redirect::to('../user/activate-fail');
 		}
 
 		$user = $logAccountActivate->findUser()->first();
 		if (!$user) {
-			return redirect::to('/activate-fail');
+			return redirect::to('../user/activate-fail');
 		}
 
 		try {
@@ -407,7 +413,7 @@ Class AuthUserController extends Controller {
 			$user->activated = 1;
 			$user->save();
 
-			return redirect::to('/activate-success');
+			return redirect::to('../user/activate-success');
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -433,7 +439,7 @@ Class AuthUserController extends Controller {
 
 		try {
 
-			 DB::table('t9202_log_password_reset')
+			DB::table('t9202_log_password_reset')
 				->where('user_id', $user->id)
 				->update([
 					'expired' => 1,
@@ -449,9 +455,9 @@ Class AuthUserController extends Controller {
 			$edmHtml = (string) view('emails.forgot-password', [
 				'name' => $user->name,
 				'username' => $email,
-				'zapzapmath_portal' => Config::get('app.website_url').'/sign-in',
+				'zapzapmath_portal' => Config::get('app.website_url') . '/user/sign-in',
 				'social_media_links' => Config::get('app.fanpage_url'),
-				'reset_url' => Config::get('app.website_url').'/user/reset-password/' . $secret,
+				'reset_url' => Config::get('app.website_url') . '/user/reset-password/' . $secret,
 			]);
 
 			EmailHelper::SendEmail([
@@ -525,11 +531,11 @@ Class AuthUserController extends Controller {
 		$mobileNumber = Request::input('mobile_number');
 		$address = Request::input('address');
 
-		try{
+		try {
 			$user = User::find($userId);
 
-			if(!$user){
-			return ResponseHelper::OutputJSON('fail','','user not found');
+			if (!$user) {
+				return ResponseHelper::OutputJSON('fail', '', 'user not found');
 			}
 
 			$wiped = [];
@@ -551,7 +557,7 @@ Class AuthUserController extends Controller {
 
 			$user->save();
 			return ResponseHelper::OutputJSON('success');
-			
+
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 				'source' => 'AuthUserController > update',
@@ -562,22 +568,21 @@ Class AuthUserController extends Controller {
 	}
 
 	public function signUpApp() {
-		$email = Request::input('email');
+		$email = Request::input('email', '');
 		$firstName = Request::input('first_name');
-		$lastName = Request::input('last_name');
+		$lastName = Request::input('last_name', '');
 		$deviceId = Request::input('deviceId');
 
-
-		if (!$email || !$firstName || !$lastName) {
+		if (!$email || !$firstName) {
 			return ResponseHelper::OutputJSON('fail', "missing parameters");
 		}
 
-		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+		if ($email != '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			return ResponseHelper::OutputJSON('fail', "invalid email format");
 		}
 
 		$access = UserAccess::where('username', $email)->first();
-		if($access){
+		if ($access) {
 			return ResponseHelper::OutputJSON('fail', "email used");
 		}
 
@@ -611,9 +616,9 @@ Class AuthUserController extends Controller {
 			$profile->user_id = $user->id;
 			$profile->first_name = $firstName;
 			$profile->last_name = $lastName;
-			$profile->nickname1= 1;
-			$profile->nickname2= 1;
-			$profile->avatar_id = 1;
+			$profile->nickname1 = 1;
+			$profile->nickname2 = 1;
+			$profile->avatar_id = 999;
 			$profile->save();
 
 			$idCounter = IdCounter::find(1);
@@ -635,7 +640,7 @@ Class AuthUserController extends Controller {
 
 			$secretKey = sha1(time() . $email);
 			$edmHtml = (string) view('emails.set-password-app-signup', [
-				'set_url' => config('app.website_url').'/user/set-password/'.$secretKey,
+				'set_url' => config('app.website_url') . '/user/set-password/' . $secretKey,
 				'social_media_links' => config('app.fanpage_url'),
 			]);
 
@@ -660,17 +665,16 @@ Class AuthUserController extends Controller {
 			DatabaseUtilHelper::LogInsert($user->id, $profile->table, $profile->id);
 			DatabaseUtilHelper::LogInsert($user->id, $code->table, $code->id);
 
-			return ResponseHelper::OutputJSON('success', '', $code->code);	
+			return ResponseHelper::OutputJSON('success', '', $code->code);
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 				'source' => 'AuthUserController > signUp',
 				'inputs' => Request::all(),
-				
+
 			])]);
 			return ResponseHelper::OutputJSON('exception');
 		}
-
 	}
 
 	public function setPassword() {
@@ -685,7 +689,7 @@ Class AuthUserController extends Controller {
 		if (strlen($password) < 6) {
 			return ResponseHelper::OutputJSON('fail', 'password must be atleast 6 chars');
 		}
-		
+
 		$LogAccountActivate = LogAccountActivate::where('secret', $secret)->where('expired', '0')->whereNull('activated_at')->first();
 		if (!$LogAccountActivate) {
 			return ResponseHelper::OutputJSON('fail', 'invalid secret');
@@ -696,7 +700,6 @@ Class AuthUserController extends Controller {
 		if (!$userAccess) {
 			return ResponseHelper::OutputJSON('fail', 'user not found');
 		}
-
 
 		try {
 			$accessToken = AuthHelper::GenerateAccessToken($userId);
@@ -710,14 +713,14 @@ Class AuthUserController extends Controller {
 			$userAccess->access_token = $accessToken;
 			$userAccess->save();
 
-			DatabaseUtilHelper::LogUpdate($userId, $userAccess->table, $userId ,json_encode(['password_sha1' => $userAccess->password_sha1]));
+			DatabaseUtilHelper::LogUpdate($userId, $userAccess->table, $userId, json_encode(['password_sha1' => $userAccess->password_sha1]));
 
 			Session::put('access_token', $accessToken);
 			return ResponseHelper::OutputJSON('success', '', [], [
-				'X-access-token' => $accessToken
-			],[
-				'access_token' => $accessToken
-			]);		
+				'X-access-token' => $accessToken,
+			], [
+				'access_token' => $accessToken,
+			]);
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([

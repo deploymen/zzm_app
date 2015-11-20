@@ -3,7 +3,7 @@ use Response;
 
 class ResponseHelper {
 
-	public static function OutputJSON($status, $message = "", $data = [], $headers = [], $cookies = []) {
+	public static function OutputJSON($status, $message = "", $data = [], $headers = [], $cookies = [] , $cmd = '' , $cmdParam = []) {
 		$payload = array(
 			'status' => $status,
 		);
@@ -12,9 +12,18 @@ class ResponseHelper {
 		$ip = $_SERVER['REMOTE_ADDR'];
 
 		if ($status == 'exception') {$statusCode = 500;}
+		if ($status == 'fail-unauthorised') {
+			$statusCode = 401;
+			$status == 'fail';
+		}
 
 		if ($message != "") {
 			$payload['message'] = $message;
+		}
+
+		if ($cmd != ""){
+			$payload['cmd'] = $cmd;
+			$payload['cmd_param'] = $cmdParam;
 		}
 
 		if (count($data) > 0) {$payload['data'] = $data;}
