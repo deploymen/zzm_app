@@ -2345,8 +2345,7 @@ class ZapZapQuestionHelper{
 
 	public static function LeaderboardUpdate($profile,$systemPlanet,$gameResult) {
 		try{
-			$leaderboardSql = '';
-			$leaderboardSql1 = '';
+
 			$leaderBoard = new LeaderboardPlanet;
 			$leaderBoard->planet_id = $systemPlanet->planet_id;
 			$leaderBoard->profile_id = $profile->id;
@@ -2355,6 +2354,7 @@ class ZapZapQuestionHelper{
 			$leaderBoard->avatar =  $profile->avatar->filename;
 			$leaderBoard->score = $gameResult['score'];
 			$leaderBoard->save();
+
 			$sql = "
 				UPDATE `t0603_leaderboard_planet` AS l1 ,
 					( SELECT `id`, FIND_IN_SET( `score`, ( SELECT GROUP_CONCAT( DISTINCT  `score` ORDER BY `score` DESC ) FROM `t0603_leaderboard_planet`

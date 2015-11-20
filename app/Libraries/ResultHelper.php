@@ -513,7 +513,7 @@ class ResultHelper{
 					$answer = $answer.$r->answer_cheese;
 				}
 
-				rtrim($answer, ':');
+				$answer = rtrim($answer, ':');
 
 				if($r->patty){
 					$question = $r->patty.':';
@@ -527,7 +527,7 @@ class ResultHelper{
 					$question = $question.$r->cheese;
 				}
 
-				rtrim($question, ':');
+				$question = rtrim($question, ':');
 
 				array_push($answers, [
 					'question' => $question,

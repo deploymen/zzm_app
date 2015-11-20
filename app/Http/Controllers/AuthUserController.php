@@ -104,8 +104,8 @@ Class AuthUserController extends Controller {
 
 					$profile = new GameProfile;
 					$profile->user_id = $user->id;
-					$profile->nickname1 = 1;
-					$profile->nickname2 = 1;
+					$profile->nickname1 = 999;
+					$profile->nickname2 = 999;
 					$profile->avatar_id = 999;
 					$profile->save();
 
@@ -616,8 +616,8 @@ Class AuthUserController extends Controller {
 			$profile->user_id = $user->id;
 			$profile->first_name = $firstName;
 			$profile->last_name = $lastName;
-			$profile->nickname1 = 1;
-			$profile->nickname2 = 1;
+			$profile->nickname1 = 999;
+			$profile->nickname2 = 999;
 			$profile->avatar_id = 999;
 			$profile->save();
 
@@ -677,57 +677,5 @@ Class AuthUserController extends Controller {
 		}
 	}
 
-	public function setPassword() {
 
-		$password = Request::input('password');
-		$secret = Request::input('secret');
-
-		if (!$password || !$secret) {
-			return ResponseHelper::OutputJSON('fail', 'missing parameters');
-		}
-
-		if (strlen($password) < 6) {
-			return ResponseHelper::OutputJSON('fail', 'password must be atleast 6 chars');
-		}
-
-		$LogAccountActivate = LogAccountActivate::where('secret', $secret)->where('expired', '0')->whereNull('activated_at')->first();
-		if (!$LogAccountActivate) {
-			return ResponseHelper::OutputJSON('fail', 'invalid secret');
-		}
-
-		$userId = $LogAccountActivate->user_id;
-		$userAccess = UserAccess::find($userId);
-		if (!$userAccess) {
-			return ResponseHelper::OutputJSON('fail', 'user not found');
-		}
-
-		try {
-			$accessToken = AuthHelper::GenerateAccessToken($userId);
-
-			$LogAccountActivate->expired = 1;
-			$LogAccountActivate->activated_at = DB::raw('NOW()');
-			$LogAccountActivate->activated_ip = Request::ip();
-			$LogAccountActivate->save();
-
-			$userAccess->password_sha1 = sha1($password . Config::get('app.auth_salt'));
-			$userAccess->access_token = $accessToken;
-			$userAccess->save();
-
-			DatabaseUtilHelper::LogUpdate($userId, $userAccess->table, $userId, json_encode(['password_sha1' => $userAccess->password_sha1]));
-
-			Session::put('access_token', $accessToken);
-			return ResponseHelper::OutputJSON('success', '', [], [
-				'X-access-token' => $accessToken,
-			], [
-				'access_token' => $accessToken,
-			]);
-
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'AuthUserController > resetPassword',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
-	}
 }
