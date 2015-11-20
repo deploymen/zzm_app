@@ -106,8 +106,8 @@ Class ApiProfileController extends Controller {
 		$city = Request::input('city');
 		$email = Request::input('email', '');
 
-		$nickname1 = Request::input('nickname1', 1);
-		$nickname2 = Request::input('nickname2', 1);
+		$nickname1 = Request::input('nickname1', 999);
+		$nickname2 = Request::input('nickname2', 999);
 		$avatarId = Request::input('avatar_id', 999);
 
 		if (!$firstName || !$school || !$city || !$age || !$grade) {
@@ -447,8 +447,8 @@ Class ApiProfileController extends Controller {
 			$gamePro->user_id = 0;
 			$gamePro->first_name = "anonymous";
 			$gamePro->last_name = "anonymous";
-			$gamePro->nickname1 = 1;
-			$gamePro->nickname2 = 1;
+			$gamePro->nickname1 = 999;
+			$gamePro->nickname2 = 999;
 			$gamePro->avatar_id = 999;
 			$gamePro->save();
 

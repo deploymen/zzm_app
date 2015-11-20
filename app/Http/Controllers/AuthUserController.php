@@ -104,8 +104,8 @@ Class AuthUserController extends Controller {
 
 					$profile = new GameProfile;
 					$profile->user_id = $user->id;
-					$profile->nickname1 = 1;
-					$profile->nickname2 = 1;
+					$profile->nickname1 = 999;
+					$profile->nickname2 = 999;
 					$profile->avatar_id = 999;
 					$profile->save();
 
@@ -616,8 +616,8 @@ Class AuthUserController extends Controller {
 			$profile->user_id = $user->id;
 			$profile->first_name = $firstName;
 			$profile->last_name = $lastName;
-			$profile->nickname1 = 1;
-			$profile->nickname2 = 1;
+			$profile->nickname1 = 999;
+			$profile->nickname2 = 999;
 			$profile->avatar_id = 999;
 			$profile->save();
 
