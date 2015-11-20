@@ -5,14 +5,14 @@
 // =======================================================================//
 
 Route::group(['middleware' => 'auth.game'], function () {
-	Route::group(['prefix' => 'api/1.0/game/profiles'], function () {
+	Route::group(['prefix' => '1.0/game/profiles'], function () {
 			Route::put('/', 'ApiProfileController@gameUpdate');
 	});
 });
 
 
 
-Route::group(['prefix' => 'api/1.0/game'], function () {
+Route::group(['prefix' => '1.0/game'], function () {
 	Route::get('/create-package', 'ApiGameController@createPackage');
 
 	Route::post('/sign-up', 'AuthUserController@signUpApp');
@@ -52,6 +52,6 @@ Route::group(['prefix' => 'api/1.0/game'], function () {
 });
 
 
-Route::get('/api/1.0/set/nick', 'ApiProfileController@getNick');
+Route::get('1.0/set/nick', 'ApiProfileController@getNick');
 
 

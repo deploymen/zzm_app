@@ -1,12 +1,13 @@
-
 <?php
+Route::get('/', function () {return die('zzm-api123');});
+Route::get('/version', function () {return die('1.0');});
 
 Route::pattern('role', '(parent)|(teacher)|(admin)|(content)|(investor)');
 
 // =======================================================================//
 // ! Auth Related												          //
 // =======================================================================//
-Route::group(['prefix' => 'api/1.0/auth'], function () {
+Route::group(['prefix' => '1.0/auth'], function () {
 	Route::post('/sign-up', 'AuthUserController@signUp'); //only for parent|teacher
 	Route::post('/sign-in', 'AuthUserController@signIn');
 	Route::post('/sign-out', 'AuthUserController@signOut');
@@ -32,17 +33,17 @@ Route::group(['prefix' => 'api/1.0/auth'], function () {
 // ! Content											          //
 // =======================================================================//
 
-Route::post('/api/1.0/worksheets', 'ApiQuestionBankController@createGameWorksheet');
+Route::post('/1.0/worksheets', 'ApiQuestionBankController@createGameWorksheet');
 
+Route::get('/1.0/flag', 'ApiCmsController@getFlag');
 
-Route::get('/api/1.0/flag', 'ApiCmsController@getFlag');
-
-
-Route::group(['prefix' => 'api/1.0/pre-launch'], function(){
+Route::group(['prefix' => '1.0/pre-launch'], function () {
 	Route::post('/subscribe', 'ApiController@subscribe');
 	Route::post('/contact-us', 'ApiController@contactUs');
 	Route::get('/subscribe-external', 'ApiController@subscribeExternal');
 
 });
 
-	Route::post('api/1.0/launch-notification', 'ApiController@launchNotification');
+Route::post('1.0/launch-notification', 'ApiController@launchNotification');
+
+Route::get('1.0/status', 'ApiCheckingController@CheckGameStatus');
