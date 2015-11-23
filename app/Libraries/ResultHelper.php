@@ -144,7 +144,7 @@ class ResultHelper{
 		$answers = [];
 
        $sql = "
-       		SELECT q2.`id` AS `question_id` ,q2.`question`, q2.`answer_option_1` , q2.`answer_option_2` ,q2.`answer_option_3` ,q2.`answer_option_4` ,q2.`answer_option_5` ,q2.`answer_option_6` ,q2.`difficulty` , r2.*
+       		SELECT q2.`id` AS `question_id` ,q2.`question`, q2.`answer_option_1` , q2.`answer_option_2` ,q2.`answer_option_3` ,q2.`answer_option_4` ,q2.`answer_option_5` ,q2.`answer_option_6` ,q2.`fixed` ,q2.`difficulty` , r2.*
        			FROM `t0300_game_result` r , `t0202_game_question_p02` q2 , `t0302_game_result_p02` r2
 
        				WHERE r.`target_id` = r2.`id`
@@ -179,19 +179,40 @@ class ResultHelper{
 						}
 					}
 				}
-		
-				if($r->answer_option_1){
-					$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1;
-					if($r->answer_option_2){
-						$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2;
-						if($r->answer_option_3){
-							$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3;
-							if($r->answer_option_4){
-								$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3.','.$r->answer_option_4;
-								if($r->answer_option_5){
-									$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3.','.$r->answer_option_4.','.$r->answer_option_5;
-									if($r->answer_option_6){
-										$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3.','.$r->answer_option_4.','.$r->answer_option_5.','.$r->answer_option_6;
+				
+				if($r->fixed){
+					if($r->answer_option_1){
+						$question = 'Make '.$r->question.' given '.$r->fixed.' and the following numbers '.$r->answer_option_1;
+						if($r->answer_option_2){
+							$question = 'Make '.$r->question.' given '.$r->fixed.' and the following numbers '.$r->answer_option_1.','.$r->answer_option_2;
+							if($r->answer_option_3){
+								$question = 'Make '.$r->question.' given '.$r->fixed.' and the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3;
+								if($r->answer_option_4){
+									$question = 'Make '.$r->question.' given '.$r->fixed.' and the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3.','.$r->answer_option_4;
+									if($r->answer_option_5){
+										$question = 'Make '.$r->question.' given '.$r->fixed.' and the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3.','.$r->answer_option_4.','.$r->answer_option_5;
+										if($r->answer_option_6){
+											$question = 'Make '.$r->question.' given '.$r->fixed.' and the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3.','.$r->answer_option_4.','.$r->answer_option_5.','.$r->answer_option_6;
+										}
+									}
+								}
+							}
+						}
+					}
+				}else{
+					if($r->answer_option_1){
+						$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1;
+						if($r->answer_option_2){
+							$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2;
+							if($r->answer_option_3){
+								$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3;
+								if($r->answer_option_4){
+									$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3.','.$r->answer_option_4;
+									if($r->answer_option_5){
+										$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3.','.$r->answer_option_4.','.$r->answer_option_5;
+										if($r->answer_option_6){
+											$question = 'Make '.$r->question.' given the following numbers '.$r->answer_option_1.','.$r->answer_option_2.','.$r->answer_option_3.','.$r->answer_option_4.','.$r->answer_option_5.','.$r->answer_option_6;
+										}
 									}
 								}
 							}
