@@ -45,6 +45,7 @@ Class ApiGameController extends Controller {
 
 	//GET QUESTION
 	public function request($planetId) {	
+		
 		$gameCode = Request::input('game_code');
 		$difficulty = Request::input('difficulty');
 
@@ -165,7 +166,6 @@ Class ApiGameController extends Controller {
 
 	//SUBMIT RESULT
 	public function result($planetId) {
-
 		$Planet = GamePlanet::find($planetId);
 		$jsonGameResult = Request::input('game_result');
 		$hash = Request::input('hash');
@@ -334,7 +334,6 @@ Class ApiGameController extends Controller {
 			}
 
 			return ResponseHelper::OutputJSON('success');
-
 	}
 
 	public function resultLog(){
