@@ -16,6 +16,7 @@ use App\Models\IdCounter;
 use App\Models\SetNickname1;
 use App\Models\SetNickname2;
 use App\Models\UserMap;
+use App\Models\Age;
 use DB;
 use Exception;
 use Request;
@@ -381,45 +382,51 @@ Class ApiProfileController extends Controller {
 		$nickname1 = Request::input('nickname1');
 		$nickname2 = Request::input('nickname2');
 		$avatarId = Request::input('avatar_id');
+		$age = Request::input('age');
+		
 
 		try {
-			$wiped = [];
-			// if(!$userId){
-			// 	return ResponseHelper::OutputJSON('fail','wrong user id');
-			// }
-
 			$profile = GameProfile::find($profileId);
 			if (!$profile) {
 				return ResponseHelper::OutputJSON('fail', "profile not found");
 			}
 
-			if ($nickname1) {
-				$nicknameSet = SetNickname1::find($nickname1);
-				if (!$nicknameSet) {
-					return ResponseHelper::OutputJSON('fail', "nickname not found");
-				}
-				$wiped['nickname1'] = $profile->nickname1;
-				$profile->nickname1 = $nickname1;
+			$nicknameSet = SetNickname1::find($nickname1);
+			if (!$nicknameSet) {
+				return ResponseHelper::OutputJSON('fail', "nickname1 not found");
 			}
 
-			if ($nickname2) {
-				$nicknameSet = SetNickname2::find($nickname2);
-				if (!$nicknameSet) {
-					return ResponseHelper::OutputJSON('fail', "nickname not found");
-				}
-				$wiped['nickname2'] = $profile->nickname2;
-				$profile->nickname2 = $nickname2;
+			$nicknameSet = SetNickname2::find($nickname2);
+			if (!$nicknameSet) {
+				return ResponseHelper::OutputJSON('fail', "nickname2 not found");
 			}
 
-			if ($avatarId) {
-				$avatarSet = AvatarSet::find($avatarId);
-				if (!$avatarSet) {
-					return ResponseHelper::OutputJSON('fail', "avatar not found");
-				}
-				$wiped['avatar_id'] = $profile->avatar_id;
-				$profile->avatar_id = $avatarId;
+			$avatarSet = AvatarSet::find($avatarId);
+			if (!$avatarSet) {
+				return ResponseHelper::OutputJSON('fail', "avatar not found");
+			}
+			
+			$ageSet = Age::find($age);
+			if (!$ageSet) {
+				return ResponseHelper::OutputJSON('fail', "age not found");
 			}
 
+			$secret = 'SAKF3G83D83MEKX59Y9Z';
+			$ip = Request::ip();
+
+			$res = file_get_contents("http://api.apigurus.com/iplocation/v1.8/locateip?key={$secret}&ip={$ip}&format=json&compact=y");			
+			$ipDetail = json_decode($res, true);
+
+			if(isset($ipDetail['geolocation_data']))
+			{ 
+				$geolocationData = $ipDetail['geolocation_data'];
+				$profile->city = $geolocationData['city'];
+			}
+
+			$profile->nickname1 = $nickname1;
+			$profile->nickname2 = $nickname2;
+			$profile->avatar_id = $avatarId;
+			$profile->age = $age;
 			$profile->save();
 
 			DatabaseUtilHelper::LogUpdate($userId, $profile->table, $userId, json_encode($wiped));
