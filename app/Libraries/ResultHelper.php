@@ -640,7 +640,7 @@ class ResultHelper{
 		$answers = [];
 
 		 $sql = "
-       		SELECT q14.`id` AS `question_id` , r14.`answer`, r14.`id` AS `result_id` ,r14.`correct` , q14.`difficulty`
+       		SELECT q14.`id` AS `question_id` ,q14.`operator`, q14.`number1`,q14.`number2`,q14.`number3`,q14.`number1_multiplier`,q14.'number2_multiplier',q14.`number3_multiplier`, r14.`answer`, r14.`id` AS `result_id` ,r14.`correct` , q14.`difficulty`
        			FROM `t0300_game_result` r , `t0214_game_question_p14` q14 , `t0314_game_result_p14` r14
 
        				WHERE r.`target_id` = r14.`id`
@@ -656,8 +656,27 @@ class ResultHelper{
 			$r = $result[$i];
 			if($r->question_id != $prevQuestionId){
 				
+				if($r->number1){
+					$exNum1= explode('/' , $r->number1);
+					$number1_1 = $exNum1[0] * $r->number1_multiplier;
+					$number1_2 = $exNum1[1] * $r->number1_multiplier;
+
+				}
+				if($r->number2){
+					$exNum2 = explode('/' , $r->number2);
+					$number2_1 = $exNum2[0] * $r->number2_multiplier;
+					$number2_2 = $exNum2[1] * $r->number2_multiplier;
+
+				}
+				if($r->number3){
+					$exNum3 = explode('/' , $r->number3);
+					$number3_1 = $exNum3[0] * $r->number3_multiplier;
+					$number3_2 = $exNum3[1] * $r->number3_multiplier;
+				}
+
+				$question = $number1_1.'/'.$number1_2.' '.$r->operator.' '.$number2_1.'/'.$number2_2;
 				array_push($answers, [
-					'question' => '',
+					'question' => $question,
 					'difficulty'=>$r->difficulty,
 					'result' => [
 						'result_id' => $r->result_id,
