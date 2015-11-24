@@ -143,9 +143,9 @@ Class ApiGameController extends Controller {
 
 				$res = file_get_contents("http://api.apigurus.com/iplocation/v1.8/locateip?key={$secret}&ip={$ip}&format=json&compact=y");			
 				$ipDetail = json_decode($res, true);
+				var_export($ipDetail); die();
 
-				if(isset($ipDetail['geolocation_data']))
-				{ 
+				if(isset($ipDetail['geolocation_data'])) { 
 					$geolocationData = $ipDetail['geolocation_data'];
 					$profile->city = $geolocationData['city'];
 					$profile->save();
