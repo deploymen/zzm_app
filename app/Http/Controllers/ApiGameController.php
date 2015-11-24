@@ -45,7 +45,7 @@ Class ApiGameController extends Controller {
 
 	//GET QUESTION
 	public function request($planetId) {	
-		
+
 		$gameCode = Request::input('game_code');
 		$difficulty = Request::input('difficulty');
 
@@ -136,6 +136,25 @@ Class ApiGameController extends Controller {
 				}	
 			}
 
+			$profile = GameProfile::find($profileId);
+			var_export($profile); die();
+			if(!$profile->city){
+				$secret = 'SAKF3G83D83MEKX59Y9Z';
+				$ip = Request::ip();
+
+				$res = file_get_contents("http://api.apigurus.com/iplocation/v1.8/locateip?key={$secret}&ip={$ip}&format=json&compact=y");			
+				$ipDetail = json_decode($res, true);
+				var_export($ipDetail); die();
+
+				if(isset($ipDetail['geolocation_data'])) { 
+					$geolocationData = $ipDetail['geolocation_data'];
+					$profile->city = $geolocationData['city'];
+					$profile->save();
+
+				}
+
+			}
+			
 			return ResponseHelper::OutputJSON('success', '', [
 					'planet' => [
 						'id' => $planet->id,
