@@ -23,7 +23,7 @@
 
 <div class="row">
     <div class="col-lg-8">
-        <h3>PUT   /api/class/{id}</h3>
+        <h3>PUT   /api/1.0/class/{id}</h3>
         <ul id="myTab" class="nav nav-tabs">
             <li class="active"><a href="#descriptions" data-toggle="tab">Explain</a>
             </li>
@@ -73,10 +73,9 @@
                     </tr>
                 </table>
                 <div style="margin-top:50px; height:500px; overflow:auto; font-size:12px">
-<pre class="prettyprint">PUT http://local.zapzapmath.com/api/class/3 HTTP/1.1
-Host: local.zapzapmath.com
+<pre class="prettyprint">PUT http://staging.zapzapmath.com/api/1.0/class/3 HTTP/1.1
+Host: staging.zapzapmath.com
 X-access-token: 1234
-Cookie: __utmx=208893977.e5U6QuyaSKqesLvm_jKPxw$99127049-0:1; __utmxx=208893977.e5U6QuyaSKqesLvm_jKPxw$99127049-0:1428307792:15552000; access_token=4%7Ca212e19d35b8e08b429ac1a3b9a61ee71edb8065; _gat=1; _ga=GA1.2.1098556987.1429157607; laravel_session=eyJpdiI6ImZzQmpOVlA4VWI3NU1kMVBNT0gza2c9PSIsInZhbHVlIjoiN1A2UUdvS3hFTmcxWnlITFpqQW9QU0hiOGJaRzJJckhVY1pJbGpralB6ZFR6dFFhdVpqYWZKZHJXN245eHhCWWRqRE5remRvM3NvbmJIM1lOUTErXC93PT0iLCJtYWMiOiJhOTY3M2FiZmEzNGRhMzNiNzUzZDk0MGQxODY2YzgwYzBmZDhiZjBmNjQyZGNiNmNlZDAzODI0NDY5MDk2MTY4In0%3D
 
 class_name=Class+4
 </pre>
