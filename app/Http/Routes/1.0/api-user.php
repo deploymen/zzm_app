@@ -29,7 +29,7 @@ Route::group(['middleware' => 'auth.user'], function () {
 			Route::delete('/{id}', 'ApiClassController@delete');
 
 			Route::put('/add-to-class', 'ApiClassController@addProfile');
-			Route::put('/{id}/profile', 'ApiClassController@removeProfile');
+			Route::get('/{id}/profiles', 'ApiClassController@getProfile');
 		});
 	});
 });

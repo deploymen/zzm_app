@@ -30,11 +30,8 @@ Class ApiClassController extends Controller {
 		}
 	}
 
-
 	public function create() {
-
 		try {
-
 			$userId = Request::input('user_id');
 			$className = Request::input('class_name');
 
@@ -55,7 +52,6 @@ Class ApiClassController extends Controller {
 			])]);
 			return ResponseHelper::OutputJSON('exception');
 		}
-
 	}
 
 	public function update($id) {
@@ -149,34 +145,19 @@ Class ApiClassController extends Controller {
 		}
 	}
 
-	public function removeProfile($id) {
-
-		
+	public function getProfile($classId){
 		$userId = Request::input('user_id');
 
-		try{
+		$gameClass = GameClass::where('id', $classId)->where('user_id' , $userId)->get()->toarray();
 
-			$profile = GameProfile::find($id);
-
-				if(!$profile) {
-					return ResponseHelper::OutputJSON('fail', "profile not found");
-				}
-			
-			if($userId == $profile->user_id){	
-				$profile->class_id = 0;
-				$profile->save();
-
-				return ResponseHelper::OutputJSON('success');
-			}
-
-			return ResponseHelper::OutputJSON('fail','wrong user id');
-
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
+		if(!$gameClass){
+			return ResponseHelper::OutputJSON('fail', 'class not found');
 		}
+
+		$gameProfile = GameProfile::where('class_id', $classId)->get();
+		return ResponseHelper::OutputJSON('success', '' , $gameProfile);
+
+
 	}
 
 }

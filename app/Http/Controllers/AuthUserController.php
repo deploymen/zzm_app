@@ -246,7 +246,7 @@ Class AuthUserController extends Controller {
 			Session::put('access_token', $accessToken);
 			setcookie('access_token', $accessToken, time() + (86400 * 30), "/"); // 86400 = 1 day*/
 
-			return ResponseHelper::OutputJSON('success', '', [], [
+			return ResponseHelper::OutputJSON('success', '', $list, [
 				'X-access-token' => $accessToken,
 			], [
 				'access_token' => $accessToken,
