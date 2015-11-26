@@ -23,7 +23,7 @@
 
 <div class="row">
     <div class="col-lg-8">
-        <h3>POST  /api/1.0/class/add-to-class</h3>
+        <h3>PUT  /api/1.0/class/add-to-class</h3>
         <ul id="myTab" class="nav nav-tabs">
             <li class="active"><a href="#descriptions" data-toggle="tab">Explain</a>
             </li>
@@ -73,7 +73,7 @@
                     </tr>
                 </table>
                 <div style="margin-top:50px; height:500px; overflow:auto; font-size:12px">
-<pre class="prettyprint">POST http://staging.zapzapmath.com/api/1.0/class/add-to-class HTTP/1.1
+<pre class="prettyprint">PUT http://staging.zapzapmath.com/api/1.0/class/add-to-class HTTP/1.1
 Host: staging.zapzapmath.com
 X-access-token: 123
 

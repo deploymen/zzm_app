@@ -28,7 +28,7 @@ Route::group(['middleware' => 'auth.user'], function () {
 			Route::put('/{id}', 'ApiClassController@update');
 			Route::delete('/{id}', 'ApiClassController@delete');
 
-			Route::post('/add-to-class', 'ApiClassController@addProfile');
+			Route::put('/add-to-class', 'ApiClassController@addProfile');
 			Route::put('/{id}/profile', 'ApiClassController@removeProfile');
 		});
 	});
