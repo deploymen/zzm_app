@@ -33,7 +33,7 @@ Class ApiClassController extends Controller {
 	public function create() {
 		try {
 			$user_id = Request::input('user_id');
-			$className = Request::input('class_name');
+			$className = Request::input('name');
 
 			if (!$className || !$userId) {
 				return ResponseHelper::OutputJSON('fail', "missing parameters");
@@ -62,7 +62,7 @@ Class ApiClassController extends Controller {
 	public function update($id) {
 		try {
 			$userId = Request::input('user_id');
-			$className = Request::input('class_name');
+			$className = Request::input('name');
 
 			if(!$className){
 				return ResponseHelper::OutputJSON('fail', "missing parameters");
