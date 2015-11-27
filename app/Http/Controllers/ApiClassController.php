@@ -32,11 +32,16 @@ Class ApiClassController extends Controller {
 
 	public function create() {
 		try {
-			$userId = Request::input('user_id');
+			$user_id = Request::input('user_id');
 			$className = Request::input('class_name');
 
 			if (!$className || !$userId) {
 				return ResponseHelper::OutputJSON('fail', "missing parameters");
+			}
+
+			$classN = GameClass::where('user_id' , $user_id)->where('name' , $className)->first();
+			if($classN){
+				return ResponseHelper::OutputJSON('fail', "class name already exist");
 			}
 
 			$gameClass = new GameClass;
@@ -70,6 +75,11 @@ Class ApiClassController extends Controller {
 		
 			if(!$gameClass->user_id == $userId){
 				return ResponseHelper::OutputJSON('fail', "user id not math");
+			}
+
+			$classN = GameClass::where('user_id' , $user_id)->where('name' , $className)->first();
+			if($classN){
+				return ResponseHelper::OutputJSON('fail', "class name already exist");
 			}
 
 			$gameClass->name = $className;
