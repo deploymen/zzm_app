@@ -166,8 +166,15 @@ Class ApiClassController extends Controller {
 
 		$gameProfile = GameProfile::where('class_id', $classId)->get();
 		return ResponseHelper::OutputJSON('success', '' , $gameProfile);
-
-
 	}
 
+	public function getGameClass($classId){
+		$class = GameClass::find($classId);
+
+		if(!$class){
+			return ResponseHelper::OutputJSON('fail', "class no found");
+		}
+
+		return ResponseHelper::OutputJSON('fail', '', $class);
+	}
 }
