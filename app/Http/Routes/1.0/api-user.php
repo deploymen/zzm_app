@@ -30,6 +30,9 @@ Route::group(['middleware' => 'auth.user'], function () {
 
 			Route::put('/add-to-class', 'ApiClassController@addProfile');
 			Route::get('/{id}/profiles', 'ApiClassController@getProfile');
+
+			Route::get('/{class_id}', 'ApiClassController@getGameClass');
+
 		});
 	});
 });
