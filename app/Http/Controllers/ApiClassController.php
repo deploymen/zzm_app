@@ -175,6 +175,6 @@ Class ApiClassController extends Controller {
 			return ResponseHelper::OutputJSON('fail', "class no found");
 		}
 
-		return ResponseHelper::OutputJSON('fail', '', $class);
+		return ResponseHelper::OutputJSON('success', '', $class);
 	}
 }
