@@ -31,15 +31,15 @@ Class ApiClassController extends Controller {
 	}
 
 	public function create() {
-		try {
-			$user_id = Request::input('user_id');
+		// try {
+			$userId = Request::input('user_id');
 			$className = Request::input('name');
 
 			if (!$className || !$userId) {
 				return ResponseHelper::OutputJSON('fail', "missing parameters");
 			}
 
-			$classN = GameClass::where('user_id' , $user_id)->where('name' , $className)->first();
+			$classN = GameClass::where('user_id' , $userId)->where('name' , $className)->first();
 			if($classN){
 				return ResponseHelper::OutputJSON('fail', "class name already exist");
 			}
@@ -51,12 +51,12 @@ Class ApiClassController extends Controller {
 
 			return ResponseHelper::OutputJSON('success');
 
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		// } catch (Exception $ex) {
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 	}
 
 	public function update($id) {
@@ -77,7 +77,7 @@ Class ApiClassController extends Controller {
 				return ResponseHelper::OutputJSON('fail', "user id not math");
 			}
 
-			$classN = GameClass::where('user_id' , $user_id)->where('name' , $className)->first();
+			$classN = GameClass::where('user_id' , $userId)->where('name' , $className)->first();
 			if($classN){
 				return ResponseHelper::OutputJSON('fail', "class name already exist");
 			}
@@ -165,7 +165,7 @@ Class ApiClassController extends Controller {
 		}
 
 		$gameProfile = GameProfile::where('class_id', $classId)->get();
-		return ResponseHelper::OutputJSON('success', '' , $gameProfile);
+		return ResponseHelper::OutputJSON('success', '' , ['profile' => $gameProfile ]);
 	}
 
 	public function getGameClass($classId){
