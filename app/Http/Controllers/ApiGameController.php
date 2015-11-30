@@ -297,7 +297,7 @@ Class ApiGameController extends Controller {
 					$gameResult['badges']['accuracy'] = '0';
 				}
 
-				$gamePlay->badges_matrick = json_encode($gameResult['badges']);		
+				$gamePlay->badges_metrics = json_encode($gameResult['badges']);		
 			}
 			if(isset($gameResult['level']) ){
 				$gamePlay->level =  $gameResult['level'];
