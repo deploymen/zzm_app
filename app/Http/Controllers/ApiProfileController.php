@@ -406,7 +406,7 @@ Class ApiProfileController extends Controller {
 				return ResponseHelper::OutputJSON('fail', "avatar not found");
 			}
 			
-			$ageSet = Age::find($age);
+			$ageSet = Age::where('age', $age)->first();
 			if (!$ageSet) {
 				return ResponseHelper::OutputJSON('fail', "age not found");
 			}
@@ -429,7 +429,6 @@ Class ApiProfileController extends Controller {
 			$profile->age = $age;
 			$profile->save();
 
-			DatabaseUtilHelper::LogUpdate($userId, $profile->table, $userId, json_encode($wiped));
 			return ResponseHelper::OutputJSON('success', '', $profile->toArray());
 
 		} catch (Exception $ex) {

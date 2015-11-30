@@ -31,7 +31,7 @@ Class ApiClassController extends Controller {
 	}
 
 	public function create() {
-		// try {
+		try {
 			$userId = Request::input('user_id');
 			$className = Request::input('name');
 
@@ -49,14 +49,14 @@ Class ApiClassController extends Controller {
 			$gameClass->name = $className;
 			$gameClass->save();
 
-			return ResponseHelper::OutputJSON('success');
+			return ResponseHelper::OutputJSON('success', '' , $gameClass);
 
-		// } catch (Exception $ex) {
-		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-		// 		'inputs' => Request::all(),
-		// 	])]);
-		// 	return ResponseHelper::OutputJSON('exception');
-		// }
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 	}
 
 	public function update($id) {
