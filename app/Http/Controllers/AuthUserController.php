@@ -8,6 +8,7 @@ use App\Libraries\LogHelper;
 use App\Libraries\ResponseHelper;
 use App\Libraries\ZapZapHelper;
 use App\Models\GameCode;
+use App\Models\GameClass;
 use App\Models\GameProfile;
 use App\Models\IdCounter;
 use App\Models\LogAccountActivate;
@@ -120,6 +121,13 @@ Class AuthUserController extends Controller {
 					$code->seed = $gameCodeSeed;
 					$code->profile_id = $profile->id;
 					$code->save();
+
+					if ($role == 'teacher'){
+						$gameClass = new GameClass;
+						$gameClass->user_id = $user->id;
+						$gameClass->name = 'default class';
+						$gameClass->save();
+					}
 
 					if ($deviceId) {
 						//claim back previous game result played from this device id

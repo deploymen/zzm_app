@@ -8,6 +8,7 @@ use App\Libraries\ReportProfileHelper;
 use App\Libraries\ResponseHelper;
 use App\Libraries\ZapZapHelper;
 use App\Models\AvatarSet;
+use App\Models\GameClass;
 use App\Models\GameCode;
 use App\Models\GamePlanet;
 use App\Models\GamePlay;
@@ -106,6 +107,7 @@ Class ApiProfileController extends Controller {
 		$grade = Request::input('grade');
 		$city = Request::input('city');
 		$email = Request::input('email', '');
+		$classId = Request::input('class_id' , 0);
 
 		$nickname1 = Request::input('nickname1', 999);
 		$nickname2 = Request::input('nickname2', 999);
@@ -119,26 +121,36 @@ Class ApiProfileController extends Controller {
 			return ResponseHelper::OutputJSON('fail', "invalid email format");
 		}
 
-		try {
+		$nickname1 = SetNickname1::find($nickname1);
+		$nickname2 = SetNickname2::find($nickname2);
+		
+		if (!$nickname1) {
+			return ResponseHelper::OutputJSON('fail', "invalid nickname id");
+		}
 
-			$nickname_1 = SetNickname1::find($nickname1);
-			$nickname_2 = SetNickname2::find($nickname2);
+		if (!$nickname2) {
+			return ResponseHelper::OutputJSON('fail', "invalid nickname id");
+		}
+
+		if (!$avatarId) {
+			return ResponseHelper::OutputJSON('fail', "invalid avatar id");
+		}
+
+		if($classId){
+			$gameClass = GameClass::find($classId);
+			if(!$gameClass || $gameClass->user_id != $userId) {
+				return ResponseHelper::OutputJSON('fail', "class not found");
+			}
+		}
+		
+		// try {
+
+
 			$avatarIdSet = AvatarSet::find($avatarId);
-
-			if (!$nickname_1) {
-				return ResponseHelper::OutputJSON('fail', "invalid nickname id");
-			}
-
-			if (!$nickname_2) {
-				return ResponseHelper::OutputJSON('fail', "invalid nickname id");
-			}
-
-			if (!$avatarId) {
-				return ResponseHelper::OutputJSON('fail', "invalid avatar id");
-			}
 
 			$profile = new GameProfile;
 			$profile->user_id = $userId;
+			$profile->class_id = $classId;
 			$profile->first_name = $firstName;
 			$profile->last_name = $lastName;
 			$profile->age = $age;
@@ -165,13 +177,13 @@ Class ApiProfileController extends Controller {
 
 			DatabaseUtilHelper::LogInsert($userId, $profile->table, $userId);
 
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiProfileController > create',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		// } catch (Exception $ex) {
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		'source' => 'ApiProfileController > create',
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 
 		return ResponseHelper::OutputJSON('success', '', [
 			'profile' => $profile,
