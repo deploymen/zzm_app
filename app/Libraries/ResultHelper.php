@@ -420,8 +420,8 @@ class ResultHelper{
 		$answers = [];
 
 		 $sql = "
-       		SELECT q11.`id` AS `question_id` , r11.`patty`, r11.`greens`, r11.`cheese` , r11.`id` AS `result_id` ,r11.`correct` , q11.`difficulty`
-       			FROM `t0300_game_result` r , `t0211_game_question_p11` q11 , `t0311_game_result_p11`
+       		SELECT q11.`id` AS `question_id` , q11.`patty`, q11.`greens`, q11.`cheese`, r11.`patty` AS `answer_patty`, r11.`green` AS `answer_green`, r11.`cheese` AS `answer_cheese`, r11.`id` AS `result_id` ,r11.`correct` , q11.`difficulty`
+       			FROM `t0300_game_result` r , `t0211_game_question_p11` q11 , `t0311_game_result_p11` r11
        				WHERE r.`target_id` = r11.`id`
        				AND r11.`target_id` = q11.`id`
        				AND r.`play_id` IN ( {$playId} )
