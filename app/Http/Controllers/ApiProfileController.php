@@ -167,11 +167,6 @@ Class ApiProfileController extends Controller {
 				return ResponseHelper::OutputJSON('fail', 'wrong user id');
 			}
 
-			$gameClass = GameClass::find($classId);
-			if(!$gameClass || !$gameClass->user_id != $userId ) {
-				return ResponseHelper::OutputJSON('fail', "class not found");
-			}
-
 			if ($firstName) {
 				$profile->first_name = $firstName;
 			}
@@ -201,6 +196,10 @@ Class ApiProfileController extends Controller {
 			}
 
 			if ($classId) {
+				$gameClass = GameClass::find($classId);
+				if(!$gameClass || !$gameClass->user_id != $userId ) {
+					return ResponseHelper::OutputJSON('fail', "class not found");
+				}
 				$profile->class_id = $classId;
 			}
 
