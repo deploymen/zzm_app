@@ -143,7 +143,7 @@ Class ApiProfileController extends Controller {
 			}
 		}
 		
-		// try {
+		try {
 
 
 			$avatarIdSet = AvatarSet::find($avatarId);
@@ -177,13 +177,13 @@ Class ApiProfileController extends Controller {
 
 			DatabaseUtilHelper::LogInsert($userId, $profile->table, $userId);
 
-		// } catch (Exception $ex) {
-		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-		// 		'source' => 'ApiProfileController > create',
-		// 		'inputs' => Request::all(),
-		// 	])]);
-		// 	return ResponseHelper::OutputJSON('exception');
-		// }
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiProfileController > create',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 
 		return ResponseHelper::OutputJSON('success', '', [
 			'profile' => $profile,
@@ -206,7 +206,6 @@ Class ApiProfileController extends Controller {
 		$classId = Request::input('class_id');
 
 		try {
-			$wiped = [];
 
 			if ($email && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 				return ResponseHelper::OutputJSON('fail', "invalid email format");
@@ -221,43 +220,40 @@ Class ApiProfileController extends Controller {
 				return ResponseHelper::OutputJSON('fail', 'wrong user id');
 			}
 
+			$gameClass = GameClass::find($classId);
+			if(!$gameClass) {
+				return ResponseHelper::OutputJSON('fail', "class not found");
+			}
+
 			if ($firstName) {
-				$wiped['first_name'] = $profile->first_name;
 				$profile->first_name = $firstName;
 			}
 
 			if ($lastName) {
-				$wiped['last_name'] = $profile->last_name;
 				$profile->last_name = $lastName;
 			}
 
 			if ($age) {
-				$wiped['age'] = $profile->age;
 				$profile->age = $age;
 			}
 
 			if ($school) {
-				$wiped['school'] = $profile->school;
 				$profile->school = $school;
 			}
 
 			if ($grade) {
-				$wiped['grade'] = $profile->grade;
 				$profile->grade = $grade;
 			}
 
 			if ($city) {
-				$wiped['city'] = $profile->city;
 				$profile->city = $city;
 			}
 
 			if ($email) {
-				$wiped['email'] = $profile->email;
 				$profile->email = $email;
 			}
 
 			if ($classId) {
-				$wiped['class_id'] = $profile->class_id;
 				$profile->class_id = $classId;
 			}
 
@@ -266,7 +262,6 @@ Class ApiProfileController extends Controller {
 				if (!$nicknameSet) {
 					return ResponseHelper::OutputJSON('fail', "nickname not found");
 				}
-				$wiped['nickname1'] = $profile->nickname1;
 				$profile->nickname1 = $nickname1;
 			}
 
@@ -275,7 +270,6 @@ Class ApiProfileController extends Controller {
 				if (!$nicknameSet) {
 					return ResponseHelper::OutputJSON('fail', "nickname not found");
 				}
-				$wiped['nickname2'] = $profile->nickname2;
 				$profile->nickname2 = $nickname2;
 			}
 
@@ -284,13 +278,12 @@ Class ApiProfileController extends Controller {
 				if (!$avatarSet) {
 					return ResponseHelper::OutputJSON('fail', "avatar not found");
 				}
-				$wiped['avatar_id'] = $profile->avatar_id;
 				$profile->avatar_id = $avatarId;
 			}
 
 			$profile->save();
 
-			DatabaseUtilHelper::LogUpdate($userId, $profile->table, $userId, json_encode($wiped));
+			DatabaseUtilHelper::LogUpdate($userId, $profile->table, $userId);
 			return ResponseHelper::OutputJSON('success', '', $profile->toArray());
 
 		} catch (Exception $ex) {

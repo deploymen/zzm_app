@@ -164,12 +164,21 @@ Class ApiClassController extends Controller {
 
 		$gameClass = GameClass::where('id', $classId)->where('user_id' , $userId)->get()->toarray();
 
+
 		if(!$gameClass){
 			return ResponseHelper::OutputJSON('fail', 'class not found');
 		}
 
-		$gameProfile = GameProfile::where('class_id', $classId)->get();
-		return ResponseHelper::OutputJSON('success', '' , ['profile' => $gameProfile ]);
+		
+		$profiles = GameProfile::select('id', 'user_id', 'class_id', 'first_name', 'last_name', 'age', 'school', 'grade', 'city', 'email', 'nickname1', 'nickname2', 'avatar_id')->where('class_id', $classId)->orderBy('id')->get();
+
+			foreach ($profiles as $profile) {
+				$profile->nickName1;
+				$profile->nickName2;
+				$profile->avatar;
+				$profile->gameCode;
+			}
+		return ResponseHelper::OutputJSON('success', '' , ['profile' => $profiles ]);
 	}
 
 	public function getGameClass($classId){
