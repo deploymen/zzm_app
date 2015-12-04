@@ -79,10 +79,14 @@ class ApiProfileHelper{
 		 }	
 	}
 
-	public static function GetProfile($userId){
+	public static function GetProfile($userId , $classId){
 		$profileInfo = [];
 
-		$profiles = GameProfile::select('id', 'user_id', 'class_id', 'first_name', 'last_name', 'age', 'school', 'grade', 'city', 'email', 'nickname1', 'nickname2', 'avatar_id')->where('user_id', $userId)->orderBy('id')->get();
+		if($classId){
+			$profiles = GameProfile::select('id', 'user_id', 'class_id', 'first_name', 'last_name', 'age', 'school', 'grade', 'city', 'email', 'nickname1', 'nickname2', 'avatar_id')->where('class_id', $classId)->orderBy('id')->get();
+		}else{
+			$profiles = GameProfile::select('id', 'user_id', 'class_id', 'first_name', 'last_name', 'age', 'school', 'grade', 'city', 'email', 'nickname1', 'nickname2', 'avatar_id')->where('user_id', $userId)->orderBy('id')->get();
+		}
 
 		foreach ($profiles as $profile) {
 			$profile->nickName1;

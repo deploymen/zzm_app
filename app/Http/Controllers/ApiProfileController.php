@@ -30,7 +30,7 @@ Class ApiProfileController extends Controller {
 	public function get() {
 		$userId = Request::input('user_id');
 		try {
-			$profileInfo = ApiProfileHelper::GetProfile($userId);
+			$profileInfo = ApiProfileHelper::GetProfile($userId , 0);
 
 			return ResponseHelper::OutputJSON('success', '', ['list' => $profileInfo]);
 

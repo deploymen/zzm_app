@@ -168,7 +168,7 @@ Class ApiClassController extends Controller {
 			return ResponseHelper::OutputJSON('fail', 'class not found');
 		}
 
-		$profiles = ApiProfileHelper::GetProfile($userId);
+		$profiles = ApiProfileHelper::GetProfile($userId, $classId);
 
 		return ResponseHelper::OutputJSON('success', '' , ['profile' => $profiles ]);
 	}
