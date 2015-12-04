@@ -10,6 +10,7 @@ use App\Models\GameClass;
 use App\Libraries;
 use App\Libraries\LogHelper;
 use App\Libraries\ResponseHelper;
+use App\Libraries\ApiProfileHelper;
 
 
 Class ApiClassController extends Controller {
@@ -163,21 +164,12 @@ Class ApiClassController extends Controller {
 		$userId = Request::input('user_id');
 
 		$gameClass = GameClass::where('id', $classId)->where('user_id' , $userId)->get()->toarray();
-
-
 		if(!$gameClass){
 			return ResponseHelper::OutputJSON('fail', 'class not found');
 		}
 
-		
-		$profiles = GameProfile::select('id', 'user_id', 'class_id', 'first_name', 'last_name', 'age', 'school', 'grade', 'city', 'email', 'nickname1', 'nickname2', 'avatar_id')->where('class_id', $classId)->orderBy('id')->get();
+		$profiles = ApiProfileHelper::GetProfile($userId);
 
-			foreach ($profiles as $profile) {
-				$profile->nickName1;
-				$profile->nickName2;
-				$profile->avatar;
-				$profile->gameCode;
-			}
 		return ResponseHelper::OutputJSON('success', '' , ['profile' => $profiles ]);
 	}
 

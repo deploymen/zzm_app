@@ -29,61 +29,8 @@ Class ApiProfileController extends Controller {
 	// =======================================================================//
 	public function get() {
 		$userId = Request::input('user_id');
-		$profileInfo = [];
 		try {
-			$profiles = GameProfile::select('id', 'user_id', 'class_id', 'first_name', 'last_name', 'age', 'school', 'grade', 'city', 'email', 'nickname1', 'nickname2', 'avatar_id')->where('user_id', $userId)->orderBy('id')->get();
-
-			foreach ($profiles as $profile) {
-				$profile->nickName1;
-				$profile->nickName2;
-				$profile->avatar;
-				$profile->gameCode;
-			}
-
-			$sql = "
-				 SELECT profile.`id` , play.`created_at`, count(result.`id`) AS `questions_played` ,play.`score`
-		    		FROM `t0111_game_profile` profile
-						LEFT JOIN `t0400_game_play` play ON (play.`profile_id` = profile.`id` AND play.`user_id` = {$userId} )
-						LEFT JOIN `t0400_game_play` play2 ON (play2.`profile_id` = profile.`id` AND play2.`user_id` = {$userId} AND play2.`created_at` > play.`created_at`)
-
-						LEFT JOIN `t0400_game_play` play_all ON (play_all.`profile_id` = profile.`id` AND play_all.`user_id` = {$userId})
-						LEFT JOIN `t0300_game_result` result ON (play_all.`id` = result.`play_id` AND result.`target_type` = play_all.`target_type`)
-				    		WHERE profile.`deleted_at` IS NULL
-				    		AND play2.`id` IS NULL
-				    		AND profile.`user_id` = {$userId}
-
-		    					GROUP BY profile.`id`
-			";
-
-			$lastPlayed = DB::select($sql);
-			for ($i = 0; $i < count($profiles); $i++) {
-				$p = $profiles[$i];
-				$lp = $lastPlayed[$i];
-
-				array_push($profileInfo, [
-					'id' => $p->id,
-					'user_id' => $p->user_id,
-					'class_id' => $p->class_id,
-					'first_name' => $p->first_name,
-					'last_name' => $p->last_name,
-					'age' => $p->age,
-					'school' => $p->school,
-					'grade' => $p->grade,
-					'city' => $p->city,
-					'email' => $p->email,
-					'questions_played' => $lp->questions_played,
-					'nickname1' => $p->nickname1,
-					'nickname2' => $p->nickname2,
-					'avatar_id' => $p->avatar_id,
-					'nick_name1' => $p->nickName1,
-					'nick_name2' => $p->nickName2,
-					'avatar' => $p->avatar,
-					'game_code' => $p->gameCode,
-					'last_played' => $lp->created_at,
-
-				]);
-
-			}
+			$profileInfo = ApiProfileHelper::GetProfile($userId);
 
 			return ResponseHelper::OutputJSON('success', '', ['list' => $profileInfo]);
 
@@ -205,7 +152,7 @@ Class ApiProfileController extends Controller {
 		$avatarId = Request::input('avatar_id');
 		$classId = Request::input('class_id');
 
-		try {
+		// try {
 
 			if ($email && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 				return ResponseHelper::OutputJSON('fail', "invalid email format");
@@ -221,7 +168,7 @@ Class ApiProfileController extends Controller {
 			}
 
 			$gameClass = GameClass::find($classId);
-			if(!$gameClass) {
+			if(!$gameClass || !$gameClass->user_id != $userId ) {
 				return ResponseHelper::OutputJSON('fail', "class not found");
 			}
 
@@ -258,7 +205,7 @@ Class ApiProfileController extends Controller {
 			}
 
 			if ($nickname1) {
-				$nicknameSet = SetNickname1::find($nickname1);
+				$nicknameSet = SetNickname1::find($nickname1);				
 				if (!$nicknameSet) {
 					return ResponseHelper::OutputJSON('fail', "nickname not found");
 				}
@@ -283,16 +230,15 @@ Class ApiProfileController extends Controller {
 
 			$profile->save();
 
-			DatabaseUtilHelper::LogUpdate($userId, $profile->table, $userId);
 			return ResponseHelper::OutputJSON('success', '', $profile->toArray());
 
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiProfileController > update',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		// } catch (Exception $ex) {
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		'source' => 'ApiProfileController > update',
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 	}
 
 	public function delete($id) {

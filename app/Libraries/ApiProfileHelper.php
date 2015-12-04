@@ -78,4 +78,63 @@ class ApiProfileHelper{
 		 	return ResponseHelper::OutputJSON('exception');
 		 }	
 	}
+
+	public static function GetProfile($userId){
+		$profileInfo = [];
+
+		$profiles = GameProfile::select('id', 'user_id', 'class_id', 'first_name', 'last_name', 'age', 'school', 'grade', 'city', 'email', 'nickname1', 'nickname2', 'avatar_id')->where('user_id', $userId)->orderBy('id')->get();
+
+		foreach ($profiles as $profile) {
+			$profile->nickName1;
+			$profile->nickName2;
+			$profile->avatar;
+			$profile->gameCode;
+		}
+
+		$sql = "
+			 SELECT profile.`id` , play.`created_at`, count(result.`id`) AS `questions_played` ,play.`score`
+	    		FROM `t0111_game_profile` profile
+					LEFT JOIN `t0400_game_play` play ON (play.`profile_id` = profile.`id` AND play.`user_id` = {$userId} )
+					LEFT JOIN `t0400_game_play` play2 ON (play2.`profile_id` = profile.`id` AND play2.`user_id` = {$userId} AND play2.`created_at` > play.`created_at`)
+
+					LEFT JOIN `t0400_game_play` play_all ON (play_all.`profile_id` = profile.`id` AND play_all.`user_id` = {$userId})
+					LEFT JOIN `t0300_game_result` result ON (play_all.`id` = result.`play_id` AND result.`target_type` = play_all.`target_type`)
+			    		WHERE profile.`deleted_at` IS NULL
+			    		AND play2.`id` IS NULL
+			    		AND profile.`user_id` = {$userId}
+
+	    					GROUP BY profile.`id`
+		";
+
+		$lastPlayed = DB::select($sql);
+		for ($i = 0; $i < count($profiles); $i++) {
+			$p = $profiles[$i];
+			$lp = $lastPlayed[$i];
+
+			array_push($profileInfo, [
+				'id' => $p->id,
+				'user_id' => $p->user_id,
+				'class_id' => $p->class_id,
+				'first_name' => $p->first_name,
+				'last_name' => $p->last_name,
+				'age' => $p->age,
+				'school' => $p->school,
+				'grade' => $p->grade,
+				'city' => $p->city,
+				'email' => $p->email,
+				'questions_played' => $lp->questions_played,
+				'nickname1' => $p->nickname1,
+				'nickname2' => $p->nickname2,
+				'avatar_id' => $p->avatar_id,
+				'nick_name1' => $p->nickName1,
+				'nick_name2' => $p->nickName2,
+				'avatar' => $p->avatar,
+				'game_code' => $p->gameCode,
+				'last_played' => $lp->created_at,
+
+			]);
+		}
+
+		return $profileInfo;
+	}
 }
