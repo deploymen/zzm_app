@@ -197,7 +197,8 @@ Class ApiProfileController extends Controller {
 
 			if ($classId) {
 				$gameClass = GameClass::find($classId);
-				if(!$gameClass || !$gameClass->user_id != $userId ) {
+
+				if(!$gameClass || $gameClass->user_id != $userId ) {
 					return ResponseHelper::OutputJSON('fail', "class not found");
 				}
 				$profile->class_id = $classId;
