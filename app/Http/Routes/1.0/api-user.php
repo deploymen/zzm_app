@@ -28,8 +28,11 @@ Route::group(['middleware' => 'auth.user'], function () {
 			Route::put('/{id}', 'ApiClassController@update');
 			Route::delete('/{id}', 'ApiClassController@delete');
 
-			Route::post('/{id}/profile', 'ApiClassController@addProfile');
-			Route::put('/{id}/profile', 'ApiClassController@removeProfile');
+			Route::put('/add-to-class', 'ApiClassController@addProfile');
+			Route::get('/{id}/profiles', 'ApiClassController@getProfile');
+
+			Route::get('/{class_id}', 'ApiClassController@getGameClass');
+
 		});
 	});
 });

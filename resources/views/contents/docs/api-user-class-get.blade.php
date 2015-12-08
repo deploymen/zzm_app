@@ -23,7 +23,7 @@
 
 <div class="row">
     <div class="col-lg-8">
-        <h3>GET   /api/class</h3>
+        <h3>GET   /api/1.0/class</h3>
         <ul id="myTab" class="nav nav-tabs">
             <li class="active"><a href="#descriptions" data-toggle="tab">Explain</a>
             </li>
@@ -55,10 +55,9 @@
 
                 </table>
                 <div style="margin-top:50px; height:500px; overflow:auto; font-size:12px">
-<pre class="prettyprint">GET http://local.zapzapmath.com/api/class HTTP/1.1
-Host: local.zapzapmath.com
+<pre class="prettyprint">GET http://staging.zapzapmath.com/api/1.0/class HTTP/1.1
+Host: staging.zapzapmath.com
 X-access-token: 1234
-Cookie: __utmx=208893977.e5U6QuyaSKqesLvm_jKPxw$99127049-0:1; __utmxx=208893977.e5U6QuyaSKqesLvm_jKPxw$99127049-0:1428307792:15552000; access_token=4%7Ca212e19d35b8e08b429ac1a3b9a61ee71edb8065; laravel_session=eyJpdiI6ImYyRkRNblpYbjZqNHUzdm8wSHN0VUE9PSIsInZhbHVlIjoiZGNFODd0SFwvRlF4NnNZeEU0bWE4WmFkY3Z6eFVBSW1abzg0VHI3RHZoV3htVlN1QXRiK1VSUURDQlF2cUJOMEN0TWlcL0t0K2hrU0s5WXBrQURZMFZpQT09IiwibWFjIjoiM2IwMmMxYTc0Mzg5ZTU3OWJkMTlmYWQwNzliMjliZmRhMDhmMThmODBiMjVkMDE3ODJkNWEwYjI2YTM1N2E4YyJ9; _ga=GA1.2.1098556987.1429157607; _gat=1
 </pre>
                 </div>
             </div>
@@ -90,10 +89,14 @@ Cookie: __utmx=208893977.e5U6QuyaSKqesLvm_jKPxw$99127049-0:1; __utmxx=208893977.
 {
   "status": "success",
   "data": {
-    "list": [
+    "game_class": [
       {
-        "user_id": 3,
-        "name": "Class 3"
+        "id": 1,
+        "user_id": 2,
+        "name": "Class 2",
+        "created_at": "2015-11-26 13:19:56",
+        "updated_at": "2015-11-26 13:28:42",
+        "deleted_at": null
       }
     ]
   }

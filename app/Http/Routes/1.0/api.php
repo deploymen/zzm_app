@@ -1,6 +1,6 @@
 <?php
 Route::get('/', function () {return die('zzm-api');});
-Route::get('/version', function () {return die('1.0');});
+Route::get('/version', 'ApiController@getVersion');
 
 Route::pattern('role', '(parent)|(teacher)|(admin)|(content)|(investor)');
 
@@ -18,8 +18,6 @@ Route::group(['prefix' => '1.0/auth'], function () {
 	Route::get('/activate/{secret_key}', 'AuthUserController@activate');
 	Route::put('/forgot-password', 'AuthUserController@forgotPassword');
 	Route::put('/reset-password', 'AuthUserController@resetPassword');
-
-	Route::put('/setup-password', 'AuthUserController@setPassword');
 
 	Route::post('/invite-parent', 'AuthUserController@invite');
 
