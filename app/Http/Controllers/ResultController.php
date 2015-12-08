@@ -88,7 +88,7 @@ Class ResultController extends Controller {
 			$profileId = 365;
 		}
 
-		// try {
+		try {
 
 			if (!$profileId) {
 				return ResponseHelper::OutputJSON('fail', 'missing profile id');
@@ -122,9 +122,9 @@ Class ResultController extends Controller {
 							WHERE s.`id` = {$systmeId}
 								AND sp.`planet_id` = p.`id`
 								AND sp.`system_id` = s.`id`
-								AND sp.`enable` = 1
+								AND p.`available` = 1
 		                                GROUP BY s.`id`, p.`id`
-										ORDER BY p.`id` ASC
+										ORDER BY sp.`sequence` ASC
 
 										LIMIT {$startIndex} , {$pageSize}
 			";
@@ -155,14 +155,14 @@ Class ResultController extends Controller {
 				'page_size' => $pageSize,
 				'pageTotal' => ceil($total / $pageSize),
 			]);
-		// } catch (Exception $ex) {
+		} catch (Exception $ex) {
 
-		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-		// 		'source' => 'ResultController > onlyPlanet',
-		// 		'inputs' => Request::all(),
-		// 	])]);
-		// 	return ResponseHelper::OutputJSON('exception');
-		// }
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ResultController > onlyPlanet',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 	}
 
 	// public function onlyPlay(){
