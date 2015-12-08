@@ -333,7 +333,7 @@ Class ApiProfileController extends Controller {
 		$nickname1 = Request::input('nickname1');
 		$nickname2 = Request::input('nickname2');
 		$avatarId = Request::input('avatar_id');
-		$age = Request::input('age');
+		$age = Request::input('age' , 0);
 		
 
 		try {
@@ -357,11 +357,13 @@ Class ApiProfileController extends Controller {
 				return ResponseHelper::OutputJSON('fail', "avatar not found");
 			}
 			
-			$ageSet = Age::where('age', $age)->first();
-			if (!$ageSet) {
-				return ResponseHelper::OutputJSON('fail', "age not found");
+			if($age){
+				$ageSet = Age::where('age', $age)->first();
+				if (!$ageSet) {
+					return ResponseHelper::OutputJSON('fail', "age not found");
+				}
 			}
-
+			
 			$secret = 'SAKF3G83D83MEKX59Y9Z';
 			$ip = Request::ip();
 
@@ -371,7 +373,9 @@ Class ApiProfileController extends Controller {
 			if(isset($ipDetail['geolocation_data']))
 			{ 
 				$geolocationData = $ipDetail['geolocation_data'];
+				var_export($geolocationData); die();
 				$profile->city = $geolocationData['city'];
+				$profile->country = $geolocationData['country'];
 			}
 
 			$profile->nickname1 = $nickname1;

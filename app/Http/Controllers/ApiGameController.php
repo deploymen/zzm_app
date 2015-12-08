@@ -147,6 +147,7 @@ Class ApiGameController extends Controller {
 				if(isset($ipDetail['geolocation_data'])) { 
 					$geolocationData = $ipDetail['geolocation_data'];
 					$profile->city = $geolocationData['city'];
+					$profile->country = $geolocationData['country'];
 					$profile->save();
 				}
 			}
@@ -633,7 +634,6 @@ Class ApiGameController extends Controller {
 		header("Content-Transfer-Encoding: binary");
 		header("Content-Length: ".filesize(public_path().'/package/application.zip'));
 		readfile(public_path().'/package/application.zip');
-
 	}
 
 }
