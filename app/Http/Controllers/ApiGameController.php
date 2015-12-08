@@ -137,7 +137,7 @@ Class ApiGameController extends Controller {
 			}
 
 			$profile = GameProfile::find($profileId);
-			if(!$profile->city){
+			if(!$profile->city || !$profile->country){
 				$secret = 'SAKF3G83D83MEKX59Y9Z';
 				$ip = Request::ip();
 
@@ -147,7 +147,7 @@ Class ApiGameController extends Controller {
 				if(isset($ipDetail['geolocation_data'])) { 
 					$geolocationData = $ipDetail['geolocation_data'];
 					$profile->city = $geolocationData['city'];
-					$profile->country = $geolocationData['country'];
+					$profile->country = $geolocationData['country_name'];
 					$profile->save();
 				}
 			}
@@ -298,7 +298,7 @@ Class ApiGameController extends Controller {
 					$gameResult['badges']['accuracy'] = '0';
 				}
 
-				$gamePlay->badges_metrics = json_encode($gameResult['badges']);		
+				$gamePlay->badges_matrick = json_encode($gameResult['badges']);		
 			}
 			if(isset($gameResult['level']) ){
 				$gamePlay->level =  $gameResult['level'];
@@ -576,7 +576,6 @@ Class ApiGameController extends Controller {
 						case '14':$questions = ZapZapQuestionHelper::GetQuestionP14($p->id,$difficulty,$p->question_count); break;
 						case '15':$questions = ZapZapQuestionHelper::GetQuestionP15($p->id,$difficulty,$p->question_count); break;
 						case '16':$questions = ZapZapQuestionHelper::GetQuestionP16($p->id,$difficulty,$p->question_count); break;
-						case '17':$questions = ZapZapQuestionHelper::GetQuestionP17($p->id,$difficulty,$p->question_count); break;
 						case '18':$questions = ZapZapQuestionHelper::GetQuestionP18($p->id,$difficulty,$p->question_count); break;
 						case '23':$questions = ZapZapQuestionHelper::GetQuestionP23($p->id,$difficulty,$p->question_count); break;
 						case '32':$questions = ZapZapQuestionHelper::GetQuestionP32($p->id,$difficulty,$p->question_count); break;
