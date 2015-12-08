@@ -8,6 +8,7 @@ use App\Libraries\ReportProfileHelper;
 use App\Libraries\ResponseHelper;
 use App\Libraries\ZapZapHelper;
 use App\Models\AvatarSet;
+use App\Models\GameClass;
 use App\Models\GameCode;
 use App\Models\GamePlanet;
 use App\Models\GamePlay;
@@ -16,6 +17,7 @@ use App\Models\IdCounter;
 use App\Models\SetNickname1;
 use App\Models\SetNickname2;
 use App\Models\UserMap;
+use App\Models\Age;
 use DB;
 use Exception;
 use Request;
@@ -27,61 +29,8 @@ Class ApiProfileController extends Controller {
 	// =======================================================================//
 	public function get() {
 		$userId = Request::input('user_id');
-		$profileInfo = [];
 		try {
-			$profiles = GameProfile::select('id', 'user_id', 'class_id', 'first_name', 'last_name', 'age', 'school', 'grade', 'city', 'email', 'nickname1', 'nickname2', 'avatar_id')->where('user_id', $userId)->orderBy('id')->get();
-
-			foreach ($profiles as $profile) {
-				$profile->nickName1;
-				$profile->nickName2;
-				$profile->avatar;
-				$profile->gameCode;
-			}
-
-			$sql = "
-				 SELECT profile.`id` , play.`created_at`, count(result.`id`) AS `questions_played` ,play.`score`
-		    		FROM `t0111_game_profile` profile
-						LEFT JOIN `t0400_game_play` play ON (play.`profile_id` = profile.`id` AND play.`user_id` = {$userId} )
-						LEFT JOIN `t0400_game_play` play2 ON (play2.`profile_id` = profile.`id` AND play2.`user_id` = {$userId} AND play2.`created_at` > play.`created_at`)
-
-						LEFT JOIN `t0400_game_play` play_all ON (play_all.`profile_id` = profile.`id` AND play_all.`user_id` = {$userId})
-						LEFT JOIN `t0300_game_result` result ON (play_all.`id` = result.`play_id` AND result.`target_type` = play_all.`target_type`)
-				    		WHERE profile.`deleted_at` IS NULL
-				    		AND play2.`id` IS NULL
-				    		AND profile.`user_id` = {$userId}
-
-		    					GROUP BY profile.`id`
-			";
-
-			$lastPlayed = DB::select($sql);
-			for ($i = 0; $i < count($profiles); $i++) {
-				$p = $profiles[$i];
-				$lp = $lastPlayed[$i];
-
-				array_push($profileInfo, [
-					'id' => $p->id,
-					'user_id' => $p->user_id,
-					'class_id' => $p->class_id,
-					'first_name' => $p->first_name,
-					'last_name' => $p->last_name,
-					'age' => $p->age,
-					'school' => $p->school,
-					'grade' => $p->grade,
-					'city' => $p->city,
-					'email' => $p->email,
-					'questions_played' => $lp->questions_played,
-					'nickname1' => $p->nickname1,
-					'nickname2' => $p->nickname2,
-					'avatar_id' => $p->avatar_id,
-					'nick_name1' => $p->nickName1,
-					'nick_name2' => $p->nickName2,
-					'avatar' => $p->avatar,
-					'game_code' => $p->gameCode,
-					'last_played' => $lp->created_at,
-
-				]);
-
-			}
+			$profileInfo = ApiProfileHelper::GetProfile($userId , 0);
 
 			return ResponseHelper::OutputJSON('success', '', ['list' => $profileInfo]);
 
@@ -105,9 +54,10 @@ Class ApiProfileController extends Controller {
 		$grade = Request::input('grade');
 		$city = Request::input('city');
 		$email = Request::input('email', '');
+		$classId = Request::input('class_id' , 0);
 
-		$nickname1 = Request::input('nickname1', 1);
-		$nickname2 = Request::input('nickname2', 1);
+		$nickname1 = Request::input('nickname1', 999);
+		$nickname2 = Request::input('nickname2', 999);
 		$avatarId = Request::input('avatar_id', 999);
 
 		if (!$firstName || !$school || !$city || !$age || !$grade) {
@@ -118,26 +68,36 @@ Class ApiProfileController extends Controller {
 			return ResponseHelper::OutputJSON('fail', "invalid email format");
 		}
 
+		$nickname1 = SetNickname1::find($nickname1);
+		$nickname2 = SetNickname2::find($nickname2);
+		
+		if (!$nickname1) {
+			return ResponseHelper::OutputJSON('fail', "invalid nickname id");
+		}
+
+		if (!$nickname2) {
+			return ResponseHelper::OutputJSON('fail', "invalid nickname id");
+		}
+
+		if (!$avatarId) {
+			return ResponseHelper::OutputJSON('fail', "invalid avatar id");
+		}
+
+		if($classId){
+			$gameClass = GameClass::find($classId);
+			if(!$gameClass || $gameClass->user_id != $userId) {
+				return ResponseHelper::OutputJSON('fail', "class not found");
+			}
+		}
+		
 		try {
 
-			$nickname_1 = SetNickname1::find($nickname1);
-			$nickname_2 = SetNickname2::find($nickname2);
+
 			$avatarIdSet = AvatarSet::find($avatarId);
-
-			if (!$nickname_1) {
-				return ResponseHelper::OutputJSON('fail', "invalid nickname id");
-			}
-
-			if (!$nickname_2) {
-				return ResponseHelper::OutputJSON('fail', "invalid nickname id");
-			}
-
-			if (!$avatarId) {
-				return ResponseHelper::OutputJSON('fail', "invalid avatar id");
-			}
 
 			$profile = new GameProfile;
 			$profile->user_id = $userId;
+			$profile->class_id = $classId;
 			$profile->first_name = $firstName;
 			$profile->last_name = $lastName;
 			$profile->age = $age;
@@ -193,7 +153,6 @@ Class ApiProfileController extends Controller {
 		$classId = Request::input('class_id');
 
 		try {
-			$wiped = [];
 
 			if ($email && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 				return ResponseHelper::OutputJSON('fail', "invalid email format");
@@ -209,51 +168,47 @@ Class ApiProfileController extends Controller {
 			}
 
 			if ($firstName) {
-				$wiped['first_name'] = $profile->first_name;
 				$profile->first_name = $firstName;
 			}
 
 			if ($lastName) {
-				$wiped['last_name'] = $profile->last_name;
 				$profile->last_name = $lastName;
 			}
 
 			if ($age) {
-				$wiped['age'] = $profile->age;
 				$profile->age = $age;
 			}
 
 			if ($school) {
-				$wiped['school'] = $profile->school;
 				$profile->school = $school;
 			}
 
 			if ($grade) {
-				$wiped['grade'] = $profile->grade;
 				$profile->grade = $grade;
 			}
 
 			if ($city) {
-				$wiped['city'] = $profile->city;
 				$profile->city = $city;
 			}
 
 			if ($email) {
-				$wiped['email'] = $profile->email;
 				$profile->email = $email;
 			}
 
 			if ($classId) {
-				$wiped['class_id'] = $profile->class_id;
+				$gameClass = GameClass::find($classId);
+
+				if(!$gameClass || $gameClass->user_id != $userId ) {
+					return ResponseHelper::OutputJSON('fail', "class not found");
+				}
 				$profile->class_id = $classId;
 			}
 
 			if ($nickname1) {
-				$nicknameSet = SetNickname1::find($nickname1);
+				$nicknameSet = SetNickname1::find($nickname1);				
 				if (!$nicknameSet) {
 					return ResponseHelper::OutputJSON('fail', "nickname not found");
 				}
-				$wiped['nickname1'] = $profile->nickname1;
 				$profile->nickname1 = $nickname1;
 			}
 
@@ -262,7 +217,6 @@ Class ApiProfileController extends Controller {
 				if (!$nicknameSet) {
 					return ResponseHelper::OutputJSON('fail', "nickname not found");
 				}
-				$wiped['nickname2'] = $profile->nickname2;
 				$profile->nickname2 = $nickname2;
 			}
 
@@ -271,13 +225,11 @@ Class ApiProfileController extends Controller {
 				if (!$avatarSet) {
 					return ResponseHelper::OutputJSON('fail', "avatar not found");
 				}
-				$wiped['avatar_id'] = $profile->avatar_id;
 				$profile->avatar_id = $avatarId;
 			}
 
 			$profile->save();
 
-			DatabaseUtilHelper::LogUpdate($userId, $profile->table, $userId, json_encode($wiped));
 			return ResponseHelper::OutputJSON('success', '', $profile->toArray());
 
 		} catch (Exception $ex) {
@@ -381,48 +333,53 @@ Class ApiProfileController extends Controller {
 		$nickname1 = Request::input('nickname1');
 		$nickname2 = Request::input('nickname2');
 		$avatarId = Request::input('avatar_id');
+		$age = Request::input('age');
+		
 
 		try {
-			$wiped = [];
-			// if(!$userId){
-			// 	return ResponseHelper::OutputJSON('fail','wrong user id');
-			// }
-
 			$profile = GameProfile::find($profileId);
 			if (!$profile) {
 				return ResponseHelper::OutputJSON('fail', "profile not found");
 			}
 
-			if ($nickname1) {
-				$nicknameSet = SetNickname1::find($nickname1);
-				if (!$nicknameSet) {
-					return ResponseHelper::OutputJSON('fail', "nickname not found");
-				}
-				$wiped['nickname1'] = $profile->nickname1;
-				$profile->nickname1 = $nickname1;
+			$nicknameSet = SetNickname1::find($nickname1);
+			if (!$nicknameSet) {
+				return ResponseHelper::OutputJSON('fail', "nickname1 not found");
 			}
 
-			if ($nickname2) {
-				$nicknameSet = SetNickname2::find($nickname2);
-				if (!$nicknameSet) {
-					return ResponseHelper::OutputJSON('fail', "nickname not found");
-				}
-				$wiped['nickname2'] = $profile->nickname2;
-				$profile->nickname2 = $nickname2;
+			$nicknameSet = SetNickname2::find($nickname2);
+			if (!$nicknameSet) {
+				return ResponseHelper::OutputJSON('fail', "nickname2 not found");
 			}
 
-			if ($avatarId) {
-				$avatarSet = AvatarSet::find($avatarId);
-				if (!$avatarSet) {
-					return ResponseHelper::OutputJSON('fail', "avatar not found");
-				}
-				$wiped['avatar_id'] = $profile->avatar_id;
-				$profile->avatar_id = $avatarId;
+			$avatarSet = AvatarSet::find($avatarId);
+			if (!$avatarSet) {
+				return ResponseHelper::OutputJSON('fail', "avatar not found");
+			}
+			
+			$ageSet = Age::where('age', $age)->first();
+			if (!$ageSet) {
+				return ResponseHelper::OutputJSON('fail', "age not found");
 			}
 
+			$secret = 'SAKF3G83D83MEKX59Y9Z';
+			$ip = Request::ip();
+
+			$res = file_get_contents("http://api.apigurus.com/iplocation/v1.8/locateip?key={$secret}&ip={$ip}&format=json&compact=y");			
+			$ipDetail = json_decode($res, true);
+
+			if(isset($ipDetail['geolocation_data']))
+			{ 
+				$geolocationData = $ipDetail['geolocation_data'];
+				$profile->city = $geolocationData['city'];
+			}
+
+			$profile->nickname1 = $nickname1;
+			$profile->nickname2 = $nickname2;
+			$profile->avatar_id = $avatarId;
+			$profile->age = $age;
 			$profile->save();
 
-			DatabaseUtilHelper::LogUpdate($userId, $profile->table, $userId, json_encode($wiped));
 			return ResponseHelper::OutputJSON('success', '', $profile->toArray());
 
 		} catch (Exception $ex) {
@@ -447,8 +404,8 @@ Class ApiProfileController extends Controller {
 			$gamePro->user_id = 0;
 			$gamePro->first_name = "anonymous";
 			$gamePro->last_name = "anonymous";
-			$gamePro->nickname1 = 1;
-			$gamePro->nickname2 = 1;
+			$gamePro->nickname1 = 999;
+			$gamePro->nickname2 = 999;
 			$gamePro->avatar_id = 999;
 			$gamePro->save();
 

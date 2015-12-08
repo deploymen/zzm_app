@@ -2,7 +2,7 @@
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
-use Libraries;
+use App\Libraries\ResponseHelper;
 
 class AuthenticateTeacher {
 
@@ -38,7 +38,7 @@ class AuthenticateTeacher {
 		switch ($role) {
 			case 'teacher':break;
 			default:
-				return Libraries\ResponseHelper::OutputJSON('fail-unauthorised', "invalid role");
+				return ResponseHelper::OutputJSON('fail-unauthorised', "invalid role");
 		}
 
 		return $next($request);

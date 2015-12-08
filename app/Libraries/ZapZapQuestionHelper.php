@@ -1148,6 +1148,10 @@ class ZapZapQuestionHelper{
 						'number_4' => $r->number_4,
 						'color_5' => $r->color_5,
 						'number_5' => $r->number_5,
+						'fake_color_1' => $r->fake_color_1,
+						'fake_number_1' => $r->fake_number_2,
+						'fake_color_2' => $r->fake_color_2,
+						'fake_number_2' => $r->fake_number_2,
 						'difficulty' => $r->difficulty,
 						
 					]);
@@ -2222,36 +2226,6 @@ class ZapZapQuestionHelper{
 		}
 	}
 
-	public static function submitResultP13($planetId,$gamePlay ,$gameResult,$profileId ) {
-		try{
-			for($i=0; $i<count($gameResult['answers']); $i++){
-				$inAnswer = $gameResult['answers'][$i];
-				$question = GameQuestion::find($inAnswer['question_id']);
-
-				$resultP13 = new GameResultP13;
-				$resultP13->target_type = 'p13';
-				$resultP13->target_id = $question->target_id;
-				$resultP13->answer = $inAnswer['answer'];
-				$resultP13->correct = $inAnswer['correct'];
-				$resultP13->save();
-
-				$gameResults = new GameResult;
-				$gameResults->play_id = $gamePlay->id;
-				$gameResults->question_id = $inAnswer['question_id'];
-				$gameResults->target_type = 'p13';
-				$gameResults->target_id = $resultP13->id;
-				$gameResults->game_type_id = '11';
-				$gameResults->save();
-			}	
-
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
-	}
-
 	public static function submitResultP18($planetId,$gamePlay ,$gameResult,$profileId ) {
 		try{
 			for($i=0; $i<count($gameResult['answers']); $i++){
@@ -2375,8 +2349,7 @@ class ZapZapQuestionHelper{
 
 	public static function LeaderboardUpdate($profile,$systemPlanet,$gameResult) {
 		try{
-			$leaderboardSql = '';
-			$leaderboardSql1 = '';
+
 			$leaderBoard = new LeaderboardPlanet;
 			$leaderBoard->planet_id = $systemPlanet->planet_id;
 			$leaderBoard->profile_id = $profile->id;
@@ -2385,6 +2358,7 @@ class ZapZapQuestionHelper{
 			$leaderBoard->avatar =  $profile->avatar->filename;
 			$leaderBoard->score = $gameResult['score'];
 			$leaderBoard->save();
+
 			$sql = "
 				UPDATE `t0603_leaderboard_planet` AS l1 ,
 					( SELECT `id`, FIND_IN_SET( `score`, ( SELECT GROUP_CONCAT( DISTINCT  `score` ORDER BY `score` DESC ) FROM `t0603_leaderboard_planet`

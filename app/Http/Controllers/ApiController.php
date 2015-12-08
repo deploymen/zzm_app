@@ -17,6 +17,7 @@ use App\Libraries\DatabaseUtilHelper;
 use App\Models;
 use App\Models\Subscribe;
 use App\Models\LaunchNotification;
+use App\Models\AppVersion;
 
 class ApiController extends Controller {
 
@@ -201,7 +202,24 @@ class ApiController extends Controller {
 			])]);
 			return ResponseHelper::OutputJSON('exception');
 		}		
+	}
 
+	public function getVersion(){
+		$device = Request::input('device');
+
+		if(!$device){
+			return ResponseHelper::OutputJSON('fail', 'missing parameter');
+		}
+
+		$appVersion = AppVersion::where('device', $device)->first();
+		if(!$appVersion){
+			return ResponseHelper::OutputJSON('fail', 'version not found');
+		}
+
+		return ResponseHelper::OutputJSON('success', '' , [
+			'version' => $appVersion->version,
+			'end_point' => $appVersion->end_point,
+			]);
 
 	}
 }
