@@ -152,7 +152,7 @@ Class ApiProfileController extends Controller {
 		$avatarId = Request::input('avatar_id');
 		$classId = Request::input('class_id');
 
-		// try {
+		try {
 
 			if ($email && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 				return ResponseHelper::OutputJSON('fail', "invalid email format");
@@ -232,13 +232,13 @@ Class ApiProfileController extends Controller {
 
 			return ResponseHelper::OutputJSON('success', '', $profile->toArray());
 
-		// } catch (Exception $ex) {
-		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-		// 		'source' => 'ApiProfileController > update',
-		// 		'inputs' => Request::all(),
-		// 	])]);
-		// 	return ResponseHelper::OutputJSON('exception');
-		// }
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiProfileController > update',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 	}
 
 	public function delete($id) {
