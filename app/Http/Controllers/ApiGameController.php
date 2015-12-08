@@ -81,8 +81,7 @@ Class ApiGameController extends Controller {
 				Cache::forget('ApiGameController@request('.$planetId.')');
 				return ResponseHelper::OutputJSON('fail', 'planet is not enable');
 			}	
-
-			//NEED UPDATE 26/10/2015
+			
 			$userMap = ZapZapQuestionHelper::GetUserMapPersonal($profileId, $planetId);
 
 			$planetTopScore = ZapZapQuestionHelper::GameScreenPlanetTopScore($planetId);
@@ -137,7 +136,7 @@ Class ApiGameController extends Controller {
 			}
 
 			$profile = GameProfile::find($profileId);
-			if(!$profile->city){
+			if(!$profile->city || !$profile->country){
 				$secret = 'SAKF3G83D83MEKX59Y9Z';
 				$ip = Request::ip();
 
@@ -147,6 +146,7 @@ Class ApiGameController extends Controller {
 				if(isset($ipDetail['geolocation_data'])) { 
 					$geolocationData = $ipDetail['geolocation_data'];
 					$profile->city = $geolocationData['city'];
+					$profile->country = $geolocationData['country_name'];
 					$profile->save();
 				}
 			}
@@ -632,7 +632,6 @@ Class ApiGameController extends Controller {
 		header("Content-Transfer-Encoding: binary");
 		header("Content-Length: ".filesize(public_path().'/package/application.zip'));
 		readfile(public_path().'/package/application.zip');
-
 	}
 
 }
