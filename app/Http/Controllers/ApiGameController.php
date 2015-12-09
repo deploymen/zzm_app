@@ -81,8 +81,7 @@ Class ApiGameController extends Controller {
 				Cache::forget('ApiGameController@request('.$planetId.')');
 				return ResponseHelper::OutputJSON('fail', 'planet is not enable');
 			}	
-
-			//NEED UPDATE 26/10/2015
+			
 			$userMap = ZapZapQuestionHelper::GetUserMapPersonal($profileId, $planetId);
 
 			$planetTopScore = ZapZapQuestionHelper::GameScreenPlanetTopScore($planetId);

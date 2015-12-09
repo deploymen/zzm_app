@@ -34,6 +34,7 @@ Class ResultController extends Controller {
                         LEFT JOIN `t0501_game_user_map` um ON (um.`planet_id` = sp.`planet_id` AND um.`profile_id`  = {$profileId})
 
 						WHERE sp.`system_id` = s.`id`
+						AND s.`enable` = 1
                         GROUP BY `system_id`
                         ORDER BY `system_id` ASC
 
