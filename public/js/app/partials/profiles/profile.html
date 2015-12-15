@@ -1,0 +1,75 @@
+<section class="profile-info">
+
+    <div class="profile-item-group small-12 columns">
+        <div class="small-5 columns">
+            <div class="profile-pic-holder">
+                <img ng-src="{{vm.APP_CONFIG.cdnStatic}}/images/user/avatars/{{profile.avatar.filename}}" alt="Avatar">
+            </div>
+        </div>
+
+        <div class="small-7 columns">
+            <div class="cf">
+                <p class="profile-nickname truncate">
+                    <span class="first-name" ng-bind="profile.nick_name1.name"></span>
+                    <span class="last-name" ng-bind="profile.nick_name2.name"></span>
+                </p>
+
+                <p class="profile-name truncate">
+                    <span class="first-name" ng-bind="profile.first_name"></span>
+                </p>
+
+                <p class="profile-code bold">
+                    <span class="profile-label">Player ID:</span>
+                    <span class="user-id" ng-bind="profile.game_code.code"></span>
+                    <span data-tooltip aria-haspopup="true" class="player-id has-tip tip-right radius" title="Insert this Player ID into your game to connect your account"><i class="fa fa-info-circle"></i></span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-item-group no-padding small-12 columns">
+        <p class="profile-school-grade truncate">Grade: <span ng-bind="profile.grade"></span></p>
+    </div>
+
+    <div class="profile-item-group border-bottom small-12 columns last-played">
+        <div class="small-12 columns text-center">
+            <p class="profile-proficiency">
+                <span class="profile-label bold">Last Played</span>
+            </p>
+            <div ng-switch on="profile.last_played">
+                <p class="profile-last-seen" ng-switch-when="null">no record yet</p>
+                <div ng-switch-default>
+                    <div class="small-6 columns title">Date</div>
+                    <div class="small-6 columns title">Time</div>
+                    <div class="small-6 columns date" ng-bind="profile.last_played| date:'yyyy - mm - dd'"></div>
+                    <div class="small-6 columns time" ng-bind="profile.last_played| date:'h:mma'"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-item-group border-bottom small-12 columns">
+        <div class="small-12 columns text-center">
+            <p class="profile-attempts">
+                <span class="profile-label bold">Total Attempts</span>
+            </p>
+            <span ng-switch on="profile.questions_played">
+                <p class="profile-attempt-number" ng-switch-when="null">0</p>
+                <p class="profile-attempt-number" ng-switch-default ng-bind="profile.questions_played"></p>
+                <span data-tooltip aria-haspopup="true" class="played has-tip tip-right radius" title="This displays the number of tries by your child at playing this section of the game."><i class="fa fa-info-circle"></i></span>
+            </span>
+        </div>
+    </div>
+
+    <div class="small-12 columns">
+        <p class="view-completion">View completion progress, proficiency levels and individual questions answered</p>
+        <p class="profile-upgrade-cta">
+            <a ng-href="profiles/systems/{{profile.id}}" class="button round" 
+               ng-click="analytics.analyticsService.sendEvent('Dashboard Main', 'Detail Report', 'Detail Report - Dashboard Main', false)">
+                Detailed report
+            </a>
+        </p>
+    </div>
+
+    <a ng-href="profiles/edit/{{profile.id}}" class="btn-profile-edit" ng-click="analytics.analyticsService.sendEvent('Dashboard Main', 'Edit Profile', 'Edit Profile - Dashboard Main', false)">Edit</a>
+</section>
