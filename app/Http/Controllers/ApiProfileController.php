@@ -91,8 +91,6 @@ Class ApiProfileController extends Controller {
 		}
 		
 		try {
-
-
 			$avatarIdSet = AvatarSet::find($avatarId);
 
 			$profile = new GameProfile;
@@ -505,22 +503,26 @@ Class ApiProfileController extends Controller {
 
 		try {
 			$verifyHelper = ApiProfileHelper::verifyTransfer($deviceGameCode , $currentGameCode);
-var_export($verifyHelper); die();
-			if($verifyHelper['data']->profile_transfer){
-				$gamePlay = GamePlay::where('code' , $gameCodeExisted)->update(['']);
-			}
-				$userMap = UserMap::where('profile_id', $anonymousGameCode->profile_id)->update([
-					'profile_id' => $gameCode->profile_id,
-				]);
 
-				$gameCode->played = '1';
-				$gameCode->save();
-				$anonymousGameCode->played = '0';
-				$anonymousGameCode->save();
+			if($verifyHelper['profile_transfer']){
+				$gamePlay = GamePlay::where('code' , $gameCodeExisted)->update([
+					'type' => 'profile',
+					'code' => $gameCodeEnter,
+					'user_id' => $profile->user_id,
+					'profile_id' => $profile->id,
+					'device_id' => $currentGameCode->device_id
+					]);
+
+				$gameUserMap = UserMap::where('profile_id' , $deviceProfile->id)->update(['profile_id' => $profile->id]);
+
+				$currentGameCode->played = 1;
+				$currentGameCode->save();
 
 				return ResponseHelper::OutputJSON('success');
+			}
 
 			return ResponseHelper::OutputJSON('fail', 'profile transfer is not allow on the inputs given');
+			
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 				'source' => 'ApiProfileController > profileTransfer',
