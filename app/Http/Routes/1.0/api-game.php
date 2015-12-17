@@ -19,8 +19,6 @@ Route::group(['prefix' => '1.0/game'], function () {
 	
 	Route::post('/map/system', 'ApiGameController@mapSystem');
 	Route::post('/map/system/{id}/planet', 'ApiGameController@mapPlanet');
-	
-	Route::post('/verify-code', 'ApiProfileController@verifyCode');
 
 	Route::get('/profile/{profile_id}/result/system-planet/progress', 'ApiGameController@systemPlanetProgress');
 	Route::get('/profile/{profile_id}/result/system-planet/planet/{planet_id}', 'ApiGameController@systemPlanetPlay');
@@ -33,6 +31,9 @@ Route::group(['prefix' => '1.0/game'], function () {
 	Route::get('/top-score', 'ApiGameController@GameScreenTopScore');
 
 	Route::group(['middleware' => 'auth.game'], function () {
+		Route::post('/verify-tranfer', 'ApiProfileController@verifyCode');
+
+		
 		Route::post('/play/{id}/result', 'ApiGameController@result');
 		Route::get('/play/{id}/request', 'ApiGameController@request');
 		// Route::get('/play/{id}/result', 'ApiGameController@winScreen');
