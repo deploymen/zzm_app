@@ -141,4 +141,84 @@ class ApiProfileHelper{
 
 		return $profileInfo;
 	}
+
+	public static function verifyTransfer($gameCodeExisted , $gameCodeExisting){
+
+		$deviceGameCode = GameCode::where('code', $gameCodeExisted)->first();
+		if (!$deviceGameCode) {
+			return ['status' => 'fail','message' => 'device game code no found' , 'data' => []];
+		}
+
+		$gameCode = GameCode::where('code', $gameCodeExisting)->first();
+		if (!$gameCode) {
+			return ['status' => 'fail','message' => 'game code no found' , 'data' => []];
+		}
+
+		$profile = GameProfile::find($gameCode->profile_id);
+		if (!$profile) {
+			return ['status' => 'fail','message' => 'profile no found' , 'data' => []];
+		}
+
+		$deviceProfile = GameProfile::find($deviceGameCode->profile_id);
+		if (!$deviceProfile) {
+			return ['status' => 'fail','message' => 'anonymous profile no found' , 'data' => []];
+		}
+
+		if ($deviceGameCode->type == 'anonymous' && $deviceGameCode->played) {	
+			if($gameCode->type == 'anonymous' && $gameCode->played){
+				return  [
+						'status' => 'success',
+						'message' => '', 
+						'data' => [
+							'anonymous_type' => $deviceGameCode->type,
+							'anonymous_code' => $deviceGameCode->code,
+							'anonymous_played' => $deviceGameCode->played,
+							'profile_transfer' => '1',
+							'action' => 'current+claim'
+						]
+					];
+				}|| $gameCode->type == 'profile' && $gameCode->played
+
+
+			if($gameCode->type == 'profile' && $gameCode->played){
+				return  [
+						'status' => 'success',
+						'message' => '', 
+						'data' => [
+							'anonymous_type' => $deviceGameCode->type,
+							'anonymous_code' => $deviceGameCode->code,
+							'anonymous_played' => $deviceGameCode->played,
+							'profile_transfer' => '0',
+							'action' => 'warning'
+						]
+					];
+				}
+
+			if($gameCode->type == 'anonymous' && !$gameCode->played || $gameCode->type == 'profile' && !$gameCode->played){
+				return  [
+						'status' => 'success',
+						'message' => '', 
+						'data' => [
+							'anonymous_type' => $deviceGameCode->type,
+							'anonymous_code' => $deviceGameCode->code,
+							'anonymous_played' => $deviceGameCode->played,
+							'profile_transfer' => '1',
+							'action' => 'new+claim'
+						]
+					];
+			}
+		}
+
+		return [
+				'status' => 'success',
+				'message' => '', 
+				'data' => [
+					'anonymous_type' => $deviceGameCode->type,
+					'anonymous_code' => $deviceGameCode->code,
+					'anonymous_played' => $deviceGameCode->played,
+					'profile_transfer' => '0',
+					'action' => 'n/a'
+				]
+			];
+	}
 }
