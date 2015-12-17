@@ -507,7 +507,7 @@ Class ApiProfileController extends Controller {
 			$verifyHelper = ApiProfileHelper::verifyTransfer($deviceGameCode , $currentGameCode);
 var_export($verifyHelper); die();
 			if($verifyHelper['data']->profile_transfer){
-				$gamePlay = GamePlay::where('code' , $gameCodeExisted)->update([''])
+				$gamePlay = GamePlay::where('code' , $gameCodeExisted)->update(['']);
 			}
 				$userMap = UserMap::where('profile_id', $anonymousGameCode->profile_id)->update([
 					'profile_id' => $gameCode->profile_id,
@@ -519,7 +519,6 @@ var_export($verifyHelper); die();
 				$anonymousGameCode->save();
 
 				return ResponseHelper::OutputJSON('success');
-			}
 
 			return ResponseHelper::OutputJSON('fail', 'profile transfer is not allow on the inputs given');
 		} catch (Exception $ex) {
