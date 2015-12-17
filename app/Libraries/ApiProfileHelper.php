@@ -142,83 +142,50 @@ class ApiProfileHelper{
 		return $profileInfo;
 	}
 
-	public static function verifyTransfer($gameCodeExisted , $gameCodeExisting){
+	public static function verifyTransfer($deviceGameCode , $gameCode){
 
-		$deviceGameCode = GameCode::where('code', $gameCodeExisted)->first();
-		if (!$deviceGameCode) {
-			return ['status' => 'fail','message' => 'device game code no found' , 'data' => []];
-		}
+		// device 		d.Played 	entered 		e.Played 	Can Transfer
+		// ================================================================
+		// ann			0			ann				0			0
+		// ann			0			ann				1			0
+		// ann			1			ann				0			1
+		// ann			1			ann				1			0
 
-		$gameCode = GameCode::where('code', $gameCodeExisting)->first();
-		if (!$gameCode) {
-			return ['status' => 'fail','message' => 'game code no found' , 'data' => []];
-		}
+		// ann			0			pro				0			0
+		// ann			0			pro				1			0
+		// ann			1			pro				0			1
+		// ann			1			pro				1			0
 
-		$profile = GameProfile::find($gameCode->profile_id);
-		if (!$profile) {
-			return ['status' => 'fail','message' => 'profile no found' , 'data' => []];
-		}
 
-		$deviceProfile = GameProfile::find($deviceGameCode->profile_id);
-		if (!$deviceProfile) {
-			return ['status' => 'fail','message' => 'anonymous profile no found' , 'data' => []];
-		}
+		// pro			0			pro				0			0
+		// pro			0			pro				1			0
+		// pro			1			pro				0			0
+		// pro			1			pro				1			0
+
+		// pro			0			ann				0			0
+		// pro			0			ann				1			0
+		// pro			1			ann				0			0
+		// pro			1			ann				1			0
 
 		if ($deviceGameCode->type == 'anonymous' && $deviceGameCode->played) {	
-			if($gameCode->type == 'anonymous' && $gameCode->played){
+			if($gameCode->type == 'profile' && $gameCode->played || $gameCode->type == 'anonymous' && $gameCode->played){
 				return  [
-						'status' => 'success',
-						'message' => '', 
-						'data' => [
-							'anonymous_type' => $deviceGameCode->type,
-							'anonymous_code' => $deviceGameCode->code,
-							'anonymous_played' => $deviceGameCode->played,
-							'profile_transfer' => '1',
-							'action' => 'current+claim'
-						]
-					];
-				}|| $gameCode->type == 'profile' && $gameCode->played
-
-
-			if($gameCode->type == 'profile' && $gameCode->played){
-				return  [
-						'status' => 'success',
-						'message' => '', 
-						'data' => [
-							'anonymous_type' => $deviceGameCode->type,
-							'anonymous_code' => $deviceGameCode->code,
-							'anonymous_played' => $deviceGameCode->played,
-							'profile_transfer' => '0',
-							'action' => 'warning'
-						]
+						'profile_transfer' => '0',
+						'action' => 'warning'
 					];
 				}
 
 			if($gameCode->type == 'anonymous' && !$gameCode->played || $gameCode->type == 'profile' && !$gameCode->played){
 				return  [
-						'status' => 'success',
-						'message' => '', 
-						'data' => [
-							'anonymous_type' => $deviceGameCode->type,
-							'anonymous_code' => $deviceGameCode->code,
-							'anonymous_played' => $deviceGameCode->played,
-							'profile_transfer' => '1',
-							'action' => 'new+claim'
-						]
+						'profile_transfer' => '1',
+						'action' => 'new+claim'
 					];
 			}
 		}
 
 		return [
-				'status' => 'success',
-				'message' => '', 
-				'data' => [
-					'anonymous_type' => $deviceGameCode->type,
-					'anonymous_code' => $deviceGameCode->code,
-					'anonymous_played' => $deviceGameCode->played,
-					'profile_transfer' => '0',
-					'action' => 'n/a'
-				]
+				'profile_transfer' => '0',
+				'action' => 'n/a'
 			];
 	}
 }
