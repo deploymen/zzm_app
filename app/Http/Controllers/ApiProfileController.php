@@ -52,6 +52,7 @@ Class ApiProfileController extends Controller {
 		$age = Request::input('age');
 		$school = Request::input('school');
 		$grade = Request::input('grade');
+		$city = Request::input('city');
 		$email = Request::input('email', '');
 		$classId = Request::input('class_id' , 0);
 
