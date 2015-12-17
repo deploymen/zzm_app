@@ -31,9 +31,10 @@ Route::group(['prefix' => '1.0/game'], function () {
 	Route::get('/top-score', 'ApiGameController@GameScreenTopScore');
 
 	Route::group(['middleware' => 'auth.game'], function () {
-		Route::post('/verify-tranfer', 'ApiProfileController@verifyCode');
+		Route::post('/verify-transfer', 'ApiProfileController@verifyCode');
+		Route::post('/profile-transfer', 'ApiProfileController@profileTransfer');
 
-		
+
 		Route::post('/play/{id}/result', 'ApiGameController@result');
 		Route::get('/play/{id}/request', 'ApiGameController@request');
 		// Route::get('/play/{id}/result', 'ApiGameController@winScreen');
@@ -43,7 +44,6 @@ Route::group(['prefix' => '1.0/game'], function () {
 		Route::get('/result/system-planet/play/planet/{planet_id}', 'ApiGameController@systemPlanetPlay');
 
 		Route::get('/user-map', 'ApiGameController@getUserMap');
-		Route::post('/profile-transfer', 'ApiProfileController@profileTransfer');
 
 		Route::get('/result/only-system', 'ResultController@onlySystem');
 		Route::get('/result/only-planet', 'ResultController@onlyPlanet');

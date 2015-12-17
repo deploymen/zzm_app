@@ -475,37 +475,61 @@ Class ApiProfileController extends Controller {
 		}
 	}
 
-	// public function profileTransfer() {
-	// 	$gameCodeExisted = Request::input('game_code');
-	// 	$gameCodeExisting = Request::input('game_code_existing');
+	public function profileTransfer() {
+		$gameCodeExisted = Request::input('game_code'); //game in device
+		$gameCodeEnter = Request::input('game_code_enter'); //game new key in
 
-	// 	try {
-	// 		$verifyHelper = ApiProfileHelper::verifyTransfer($gameCodeExisted , $gameCodeExisting);
+		if (!$gameCodeEnter) {
+			return ResponseHelper::OutputJSON('fail', 'missing parameters');
+		}
 
-	// 		if($verifyHelper['data']->profile_transfer){
-	// 			$gamePlay = GamePlay::where('code' , $gameCodeExisted)->update([''])
-	// 		}
-	// 			$userMap = UserMap::where('profile_id', $anonymousGameCode->profile_id)->update([
-	// 				'profile_id' => $gameCode->profile_id,
-	// 			]);
+		$deviceGameCode = GameCode::where('code', $gameCodeExisted)->first();
+		if (!$deviceGameCode) {
+			return ResponseHelper::OutputJSON('fail', 'device game code no found');
+		}
 
-	// 			$gameCode->played = '1';
-	// 			$gameCode->save();
-	// 			$anonymousGameCode->played = '0';
-	// 			$anonymousGameCode->save();
+		$currentGameCode = GameCode::where('code', $gameCodeEnter)->first();
+		if (!$currentGameCode) {
+			return ResponseHelper::OutputJSON('fail', 'game code no found');
+		}
 
-	// 			return ResponseHelper::OutputJSON('success');
-	// 		}
+		$deviceProfile = GameProfile::find($deviceGameCode->profile_id);
+		if (!$deviceProfile) {
+			return ResponseHelper::OutputJSON('fail', 'anonymous profile no found');
+		}
 
-	// 		return ResponseHelper::OutputJSON('fail', 'profile transfer is not allow on the inputs given');
-	// 	} catch (Exception $ex) {
-	// 		LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-	// 			'source' => 'ApiProfileController > profileTransfer',
-	// 			'inputs' => Request::all(),
-	// 		])]);
-	// 		return ResponseHelper::OutputJSON('exception');
-	// 	}
-	// }
+		$profile = GameProfile::find($currentGameCode->profile_id);
+		if (!$profile) {
+			return ResponseHelper::OutputJSON('fail', 'profile no found');
+		}
+
+		try {
+			$verifyHelper = ApiProfileHelper::verifyTransfer($deviceGameCode , $currentGameCode);
+var_export($verifyHelper); die();
+			if($verifyHelper['data']->profile_transfer){
+				$gamePlay = GamePlay::where('code' , $gameCodeExisted)->update([''])
+			}
+				$userMap = UserMap::where('profile_id', $anonymousGameCode->profile_id)->update([
+					'profile_id' => $gameCode->profile_id,
+				]);
+
+				$gameCode->played = '1';
+				$gameCode->save();
+				$anonymousGameCode->played = '0';
+				$anonymousGameCode->save();
+
+				return ResponseHelper::OutputJSON('success');
+			}
+
+			return ResponseHelper::OutputJSON('fail', 'profile transfer is not allow on the inputs given');
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiProfileController > profileTransfer',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
+	}
 
 	public function profileDetails() {
 		$profileId = Request::input('profile_id');
