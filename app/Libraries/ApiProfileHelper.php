@@ -177,7 +177,7 @@ class ApiProfileHelper{
 							'action' => 'current+claim'
 						]
 					];
-				}|| $gameCode->type == 'profile' && $gameCode->played
+				}
 
 
 			if($gameCode->type == 'profile' && $gameCode->played){
