@@ -426,7 +426,7 @@ Class ApiProfileController extends Controller {
 
 	public function verifyCode() {
 		$gameCodeExisted = Request::input('game_code'); //game in device
-		$gameCodeExisting = Request::input('game_code_existing'); //game new key in
+		$gameCodeExisting = Request::input('game_code_enter'); //game new key in
 
 		if (!$gameCodeExisting) {
 			return ResponseHelper::OutputJSON('fail', 'missing parameters');
