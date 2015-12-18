@@ -514,6 +514,11 @@ Class ApiProfileController extends Controller {
 					]);
 
 				$gameUserMap = UserMap::where('profile_id' , $deviceProfile->id)->update(['profile_id' => $profile->id]);
+				
+				$profile->nickname1 = $deviceProfile->nickname1;
+				$profile->nickname2 = $deviceProfile->nickname2;
+				$profile->avatar_id = $deviceProfile->avatar_id;
+				$profile->save();
 
 				$currentGameCode->played = 1;
 				$currentGameCode->save();
