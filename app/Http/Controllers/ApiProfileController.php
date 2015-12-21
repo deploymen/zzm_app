@@ -52,7 +52,6 @@ Class ApiProfileController extends Controller {
 		$age = Request::input('age');
 		$school = Request::input('school');
 		$grade = Request::input('grade');
-		$city = Request::input('city');
 		$email = Request::input('email', '');
 		$classId = Request::input('class_id' , 0);
 
@@ -60,7 +59,7 @@ Class ApiProfileController extends Controller {
 		$nickname2 = Request::input('nickname2', 999);
 		$avatarId = Request::input('avatar_id', 999);
 
-		if (!$firstName || !$school || !$city || !$age || !$grade) {
+		if (!$firstName || !$school || !$age || !$grade) {
 			return ResponseHelper::OutputJSON('fail', "missing parameters");
 		}
 
