@@ -141,4 +141,51 @@ class ApiProfileHelper{
 
 		return $profileInfo;
 	}
+
+	public static function verifyTransfer($deviceGameCode , $gameCode){
+
+		// device 		d.Played 	entered 		e.Played 	Can Transfer
+		// ================================================================
+		// ann			0			ann				0			0
+		// ann			0			ann				1			0
+		// ann			1			ann				0			1
+		// ann			1			ann				1			0
+
+		// ann			0			pro				0			0
+		// ann			0			pro				1			0
+		// ann			1			pro				0			1
+		// ann			1			pro				1			0
+
+
+		// pro			0			pro				0			0
+		// pro			0			pro				1			0
+		// pro			1			pro				0			0
+		// pro			1			pro				1			0
+
+		// pro			0			ann				0			0
+		// pro			0			ann				1			0
+		// pro			1			ann				0			0
+		// pro			1			ann				1			0
+
+		if ($deviceGameCode->type == 'anonymous' && $deviceGameCode->played) {	
+			if($gameCode->type == 'profile' && $gameCode->played || $gameCode->type == 'anonymous' && $gameCode->played){
+				return  [
+						'profile_transfer' => '0',
+						'action' => 'warning'
+					];
+				}
+
+			if($gameCode->type == 'anonymous' && !$gameCode->played || $gameCode->type == 'profile' && !$gameCode->played){
+				return  [
+						'profile_transfer' => '1',
+						'action' => 'new+claim'
+					];
+			}
+		}
+
+		return [
+				'profile_transfer' => '0',
+				'action' => 'n/a'
+			];
+	}
 }
