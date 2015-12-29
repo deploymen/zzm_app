@@ -1,4 +1,4 @@
-	<?php namespace App\Libraries;
+<?php namespace App\Libraries;
 
 use App;
 use Exception;
@@ -712,7 +712,7 @@ class ResultHelper{
 			if($r->question_id != $prevQuestionId){
 				
 				array_push($answers, [
-					'question' => 'Tap the clock that shows '.$r->question,
+					'question' => $r->question,
 					'difficulty'=>$r->difficulty,
 					'result' => [
 						'result_id' => $r->result_id,
