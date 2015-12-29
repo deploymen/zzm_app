@@ -48,13 +48,19 @@ Class AuthUserController extends Controller {
 		$accessToken = '';
 		$deviceId = Request::input('device_id'); //optional
 		$role = Request::input('role');
+		$classId = 0;
 
 		if (!$username || !$password || !$name || !$email || !$country || !$role) {
 			return ResponseHelper::OutputJSON('fail', "missing parameters");
 		}
 
 		switch ($role) {
-			case 'parent':case 'teacher':break;
+			case 'parent':
+
+			break;
+			case 'teacher':
+
+			break;
 			default:return ResponseHelper::OutputJSON('fail', "invalid role");
 		}
 
@@ -71,7 +77,7 @@ Class AuthUserController extends Controller {
 			return ResponseHelper::OutputJSON('fail', "email used");
 		}
 
-		try {
+		try {	
 			DB::transaction(function ()
 				 use ($role, $username, $password_sha1, $name, $email, $country, $deviceId, $accessToken) {
 
@@ -103,11 +109,21 @@ Class AuthUserController extends Controller {
 					$setting->user_id = $user->id;
 					$setting->save();
 
+					if($role == 'teacher'){
+						$gameClass = new GameClass;
+						$gameClass->user_id = $user->id;
+						$gameClass->name = 'Default Class';
+						$gameClass->save();
+
+						$classId = $gameClass->id;
+					}
+
 					$profile = new GameProfile;
 					$profile->user_id = $user->id;
 					$profile->nickname1 = 999;
 					$profile->nickname2 = 999;
 					$profile->avatar_id = 999;
+					$profile->class_id = $classId;
 					$profile->save();
 
 					$idCounter = IdCounter::find(1);
