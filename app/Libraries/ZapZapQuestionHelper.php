@@ -1246,6 +1246,74 @@ class ZapZapQuestionHelper{
 		}
 	}
 
+	public static function GetQuestionP19($planetId,$difficulty,$questionCount){
+
+		try{
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
+			
+			$sql = "
+				SELECT p19.*, qc.`question_id`
+					FROM `t0219_game_question_p19` p19, `t0126_game_planet_question_cache` qc
+                        WHERE qc.`planet_id` = {$planetId}
+                        	AND qc.`difficulty` = {$difficulty}
+                        	AND p19.`id` = qc.`target_id`
+
+                        	ORDER BY RAND() 
+                        	LIMIT {$questionCount}
+			";
+
+			$result = DB::SELECT($sql);
+
+			$results = [];
+			$prevQuestionId = 0;
+
+			for($i=0; $i<count($result); $i++){
+				$r = $result[$i];
+
+				if($r->id != $prevQuestionId){
+					array_push($results, [
+						'id' => $r->question_id,
+						'essential_item_1' => $r->essential_item_1,
+						'item_number_1' => $r->item_number_1,
+						'essential_item_2' => $r->essential_item_2,
+						'item_number_2' => $r->item_number_2,
+						'essential_item_3' => $r->essential_item_3,
+						'item_number_3' => $r->item_number_3,
+						'essential_item_4' => $r->essential_item_4,
+						'item_number_4' => $r->item_number_4,
+						'budget' => $r->budget,
+						'difficulty' => $r->difficulty,
+					]);
+				}
+				
+
+				$prevQuestionId = $r->id;
+			}
+
+			shuffle($results);
+
+			if(!$results){
+				return 'question not found';
+			}
+
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			return $results;
+
+		}catch(Exception $ex){
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp19', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
+		return false;
+		}
+	}
+
 	public static function GetQuestionP23($planetId,$difficulty,$questionCount){
 
 		try{
