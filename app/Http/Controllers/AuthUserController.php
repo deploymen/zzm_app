@@ -213,6 +213,8 @@ Class AuthUserController extends Controller {
 		$password = Request::input('password');
 		$password_sha1 = sha1($password . Config::get('app.auth_salt'));
 		$deviceId = Request::input('device_id'); //optional
+		$firstLogin = 1;
+
 
 		if (!$username || !$password) {
 			return ResponseHelper::OutputJSON('fail', 'missing parameters');
@@ -258,6 +260,12 @@ Class AuthUserController extends Controller {
 			$userAccess->access_token_expired_at = DB::Raw('DATE_ADD(NOW(), INTERVAL 10 YEAR)');
 			$userAccess->save();
 
+			$checkFirstLogin = LogSignInUser::where('username' , $username)->where('success' , 1)->first();
+
+			if(!$checkFirstLogin){
+				$firstLogin = 0;
+			}
+
 			$log = new LogSignInUser;
 			$log->username = $username;
 			$log->password_sha1 = $password_sha1;
@@ -270,7 +278,7 @@ Class AuthUserController extends Controller {
 			Session::put('access_token', $accessToken);
 			setcookie('access_token', $accessToken, time() + (86400 * 30), "/"); // 86400 = 1 day*/
 
-			return ResponseHelper::OutputJSON('success', '', $list, [
+			return ResponseHelper::OutputJSON('success', '', ['profile' => $list , 'first_time_login' => $firstLogin], [
 				'X-access-token' => $accessToken,
 			], [
 				'access_token' => $accessToken,

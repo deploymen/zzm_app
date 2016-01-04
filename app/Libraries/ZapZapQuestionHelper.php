@@ -1256,7 +1256,7 @@ class ZapZapQuestionHelper{
 			
 			$sql = "
 				SELECT p19.*, qc.`question_id`
-					FROM `t0219_game_question_p19` p19, `t0126_game_planet_question_cache` qc
+					FROM `t0219_game_question_p19` p19, `t0126_game_planet_question_cache` qc 
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
                         	AND p19.`id` = qc.`target_id`
@@ -1269,6 +1269,15 @@ class ZapZapQuestionHelper{
 
 			$results = [];
 			$prevQuestionId = 0;
+
+			$priceListSql = "
+				SELECT `item_name` , `item_price`
+					FROM `t0219_game_question_p19_price_list`
+						WHERE `difficulty` = {$difficulty}
+			";
+
+			$priceList = DB::SELECT($priceListSql);
+
 
 			for($i=0; $i<count($result); $i++){
 				$r = $result[$i];
@@ -1286,6 +1295,7 @@ class ZapZapQuestionHelper{
 						'item_number_4' => $r->item_number_4,
 						'budget' => $r->budget,
 						'difficulty' => $r->difficulty,
+						'price_list' => $priceList
 					]);
 				}
 				
