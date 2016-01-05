@@ -11,8 +11,8 @@ use App\Libraries\LogHelper;
 use App\Libraries\ResponseHelper;
 use App\Libraries\ApiProfileHelper;
 
-use Illuminate\Http\Request;
 use Validator;
+use Request;
 
 Class ApiClassController extends Controller {
 
@@ -61,7 +61,7 @@ Class ApiClassController extends Controller {
 		}
 	}
 
-	public function update(Request $request , $id) {
+	public function update(\Illuminate\Http\Request $request , $id) {
 		try {
 			if(!$request->name){
 				return ResponseHelper::OutputJSON('fail', "missing parameters");
