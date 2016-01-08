@@ -366,6 +366,8 @@ Class ApiProfileController extends Controller {
 				$geolocationData = $ipDetail['geolocation_data'];
 				$profile->city = $geolocationData['city'];
 				$profile->country = $geolocationData['country_name'];
+				$profile->latitude = $geolocationData['latitude'];
+				$profile->longitude = $geolocationData['longitude'];
 			}
 
 			$profile->nickname1 = $nickname1;
