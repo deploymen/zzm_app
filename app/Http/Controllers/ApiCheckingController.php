@@ -1,6 +1,8 @@
 <?php namespace App\Http\Controllers;
 use DB;
 use Models;
+use Request;
+
 use Libraries;
 use App\Libraries\ResponseHelper;
 use App\Libraries\ZapZapQuestionHelper;
@@ -66,7 +68,23 @@ class ApiCheckingController extends Controller {
 		}
 
 		return view('status-game', ['status'=>$status] );
-		
+	}
+
+	public function CheckIpDetails(){
+		$secret = 'SAKF3G83D83MEKX59Y9Z';
+		$ip = Request::ip();
+
+		$res = file_get_contents("http://api.apigurus.com/iplocation/v1.8/locateip?key={$secret}&ip={$ip}&format=json&compact=y");			
+		$ipDetail = json_decode($res, true);
+
+		if(isset($ipDetail['geolocation_data'])) { 
+			$geolocationData = $ipDetail['geolocation_data'];
+
+			var_export($geolocationData); die();
+			$profile->city = $geolocationData['city'];
+			$profile->country = $geolocationData['country_name'];
+			$profile->save();
+		}
 	}
 
 }

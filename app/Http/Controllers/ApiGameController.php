@@ -139,7 +139,7 @@ Class ApiGameController extends Controller {
 			}
 
 			$profile = GameProfile::find($profileId);
-			if(!$profile->city || !$profile->country){
+			if(!$profile->city || !$profile->country || !$profile->latitude || !$profile->longitude){
 				$secret = 'SAKF3G83D83MEKX59Y9Z';
 				$ip = Request::ip();
 
@@ -150,6 +150,8 @@ Class ApiGameController extends Controller {
 					$geolocationData = $ipDetail['geolocation_data'];
 					$profile->city = $geolocationData['city'];
 					$profile->country = $geolocationData['country_name'];
+					$profile->latitude = $geolocationData['latitude'];
+					$profile->longitude = $geolocationData['longitude'];
 					$profile->save();
 				}
 			}
