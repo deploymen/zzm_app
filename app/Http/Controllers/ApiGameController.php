@@ -40,6 +40,8 @@ use App\Models\UserExternalId;
 use App\Models\LeaderboardWorld;
 use App\Models\LeaderboardSystem;
 use App\Models\LeaderboardPlanet;
+use App\Models\IdCounter;
+
 
 Class ApiGameController extends Controller {
 
@@ -635,4 +637,38 @@ Class ApiGameController extends Controller {
 		readfile(public_path().'/package/application.zip');
 	}
 
+	public function checkGameCode(){
+		$gameCode = Request::input('game_code');
+		$deviceId = Request::input('device_id');
+
+		$checkGameCode = GameCode::where('code' , $gameCode)->first();
+
+		if(!$checkGameCode){
+			$idCounter = IdCounter::find(1);
+			$gameCodeSeed = $idCounter->game_code_seed;
+			$idCounter->game_code_seed = $gameCodeSeed + 1;
+			$idCounter->save();
+
+			$gamePro = new GameProfile;
+			$gamePro->user_id = 0;
+			$gamePro->first_name = "anonymous";
+			$gamePro->last_name = "anonymous";
+			$gamePro->nickname1 = 999;
+			$gamePro->nickname2 = 999;
+			$gamePro->avatar_id = 999;
+			$gamePro->save();
+
+			$code = new GameCode;
+			$code->profile_id = $gamePro->id;
+			$code->type = 'anonymous';
+			$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
+			$code->seed = $gameCodeSeed;
+			$code->device_id = $deviceId;
+			$code->save();
+
+			return ResponseHelper::OutputJSON('success', '', [] , [] , [] , 'change_game_code', ['game_code' => $code->code]);
+		}
+
+		return ResponseHelper::OutputJSON('success');
+	}
 }

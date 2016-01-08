@@ -3,7 +3,6 @@
 use App;
 use Exception;
 use Config;
-use Request;
 use App\Models;
 use App\Models\GameProfile;
 use App\Models\GameClass;
@@ -12,6 +11,8 @@ use App\Libraries\LogHelper;
 use App\Libraries\ResponseHelper;
 use App\Libraries\ApiProfileHelper;
 
+use Validator;
+use Request;
 
 Class ApiClassController extends Controller {
 
@@ -60,30 +61,26 @@ Class ApiClassController extends Controller {
 		}
 	}
 
-	public function update($id) {
+	public function update(\Illuminate\Http\Request $request , $id) {
 		try {
-			$userId = Request::input('user_id');
-			$className = Request::input('name');
-
-			if(!$className){
+			if(!$request->name){
 				return ResponseHelper::OutputJSON('fail', "missing parameters");
 			}
-			
+
 			$gameClass = GameClass::find($id);
 			if(!$gameClass){
-				return ResponseHelper::OutputJSON('fail', "class not found");
-			}
-		
-			if(!$gameClass->user_id == $userId){
-				return ResponseHelper::OutputJSON('fail', "user id not math");
+				return ResponseHelper::OutputJSON("fail", "class not found");
 			}
 
-			$classN = GameClass::where('user_id' , $userId)->where('name' , $className)->first();
-			if($classN){
-				return ResponseHelper::OutputJSON('fail', "class name already exist");
-			}
+			$validator = Validator::make($request->all(),  [
+		        'name' => 'required|min:3|unique:t0112_game_class,name,'.$id.',id,user_id,'.$request->user_id,
+		    ]);
 
-			$gameClass->name = $className;
+			if ($validator->fails()) {
+				return ResponseHelper::OutputJSON("fail", "validation fail");
+       		}
+
+			$gameClass->name = $request->name;
 			$gameClass->save();
 
 			return ResponseHelper::OutputJSON('success');
