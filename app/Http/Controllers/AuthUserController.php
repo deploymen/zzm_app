@@ -187,7 +187,8 @@ Class AuthUserController extends Controller {
 				});
 
 			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
-			$list = User::select('role', 'name')->find($userAccess->user_id);
+			$list = User::select('id' , 'role' , 'name')->find($userAccess->user_id);
+
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 				'source' => 'AuthUserController > signUp',
@@ -196,7 +197,7 @@ Class AuthUserController extends Controller {
 			return ResponseHelper::OutputJSON('exception');
 		}
 
-		return ResponseHelper::OutputJSON('success', '', $list, [
+		return ResponseHelper::OutputJSON('success', '', ['user' => $list], [
 			'X-access-token' => $accessToken,
 		], [
 			'access_token' => $accessToken,
@@ -273,12 +274,12 @@ Class AuthUserController extends Controller {
 			$log->created_ip = Request::ip();
 			$log->save();
 
-			$list = User::select('role', 'name')->find($userAccess->user_id);
+			$list = User::select('id' , 'role', 'name')->find($userAccess->user_id);
 
 			Session::put('access_token', $accessToken);
 			setcookie('access_token', $accessToken, time() + (86400 * 30), "/"); // 86400 = 1 day*/
 
-			return ResponseHelper::OutputJSON('success', '', ['profile' => $list , 'first_time_login' => $firstLogin], [
+			return ResponseHelper::OutputJSON('success', '', ['user' => $list , 'first_time_login' => $firstLogin], [
 				'X-access-token' => $accessToken,
 			], [
 				'access_token' => $accessToken,
