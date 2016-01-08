@@ -79,7 +79,7 @@ Class AuthUserController extends Controller {
 
 		try {	
 			DB::transaction(function ()
-				 use ($role, $username, $password_sha1, $name, $email, $country, $deviceId, $accessToken) {
+				 use ($role, $username, $password_sha1, $name, $email, $country, $deviceId, $accessToken, $classId) {
 
 					$user = new User;
 					$user->role = $role;

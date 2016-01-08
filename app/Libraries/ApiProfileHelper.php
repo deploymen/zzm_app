@@ -84,8 +84,11 @@ class ApiProfileHelper{
 
 		if($classId){
 			$profiles = GameProfile::select('id', 'user_id', 'class_id', 'first_name', 'last_name', 'age', 'school', 'grade', 'city', 'email', 'nickname1', 'nickname2', 'avatar_id')->where('class_id', $classId)->orderBy('id')->get();
+			$query = 'AND profile.`class_id` = '.$classId;
 		}else{
 			$profiles = GameProfile::select('id', 'user_id', 'class_id', 'first_name', 'last_name', 'age', 'school', 'grade', 'city', 'email', 'nickname1', 'nickname2', 'avatar_id')->where('user_id', $userId)->orderBy('id')->get();
+			$query = 'AND profile.`user_id` = '.$userId;
+	
 		}
 
 		foreach ($profiles as $profile) {
@@ -105,7 +108,7 @@ class ApiProfileHelper{
 					LEFT JOIN `t0300_game_result` result ON (play_all.`id` = result.`play_id` AND result.`target_type` = play_all.`target_type`)
 			    		WHERE profile.`deleted_at` IS NULL
 			    		AND play2.`id` IS NULL
-			    		AND profile.`user_id` = {$userId}
+			    		{$query}
 
 	    					GROUP BY profile.`id`
 		";
