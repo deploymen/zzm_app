@@ -2439,16 +2439,20 @@ class ZapZapQuestionHelper{
 
 			$sql = "
 				UPDATE `t0603_leaderboard_planet` AS l1 ,
-					( SELECT `id`, FIND_IN_SET( `score`, ( SELECT GROUP_CONCAT( DISTINCT  `score` ORDER BY `score` DESC ) FROM `t0603_leaderboard_planet`
-						WHERE `planet_id` = :planetid
-					)) AS `set_rank` 
-						FROM `t0603_leaderboard_planet`) AS l2
-							SET l1.`rank` = l2.`set_rank`
-							WHERE l1.`id` = l2.`id`
-							AND l1.`planet_id` = :planet_id 
+					( SELECT `id`, FIND_IN_SET( `score`, (
+						 SELECT GROUP_CONCAT( DISTINCT  `score` ORDER BY `score` DESC ) FROM `t0603_leaderboard_planet`
+							WHERE `planet_id` = :planetid
+							)
+					) AS `set_rank` 
+						FROM `t0603_leaderboard_planet`
+							WHERE `planet_id` = :planetid2
+							) AS l2
+								SET l1.`rank` = l2.`set_rank`
+								WHERE l1.`id` = l2.`id`
+								AND l1.`planet_id` = :planet_id 
 			";
 
-			$param =  ['planetid' => $systemPlanet->planet_id, 'planet_id' => $systemPlanet->planet_id];
+			$param =  ['planetid' => $systemPlanet->planet_id, 'planet_id' => $systemPlanet->planet_id , 'planetid2' => $systemPlanet->planet_id ];
 			DB::UPDATE($sql , $param);
 
 		} catch (Exception $ex) {
