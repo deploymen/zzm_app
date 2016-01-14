@@ -1295,7 +1295,6 @@ class ZapZapQuestionHelper{
 						'item_number_4' => $r->item_number_4,
 						'budget' => $r->budget,
 						'difficulty' => $r->difficulty,
-						'price_list' => $priceList
 					]);
 				}
 				
@@ -1311,7 +1310,8 @@ class ZapZapQuestionHelper{
 
 			$expiresAt = Carbon::now()->addMinutes(5);
 			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
-			return $results;
+		
+			return ['question' =>$results , 'price_list' => $priceList];
 
 		}catch(Exception $ex){
 			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp19', [
