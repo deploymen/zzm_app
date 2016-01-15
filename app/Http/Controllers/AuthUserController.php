@@ -703,5 +703,53 @@ Class AuthUserController extends Controller {
 		}
 	}
 
+	public function ResendACtivateCode(){
+		$email = Request::input('email');
+
+		if(!$email){
+			return ResponseHelper::OutputJSON('fail', 'missing parameters');
+		}
+
+		$user = User::where('email', $email)->first();
+
+		if(!$user){
+			return ResponseHelper::OutputJSON('fail', 'invalid email');
+		}
+
+		if($user->activated){
+			return ResponseHelper::OutputJSON('fail', 'email already activated');
+		}
+
+		$secretKey = sha1(time() . $email);
+		$edmHtml = (string) view('emails.account-activation', [
+			'name' => $user->name,
+			'app_store_address' => config('app.app_store_url'),
+			'username' => $email,
+			'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
+			'activation_link' => config('app.website_url') . "/api/1.0/auth/activate/{$secretKey}",
+			'email_support' => config('app.support_email'),
+			'social_media_links' => config('app.fanpage_url'),
+		]);
+
+		EmailHelper::SendEmail([
+			'about' => 'Welcome',
+			'subject' => 'Your Zap Zap Account is now ready!',
+			'body' => $edmHtml,
+			'bodyHtml' => $edmHtml,
+			'toAddresses' => [$email],
+		]);
+
+		//expired older activate code
+		$logAccountActivate = LogAccountActivate::where('user_id', $user->id)->update(['expired' => 1]);
+
+		$logOpenAcc = new LogAccountActivate;
+		$logOpenAcc->user_id = $user->id;
+		$logOpenAcc->secret = $secretKey;
+		$logOpenAcc->save();
+
+		return ResponseHelper::OutputJSON('success');
+
+	}
+
 
 }
