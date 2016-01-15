@@ -214,7 +214,7 @@ Class AuthUserController extends Controller {
 		$password = Request::input('password');
 		$password_sha1 = sha1($password . Config::get('app.auth_salt'));
 		$deviceId = Request::input('device_id'); //optional
-		$firstLogin = 1;
+		$firstLogin = 0;
 
 
 		if (!$username || !$password) {
@@ -264,7 +264,7 @@ Class AuthUserController extends Controller {
 			$checkFirstLogin = LogSignInUser::where('username' , $username)->where('success' , 1)->first();
 
 			if(!$checkFirstLogin){
-				$firstLogin = 0;
+				$firstLogin = 1;
 			}
 
 			$log = new LogSignInUser;
