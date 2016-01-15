@@ -138,13 +138,6 @@ Class AuthUserController extends Controller {
 					$code->profile_id = $profile->id;
 					$code->save();
 
-					if ($role == 'teacher'){
-						$gameClass = new GameClass;
-						$gameClass->user_id = $user->id;
-						$gameClass->name = 'default class';
-						$gameClass->save();
-					}
-
 					if ($deviceId) {
 						//claim back previous game result played from this device id
 						//to do...
