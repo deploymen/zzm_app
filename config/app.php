@@ -161,8 +161,8 @@ return [
 
 		'Chumper\Zipper\ZipperServiceProvider',
 
-		'Socialite' => Laravel\Socialite\Facades\Socialite::class,
-		
+		'Laravel\Socialite\Facades\Socialite',
+
 
 	],
 

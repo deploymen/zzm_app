@@ -25,7 +25,7 @@ use Exception;
 use Redirect;
 use Request;
 use Session;
-use Socialite;
+use Laravel\Socialite\Contracts\Factory; 
 
 Class AuthUserController extends Controller {
 
