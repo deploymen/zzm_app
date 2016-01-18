@@ -161,9 +161,6 @@ return [
 
 		'Chumper\Zipper\ZipperServiceProvider',
 
-		'Laravel\Socialite\Facades\Socialite',
-
-
 	],
 
 	/*
