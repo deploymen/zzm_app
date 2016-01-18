@@ -25,6 +25,7 @@ use Exception;
 use Redirect;
 use Request;
 use Session;
+use Socialite;
 
 Class AuthUserController extends Controller {
 
