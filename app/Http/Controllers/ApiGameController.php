@@ -46,7 +46,7 @@ use App\Models\IdCounter;
 Class ApiGameController extends Controller {
 
 	//GET QUESTION
-	public function request($planetId) {	
+	public function request($planetId , $language = 'en') {	
 
 		$gameCode = Request::input('game_code');
 		$difficulty = Request::input('difficulty');
@@ -113,7 +113,7 @@ Class ApiGameController extends Controller {
 
 				$type = GameType::find($planet->game_type_id);
 				switch($type->name){
-					case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId,$difficulty,$questionCount); break;
+					case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId,$difficulty,$questionCount , $language); break;
 					case 'p02':$questions = ZapZapQuestionHelper::GetQuestionP02($planetId,$difficulty,$questionCount); break;
 					case 'p03':$questions = ZapZapQuestionHelper::GetQuestionP03($planetId,$difficulty,$questionCount); break;
 					case 'p06':$questions = ZapZapQuestionHelper::GetQuestionP06($planetId,$difficulty,$questionCount); break;
