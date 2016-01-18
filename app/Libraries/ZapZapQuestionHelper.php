@@ -1280,7 +1280,6 @@ class ZapZapQuestionHelper{
 
 			$priceList = DB::SELECT($priceListSql);
 
-
 			for($i=0; $i<count($result); $i++){
 				$r = $result[$i];
 
