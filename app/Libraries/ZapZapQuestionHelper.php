@@ -114,7 +114,7 @@ class ZapZapQuestionHelper{
 				 			AND sp.`system_id` = s.`id`
 				 			AND sp.`enable` = '1'
 				 			{$sqlWherePlanet}
-				 			ORDER BY sp.`sequence`
+				 			ORDER BY s.`id`
 				";
 
 			$result = DB::SELECT($sql, ['profileId'=>$profileId]);
@@ -1279,6 +1279,7 @@ class ZapZapQuestionHelper{
 			";
 
 			$priceList = DB::SELECT($priceListSql);
+
 
 			for($i=0; $i<count($result); $i++){
 				$r = $result[$i];

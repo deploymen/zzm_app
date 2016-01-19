@@ -106,10 +106,10 @@ Class ApiGameController extends Controller {
 
 			$level = $userMap->level;
 
-			// if ( Cache::has('ApiGameController@request('.$planetId.','.$difficulty.')') ){
+			if ( Cache::has('ApiGameController@request('.$planetId.','.$difficulty.')') ){
 
-			// 	$questions = Cache::get('ApiGameController@request('.$planetId.','.$difficulty.')');
-			// }else{
+				$questions = Cache::get('ApiGameController@request('.$planetId.','.$difficulty.')');
+			}else{
 
 				$type = GameType::find($planet->game_type_id);
 				switch($type->name){
@@ -136,7 +136,7 @@ Class ApiGameController extends Controller {
 
 					default: return ResponseHelper::OutputJSON('fail', $type->name.' not found');
 				}	
-			// }
+			}
 
 			$profile = GameProfile::find($profileId);
 			if(!$profile->city || !$profile->country || !$profile->latitude || !$profile->longitude){
@@ -456,6 +456,7 @@ Class ApiGameController extends Controller {
 
 		try{
 			$result = ZapZapQuestionHelper::GetUserMap($profileId);
+			$totalStar = UserMap::where('profile_id', $profileId)->sum('star');
 
 			$systems = [];		
 			$prevSystemId = 0;
@@ -483,9 +484,6 @@ Class ApiGameController extends Controller {
 					'name' => $r->planet_name,
 					'description' => $r->description,
 					'star' => $r->star,
-					'subjects' => [
-						['id'=>'1', 'code'=>'c.0.1']
-					],
 					'enable' => ($planetEnable)?1:0,
 
 				]);				
@@ -493,7 +491,12 @@ Class ApiGameController extends Controller {
 				$prevPlanetStar = $r->star;
 				$prevSystemId = $r->system_id;
 			}
-		return ResponseHelper::OutputJSON('success', '' , $systems);
+		return ResponseHelper::OutputJSON('success', '' , [
+			'profile' => [
+				'total_star' => $totalStar,
+				] ,
+			'system_planet' => $systems
+			 ]);
 
 		} catch (Exception $ex) {
 
