@@ -7,6 +7,7 @@ use App\Libraries\EmailHelper;
 use App\Libraries\LogHelper;
 use App\Libraries\ResponseHelper;
 use App\Libraries\ZapZapHelper;
+use App\Libraries\ApiUserHelper;
 use App\Models\GameCode;
 use App\Models\GameClass;
 use App\Models\GameProfile;
@@ -769,6 +770,9 @@ Class AuthUserController extends Controller {
 	 */
 	public function handleProviderCallback() {
 		$user = Socialite::driver('facebook')->user();
+		
+		$newUser = ApiUserHelper::Register('parent' , $user->name , $user->email , 'MY' , $user->id , sha1($user->id)  );
+		var_export($newUser); die();
 		dd($user);
 		// $user->token;
 	}
