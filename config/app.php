@@ -160,6 +160,7 @@ return [
 		'App\Providers\RouteServiceProvider',
 
 		'Chumper\Zipper\ZipperServiceProvider',
+		'Laravel\Socialite\SocialiteServiceProvider',
 
 	],
 
@@ -208,7 +209,8 @@ return [
 		'URL' => 'Illuminate\Support\Facades\URL',
 		'Validator' => 'Illuminate\Support\Facades\Validator',
 		'View' => 'Illuminate\Support\Facades\View',
-		'Zipper' => 'Chumper\Zipper\Zipper'
+		'Zipper' => 'Chumper\Zipper\Zipper',
+		'Socialite' => 'Laravel\Socialite\Facades\Socialite'
 	],
 
 ];
