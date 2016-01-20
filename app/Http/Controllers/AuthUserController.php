@@ -289,10 +289,6 @@ Class AuthUserController extends Controller {
 		}
 	}
 
-	public function connectFacebook() {
-		return ResponseHelper::OutputJSON('fail', 'not yet support');
-	}
-
 	public function connectGoogle() {
 		return ResponseHelper::OutputJSON('fail', 'not yet support');
 	}
@@ -769,12 +765,87 @@ Class AuthUserController extends Controller {
 	 * @return Response
 	 */
 	public function handleProviderCallback() {
-		$user = Socialite::driver('facebook')->user();
+		$firstLogin = 0;
+
+		$fbUser = Socialite::driver('facebook')->user();
 		
-		$newUser = ApiUserHelper::Register('parent' , $user->name , $user->email , 'MY' , $user->id , sha1($user->id)  );
-		var_export($newUser); die();
-		dd($user);
-		// $user->token;
+		//check User facebook ID
+		$userExternalId = UserExternalId::where('facebook_id' , $fbUser->id)->first();
+
+		if($userExternalId){
+		
+			$user = User::select('id' , 'role', 'name')->find($userExternalId->user_id);
+			$userAccess = UserAccess::where('user_id' , $userExternalId->user_id)->first();
+
+			if ($userAccess->access_token == '') {
+				$accessToken = AuthHelper::GenerateAccessToken($userAccess->user_id);
+				$userAccess->access_token = $accessToken;
+				$userAccess->access_token_issue_at = DB::Raw('NOW()');
+				$userAccess->access_token_issue_ip = Request::ip();
+			} else {
+				$accessToken = $userAccess->access_token;
+			}
+
+			$userAccess->access_token_expired_at = DB::Raw('DATE_ADD(NOW(), INTERVAL 10 YEAR)');
+			$userAccess->save();
+
+			$checkFirstLogin = LogSignInUser::where('username' , $userAccess->username)->where('success' , 1)->first();
+
+			if(!$checkFirstLogin){
+				$firstLogin = 1;
+			}
+
+			return ResponseHelper::OutputJSON('success', '', ['user' => $user , 'first_time_login' => $firstLogin], [
+				'X-access-token' => $accessToken,
+			], [
+				'access_token' => $accessToken,
+			]);
+		}
+
+		//check email didnt use
+		$userAccess = UserAccess::where('username' , $fbUser->email)->first();
+		if(!$userAccess){
+
+			//create new
+			$newUser = ApiUserHelper::Register('parent' , $fbUser->name , $fbUser->email , '' , $fbUser->id , sha1($fbUser->id) );
+			$user = User::select('id' , 'role', 'name')->find($newUser);
+			$userExternalId = UserExternalId::where('user_id' , $newUser)->update(['facebook_id' => $fbUser->id]);
+
+			if ($userAccess->access_token == '') {
+				$accessToken = AuthHelper::GenerateAccessToken($userAccess->user_id);
+				$userAccess->access_token = $accessToken;
+				$userAccess->access_token_issue_at = DB::Raw('NOW()');
+				$userAccess->access_token_issue_ip = Request::ip();
+			} else {
+				$accessToken = $userAccess->access_token;
+			}
+
+			$userAccess->access_token_expired_at = DB::Raw('DATE_ADD(NOW(), INTERVAL 10 YEAR)');
+			$userAccess->save();
+
+			$firstLogin = 1;
+
+			return ResponseHelper::OutputJSON('success', '', ['user' => $user , 'first_time_login' => $firstLogin], [
+				'X-access-token' => $accessToken,
+			], [
+				'access_token' => $accessToken,
+			]);
+		}
+
+		//sync account
+		$user = User::select('id' , 'role', 'name')->find($userAccess->user_id);
+		$userExternalId = UserExternalId::where('user_id' , $userAccess->user_id)->update(['facebook_id' => $fbUser->id ]);
+		$checkFirstLogin = LogSignInUser::where('username' , $userAccess->username)->where('success' , 1)->first();
+
+		if(!$checkFirstLogin){
+			$firstLogin = 1;
+		}
+
+		return ResponseHelper::OutputJSON('success', '', ['user' => $user , 'first_time_login' => $firstLogin], [
+				'X-access-token' => $accessToken,
+			], [
+				'access_token' => $accessToken,
+			]);
 	}
 
 }
