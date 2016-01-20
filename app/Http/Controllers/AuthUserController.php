@@ -810,16 +810,12 @@ Class AuthUserController extends Controller {
 			$newUser = ApiUserHelper::Register('parent' , $fbUser->name , $fbUser->email , '' , $fbUser->id , sha1($fbUser->id) );
 			$user = User::select('id' , 'role', 'name')->find($newUser);
 			$userExternalId = UserExternalId::where('user_id' , $newUser)->update(['facebook_id' => $fbUser->id]);
-
-			if ($userAccess->access_token == '') {
-				$accessToken = AuthHelper::GenerateAccessToken($userAccess->user_id);
-				$userAccess->access_token = $accessToken;
-				$userAccess->access_token_issue_at = DB::Raw('NOW()');
-				$userAccess->access_token_issue_ip = Request::ip();
-			} else {
-				$accessToken = $userAccess->access_token;
-			}
-
+			$userAccess = UserAccess::where('user_id' , $user->id)->first();
+			
+			$accessToken = AuthHelper::GenerateAccessToken($userAccess->user_id);
+			$userAccess->access_token = $accessToken;
+			$userAccess->access_token_issue_at = DB::Raw('NOW()');
+			$userAccess->access_token_issue_ip = Request::ip();
 			$userAccess->access_token_expired_at = DB::Raw('DATE_ADD(NOW(), INTERVAL 10 YEAR)');
 			$userAccess->save();
 

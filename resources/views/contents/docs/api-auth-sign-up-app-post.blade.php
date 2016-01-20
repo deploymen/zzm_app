@@ -22,7 +22,7 @@
 @section('content')
 <div class="row">
     <div class="col-lg-8">
-        <h3>POST  /api/auth/sign-up</h3>
+        <h3>POST  /api/game/sign-up</h3>
         <ul id="myTab" class="nav nav-tabs">
             <li class="active"><a href="#descriptions" data-toggle="tab">Explain</a>
             </li>
