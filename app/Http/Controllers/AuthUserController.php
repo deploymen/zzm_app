@@ -771,7 +771,9 @@ Class AuthUserController extends Controller {
 		
 		//check User facebook ID
 		$userExternalId = UserExternalId::where('facebook_id' , $fbUser->id)->first();
+
 		if($userExternalId){
+		
 			$user = User::select('id' , 'role', 'name')->find($userExternalId->user_id);
 			$userAccess = UserAccess::where('user_id' , $userExternalId->user_id)->first();
 
@@ -802,10 +804,11 @@ Class AuthUserController extends Controller {
 
 		//check email didnt use
 		$userAccess = UserAccess::where('username' , $fbUser->email)->first();
-		if(!$user){
+		if(!$userAccess){
+
 			//create new
-			$user = User::select('id' , 'role', 'name')->find($userAccess->user_id);
-			$newUser = ApiUserHelper::Register('parent' , $fbUser->name , $fbUser->email , '' , $fbUser->id , sha1($fbUser->id) ); //need modifiy
+			$newUser = ApiUserHelper::Register('parent' , $fbUser->name , $fbUser->email , '' , $fbUser->id , sha1($fbUser->id) );
+			$user = User::select('id' , 'role', 'name')->find($newUser);
 			$userExternalId = UserExternalId::where('user_id' , $newUser)->update(['facebook_id' => $fbUser->id]);
 
 			if ($userAccess->access_token == '') {

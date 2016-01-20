@@ -77,7 +77,7 @@ Class ApiClassController extends Controller {
 		    ]);
 
 			if ($validator->fails()) {
-				return ResponseHelper::OutputJSON("fail", "validation fail");
+				return ResponseHelper::OutputJSON("fail", "class name already exist");
        		}
 
 			$gameClass->name = $request->name;
