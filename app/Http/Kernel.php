@@ -29,8 +29,6 @@ class Kernel extends HttpKernel {
 		'auth.parent' => 'App\Http\Middleware\AuthenticateParent',
 		'auth.teacher' => 'App\Http\Middleware\AuthenticateTeacher',
 		'auth.content' => 'App\Http\Middleware\AuthenticateContent',
-
-
 	];
 
 }

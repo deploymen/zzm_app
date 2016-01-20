@@ -46,7 +46,7 @@ use App\Models\IdCounter;
 Class ApiGameController extends Controller {
 
 	//GET QUESTION
-	public function request($planetId) {	
+	public function request($planetId , $language = 'en') {	
 
 		$gameCode = Request::input('game_code');
 		$difficulty = Request::input('difficulty');
@@ -113,7 +113,7 @@ Class ApiGameController extends Controller {
 
 				$type = GameType::find($planet->game_type_id);
 				switch($type->name){
-					case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId,$difficulty,$questionCount); break;
+					case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId,$difficulty,$questionCount , $language); break;
 					case 'p02':$questions = ZapZapQuestionHelper::GetQuestionP02($planetId,$difficulty,$questionCount); break;
 					case 'p03':$questions = ZapZapQuestionHelper::GetQuestionP03($planetId,$difficulty,$questionCount); break;
 					case 'p06':$questions = ZapZapQuestionHelper::GetQuestionP06($planetId,$difficulty,$questionCount); break;
@@ -456,6 +456,7 @@ Class ApiGameController extends Controller {
 
 		try{
 			$result = ZapZapQuestionHelper::GetUserMap($profileId);
+			$totalStar = UserMap::where('profile_id', $profileId)->sum('star');
 
 			$systems = [];		
 			$prevSystemId = 0;
@@ -483,9 +484,6 @@ Class ApiGameController extends Controller {
 					'name' => $r->planet_name,
 					'description' => $r->description,
 					'star' => $r->star,
-					'subjects' => [
-						['id'=>'1', 'code'=>'c.0.1']
-					],
 					'enable' => ($planetEnable)?1:0,
 
 				]);				
@@ -493,7 +491,12 @@ Class ApiGameController extends Controller {
 				$prevPlanetStar = $r->star;
 				$prevSystemId = $r->system_id;
 			}
-		return ResponseHelper::OutputJSON('success', '' , $systems);
+		return ResponseHelper::OutputJSON('success', '' , [
+			'profile' => [
+				'total_star' => $totalStar,
+				] ,
+			'system_planet' => $systems
+			 ]);
 
 		} catch (Exception $ex) {
 

@@ -34,4 +34,10 @@ return [
 		'secret' => '',
 	],
 
+	 'facebook' => [
+        'client_id' => env('FACEBOOK_APP_KEY'),
+		'client_secret' => env('FACEBOOK_APP_SECRET'),
+        'redirect'      => 'http://staging.zapzapmath.com/api/1.0/auth/facebook/callback',
+    ],
+
 ];

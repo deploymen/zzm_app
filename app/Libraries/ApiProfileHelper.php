@@ -191,4 +191,23 @@ class ApiProfileHelper{
 				'action' => 'n/a'
 			];
 	}
+
+	public static function newProfile($userId , $classId , $firstName , $lastName , $age , $school , $grade , $email, $nickname1 , $nickname2 , $avatarId){
+
+		$profile = new GameProfile;
+		$profile->user_id = $userId;
+		$profile->class_id = $classId;
+		$profile->first_name = $firstName;
+		$profile->last_name = $lastName;
+		$profile->age = $age;
+		$profile->school = $school;
+		$profile->grade = $grade;
+		$profile->email = $email;
+		$profile->nickname1 = $nickname1;
+		$profile->nickname2 = $nickname2;
+		$profile->avatar_id = $avatarId;
+		$profile->save();
+
+		return $profile;
+	}
 }

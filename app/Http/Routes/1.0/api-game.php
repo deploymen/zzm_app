@@ -38,7 +38,9 @@ Route::group(['prefix' => '1.0/game'], function () {
 
 
 		Route::post('/play/{id}/result', 'ApiGameController@result');
-		Route::get('/play/{id}/request', 'ApiGameController@request');
+		Route::get('/play/{id}/request/', 'ApiGameController@request');
+
+		Route::get('/play/{id}/request/{language}', 'ApiGameController@request');
 		// Route::get('/play/{id}/result', 'ApiGameController@winScreen');
 		Route::get('/result/log', 'ApiGameController@resultLog');
 
