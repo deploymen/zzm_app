@@ -106,10 +106,10 @@ Class ApiGameController extends Controller {
 
 			$level = $userMap->level;
 
-			// if ( Cache::has('ApiGameController@request('.$planetId.','.$difficulty.')') ){
+			if ( Cache::has('ApiGameController@request('.$planetId.','.$difficulty.')') ){
 
-			// 	$questions = Cache::get('ApiGameController@request('.$planetId.','.$difficulty.')');
-			// }else{
+				$questions = Cache::get('ApiGameController@request('.$planetId.','.$difficulty.')');
+			}else{
 
 				$type = GameType::find($planet->game_type_id);
 				switch($type->name){
@@ -137,7 +137,7 @@ Class ApiGameController extends Controller {
 
 					default: return ResponseHelper::OutputJSON('fail', $type->name.' not found');
 				}	
-			// }
+			}
 
 			$profile = GameProfile::find($profileId);
 			if(!$profile->city || !$profile->country || !$profile->latitude || !$profile->longitude){

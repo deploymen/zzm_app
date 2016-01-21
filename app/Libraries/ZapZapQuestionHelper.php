@@ -1334,7 +1334,7 @@ class ZapZapQuestionHelper{
 				$gamePlanet = GamePlanet::find($planetId);
 				$questionCount = $gamePlanet->question_count;
 			}
-			var_export($questionCount); die();
+		
 			$sql = "
 				SELECT p20.*, qc.`question_id`
 					FROM `t0220_game_question_p20` p20, `t0126_game_planet_question_cache` qc 
@@ -1377,7 +1377,7 @@ class ZapZapQuestionHelper{
 			$expiresAt = Carbon::now()->addMinutes(5);
 			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
 		
-			return ['question' =>$results , 'price_list' => $priceList];
+			return $results;
 
 		}catch(Exception $ex){
 			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp20', [
