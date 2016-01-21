@@ -783,7 +783,8 @@ Class AuthUserController extends Controller {
 	 */
 	public function handleProviderCallback() {
 		$firstLogin = 0;
-
+		$xsrfToken = Cookie::get('XSRF-TOKEN');
+		var_export($xsrfToken); die();
 		$fbUser = Socialite::driver('facebook')->user();
 		
 		//check User facebook ID
@@ -825,6 +826,8 @@ Class AuthUserController extends Controller {
 
 			//create new
 			$newUser = ApiUserHelper::Register('parent' , $fbUser->name , $fbUser->email , '' , $fbUser->id , sha1($fbUser->id) );
+			$newProfile = ApiProfileHelper::newProfile($newUser , 0 , 'Default Profile' , '' , '5_or_younger' , '' , 'preschool' , '', 999 , 999 , 999);
+
 			$user = User::select('id' , 'role', 'name')->find($newUser);
 			$userExternalId = UserExternalId::where('user_id' , $newUser)->update(['facebook_id' => $fbUser->id]);
 			$userAccess = UserAccess::where('user_id' , $user->id)->first();
