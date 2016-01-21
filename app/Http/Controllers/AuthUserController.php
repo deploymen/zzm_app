@@ -27,6 +27,7 @@ use Redirect;
 use Request;
 use Session;
 use Socialite;
+use GuzzleHttp\Client;
 
 Class AuthUserController extends Controller {
 
@@ -273,6 +274,23 @@ Class AuthUserController extends Controller {
 
 			Session::put('access_token', $accessToken);
 			setcookie('access_token', $accessToken, time() + (86400 * 30), "/"); // 86400 = 1 day*/
+
+			$user = User::find($userAccess->user_id);
+			if(!$user->city || !$user->latitude || !$user->longitude){
+				$secret = 'SAKF3G83D83MEKX59Y9Z';
+				$ip = Request::ip();
+
+				$res = file_get_contents("http://api.apigurus.com/iplocation/v1.8/locateip?key={$secret}&ip={$ip}&format=json&compact=y");			
+				$ipDetail = json_decode($res, true);
+
+				if(isset($ipDetail['geolocation_data'])) { 
+					$geolocationData = $ipDetail['geolocation_data'];
+					$user->city = $geolocationData['city'];
+					$user->latitude = $geolocationData['latitude'];
+					$user->longitude = $geolocationData['longitude'];
+					$user->save();
+				}
+			}
 
 			return ResponseHelper::OutputJSON('success', '', ['user' => $list , 'first_time_login' => $firstLogin], [
 				'X-access-token' => $accessToken,
@@ -765,8 +783,10 @@ Class AuthUserController extends Controller {
 	 * @return Response
 	 */
 	public function handleProviderCallback() {
+		$client = new Client;
 		$firstLogin = 0;
-
+		$xsrfToken = Cookie::get('XSRF-TOKEN');
+		
 		$fbUser = Socialite::driver('facebook')->user();
 		
 		//check User facebook ID
@@ -795,11 +815,8 @@ Class AuthUserController extends Controller {
 				$firstLogin = 1;
 			}
 
-			return ResponseHelper::OutputJSON('success', '', ['user' => $user , 'first_time_login' => $firstLogin], [
-				'X-access-token' => $accessToken,
-			], [
-				'access_token' => $accessToken,
-			]);
+			// $response = $client->request('POST', env('WEBSITE_URL').'/user/auth-redirect' , ['user' => $user , 'first_time_login' => $firstLogin , '_token' => $xsrfToken]);
+			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect?_method=post&user='.json_encode($user).'&first_time_login='.$firstLogin.'&_token='.$xsrfToken));
 		}
 
 		//check email didnt use
@@ -808,6 +825,8 @@ Class AuthUserController extends Controller {
 
 			//create new
 			$newUser = ApiUserHelper::Register('parent' , $fbUser->name , $fbUser->email , '' , $fbUser->id , sha1($fbUser->id) );
+			$newProfile = ApiProfileHelper::newProfile($newUser , 0 , 'Default Profile' , '' , '5_or_younger' , '' , 'preschool' , '', 999 , 999 , 999);
+
 			$user = User::select('id' , 'role', 'name')->find($newUser);
 			$userExternalId = UserExternalId::where('user_id' , $newUser)->update(['facebook_id' => $fbUser->id]);
 			$userAccess = UserAccess::where('user_id' , $user->id)->first();
@@ -821,11 +840,9 @@ Class AuthUserController extends Controller {
 
 			$firstLogin = 1;
 
-			return ResponseHelper::OutputJSON('success', '', ['user' => $user , 'first_time_login' => $firstLogin], [
-				'X-access-token' => $accessToken,
-			], [
-				'access_token' => $accessToken,
-			]);
+			// $response = $client->request('POST', env('WEBSITE_URL').'/user/auth-redirect' , ['user' => $user , 'first_time_login' => $firstLogin , '_token' => $xsrfToken]);
+			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect?_method=post&user='.json_encode($user).'&first_time_login='.$firstLogin.'&_token='.$xsrfToken));
+
 		}
 
 		//sync account
@@ -837,11 +854,8 @@ Class AuthUserController extends Controller {
 			$firstLogin = 1;
 		}
 
-		return ResponseHelper::OutputJSON('success', '', ['user' => $user , 'first_time_login' => $firstLogin], [
-				'X-access-token' => $accessToken,
-			], [
-				'access_token' => $accessToken,
-			]);
-	}
+		// $response = $client->request('POST', env('WEBSITE_URL').'/user/auth-redirect' , ['user' => $user , 'first_time_login' => $firstLogin , '_token' => $xsrfToken]);
+			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect?_method=post&user='.json_encode($user).'&first_time_login='.$firstLogin.'&_token='.$xsrfToken));
 
+	}
 }
