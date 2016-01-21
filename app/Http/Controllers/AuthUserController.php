@@ -27,6 +27,7 @@ use Redirect;
 use Request;
 use Session;
 use Socialite;
+use GuzzleHttp\Client;
 
 Class AuthUserController extends Controller {
 
@@ -782,9 +783,10 @@ Class AuthUserController extends Controller {
 	 * @return Response
 	 */
 	public function handleProviderCallback() {
+		$client = new Client;
 		$firstLogin = 0;
 		$xsrfToken = Cookie::get('XSRF-TOKEN');
-		var_export($xsrfToken); die();
+		
 		$fbUser = Socialite::driver('facebook')->user();
 		
 		//check User facebook ID
@@ -813,11 +815,7 @@ Class AuthUserController extends Controller {
 				$firstLogin = 1;
 			}
 
-			return ResponseHelper::OutputJSON('success', '', ['user' => $user , 'first_time_login' => $firstLogin], [
-				'X-access-token' => $accessToken,
-			], [
-				'access_token' => $accessToken,
-			]);
+			$response = $client->request('POST', env('WEBSITE_URL').'/user/auth-redirect' , ['user' => $user , 'first_time_login' => $firstLogin , '_token' => $xsrfToken]);
 		}
 
 		//check email didnt use
@@ -841,11 +839,7 @@ Class AuthUserController extends Controller {
 
 			$firstLogin = 1;
 
-			return ResponseHelper::OutputJSON('success', '', ['user' => $user , 'first_time_login' => $firstLogin], [
-				'X-access-token' => $accessToken,
-			], [
-				'access_token' => $accessToken,
-			]);
+			$response = $client->request('POST', env('WEBSITE_URL').'/user/auth-redirect' , ['user' => $user , 'first_time_login' => $firstLogin , '_token' => $xsrfToken]);
 		}
 
 		//sync account
@@ -857,11 +851,7 @@ Class AuthUserController extends Controller {
 			$firstLogin = 1;
 		}
 
-		return ResponseHelper::OutputJSON('success', '', ['user' => $user , 'first_time_login' => $firstLogin], [
-				'X-access-token' => $accessToken,
-			], [
-				'access_token' => $accessToken,
-			]);
+		$response = $client->request('POST', env('WEBSITE_URL').'/user/auth-redirect' , ['user' => $user , 'first_time_login' => $firstLogin , '_token' => $xsrfToken]);
 	}
 
 }
