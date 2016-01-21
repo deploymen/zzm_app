@@ -274,6 +274,23 @@ Class AuthUserController extends Controller {
 			Session::put('access_token', $accessToken);
 			setcookie('access_token', $accessToken, time() + (86400 * 30), "/"); // 86400 = 1 day*/
 
+			$user = User::find($userAccess->user_id);
+			if(!$user->city || !$user->latitude || !$user->longitude){
+				$secret = 'SAKF3G83D83MEKX59Y9Z';
+				$ip = Request::ip();
+
+				$res = file_get_contents("http://api.apigurus.com/iplocation/v1.8/locateip?key={$secret}&ip={$ip}&format=json&compact=y");			
+				$ipDetail = json_decode($res, true);
+
+				if(isset($ipDetail['geolocation_data'])) { 
+					$geolocationData = $ipDetail['geolocation_data'];
+					$user->city = $geolocationData['city'];
+					$user->latitude = $geolocationData['latitude'];
+					$user->longitude = $geolocationData['longitude'];
+					$user->save();
+				}
+			}
+
 			return ResponseHelper::OutputJSON('success', '', ['user' => $list , 'first_time_login' => $firstLogin], [
 				'X-access-token' => $accessToken,
 			], [
