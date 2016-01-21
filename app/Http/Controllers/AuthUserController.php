@@ -815,7 +815,8 @@ Class AuthUserController extends Controller {
 				$firstLogin = 1;
 			}
 
-			$response = $client->request('POST', env('WEBSITE_URL').'/user/auth-redirect' , ['user' => $user , 'first_time_login' => $firstLogin , '_token' => $xsrfToken]);
+			// $response = $client->request('POST', env('WEBSITE_URL').'/user/auth-redirect' , ['user' => $user , 'first_time_login' => $firstLogin , '_token' => $xsrfToken]);
+			return redirect::to(env('WEBSITE_URL').'/user/auth-redirect')->with('lll', '222');//->with('first_time_login', $firstLogin)->with();
 		}
 
 		//check email didnt use
