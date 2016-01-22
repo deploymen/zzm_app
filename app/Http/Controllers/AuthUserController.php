@@ -181,7 +181,7 @@ Class AuthUserController extends Controller {
 					Session::put('access_token', $accessToken);
 					setcookie('access_token', $accessToken, time() + (86400 * 30), "/"); // 86400 = 1 day*/
 				// }
-				);
+				// );
 
 			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
 			$list = User::select('id' , 'role' , 'name')->find($userAccess->user_id);
