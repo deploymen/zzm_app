@@ -1311,7 +1311,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')',  ['question' =>$results , 'price_list' => $priceList] , $expiresAt);
 		
 			return ['question' =>$results , 'price_list' => $priceList];
 
