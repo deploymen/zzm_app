@@ -816,12 +816,13 @@ Class AuthUserController extends Controller {
 				$firstLogin = 1;
 			}
 
-			// $response = $client->request('POST', env('WEBSITE_URL').'/user/auth-redirect' , ['user' => $user , 'first_time_login' => $firstLogin , '_token' => $xsrfToken]);
-			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect?_method=post&user='.json_encode($user).'&first_time_login='.$firstLogin.'&_token='.$xsrfToken.'&access_token='.$userAccess->access_token));
+			$cookie = Cookie::make('X-access-token', $userAccess->access_token);
+			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect?_method=post&user='.json_encode($user).'&first_time_login='.$firstLogin.'&_token='.$xsrfToken))->withCookie($cookie);
 		}
 
 		//check email didnt use
 		$userAccess = UserAccess::where('username' , $fbUser->email)->first();
+
 		if(!$userAccess){
 
 			//create new
@@ -834,8 +835,8 @@ Class AuthUserController extends Controller {
 
 			$firstLogin = 1;
 
-			// $response = $client->request('POST', env('WEBSITE_URL').'/user/auth-redirect' , ['user' => $user , 'first_time_login' => $firstLogin , '_token' => $xsrfToken]);
-			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect?_method=post&user='.json_encode($user).'&first_time_login='.$firstLogin.'&_token='.$xsrfToken.'&access_token='.$userAccess->access_token));
+			$cookie = Cookie::make('X-access-token', $userAccess->access_token);
+			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect?_method=post&user='.json_encode($user).'&first_time_login='.$firstLogin.'&_token='.$xsrfToken))->withCookie($cookie);
 
 		}
 
@@ -847,9 +848,8 @@ Class AuthUserController extends Controller {
 		if(!$checkFirstLogin){
 			$firstLogin = 1;
 		}
-
-		// $response = $client->request('POST', env('WEBSITE_URL').'/user/auth-redirect' , ['user' => $user , 'first_time_login' => $firstLogin , '_token' => $xsrfToken]);
-			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect?_method=post&user='.json_encode($user).'&first_time_login='.$firstLogin.'&_token='.$xsrfToken.'&access_token='.$userAccess->access_token));
-
+		
+		$cookie = Cookie::make('X-access-token', $userAccess->access_token);
+		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect?_method=post&user='.json_encode($user).'&first_time_login='.$firstLogin.'&_token='.$xsrfToken))->withCookie($cookie);
 	}
 }
