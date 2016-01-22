@@ -816,7 +816,7 @@ Class AuthUserController extends Controller {
 				$firstLogin = 1;
 			}
 
-			$cookie = Cookie::make('X-access-token', $userAccess->access_token);
+			$cookie = Cookie::make('access-token', $userAccess->access_token);
 			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect?_method=post&user='.json_encode($user).'&first_time_login='.$firstLogin.'&_token='.$xsrfToken))->withCookie($cookie);
 		}
 
@@ -835,7 +835,7 @@ Class AuthUserController extends Controller {
 
 			$firstLogin = 1;
 
-			$cookie = Cookie::make('X-access-token', $userAccess->access_token);
+			$cookie = Cookie::make('access-token', $userAccess->access_token);
 			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect?_method=post&user='.json_encode($user).'&first_time_login='.$firstLogin.'&_token='.$xsrfToken))->withCookie($cookie);
 
 		}
@@ -848,8 +848,8 @@ Class AuthUserController extends Controller {
 		if(!$checkFirstLogin){
 			$firstLogin = 1;
 		}
-		
-		$cookie = Cookie::make('X-access-token', $userAccess->access_token);
+
+		$cookie = Cookie::make('access-token', $userAccess->access_token);
 		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect?_method=post&user='.json_encode($user).'&first_time_login='.$firstLogin.'&_token='.$xsrfToken))->withCookie($cookie);
 	}
 }
