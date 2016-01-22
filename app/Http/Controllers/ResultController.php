@@ -26,7 +26,7 @@ Class ResultController extends Controller {
 		$page = Request::input("page", '1');
 		$pageSize = Request::input("page_size", '30');
 		$pagination = $pageSize * ($page - 1);
-		try {
+		// try {
 
 			$sql = "
 				SELECT s.`name` , sp.`system_id` , IF(SUM(um.`played`) > 0, 1, 0) AS `played` , IFNULL(SUM(um.`star`) , 0 ) AS `star` , count(sp.`planet_id`) AS `total_planet`
@@ -47,15 +47,18 @@ Class ResultController extends Controller {
 			$system = [];
 			for ($i = 0; $i < count($result); $i++) {
 				$r = $result[$i];
-				$totalPlanet = $r->total_planet * 5;
-				$percentage = $r->star / $totalPlanet * 100 / 1;
 
-				array_push($system, [
-					'id' => $r->system_id,
-					'system_name' => $r->name,
-					'played' => $r->played,
-					'percentage' => number_format($percentage, 0),
-				]);
+				if($r->system_id != 999 && $r->system_id != 117){
+					$totalPlanet = $r->total_planet * 5;
+					$percentage = $r->star / $totalPlanet * 100 / 1;
+
+					array_push($system, [
+						'id' => $r->system_id,
+						'system_name' => $r->name,
+						'played' => $r->played,
+						'percentage' => number_format($percentage, 0),
+					]);
+				}
 			}
 
 			return ResponseHelper::OutputJSON('success', '', [
@@ -64,13 +67,13 @@ Class ResultController extends Controller {
 				'page_size' => $pageSize,
 				'pageTotal' => ceil($total / $pageSize),
 			]);
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ResultController > onlySystem',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		// } catch (Exception $ex) {
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		'source' => 'ResultController > onlySystem',
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 	}
 
 	public function onlyPlanet() {

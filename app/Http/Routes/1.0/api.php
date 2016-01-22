@@ -16,6 +16,7 @@ Route::group(['prefix' => '1.0/auth'], function () {
 	Route::post('/connect/google', 'AuthUserController@connectGoogle');
 
 	Route::get('/activate/{secret_key}', 'AuthUserController@activate');
+	Route::post('/activate-code', 'AuthUserController@ResendACtivateCode');
 	Route::put('/forgot-password', 'AuthUserController@forgotPassword');
 	Route::put('/reset-password', 'AuthUserController@resetPassword');
 
