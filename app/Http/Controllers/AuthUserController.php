@@ -816,7 +816,7 @@ Class AuthUserController extends Controller {
 			}
 
 			// $response = $client->request('POST', env('WEBSITE_URL').'/user/auth-redirect' , ['user' => $user , 'first_time_login' => $firstLogin , '_token' => $xsrfToken]);
-			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect?_method=post&user='.json_encode($user).'&first_time_login='.$firstLogin.'&_token='.$xsrfToken));
+			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect?_method=post&user='.json_encode($user).'&first_time_login='.$firstLogin.'&_token='.$xsrfToken.'&access_token='.$userAccess->access_token));
 		}
 
 		//check email didnt use
@@ -830,18 +830,11 @@ Class AuthUserController extends Controller {
 			$user = User::select('id' , 'role', 'name')->find($newUser);
 			$userExternalId = UserExternalId::where('user_id' , $newUser)->update(['facebook_id' => $fbUser->id]);
 			$userAccess = UserAccess::where('user_id' , $user->id)->first();
-			
-			$accessToken = AuthHelper::GenerateAccessToken($userAccess->user_id);
-			$userAccess->access_token = $accessToken;
-			$userAccess->access_token_issue_at = DB::Raw('NOW()');
-			$userAccess->access_token_issue_ip = Request::ip();
-			$userAccess->access_token_expired_at = DB::Raw('DATE_ADD(NOW(), INTERVAL 10 YEAR)');
-			$userAccess->save();
 
 			$firstLogin = 1;
 
 			// $response = $client->request('POST', env('WEBSITE_URL').'/user/auth-redirect' , ['user' => $user , 'first_time_login' => $firstLogin , '_token' => $xsrfToken]);
-			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect?_method=post&user='.json_encode($user).'&first_time_login='.$firstLogin.'&_token='.$xsrfToken));
+			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect?_method=post&user='.json_encode($user).'&first_time_login='.$firstLogin.'&_token='.$xsrfToken.'&access_token='.$userAccess->access_token));
 
 		}
 
@@ -855,7 +848,7 @@ Class AuthUserController extends Controller {
 		}
 
 		// $response = $client->request('POST', env('WEBSITE_URL').'/user/auth-redirect' , ['user' => $user , 'first_time_login' => $firstLogin , '_token' => $xsrfToken]);
-			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect?_method=post&user='.json_encode($user).'&first_time_login='.$firstLogin.'&_token='.$xsrfToken));
+			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect?_method=post&user='.json_encode($user).'&first_time_login='.$firstLogin.'&_token='.$xsrfToken.'&access_token='.$userAccess->access_token));
 
 	}
 }
