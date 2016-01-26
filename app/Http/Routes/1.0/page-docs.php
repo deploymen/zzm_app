@@ -6,6 +6,7 @@ Route::group(['prefix' => 'docs'], function(){
 
 	Route::get('/list-general', function(){ return view('contents.docs.list-general'); });
 	Route::get('/api.auth-sign-up-post', function(){ return view('contents.docs.api-auth-sign-up-post'); });
+	Route::get('/api.auth-sign-up-app-post', function(){ return view('contents.docs.api-auth-sign-up-app-post'); });
 	Route::get('/api.auth-sign-in-post', function(){ return view('contents.docs.api-auth-sign-in-post'); });
 	Route::get('/api.auth-connect-facebook-post', function(){ return view('contents.docs.api-auth-connect-facebook-post'); });
 	Route::get('/api.auth-connect-google-post', function(){ return view('contents.docs.api-auth-connect-google-post'); });

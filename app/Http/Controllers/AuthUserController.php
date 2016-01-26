@@ -7,6 +7,7 @@ use App\Libraries\EmailHelper;
 use App\Libraries\LogHelper;
 use App\Libraries\ResponseHelper;
 use App\Libraries\ZapZapHelper;
+use App\Libraries\ApiUserHelper;
 use App\Models\GameCode;
 use App\Models\GameClass;
 use App\Models\GameProfile;
@@ -25,6 +26,8 @@ use Exception;
 use Redirect;
 use Request;
 use Session;
+use Socialite;
+use GuzzleHttp\Client;
 
 Class AuthUserController extends Controller {
 
@@ -78,8 +81,8 @@ Class AuthUserController extends Controller {
 		}
 
 		try {	
-			DB::transaction(function ()
-				 use ($role, $username, $password_sha1, $name, $email, $country, $deviceId, $accessToken, $classId) {
+			// DB::transaction(function ()
+				 // use ($role, $username, $password_sha1, $name, $email, $country, $deviceId, $accessToken, $classId) {
 
 					$user = new User;
 					$user->role = $role;
@@ -177,7 +180,8 @@ Class AuthUserController extends Controller {
 
 					Session::put('access_token', $accessToken);
 					setcookie('access_token', $accessToken, time() + (86400 * 30), "/"); // 86400 = 1 day*/
-				});
+				// }
+				// );
 
 			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
 			$list = User::select('id' , 'role' , 'name')->find($userAccess->user_id);
@@ -272,6 +276,23 @@ Class AuthUserController extends Controller {
 			Session::put('access_token', $accessToken);
 			setcookie('access_token', $accessToken, time() + (86400 * 30), "/"); // 86400 = 1 day*/
 
+			$user = User::find($userAccess->user_id);
+			if(!$user->city || !$user->latitude || !$user->longitude){
+				$secret = 'SAKF3G83D83MEKX59Y9Z';
+				$ip = Request::ip();
+
+				$res = file_get_contents("http://api.apigurus.com/iplocation/v1.8/locateip?key={$secret}&ip={$ip}&format=json&compact=y");			
+				$ipDetail = json_decode($res, true);
+
+				if(isset($ipDetail['geolocation_data'])) { 
+					$geolocationData = $ipDetail['geolocation_data'];
+					$user->city = $geolocationData['city'];
+					$user->latitude = $geolocationData['latitude'];
+					$user->longitude = $geolocationData['longitude'];
+					$user->save();
+				}
+			}
+
 			return ResponseHelper::OutputJSON('success', '', ['user' => $list , 'first_time_login' => $firstLogin], [
 				'X-access-token' => $accessToken,
 			], [
@@ -285,10 +306,6 @@ Class AuthUserController extends Controller {
 			])]);
 			return ResponseHelper::OutputJSON('exception');
 		}
-	}
-
-	public function connectFacebook() {
-		return ResponseHelper::OutputJSON('fail', 'not yet support');
 	}
 
 	public function connectGoogle() {
@@ -751,5 +768,88 @@ Class AuthUserController extends Controller {
 
 	}
 
+	//Socialite
+	/**
+	 * Redirect the user to the GitHub authentication page.
+	 *
+	 * @return Response
+	 */
+	public function redirectToProvider(Request $request) {
+		return Socialite::driver('facebook')->redirect();
+	}
 
+	/**
+	 * Obtain the user information from GitHub.
+	 *
+	 * @return Response
+	 */
+	public function handleProviderCallback() {
+		$client = new Client;
+		$firstLogin = 0;
+		$xsrfToken = Cookie::get('XSRF-TOKEN');
+		
+		$fbUser = Socialite::driver('facebook')->user();
+		
+		//check User facebook ID
+		$userExternalId = UserExternalId::where('facebook_id' , $fbUser->id)->first();
+
+		if($userExternalId){
+		
+			$user = User::select('id' , 'role', 'name')->find($userExternalId->user_id);
+			$userAccess = UserAccess::where('user_id' , $userExternalId->user_id)->first();
+
+			if ($userAccess->access_token == '') {
+				$accessToken = AuthHelper::GenerateAccessToken($userAccess->user_id);
+				$userAccess->access_token = $accessToken;
+				$userAccess->access_token_issue_at = DB::Raw('NOW()');
+				$userAccess->access_token_issue_ip = Request::ip();
+			} else {
+				$accessToken = $userAccess->access_token;
+			}
+
+			$userAccess->access_token_expired_at = DB::Raw('DATE_ADD(NOW(), INTERVAL 10 YEAR)');
+			$userAccess->save();
+
+			$checkFirstLogin = LogSignInUser::where('username' , $userAccess->username)->where('success' , 1)->first();
+
+			if(!$checkFirstLogin){
+				$firstLogin = 1;
+			}
+
+			$cookie = Cookie::make('access_token', $userAccess->access_token);
+			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect?user='.json_encode($user).'&first_time_login='.$firstLogin))->withCookie($cookie);
+		}
+
+		//check email didnt use
+		$userAccess = UserAccess::where('username' , $fbUser->email)->first();
+
+		if(!$userAccess){
+
+			//create new
+			$newUser = ApiUserHelper::Register('parent' , $fbUser->name , $fbUser->email , '' , $fbUser->id , sha1($fbUser->id) );
+			$newProfile = ApiProfileHelper::newProfile($newUser , 0 , 'Default Profile' , '' , '5_or_younger' , '' , 'preschool' , '', 999 , 999 , 999);
+
+			$user = User::select('id' , 'role', 'name')->find($newUser);
+			$userExternalId = UserExternalId::where('user_id' , $newUser)->update(['facebook_id' => $fbUser->id]);
+			$userAccess = UserAccess::where('user_id' , $user->id)->first();
+
+			$firstLogin = 1;
+
+			$cookie = Cookie::make('access_token', $userAccess->access_token);
+			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect?_method=post&user='.json_encode($user).'&first_time_login='.$firstLogin))->withCookie($cookie);
+
+		}
+
+		//sync account
+		$user = User::select('id' , 'role', 'name')->find($userAccess->user_id);
+		$userExternalId = UserExternalId::where('user_id' , $userAccess->user_id)->update(['facebook_id' => $fbUser->id ]);
+		$checkFirstLogin = LogSignInUser::where('username' , $userAccess->username)->where('success' , 1)->first();
+
+		if(!$checkFirstLogin){
+			$firstLogin = 1;
+		}
+
+		$cookie = Cookie::make('access_token', $userAccess->access_token);
+		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect?_method=post&user='.json_encode($user).'&first_time_login='.$firstLogin))->withCookie($cookie);
+	}
 }
