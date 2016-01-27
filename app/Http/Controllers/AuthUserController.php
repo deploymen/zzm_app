@@ -817,7 +817,7 @@ Class AuthUserController extends Controller {
 			}
 
 			$cookie = Cookie::make('access_token', $userAccess->access_token);
-			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect')->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
+			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
 		}
 
 		//check email didnt use
@@ -836,7 +836,7 @@ Class AuthUserController extends Controller {
 			$firstLogin = 1;
 
 			$cookie = Cookie::make('access_token', $userAccess->access_token);
-			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect')->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
+			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
 
 		}
 
@@ -850,6 +850,6 @@ Class AuthUserController extends Controller {
 		}
 
 		$cookie = Cookie::make('access_token', $userAccess->access_token);
-		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect')->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
+		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
 	}
 }
