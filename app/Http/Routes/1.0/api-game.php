@@ -30,12 +30,12 @@ Route::group(['prefix' => '1.0/game'], function () {
 
 	Route::get('/top-score', 'ApiGameController@GameScreenTopScore');
 
+	Route::post('/check-game-code' , 'ApiGameController@checkGameCode');
 
 	Route::group(['middleware' => 'auth.game'], function () {
 		Route::post('/verify-transfer', 'ApiProfileController@verifyCode');
 		Route::post('/profile-transfer', 'ApiProfileController@profileTransfer');
 
-		Route::post('/check-game-code' , 'ApiGameController@checkGameCode');
 
 		Route::post('/play/{id}/result', 'ApiGameController@result');
 		Route::get('/play/{id}/request/', 'ApiGameController@request');
