@@ -644,7 +644,7 @@ Class ApiGameController extends Controller {
 	}
 
 	public function checkGameCode(){
-		$gameCode = Request::input('game_code');
+		$gameCode = Request::input('game_code' , '0');
 		$deviceId = Request::input('device_id');
 
 		$checkGameCode = GameCode::where('code' , $gameCode)->first();
@@ -675,6 +675,6 @@ Class ApiGameController extends Controller {
 			return ResponseHelper::OutputJSON('success', '', [] , [] , [] , 'change_game_code', ['game_code' => $code->code]);
 		}
 
-		return ResponseHelper::OutputJSON('success');
+		return ResponseHelper::OutputJSON('success', '', [] , [] , [] , 'success', ['game_code' => $gameCode] );
 	}
 }
