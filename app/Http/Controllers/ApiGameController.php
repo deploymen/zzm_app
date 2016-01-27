@@ -644,11 +644,11 @@ Class ApiGameController extends Controller {
 	}
 
 	public function checkGameCode(){
-		$gameCode = Request::input('game_code' , '0');
+		$gameCode = Request::input('game_code');
 		$deviceId = Request::input('device_id');
 
 		$checkGameCode = GameCode::where('code' , $gameCode)->first();
-
+		
 		if(!$checkGameCode){
 			$idCounter = IdCounter::find(1);
 			$gameCodeSeed = $idCounter->game_code_seed;
