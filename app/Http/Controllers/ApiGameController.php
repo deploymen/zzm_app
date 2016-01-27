@@ -672,7 +672,7 @@ Class ApiGameController extends Controller {
 			$code->device_id = $deviceId;
 			$code->save();
 
-			return ResponseHelper::OutputJSON('success', '', [] , [] , [] , 'change_game_code', ['game_code' => $code->code]);
+			return ResponseHelper::OutputJSON('fail', '', [] , [] , [] , 'change_game_code', ['game_code' => $code->code]);
 		}
 
 		return ResponseHelper::OutputJSON('success', '', [] , [] , [] , 'success', ['game_code' => $gameCode] );
