@@ -8,6 +8,7 @@ use App\Libraries\LogHelper;
 use App\Libraries\ResponseHelper;
 use App\Libraries\ZapZapHelper;
 use App\Libraries\ApiUserHelper;
+use App\Libraries\ApiProfileHelper;
 use App\Models\GameCode;
 use App\Models\GameClass;
 use App\Models\GameProfile;
