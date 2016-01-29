@@ -862,14 +862,14 @@ Class AuthUserController extends Controller {
 		$gameProfile = GameProfile::where('user_id' , $userId )->get();
 		$userSetting = UserSetting::find($userId);
 
-		if(!$user || !$userAccess || !$gameProfile || $userSetting){
+		if(!$user || !$userAccess || !$gameProfile){
 			return ResponseHelper::OutputJSON('fail' , 'user not found');
 		}
 
 		$user->delete();
 		$userAccess->delete();
 		$userSetting->delete();
-		
+
 		foreach($gameProfile as $gameProfiles){
 			$gameCode = GameCode::where('profile_id' , $gameProfiles->id)->delete();
 			$gameProfiles->delete();
