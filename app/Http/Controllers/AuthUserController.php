@@ -853,4 +853,28 @@ Class AuthUserController extends Controller {
 		$cookie = Cookie::make('access_token', $userAccess->access_token);
 		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
 	}
+
+	public function deleteAccount(){
+		$userId = Request::input('user_id');
+
+		$user = User::find($userId);
+		$userAccess = UserAccess::find($userId);		
+		$gameProfile = GameProfile::where('user_id' , $userId )->get();
+		$userSetting = UserSetting::find($userId);
+
+		if(!$user || !$userAccess || !$gameProfile || $userSetting){
+			return ResponseHelper::OutputJSON('fail' , 'user not found');
+		}
+
+		$user->delete();
+		$userAccess->delete();
+		$userSetting->delete();
+		foreach($gameProfile as $gameProfiles){
+			$gameCode = GameCode::where('profile_id' , $gameProfiles->id)->delete();
+			$gameProfiles->delete();
+		}
+
+		return ResponseHelper::OutputJSON('success');
+
+	}
 }
