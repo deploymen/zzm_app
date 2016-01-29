@@ -799,7 +799,7 @@ Class AuthUserController extends Controller {
 			$user = User::select('id' , 'role', 'name')->find($userExternalId->user_id);
 			$userAccess = UserAccess::where('user_id' , $userExternalId->user_id)->first();
 
-			if ($userAccess->access_token == '') {
+			if($userAccess->access_token == '') {
 				$accessToken = AuthHelper::GenerateAccessToken($userAccess->user_id);
 				$userAccess->access_token = $accessToken;
 				$userAccess->access_token_issue_at = DB::Raw('NOW()');
@@ -861,6 +861,7 @@ Class AuthUserController extends Controller {
 		$userAccess = UserAccess::find($userId);		
 		$gameProfile = GameProfile::where('user_id' , $userId )->get();
 		$userSetting = UserSetting::find($userId);
+		$userExternalId = UserExternalId::find($userId);
 
 		if(!$user || !$userAccess || !$gameProfile){
 			return ResponseHelper::OutputJSON('fail' , 'user not found');
@@ -869,7 +870,8 @@ Class AuthUserController extends Controller {
 		$user->delete();
 		$userAccess->delete();
 		$userSetting->delete();
-
+		$userExternalId->delete();
+		
 		foreach($gameProfile as $gameProfiles){
 			$gameCode = GameCode::where('profile_id' , $gameProfiles->id)->delete();
 			$gameProfiles->delete();
