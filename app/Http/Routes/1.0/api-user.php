@@ -65,4 +65,4 @@ Route::group(['middleware' => 'auth.user'], function () {
 	Route::get('1.0/auth/facebook', 'AuthUserController@redirectToProvider');
 	Route::get('1.0/auth/facebook/callback', 'AuthUserController@handleProviderCallback');
 
-	Route::post('1.0/remove/account', 'AuthUserController@deleteAccount');
+	Route::delete('1.0/remove/account', 'AuthUserController@deleteAccount');
