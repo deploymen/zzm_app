@@ -869,6 +869,7 @@ Class AuthUserController extends Controller {
 		$user->delete();
 		$userAccess->delete();
 		$userSetting->delete();
+		
 		foreach($gameProfile as $gameProfiles){
 			$gameCode = GameCode::where('profile_id' , $gameProfiles->id)->delete();
 			$gameProfiles->delete();
