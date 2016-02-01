@@ -453,6 +453,7 @@ Class ApiGameController extends Controller {
 		$userId = Request::input('user_id');
 		$deviceId = Request::input('game_code_device_id');
 		$gameCode = Request::input('game_code');
+		$format = Request::input('format', 'old');
 		
 
 		try{
@@ -492,12 +493,18 @@ Class ApiGameController extends Controller {
 				$prevPlanetStar = $r->star;
 				$prevSystemId = $r->system_id;
 			}
+
+		if($format == 'old'){
+			return ResponseHelper::OutputJSON('success', '' , $systems );
+		}
+
 		return ResponseHelper::OutputJSON('success', '' , [
 			'profile' => [
 				'total_star' => $totalStar,
 				] ,
 			'system_planet' => $systems
 			 ]);
+
 
 		} catch (Exception $ex) {
 
