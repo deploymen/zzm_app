@@ -498,12 +498,12 @@ Class ApiGameController extends Controller {
 			return ResponseHelper::OutputJSON('success', '' , $systems );
 		}
 
-		return ResponseHelper::OutputJSON('success', '' , [
-			'profile' => [
-				'total_star' => $totalStar,
-				] ,
-			'system_planet' => $systems
-			 ]);
+		// return ResponseHelper::OutputJSON('success', '' , [
+		// 	'profile' => [
+		// 		'total_star' => $totalStar,
+		// 		] ,
+		// 	'system_planet' => $systems
+		// 	 ]);
 
 
 		} catch (Exception $ex) {
