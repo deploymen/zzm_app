@@ -90,6 +90,7 @@ Class AuthUserController extends Controller {
 					$user->name = $name;
 					$user->email = $email;
 					$user->country = $country;
+					$user->register_from = 'website';
 					$user->save();
 
 					$accessToken = AuthHelper::GenerateAccessToken($user->id);
@@ -272,7 +273,7 @@ Class AuthUserController extends Controller {
 			$log->created_ip = Request::ip();
 			$log->save();
 
-			$list = User::select('id' , 'role', 'name')->find($userAccess->user_id);
+			$list = User::select('id' , 'role', 'name' , 'register_from')->find($userAccess->user_id);
 
 			Session::put('access_token', $accessToken);
 			setcookie('access_token', $accessToken, time() + (86400 * 30), "/"); // 86400 = 1 day*/
@@ -634,6 +635,8 @@ Class AuthUserController extends Controller {
 			$user = new User;
 			$user->role = 'parent';
 			$user->email = $email;
+			$user->register_from = 'app';
+
 			$user->save();
 
 			$accessToken = AuthHelper::GenerateAccessToken($user->id);
@@ -796,7 +799,7 @@ Class AuthUserController extends Controller {
 
 		if($userExternalId){
 		
-			$user = User::select('id' , 'role', 'name')->find($userExternalId->user_id);
+			$user = User::select('id','role', 'name', 'register_from')->find($userExternalId->user_id);
 			$userAccess = UserAccess::where('user_id' , $userExternalId->user_id)->first();
 
 			if($userAccess->access_token == '') {
@@ -825,7 +828,7 @@ Class AuthUserController extends Controller {
 			$log->success = 1;
 			$log->created_ip = Request::ip();
 			$log->save();
-			
+
 			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
 		}
 
@@ -835,10 +838,10 @@ Class AuthUserController extends Controller {
 		if(!$userAccess){
 
 			//create new
-			$newUser = ApiUserHelper::Register('parent' , $fbUser->name , $fbUser->email , '' , $fbUser->id , sha1($fbUser->id) );
+			$newUser = ApiUserHelper::Register('parent' , $fbUser->name , $fbUser->email , '' , $fbUser->id , sha1($fbUser->id) , 'facebook');
 			$newProfile = ApiProfileHelper::newProfile($newUser , 0 , 'Default Profile' , '' , '5_or_younger' , '' , 'preschool' , '', 999 , 999 , 999);
 
-			$user = User::select('id' , 'role', 'name')->find($newUser);
+			$user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser);
 			$userExternalId = UserExternalId::where('user_id' , $newUser)->update(['facebook_id' => $fbUser->id]);
 			$userAccess = UserAccess::where('user_id' , $user->id)->first();
 
@@ -858,7 +861,7 @@ Class AuthUserController extends Controller {
 		}
 
 		//sync account
-		$user = User::select('id' , 'role', 'name')->find($userAccess->user_id);
+		$user = User::select('id' , 'role', 'name', 'register_from')->find($userAccess->user_id);
 		$userExternalId = UserExternalId::where('user_id' , $userAccess->user_id)->update(['facebook_id' => $fbUser->id ]);
 		$checkFirstLogin = LogSignInUser::where('username' , $userAccess->username)->where('success' , 1)->first();
 
