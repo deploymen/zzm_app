@@ -37,6 +37,7 @@ use App\Models\UserExternalId;
 use App\Models\LeaderboardWorld;
 use App\Models\LeaderboardSystem;
 use App\Models\LeaderboardPlanet;
+use App\Models\IdCounter;
 
 class ApiProfileHelper{
 
