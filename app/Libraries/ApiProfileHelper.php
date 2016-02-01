@@ -208,6 +208,18 @@ class ApiProfileHelper{
 		$profile->avatar_id = $avatarId;
 		$profile->save();
 
+		$idCounter = IdCounter::find(1);
+		$gameCodeSeed = $idCounter->game_code_seed;
+		$idCounter->game_code_seed = $gameCodeSeed + 1;
+		$idCounter->save();
+
+		$code = new GameCode;
+		$code->type = 'profile';
+		$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
+		$code->seed = $gameCodeSeed;
+		$code->profile_id = $profile->id;
+		$code->save();
+		
 		return $profile;
 	}
 }

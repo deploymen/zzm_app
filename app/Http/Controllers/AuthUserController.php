@@ -818,6 +818,14 @@ Class AuthUserController extends Controller {
 			}
 
 			$cookie = Cookie::make('access_token', $userAccess->access_token);
+
+			$log = new LogSignInUser;
+			$log->username = $userAccess->username;
+			$log->password_sha1 = '';
+			$log->success = 1;
+			$log->created_ip = Request::ip();
+			$log->save();
+			
 			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
 		}
 
@@ -837,6 +845,14 @@ Class AuthUserController extends Controller {
 			$firstLogin = 1;
 
 			$cookie = Cookie::make('access_token', $userAccess->access_token);
+
+			$log = new LogSignInUser;
+			$log->username = $userAccess->username;
+			$log->password_sha1 = '';
+			$log->success = 1;
+			$log->created_ip = Request::ip();
+			$log->save();
+
 			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
 
 		}
@@ -851,6 +867,14 @@ Class AuthUserController extends Controller {
 		}
 
 		$cookie = Cookie::make('access_token', $userAccess->access_token);
+
+		$log = new LogSignInUser;
+		$log->username = $userAccess->username;
+		$log->password_sha1 = '';
+		$log->success = 1;
+		$log->created_ip = Request::ip();
+		$log->save();
+
 		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
 	}
 
