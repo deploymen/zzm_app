@@ -483,7 +483,7 @@ Class AuthUserController extends Controller {
 		}
 
 		if($user->register_from == 'facebook'){
-			return ResponseHelper::OutputJSON('fail', 'this email is using facebook login')
+			return ResponseHelper::OutputJSON('fail', 'this email is using facebook login');
 		}
 
 		try {
@@ -631,7 +631,8 @@ Class AuthUserController extends Controller {
 		}
 
 		$access = UserAccess::where('username', $email)->first();
-		if ($access) {
+		$user = User::where('email' , $email)->first();
+		if ($access || $user) {
 			return ResponseHelper::OutputJSON('fail', "email used");
 		}
 
