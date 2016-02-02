@@ -684,6 +684,8 @@ Class AuthUserController extends Controller {
 			$code->profile_id = $profile->id;
 			$code->save();
 
+
+
 			if ($deviceId) {
 				//claim back previous game result played from this device id
 				//to do...
@@ -707,6 +709,11 @@ Class AuthUserController extends Controller {
 			$logOpenAcc->user_id = $user->id;
 			$logOpenAcc->secret = $secretKey;
 			$logOpenAcc->save();
+
+			$logPasswordReset = new LogPasswordReset;
+			$logPasswordReset->user_id = $user->id;
+			$logPasswordReset->secret = $secretKey;
+			$logPasswordReset->save();
 
 			//job done - log it!
 			DatabaseUtilHelper::LogInsert($user->id, $user->table, $user->id);
