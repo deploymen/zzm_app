@@ -482,6 +482,10 @@ Class AuthUserController extends Controller {
 			return ResponseHelper::OutputJSON('fail', 'user not found');
 		}
 
+		if($user->register_from == 'facebook'){
+			return ResponseHelper::OutputJSON('fail', 'this email is using facebook login')
+		}
+
 		try {
 
 			DB::table('t9202_log_password_reset')
