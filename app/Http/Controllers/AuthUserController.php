@@ -52,6 +52,7 @@ Class AuthUserController extends Controller {
 		$accessToken = '';
 		$deviceId = Request::input('device_id'); //optional
 		$role = Request::input('role');
+		$registerFrom = Request::input('register_from' , 'website');
 		$classId = 0;
 
 		if (!$username || !$password || !$name || !$email || !$country || !$role) {
@@ -90,7 +91,7 @@ Class AuthUserController extends Controller {
 					$user->name = $name;
 					$user->email = $email;
 					$user->country = $country;
-					$user->register_from = 'website';
+					$user->register_from = $registerFrom;
 					$user->save();
 
 					$accessToken = AuthHelper::GenerateAccessToken($user->id);
@@ -129,6 +130,7 @@ Class AuthUserController extends Controller {
 					$profile->nickname2 = 999;
 					$profile->avatar_id = 999;
 					$profile->class_id = $classId;
+					$profile->school = 'default school';
 					$profile->save();
 
 					$idCounter = IdCounter::find(1);
@@ -483,7 +485,7 @@ Class AuthUserController extends Controller {
 		}
 
 		if($user->register_from == 'facebook'){
-			return ResponseHelper::OutputJSON('fail', 'this email is using facebook login')
+			return ResponseHelper::OutputJSON('fail', 'this email register by facebook');
 		}
 
 		try {
@@ -631,7 +633,8 @@ Class AuthUserController extends Controller {
 		}
 
 		$access = UserAccess::where('username', $email)->first();
-		if ($access) {
+		$user = User::where('email' , $email)->first();
+		if ($access || $user) {
 			return ResponseHelper::OutputJSON('fail', "email used");
 		}
 
@@ -849,25 +852,7 @@ Class AuthUserController extends Controller {
 		if(!$userAccess){
 
 			//create new
-			$newUser = ApiUserHelper::Register('parent' , $fbUser->name , $fbUser->email , '' , $fbUser->id , sha1($fbUser->id) , 'facebook');
-			$newProfile = ApiProfileHelper::newProfile($newUser , 0 , 'Default Profile' , '' , '5_or_younger' , '' , 'preschool' , '', 999 , 999 , 999);
-
-			$user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser);
-			$userExternalId = UserExternalId::where('user_id' , $newUser)->update(['facebook_id' => $fbUser->id]);
-			$userAccess = UserAccess::where('user_id' , $user->id)->first();
-
-			$firstLogin = 1;
-
-			$cookie = Cookie::make('access_token', $userAccess->access_token);
-
-			$log = new LogSignInUser;
-			$log->username = $userAccess->username;
-			$log->password_sha1 = '';
-			$log->success = 1;
-			$log->created_ip = Request::ip();
-			$log->save();
-
-			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
+			return redirect(url(env('WEBSITE_URL').'/user/redirect-signup'))->with('name' , $fbUser->name)->with('email' , $fbUser->email)->with('facebook_id' , $fbUser->id);
 
 		}
 
@@ -918,4 +903,30 @@ Class AuthUserController extends Controller {
 		return ResponseHelper::OutputJSON('success');
 
 	}
+
+	public function facebookSignUp(){
+		$request = Request::all();
+
+		$newUser = ApiUserHelper::Register($request['role'] , $request['name'] , $request['email'] , '' , $request['facebook_id'] , '' , 'facebook');
+		$newProfile = ApiProfileHelper::newProfile($newUser , 0 , 'Default Profile' , '' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
+
+		$user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser);
+		$userExternalId = UserExternalId::where('user_id' , $newUser)->update(['facebook_id' => $request['facebook_id'] ]);
+		$userAccess = UserAccess::where('user_id' , $user->id)->first();
+
+		$firstLogin = 1;
+
+		$cookie = Cookie::make('access_token', $userAccess->access_token);
+
+		$log = new LogSignInUser;
+		$log->username = $userAccess->username;
+		$log->password_sha1 = '';
+		$log->success = 1;
+		$log->created_ip = Request::ip();
+		$log->save();
+
+		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
+
+	}
 }
+
