@@ -53,6 +53,7 @@ Class AuthUserController extends Controller {
 		$deviceId = Request::input('device_id'); //optional
 		$role = Request::input('role');
 		$registerFrom = Request::input('register_from' , 'website');
+		$ref = Request::input('ref');
 		$classId = 0;
 
 		if (!$username || !$password || !$name || !$email || !$country || !$role) {
@@ -92,6 +93,7 @@ Class AuthUserController extends Controller {
 					$user->email = $email;
 					$user->country = $country;
 					$user->register_from = $registerFrom;
+					$user->ref = $ref;
 					$user->save();
 
 					$accessToken = AuthHelper::GenerateAccessToken($user->id);
