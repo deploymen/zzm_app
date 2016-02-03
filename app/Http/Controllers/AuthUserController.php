@@ -53,7 +53,7 @@ Class AuthUserController extends Controller {
 		$deviceId = Request::input('device_id'); //optional
 		$role = Request::input('role');
 		$registerFrom = Request::input('register_from' , 'website');
-		$ref = Request::input('ref');
+		$ref = Request::input('aaa');
 		$classId = 0;
 
 		if (!$username || !$password || !$name || !$email || !$country || !$role) {
