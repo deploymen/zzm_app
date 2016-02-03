@@ -908,7 +908,7 @@ Class AuthUserController extends Controller {
 
 	public function facebookSignUp(){
 		$request = Request::all();
-		$classId = 0
+		$classId = 0;
 		$newUser = ApiUserHelper::Register($request['role'] , $request['name'] , $request['email'] , '' , $request['facebook_id'] , '' , 'facebook');
 
 		if($request['role'] == 'teacher'){
