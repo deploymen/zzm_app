@@ -140,7 +140,7 @@ Class ResultController extends Controller {
 				$r = $result[$i];
 				array_push($planet, [
 					'id' => $r->planet_id,
-					'planet_name' => $r->planet_name;
+					'planet_name' => $r->planet_name,
 					'subtitle' => $r->subtitle,
 					'play_count' => $r->play_count,
 					'star' => $r->star,
