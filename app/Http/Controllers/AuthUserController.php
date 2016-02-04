@@ -942,9 +942,9 @@ Class AuthUserController extends Controller {
 		$log->save();
 
 		return ResponseHelper::OutputJSON('success', '', ['user' => $user], [
-			'X-access-token' => $accessToken,
+			'X-access-token' => $userAccess->access_token,
 		], [
-			'access_token' => $accessToken,
+			'access_token' => $userAccess->access_token,
 		]);
 
 	}
