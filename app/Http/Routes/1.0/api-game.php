@@ -38,7 +38,7 @@ Route::group(['prefix' => '1.0/game'], function () {
 
 
 		Route::post('/play/{id}/result', 'ApiGameController@result');
-		Route::get('/play/{id}/request/' , ['middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:3,0.08'] , 'ApiGameController@request');
+		Route::get('/play/{id}/request/' , 'ApiGameController@request');
 
 		Route::get('/play/{id}/request/{language}', 'ApiGameController@request');
 		// Route::get('/play/{id}/result', 'ApiGameController@winScreen');
