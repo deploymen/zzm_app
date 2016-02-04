@@ -190,7 +190,7 @@ Class AuthUserController extends Controller {
 				// );
 
 			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
-			$list = User::select('id' , 'role' , 'name')->find($userAccess->user_id);
+			$list = User::select('id' , 'role' , 'name' , 'register_from')->find($userAccess->user_id);
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -907,9 +907,13 @@ Class AuthUserController extends Controller {
 	}
 
 	public function facebookSignUp(){
-		$request = Request::all();
+		$role = Request::input('role');
+		$name = Request::input('name');
+		$email = Request::input('email');
+		$facebook_id = Request::input('facebook_id');
+
 		$classId = 0;
-		$newUser = ApiUserHelper::Register($request['role'] , $request['name'] , $request['email'] , '' , $request['facebook_id'] , '' , 'facebook');
+		$newUser = ApiUserHelper::Register($role , $name , $email , '' , $facebook_id , '' , 'facebook');
 
 		if($request['role'] == 'teacher'){
 			$gameClass = new GameClass;
@@ -924,7 +928,7 @@ Class AuthUserController extends Controller {
 		$newProfile = ApiProfileHelper::newProfile($newUser , $classId , 'Default Profile' , '' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
 
 		$user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser);
-		$userExternalId = UserExternalId::where('user_id' , $newUser)->update(['facebook_id' => $request['facebook_id'] ]);
+		$userExternalId = UserExternalId::where('user_id' , $newUser)->update(['facebook_id' => $facebook_id ]);
 		$userAccess = UserAccess::where('user_id' , $user->id)->first();
 
 		$firstLogin = 1;
@@ -938,7 +942,11 @@ Class AuthUserController extends Controller {
 		$log->created_ip = Request::ip();
 		$log->save();
 
-		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
+		return ResponseHelper::OutputJSON('success', '', ['user' => $user], [
+			'X-access-token' => $accessToken,
+		], [
+			'access_token' => $accessToken,
+		]);
 
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Support\Facades\Route;
 // =======================================================================//
 // ! Game Profile(Kid)										 			      //
 // =======================================================================//
@@ -24,7 +24,7 @@ Route::group(['prefix' => '1.0/game'], function () {
 	Route::get('/profile/{profile_id}/result/system-planet/planet/{planet_id}', 'ApiGameController@systemPlanetPlay');
 
 
-	Route::get('/leaderboard/world', 'ApiGameController@leaderBoardWorld');
+	Route::get('/leaderboard/world' , 'ApiGameController@leaderBoardWorld');
 	Route::get('/leaderboard/system/{id}', 'ApiGameController@leaderBoardSystem');
 	Route::get('/leaderboard/planet/{id}', 'ApiGameController@leaderBoardPlanet');
 
@@ -38,7 +38,7 @@ Route::group(['prefix' => '1.0/game'], function () {
 
 
 		Route::post('/play/{id}/result', 'ApiGameController@result');
-		Route::get('/play/{id}/request/', 'ApiGameController@request');
+		Route::get('/play/{id}/request/' , ['middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:3,0.08'] , 'ApiGameController@request');
 
 		Route::get('/play/{id}/request/{language}', 'ApiGameController@request');
 		// Route::get('/play/{id}/result', 'ApiGameController@winScreen');
