@@ -117,7 +117,7 @@ Class ResultController extends Controller {
 			$total = GamePlanet::where('available', 1)->count();
 
 			$sql = "
-				SELECT p.`id` AS `planet_id`, p.`description` AS `subtitle`, COUNT(gp.`id`) AS `play_count` ,IFNULL(MAX(gp.`score`), 0) AS `max_score` , IFNULL(um.`star`, 0) AS `star` , IFNULL(um.`played`,0) AS `played`
+				SELECT p.`id` AS `planet_id`,p.`name` AS `planet_name` ,p.`description` AS `subtitle`, COUNT(gp.`id`) AS `play_count` ,IFNULL(MAX(gp.`score`), 0) AS `max_score` , IFNULL(um.`star`, 0) AS `star` , IFNULL(um.`played`,0) AS `played`
 					FROM (`t0122_game_system` s, `t0123_game_planet` p, `t0124_game_system_planet` sp)
 
 						LEFT JOIN `t0400_game_play` gp ON( p.`id` = gp.`planet_id` AND gp.`code` = :game_code )
@@ -140,6 +140,7 @@ Class ResultController extends Controller {
 				$r = $result[$i];
 				array_push($planet, [
 					'id' => $r->planet_id,
+					'planet_name' => $r->planet_name;
 					'subtitle' => $r->subtitle,
 					'play_count' => $r->play_count,
 					'star' => $r->star,
