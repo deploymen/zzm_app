@@ -1388,6 +1388,78 @@ class ZapZapQuestionHelper{
 			]);		
 		return false;
 		}
+	}	
+
+	public static function GetQuestionP21($planetId,$difficulty,$questionCount){
+
+		try{
+
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
+		
+			$sql = "
+				SELECT p21.*, qc.`question_id`
+					FROM `t0221_game_question_p21` p21, `t0126_game_planet_question_cache` qc 
+                        WHERE qc.`planet_id` = {$planetId}
+                        	AND qc.`difficulty` = {$difficulty}
+                        	AND p21.`id` = qc.`target_id`	
+
+
+                        	ORDER BY RAND() 
+                        	LIMIT {$questionCount}
+			";
+
+			$result = DB::SELECT($sql);
+
+			$results = [];
+			$prevQuestionId = 0;
+
+			for($i=0; $i<count($result); $i++){
+				$r = $result[$i];
+
+				if($r->id != $prevQuestionId){
+					array_push($results, [
+						'id' => $r->question_id,
+						'question' => $r->question,
+						'param_time' => $r->param_time,
+						'param_minimum' => $r->param_minimum,
+						'param_lazy' => $r->param_lazy,
+						'param_low' => $r->param_low,
+						'param_very_low' => $r->param_very_low,
+						'param_peak' => $r->param_peak,
+						'param_over' => $r->param_over,
+						'param_increase_rate' => $r->param_increase_rate,
+						'param_decrease_rate' => $r->param_decrease_rate,
+						'difficulty' => $r->difficulty,
+					]);
+				}
+				
+
+				$prevQuestionId = $r->id;
+			}
+
+			shuffle($results);
+
+			if(!$results){
+				return 'question not found';
+			}
+
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+		
+			return $results;
+
+		}catch(Exception $ex){
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp21', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
+		return false;
+		}
 	}
 
 	public static function GetQuestionP23($planetId,$difficulty,$questionCount){
