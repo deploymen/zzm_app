@@ -220,6 +220,9 @@ class ApiController extends Controller {
 			'version' => $appVersion->version,
 			'end_point' => $appVersion->end_point,
 			]);
+	}
 
+	public function clearSession(){
+		Session::flush();
 	}
 }
