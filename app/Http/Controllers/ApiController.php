@@ -6,6 +6,7 @@ use PDOException;
 use Config;
 use Request;
 use DB;
+use Session;
 use App\Libraries;
 use App\Libraries\LogHelper;
 use App\Libraries\AuthHelper;
