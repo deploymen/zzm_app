@@ -693,11 +693,10 @@ Class ApiGameController extends Controller {
 		$gameCodeType = Request::input('game_code_type');
 		$results = json_decode($result, true);
 
-
 		try{
-			for($i=0; $i<count($results); $i++){
-				$r = $results[$i];
 
+			for($i=0; $i<=(count($results) - 1); $i++){
+				$r = $results[$i];
 
 				$gameResult = $r['game_result'];
 				$sgameResult = json_encode($gameResult);
@@ -740,8 +739,8 @@ Class ApiGameController extends Controller {
 					return ResponseHelper::OutputJSON('fail', 'no double submit');
 				}
 
-				for($i=0; $i<count($gameResult['answers']); $i++){
-					$inAnswer = $gameResult['answers'][$i];
+				for($j=0; $j<count($gameResult['answers']); $j++){
+					$inAnswer = $gameResult['answers'][$j];
 
 					$question = GameQuestion::find($inAnswer['question_id']);
 
@@ -841,9 +840,7 @@ Class ApiGameController extends Controller {
 
 				ZapZapQuestionHelper::LeaderboardUpdate($profile,$systemPlanet,$gameResult);
 				LogHelper::LogPostResult($planetId , $sgameResult, $gameCode);//log post result
-
 			}
-
 
 		} catch (Exception $ex) {
 
