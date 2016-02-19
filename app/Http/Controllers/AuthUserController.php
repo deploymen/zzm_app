@@ -625,6 +625,7 @@ Class AuthUserController extends Controller {
 		$firstName = Request::input('first_name');
 		$lastName = Request::input('last_name', '');
 		$deviceId = Request::input('deviceId');
+		$role = Request::input('role');
 
 		if (!$email || !$firstName) {
 			return ResponseHelper::OutputJSON('fail', "missing parameters");
@@ -642,7 +643,7 @@ Class AuthUserController extends Controller {
 
 		try {
 			$user = new User;
-			$user->role = 'parent';
+			$user->role = $role;
 			$user->email = $email;
 			$user->register_from = 'app';
 

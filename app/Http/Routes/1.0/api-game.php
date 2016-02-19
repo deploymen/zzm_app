@@ -40,6 +40,8 @@ Route::group(['prefix' => '1.0/game'], function () {
 		Route::post('/play/{id}/result', 'ApiGameController@result');
 		Route::get('/play/{id}/request/'  , 'ApiGameController@request');
 
+		Route::post('/play/push-result/'  , 'ApiGameController@offlinePost');
+
 		Route::get('/play/{id}/request/{language}', 'ApiGameController@request');
 		// Route::get('/play/{id}/result', 'ApiGameController@winScreen');
 		Route::get('/result/log', 'ApiGameController@resultLog');
@@ -58,8 +60,3 @@ Route::group(['prefix' => '1.0/game'], function () {
 
 
 Route::get('1.0/set/nick', 'ApiProfileController@getNick');
-
-
-Route::get('foo', ['middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware', function () {
-    return 'Why herro there!';
-}]);

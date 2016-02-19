@@ -161,6 +161,9 @@ return [
 
 		'Chumper\Zipper\ZipperServiceProvider',
 		'Laravel\Socialite\SocialiteServiceProvider',
+		'GrahamCampbell\Throttle\ThrottleServiceProvider',
+		'Avanderbergh\Schoology\Saml2ServiceProvider',
+    	'Avanderbergh\Schoology\SchoologyServiceProvider',
 
 	],
 
@@ -210,7 +213,9 @@ return [
 		'Validator' => 'Illuminate\Support\Facades\Validator',
 		'View' => 'Illuminate\Support\Facades\View',
 		'Zipper' => 'Chumper\Zipper\Zipper',
-		'Socialite' => 'Laravel\Socialite\Facades\Socialite'
+		'Socialite' => 'Laravel\Socialite\Facades\Socialite',
+		'Throttle' => 'GrahamCampbell\Throttle\Facades\Throttle',
+		'Schoology' => 'Avanderbergh\Schoology\Facades\Schoology'
 	],
 
 ];
