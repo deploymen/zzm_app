@@ -528,6 +528,12 @@ Class ApiGameController extends Controller {
 		try{
 			$result = ZapZapQuestionHelper::GetUserMap($profileId);
 			$totalStar = UserMap::where('profile_id', $profileId)->sum('star');
+
+			$profile = GameProfile::find($profileId);
+
+			$profile->nickName1;
+			$profile->nickName2;
+			
 			$userType = 2;
 
 			if($userId){
@@ -572,8 +578,14 @@ Class ApiGameController extends Controller {
 	
 			return ResponseHelper::OutputJSON('success', '' , [
 					'profile' => [
+						'first_name' => $profile->first_name,
+						'last_name' => $profile->last_name,
+						'nick_name1' =>$profile->nickName1->name,
+						'nick_name2' =>$profile->nickName2->name,
+						'nick_name2' =>$profile->grade,
 						'total_star' => $totalStar,
 						'user_type' => $userType,
+						'game_code' => $gameCode,
 						] ,
 					'system_planet' => $systems
 					 ]);
