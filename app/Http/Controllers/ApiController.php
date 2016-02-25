@@ -22,8 +22,6 @@ use App\Models\AppVersion;
 
 class ApiController extends Controller {
 
-
-
 	public function subscribe($source = 'pre-launch'){
 
 		$email = Request::input("email");
@@ -207,12 +205,13 @@ class ApiController extends Controller {
 
 	public function getVersion(){
 		$device = Request::input('device');
+		$version = Request::input('version');
 
-		if(!$device){
+		if(!$device || !$version){
 			return ResponseHelper::OutputJSON('fail', 'missing parameter');
 		}
 
-		$appVersion = AppVersion::where('device', $device)->first();
+		$appVersion = AppVersion::where('device', $device)->where('version' , $version)->first();
 		if(!$appVersion){
 			return ResponseHelper::OutputJSON('fail', 'version not found');
 		}
@@ -223,7 +222,32 @@ class ApiController extends Controller {
 			]);
 	}
 
-	public function clearSession(){
-		Session::flush();
+	public function sendEmail(){
+		$sql = "
+			SELECT * FROM `table 99`
+		";
+
+		$email = DB::SELECT($sql);
+
+
+		for($j=0; $j<count($email); $j++){
+			$mail = $email[$j]->email;
+
+			if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
+				continue;
+			}
+
+			EmailHelper::SendEmail([
+				'about' => '',
+				'subject' => '',
+				'body' => 'emails.test',
+				'bodyHtml' => 'emails.test',
+				'toAddresses' => [$mail], //['support@932.xxx'],
+				'bccAddresses' => [],
+				'replyToAddresses' => ['no-reply@fxum.com'],
+				'data' => [],
+			]);
+		}
+		return 'success';
 	}
 }
