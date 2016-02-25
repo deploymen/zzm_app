@@ -23,7 +23,7 @@
 
 <div class="row">
     <div class="col-lg-8">
-        <h3>POST  /api/version</h3>
+        <h3>GET  /api/version</h3>
         <ul id="myTab" class="nav nav-tabs">
             <li class="active"><a href="#descriptions" data-toggle="tab">Explain</a>
             </li>
@@ -92,7 +92,7 @@
                 <pre class="prettyprint">
 {
   "status": "success",
-  "data": [
+  "data": {
         "version": 1.0
         "end_point": "http://staging.zapzapmath.com/api/1.0"
     }
