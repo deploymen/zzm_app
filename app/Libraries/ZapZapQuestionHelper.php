@@ -42,6 +42,7 @@ use App\Models\GameResultP15;
 use App\Models\GameResultP16;
 use App\Models\GameResultP17;
 use App\Models\GameResultP18;
+use App\Models\GameResultP21;
 use App\Models\GameResultP23;
 use App\Models\GameResultP32;
 use App\Models\GameQuestion;
@@ -56,7 +57,7 @@ use App\Models\LeaderboardPlanet;
 
 class ZapZapQuestionHelper{
 
-	public static function GetPlanetInfo($planetId){
+	public static function GetPlanetInfo( $planetId){
 		try{
 			$sql = "
 				SELECT t.`name` AS `game_type` , p.`id` ,p.`name` , p.`description` , p.`badges_metrics` , p.`question_count` , p.`enable` 

@@ -447,7 +447,20 @@ Class ApiGameController extends Controller {
 			}
 	}
 
-	public function getUserMap(){
+	public function getUserMapVersion($version){
+		// $version = Request::input('version');
+
+		switch ($version) {
+			case '1.0':
+				return $this->getUserMapV10();
+				break;
+
+			case '1.1':
+				return $this->getUserMapV11();
+				break;
+		}
+	}
+	public function getUserMapV10(){
 		$profileId = Request::input('game_code_profile_id');
 		$userId = Request::input('user_id');
 		$deviceId = Request::input('game_code_device_id');
@@ -505,6 +518,87 @@ Class ApiGameController extends Controller {
 		}
 	}
 
+	public function getUserMapV11(){
+		$profileId = Request::input('game_code_profile_id');
+		$userId = Request::input('user_id');
+		$deviceId = Request::input('game_code_device_id');
+		$gameCode = Request::input('game_code');
+
+		try{
+			$result = ZapZapQuestionHelper::GetUserMap($profileId);
+			$totalStar = UserMap::where('profile_id', $profileId)->sum('star');
+
+			$profile = GameProfile::find($profileId);
+
+			$profile->nickName1;
+			$profile->nickName2;
+			
+			$userType = 2;
+
+			if($userId){
+				$user = User::find($userId);
+				
+				$userType = $user->paid;
+			}
+
+			$systems = [];		
+			$prevSystemId = 0;
+
+			$prevPlanetStar = 5;
+			$prevPlanetEnable = true;
+
+			for($i=0; $i<count($result); $i++){
+				$r = $result[$i];
+
+				if($r->system_id != $prevSystemId){
+					array_push($systems, [
+						'system_id' => $r->system_id,
+						'name' => $r->system_name,
+						'planets' => []
+					]);
+				}
+
+				$planetEnable = ($prevPlanetStar >= 3) && $prevPlanetEnable;
+				$prevPlanetEnable = $planetEnable;
+		
+
+				array_push($systems[count($systems)-1]['planets'], [
+					'planet_id' => $r->planet_id,
+					'name' => $r->planet_name,
+					'description' => $r->description,
+					'star' => $r->star,
+					'enable' => ($planetEnable)?1:0,
+
+				]);				
+
+				$prevPlanetStar = $r->star;
+				$prevSystemId = $r->system_id;
+			}
+	
+			return ResponseHelper::OutputJSON('success', '' , [
+					'profile' => [
+						'first_name' => $profile->first_name,
+						'last_name' => $profile->last_name,
+						'nick_name1' =>$profile->nickName1->name,
+						'nick_name2' =>$profile->nickName2->name,
+						'nick_name2' =>$profile->grade,
+						'total_star' => $totalStar,
+						'user_type' => $userType,
+						'game_code' => $gameCode,
+						] ,
+					'system_planet' => $systems
+					 ]);
+		
+		} catch (Exception $ex) {
+
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiGameController > getUserMap',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
+	}
+
 	public function clearLeaderBoard(){
 		try{
 			$sql = "
@@ -522,7 +616,7 @@ Class ApiGameController extends Controller {
 		}
 	}
 
-	public function leaderBoardPlanet($planetId){
+	public function leaderBoardPlanet($version ,$planetId){
 		try{
 
 			$leaderBoardPlanet = LeaderBoardPlanet::where('planet_id', $planetId)->where('rank' ,'<' ,101)->orderBy('rank')->get()->toArray();
@@ -581,6 +675,9 @@ Class ApiGameController extends Controller {
 						case '15':$questions = ZapZapQuestionHelper::GetQuestionP15($p->id,$difficulty,$p->question_count); break;
 						case '16':$questions = ZapZapQuestionHelper::GetQuestionP16($p->id,$difficulty,$p->question_count); break;
 						case '18':$questions = ZapZapQuestionHelper::GetQuestionP18($p->id,$difficulty,$p->question_count); break;
+						case '19':$questions = ZapZapQuestionHelper::GetQuestionP19($p->id,$difficulty,$p->question_count); break;
+						case '20':$questions = ZapZapQuestionHelper::GetQuestionP20($p->id,$difficulty,$p->question_count); break;
+						case '21':$questions = ZapZapQuestionHelper::GetQuestionP21($p->id,$difficulty,$p->question_count); break;
 						case '23':$questions = ZapZapQuestionHelper::GetQuestionP23($p->id,$difficulty,$p->question_count); break;
 						case '32':$questions = ZapZapQuestionHelper::GetQuestionP32($p->id,$difficulty,$p->question_count); break;
 				
@@ -845,77 +942,6 @@ Class ApiGameController extends Controller {
 		}
 
 		return ResponseHelper::OutputJSON('success');
-
 	}
 
-//====================================== v2.0 ================================================
-	
-	public function getUserMapV2(){
-		$profileId = Request::input('game_code_profile_id');
-		$userId = Request::input('user_id');
-		$deviceId = Request::input('game_code_device_id');
-		$gameCode = Request::input('game_code');
-
-		try{
-			$result = ZapZapQuestionHelper::GetUserMap($profileId);
-			$totalStar = UserMap::where('profile_id', $profileId)->sum('star');
-			$userType = 2;
-
-			if($userId){
-				$user = User::find($userId);
-				
-				$userType = $user->paid;
-			}
-
-			$systems = [];		
-			$prevSystemId = 0;
-
-			$prevPlanetStar = 5;
-			$prevPlanetEnable = true;
-
-			for($i=0; $i<count($result); $i++){
-				$r = $result[$i];
-
-				if($r->system_id != $prevSystemId){
-					array_push($systems, [
-						'system_id' => $r->system_id,
-						'name' => $r->system_name,
-						'planets' => []
-					]);
-				}
-
-				$planetEnable = ($prevPlanetStar >= 3) && $prevPlanetEnable;
-				$prevPlanetEnable = $planetEnable;
-		
-
-				array_push($systems[count($systems)-1]['planets'], [
-					'planet_id' => $r->planet_id,
-					'name' => $r->planet_name,
-					'description' => $r->description,
-					'star' => $r->star,
-					'enable' => ($planetEnable)?1:0,
-
-				]);				
-
-				$prevPlanetStar = $r->star;
-				$prevSystemId = $r->system_id;
-			}
-	
-			return ResponseHelper::OutputJSON('success', '' , [
-					'profile' => [
-						'total_star' => $totalStar,
-						'user_type' => $userType,
-						] ,
-					'system_planet' => $systems
-					 ]);
-		
-		} catch (Exception $ex) {
-
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiGameController > getUserMap',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
-	}
 }
