@@ -47,7 +47,7 @@ use App\Models\IdCounter;
 Class ApiGameController extends Controller {
 
 	//GET QUESTION
-	public function request($planetId , $language = 'en') {	
+	public function request($version , $planetId , $language = 'en') {	
 
 		$gameCode = Request::input('game_code');
 		$difficulty = Request::input('difficulty');
@@ -188,7 +188,7 @@ Class ApiGameController extends Controller {
 	}
 
 	//SUBMIT RESULT
-	public function result($planetId) {
+	public function result($version ,$planetId) {
 		$Planet = GamePlanet::find($planetId);
 		$jsonGameResult = Request::input('game_result');
 		$hash = Request::input('hash');
@@ -617,7 +617,7 @@ Class ApiGameController extends Controller {
 		}
 	}
 
-	public function leaderBoardPlanet($planetId){
+	public function leaderBoardPlanet($version ,$planetId){
 		try{
 
 			$leaderBoardPlanet = LeaderBoardPlanet::where('planet_id', $planetId)->where('rank' ,'<' ,101)->orderBy('rank')->get()->toArray();
@@ -676,6 +676,9 @@ Class ApiGameController extends Controller {
 						case '15':$questions = ZapZapQuestionHelper::GetQuestionP15($p->id,$difficulty,$p->question_count); break;
 						case '16':$questions = ZapZapQuestionHelper::GetQuestionP16($p->id,$difficulty,$p->question_count); break;
 						case '18':$questions = ZapZapQuestionHelper::GetQuestionP18($p->id,$difficulty,$p->question_count); break;
+						case '19':$questions = ZapZapQuestionHelper::GetQuestionP19($p->id,$difficulty,$p->question_count); break;
+						case '20':$questions = ZapZapQuestionHelper::GetQuestionP20($p->id,$difficulty,$p->question_count); break;
+						case '21':$questions = ZapZapQuestionHelper::GetQuestionP21($p->id,$difficulty,$p->question_count); break;
 						case '23':$questions = ZapZapQuestionHelper::GetQuestionP23($p->id,$difficulty,$p->question_count); break;
 						case '32':$questions = ZapZapQuestionHelper::GetQuestionP32($p->id,$difficulty,$p->question_count); break;
 				
@@ -940,7 +943,6 @@ Class ApiGameController extends Controller {
 		}
 
 		return ResponseHelper::OutputJSON('success');
-
 	}
 
 }
