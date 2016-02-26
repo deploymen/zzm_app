@@ -3,9 +3,16 @@ use Illuminate\Support\Facades\Route;
 // =======================================================================//
 // ! Game Profile(Kid)										 			      //
 // =======================================================================//
-Route::group(['prefix' => '{version}'], function () {
+Route::group(['prefix' => '/2.0'], function () {
 
-	Route::group(['prefix' => 'game'], function () {
+	Route::group(['middleware' => 'auth.game'], function () {
+		Route::group(['prefix' => '/game/profiles'], function () {
+				Route::put('/', 'ApiProfileController@gameUpdate');
+		});
+	});
+
+	Route::group(['prefix' => '/game'], function () {
+
 		Route::get('/create-package', 'ApiGameController@createPackage');
 
 		Route::post('/sign-up', 'AuthUserController@signUpApp');
@@ -26,8 +33,6 @@ Route::group(['prefix' => '{version}'], function () {
 		Route::post('/check-game-code' , 'ApiGameController@checkGameCode');
 
 		Route::group(['middleware' => 'auth.game'], function () {
-			Route::put('/profiles', 'ApiProfileController@gameUpdate');
-
 			Route::post('/verify-transfer', 'ApiProfileController@verifyCode');
 			Route::post('/profile-transfer', 'ApiProfileController@profileTransfer');
 
@@ -44,7 +49,7 @@ Route::group(['prefix' => '{version}'], function () {
 			Route::get('/result/system-planet/progress', 'ApiGameController@systemPlanetProgress');
 			Route::get('/result/system-planet/play/planet/{planet_id}', 'ApiGameController@systemPlanetPlay');
 
-			Route::get('/user-map', 'ApiGameController@getUserMapVersion');
+			Route::get('/user-map', 'ApiGameController@getUserMapV2');
 
 			Route::get('/result/only-system', 'ResultController@onlySystem');
 			Route::get('/result/only-planet', 'ResultController@onlyPlanet');
@@ -55,4 +60,5 @@ Route::group(['prefix' => '{version}'], function () {
 
 
 	Route::get('set/nick', 'ApiProfileController@getNick');
+
 });

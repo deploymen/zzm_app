@@ -42,6 +42,7 @@ use App\Models\GameResultP15;
 use App\Models\GameResultP16;
 use App\Models\GameResultP17;
 use App\Models\GameResultP18;
+use App\Models\GameResultP21;
 use App\Models\GameResultP23;
 use App\Models\GameResultP32;
 use App\Models\GameQuestion;

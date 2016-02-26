@@ -66,7 +66,6 @@ Route::group(['prefix' => 'docs'], function(){
 	Route::get('/api.game-leaderboard-world-get', function(){ return view('contents.docs.api-game-leaderboard-world-get'); });
 	Route::get('/api.game-leaderboard-system-get', function(){ return view('contents.docs.api-game-leaderboard-system-get'); });
 	Route::get('/api.game-leaderboard-planet-get', function(){ return view('contents.docs.api-game-leaderboard-planet-get'); });
-	Route::get('/api.version-get', function(){ return view('contents.docs.api-version-get'); });
 
 
 	Route::get('/api.game-play-request-get-p01-150', function(){ return view('contents.docs.api-game-play-request-get-p01-150'); });
