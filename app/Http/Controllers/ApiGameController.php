@@ -447,8 +447,8 @@ Class ApiGameController extends Controller {
 			}
 	}
 
-	public function getUserMapVersion($version){
-		// $version = Request::input('version');
+	public function getUserMapVersion(){
+		$version = Request::input('version');
 
 		switch ($version) {
 			case '1.0':
