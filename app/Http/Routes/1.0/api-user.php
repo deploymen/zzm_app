@@ -22,7 +22,7 @@ Route::group(['middleware' => 'auth.user'], function () {
 // =======================================================================//
 Route::group(['middleware' => 'auth.user'], function () {
 	Route::group(['middleware' => 'auth.teacher'], function () {
-		Route::group(['prefix' => '1.0/class'], function () {
+		Route::group(['prefix' => 'class'], function () {
 			Route::get('/', 'ApiClassController@get');
 			Route::post('/', 'ApiClassController@create');
 			Route::put('/{id}', 'ApiClassController@update');
@@ -39,16 +39,14 @@ Route::group(['middleware' => 'auth.user'], function () {
 
 Route::group(['middleware' => 'auth.user'], function () {
 	Route::group(['middleware' => 'auth.parent'], function () {
-		Route::group(['prefix' => '1.0/user'], function () {
+		Route::group(['prefix' => 'user'], function () {
 			Route::put('/{id}/edit', 'AuthUserController@update');
 		});
 	});
 });
 
-Route::post('1.0/game-code/anonymous', 'ApiProfileController@GenerateAnonymousGameCode');
-
 Route::group(['middleware' => 'auth.user'], function () {
-	Route::group(['prefix' => '1.0/profiles'], function () {
+	Route::group(['prefix' => 'profiles'], function () {
 /* fade domain name */
 		Route::get('/result/only-system', 'ResultController@onlySystem');
 		Route::get('/result/only-planet', 'ResultController@onlyPlanet');
@@ -60,13 +58,12 @@ Route::group(['middleware' => 'auth.user'], function () {
 	});
 });
 
-
 //third party login
-	Route::get('1.0/auth/facebook', 'AuthUserController@redirectToProvider');
-	Route::get('1.0/auth/facebook/callback', 'AuthUserController@handleProviderCallback');
+	Route::get('auth/facebook', 'AuthUserController@redirectToProvider');
+	Route::get('auth/facebook/callback', 'AuthUserController@handleProviderCallback');
 
-	Route::post('1.0/auth/facebook/signup', 'AuthUserController@facebookSignUp');
+	Route::post('auth/facebook/signup', 'AuthUserController@facebookSignUp');
 	
 Route::group(['middleware' => 'auth.user'], function () {
-	Route::delete('1.0/remove/account', 'AuthUserController@deleteAccount');
+	Route::delete('remove/account', 'AuthUserController@deleteAccount');
 });

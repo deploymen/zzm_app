@@ -2,8 +2,6 @@
 Route::get('/', function () {return die('zzm-api');});
 Route::get('/version', 'ApiController@getVersion');
 
-Route::group(['prefix' => '1.0'], function () {
-
 	Route::pattern('role', '(parent)|(teacher)|(admin)|(content)|(investor)');
 
 	// =======================================================================//
@@ -51,5 +49,3 @@ Route::group(['prefix' => '1.0'], function () {
 	Route::get('check-ip-details', 'ApiCheckingController@CheckIpDetails');
 
 	Route::get('send/email', 'ApiController@sendEmail');
-
-});	
