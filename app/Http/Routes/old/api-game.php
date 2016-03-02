@@ -3,7 +3,7 @@ use Illuminate\Support\Facades\Route;
 // =======================================================================//
 // ! Game Profile(Kid)										 			      //
 // =======================================================================//
-Route::group(['prefix' => '/2.0'], function () {
+Route::group(['prefix' => '/1.0'], function () {
 
 	Route::group(['middleware' => 'auth.game'], function () {
 		Route::group(['prefix' => '/game/profiles'], function () {

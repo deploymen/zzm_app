@@ -3,7 +3,7 @@
 // =======================================================================//
 // ! Admin | Content | Investor											  //
 // =======================================================================//
-Route::group(['prefix' => '/2.0'], function () {
+Route::group(['prefix' => '/1.0'], function () {
 
 	Route::group(['middleware' => 'auth.user'], function () {
 		Route::group(['middleware' => 'auth.content'], function () {

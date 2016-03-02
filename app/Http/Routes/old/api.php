@@ -5,7 +5,7 @@ Route::get('/version', 'ApiController@getVersion');
 Route::pattern('role', '(parent)|(teacher)|(admin)|(content)|(investor)');
 
 
-Route::group(['prefix' => '2.0'], function () {
+Route::group(['prefix' => '1.0'], function () {
 
 	// =======================================================================//
 	// ! Auth Related												          //
