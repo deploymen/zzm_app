@@ -88,23 +88,7 @@
 													</tr>
 													
 													<tr align="left" valign="top">
-														<td bgcolor="#FFFFFF" colspan="5" height="16" style="background-color:#FFFFFF;">
-															<a href="https://goo.gl/0Ugux8" target="_blank" style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif;font-size:12px;color:#838383; font-style: italic; text-decoration:none;">
-																No 1129, Block A3,
-																Leisure Commerce Square,
-																No. 9, Jalan PJS 8/9,
-																Bandar Sunway,
-																46150 Petaling Jaya
-															</a>
-														</td>
-													</tr>
-													<tr align="left" valign="top">
 														<td bgcolor="#FFFFFF" colspan="5" style="background-color:#FFFFFF; border-bottom:1px dotted #E3E3E3;font-size:3px;" height="5">&nbsp;</td>
-													</tr>
-													<tr align="left" valign="top">
-														<td bgcolor="#FFFFFF" colspan="5" height="16" style="background-color:#FFFFFF;">
-															<a style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif;font-size:13px;color:#838383; text-decoration:none;" href="https://www.zapzapmath.com" target="_blank">www.zapzapmath.com</a> <span style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif;font-size:13px;color:#838383;">|</span> <a style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif;font-size:13px;color:#838383; text-decoration:none;" href="tel:+60378659023">+603 7865 9023</a>
-														</td>
 													</tr>
 													<tr align="left" valign="top">
 														<td bgcolor="#FFFFFF" colspan="5" style="background-color:#FFFFFF; border-bottom:1px dotted #E3E3E3;font-size:3px;" height="5">&nbsp;</td>
