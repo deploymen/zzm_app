@@ -158,7 +158,7 @@ Class AuthUserController extends Controller {
 						'app_store_address' => config('app.app_store_url'),
 						'username' => $email,
 						'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
-						'activation_link' => config('app.website_url') . "/api/1.0/auth/activate/{$secretKey}",
+						'activation_link' => config('app.website_url') . "/api/auth/activate/{$secretKey}",
 						'email_support' => config('app.support_email'),
 						'social_media_links' => config('app.fanpage_url'),
 					]);
@@ -764,7 +764,7 @@ Class AuthUserController extends Controller {
 			'app_store_address' => config('app.app_store_url'),
 			'username' => $email,
 			'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
-			'activation_link' => config('app.website_url') . "/api/1.0/auth/activate/{$secretKey}",
+			'activation_link' => config('app.website_url') . "/api/auth/activate/{$secretKey}",
 			'email_support' => config('app.support_email'),
 			'social_media_links' => config('app.fanpage_url'),
 		]);

@@ -36,6 +36,8 @@ Class ApiClassController extends Controller {
 		try {
 			$userId = Request::input('user_id');
 			$className = Request::input('name');
+			// $grade = Request::input('grade');
+			// $age = Request::input('age');
 
 			if (!$className || !$userId) {
 				return ResponseHelper::OutputJSON('fail', "missing parameters");
@@ -49,6 +51,8 @@ Class ApiClassController extends Controller {
 			$gameClass = new GameClass;
 			$gameClass->user_id = $userId;
 			$gameClass->name = $className;
+			// $gameClass->grade = $grade;
+			// $gameClass->age = $age;
 			$gameClass->save();
 
 			return ResponseHelper::OutputJSON('success', '' , $gameClass);
@@ -81,6 +85,8 @@ Class ApiClassController extends Controller {
        		}
 
 			$gameClass->name = $request->name;
+			// $gameClass->grade = $request->grade;
+			// $gameClass->age = $request->age;
 			$gameClass->save();
 
 			return ResponseHelper::OutputJSON('success');
