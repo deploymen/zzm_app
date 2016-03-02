@@ -454,10 +454,12 @@ Class ApiGameController extends Controller {
 			case '1.0':
 				return $this->getUserMapV10();
 				break;
-
 			case '1.1':
 				return $this->getUserMapV11();
 				break;
+
+			default: return ResponseHelper::OutputJSON('fail', 'version not support');
+
 		}
 	}
 	public function getUserMapV10(){
