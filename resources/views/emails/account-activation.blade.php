@@ -27,7 +27,7 @@
 						<!--START-outer-table-holding-cell-->
 						<td valign="top" align="left" style="background-color:#448ccb; font:15px/1.25em 'Helvetica Neue',Arial,Helvetica;">
 							<!-- START-inner-table-content -->
-							<table cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" style="background-color:#FFFFFF; border: none; padding-bottom:50px; margin: 50px auto 0px auto; width: 600px">
+							<table cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" style="background-color:#FFFFFF; border: none; padding-bottom:10px; margin: 50px auto 0px auto; width: 600px">
 								<tbody>
 									<tr width="100%">
 										<td valign="top" align="left" bgcolor="#FFFFFF" style="background-color: #FFFFFF; text-align:center">
@@ -71,42 +71,23 @@
 							<table cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF" align="center" style="width: 600px; text-align:center; margin-bottom:50px;">
 								<tbody>
 									<tr>
-										<td>
-											<table cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF" style="margin-bottom:20px; width: 400px; text-align:center;">
+										<td style="padding: 30px;">
+											<table cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF" style="margin-bottom:20px; width: 100%; text-align:center;">
 												<tbody>
-													<tr align="center" valign="middle">
-														<td bgcolor="#FFFFFF" width="150" rowspan="8" style="background-color:#FFFFFF;">
-															<a href="https://www.zapzapmath.com" target="_blank" style="text-decoration:none;">
-																<img src="https://www.zapzapmath.com/assets/img/edm/zapzap-logo.png" alt="Zap Zap Math Icon Logo" width="100" height="100">
-															</a>
-														</td>
-													</tr>
-													<tr align="left" valign="top">
-														<td bgcolor="#FFFFFF" colspan="5" style="background-color:#FFFFFF; border-bottom:1px dotted #E3E3E3;">
-															<p style="font-family:'Open Sans',Calibri,Arial,Helvetica,sans-serif;font-size:14px;color:#636363;"><strong>Zap Zap Math</strong></p>
-														</td>
-													</tr>
-													
-													<tr align="left" valign="top">
-														<td bgcolor="#FFFFFF" colspan="5" style="background-color:#FFFFFF; border-bottom:1px dotted #E3E3E3;font-size:3px;" height="5">&nbsp;</td>
-													</tr>
-													<tr align="left" valign="top">
-														<td bgcolor="#FFFFFF" colspan="5" style="background-color:#FFFFFF; border-bottom:1px dotted #E3E3E3;font-size:3px;" height="5">&nbsp;</td>
-													</tr>
 													<tr align="left" valign="bottom">
-														<td bgcolor="#FFFFFF" height="30" style="background-color:#FFFFFF;">
+														<td bgcolor="#FFFFFF" height="30" width="20%" style="background-color:#FFFFFF;text-align:center">
 															<a href="#" target="_blank"><img src="https://www.zapzapmath.com/assets/img/edm/icon-twitter.png" alt="Twitter Icon"></a>
 														</td>
-														<td bgcolor="#FFFFFF" height="30" style="background-color:#FFFFFF;">
+														<td bgcolor="#FFFFFF" height="30" width="20%" style="background-color:#FFFFFF;text-align:center">
 															<a href="#" target="_blank"><img src="https://www.zapzapmath.com/assets/img/edm/icon-pinterest.png" alt="Pinterest Icon"></a>
 														</td>
-														<td bgcolor="#FFFFFF" height="30" style="background-color:#FFFFFF;">
+														<td bgcolor="#FFFFFF" height="30" width="20%" style="background-color:#FFFFFF;text-align:center">
 															<a href="#" target="_blank"><img src="https://www.zapzapmath.com/assets/img/edm/icon-youtube.png" alt="YouTube Icon"></a>
 														</td>
-														<td bgcolor="#FFFFFF" height="30" style="background-color:#FFFFFF;">
+														<td bgcolor="#FFFFFF" height="30" width="20%" style="background-color:#FFFFFF;text-align:center">
 															<a href="#" target="_blank"><img src="https://www.zapzapmath.com/assets/img/edm/icon-facebook.png" alt="Facebook Icon"></a>
 														</td>
-														<td bgcolor="#FFFFFF" height="30" style="background-color:#FFFFFF;">
+														<td bgcolor="#FFFFFF" height="30" width="20%" style="background-color:#FFFFFF;text-align:center">
 															<a href="#" target="_blank"><img src="https://www.zapzapmath.com/assets/img/edm/icon-instagram.png" alt="Instagram Icon"></a>
 														</td>
 													</tr>
