@@ -44,8 +44,6 @@ Class AuthUserController extends Controller {
 		// }
 
 		$username = Request::input('email'); //username = email
-		$password = Request::input('password');
-		$password_sha1 = sha1($password . Config::get('app.auth_salt'));
 		$name = Request::input('name');
 		$email = Request::input('email');
 		$country = Request::input('country', '');
@@ -621,7 +619,10 @@ Class AuthUserController extends Controller {
 	}
 
 	public function signUpApp() {
-		$email = Request::input('email', '');
+		$email = Request::input('email');
+		$password = Request::input('password');
+		$password_sha1 = sha1($password . Config::get('app.auth_salt'));
+
 		$firstName = Request::input('first_name');
 		$lastName = Request::input('last_name', '');
 		$deviceId = Request::input('deviceId');
@@ -654,6 +655,7 @@ Class AuthUserController extends Controller {
 			$access = new UserAccess;
 			$access->user_id = $user->id;
 			$access->username = $email;
+			$access->password_sha1 = $password_sha1;
 			$access->access_token = $accessToken;
 			$access->access_token_issue_at = DB::raw('NOW()');
 			$access->access_token_issue_ip = Request::ip();
