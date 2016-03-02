@@ -93,8 +93,9 @@
 {
   "status": "success",
   "data": {
+        " device": "ios-1"
         "version": 1.0
-        "end_point": "http://staging.zapzapmath.com/api/1.0"
+        "end_point": "version=1.0"
     }
 
 }

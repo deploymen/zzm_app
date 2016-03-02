@@ -6,7 +6,7 @@
 
 Route::group(['middleware' => 'auth.user'], function () {
 	Route::group(['middleware' => 'auth.parent'], function () {
-		Route::group(['prefix' => '/1.0/profiles'], function () {
+		Route::group(['prefix' => '/profiles'], function () {
 			Route::get('/', 'ApiProfileController@get');
 			Route::post('/', 'ApiProfileController@create');
 			Route::get('/{id}', 'ApiProfileController@getProfile');

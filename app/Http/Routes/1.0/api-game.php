@@ -3,7 +3,7 @@ use Illuminate\Support\Facades\Route;
 // =======================================================================//
 // ! Game Profile(Kid)										 			      //
 // =======================================================================//
-Route::group(['prefix' => '{version}'], function () {
+Route::group(['prefix' => '1.0'], function () {
 
 	Route::group(['prefix' => 'game'], function () {
 		Route::get('/create-package', 'ApiGameController@createPackage');
