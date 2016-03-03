@@ -64,3 +64,4 @@ Route::group(['middleware' => 'auth.user'], function () {
 //third party login
 	Route::get('1.0/auth/facebook', 'AuthUserController@redirectToProvider');
 	Route::get('1.0/auth/facebook/callback', 'AuthUserController@handleProviderCallback');
+	Route::post('1.0/auth/facebook/signup', 'AuthUserController@facebookSignUp');
