@@ -48,3 +48,5 @@ Route::post('1.0/launch-notification', 'ApiController@launchNotification');
 Route::get('1.0/status', 'ApiCheckingController@CheckGameStatus');
 
 Route::get('1.0/check-ip-details', 'ApiCheckingController@CheckIpDetails');
+
+Route::get('saml/acs', 'schoologyController@schoology');
