@@ -22,6 +22,7 @@ Class schoologyController extends Controller {
 
 	public function schoology2(){
 		$users = Schoology::apiResult('users');
+		var_export($users); die();
 	}
 }
 

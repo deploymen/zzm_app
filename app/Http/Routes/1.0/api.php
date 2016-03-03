@@ -51,4 +51,3 @@ Route::get('check-ip-details', 'ApiCheckingController@CheckIpDetails');
 Route::get('send/email', 'ApiController@sendEmail');
 
 Route::get('/saml/acs', 'schoologyController@schoology');
-Route::get('/saml/authorize', 'schoologyController@schoology2');
