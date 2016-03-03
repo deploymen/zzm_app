@@ -327,6 +327,7 @@ Class ApiProfileController extends Controller {
 		$nickname2 = Request::input('nickname2');
 		$avatarId = Request::input('avatar_id');
 		$age = Request::input('age' , 0);
+		$grade = Request::input('grade', 'preschool')
 		
 
 		try {
@@ -376,6 +377,7 @@ Class ApiProfileController extends Controller {
 			$profile->nickname2 = $nickname2;
 			$profile->avatar_id = $avatarId;
 			$profile->age = $age;
+			$profile->grade = $grade;
 			$profile->save();
 
 			return ResponseHelper::OutputJSON('success', '', $profile->toArray());
