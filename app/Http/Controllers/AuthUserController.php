@@ -774,6 +774,12 @@ Class AuthUserController extends Controller {
 	 *
 	 * @return Response
 	 */
+//Socialite
+	/**
+	 * Redirect the user to the GitHub authentication page.
+	 *
+	 * @return Response
+	 */
 	public function redirectToProvider(Request $request) {
 		return Socialite::driver('facebook')->redirect();
 	}
@@ -795,10 +801,10 @@ Class AuthUserController extends Controller {
 
 		if($userExternalId){
 		
-			$user = User::select('id' , 'role', 'name')->find($userExternalId->user_id);
+			$user = User::select('id','role', 'name', 'register_from')->find($userExternalId->user_id);
 			$userAccess = UserAccess::where('user_id' , $userExternalId->user_id)->first();
 
-			if ($userAccess->access_token == '') {
+			if($userAccess->access_token == '') {
 				$accessToken = AuthHelper::GenerateAccessToken($userAccess->user_id);
 				$userAccess->access_token = $accessToken;
 				$userAccess->access_token_issue_at = DB::Raw('NOW()');
@@ -817,6 +823,14 @@ Class AuthUserController extends Controller {
 			}
 
 			$cookie = Cookie::make('access_token', $userAccess->access_token);
+
+			$log = new LogSignInUser;
+			$log->username = $userAccess->username;
+			$log->password_sha1 = '';
+			$log->success = 1;
+			$log->created_ip = Request::ip();
+			$log->save();
+
 			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
 		}
 
@@ -826,22 +840,12 @@ Class AuthUserController extends Controller {
 		if(!$userAccess){
 
 			//create new
-			$newUser = ApiUserHelper::Register('parent' , $fbUser->name , $fbUser->email , '' , $fbUser->id , sha1($fbUser->id) );
-			$newProfile = ApiProfileHelper::newProfile($newUser , 0 , 'Default Profile' , '' , '5_or_younger' , '' , 'preschool' , '', 999 , 999 , 999);
-
-			$user = User::select('id' , 'role', 'name')->find($newUser);
-			$userExternalId = UserExternalId::where('user_id' , $newUser)->update(['facebook_id' => $fbUser->id]);
-			$userAccess = UserAccess::where('user_id' , $user->id)->first();
-
-			$firstLogin = 1;
-
-			$cookie = Cookie::make('access_token', $userAccess->access_token);
-			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
+			return redirect(url(env('WEBSITE_URL').'/user/redirect-signup'))->with('name' , $fbUser->name)->with('email' , $fbUser->email)->with('facebook_id' , $fbUser->id);
 
 		}
 
 		//sync account
-		$user = User::select('id' , 'role', 'name')->find($userAccess->user_id);
+		$user = User::select('id' , 'role', 'name', 'register_from')->find($userAccess->user_id);
 		$userExternalId = UserExternalId::where('user_id' , $userAccess->user_id)->update(['facebook_id' => $fbUser->id ]);
 		$checkFirstLogin = LogSignInUser::where('username' , $userAccess->username)->where('success' , 1)->first();
 
@@ -850,6 +854,83 @@ Class AuthUserController extends Controller {
 		}
 
 		$cookie = Cookie::make('access_token', $userAccess->access_token);
+
+		$log = new LogSignInUser;
+		$log->username = $userAccess->username;
+		$log->password_sha1 = '';
+		$log->success = 1;
+		$log->created_ip = Request::ip();
+		$log->save();
+
 		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
+	}
+
+	public function deleteAccount(){
+		$userId = Request::input('user_id');
+
+		$user = User::find($userId);
+		$userAccess = UserAccess::find($userId);		
+		$gameProfile = GameProfile::where('user_id' , $userId )->get();
+		$userSetting = UserSetting::find($userId);
+		$userExternalId = UserExternalId::find($userId);
+
+		if(!$user || !$userAccess || !$gameProfile){
+			return ResponseHelper::OutputJSON('fail' , 'user not found');
+		}
+
+		$user->delete();
+		$userAccess->delete();
+		$userSetting->delete();
+		$userExternalId->delete();
+		
+		foreach($gameProfile as $gameProfiles){
+			$gameCode = GameCode::where('profile_id' , $gameProfiles->id)->delete();
+			$gameProfiles->delete();
+		}
+
+		return ResponseHelper::OutputJSON('success');
+
+	}
+
+	public function facebookSignUp(){
+		$role = Request::input('role');
+		$name = Request::input('name');
+		$email = Request::input('email');
+		$facebook_id = Request::input('facebook_id');
+
+		$classId = 0;
+		$newUser = ApiUserHelper::Register($role , $name , $email , '' , $facebook_id , '' , 'facebook');
+
+		if($role == 'teacher'){
+			$gameClass = new GameClass;
+			$gameClass->user_id = $newUser;
+			$gameClass->name = 'Default Class';
+			$gameClass->save();
+
+			$classId = $gameClass->id;
+		}
+
+		$newProfile = ApiProfileHelper::newProfile($newUser , $classId , 'Default Profile' , '' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
+
+		$user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser);
+		$userExternalId = UserExternalId::where('user_id' , $newUser)->update(['facebook_id' => $facebook_id ]);
+		$userAccess = UserAccess::where('user_id' , $user->id)->first();
+
+		$firstLogin = 1;
+
+		$cookie = Cookie::make('access_token', $userAccess->access_token);
+
+		$log = new LogSignInUser;
+		$log->username = $userAccess->username;
+		$log->password_sha1 = '';
+		$log->success = 1;
+		$log->created_ip = Request::ip();
+		$log->save();
+
+		return ResponseHelper::OutputJSON('success', '', ['user' => $user], [
+			'X-access-token' => $userAccess->access_token,
+		], [
+			'access_token' => $userAccess->access_token,
+		]);
 	}
 }
