@@ -11,6 +11,26 @@ use Socialite;
 use Auth;
 use Schoology;
 
+use App\Models\GameCode;
+use App\Models\GameClass;
+use App\Models\GameProfile;
+use App\Models\IdCounter;
+use App\Models\LogAccountActivate;
+use App\Models\LogPasswordReset;
+use App\Models\LogSignInUser;
+use App\Models\User;
+use App\Models\UserAccess;
+use App\Models\UserExternalId;
+use App\Models\UserSetting;
+use App\Libraries\AuthHelper;
+use App\Libraries\DatabaseUtilHelper;
+use App\Libraries\EmailHelper;
+use App\Libraries\LogHelper;
+use App\Libraries\ResponseHelper;
+use App\Libraries\ZapZapHelper;
+use App\Libraries\ApiUserHelper;
+use App\Libraries\ApiProfileHelper;
+
 Class AuthSchoologyController extends Controller {
 
 	public function schoology() {
@@ -62,12 +82,18 @@ Class AuthSchoologyController extends Controller {
 			$userAccess = UserAccess::where('username' , $schoologyUser['original']['email'])->first();
 
 			if(!$userAccess){
+				$password_sha1 = sha1($schoologyUser['original']['id']);
+				$userId = ApiUserHelper::Register('teacher', $schoologyUser['original']['name'] , $schoologyUser['original']['email'], '', $schoologyUser['original']['email'], $password_sha1, 'schoology' );
 
-				//create new
-				return redirect(url(env('WEBSITE_URL').'/user/redirect-signup'))->with('name' , $schoologyUser['original']['name'])->with('email' , $schoologyUser['original']['email'])->with('schoology_id' , $schoologyUser['original']['id']);
+				$gameClass = new GameClass;
+				$gameClass->user_id = $userId;
+				$gameClass->name = 'Default Class';
+				$gameClass->save();
 
+				$classId = $gameClass->id;
+
+				$newProfile = ApiProfileHelper::newProfile($userId , $classId , 'Default Profile' , '' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
 			}
-
 			//sync account
 			$user = User::select('id' , 'role', 'name', 'register_from')->find($userAccess->user_id);
 			$userExternalId = UserExternalId::where('user_id' , $userAccess->user_id)->update(['schoology_id' => $schoologyUser['original']['id'] ]);
