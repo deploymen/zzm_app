@@ -82,17 +82,19 @@ Class AuthSchoologyController extends Controller {
 			$userAccess = UserAccess::where('username' , $schoologyUser['original']['email'])->first();
 
 			if(!$userAccess){
-				$password_sha1 = sha($schoologyUser['original']['id']);
-				$userId = ApiUserHelper::Register('teacher', $schoologyUser['original']['name'] , $schoologyUser['original']['email'], '', $schoologyUser['original']['id'], $password_sha1, 'schoology' ,$deviceId = '');
+				return redirect(url(env('WEBSITE_URL').'/user/redirect-signup/schoology'))->with('name' , $schoologyUser['original']['name'])->with('email' , $schoologyUser['original']['email'])->with('schoology_id' , $schoologyUser['original']['id']);
 
-				$gameClass = new GameClass;
-				$gameClass->user_id = $userId;
-				$gameClass->name = 'Default Class';
-				$gameClass->save();
+				// $password_sha1 = sha($schoologyUser['original']['id']);
+				// $userId = ApiUserHelper::Register('teacher', $schoologyUser['original']['name'] , $schoologyUser['original']['email'], '', $schoologyUser['original']['id'], $password_sha1, 'schoology' ,$deviceId = '');
 
-				$classId = $gameClass->id;
+				// $gameClass = new GameClass;
+				// $gameClass->user_id = $userId;
+				// $gameClass->name = 'Default Class';
+				// $gameClass->save();
 
-				$newProfile = ApiProfileHelper::newProfile($userId , $classId , 'Default Profile' , '' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
+				// $classId = $gameClass->id;
+
+				// $newProfile = ApiProfileHelper::newProfile($userId , $classId , 'Default Profile' , '' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
 			}
 
 			//sync account

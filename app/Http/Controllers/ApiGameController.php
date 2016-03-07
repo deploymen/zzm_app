@@ -767,10 +767,10 @@ Class ApiGameController extends Controller {
 			$code->device_id = $deviceId;
 			$code->save();
 
-			return ResponseHelper::OutputJSON('fail', '', [] , [] , [] , 'change_game_code', ['game_code' => $code->code]);
+			return ResponseHelper::OutputJSON('fail', '', ['game_type' => 0] , [] , [] , 'change_game_code', ['game_code' => $code->code]);
 		}
 
-		return ResponseHelper::OutputJSON('success', '', [] , [] , [] , 'success', ['game_code' => $gameCode] );
+		return ResponseHelper::OutputJSON('success', '', ['game_type' => 1] , [] , [] , 'success', ['game_code' => $gameCode] );
 	}
 
 	public function offlinePost(){
