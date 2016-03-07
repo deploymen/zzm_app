@@ -49,4 +49,5 @@ Route::get('1.0/status', 'ApiCheckingController@CheckGameStatus');
 
 Route::get('1.0/check-ip-details', 'ApiCheckingController@CheckIpDetails');
 
-Route::get('saml/acs', 'schoologyController@schoology');
+
+Route::get('saml/acs', 'AuthSchoologyController@schoology');
