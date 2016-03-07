@@ -11,6 +11,26 @@ use Socialite;
 use Auth;
 use Schoology;
 
+use App\Libraries\AuthHelper;
+use App\Libraries\DatabaseUtilHelper;
+use App\Libraries\EmailHelper;
+use App\Libraries\LogHelper;
+use App\Libraries\ResponseHelper;
+use App\Libraries\ZapZapHelper;
+use App\Libraries\ApiUserHelper;
+use App\Libraries\ApiProfileHelper;
+use App\Models\GameCode;
+use App\Models\GameClass;
+use App\Models\GameProfile;
+use App\Models\IdCounter;
+use App\Models\LogAccountActivate;
+use App\Models\LogPasswordReset;
+use App\Models\LogSignInUser;
+use App\Models\User;
+use App\Models\UserAccess;
+use App\Models\UserExternalId;
+use App\Models\UserSetting;
+
 Class AuthSchoologyController extends Controller {
 
 	public function schoology() {
