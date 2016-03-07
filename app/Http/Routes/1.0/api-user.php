@@ -60,8 +60,16 @@ Route::group(['middleware' => 'auth.user'], function () {
 	});
 });
 
+Route::group(['middleware' => 'auth.user'], function () {
+	Route::delete('1.0/remove/account', 'AuthUserController@deleteAccount');
+});
 
 //third party login
 	Route::get('1.0/auth/facebook', 'AuthUserController@redirectToProvider');
 	Route::get('1.0/auth/facebook/callback', 'AuthUserController@handleProviderCallback');
+
 	Route::post('1.0/auth/facebook/signup', 'AuthUserController@facebookSignUp');
+
+
+	Route::get('saml/acs', 'AuthSchoologyController@schoology');
+	Route::post('1.0/auth/schoology/signup', 'AuthSchoologyController@schoologySignUp');
