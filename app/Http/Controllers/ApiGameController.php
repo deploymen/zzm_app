@@ -770,7 +770,13 @@ Class ApiGameController extends Controller {
 			return ResponseHelper::OutputJSON('fail', '', ['game_type' => 0] , [] , [] , 'change_game_code', ['game_code' => $code->code]);
 		}
 
-		return ResponseHelper::OutputJSON('success', '', ['game_type' => 1] , [] , [] , 'success', ['game_code' => $gameCode] );
+		$checkGameCode = GameCode::where('code' , $gameCode)->get();
+		$type = 0;
+		if($checkGameCode->type == 'profile'){
+			$type = 1;
+		}
+
+		return ResponseHelper::OutputJSON('success', '', ['game_type' => $type] , [] , [] , 'success', ['game_code' => $gameCode] );
 	}
 
 	public function offlinePost(){
