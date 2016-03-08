@@ -914,9 +914,10 @@ Class AuthUserController extends Controller {
 		$name = Request::input('name');
 		$email = Request::input('email');
 		$facebook_id = Request::input('facebook_id');
+		$country = Request::input('country');
 
 		$classId = 0;
-		$newUser = ApiUserHelper::Register($role , $name , $email , '' , $facebook_id , '' , 'facebook');
+		$newUser = ApiUserHelper::Register($role , $name , $email , $country , $facebook_id , '' , 'facebook');
 
 		if($role == 'teacher'){
 			$gameClass = new GameClass;
