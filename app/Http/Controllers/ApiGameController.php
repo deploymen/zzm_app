@@ -770,8 +770,9 @@ Class ApiGameController extends Controller {
 			return ResponseHelper::OutputJSON('fail', '', ['game_type' => 0] , [] , [] , 'change_game_code', ['game_code' => $code->code]);
 		}
 
-		$checkGameCode = GameCode::where('code' , $gameCode)->get();
+		$checkGameCode = GameCode::where('code' , $gameCode)->first();
 		$type = 0;
+
 		if($checkGameCode->type == 'profile'){
 			$type = 1;
 		}
