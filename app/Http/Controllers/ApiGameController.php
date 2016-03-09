@@ -526,8 +526,8 @@ Class ApiGameController extends Controller {
 		$deviceId = Request::input('game_code_device_id');
 		$gameCode = Request::input('game_code');
 
-		try{
-			$result = ZapZapQuestionHelper::GetUserMap($profileId);
+		// try{
+			$result = ZapZapQuestionHelper::GetUserMapV11($profileId);
 			$totalStar = UserMap::where('profile_id', $profileId)->sum('star');
 
 			$profile = GameProfile::find($profileId);
@@ -545,7 +545,7 @@ Class ApiGameController extends Controller {
 
 			$systems = [];		
 			$prevSystemId = 0;
-
+			$prevSubsytemId = 0;
 			$prevPlanetStar = 5;
 			$prevPlanetEnable = true;
 
@@ -556,15 +556,31 @@ Class ApiGameController extends Controller {
 					array_push($systems, [
 						'system_id' => $r->system_id,
 						'name' => $r->system_name,
-						'planets' => []
+						'subsystem' => [
+							[
+								'subsystem_id' => $r->subsystem_id,
+								'subsytem_name' => $r->subsytem_name,
+								'planet' => []
+							],
+							
+						]
 					]);
+				}
+
+
+				if($r->system_id == $prevSystemId && $r->subsystem_id != $prevSubsytemId){
+					array_push($systems[count($systems)-1]['subsystem'], [
+						'subsystem_id' => $r->subsystem_id,
+						'subsytem_name' => $r->subsytem_name,
+						'planet' => []
+					]);				
+						
 				}
 
 				$planetEnable = ($prevPlanetStar >= 3) && $prevPlanetEnable;
 				$prevPlanetEnable = $planetEnable;
-		
 
-				array_push($systems[count($systems)-1]['planets'], [
+				array_push($systems[count($systems)-1]['subsystem'][count($systems[count($systems)-1]['subsystem'])-1]['planet'], [
 					'planet_id' => $r->planet_id,
 					'name' => $r->planet_name,
 					'description' => $r->description,
@@ -572,9 +588,9 @@ Class ApiGameController extends Controller {
 					'enable' => ($planetEnable)?1:0,
 
 				]);				
-
 				$prevPlanetStar = $r->star;
 				$prevSystemId = $r->system_id;
+				$prevSubsytemId = $r->subsystem_id;
 			}
 	
 			return ResponseHelper::OutputJSON('success', '' , [
@@ -591,14 +607,14 @@ Class ApiGameController extends Controller {
 					'system_planet' => $systems
 					 ]);
 		
-		} catch (Exception $ex) {
+		// } catch (Exception $ex) {
 
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiGameController > getUserMap',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		'source' => 'ApiGameController > getUserMap',
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 	}
 
 	public function clearLeaderBoard(){
