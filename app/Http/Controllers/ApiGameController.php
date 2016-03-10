@@ -783,17 +783,17 @@ Class ApiGameController extends Controller {
 			$code->device_id = $deviceId;
 			$code->save();
 
-			return ResponseHelper::OutputJSON('fail', '', ['game_type' => 0] , [] , [] , 'change_game_code', ['game_code' => $code->code]);
+			return ResponseHelper::OutputJSON('fail', '', ['account_type' => 'anonymous'] , [] , [] , 'change_game_code', ['game_code' => $code->code]);
 		}
 
 		$checkGameCode = GameCode::where('code' , $gameCode)->first();
-		$type = 0;
+		$type = 'anonymous';
 
 		if($checkGameCode->type == 'profile'){
-			$type = 1;
+			$type = 'signed_up';
 		}
 
-		return ResponseHelper::OutputJSON('success', '', ['game_type' => $type] , [] , [] , 'success', ['game_code' => $gameCode] );
+		return ResponseHelper::OutputJSON('success', '', ['account_type' => $type] , [] , [] , 'success', ['game_code' => $gameCode] );
 	}
 
 	public function offlinePost(){

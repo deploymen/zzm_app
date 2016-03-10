@@ -62,7 +62,7 @@
                         POST http://staging.zapzapmath.com/api/version HTTP/1.1
                         Host: staging.zapzapmath.com
 
-                        device=ios-1&version=1.0
+                        device_os=ios-1&zzm_version=1.0
                     </pre>
                 </div>
             </div>
