@@ -21,7 +21,7 @@ Route::group(['prefix' => 'game'], function () {
 	Route::get('/leaderboard/planet/{id}', 'ApiGameController@leaderBoardPlanet');
 
 	Route::get('/top-score', 'ApiGameController@GameScreenTopScore');
-
+	
 	Route::post('/check-game-code' , 'ApiGameController@checkGameCode');
 
 	Route::group(['middleware' => 'auth.game'], function () {

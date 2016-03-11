@@ -129,7 +129,7 @@ Class ApiProfileController extends Controller {
 			$idCounter->save();
 
 			$code = new GameCode;
-			$code->type = 'profile';
+			$code->type = 'signed_up_profile';
 			$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
 			$code->seed = $gameCodeSeed;
 			$code->profile_id = $profile->id;

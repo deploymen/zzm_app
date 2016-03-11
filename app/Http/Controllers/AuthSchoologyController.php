@@ -11,6 +11,26 @@ use Socialite;
 use Auth;
 use Schoology;
 
+use App\Libraries\AuthHelper;
+use App\Libraries\DatabaseUtilHelper;
+use App\Libraries\EmailHelper;
+use App\Libraries\LogHelper;
+use App\Libraries\ResponseHelper;
+use App\Libraries\ZapZapHelper;
+use App\Libraries\ApiUserHelper;
+use App\Libraries\ApiProfileHelper;
+use App\Models\GameCode;
+use App\Models\GameClass;
+use App\Models\GameProfile;
+use App\Models\IdCounter;
+use App\Models\LogAccountActivate;
+use App\Models\LogPasswordReset;
+use App\Models\LogSignInUser;
+use App\Models\User;
+use App\Models\UserAccess;
+use App\Models\UserExternalId;
+use App\Models\UserSetting;
+
 Class AuthSchoologyController extends Controller {
 
 	public function schoology() {
@@ -62,17 +82,19 @@ Class AuthSchoologyController extends Controller {
 			$userAccess = UserAccess::where('username' , $schoologyUser['original']['email'])->first();
 
 			if(!$userAccess){
-				$password_sha1 = sha($schoologyUser['original']['id']);
-				$userId = ApiUserHelper::Register('teacher', $schoologyUser['original']['name'] , $schoologyUser['original']['email'], '', $schoologyUser['original']['id'], $password_sha1, 'schoology' ,$deviceId = '');
+				return redirect(url(env('WEBSITE_URL').'/user/redirect-signup/schoology'))->with('name' , $schoologyUser['original']['name'])->with('email' , $schoologyUser['original']['email'])->with('schoology_id' , $schoologyUser['original']['id']);
 
-				$gameClass = new GameClass;
-				$gameClass->user_id = $userId;
-				$gameClass->name = 'Default Class';
-				$gameClass->save();
+				// $password_sha1 = sha($schoologyUser['original']['id']);
+				// $userId = ApiUserHelper::Register('teacher', $schoologyUser['original']['name'] , $schoologyUser['original']['email'], '', $schoologyUser['original']['id'], $password_sha1, 'schoology' ,$deviceId = '');
 
-				$classId = $gameClass->id;
+				// $gameClass = new GameClass;
+				// $gameClass->user_id = $userId;
+				// $gameClass->name = 'Default Class';
+				// $gameClass->save();
 
-				$newProfile = ApiProfileHelper::newProfile($userId , $classId , 'Default Profile' , '' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
+				// $classId = $gameClass->id;
+
+				// $newProfile = ApiProfileHelper::newProfile($userId , $classId , 'Default Profile' , '' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
 			}
 
 			//sync account

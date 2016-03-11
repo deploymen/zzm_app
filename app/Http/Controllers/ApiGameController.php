@@ -63,7 +63,7 @@ Class ApiGameController extends Controller {
 				return ResponseHelper::OutputJSON('fail', 'planet not yet support');
 			}
 
-			//get planet info
+			// get planet info
 			if (Cache::has('ApiGameController@request('.$planetId.')') ) {
 
 				$planet = Cache::get('ApiGameController@request('.$planetId.')');
@@ -111,7 +111,7 @@ Class ApiGameController extends Controller {
 
 				$questions = Cache::get('ApiGameController@request('.$planetId.','.$difficulty.')');
 			}else{
-
+				
 				$type = GameType::find($planet->game_type_id);
 				switch($type->name){
 					case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId,$difficulty,$questionCount , $language); break;
@@ -527,7 +527,7 @@ Class ApiGameController extends Controller {
 		$gameCode = Request::input('game_code');
 
 		try{
-			$result = ZapZapQuestionHelper::GetUserMap($profileId);
+			$result = ZapZapQuestionHelper::GetUserMapV11($profileId);
 			$totalStar = UserMap::where('profile_id', $profileId)->sum('star');
 
 			$profile = GameProfile::find($profileId);
@@ -545,7 +545,7 @@ Class ApiGameController extends Controller {
 
 			$systems = [];		
 			$prevSystemId = 0;
-
+			$prevSubsytemId = 0;
 			$prevPlanetStar = 5;
 			$prevPlanetEnable = true;
 
@@ -556,15 +556,31 @@ Class ApiGameController extends Controller {
 					array_push($systems, [
 						'system_id' => $r->system_id,
 						'name' => $r->system_name,
-						'planets' => []
+						'subsystem' => [
+							[
+								'subsystem_id' => $r->subsystem_id,
+								'subsytem_name' => $r->subsytem_name,
+								'planet' => []
+							],
+							
+						]
 					]);
+				}
+
+
+				if($r->system_id == $prevSystemId && $r->subsystem_id != $prevSubsytemId){
+					array_push($systems[count($systems)-1]['subsystem'], [
+						'subsystem_id' => $r->subsystem_id,
+						'subsytem_name' => $r->subsytem_name,
+						'planet' => []
+					]);				
+						
 				}
 
 				$planetEnable = ($prevPlanetStar >= 3) && $prevPlanetEnable;
 				$prevPlanetEnable = $planetEnable;
-		
 
-				array_push($systems[count($systems)-1]['planets'], [
+				array_push($systems[count($systems)-1]['subsystem'][count($systems[count($systems)-1]['subsystem'])-1]['planet'], [
 					'planet_id' => $r->planet_id,
 					'name' => $r->planet_name,
 					'description' => $r->description,
@@ -572,9 +588,9 @@ Class ApiGameController extends Controller {
 					'enable' => ($planetEnable)?1:0,
 
 				]);				
-
 				$prevPlanetStar = $r->star;
 				$prevSystemId = $r->system_id;
+				$prevSubsytemId = $r->subsystem_id;
 			}
 	
 			return ResponseHelper::OutputJSON('success', '' , [
@@ -742,35 +758,27 @@ Class ApiGameController extends Controller {
 		$gameCode = Request::input('game_code');
 		$deviceId = Request::input('device_id');
 
-		$checkGameCode = GameCode::where('code' , $gameCode)->first();
-		
-		if(!$checkGameCode){
-			$idCounter = IdCounter::find(1);
-			$gameCodeSeed = $idCounter->game_code_seed;
-			$idCounter->game_code_seed = $gameCodeSeed + 1;
-			$idCounter->save();
-
-			$gamePro = new GameProfile;
-			$gamePro->user_id = 0;
-			$gamePro->first_name = "anonymous";
-			$gamePro->last_name = "anonymous";
-			$gamePro->nickname1 = 999;
-			$gamePro->nickname2 = 999;
-			$gamePro->avatar_id = 999;
-			$gamePro->save();
-
-			$code = new GameCode;
-			$code->profile_id = $gamePro->id;
-			$code->type = 'anonymous';
-			$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
-			$code->seed = $gameCodeSeed;
-			$code->device_id = $deviceId;
-			$code->save();
-
-			return ResponseHelper::OutputJSON('fail', '', ['game_type' => 0] , [] , [] , 'change_game_code', ['game_code' => $code->code]);
+		if(!$gameCode){
+			return ResponseHelper::OutputJSON('fail', 'missing parameter' );
 		}
 
-		return ResponseHelper::OutputJSON('success', '', ['game_type' => 1] , [] , [] , 'success', ['game_code' => $gameCode] );
+		$sql = "
+			SELECT *
+				FROM `t0113_game_code`
+					WHERE `code` = :game_code
+		";
+
+		$result = DB::SELECT($sql, ['game_code' => $gameCode]);
+	
+		if(!$result){
+			return ResponseHelper::OutputJSON('fail', 'game code not found' );
+		} 
+
+		if($result[0]->deleted_at){
+			return ResponseHelper::OutputJSON('fail', 'game code deleted' );
+		}
+
+		return ResponseHelper::OutputJSON('success', '' , ['account_type' => $result[0]->type] );
 	}
 
 	public function offlinePost(){
