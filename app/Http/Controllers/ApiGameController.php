@@ -758,6 +758,10 @@ Class ApiGameController extends Controller {
 		$gameCode = Request::input('game_code');
 		$deviceId = Request::input('device_id');
 
+		if(!$gameCode){
+			return ResponseHelper::OutputJSON('fail', 'missing parameter' );
+		}
+
 		$sql = "
 			SELECT *
 				FROM `t0113_game_code`
@@ -765,6 +769,10 @@ Class ApiGameController extends Controller {
 		";
 
 		$result = DB::SELECT($sql, ['game_code' => $gameCode]);
+	
+		if(!$result){
+			return ResponseHelper::OutputJSON('fail', 'game code not found' );
+		} 
 
 		if($result[0]->deleted_at){
 			return ResponseHelper::OutputJSON('fail', 'game code deleted' );
