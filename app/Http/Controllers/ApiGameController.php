@@ -758,42 +758,19 @@ Class ApiGameController extends Controller {
 		$gameCode = Request::input('game_code');
 		$deviceId = Request::input('device_id');
 
-		$checkGameCode = GameCode::where('code' , $gameCode)->first();
-		
-		if(!$checkGameCode){
-			$idCounter = IdCounter::find(1);
-			$gameCodeSeed = $idCounter->game_code_seed;
-			$idCounter->game_code_seed = $gameCodeSeed + 1;
-			$idCounter->save();
+		$sql = "
+			SELECT *
+				FROM `t0113_game_code`
+					WHERE `code` = :game_code
+		";
 
-			$gamePro = new GameProfile;
-			$gamePro->user_id = 0;
-			$gamePro->first_name = "anonymous";
-			$gamePro->last_name = "anonymous";
-			$gamePro->nickname1 = 999;
-			$gamePro->nickname2 = 999;
-			$gamePro->avatar_id = 999;
-			$gamePro->save();
+		$result = DB::SELECT($sql, ['game_code' => $gameCode]);
 
-			$code = new GameCode;
-			$code->profile_id = $gamePro->id;
-			$code->type = 'anonymous';
-			$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
-			$code->seed = $gameCodeSeed;
-			$code->device_id = $deviceId;
-			$code->save();
-
-			return ResponseHelper::OutputJSON('fail', '', ['account_type' => 'anonymous'] , [] , [] , 'change_game_code', ['game_code' => $code->code]);
+		if($result[0]->deleted_at){
+			return ResponseHelper::OutputJSON('fail', 'game code deleted' );
 		}
 
-		$checkGameCode = GameCode::where('code' , $gameCode)->first();
-		$type = 'anonymous';
-
-		if($checkGameCode->type == 'profile'){
-			$type = 'signed_up';
-		}
-
-		return ResponseHelper::OutputJSON('success', '', ['account_type' => $type] , [] , [] , 'success', ['game_code' => $gameCode] );
+		return ResponseHelper::OutputJSON('success', '' , ['account_type' => $result[0]->type] );
 	}
 
 	public function offlinePost(){
