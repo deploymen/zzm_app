@@ -63,7 +63,7 @@ Class ApiGameController extends Controller {
 				return ResponseHelper::OutputJSON('fail', 'planet not yet support');
 			}
 
-			//get planet info
+			// get planet info
 			if (Cache::has('ApiGameController@request('.$planetId.')') ) {
 
 				$planet = Cache::get('ApiGameController@request('.$planetId.')');
