@@ -23,7 +23,7 @@
 
 <div class="row">
     <div class="col-lg-8">
-        <h3>GET  /api/game/user-map</h3>
+        <h3>GET  /api/game/user-map?version=1.1</h3>
         <ul id="myTab" class="nav nav-tabs">
             <li class="active"><a href="#descriptions" data-toggle="tab">Explain</a>
             </li>
@@ -54,9 +54,9 @@
                 </table>
                 <div style="margin-top:50px; height:500px; overflow:auto; font-size:12px">
 <pre class="prettyprint">
-GET http://www.zapzapmath.com/api/game/user-map HTTP/1.1
-Host: www.zapzapmath.com
-X-game-code: 0000015k
+GET http://staging.zapzapmath.com/api/game/user-map/version=1.1 HTTP/1.1
+Host: staging.zapzapmath.com
+X-game-code: devanm01
 </pre>
                 </div>
             </div>
@@ -86,219 +86,176 @@ X-game-code: 0000015k
 <pre class="prettyprint">
 {
   "status": "success",
-  "data": [
-    {
-      "system_id": 1001,
-      "name": "grade 1",
-      "planets": [
-        {
-          "planet_id": 102,
-          "name": "The 'Correct' Collector",
-          "description": "Yes? No?",
-          "star": 0,
-          "subjects": [
-            {
-              "id": "1",
-              "code": "c.0.1"
-            }
-          ],
-          "enable": 1
-        },
-        {
-          "planet_id": 103,
-          "name": "Space Taxi",
-          "description": "What + What = What??",
-          "star": 0,
-          "subjects": [
-            {
-              "id": "1",
-              "code": "c.0.1"
-            }
-          ],
-          "enable": 0
-        },
-        {
-          "planet_id": 104,
-          "name": "Word Games",
-          "description": "What's your (word) problem?",
-          "star": 0,
-          "subjects": [
-            {
-              "id": "1",
-              "code": "c.0.1"
-            }
-          ],
-          "enable": 0
-        },
-        {
-          "planet_id": 105,
-          "name": "Tap Tens",
-          "description": "How many ones are in a ten?",
-          "star": 0,
-          "subjects": [
-            {
-              "id": "1",
-              "code": "c.0.1"
-            }
-          ],
-          "enable": 0
-        },
-        {
-          "planet_id": 106,
-          "name": "Space Taxi 2",
-          "description": "Get up to 20 passengers!",
-          "star": 0,
-          "subjects": [
-            {
-              "id": "1",
-              "code": "c.0.1"
-            }
-          ],
-          "enable": 0
-        }
-      ]
+  "data": {
+    "profile": {
+      "first_name": "lai",
+      "last_name": "",
+      "nick_name1": "Extremum",
+      "nick_name2": "preschool",
+      "total_star": "2",
+      "user_type": 1,
+      "game_code": "devanm01"
     },
-    {
-      "system_id": 1002,
-      "name": "grade 2",
-      "planets": [
-        {
-          "planet_id": 114,
-          "name": "More or Less?",
-          "description": ">=<",
-          "star": 0,
-          "subjects": [
-            {
-              "id": "1",
-              "code": "c.0.1"
-            }
-          ],
-          "enable": 0
-        },
-        {
-          "planet_id": 115,
-          "name": "Space Taxi 3",
-          "description": "Up to 40 passengers at a time!",
-          "star": 0,
-          "subjects": [
-            {
-              "id": "1",
-              "code": "c.0.1"
-            }
-          ],
-          "enable": 0
-        }
-      ]
-    },
-    {
-      "system_id": 108,
-      "name": " Lengths",
-      "planets": [
-        {
-          "planet_id": 129,
-          "name": "Engine Engine Number Line",
-          "description": "Number line, number line",
-          "star": 0,
-          "subjects": [
-            {
-              "id": "1",
-              "code": "c.0.1"
-            }
-          ],
-          "enable": 0
-        }
-      ]
-    },
-    {
-      "system_id": 112,
-      "name": " Foundation for Multiplication & Division",
-      "planets": [
-        {
-          "planet_id": 141,
-          "name": "The 'Correct' Collector 2",
-          "description": "Do you EVEN find it ODD?",
-          "star": 0,
-          "subjects": [
-            {
-              "id": "1",
-              "code": "c.0.1"
-            }
-          ],
-          "enable": 0
-        }
-      ]
-    },
-    {
-      "system_id": 1002,
-      "name": "grade 2",
-      "planets": [
-        {
-          "planet_id": 150,
-          "name": "Sushi Star: Sushimetry 3",
-          "description": "Know your ingredients!",
-          "star": 0,
-          "subjects": [
-            {
-              "id": "1",
-              "code": "c.0.1"
-            }
-          ],
-          "enable": 0
-        }
-      ]
-    },
-    {
-      "system_id": 1003,
-      "name": "grade 3",
-      "planets": [
-        {
-          "planet_id": 155,
-          "name": "Word Games 10",
-          "description": "Do you divide or multiply?",
-          "star": 0,
-          "subjects": [
-            {
-              "id": "1",
-              "code": "c.0.1"
-            }
-          ],
-          "enable": 0
-        },
-        {
-          "planet_id": 166,
-          "name": "The Big Showdown",
-          "description": "Which piece fits?",
-          "star": 0,
-          "subjects": [
-            {
-              "id": "1",
-              "code": "c.0.1"
-            }
-          ],
-          "enable": 0
-        }
-      ]
-    },
-    {
-      "system_id": 125,
-      "name": " Angles and Planes",
-      "planets": [
-        {
-          "planet_id": 185,
-          "name": "measure angles with a protractor",
-          "description": "",
-          "star": 3,
-          "subjects": [
-            {
-              "id": "1",
-              "code": "c.0.1"
-            }
-          ],
-          "enable": 0
-        }
-      ]
-    }
-  ]
+    "system_planet": [
+      {
+        "system_id": 102,
+        "name": "Adding Tens and Ones",
+        "subsystem": [
+          {
+            "subsystem_id": 5,
+            "subsytem_name": "Accuracy",
+            "planet": [
+              {
+                "planet_id": 123,
+                "name": "Tap Hundreds",
+                "description": "Ten tens!",
+                "star": 0,
+                "enable": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "system_id": 107,
+        "name": "Plus and Minus Tens and Ones",
+        "subsystem": [
+          {
+            "subsystem_id": 4,
+            "subsytem_name": "Skills",
+            "planet": [
+              {
+                "planet_id": 105,
+                "name": "Tap Tens",
+                "description": "How many ones are in a ten?",
+                "star": 0,
+                "enable": 0
+              },
+              {
+                "planet_id": 114,
+                "name": "Gears!",
+                "description": "What do the signs mean? (>=< 40)",
+                "star": 0,
+                "enable": 0
+              }
+            ]
+          },
+          {
+            "subsystem_id": 5,
+            "subsytem_name": "Accuracy",
+            "planet": [
+              {
+                "planet_id": 103,
+                "name": "Space Shuttle",
+                "description": "What makes the number?",
+                "star": 0,
+                "enable": 0
+              },
+              {
+                "planet_id": 106,
+                "name": "Space Shuttle 2",
+                "description": "Ship up to 20 parcels!",
+                "star": 0,
+                "enable": 0
+              },
+              {
+                "planet_id": 115,
+                "name": "Space Shuttle 3",
+                "description": "Up to 40 parcels at a time!",
+                "star": 0,
+                "enable": 0
+              }
+            ]
+          },
+          {
+            "subsystem_id": 7,
+            "subsytem_name": "Mission",
+            "planet": [
+              {
+                "planet_id": 119,
+                "name": "Hexcavations",
+                "description": "Find the correct path for the equations!",
+                "star": 0,
+                "enable": 0
+              },
+              {
+                "planet_id": 121,
+                "name": "Orb Oracle",
+                "description": "Figure out the pattern!",
+                "star": 0,
+                "enable": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "system_id": 109,
+        "name": "Time to Hours and Half Hours",
+        "subsystem": [
+          {
+            "subsystem_id": 5,
+            "subsytem_name": "Accuracy",
+            "planet": [
+              {
+                "planet_id": 149,
+                "name": "Tick Tock",
+                "description": "How do you tell time?",
+                "star": 0,
+                "enable": 0
+              }
+            ]
+          },
+          {
+            "subsystem_id": 7,
+            "subsytem_name": "Mission",
+            "planet": [
+              {
+                "planet_id": 151,
+                "name": "Time Out!",
+                "description": "What time is it?",
+                "star": 0,
+                "enable": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "system_id": 204,
+        "name": "Relating Addition to Multiplication",
+        "subsystem": [
+          {
+            "subsystem_id": 4,
+            "subsytem_name": "Skills",
+            "planet": [
+              {
+                "planet_id": 120,
+                "name": "Cell Cloning",
+                "description": "How do you count multiples?",
+                "star": 0,
+                "enable": 0
+              }
+            ]
+          },
+          {
+            "subsystem_id": 5,
+            "subsytem_name": "Accuracy",
+            "planet": [
+              {
+                "planet_id": 141,
+                "name": "The 'Correct' Collector: Even or Odd?",
+                "description": "Do you EVEN find it ODD?",
+                "star": 0,
+                "enable": 0
+              }
+            ]
+          }
+        ]
+      }
+      ...........................
+    ]
+  }
 }
 </pre>
             </div>

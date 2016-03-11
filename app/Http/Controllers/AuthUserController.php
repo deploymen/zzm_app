@@ -47,6 +47,8 @@ Class AuthUserController extends Controller {
 		$name = Request::input('name');
 		$email = Request::input('email');
 		$country = Request::input('country', '');
+		$password = Request::input('password');
+		$password_sha1 = sha1($password . Config::get('app.auth_salt'));
 		$accessToken = '';
 		$deviceId = Request::input('device_id'); //optional
 		$role = Request::input('role');
@@ -81,7 +83,7 @@ Class AuthUserController extends Controller {
 			return ResponseHelper::OutputJSON('fail', "email used");
 		}
 
-		try {	
+		// try {	
 			// DB::transaction(function ()
 				 // use ($role, $username, $password_sha1, $name, $email, $country, $deviceId, $accessToken, $classId) {
 
@@ -139,7 +141,7 @@ Class AuthUserController extends Controller {
 					$idCounter->save();
 
 					$code = new GameCode;
-					$code->type = 'profile';
+					$code->type = 'signed_up_profile';
 					$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
 					$code->seed = $gameCodeSeed;
 					$code->profile_id = $profile->id;
@@ -190,13 +192,13 @@ Class AuthUserController extends Controller {
 			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
 			$list = User::select('id' , 'role' , 'name' , 'register_from')->find($userAccess->user_id);
 
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'AuthUserController > signUp',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		// } catch (Exception $ex) {
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		'source' => 'AuthUserController > signUp',
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 
 		return ResponseHelper::OutputJSON('success', '', ['user' => $list], [
 			'X-access-token' => $accessToken,
@@ -686,7 +688,7 @@ Class AuthUserController extends Controller {
 			$idCounter->save();
 
 			$code = new GameCode;
-			$code->type = 'profile';
+			$code->type = 'signed_up_profile';
 			$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
 			$code->seed = $gameCodeSeed;
 			$code->profile_id = $profile->id;
@@ -857,7 +859,7 @@ Class AuthUserController extends Controller {
 		if(!$userAccess){
 
 			//create new
-			return redirect(url(env('WEBSITE_URL').'/user/redirect-signup'))->with('name' , $fbUser->name)->with('email' , $fbUser->email)->with('facebook_id' , $fbUser->id);
+			return redirect(url(env('WEBSITE_URL').'/user/redirect-signup/facebook'))->with('name' , $fbUser->name)->with('email' , $fbUser->email)->with('facebook_id' , $fbUser->id);
 
 		}
 
