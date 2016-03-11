@@ -17,6 +17,7 @@ use App\Models\IdCounter;
 use App\Models\SetNickname1;
 use App\Models\SetNickname2;
 use App\Models\UserMap;
+use App\Models\UserFlag;
 use App\Models\Age;
 use DB;
 use Exception;
@@ -86,6 +87,22 @@ Class ApiProfileController extends Controller {
 			$gameClass = GameClass::find($classId);
 			if(!$gameClass || $gameClass->user_id != $userId) {
 				return ResponseHelper::OutputJSON('fail', "class not found");
+			}
+		}
+
+		$userFlag = UserFlag::find($userId);
+		
+		if($classId){
+			$profileClass = GameProfile::where('class_id' , $classId)->where('user_id', $userId)->count();
+
+			if($profileClass >= $userFlag->profile_limit){
+				return ResponseHelper::OutputJSON('fail', "limited");
+			}
+		}else{
+			$userProfile = GameProfile::where('user_id' , $userId)->count();
+
+			if($userProfile >= $userFlag->profile_limit){
+				return ResponseHelper::OutputJSON('fail', "limited");
 			}
 		}
 		

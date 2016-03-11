@@ -39,6 +39,13 @@ Class ApiClassController extends Controller {
 			// $grade = Request::input('grade');
 			// $age = Request::input('age');
 
+			$userFlag = UserFlag::find($userId);
+			$userClass = GameClass::where('user_id' , $userId)->count();
+
+			if($userClass >= $userFlag->class_limit){
+				return ResponseHelper::OutputJSON('fail', "limited");
+			}
+
 			if (!$className || !$userId) {
 				return ResponseHelper::OutputJSON('fail', "missing parameters");
 			}
