@@ -859,7 +859,7 @@ Class AuthUserController extends Controller {
 		if(!$userAccess){
 
 			//create new
-			return redirect(url(env('WEBSITE_URL').'/user/redirect-signup'))->with('name' , $fbUser->name)->with('email' , $fbUser->email)->with('facebook_id' , $fbUser->id);
+			return redirect(url(env('WEBSITE_URL').'/user/redirect-signup/facebook'))->with('name' , $fbUser->name)->with('email' , $fbUser->email)->with('facebook_id' , $fbUser->id);
 
 		}
 
