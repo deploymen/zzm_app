@@ -46,9 +46,6 @@ Route::group(['middleware' => 'auth.user'], function () {
 });
 
 Route::group(['middleware' => 'auth.user'], function () {
-
-	Route::get('user/facebook/share-unlock', 'ApiProfileController@unlockUserLimit');
-
 	Route::group(['prefix' => 'profiles'], function () {
 /* fade domain name */
 		Route::get('/result/only-system', 'ResultController@onlySystem');
@@ -71,5 +68,6 @@ Route::group(['middleware' => 'auth.user'], function () {
 	
 Route::group(['middleware' => 'auth.user'], function () {
 	Route::delete('remove/account', 'AuthUserController@deleteAccount');
+	Route::post('user/facebook/share-unlock', 'ApiProfileController@unlockUserLimit');
 });
 
