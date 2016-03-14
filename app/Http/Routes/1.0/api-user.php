@@ -46,6 +46,9 @@ Route::group(['middleware' => 'auth.user'], function () {
 });
 
 Route::group(['middleware' => 'auth.user'], function () {
+
+	Route::get('user/facebook/share-unlock', 'ApiProfileController@profileDetails');
+
 	Route::group(['prefix' => 'profiles'], function () {
 /* fade domain name */
 		Route::get('/result/only-system', 'ResultController@onlySystem');
@@ -61,7 +64,6 @@ Route::group(['middleware' => 'auth.user'], function () {
 //third party login
 	Route::get('auth/facebook', 'AuthUserController@redirectToProvider');
 	Route::get('auth/facebook/callback', 'AuthUserController@handleProviderCallback');
-
 	Route::post('auth/facebook/signup', 'AuthUserController@facebookSignUp');
 
 	Route::get('saml/acs', 'AuthSchoologyController@schoology');
