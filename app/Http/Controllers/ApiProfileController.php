@@ -602,9 +602,9 @@ Class ApiProfileController extends Controller {
 		}
 	}
 
-	public function verifyFacebookPost(){
+	public function unlockUserLimit(){
 		$postId = Request::input('post_id');
-		
+
 		$request = new FacebookRequest($session,  'GET' , '/{post-id}');
 		$response = $request->execute();
 		$graphObject = $response->getGraphObject();
