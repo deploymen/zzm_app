@@ -22,6 +22,7 @@ use App\Models\Age;
 use DB;
 use Exception;
 use Request;
+use FacebookRequest;
 
 Class ApiProfileController extends Controller {
 
