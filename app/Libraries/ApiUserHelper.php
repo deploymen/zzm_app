@@ -32,18 +32,15 @@ use Session;
 
 class ApiUserHelper{
 
-	public static function Register($role, $name, $email, $country, $username, $password_sha1,  $registerFrom , $deviceId = ''){
+	public static function Register($role, $name, $email, $country, $registerFrom , $username, $password_sha1, $deviceId = '' , $classId = 0){
 
 		$user = new User;
 		$user->role = $role;
 		$user->name = $name;
 		$user->email = $email;
 		$user->country = $country;
-		$user->activated = 0;
 		$user->register_from = $registerFrom;
 		$user->save();
-
-		$accessToken = AuthHelper::GenerateAccessToken($user->id);
 
 		$access = new UserAccess;
 		$access->user_id = $user->id;
@@ -63,6 +60,46 @@ class ApiUserHelper{
 		$setting = new UserSetting;
 		$setting->user_id = $user->id;
 		$setting->save();
+
+		$userFlag = new UserFlag;
+		$userFlag->user_id = $user->id;
+		$userFlag->profile_limit = 1;
+		$userFlag->class_limit = 0;
+
+		if($role == 'teacher'){
+			$gameClass = new GameClass;
+			$gameClass->user_id = $user->id;
+			$gameClass->name = 'Default Class';
+			$gameClass->save();
+
+			$classId = $gameClass->id;
+
+			$userFlag->profile_limit = 3;
+			$userFlag->class_limit = 50;
+		}
+
+		$userFlag->save();
+
+		$profile = new GameProfile;
+		$profile->user_id = $user->id;
+		$profile->nickname1 = 999;
+		$profile->nickname2 = 999;
+		$profile->avatar_id = 999;
+		$profile->class_id = $classId;
+		$profile->school = 'default school';
+		$profile->save();
+
+		$idCounter = IdCounter::find(1);
+		$gameCodeSeed = $idCounter->game_code_seed;
+		$idCounter->game_code_seed = $gameCodeSeed + 1;
+		$idCounter->save();
+
+		$code = new GameCode;
+		$code->type = 'signed_up_profile';
+		$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
+		$code->seed = $gameCodeSeed;
+		$code->profile_id = $profile->id;
+		$code->save();
 
 		return $user->id;
 	}

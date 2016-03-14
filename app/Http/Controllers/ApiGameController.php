@@ -592,14 +592,14 @@ Class ApiGameController extends Controller {
 				$prevSystemId = $r->system_id;
 				$prevSubsytemId = $r->subsystem_id;
 			}
-	
+
 			return ResponseHelper::OutputJSON('success', '' , [
 					'profile' => [
 						'first_name' => $profile->first_name,
 						'last_name' => $profile->last_name,
 						'nick_name1' =>$profile->nickName1->name,
 						'nick_name2' =>$profile->nickName2->name,
-						'nick_name2' =>$profile->grade,
+						'grade' =>$profile->grade,
 						'total_star' => $totalStar,
 						'user_type' => $userType,
 						'game_code' => $gameCode,
