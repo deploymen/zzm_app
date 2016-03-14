@@ -47,7 +47,7 @@ Route::group(['middleware' => 'auth.user'], function () {
 
 Route::group(['middleware' => 'auth.user'], function () {
 
-	Route::get('user/facebook/share-unlock', 'ApiProfileController@profileDetails');
+	Route::get('user/facebook/share-unlock', 'ApiProfileController@verifyFacebookPost');
 
 	Route::group(['prefix' => 'profiles'], function () {
 /* fade domain name */
