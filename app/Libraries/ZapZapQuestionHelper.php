@@ -1186,6 +1186,8 @@ class ZapZapQuestionHelper{
 						'number_4' => $r->number_4,
 						'color_5' => $r->color_5,
 						'number_5' => $r->number_5,
+						'color_6' => $r->color_6,
+						'number_6' => $r->number_6,
 						'fake_color_1' => $r->fake_color_1,
 						'fake_number_1' => $r->fake_number_2,
 						'fake_color_2' => $r->fake_color_2,
