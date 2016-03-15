@@ -22,6 +22,7 @@ use App\Models\Age;
 use DB;
 use Exception;
 use Request;
+use Facebook\Facebook;
 use Facebook\FacebookRequest;
 
 Class ApiProfileController extends Controller {
@@ -605,13 +606,15 @@ Class ApiProfileController extends Controller {
 
 
 	public function unlockUserLimit() {
-	
+		dd('asd');
 		$fb = new Facebook([
             'app_id' => env('FACEBOOK_APP_KEY'),
             'app_secret' => env('FACEBOOK_APP_SECRET'),
             'default_graph_version' => 'v2.5',
        	 ]);
-​
+
+		dd('asd');
+​dd($fb->getJavaScriptHelper());
         $helper = $fb->getJavaScriptHelper();
 ​
         try {
