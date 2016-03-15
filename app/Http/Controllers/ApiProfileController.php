@@ -92,21 +92,21 @@ Class ApiProfileController extends Controller {
 			}
 		}
 
-		$userFlag = UserFlag::find($userId);
+		// $userFlag = UserFlag::find($userId);
 		
-		if($classId){
-			$profileClass = GameProfile::where('class_id' , $classId)->where('user_id', $userId)->count();
+		// if($classId){
+		// 	$profileClass = GameProfile::where('class_id' , $classId)->where('user_id', $userId)->count();
 
-			if($profileClass >= $userFlag->profile_limit){
-				return ResponseHelper::OutputJSON('fail', "limited");
-			}
-		}else{
-			$userProfile = GameProfile::where('user_id' , $userId)->count();
+		// 	if($profileClass >= $userFlag->profile_limit){
+		// 		return ResponseHelper::OutputJSON('fail', "limited");
+		// 	}
+		// }else{
+		// 	$userProfile = GameProfile::where('user_id' , $userId)->count();
 
-			if($userProfile >= $userFlag->profile_limit){
-				return ResponseHelper::OutputJSON('fail', "limited");
-			}
-		}
+		// 	if($userProfile >= $userFlag->profile_limit){
+		// 		return ResponseHelper::OutputJSON('fail', "limited");
+		// 	}
+		// }
 		
 		try {
 			$avatarIdSet = AvatarSet::find($avatarId);
@@ -606,17 +606,17 @@ Class ApiProfileController extends Controller {
 
 
 	public function unlockUserLimit() {
-		dd('asd');
+
+
+		
 		$fb = new Facebook([
             'app_id' => env('FACEBOOK_APP_KEY'),
             'app_secret' => env('FACEBOOK_APP_SECRET'),
             'default_graph_version' => 'v2.5',
        	 ]);
 
-		dd('asd');
-​dd($fb->getJavaScriptHelper());
-        $helper = $fb->getJavaScriptHelper();
-​
+		$helper = $fb->getJavaScriptHelper();
+
         try {
             $accessToken = $helper->getAccessToken();
         } catch (Facebook\Exceptions\FacebookResponseException $e) {
@@ -628,17 +628,20 @@ Class ApiProfileController extends Controller {
             echo 'Facebook SDK returned an error: ' . $e->getMessage();
             exit;
         }
-​
+
         if (!isset($accessToken)) {
             echo 'No cookie set or no OAuth data could be obtained from cookie.';
             exit;
         }
-​
+
+
         $postId = Request::input('post_id');
         $response = $fb->get('/' . $postId, $accessToken->getValue());
         $graphObject = $response->getGraphObject();
-​
         var_export($graphObject);
+
         die();
+
+
 	}
 }
