@@ -22,7 +22,7 @@ use App\Models\Age;
 use DB;
 use Exception;
 use Request;
-use FacebookRequest;
+use Facebook\FacebookRequest;
 
 Class ApiProfileController extends Controller {
 
@@ -606,7 +606,7 @@ Class ApiProfileController extends Controller {
 	public function unlockUserLimit(){
 		$postId = Request::input('post_id');
 
-		$request = new FacebookRequest($session,  'GET' , '/{post-id}');
+		$request = new FacebookRequest($postId,  'GET' , $postId);
 		$response = $request->execute();
 		$graphObject = $response->getGraphObject();
 
