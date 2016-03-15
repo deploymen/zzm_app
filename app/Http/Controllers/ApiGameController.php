@@ -526,7 +526,7 @@ Class ApiGameController extends Controller {
 		$deviceId = Request::input('game_code_device_id');
 		$gameCode = Request::input('game_code');
 
-		try{
+		// try{
 			$result = ZapZapQuestionHelper::GetUserMapV11($profileId);
 			$totalStar = UserMap::where('profile_id', $profileId)->sum('star');
 
@@ -534,7 +534,8 @@ Class ApiGameController extends Controller {
 
 			$profile->nickName1;
 			$profile->nickName2;
-			
+			$profile->avatar;
+
 			$userType = 2;
 
 			if($userId){
@@ -597,24 +598,25 @@ Class ApiGameController extends Controller {
 					'profile' => [
 						'first_name' => $profile->first_name,
 						'last_name' => $profile->last_name,
-						'nick_name1' =>$profile->nickName1->name,
-						'nick_name2' =>$profile->nickName2->name,
 						'grade' =>$profile->grade,
 						'total_star' => $totalStar,
 						'user_type' => $userType,
 						'game_code' => $gameCode,
+						'nick_name1' =>$profile->nickName1->name,
+						'nick_name2' =>$profile->nickName2->name,
+						'avatar' => $profile->avatar,
 						] ,
 					'system_planet' => $systems
 					 ]);
 		
-		} catch (Exception $ex) {
+		// } catch (Exception $ex) {
 
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiGameController > getUserMap',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		'source' => 'ApiGameController > getUserMap',
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 	}
 
 	public function clearLeaderBoard(){
