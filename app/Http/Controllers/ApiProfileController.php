@@ -606,7 +606,7 @@ Class ApiProfileController extends Controller {
 	public function unlockUserLimit(){
 		$postId = Request::input('post_id');
 
-		$request = new FacebookRequest($postId,  'GET' , $postId);
+		$request = new FacebookRequest($postId,  'GET' , '/'.$postId);
 		$response = $request->execute();
 		$graphObject = $response->getGraphObject();
 
