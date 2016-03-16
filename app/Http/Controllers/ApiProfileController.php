@@ -644,7 +644,8 @@ Class ApiProfileController extends Controller {
 	        $response = $fb->get('/' . $postId. '?fields=privacy' , $accessToken->getValue());
 	        $graphObject = $response->getGraphObject();
 
-	       	dd($graphObject['privacy']);
+
+	       	dd($graphObject['privacy']['value']);
 
 
 		// } catch (Exception $ex) {
