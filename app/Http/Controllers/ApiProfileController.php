@@ -645,9 +645,22 @@ Class ApiProfileController extends Controller {
 	        $response = $fb->get('/' . $postId. '?fields=privacy' , $accessToken->getValue());
 	        $graphObject = $response->getGraphObject();
 
+	        //get user Flag
+	        $userFlag = UserFlag::find($userId);
+	        if(!$userFlag){
+				return ResponseHelper::OutputJSON('fail' , 'user flag not found');
+	        }
+
 			if($graphObject['privacy']['value'] == 'EVERYONE'){
-var_export($userId); die();
+				
+				$userFlag->profile_limit = 3;
+				$userFlag->total_share = $userFlag->total_share+1;
+				$userFlag->save();
+			}else{
+				return ResponseHelper::OutputJSON('fail' , 'privacy is not public');
 			}
+
+			return ResponseHelper::OutputJSON('success');
 
 
 		// } catch (Exception $ex) {
