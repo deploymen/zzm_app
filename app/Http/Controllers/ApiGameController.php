@@ -534,7 +534,8 @@ Class ApiGameController extends Controller {
 
 			$profile->nickName1;
 			$profile->nickName2;
-			
+			$profile->avatar;
+
 			$userType = 2;
 
 			if($userId){
@@ -559,7 +560,7 @@ Class ApiGameController extends Controller {
 						'subsystem' => [
 							[
 								'subsystem_id' => $r->subsystem_id,
-								'subsytem_name' => $r->subsytem_name,
+								'subsystem_name' => $r->subsystem_name,
 								'planet' => []
 							],
 							
@@ -571,7 +572,7 @@ Class ApiGameController extends Controller {
 				if($r->system_id == $prevSystemId && $r->subsystem_id != $prevSubsytemId){
 					array_push($systems[count($systems)-1]['subsystem'], [
 						'subsystem_id' => $r->subsystem_id,
-						'subsytem_name' => $r->subsytem_name,
+						'subsystem_name' => $r->subsystem_name,
 						'planet' => []
 					]);				
 						
@@ -597,12 +598,13 @@ Class ApiGameController extends Controller {
 					'profile' => [
 						'first_name' => $profile->first_name,
 						'last_name' => $profile->last_name,
-						'nick_name1' =>$profile->nickName1->name,
-						'nick_name2' =>$profile->nickName2->name,
 						'grade' =>$profile->grade,
 						'total_star' => $totalStar,
 						'user_type' => $userType,
 						'game_code' => $gameCode,
+						'nick_name1' =>$profile->nickName1->name,
+						'nick_name2' =>$profile->nickName2->name,
+						'avatar' => $profile->avatar,
 						] ,
 					'system_planet' => $systems
 					 ]);

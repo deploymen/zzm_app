@@ -22,6 +22,7 @@ use App\Models\Age;
 use DB;
 use Exception;
 use Request;
+use Facebook\Facebook;
 use Facebook\FacebookRequest;
 
 Class ApiProfileController extends Controller {
@@ -205,6 +206,12 @@ Class ApiProfileController extends Controller {
 			}
 
 			if ($classId) {
+				$profileClass = GameProfile::where('class_id' , $classId)->where('user_id', $userId)->count();
+
+				if($profileClass >= $userFlag->profile_limit){
+					return ResponseHelper::OutputJSON('fail', "limited");
+				}
+				
 				$gameClass = GameClass::find($classId);
 
 				if(!$gameClass || $gameClass->user_id != $userId ) {
@@ -603,13 +610,71 @@ Class ApiProfileController extends Controller {
 		}
 	}
 
-	public function unlockUserLimit(){
-		$postId = Request::input('post_id');
 
-		$request = new FacebookRequest($session,  'GET' , '/{post-id}');
-		$response = $request->execute();
-		$graphObject = $response->getGraphObject();
+	public function unlockUserLimit() {
+		$userId = Request::input('user_id');
 
-		var_export($graphObject); die();
+		$fb = new Facebook([
+            'app_id' => env('FACEBOOK_APP_KEY'),
+            'app_secret' => env('FACEBOOK_APP_SECRET'),
+            'default_graph_version' => 'v2.5',
+       	 ]);
+
+		$helper = $fb->getJavaScriptHelper();
+
+        try {
+            $accessToken = $helper->getAccessToken();
+        } catch (Facebook\Exceptions\FacebookResponseException $e) {
+            // When Graph returns an error
+            // echo 'Graph returned an error: ' . $e->getMessage();
+            LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiProfileController > unlockUserLimit',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+        } catch (Facebook\Exceptions\FacebookSDKException $e) {
+            // When validation fails or other local issues
+            // echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiProfileController > unlockUserLimit',
+				'inputs' => Request::all(),
+			])]);
+        }
+
+        if (!isset($accessToken)) {
+			return ResponseHelper::OutputJSON('fail' , 'No cookie set or no OAuth data could be obtained from cookie.');
+        }
+
+		try {
+	        $postId = Request::input('post_id');
+
+	        $response = $fb->get('/' . $postId. '?fields=privacy' , $accessToken->getValue());
+	        $graphObject = $response->getGraphObject();
+
+	        //get user Flag
+	        $userFlag = UserFlag::find($userId);
+	        if(!$userFlag){
+				return ResponseHelper::OutputJSON('fail' , 'user flag not found');
+	        }
+
+			if($graphObject['privacy']['value'] == 'EVERYONE'){
+				
+				$userFlag->profile_limit = 3;
+				$userFlag->total_share = $userFlag->total_share+1;
+				$userFlag->save();
+			}else{
+				return ResponseHelper::OutputJSON('fail' , 'privacy is not public');
+			}
+
+			return ResponseHelper::OutputJSON('success');
+
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiProfileController > unlockUserLimitt',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 	}
 }

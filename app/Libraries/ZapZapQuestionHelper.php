@@ -138,7 +138,7 @@ class ZapZapQuestionHelper{
 		try{
 			
 			$sql = "
-				SELECT um.`level`,um.`exp`, um.`top_score` , s.`id` AS `system_id` , s.`name` AS `system_name` ,ss.`id` AS `subsystem_id` ,ss.`name`  AS `subsytem_name` , p.`id` AS `planet_id` , p.`name` AS `planet_name` , p.`description` ,CAST(IFNULL(um.`star`, 0) AS UNSIGNED) AS `star`
+				SELECT um.`level`,um.`exp`, um.`top_score` , s.`id` AS `system_id` , s.`name` AS `system_name` ,ss.`id` AS `subsystem_id` ,ss.`name`  AS `subsystem_name` , p.`id` AS `planet_id` , p.`name` AS `planet_name` , p.`description` ,CAST(IFNULL(um.`star`, 0) AS UNSIGNED) AS `star`
 					FROM (`t0122_game_system` s, `t0122_game_system_sub` ss, `t0123_game_planet` p , `t0124_game_system_planet` sp ) 
 						LEFT JOIN `t0501_game_user_map` um 
 							ON(
@@ -149,11 +149,12 @@ class ZapZapQuestionHelper{
 				 			AND sp.`enable` = '1'
 				 			AND sp.`subsytem_id` = ss.`id`
 				 			
+				 			GROUP BY `planet_id`
 				 			ORDER BY sp.`system_id` , sp.`subsytem_id`
 				";
 				
 			$result = DB::SELECT($sql, ['profileId'=>$profileId]);
-		
+
 			return $result;
 
 		}catch(Exception $ex){
@@ -1186,6 +1187,8 @@ class ZapZapQuestionHelper{
 						'number_4' => $r->number_4,
 						'color_5' => $r->color_5,
 						'number_5' => $r->number_5,
+						'color_6' => $r->color_6,
+						'number_6' => $r->number_6,
 						'fake_color_1' => $r->fake_color_1,
 						'fake_number_1' => $r->fake_number_2,
 						'fake_color_2' => $r->fake_color_2,

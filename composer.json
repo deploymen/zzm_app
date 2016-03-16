@@ -6,7 +6,7 @@
 	"type": "project",
 	"require": {
 		"laravel/framework": "5.0.*",	
-		"facebook/php-sdk-v4": "4.0.*",
+		"facebook/php-sdk-v4": "~5.0",
 		"google/apiclient": "1.1.*@dev",
 		"aws/aws-sdk-php": "2.7.*@dev",
 		"maatwebsite/excel": "dev-master",
