@@ -560,7 +560,7 @@ Class ApiGameController extends Controller {
 						'subsystem' => [
 							[
 								'subsystem_id' => $r->subsystem_id,
-								'subsytem_name' => $r->subsytem_name,
+								'subsystem_name' => $r->subsytem_name,
 								'planet' => []
 							],
 							

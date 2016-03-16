@@ -149,11 +149,12 @@ class ZapZapQuestionHelper{
 				 			AND sp.`enable` = '1'
 				 			AND sp.`subsytem_id` = ss.`id`
 				 			
+				 			GROUP BY `planet_id`
 				 			ORDER BY sp.`system_id` , sp.`subsytem_id`
 				";
 				
 			$result = DB::SELECT($sql, ['profileId'=>$profileId]);
-		
+
 			return $result;
 
 		}catch(Exception $ex){
