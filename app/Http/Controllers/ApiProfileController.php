@@ -607,8 +607,6 @@ Class ApiProfileController extends Controller {
 
 	public function unlockUserLimit() {
 
-
-		
 		$fb = new Facebook([
             'app_id' => env('FACEBOOK_APP_KEY'),
             'app_secret' => env('FACEBOOK_APP_SECRET'),
@@ -636,7 +634,7 @@ Class ApiProfileController extends Controller {
 
 
         $postId = Request::input('post_id');
-        $response = $fb->get('/' . $postId, $accessToken->getValue());
+        $response = $fb->get('/' . $postId. '?fields=privacy' , $accessToken->getValue());
         $graphObject = $response->getGraphObject();
         var_export($graphObject);
 
