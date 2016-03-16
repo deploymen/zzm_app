@@ -492,13 +492,10 @@ Class ApiGameController extends Controller {
 				$prevPlanetStar = $r->star;
 				$prevSystemId = $r->system_id;
 			}
-		return ResponseHelper::OutputJSON('success', '' , [
-			'profile' => [
-				'total_star' => $totalStar,
-				] ,
-			'system_planet' => $systems
-			 ]);
 
+	
+			return ResponseHelper::OutputJSON('success', '' , $systems );
+		
 		} catch (Exception $ex) {
 
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
