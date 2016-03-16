@@ -18,6 +18,7 @@ use App\Models\LogPasswordReset;
 use App\Models\LogSignInUser;
 use App\Models\User;
 use App\Models\UserAccess;
+use App\Models\UserFlag;
 use App\Models\UserExternalId;
 use App\Models\UserSetting;
 use Config;
@@ -83,7 +84,7 @@ Class AuthUserController extends Controller {
 			return ResponseHelper::OutputJSON('fail', "email used");
 		}
 
-		// try {	
+		try {	
 			// DB::transaction(function ()
 				 // use ($role, $username, $password_sha1, $name, $email, $country, $deviceId, $accessToken, $classId) {
 
@@ -117,13 +118,24 @@ Class AuthUserController extends Controller {
 					$setting->user_id = $user->id;
 					$setting->save();
 
+					$userFlag = new UserFlag;
+					$userFlag->user_id = $user->id;
+
 					if($role == 'teacher'){
 						$gameClass = new GameClass;
 						$gameClass->user_id = $user->id;
 						$gameClass->name = 'Default Class';
 						$gameClass->save();
 
+						$userFlag->profile_limit = 3;
+						$userFlag->class_limit = 50;
+						$userFlag->save();
+
 						$classId = $gameClass->id;
+					}else{
+						$userFlag->profile_limit = 1;
+						$userFlag->class_limit = 0;
+						$userFlag->save();
 					}
 
 					$profile = new GameProfile;
@@ -192,13 +204,13 @@ Class AuthUserController extends Controller {
 			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
 			$list = User::select('id' , 'role' , 'name' , 'register_from')->find($userAccess->user_id);
 
-		// } catch (Exception $ex) {
-		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-		// 		'source' => 'AuthUserController > signUp',
-		// 		'inputs' => Request::all(),
-		// 	])]);
-		// 	return ResponseHelper::OutputJSON('exception');
-		// }
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'AuthUserController > signUp',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 
 		return ResponseHelper::OutputJSON('success', '', ['user' => $list], [
 			'X-access-token' => $accessToken,
@@ -681,6 +693,27 @@ Class AuthUserController extends Controller {
 			$setting = new UserSetting;
 			$setting->user_id = $user->id;
 			$setting->save();
+
+			$userFlag = new UserFlag;
+			$userFlag->user_id = $user->id;
+			
+			if($role == 'teacher'){
+				$gameClass = new GameClass;
+				$gameClass->user_id = $user->id;
+				$gameClass->name = 'Default Class';
+				$gameClass->save();
+
+				$userFlag->profile_limit = 3;
+				$userFlag->class_limit = 50;
+				$userFlag->save();
+
+				$classId = $gameClass->id;
+			}else{
+				$userFlag->profile_limit = 1;
+				$userFlag->class_limit = 0;
+				$userFlag->save();
+			}
+
 
 			$profile = new GameProfile;
 			$profile->user_id = $user->id;

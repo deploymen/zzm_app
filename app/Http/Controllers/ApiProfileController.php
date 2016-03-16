@@ -93,6 +93,9 @@ Class ApiProfileController extends Controller {
 		}
 
 		$userFlag = UserFlag::find($userId);
+		if(!$userFlag){
+			return ResponseHelper::OutputJSON('fail', "user flag not found");
+		}
 		
 		if($classId){
 			$profileClass = GameProfile::where('class_id' , $classId)->where('user_id', $userId)->count();
