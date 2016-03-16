@@ -619,27 +619,40 @@ Class ApiProfileController extends Controller {
             $accessToken = $helper->getAccessToken();
         } catch (Facebook\Exceptions\FacebookResponseException $e) {
             // When Graph returns an error
-            echo 'Graph returned an error: ' . $e->getMessage();
-            exit;
+            // echo 'Graph returned an error: ' . $e->getMessage();
+            LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiProfileController > unlockUserLimit',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
         } catch (Facebook\Exceptions\FacebookSDKException $e) {
             // When validation fails or other local issues
-            echo 'Facebook SDK returned an error: ' . $e->getMessage();
-            exit;
+            // echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiProfileController > unlockUserLimit',
+				'inputs' => Request::all(),
+			])]);
         }
 
         if (!isset($accessToken)) {
-            echo 'No cookie set or no OAuth data could be obtained from cookie.';
-            exit;
+			return ResponseHelper::OutputJSON('fail' , 'No cookie set or no OAuth data could be obtained from cookie.');
         }
 
+		// try {
+	        $postId = Request::input('post_id');
 
-        $postId = Request::input('post_id');
-        $response = $fb->get('/' . $postId. '?fields=privacy' , $accessToken->getValue());
-        $graphObject = $response->getGraphObject();
-        var_export($graphObject);
+	        $response = $fb->get('/' . $postId. '?fields=privacy' , $accessToken->getValue());
+	        $graphObject = $response->getGraphObject();
 
-        die();
+	       	var_export( $graphObject['item']); die();
 
 
+		// } catch (Exception $ex) {
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		'source' => 'ApiProfileController > unlockUserLimitt',
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 	}
 }
