@@ -559,10 +559,11 @@ Class ApiGameController extends Controller {
 						'name' => $r->system_name,
 						'subsystem' => [
 							[
-								'subsystem_id' => '1',
-								'subsystem_name' => 'Basics',
+								'subsystem_id' => $r->subsystem_id,
+								'subsystem_name' => $r->subsystem_name,
 								'planet' => []
 							],
+							
 						]
 					]);
 				}
@@ -580,17 +581,14 @@ Class ApiGameController extends Controller {
 				$planetEnable = ($prevPlanetStar >= 3) && $prevPlanetEnable;
 				$prevPlanetEnable = $planetEnable;
 
-				if($systems[count($systems)-1]['subsystem'][count($systems[count($systems)-1]['subsystem'])-1]['subsystem_id'] == $prevSubsytemId){
-					array_push($systems[count($systems)-1]['subsystem'][count($systems[count($systems)-1]['subsystem'])-1]['planet'], [
-						'planet_id' => $r->planet_id,
-						'name' => $r->planet_name,
-						'description' => $r->description,
-						'star' => $r->star,
-						'enable' => ($planetEnable)?1:0,
+				array_push($systems[count($systems)-1]['subsystem'][count($systems[count($systems)-1]['subsystem'])-1]['planet'], [
+					'planet_id' => $r->planet_id,
+					'name' => $r->planet_name,
+					'description' => $r->description,
+					'star' => $r->star,
+					'enable' => ($planetEnable)?1:0,
 
-					]);				
-				}
-				
+				]);				
 				$prevPlanetStar = $r->star;
 				$prevSystemId = $r->system_id;
 				$prevSubsytemId = $r->subsystem_id;
