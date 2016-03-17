@@ -960,16 +960,7 @@ Class AuthUserController extends Controller {
 
 		$classId = 0;
 		$newUser = ApiUserHelper::Register($role , $name , $email , $country , $facebook_id , '' , 'facebook');
-
-		if($role == 'teacher'){
-			$gameClass = new GameClass;
-			$gameClass->user_id = $newUser;
-			$gameClass->name = 'Default Class';
-			$gameClass->save();
-
-			$classId = $gameClass->id;
-		}
-
+		var_export($newUser); die();							
 		$newProfile = ApiProfileHelper::newProfile($newUser , $classId , 'Default Profile' , '' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
 
 		$user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser);
