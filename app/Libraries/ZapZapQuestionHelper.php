@@ -148,8 +148,7 @@ class ZapZapQuestionHelper{
 				 			AND sp.`system_id` = s.`id`
 				 			AND sp.`enable` = '1'
 				 			AND sp.`subsytem_id` = ss.`id`
-				 			
-				 			GROUP BY `planet_id`
+				 	
 				 			ORDER BY sp.`system_id` , sp.`subsytem_id`
 				";
 				
