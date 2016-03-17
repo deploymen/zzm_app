@@ -960,11 +960,11 @@ Class AuthUserController extends Controller {
 
 		$classId = 0;
 		$newUser = ApiUserHelper::Register($role , $name , $email , $country , $facebook_id , '' , 'facebook');
-		var_export($newUser); die();							
-		$newProfile = ApiProfileHelper::newProfile($newUser , $classId , 'Default Profile' , '' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
 
-		$user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser);
-		$userExternalId = UserExternalId::where('user_id' , $newUser)->update(['facebook_id' => $facebook_id ]);
+		$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  , 'Default Profile' , '' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
+
+		$user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser['user_id']);
+		$userExternalId = UserExternalId::where('user_id' , $newUser['user_id'])->update(['facebook_id' => $facebook_id ]);
 		$userAccess = UserAccess::where('user_id' , $user->id)->first();
 
 		$firstLogin = 1;
