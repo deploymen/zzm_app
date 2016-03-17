@@ -606,7 +606,7 @@ Class ApiGameController extends Controller {
 						'nick_name2' =>$profile->nickName2->name,
 						'avatar' => $profile->avatar,
 						] ,
-					'system_planet' => $systems
+					// 'system_planet' => $systems
 					 ]);
 		
 		} catch (Exception $ex) {
