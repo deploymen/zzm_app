@@ -604,7 +604,7 @@ Class ApiGameController extends Controller {
 						'game_code' => $gameCode,
 						'nick_name1' =>$profile->nickName1->name,
 						'nick_name2' =>$profile->nickName2->name,
-						'avatar' => $profile->avatar,
+						// 'avatar' => $profile->avatar,
 						] ,
 					// 'system_planet' => $systems
 					 ]);
