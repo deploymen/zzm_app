@@ -101,13 +101,13 @@ Class ApiProfileController extends Controller {
 			$profileClass = GameProfile::where('class_id' , $classId)->where('user_id', $userId)->count();
 
 			if($profileClass >= $userFlag->profile_limit){
-				return ResponseHelper::OutputJSON('fail', "limited");
+				return ResponseHelper::OutputJSON('fail', "class limited" );
 			}
 		}else{
 			$userProfile = GameProfile::where('user_id' , $userId)->count();
 
 			if($userProfile >= $userFlag->profile_limit){
-				return ResponseHelper::OutputJSON('fail', "limited");
+				return ResponseHelper::OutputJSON('fail', "profile limited" , ['total_share' => $userFlag->total_share]);
 			}
 		}
 		
