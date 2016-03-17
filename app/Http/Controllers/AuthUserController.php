@@ -646,12 +646,12 @@ Class AuthUserController extends Controller {
 		$password = Request::input('password');
 		$password_sha1 = sha1($password . Config::get('app.auth_salt'));
 
-		$firstName = Request::input('first_name');
-		$lastName = Request::input('last_name', '');
+		$name = Request::input('name');
 		$deviceId = Request::input('deviceId');
 		$role = Request::input('role');
+		$classId = 0;
 
-		if (!$email || !$firstName) {
+		if (!$email || !$name) {
 			return ResponseHelper::OutputJSON('fail', "missing parameters");
 		}
 
@@ -668,9 +668,9 @@ Class AuthUserController extends Controller {
 		try {
 			$user = new User;
 			$user->role = $role;
+			$user->name = $name;
 			$user->email = $email;
-			$user->register_from = 'app';
-
+			$user->register_from = 'App';
 			$user->save();
 
 			$accessToken = AuthHelper::GenerateAccessToken($user->id);
@@ -696,7 +696,7 @@ Class AuthUserController extends Controller {
 
 			$userFlag = new UserFlag;
 			$userFlag->user_id = $user->id;
-			
+
 			if($role == 'teacher'){
 				$gameClass = new GameClass;
 				$gameClass->user_id = $user->id;
@@ -714,14 +714,13 @@ Class AuthUserController extends Controller {
 				$userFlag->save();
 			}
 
-
 			$profile = new GameProfile;
 			$profile->user_id = $user->id;
-			$profile->first_name = $firstName;
-			$profile->last_name = $lastName;
 			$profile->nickname1 = 999;
 			$profile->nickname2 = 999;
 			$profile->avatar_id = 999;
+			$profile->class_id = $classId;
+			$profile->school = 'default school';
 			$profile->save();
 
 			$idCounter = IdCounter::find(1);
@@ -735,7 +734,6 @@ Class AuthUserController extends Controller {
 			$code->seed = $gameCodeSeed;
 			$code->profile_id = $profile->id;
 			$code->save();
-
 
 
 			if ($deviceId) {
@@ -963,19 +961,10 @@ Class AuthUserController extends Controller {
 		$classId = 0;
 		$newUser = ApiUserHelper::Register($role , $name , $email , $country , $facebook_id , '' , 'facebook');
 
-		if($role == 'teacher'){
-			$gameClass = new GameClass;
-			$gameClass->user_id = $newUser;
-			$gameClass->name = 'Default Class';
-			$gameClass->save();
+		$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  , 'Default Profile' , '' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
 
-			$classId = $gameClass->id;
-		}
-
-		$newProfile = ApiProfileHelper::newProfile($newUser , $classId , 'Default Profile' , '' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
-
-		$user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser);
-		$userExternalId = UserExternalId::where('user_id' , $newUser)->update(['facebook_id' => $facebook_id ]);
+		$user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser['user_id']);
+		$userExternalId = UserExternalId::where('user_id' , $newUser['user_id'])->update(['facebook_id' => $facebook_id ]);
 		$userAccess = UserAccess::where('user_id' , $user->id)->first();
 
 		$firstLogin = 1;

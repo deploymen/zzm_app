@@ -563,7 +563,6 @@ Class ApiGameController extends Controller {
 								'subsystem_name' => $r->subsystem_name,
 								'planet' => []
 							],
-							
 						]
 					]);
 				}

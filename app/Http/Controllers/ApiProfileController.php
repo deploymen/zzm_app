@@ -662,7 +662,7 @@ Class ApiProfileController extends Controller {
 
 			if($graphObject['privacy']['value'] == 'EVERYONE'){
 				
-				$userFlag->profile_limit = 3;
+				$userFlag->profile_limit = 5;
 				$userFlag->total_share = $userFlag->total_share+1;
 				$userFlag->save();
 			}else{

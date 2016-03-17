@@ -36,8 +36,6 @@ Class ApiClassController extends Controller {
 		try {
 			$userId = Request::input('user_id');
 			$className = Request::input('name');
-			// $grade = Request::input('grade');
-			// $age = Request::input('age');
 
 			if (!$className || !$userId) {
 				return ResponseHelper::OutputJSON('fail', "missing parameters");
@@ -48,11 +46,16 @@ Class ApiClassController extends Controller {
 				return ResponseHelper::OutputJSON('fail', "class name already exist");
 			}
 
+			$userFlag = UserFlag::find($userId);
+            $userClass = GameClass::where('user_id' , $userId)->count();
+
+            if($userClass >= $userFlag->class_limit){
+                return ResponseHelper::OutputJSON('fail', "limited");
+            }
+
 			$gameClass = new GameClass;
 			$gameClass->user_id = $userId;
 			$gameClass->name = $className;
-			// $gameClass->grade = $grade;
-			// $gameClass->age = $age;
 			$gameClass->save();
 
 			return ResponseHelper::OutputJSON('success', '' , $gameClass);
