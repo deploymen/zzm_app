@@ -331,7 +331,7 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p03.*, qc.`question_id` , obj.`question_object_1`,obj.`question_object_2`
+				SELECT p03.*, qc.`question_id` , obj.`question_object_1`,obj.`question_object_2` , obj.`question_type`
 					FROM (`t0203_game_question_p03` p03, `t0126_game_planet_question_cache` qc)
 						LEFT JOIN `t0203_game_question_p03_object` obj ON (obj.`question_id` = p03.`id` )
                         WHERE qc.`planet_id` = {$planetId}
@@ -354,6 +354,7 @@ class ZapZapQuestionHelper{
 					array_push($results, [
 						'id' => $r->question_id,
 						'question' => $r->question,
+						'question_type' => $r->question_type,
 						'question_object_1' => $r->question_object_1,
 						'question_object_2' => $r->question_object_2,
 						'answer' => $r->answer,

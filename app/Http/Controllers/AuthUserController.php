@@ -983,6 +983,21 @@ Class AuthUserController extends Controller {
 		], [
 			'access_token' => $userAccess->access_token,
 		]);
+	}
+
+	public function checkUserFlag(){
+
+		$userId = Request::input('user_id');
+
+		$userFlag = UserFlag::find($userId);
+		$userProfile = GameProfile::where('user_id' , $userId)->count();
+
+		if($userProfile >= $userFlag->profile_limit){
+			return ResponseHelper::OutputJSON('success' , ['within_profile_limit' => 0]);
+		}
+
+		return ResponseHelper::OutputJSON('success' , ['within_profile_limit' => 1]);
+
 
 	}
 }
