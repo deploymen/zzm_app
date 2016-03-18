@@ -266,7 +266,6 @@ Class ApiProfileController extends Controller {
 		try {
 
 			$profile = GameProfile::find($id);
-			$count = GameProfile::where('user_id', $userId)->count();
 
 			if (!$profile) {
 				return ResponseHelper::OutputJSON('fail', "profile not found");
@@ -274,10 +273,6 @@ Class ApiProfileController extends Controller {
 
 			if ($userId != $profile->user_id) {
 				return ResponseHelper::OutputJSON('fail', 'wrong user id');
-			}
-
-			if ($count == 1) {
-				return ResponseHelper::OutputJSON('fail', 'account must have at least one profile');
 			}
 
 			$gameCode = GameCode::where('profile_id' , $id)->delete();

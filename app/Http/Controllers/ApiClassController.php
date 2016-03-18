@@ -106,10 +106,6 @@ Class ApiClassController extends Controller {
 		$userId = Request::input('user_id');
 
 		try {
-			$count = GameClass::where('user_id' , $userId)->count();
-			if($count == '1'){
-				return ResponseHelper::OutputJSON('fail', "prevent deletion of last class in teacher accounts");
-			}
 
 			$gameClass = GameClass::find($id);
 			if (!$gameClass) {
