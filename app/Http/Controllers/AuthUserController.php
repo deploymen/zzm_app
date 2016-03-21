@@ -990,13 +990,16 @@ Class AuthUserController extends Controller {
 		$userId = Request::input('user_id');
 
 		$userFlag = UserFlag::find($userId);
+		if(!$userFlag){
+			return ResponseHelper::OutputJSON('success' , 'user flag not found');
+		}
 		$userProfile = GameProfile::where('user_id' , $userId)->count();
 
 		if($userProfile >= $userFlag->profile_limit){
-			return ResponseHelper::OutputJSON('success' , ['within_profile_limit' => 0]);
+			return ResponseHelper::OutputJSON('success' , '' , ['within_profile_limit' => 0, 'total_share' => $userFlag->total_share]);
 		}
 
-		return ResponseHelper::OutputJSON('success' , ['within_profile_limit' => 1]);
+		return ResponseHelper::OutputJSON('success' , '' , ['within_profile_limit' => 1 ,'total_share' => $userFlag->total_share]);
 
 
 	}
