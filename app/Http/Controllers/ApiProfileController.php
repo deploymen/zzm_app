@@ -655,14 +655,19 @@ Class ApiProfileController extends Controller {
 				return ResponseHelper::OutputJSON('fail' , 'user flag not found');
 	        }
 
-			if($graphObject['privacy']['value'] == 'EVERYONE'){
-				
-				$userFlag->profile_limit = 5;
-				$userFlag->total_share = $userFlag->total_share+1;
-				$userFlag->save();
-			}else{
-				return ResponseHelper::OutputJSON('fail' , 'privacy is not public');
+			if($graphObject['privacy']['value'] == 'SELF'){
+				return ResponseHelper::OutputJSON('fail' , 'privacy is not allow');
 			}
+var_export($graphObject); die();
+			$userFlag->profile_limit = 5;
+			$userFlag->total_share = $userFlag->total_share+1;
+			$userFlag->save();
+
+			$logFacebookShare = new LogFacebookShare;
+			$logFacebookShare->user_id = $userId;
+			$logFacebookShare->privacy = $graphObject['privacy']['value'];
+			$logFacebookShare->email = 
+			$logFacebookShare->post_id = $postId;
 
 			return ResponseHelper::OutputJSON('success');
 
