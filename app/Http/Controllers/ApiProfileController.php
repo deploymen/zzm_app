@@ -19,6 +19,7 @@ use App\Models\SetNickname2;
 use App\Models\UserMap;
 use App\Models\UserFlag;
 use App\Models\Age;
+use App\Models\LogFacebookShare;
 use DB;
 use Exception;
 use Request;
@@ -658,7 +659,7 @@ Class ApiProfileController extends Controller {
 			if($graphObject['privacy']['value'] == 'SELF'){
 				return ResponseHelper::OutputJSON('fail' , 'privacy is not allow');
 			}
-var_export($graphObject); die();
+
 			$userFlag->profile_limit = 5;
 			$userFlag->total_share = $userFlag->total_share+1;
 			$userFlag->save();
@@ -666,8 +667,8 @@ var_export($graphObject); die();
 			$logFacebookShare = new LogFacebookShare;
 			$logFacebookShare->user_id = $userId;
 			$logFacebookShare->privacy = $graphObject['privacy']['value'];
-			$logFacebookShare->email = 
 			$logFacebookShare->post_id = $postId;
+			$logFacebookShare->save();
 
 			return ResponseHelper::OutputJSON('success');
 
