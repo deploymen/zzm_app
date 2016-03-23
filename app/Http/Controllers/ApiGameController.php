@@ -199,7 +199,7 @@ Class ApiGameController extends Controller {
 		$deviceId = Request::input('game_code_device_id');
 		$gameCode = Request::input('game_code');
 		$gameCodeType = Request::input('game_code_type');
-var_export( $hash); die();
+
 		try{
 			if($planetId < 100){
 				return ResponseHelper::OutputJSON('fail', 'planet not yet support');
