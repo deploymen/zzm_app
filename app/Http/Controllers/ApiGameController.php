@@ -199,7 +199,7 @@ Class ApiGameController extends Controller {
 		$deviceId = Request::input('game_code_device_id');
 		$gameCode = Request::input('game_code');
 		$gameCodeType = Request::input('game_code_type');
-
+var_export( $hash); die();
 		try{
 			if($planetId < 100){
 				return ResponseHelper::OutputJSON('fail', 'planet not yet support');
@@ -219,6 +219,7 @@ Class ApiGameController extends Controller {
 			}
 
 			$gameResult = json_decode($jsonGameResult, true);
+
 			if(!isset($gameResult['score']) || !isset($gameResult['answers'])|| !isset($gameResult['status']) ){ 
 
 				return ResponseHelper::OutputJSON('fail', 'invalid game result format');
@@ -239,6 +240,7 @@ Class ApiGameController extends Controller {
 			}
 
 			$checkResult = GamePlay::where('hash', $hash1)->first();	
+
 			if($checkResult){
 				return ResponseHelper::OutputJSON('fail', 'no double submit');
 			}
@@ -284,6 +286,7 @@ Class ApiGameController extends Controller {
 			$gamePlay->code = $gameCode;
 			$gamePlay->hash = $hash1;
 			$gamePlay->status = $gameStatus;
+			$gamePlay->game_played = $gameResult['game_played'];
 
 			if(isset($gameResult['badges']) ){
 				
