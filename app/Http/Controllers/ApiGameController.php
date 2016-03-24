@@ -193,7 +193,7 @@ Class ApiGameController extends Controller {
 		$jsonGameResult = Request::input('game_result');
 		$hash = Request::input('hash');
 		$random = Request::input('random');
-		$gamePlayed = Request::input('game_played');
+		$playedTime = Request::input('played_time');
 
 		$profileId = Request::input('game_code_profile_id');
 		$userId = Request::input('user_id');
@@ -287,7 +287,7 @@ Class ApiGameController extends Controller {
 			$gamePlay->code = $gameCode;
 			$gamePlay->hash = $hash1;
 			$gamePlay->status = $gameStatus;
-			$gamePlay->game_played = $gamePlayed;
+			$gamePlay->played_time = $playedTime;
 
 			if(isset($gameResult['badges']) ){
 				
