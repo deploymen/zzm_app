@@ -64,12 +64,12 @@ Class ApiGameController extends Controller {
 			}
 
 			// get planet info
-			// if (Cache::has('ApiGameController@request('.$planetId.')') ) {
+			if (Cache::has('ApiGameController@request('.$planetId.')') ) {
 
-			// 	$planet = Cache::get('ApiGameController@request('.$planetId.')');
+				$planet = Cache::get('ApiGameController@request('.$planetId.')');
 
 
-			// }else{
+			}else{
 				$planet = GamePlanet::find($planetId);
 
 				if(!$planet){
@@ -78,7 +78,7 @@ Class ApiGameController extends Controller {
 
 			    $expiresAt = Carbon::now()->addMinutes(60);
 				Cache::put('ApiGameController@request('.$planetId.')', $planet , $expiresAt);
-			// }
+			}
 
 			if(!$planet->available){
 				Cache::forget('ApiGameController@request('.$planetId.')');
@@ -958,6 +958,35 @@ Class ApiGameController extends Controller {
 		}
 
 		return ResponseHelper::OutputJSON('success');
+	}
+
+	public function getGameCodeInfo(){
+		$code = Request::input('game_code');
+
+		if(!$code){
+			return ResponseHelper::OutputJSON('fail' , 'missing parameter');
+		}
+
+		$gameCode = GameCode::where('code' , $code)->first();
+
+		$totalStar = UserMap::where('profile_id', $gameCode->profile_id)->sum('star');
+
+		$profile = GameProfile::find($gameCode->profile_id);
+
+		$profile->nickName1;
+		$profile->nickName2;
+		$profile->avatar;
+
+		return ResponseHelper::OutputJSON('success', '' , [
+				'first_name' => $profile->first_name,
+				'last_name' => $profile->last_name,
+				'grade' =>$profile->grade,
+				'total_star' => $totalStar,
+				'game_code' => $code,
+				'nick_name1' =>$profile->nickName1,
+				'nick_name2' =>$profile->nickName2,
+				'avatar' => $profile->avatar,
+		 ]);
 	}
 
 }
