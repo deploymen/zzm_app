@@ -164,29 +164,29 @@ Class AuthUserController extends Controller {
 						//to do...
 					}
 
-					$secretKey = sha1(time() . $email);
-					$edmHtml = (string) view('emails.account-activation', [
-						'name' => $name,
-						'app_store_address' => config('app.app_store_url'),
-						'username' => $email,
-						'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
-						'activation_link' => config('app.website_url') . "/api/auth/activate/{$secretKey}",
-						'email_support' => config('app.support_email'),
-						'social_media_links' => config('app.fanpage_url'),
-					]);
+					// $secretKey = sha1(time() . $email);
+					// $edmHtml = (string) view('emails.account-activation', [
+					// 	'name' => $name,
+					// 	'app_store_address' => config('app.app_store_url'),
+					// 	'username' => $email,
+					// 	'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
+					// 	'activation_link' => config('app.website_url') . "/api/auth/activate/{$secretKey}",
+					// 	'email_support' => config('app.support_email'),
+					// 	'social_media_links' => config('app.fanpage_url'),
+					// ]);
 
-					EmailHelper::SendEmail([
-						'about' => 'Welcome',
-						'subject' => 'Your Zap Zap Account is now ready!',
-						'body' => $edmHtml,
-						'bodyHtml' => $edmHtml,
-						'toAddresses' => [$email],
-					]);
+					// EmailHelper::SendEmail([
+					// 	'about' => 'Welcome',
+					// 	'subject' => 'Your Zap Zap Account is now ready!',
+					// 	'body' => $edmHtml,
+					// 	'bodyHtml' => $edmHtml,
+					// 	'toAddresses' => [$email],
+					// ]);
 
-					$logOpenAcc = new LogAccountActivate;
-					$logOpenAcc->user_id = $user->id;
-					$logOpenAcc->secret = $secretKey;
-					$logOpenAcc->save();
+					// $logOpenAcc = new LogAccountActivate;
+					// $logOpenAcc->user_id = $user->id;
+					// $logOpenAcc->secret = $secretKey;
+					// $logOpenAcc->save();
 
 					//job done - log it!
 					DatabaseUtilHelper::LogInsert($user->id, $user->table, $user->id);
