@@ -64,12 +64,12 @@ Class ApiGameController extends Controller {
 			}
 
 			// get planet info
-			if (Cache::has('ApiGameController@request('.$planetId.')') ) {
+			// if (Cache::has('ApiGameController@request('.$planetId.')') ) {
 
-				$planet = Cache::get('ApiGameController@request('.$planetId.')');
+			// 	$planet = Cache::get('ApiGameController@request('.$planetId.')');
 
 
-			}else{
+			// }else{
 				$planet = GamePlanet::find($planetId);
 
 				if(!$planet){
@@ -78,7 +78,7 @@ Class ApiGameController extends Controller {
 
 			    $expiresAt = Carbon::now()->addMinutes(60);
 				Cache::put('ApiGameController@request('.$planetId.')', $planet , $expiresAt);
-			}
+			// }
 
 			if(!$planet->available){
 				Cache::forget('ApiGameController@request('.$planetId.')');
@@ -113,7 +113,7 @@ Class ApiGameController extends Controller {
 			}else{
 				
 				$type = GameType::find($planet->game_type_id);
-				
+		
 				switch($type->name){
 					case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId,$difficulty,$questionCount , $language); break;
 					case 'p02':$questions = ZapZapQuestionHelper::GetQuestionP02($planetId,$difficulty,$questionCount); break;
