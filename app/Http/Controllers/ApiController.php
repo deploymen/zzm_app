@@ -19,6 +19,7 @@ use App\Models;
 use App\Models\Subscribe;
 use App\Models\LaunchNotification;
 use App\Models\AppVersion;
+use App\Models\User;
 
 class ApiController extends Controller {
 
@@ -223,13 +224,8 @@ class ApiController extends Controller {
 			]);
 	}
 
-	public function sendEmail(){
-		$sql = "
-			SELECT * FROM `table 99`
-		";
-
-		$email = DB::SELECT($sql);
-
+	public function weeklyReport(){
+		$email = User::where('activated', 1)->select('email')->get();
 
 		for($j=0; $j<count($email); $j++){
 			$mail = $email[$j]->email;
@@ -241,8 +237,8 @@ class ApiController extends Controller {
 			EmailHelper::SendEmail([
 				'about' => '',
 				'subject' => '',
-				'body' => 'emails.test',
-				'bodyHtml' => 'emails.test',
+				'body' => 'emails.password',
+				'bodyHtml' => 'emails.password',
 				'toAddresses' => [$mail], //['support@932.xxx'],
 				'bccAddresses' => [],
 				'replyToAddresses' => ['no-reply@fxum.com'],
