@@ -113,6 +113,7 @@ Class ApiGameController extends Controller {
 			}else{
 				
 				$type = GameType::find($planet->game_type_id);
+				
 				switch($type->name){
 					case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId,$difficulty,$questionCount , $language); break;
 					case 'p02':$questions = ZapZapQuestionHelper::GetQuestionP02($planetId,$difficulty,$questionCount); break;
