@@ -48,4 +48,4 @@ Route::get('status', 'ApiCheckingController@CheckGameStatus');
 
 Route::get('check-ip-details', 'ApiCheckingController@CheckIpDetails');
 
-Route::get('send/email', 'ApiController@sendEmail');
+Route::get('weekly-report', 'ApiController@weeklyReport');

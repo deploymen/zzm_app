@@ -908,6 +908,7 @@ class ZapZapQuestionHelper{
 				if($r->id != $prevQuestionId){
 					array_push($results, [
 						'id' => $r->question_id,
+						'answer' => $r->answer,
 						'c1' => $r->c1 ,
 						'c1u' => $r->c1u ,
 						'c1d' => $r->c1d ,
@@ -928,7 +929,6 @@ class ZapZapQuestionHelper{
 						'c4d' => $r->c4d ,
 						'c4au' => $r->c4au ,
 						'c4ad' => $r->c4ad ,
-						
 						'difficulty' => $r->difficulty,
 						
 					]);

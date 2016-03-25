@@ -116,7 +116,7 @@ Class AuthSchoologyController extends Controller {
         $country = Request::input('country');
 
         $newUser = ApiUserHelper::Register('teacher' , $name , $email , $country , $schoology_id , '' , 'schoology');
-        $newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  , 'Default Profile' , '' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
+        $newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  , '' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
 
         $user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser['user_id']);
         $userExternalId = UserExternalId::where('user_id' , $newUser['user_id'])->update(['schoology_id' => $schoology_id ]);

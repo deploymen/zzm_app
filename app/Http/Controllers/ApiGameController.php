@@ -113,6 +113,7 @@ Class ApiGameController extends Controller {
 			}else{
 				
 				$type = GameType::find($planet->game_type_id);
+		
 				switch($type->name){
 					case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId,$difficulty,$questionCount , $language); break;
 					case 'p02':$questions = ZapZapQuestionHelper::GetQuestionP02($planetId,$difficulty,$questionCount); break;
@@ -193,6 +194,7 @@ Class ApiGameController extends Controller {
 		$jsonGameResult = Request::input('game_result');
 		$hash = Request::input('hash');
 		$random = Request::input('random');
+		$playedTime = Request::input('played_time');
 
 		$profileId = Request::input('game_code_profile_id');
 		$userId = Request::input('user_id');
@@ -213,12 +215,13 @@ Class ApiGameController extends Controller {
 				return ResponseHelper::OutputJSON('fail', 'planet is not enable');
 			}
 
-			if(!$jsonGameResult || !$hash || !$random){
+			if(!$jsonGameResult || !$hash || !$random || !$playedTime){
 				return ResponseHelper::OutputJSON('fail', 'missing parameter');
 
 			}
 
 			$gameResult = json_decode($jsonGameResult, true);
+
 			if(!isset($gameResult['score']) || !isset($gameResult['answers'])|| !isset($gameResult['status']) ){ 
 
 				return ResponseHelper::OutputJSON('fail', 'invalid game result format');
@@ -239,6 +242,7 @@ Class ApiGameController extends Controller {
 			}
 
 			$checkResult = GamePlay::where('hash', $hash1)->first();	
+
 			if($checkResult){
 				return ResponseHelper::OutputJSON('fail', 'no double submit');
 			}
@@ -284,6 +288,7 @@ Class ApiGameController extends Controller {
 			$gamePlay->code = $gameCode;
 			$gamePlay->hash = $hash1;
 			$gamePlay->status = $gameStatus;
+			$gamePlay->played_time = $playedTime;
 
 			if(isset($gameResult['badges']) ){
 				
@@ -953,6 +958,35 @@ Class ApiGameController extends Controller {
 		}
 
 		return ResponseHelper::OutputJSON('success');
+	}
+
+	public function getGameCodeInfo(){
+		$code = Request::input('game_code');
+
+		if(!$code){
+			return ResponseHelper::OutputJSON('fail' , 'missing parameter');
+		}
+
+		$gameCode = GameCode::where('code' , $code)->first();
+
+		$totalStar = UserMap::where('profile_id', $gameCode->profile_id)->sum('star');
+
+		$profile = GameProfile::find($gameCode->profile_id);
+
+		$profile->nickName1;
+		$profile->nickName2;
+		$profile->avatar;
+
+		return ResponseHelper::OutputJSON('success', '' , [
+				'first_name' => $profile->first_name,
+				'last_name' => $profile->last_name,
+				'grade' =>$profile->grade,
+				'total_star' => $totalStar,
+				'game_code' => $code,
+				'nick_name1' =>$profile->nickName1->name,
+				'nick_name2' =>$profile->nickName2->name,
+				'avatar_id' => $profile->avatar->id,
+		 ]);
 	}
 
 }

@@ -63,7 +63,7 @@
                         <td>game_result</td>
                         <td></td>
                         <td>
-                          {"score":"1","status":"pass","level":"10","experience":"8000","answers":[{"question_id":275018,"answer":"2","answer_option":"2","correct":1,"complete_time":"3","difficulty":"1"},{"question_id":275018,"answer":"2","answer_option":"2","correct":1,"complete_time":"3","difficulty":"1"},{"question_id":275018,"answer":"1","answer_option":"2","correct":1,"complete_time":"3","difficulty":"1"},{"question_id":275018,"answer":"2","answer_option":"2","correct":0,"complete_time":"3","difficulty":"1"},{"question_id":275018,"answer":"3","answer_option":"2","correct":0,"complete_time":"3","difficulty":"1"},{"question_id":275018,"answer":"2","answer_option":"2","correct":1,"complete_time":"3","difficulty":"1"},{"question_id":275018,"answer":"4","answer_option":"2","correct":0,"complete_time":"3","difficulty":"1"},{"question_id":275018,"answer":"3","answer_option":"2","correct":0,"complete_time":"3","difficulty":"1"},{"question_id":275018,"answer":"2","answer_option":"2","correct":1,"complete_time":"3","difficulty":"1"},{"question_id":275018,"answer":"1","answer_option":"2","correct":0,"complete_time":"3","difficulty":"1"}]}
+                          {"score":"1","status":"pass","badges":{"speed":"1","accuracy":"1"},"game_played":"11:10","answers":[XXXX]}
                         </td>
                     </tr>
                     <tr>
