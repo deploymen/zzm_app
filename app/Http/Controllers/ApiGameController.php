@@ -983,9 +983,9 @@ Class ApiGameController extends Controller {
 				'grade' =>$profile->grade,
 				'total_star' => $totalStar,
 				'game_code' => $code,
-				'nick_name1' =>$profile->nickName1,
-				'nick_name2' =>$profile->nickName2,
-				'avatar' => $profile->avatar,
+				'nick_name1' =>$profile->nickName1->name,
+				'nick_name2' =>$profile->nickName2->name,
+				'avatar_id' => $profile->avatar->id,
 		 ]);
 	}
 
