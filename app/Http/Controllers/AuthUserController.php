@@ -114,7 +114,7 @@ Class AuthUserController extends Controller {
 						$blacklist->total_register = $blacklist->total_register+1;
 						$blacklist->save();
 					}
-die('end');
+
 					$user = new User;
 					$user->role = $role;
 					$user->name = $name;
