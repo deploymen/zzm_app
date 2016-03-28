@@ -105,6 +105,16 @@ Class AuthUserController extends Controller {
 							}else{
 								$pending->total_register = $pending->total_register+1;
 								$pending->save();
+
+								if($pending->total_register >= 3){
+
+									$emailWhiteList = new EmailWhiteList;
+									$emailWhiteList->email = $domain[1];
+									$emailWhiteList->total_register = $pending->total_register;
+									$emailWhiteList->save();
+
+									$pending->delete();
+								}
 							}
 						}else{
 							$whitelist->total_register = $whitelist->total_register+1;
@@ -114,6 +124,9 @@ Class AuthUserController extends Controller {
 						$blacklist->total_register = $blacklist->total_register+1;
 						$blacklist->save();
 					}
+				
+					
+					die();
 
 					$user = new User;
 					$user->role = $role;
