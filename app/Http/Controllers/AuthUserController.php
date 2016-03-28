@@ -60,34 +60,34 @@ Class AuthUserController extends Controller {
 		$ref = Request::input('ref');
 		$classId = 0;
 
-		// if (!$username || !$password || !$name || !$email || !$country || !$role) {
-		// 	return ResponseHelper::OutputJSON('fail', "missing parameters");
-		// }
+		if (!$username || !$password || !$name || !$email || !$country || !$role) {
+			return ResponseHelper::OutputJSON('fail', "missing parameters");
+		}
 
-		// switch ($role) {
-		// 	case 'parent':
+		switch ($role) {
+			case 'parent':
 
-		// 	break;
-		// 	case 'teacher':
+			break;
+			case 'teacher':
 
-		// 	break;
-		// 	default:return ResponseHelper::OutputJSON('fail', "invalid role");
-		// }
+			break;
+			default:return ResponseHelper::OutputJSON('fail', "invalid role");
+		}
 
-		// if (strlen($password) < 6) {
-		// 	return ResponseHelper::OutputJSON('fail', 'password must be atleast 6 chars');
-		// }
+		if (strlen($password) < 6) {
+			return ResponseHelper::OutputJSON('fail', 'password must be atleast 6 chars');
+		}
 
-		// if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-		// 	return ResponseHelper::OutputJSON('fail', "invalid email format");
-		// }
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			return ResponseHelper::OutputJSON('fail', "invalid email format");
+		}
 
-		// $access = UserAccess::where('username', $username)->first();
-		// if ($access) {
-		// 	return ResponseHelper::OutputJSON('fail', "email used");
-		// }
+		$access = UserAccess::where('username', $username)->first();
+		if ($access) {
+			return ResponseHelper::OutputJSON('fail', "email used");
+		}
 
-		// try {	
+		try {	
 			// DB::transaction(function ()
 				 // use ($role, $username, $password_sha1, $name, $email, $country, $deviceId, $accessToken, $classId) {
 					$domain = explode('@' , $email);
@@ -124,9 +124,6 @@ Class AuthUserController extends Controller {
 						$blacklist->total_register = $blacklist->total_register+1;
 						$blacklist->save();
 					}
-				
-					
-					die();
 
 					$user = new User;
 					$user->role = $role;
@@ -244,13 +241,13 @@ Class AuthUserController extends Controller {
 			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
 			$list = User::select('id' , 'role' , 'name' , 'register_from')->find($userAccess->user_id);
 
-		// } catch (Exception $ex) {
-		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-		// 		'source' => 'AuthUserController > signUp',
-		// 		'inputs' => Request::all(),
-		// 	])]);
-		// 	return ResponseHelper::OutputJSON('exception');
-		// }
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'AuthUserController > signUp',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 
 		return ResponseHelper::OutputJSON('success', '', ['user' => $list], [
 			'X-access-token' => $accessToken,
