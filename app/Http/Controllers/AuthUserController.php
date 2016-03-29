@@ -21,9 +21,7 @@ use App\Models\UserAccess;
 use App\Models\UserFlag;
 use App\Models\UserExternalId;
 use App\Models\UserSetting;
-use App\Models\EmailBlackList;
-use App\Models\EmailWhiteList;
-use App\Models\EmailPending;
+use App\Models\RewardShareDomain;
 use Config;
 use Cookie;
 use DB;
@@ -59,6 +57,7 @@ Class AuthUserController extends Controller {
 		$registerFrom = Request::input('register_from' , 'website');
 		$ref = Request::input('ref');
 		$classId = 0;
+		$profileLimit = 3;
 
 		if (!$username || !$password || !$name || !$email || !$country || !$role) {
 			return ResponseHelper::OutputJSON('fail', "missing parameters");
@@ -87,43 +86,9 @@ Class AuthUserController extends Controller {
 			return ResponseHelper::OutputJSON('fail', "email used");
 		}
 
-		try {	
+		// try {	
 			// DB::transaction(function ()
 				 // use ($role, $username, $password_sha1, $name, $email, $country, $deviceId, $accessToken, $classId) {
-					$domain = explode('@' , $email);
-
-					$blacklist = EmailBlackList::where('email' , $domain[1])->first();
-					if(!$blacklist){
-						$whitelist = EmailWhitelist::where('email' , $domain[1])->first();
-						if(!$whitelist){
-							$pending = EmailPending::where('email', $domain[1])->first();
-							if(!$pending){
-								$newPending = new EmailPending;
-								$newPending->email = $domain[1];
-								$newPending->total_register = 1;
-								$newPending->save();
-							}else{
-								$pending->total_register = $pending->total_register+1;
-								$pending->save();
-
-								if($pending->total_register >= 3){
-
-									$emailWhiteList = new EmailWhiteList;
-									$emailWhiteList->email = $domain[1];
-									$emailWhiteList->total_register = $pending->total_register;
-									$emailWhiteList->save();
-
-									$pending->delete();
-								}
-							}
-						}else{
-							$whitelist->total_register = $whitelist->total_register+1;
-							$whitelist->save();
-						}
-					}else{
-						$blacklist->total_register = $blacklist->total_register+1;
-						$blacklist->save();
-					}
 
 					$user = new User;
 					$user->role = $role;
@@ -241,13 +206,13 @@ Class AuthUserController extends Controller {
 			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
 			$list = User::select('id' , 'role' , 'name' , 'register_from')->find($userAccess->user_id);
 
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'AuthUserController > signUp',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		// } catch (Exception $ex) {
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		'source' => 'AuthUserController > signUp',
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 
 		return ResponseHelper::OutputJSON('success', '', ['user' => $list], [
 			'X-access-token' => $accessToken,
@@ -520,6 +485,62 @@ Class AuthUserController extends Controller {
 			$user->activated = 1;
 			$user->save();
 
+			if($user->role ==  'teacher'){ //need update
+				$domain = explode('@' , $user->email);
+
+				$shareDomain = RewardShareDomain::where('domain' , $domain[1])->first();
+			
+				if(!$shareDomain){
+					$shareDomain = new RewardShareDomain;
+					$shareDomain->domain = $domain[1];
+					$shareDomain->save();
+				
+				}
+
+				if(!$shareDomain->blacklist){
+					if(!$shareDomain->unlock){
+						$sql = "
+							SELECT * 
+								FROM(
+									SELECT SUBSTRING_INDEX(`email`,'@', -1) AS `domain` , count(*) AS `count`
+										FROM `t0101_user` 
+										GROUP BY `domain`
+									) a
+								WHERE a.`domain` = :domain
+						";
+						$mail = DB::SELECT($sql , ["domain" => $domain[1]] );
+
+						if($mail[0]->count >= 3){
+							$shareDomain->unlock = 1;
+							$shareDomain->save();
+
+							$sqlUpdate = "  
+								UPDATE  `t0105_user_flag` a
+							        INNER JOIN (SELECT `id`
+							                    	FROM(
+								                        SELECT `id`,  SUBSTRING_INDEX(`email`,'@', -1) AS `domain`
+								                        FROM `t0101_user` 
+								                        WHERE `role` = 'teacher'
+							                    ) a
+							            WHERE a.`domain` = :domain) b
+							            ON a.`user_id` = b.`id`
+										SET a.`profile_limit` = 50,
+											a.`class_limit` = 50
+								";
+
+							$update = DB::update($sqlUpdate , ["domain" => $domain[1] ] );
+
+						}
+					}else{
+
+						$userFlag = UserFlag::find($user->id);
+						$userFlag->profile_limit = 50;
+						$userFlag->class_limit = 50;
+						$userFlag->save();
+					}
+				}
+			}
+
 			return redirect::to('../user/activate-success');
 
 		} catch (Exception $ex) {
@@ -590,22 +611,18 @@ Class AuthUserController extends Controller {
 	}
 
 	public function invite() {
-		return ResponseHelper::OutputJSON('fail', "not yet support");
-
-		$name = Request::input('name');
+		$userId = Request::input('user_id');
 		$email = Request::input('email');
-		$deviceId = Request::input('device_id', '');
 
-		if (!$name || !$email || !$deviceId) {
+		if (!$email) {
 			return ResponseHelper::OutputJSON('fail', "missing parameters");
 		}
 
 		try {
 
 			$logInvite = new LogInvite;
+			$logInvite->user_id = $userId;
 			$logInvite->email = $email;
-			$logInvite->name = $name;
-			$logInvite->device_id = $deviceId;
 			$logInvite->save();
 
 			$edmHtml = (string) view('emails.invitation', [
@@ -867,7 +884,6 @@ Class AuthUserController extends Controller {
 		$logOpenAcc->save();
 
 		return ResponseHelper::OutputJSON('success');
-
 	}
 
 	//Socialite
@@ -1037,8 +1053,6 @@ Class AuthUserController extends Controller {
 		}
 
 		return ResponseHelper::OutputJSON('success' , '' , ['within_profile_limit' => 1 ,'total_share' => $userFlag->total_share]);
-
-
 	}
 }
 
