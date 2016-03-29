@@ -176,12 +176,21 @@ Class ApiClassController extends Controller {
 	}
 
 	public function getGameClass($classId){
+		$userId = Request::input('user_id');
+
 		$class = GameClass::find($classId);
+
+		$profileCount = GameProfile::where('class_id' , $classId)->where('user_id' , $userId)->count();
 
 		if(!$class){
 			return ResponseHelper::OutputJSON('fail', "class no found");
 		}
 
-		return ResponseHelper::OutputJSON('success', '', $class);
+		return ResponseHelper::OutputJSON('success', '', [ 
+			'id' => $class->id,
+			'user_id' => $class->user_id,
+			'name' => $class->name,
+			'profile_count' => $profileCount
+			]);
 	}
 }
