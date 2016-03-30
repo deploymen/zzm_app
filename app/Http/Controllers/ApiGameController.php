@@ -533,6 +533,7 @@ Class ApiGameController extends Controller {
 
 		// try{
 			$result = ZapZapQuestionHelper::GetUserMapV11($profileId);
+
 			$totalStar = UserMap::where('profile_id', $profileId)->sum('star');
 
 			$profile = GameProfile::find($profileId);

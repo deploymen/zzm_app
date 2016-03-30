@@ -147,9 +147,9 @@ class ZapZapQuestionHelper{
 				 		WHERE  sp.`planet_id` = p.`id`
 				 			AND sp.`system_id` = s.`id`
 				 			AND sp.`enable` = '1'
-				 			AND sp.`subsytem_id` = ss.`id`
+				 			AND sp.`subsystem_id` = ss.`id`
 				 	
-				 			ORDER BY sp.`system_id` , sp.`subsytem_id`
+				 			ORDER BY sp.`system_id` , sp.`subsystem_id`
 				";
 				
 			$result = DB::SELECT($sql, ['profileId'=>$profileId]);
