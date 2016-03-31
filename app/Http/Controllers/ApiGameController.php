@@ -531,8 +531,9 @@ Class ApiGameController extends Controller {
 		$deviceId = Request::input('game_code_device_id');
 		$gameCode = Request::input('game_code');
 
-		try{
+		// try{
 			$result = ZapZapQuestionHelper::GetUserMapV11($profileId);
+
 			$totalStar = UserMap::where('profile_id', $profileId)->sum('star');
 
 			$profile = GameProfile::find($profileId);
@@ -613,14 +614,14 @@ Class ApiGameController extends Controller {
 					'system_planet' => $systems
 					 ]);
 		
-		} catch (Exception $ex) {
+		// } catch (Exception $ex) {
 
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiGameController > getUserMap',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		'source' => 'ApiGameController > getUserMap',
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 	}
 
 	public function clearLeaderBoard(){
