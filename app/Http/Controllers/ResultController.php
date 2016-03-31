@@ -18,47 +18,59 @@ Class ResultController extends Controller {
 	public function onlySystem() {
 		$gameCode = Request::input('game_code');
 		$profileId = Request::input('profile_id');
-		$fake = Request::input('fake', 0);
-		if ($fake) {
-			$profileId = 365;
-		}
 
 		$page = Request::input("page", '1');
 		$pageSize = Request::input("page_size", '30');
 		$pagination = $pageSize * ($page - 1);
-		// try {
+		
+		try {
 
 			$sql = "
-				SELECT s.`name` , sp.`system_id` , IF(SUM(um.`played`) > 0, 1, 0) AS `played` , IFNULL(SUM(um.`star`) , 0 ) AS `star` , count(sp.`planet_id`) AS `total_planet`
-                    FROM (`t0124_game_system_planet` sp , `t0122_game_system` s)
-                        LEFT JOIN `t0501_game_user_map` um ON (um.`planet_id` = sp.`planet_id` AND um.`profile_id`  = {$profileId})
-
+				SELECT sp.`grade` , sp.`system_id` , s.`name` AS `system_name` , ss.`name` AS `subsystem_name` , IF(SUM(um.`played`) > 0, 1, 0) AS `played` , IFNULL(SUM(um.`star`) , 0 ) AS `star` , count(sp.`planet_id`) AS `total_planet` 
+                    FROM (`t0124_game_system_planet` sp , `t0122_game_system` s , `t0122_game_system_sub` ss)
+                      LEFT JOIN `t0501_game_user_map` um ON um.`planet_id` = sp.`planet_id` AND um.`profile_id`  = 1
 						WHERE sp.`system_id` = s.`id`
-						AND s.`enable` = 1
-                        GROUP BY `system_id`
-                        ORDER BY `system_id` ASC
-
-                        LIMIT {$pagination} , {$pageSize}
+						AND sp.`subsystem_id` = ss.`id`
+						GROUP BY sp.`system_id`, sp.`subsystem_id`
+                        ORDER BY `grade` , `system_id` ASC
 			";
 
 			$result = DB::SELECT($sql);
 			$total = count($result);
 
 			$system = [];
-			for ($i = 0; $i < count($result); $i++) {
+			$preGrade = '0';
+			$preSystemId = '0';
+			for ($i = 0; $i < $total; $i++) {
 				$r = $result[$i];
 
-				if($r->system_id != 999 && $r->system_id != 117){
-					$totalPlanet = $r->total_planet * 5;
-					$percentage = $r->star / $totalPlanet * 100 / 1;
-
+				if($r->grade != $preGrade){
+			
 					array_push($system, [
-						'id' => $r->system_id,
-						'system_name' => $r->name,
+						'grade' => $r->grade,
+						'system' => [],
+						]);
+
+					$preGrade = $r->grade;
+				}
+
+				if($r->system_id != $preSystemId){
+					array_push($system[count($system)-1]['system'], [
+						'system_name' => $r->system_name,
+						'subsystem' => [],
+						]);
+
+					$preSystemId = $r->system_id;
+				}
+
+				$totalPlanet = $r->total_planet * 5;
+				$percentage = $r->star / $totalPlanet * 100 / 1;
+
+				array_push($system[count($system)-1]['system'][count($system[count($system)-1]['system'])-1]['subsystem'], [
+						'subsystem_name' => $r->subsystem_name,
 						'played' => $r->played,
 						'percentage' => number_format($percentage, 0),
-					]);
-				}
+						]);
 			}
 
 			return ResponseHelper::OutputJSON('success', '', [
@@ -67,13 +79,14 @@ Class ResultController extends Controller {
 				'page_size' => $pageSize,
 				'pageTotal' => ceil($total / $pageSize),
 			]);
-		// } catch (Exception $ex) {
-		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-		// 		'source' => 'ResultController > onlySystem',
-		// 		'inputs' => Request::all(),
-		// 	])]);
-		// 	return ResponseHelper::OutputJSON('exception');
-		// }
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ResultController > onlySystem',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 	}
 
 	public function onlyPlanet() {
@@ -279,5 +292,8 @@ Class ResultController extends Controller {
 		// 	])]);
 		// 	return ResponseHelper::OutputJSON('exception');
 		// }
+	}
+
+	public function Dashboard(){
 	}
 }
