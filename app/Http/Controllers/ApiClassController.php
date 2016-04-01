@@ -6,6 +6,7 @@ use Config;
 use App\Models;
 use App\Models\GameProfile;
 use App\Models\GameClass;
+use App\Models\UserFlag;
 use App\Libraries;
 use App\Libraries\LogHelper;
 use App\Libraries\ResponseHelper;
