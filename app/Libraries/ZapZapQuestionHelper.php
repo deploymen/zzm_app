@@ -138,7 +138,7 @@ class ZapZapQuestionHelper{
 		try{
 			
 			$sql = "
-				SELECT um.`level`,um.`exp`, um.`top_score` , s.`id` AS `system_id` , s.`name` AS `system_name` ,ss.`id` AS `subsystem_id` ,ss.`name`  AS `subsytem_name` , p.`id` AS `planet_id` , p.`name` AS `planet_name` , p.`description` ,CAST(IFNULL(um.`star`, 0) AS UNSIGNED) AS `star`
+				SELECT um.`level`,um.`exp`, um.`top_score` , s.`id` AS `system_id` , s.`name` AS `system_name` ,ss.`id` AS `subsystem_id` ,ss.`name`  AS `subsystem_name` , p.`id` AS `planet_id` , p.`name` AS `planet_name` , p.`description` ,CAST(IFNULL(um.`star`, 0) AS UNSIGNED) AS `star`
 					FROM (`t0122_game_system` s, `t0122_game_system_sub` ss, `t0123_game_planet` p , `t0124_game_system_planet` sp ) 
 						LEFT JOIN `t0501_game_user_map` um 
 							ON(
@@ -147,13 +147,13 @@ class ZapZapQuestionHelper{
 				 		WHERE  sp.`planet_id` = p.`id`
 				 			AND sp.`system_id` = s.`id`
 				 			AND sp.`enable` = '1'
-				 			AND sp.`subsytem_id` = ss.`id`
-				 			
-				 			ORDER BY sp.`system_id` , sp.`subsytem_id`
+				 			AND sp.`subsystem_id` = ss.`id`
+				 	
+				 			ORDER BY sp.`system_id` , sp.`subsystem_id`
 				";
 				
 			$result = DB::SELECT($sql, ['profileId'=>$profileId]);
-		
+
 			return $result;
 
 		}catch(Exception $ex){
@@ -331,8 +331,9 @@ class ZapZapQuestionHelper{
 			}
 
 			$sql = "
-				SELECT p03.*, qc.`question_id`
-					FROM `t0203_game_question_p03` p03, `t0126_game_planet_question_cache` qc
+				SELECT p03.*, qc.`question_id` , obj.`question_object_1`,obj.`question_object_2` , obj.`question_type`
+					FROM (`t0203_game_question_p03` p03, `t0126_game_planet_question_cache` qc)
+						LEFT JOIN `t0203_game_question_p03_object` obj ON (obj.`question_id` = p03.`id` )
                         WHERE qc.`planet_id` = {$planetId}
                         	AND qc.`difficulty` = {$difficulty}
                         	AND p03.`id` = qc.`target_id`
@@ -353,6 +354,9 @@ class ZapZapQuestionHelper{
 					array_push($results, [
 						'id' => $r->question_id,
 						'question' => $r->question,
+						'question_type' => $r->question_type,
+						'question_object_1' => $r->question_object_1,
+						'question_object_2' => $r->question_object_2,
 						'answer' => $r->answer,
 						'answer_option_1' => $r->answer_option_1,
 						'answer_option_2' => $r->answer_option_2,
@@ -904,6 +908,7 @@ class ZapZapQuestionHelper{
 				if($r->id != $prevQuestionId){
 					array_push($results, [
 						'id' => $r->question_id,
+						'answer' => $r->answer,
 						'c1' => $r->c1 ,
 						'c1u' => $r->c1u ,
 						'c1d' => $r->c1d ,
@@ -924,7 +929,6 @@ class ZapZapQuestionHelper{
 						'c4d' => $r->c4d ,
 						'c4au' => $r->c4au ,
 						'c4ad' => $r->c4ad ,
-						
 						'difficulty' => $r->difficulty,
 						
 					]);
@@ -1186,6 +1190,8 @@ class ZapZapQuestionHelper{
 						'number_4' => $r->number_4,
 						'color_5' => $r->color_5,
 						'number_5' => $r->number_5,
+						'color_6' => $r->color_6,
+						'number_6' => $r->number_6,
 						'fake_color_1' => $r->fake_color_1,
 						'fake_number_1' => $r->fake_number_2,
 						'fake_color_2' => $r->fake_color_2,

@@ -18,9 +18,10 @@ use App\Models\LogPasswordReset;
 use App\Models\LogSignInUser;
 use App\Models\User;
 use App\Models\UserAccess;
+use App\Models\UserFlag;
 use App\Models\UserExternalId;
 use App\Models\UserSetting;
-use App\Models\UserFlag;
+use App\Models\RewardShareDomain;
 use Config;
 use Cookie;
 use DB;
@@ -56,6 +57,7 @@ Class AuthUserController extends Controller {
 		$registerFrom = Request::input('register_from' , 'website');
 		$ref = Request::input('ref');
 		$classId = 0;
+		$profileLimit = 3;
 
 		if (!$username || !$password || !$name || !$email || !$country || !$role) {
 			return ResponseHelper::OutputJSON('fail', "missing parameters");
@@ -84,192 +86,139 @@ Class AuthUserController extends Controller {
 			return ResponseHelper::OutputJSON('fail', "email used");
 		}
 
-		try {	
-			
-			$signUp = ApiUserHelper::Register($role, $name, $email, $country, $registerFrom , $username, $password_sha1)
+		// try {	
+			// DB::transaction(function ()
+				 // use ($role, $username, $password_sha1, $name, $email, $country, $deviceId, $accessToken, $classId) {
 
-			if ($deviceId) {
-				//claim back previous game result played from this device id
-				//to do...
-			}
+					$user = new User;
+					$user->role = $role;
+					$user->name = $name;
+					$user->email = $email;
+					$user->country = $country;
+					$user->register_from = $registerFrom;
+					$user->ref = $ref;
+					$user->save();
 
-			$secretKey = sha1(time() . $email);
-			$edmHtml = (string) view('emails.account-activation', [
-				'name' => $name,
-				'app_store_address' => config('app.app_store_url'),
-				'username' => $email,
-				'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
-				'activation_link' => config('app.website_url') . "/api/auth/activate/{$secretKey}",
-				'email_support' => config('app.support_email'),
-				'social_media_links' => config('app.fanpage_url'),
-			]);
+					$accessToken = AuthHelper::GenerateAccessToken($user->id);
 
-			EmailHelper::SendEmail([
-				'about' => 'Welcome',
-				'subject' => 'Your Zap Zap Account is now ready!',
-				'body' => $edmHtml,
-				'bodyHtml' => $edmHtml,
-				'toAddresses' => [$email],
-			]);
+					$access = new UserAccess;
+					$access->user_id = $user->id;
+					$access->username = $username;
+					$access->password_sha1 = $password_sha1;
+					$access->access_token = $accessToken;
+					$access->access_token_issue_at = DB::raw('NOW()');
+					$access->access_token_issue_ip = Request::ip();
+					$access->access_token_expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 10 YEAR)'); //we dont kick them out
+					$access->save();
 
-			$logOpenAcc = new LogAccountActivate;
-			$logOpenAcc->user_id = $user->id;
-			$logOpenAcc->secret = $secretKey;
-			$logOpenAcc->save();
+					$extId = new UserExternalId;
+					$extId->user_id = $user->id;
+					if ($deviceId) {$extId->device_id = $deviceId;}
+					$extId->save();
 
-			//job done - log it!
-			DatabaseUtilHelper::LogInsert($signUp, 't0101_user', $signUp);
-			DatabaseUtilHelper::LogInsert($signUp, 't0102_user_access', $signUp);
-			DatabaseUtilHelper::LogInsert($signUp, 't0103_user_external_id', $signUp);
-			DatabaseUtilHelper::LogInsert($signUp, 't0111_game_profile', $profile->id);
-			DatabaseUtilHelper::LogInsert($signUp, 't0113_game_code', $code->id);
+					$setting = new UserSetting;
+					$setting->user_id = $user->id;
+					$setting->save();
 
-			Session::put('access_token', $accessToken);
-			setcookie('access_token', $accessToken, time() + (86400 * 30), "/"); // 86400 = 1 day*/
+					$userFlag = new UserFlag;
+					$userFlag->user_id = $user->id;
+
+					if($role == 'teacher'){
+						$gameClass = new GameClass;
+						$gameClass->user_id = $user->id;
+						$gameClass->name = 'Default Class';
+						$gameClass->save();
+
+						$userFlag->profile_limit = 3;
+						$userFlag->class_limit = 50;
+						$userFlag->save();
+
+						$classId = $gameClass->id;
+					}else{
+						$userFlag->profile_limit = 1;
+						$userFlag->class_limit = 0;
+						$userFlag->save();
+					}
+
+					$profile = new GameProfile;
+					$profile->user_id = $user->id;
+					$profile->nickname1 = 999;
+					$profile->nickname2 = 999;
+					$profile->avatar_id = 999;
+					$profile->class_id = $classId;
+					$profile->school = 'default school';
+					$profile->save();
+
+					$idCounter = IdCounter::find(1);
+					$gameCodeSeed = $idCounter->game_code_seed;
+					$idCounter->game_code_seed = $gameCodeSeed + 1;
+					$idCounter->save();
+
+					$code = new GameCode;
+					$code->type = 'signed_up_profile';
+					$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
+					$code->seed = $gameCodeSeed;
+					$code->profile_id = $profile->id;
+					$code->save();
+
+					if ($deviceId) {
+						//claim back previous game result played from this device id
+						//to do...
+					}
+
+					$secretKey = sha1(time() . $email);
+					$edmHtml = (string) view('emails.account-activation', [
+						'name' => $name,
+						'app_store_address' => config('app.app_store_url'),
+						'username' => $email,
+						'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
+						'activation_link' => config('app.website_url') . "/api/auth/activate/{$secretKey}",
+						'email_support' => config('app.support_email'),
+						'social_media_links' => config('app.fanpage_url'),
+					]);
+
+					EmailHelper::SendEmail([
+						'about' => 'Welcome',
+						'subject' => 'Your Zap Zap Account is now ready!',
+						'body' => $edmHtml,
+						'bodyHtml' => $edmHtml,
+						'toAddresses' => [$email],
+					]);
+
+					$logOpenAcc = new LogAccountActivate;
+					$logOpenAcc->user_id = $user->id;
+					$logOpenAcc->secret = $secretKey;
+					$logOpenAcc->save();
+
+					//job done - log it!
+					DatabaseUtilHelper::LogInsert($user->id, $user->table, $user->id);
+					DatabaseUtilHelper::LogInsert($user->id, $access->table, $user->id);
+					DatabaseUtilHelper::LogInsert($user->id, $extId->table, $user->id);
+					DatabaseUtilHelper::LogInsert($user->id, $extId->table, $user->id);
+					DatabaseUtilHelper::LogInsert($user->id, $profile->table, $profile->id);
+					DatabaseUtilHelper::LogInsert($user->id, $code->table, $code->id);
+
+					Session::put('access_token', $accessToken);
+					setcookie('access_token', $accessToken, time() + (86400 * 30), "/"); // 86400 = 1 day*/
 				// }
 				// );
 
 			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
 			$list = User::select('id' , 'role' , 'name' , 'register_from')->find($userAccess->user_id);
 
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'AuthUserController > signUp',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		// } catch (Exception $ex) {
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		'source' => 'AuthUserController > signUp',
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 
 		return ResponseHelper::OutputJSON('success', '', ['user' => $list], [
 			'X-access-token' => $accessToken,
 		], [
 			'access_token' => $accessToken,
 		]);
-	}
-
-	public function signUpApp() {
-		$email = Request::input('email');
-		$password = Request::input('password');
-		$password_sha1 = sha1($password . Config::get('app.auth_salt'));
-
-		$firstName = Request::input('first_name');
-		$lastName = Request::input('last_name', '');
-		$deviceId = Request::input('deviceId');
-		$role = Request::input('role');
-
-		if (!$email || !$firstName) {
-			return ResponseHelper::OutputJSON('fail', "missing parameters");
-		}
-
-		if ($email != '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-			return ResponseHelper::OutputJSON('fail', "invalid email format");
-		}
-
-		$access = UserAccess::where('username', $email)->first();
-		$user = User::where('email' , $email)->first();
-		if ($access || $user) {
-			return ResponseHelper::OutputJSON('fail', "email used");
-		}
-
-		try {
-			$user = new User;
-			$user->role = $role;
-			$user->email = $email;
-			$user->register_from = 'app';
-
-			$user->save();
-
-			$accessToken = AuthHelper::GenerateAccessToken($user->id);
-
-			$access = new UserAccess;
-			$access->user_id = $user->id;
-			$access->username = $email;
-			$access->password_sha1 = $password_sha1;
-			$access->access_token = $accessToken;
-			$access->access_token_issue_at = DB::raw('NOW()');
-			$access->access_token_issue_ip = Request::ip();
-			$access->access_token_expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 10 YEAR)'); //we dont kick them out
-			$access->save();
-
-			$extId = new UserExternalId;
-			$extId->user_id = $user->id;
-			if ($deviceId) {$extId->device_id = $deviceId;}
-			$extId->save();
-
-			$setting = new UserSetting;
-			$setting->user_id = $user->id;
-			$setting->save();
-
-			$profile = new GameProfile;
-			$profile->user_id = $user->id;
-			$profile->first_name = $firstName;
-			$profile->last_name = $lastName;
-			$profile->nickname1 = 999;
-			$profile->nickname2 = 999;
-			$profile->avatar_id = 999;
-			$profile->save();
-
-			$idCounter = IdCounter::find(1);
-			$gameCodeSeed = $idCounter->game_code_seed;
-			$idCounter->game_code_seed = $gameCodeSeed + 1;
-			$idCounter->save();
-
-			$code = new GameCode;
-			$code->type = 'signed_up_profile';
-			$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
-			$code->seed = $gameCodeSeed;
-			$code->profile_id = $profile->id;
-			$code->save();
-
-
-
-			if ($deviceId) {
-				//claim back previous game result played from this device id
-				//to do...
-			}
-
-			$secretKey = sha1(time() . $email);
-			$edmHtml = (string) view('emails.set-password-app-signup', [
-				'set_url' => config('app.website_url') . '/user/set-password/' . $secretKey,
-				'social_media_links' => config('app.fanpage_url'),
-			]);
-
-			EmailHelper::SendEmail([
-				'about' => 'Welcome',
-				'subject' => 'Please Confirm Your Password for Zap Zap Math',
-				'body' => $edmHtml,
-				'bodyHtml' => $edmHtml,
-				'toAddresses' => [$email],
-			]);
-
-			$logOpenAcc = new LogAccountActivate;
-			$logOpenAcc->user_id = $user->id;
-			$logOpenAcc->secret = $secretKey;
-			$logOpenAcc->save();
-
-			$logPasswordReset = new LogPasswordReset;
-			$logPasswordReset->user_id = $user->id;
-			$logPasswordReset->secret = $secretKey;
-			$logPasswordReset->save();
-
-			//job done - log it!
-			DatabaseUtilHelper::LogInsert($user->id, $user->table, $user->id);
-			DatabaseUtilHelper::LogInsert($user->id, $access->table, $user->id);
-			DatabaseUtilHelper::LogInsert($user->id, $extId->table, $user->id);
-			DatabaseUtilHelper::LogInsert($user->id, $extId->table, $user->id);
-			DatabaseUtilHelper::LogInsert($user->id, $profile->table, $profile->id);
-			DatabaseUtilHelper::LogInsert($user->id, $code->table, $code->id);
-
-			return ResponseHelper::OutputJSON('success', '', $code->code);
-
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'AuthUserController > signUp',
-				'inputs' => Request::all(),
-
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
 	}
 
 	public function signIn() {
@@ -504,6 +453,15 @@ Class AuthUserController extends Controller {
 
 	public function activate($secretKey) {
 
+		$logAccountActivated = LogAccountActivate::where('secret', $secretKey)
+			->where('expired', '1')
+			->whereNotNull('activated_at')
+			->first();
+
+		if($logAccountActivated){
+			return redirect::to('../user/activated');
+		}
+
 		$logAccountActivate = LogAccountActivate::where('secret', $secretKey)
 			->where('expired', '0')
 			->whereNull('activated_at')
@@ -526,6 +484,62 @@ Class AuthUserController extends Controller {
 
 			$user->activated = 1;
 			$user->save();
+
+			if($user->role ==  'teacher'){ //need update
+				$domain = explode('@' , $user->email);
+
+				$shareDomain = RewardShareDomain::where('domain' , $domain[1])->first();
+			
+				if(!$shareDomain){
+					$shareDomain = new RewardShareDomain;
+					$shareDomain->domain = $domain[1];
+					$shareDomain->save();
+				
+				}
+
+				if(!$shareDomain->blacklist){
+					if(!$shareDomain->unlock){
+						$sql = "
+							SELECT * 
+								FROM(
+									SELECT SUBSTRING_INDEX(`email`,'@', -1) AS `domain` , count(*) AS `count`
+										FROM `t0101_user` 
+										GROUP BY `domain`
+									) a
+								WHERE a.`domain` = :domain
+						";
+						$mail = DB::SELECT($sql , ["domain" => $domain[1]] );
+
+						if($mail[0]->count >= 3){
+							$shareDomain->unlock = 1;
+							$shareDomain->save();
+
+							$sqlUpdate = "  
+								UPDATE  `t0105_user_flag` a
+							        INNER JOIN (SELECT `id`
+							                    	FROM(
+								                        SELECT `id`,  SUBSTRING_INDEX(`email`,'@', -1) AS `domain`
+								                        FROM `t0101_user` 
+								                        WHERE `role` = 'teacher'
+							                    ) a
+							            WHERE a.`domain` = :domain) b
+							            ON a.`user_id` = b.`id`
+										SET a.`profile_limit` = 50,
+											a.`class_limit` = 50
+								";
+
+							$update = DB::update($sqlUpdate , ["domain" => $domain[1] ] );
+
+						}
+					}else{
+
+						$userFlag = UserFlag::find($user->id);
+						$userFlag->profile_limit = 50;
+						$userFlag->class_limit = 50;
+						$userFlag->save();
+					}
+				}
+			}
 
 			return redirect::to('../user/activate-success');
 
@@ -597,22 +611,18 @@ Class AuthUserController extends Controller {
 	}
 
 	public function invite() {
-		return ResponseHelper::OutputJSON('fail', "not yet support");
-
-		$name = Request::input('name');
+		$userId = Request::input('user_id');
 		$email = Request::input('email');
-		$deviceId = Request::input('device_id', '');
 
-		if (!$name || !$email || !$deviceId) {
+		if (!$email) {
 			return ResponseHelper::OutputJSON('fail', "missing parameters");
 		}
 
 		try {
 
 			$logInvite = new LogInvite;
+			$logInvite->user_id = $userId;
 			$logInvite->email = $email;
-			$logInvite->name = $name;
-			$logInvite->device_id = $deviceId;
 			$logInvite->save();
 
 			$edmHtml = (string) view('emails.invitation', [
@@ -685,6 +695,150 @@ Class AuthUserController extends Controller {
 		}
 	}
 
+	public function signUpApp() {
+		$email = Request::input('email');
+		$password = Request::input('password');
+		$password_sha1 = sha1($password . Config::get('app.auth_salt'));
+
+		$name = Request::input('name');
+		$deviceId = Request::input('deviceId');
+		$role = Request::input('role');
+		$classId = 0;
+
+		if (!$email || !$name) {
+			return ResponseHelper::OutputJSON('fail', "missing parameters");
+		}
+
+		if ($email != '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			return ResponseHelper::OutputJSON('fail', "invalid email format");
+		}
+
+		$access = UserAccess::where('username', $email)->first();
+		$user = User::where('email' , $email)->first();
+		if ($access || $user) {
+			return ResponseHelper::OutputJSON('fail', "email used");
+		}
+
+		try {
+			$user = new User;
+			$user->role = $role;
+			$user->name = $name;
+			$user->email = $email;
+			$user->register_from = 'App';
+			$user->save();
+
+			$accessToken = AuthHelper::GenerateAccessToken($user->id);
+
+			$access = new UserAccess;
+			$access->user_id = $user->id;
+			$access->username = $email;
+			$access->password_sha1 = $password_sha1;
+			$access->access_token = $accessToken;
+			$access->access_token_issue_at = DB::raw('NOW()');
+			$access->access_token_issue_ip = Request::ip();
+			$access->access_token_expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 10 YEAR)'); //we dont kick them out
+			$access->save();
+
+			$extId = new UserExternalId;
+			$extId->user_id = $user->id;
+			if ($deviceId) {$extId->device_id = $deviceId;}
+			$extId->save();
+
+			$setting = new UserSetting;
+			$setting->user_id = $user->id;
+			$setting->save();
+
+			$userFlag = new UserFlag;
+			$userFlag->user_id = $user->id;
+
+			if($role == 'teacher'){
+				$gameClass = new GameClass;
+				$gameClass->user_id = $user->id;
+				$gameClass->name = 'Default Class';
+				$gameClass->save();
+
+				$userFlag->profile_limit = 3;
+				$userFlag->class_limit = 50;
+				$userFlag->save();
+
+				$classId = $gameClass->id;
+			}else{
+				$userFlag->profile_limit = 1;
+				$userFlag->class_limit = 0;
+				$userFlag->save();
+			}
+
+			$profile = new GameProfile;
+			$profile->user_id = $user->id;
+			$profile->nickname1 = 999;
+			$profile->nickname2 = 999;
+			$profile->avatar_id = 999;
+			$profile->class_id = $classId;
+			$profile->school = 'default school';
+			$profile->save();
+
+			$idCounter = IdCounter::find(1);
+			$gameCodeSeed = $idCounter->game_code_seed;
+			$idCounter->game_code_seed = $gameCodeSeed + 1;
+			$idCounter->save();
+
+			$code = new GameCode;
+			$code->type = 'signed_up_profile';
+			$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
+			$code->seed = $gameCodeSeed;
+			$code->profile_id = $profile->id;
+			$code->save();
+
+
+			if ($deviceId) {
+				//claim back previous game result played from this device id
+				//to do...
+			}
+
+			$secretKey = sha1(time() . $email);
+			$edmHtml = (string) view('emails.set-password-app-signup', [
+				'set_url' => config('app.website_url') . '/user/set-password/' . $secretKey,
+				'social_media_links' => config('app.fanpage_url'),
+			]);
+
+			EmailHelper::SendEmail([
+				'about' => 'Welcome',
+				'subject' => 'Please Confirm Your Password for Zap Zap Math',
+				'body' => $edmHtml,
+				'bodyHtml' => $edmHtml,
+				'toAddresses' => [$email],
+			]);
+
+			$logOpenAcc = new LogAccountActivate;
+			$logOpenAcc->user_id = $user->id;
+			$logOpenAcc->secret = $secretKey;
+			$logOpenAcc->save();
+
+			$logPasswordReset = new LogPasswordReset;
+			$logPasswordReset->user_id = $user->id;
+			$logPasswordReset->secret = $secretKey;
+			$logPasswordReset->save();
+
+			//job done - log it!
+			DatabaseUtilHelper::LogInsert($user->id, $user->table, $user->id);
+			DatabaseUtilHelper::LogInsert($user->id, $access->table, $user->id);
+			DatabaseUtilHelper::LogInsert($user->id, $extId->table, $user->id);
+			DatabaseUtilHelper::LogInsert($user->id, $extId->table, $user->id);
+			DatabaseUtilHelper::LogInsert($user->id, $profile->table, $profile->id);
+			DatabaseUtilHelper::LogInsert($user->id, $code->table, $code->id);
+
+			return ResponseHelper::OutputJSON('success', '', $code->code);
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'AuthUserController > signUp',
+				'inputs' => Request::all(),
+
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
+	}
+
 	public function ResendACtivateCode(){
 		$email = Request::input('email');
 
@@ -730,7 +884,6 @@ Class AuthUserController extends Controller {
 		$logOpenAcc->save();
 
 		return ResponseHelper::OutputJSON('success');
-
 	}
 
 	//Socialite
@@ -861,19 +1014,10 @@ Class AuthUserController extends Controller {
 		$classId = 0;
 		$newUser = ApiUserHelper::Register($role , $name , $email , $country , $facebook_id , '' , 'facebook');
 
-		if($role == 'teacher'){
-			$gameClass = new GameClass;
-			$gameClass->user_id = $newUser;
-			$gameClass->name = 'Default Class';
-			$gameClass->save();
+		$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
 
-			$classId = $gameClass->id;
-		}
-
-		$newProfile = ApiProfileHelper::newProfile($newUser , $classId , 'Default Profile' , '' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
-
-		$user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser);
-		$userExternalId = UserExternalId::where('user_id' , $newUser)->update(['facebook_id' => $facebook_id ]);
+		$user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser['user_id']);
+		$userExternalId = UserExternalId::where('user_id' , $newUser['user_id'])->update(['facebook_id' => $facebook_id ]);
 		$userAccess = UserAccess::where('user_id' , $user->id)->first();
 
 		$firstLogin = 1;
@@ -892,7 +1036,23 @@ Class AuthUserController extends Controller {
 		], [
 			'access_token' => $userAccess->access_token,
 		]);
+	}
 
+	public function checkUserFlag(){
+
+		$userId = Request::input('user_id');
+
+		$userFlag = UserFlag::find($userId);
+		if(!$userFlag){
+			return ResponseHelper::OutputJSON('success' , 'user flag not found');
+		}
+		$userProfile = GameProfile::where('user_id' , $userId)->count();
+
+		if($userProfile >= $userFlag->profile_limit){
+			return ResponseHelper::OutputJSON('success' , '' , ['within_profile_limit' => 0, 'total_share' => $userFlag->total_share]);
+		}
+
+		return ResponseHelper::OutputJSON('success' , '' , ['within_profile_limit' => 1 ,'total_share' => $userFlag->total_share]);
 	}
 }
 

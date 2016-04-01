@@ -83,18 +83,6 @@ Class AuthSchoologyController extends Controller {
 
 			if(!$userAccess){
 				return redirect(url(env('WEBSITE_URL').'/user/redirect-signup/schoology'))->with('name' , $schoologyUser['original']['name'])->with('email' , $schoologyUser['original']['email'])->with('schoology_id' , $schoologyUser['original']['id']);
-
-				// $password_sha1 = sha($schoologyUser['original']['id']);
-				// $userId = ApiUserHelper::Register('teacher', $schoologyUser['original']['name'] , $schoologyUser['original']['email'], '', $schoologyUser['original']['id'], $password_sha1, 'schoology' ,$deviceId = '');
-
-				// $gameClass = new GameClass;
-				// $gameClass->user_id = $userId;
-				// $gameClass->name = 'Default Class';
-				// $gameClass->save();
-
-				// $classId = $gameClass->id;
-
-				// $newProfile = ApiProfileHelper::newProfile($userId , $classId , 'Default Profile' , '' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
 			}
 
 			//sync account
@@ -119,7 +107,39 @@ Class AuthSchoologyController extends Controller {
 		}else{
 			return redirect($url);
 		}
-		
 	}
+
+	public function schoologySignUp(){
+        $name = Request::input('name');
+        $email = Request::input('email');
+        $schoology_id = Request::input('schoology_id');
+        $country = Request::input('country');
+
+        $newUser = ApiUserHelper::Register('teacher' , $name , $email , $country , $schoology_id , '' , 'schoology');
+        $newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  , '' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
+
+        $user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser['user_id']);
+        $userExternalId = UserExternalId::where('user_id' , $newUser['user_id'])->update(['schoology_id' => $schoology_id ]);
+        $userAccess = UserAccess::where('user_id' , $user->id)->first();
+
+        $firstLogin = 1;
+
+        $cookie = Cookie::make('access_token', $userAccess->access_token);
+
+        $log = new LogSignInUser;
+        $log->username = $userAccess->username;
+        $log->password_sha1 = '';
+        $log->success = 1;
+        $log->created_ip = Request::ip();
+        $log->save();
+
+        return ResponseHelper::OutputJSON('success', '', ['user' => $user], [
+            'X-access-token' => $userAccess->access_token,
+        ], [
+            'access_token' => $userAccess->access_token,
+        ]);
+
+    }
+
 }
 

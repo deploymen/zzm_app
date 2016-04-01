@@ -113,6 +113,7 @@ Class ApiGameController extends Controller {
 			}else{
 				
 				$type = GameType::find($planet->game_type_id);
+		
 				switch($type->name){
 					case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId,$difficulty,$questionCount , $language); break;
 					case 'p02':$questions = ZapZapQuestionHelper::GetQuestionP02($planetId,$difficulty,$questionCount); break;
@@ -193,6 +194,7 @@ Class ApiGameController extends Controller {
 		$jsonGameResult = Request::input('game_result');
 		$hash = Request::input('hash');
 		$random = Request::input('random');
+		$playedTime = Request::input('played_time');
 
 		$profileId = Request::input('game_code_profile_id');
 		$userId = Request::input('user_id');
@@ -213,12 +215,13 @@ Class ApiGameController extends Controller {
 				return ResponseHelper::OutputJSON('fail', 'planet is not enable');
 			}
 
-			if(!$jsonGameResult || !$hash || !$random){
+			if(!$jsonGameResult || !$hash || !$random || !$playedTime){
 				return ResponseHelper::OutputJSON('fail', 'missing parameter');
 
 			}
 
 			$gameResult = json_decode($jsonGameResult, true);
+
 			if(!isset($gameResult['score']) || !isset($gameResult['answers'])|| !isset($gameResult['status']) ){ 
 
 				return ResponseHelper::OutputJSON('fail', 'invalid game result format');
@@ -239,6 +242,7 @@ Class ApiGameController extends Controller {
 			}
 
 			$checkResult = GamePlay::where('hash', $hash1)->first();	
+
 			if($checkResult){
 				return ResponseHelper::OutputJSON('fail', 'no double submit');
 			}
@@ -284,6 +288,7 @@ Class ApiGameController extends Controller {
 			$gamePlay->code = $gameCode;
 			$gamePlay->hash = $hash1;
 			$gamePlay->status = $gameStatus;
+			$gamePlay->played_time = $playedTime;
 
 			if(isset($gameResult['badges']) ){
 				
@@ -526,15 +531,17 @@ Class ApiGameController extends Controller {
 		$deviceId = Request::input('game_code_device_id');
 		$gameCode = Request::input('game_code');
 
-		try{
+		// try{
 			$result = ZapZapQuestionHelper::GetUserMapV11($profileId);
+
 			$totalStar = UserMap::where('profile_id', $profileId)->sum('star');
 
 			$profile = GameProfile::find($profileId);
 
 			$profile->nickName1;
 			$profile->nickName2;
-			
+			$profile->avatar;
+
 			$userType = 2;
 
 			if($userId){
@@ -558,8 +565,8 @@ Class ApiGameController extends Controller {
 						'name' => $r->system_name,
 						'subsystem' => [
 							[
-								'subsystem_id' => $r->subsystem_id,
-								'subsytem_name' => $r->subsytem_name,
+								'subsystem_id' => '1',
+								'subsystem_name' => 'Basics',
 								'planet' => []
 							],
 							
@@ -568,13 +575,12 @@ Class ApiGameController extends Controller {
 				}
 
 
-				if($r->system_id == $prevSystemId && $r->subsystem_id != $prevSubsytemId){
+				if($r->subsystem_id != $prevSubsytemId){
 					array_push($systems[count($systems)-1]['subsystem'], [
 						'subsystem_id' => $r->subsystem_id,
-						'subsytem_name' => $r->subsytem_name,
+						'subsystem_name' => $r->subsystem_name,
 						'planet' => []
 					]);				
-						
 				}
 
 				$planetEnable = ($prevPlanetStar >= 3) && $prevPlanetEnable;
@@ -597,24 +603,25 @@ Class ApiGameController extends Controller {
 					'profile' => [
 						'first_name' => $profile->first_name,
 						'last_name' => $profile->last_name,
-						'nick_name1' =>$profile->nickName1->name,
-						'nick_name2' =>$profile->nickName2->name,
 						'grade' =>$profile->grade,
 						'total_star' => $totalStar,
 						'user_type' => $userType,
 						'game_code' => $gameCode,
+						'nick_name1' =>$profile->nickName1->name,
+						'nick_name2' =>$profile->nickName2->name,
+						'avatar' => $profile->avatar,
 						] ,
 					'system_planet' => $systems
 					 ]);
 		
-		} catch (Exception $ex) {
+		// } catch (Exception $ex) {
 
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiGameController > getUserMap',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		'source' => 'ApiGameController > getUserMap',
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 	}
 
 	public function clearLeaderBoard(){
@@ -678,7 +685,7 @@ Class ApiGameController extends Controller {
 
 				for($j=0; $j<$set[$i][1]; $j++){
 					switch($p->game_type_id){
-						case '1':$questions = ZapZapQuestionHelper::GetQuestionP01($p->id,$difficulty,$p->question_count); break;
+						case '1':$questions = ZapZapQuestionHelper::GetQuestionP01($p->id,$difficulty,$p->question_count,'en'); break;
 						case '2':$questions = ZapZapQuestionHelper::GetQuestionP02($p->id,$difficulty,$p->question_count); break;
 						case '3':$questions = ZapZapQuestionHelper::GetQuestionP03($p->id,$difficulty,$p->question_count); break;
 						case '6':$questions = ZapZapQuestionHelper::GetQuestionP06($p->id,$difficulty,$p->question_count); break;
@@ -692,13 +699,13 @@ Class ApiGameController extends Controller {
 						case '14':$questions = ZapZapQuestionHelper::GetQuestionP14($p->id,$difficulty,$p->question_count); break;
 						case '15':$questions = ZapZapQuestionHelper::GetQuestionP15($p->id,$difficulty,$p->question_count); break;
 						case '16':$questions = ZapZapQuestionHelper::GetQuestionP16($p->id,$difficulty,$p->question_count); break;
+						case '17':$questions = ZapZapQuestionHelper::GetQuestionP17($p->id,$difficulty,$p->question_count); break;
 						case '18':$questions = ZapZapQuestionHelper::GetQuestionP18($p->id,$difficulty,$p->question_count); break;
 						case '19':$questions = ZapZapQuestionHelper::GetQuestionP19($p->id,$difficulty,$p->question_count); break;
 						case '20':$questions = ZapZapQuestionHelper::GetQuestionP20($p->id,$difficulty,$p->question_count); break;
 						case '21':$questions = ZapZapQuestionHelper::GetQuestionP21($p->id,$difficulty,$p->question_count); break;
 						case '23':$questions = ZapZapQuestionHelper::GetQuestionP23($p->id,$difficulty,$p->question_count); break;
 						case '32':$questions = ZapZapQuestionHelper::GetQuestionP32($p->id,$difficulty,$p->question_count); break;
-				
 						default: continue;
 					}	
 					
@@ -952,6 +959,35 @@ Class ApiGameController extends Controller {
 		}
 
 		return ResponseHelper::OutputJSON('success');
+	}
+
+	public function getGameCodeInfo(){
+		$code = Request::input('game_code');
+
+		if(!$code){
+			return ResponseHelper::OutputJSON('fail' , 'missing parameter');
+		}
+
+		$gameCode = GameCode::where('code' , $code)->first();
+
+		$totalStar = UserMap::where('profile_id', $gameCode->profile_id)->sum('star');
+
+		$profile = GameProfile::find($gameCode->profile_id);
+
+		$profile->nickName1;
+		$profile->nickName2;
+		$profile->avatar;
+
+		return ResponseHelper::OutputJSON('success', '' , [
+				'first_name' => $profile->first_name,
+				'last_name' => $profile->last_name,
+				'grade' =>$profile->grade,
+				'total_star' => $totalStar,
+				'game_code' => $code,
+				'nick_name1' =>$profile->nickName1->name,
+				'nick_name2' =>$profile->nickName2->name,
+				'avatar_id' => $profile->avatar->id,
+		 ]);
 	}
 
 }

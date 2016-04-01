@@ -6,6 +6,7 @@ use Config;
 use App\Models;
 use App\Models\GameProfile;
 use App\Models\GameClass;
+use App\Models\UserFlag;
 use App\Libraries;
 use App\Libraries\LogHelper;
 use App\Libraries\ResponseHelper;
@@ -36,8 +37,6 @@ Class ApiClassController extends Controller {
 		try {
 			$userId = Request::input('user_id');
 			$className = Request::input('name');
-			// $grade = Request::input('grade');
-			// $age = Request::input('age');
 
 			$userFlag = UserFlag::find($userId);
 			$userClass = GameClass::where('user_id' , $userId)->count();
@@ -55,11 +54,16 @@ Class ApiClassController extends Controller {
 				return ResponseHelper::OutputJSON('fail', "class name already exist");
 			}
 
+			$userFlag = UserFlag::find($userId);
+            $userClass = GameClass::where('user_id' , $userId)->count();
+
+            if($userClass >= $userFlag->class_limit){
+                return ResponseHelper::OutputJSON('fail', "limited");
+            }
+
 			$gameClass = new GameClass;
 			$gameClass->user_id = $userId;
 			$gameClass->name = $className;
-			// $gameClass->grade = $grade;
-			// $gameClass->age = $age;
 			$gameClass->save();
 
 			return ResponseHelper::OutputJSON('success', '' , $gameClass);
@@ -110,10 +114,6 @@ Class ApiClassController extends Controller {
 		$userId = Request::input('user_id');
 
 		try {
-			$count = GameClass::where('user_id' , $userId)->count();
-			if($count == '1'){
-				return ResponseHelper::OutputJSON('fail', "prevent deletion of last class in teacher accounts");
-			}
 
 			$gameClass = GameClass::find($id);
 			if (!$gameClass) {
@@ -184,12 +184,21 @@ Class ApiClassController extends Controller {
 	}
 
 	public function getGameClass($classId){
+		$userId = Request::input('user_id');
+
 		$class = GameClass::find($classId);
+
+		$profileCount = GameProfile::where('class_id' , $classId)->where('user_id' , $userId)->count();
 
 		if(!$class){
 			return ResponseHelper::OutputJSON('fail', "class no found");
 		}
 
-		return ResponseHelper::OutputJSON('success', '', $class);
+		return ResponseHelper::OutputJSON('success', '', [ 
+			'id' => $class->id,
+			'user_id' => $class->user_id,
+			'name' => $class->name,
+			'profile_count' => $profileCount
+			]);
 	}
 }
