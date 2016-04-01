@@ -192,13 +192,12 @@ class ApiProfileHelper{
 			];
 	}
 
-	public static function newProfile($userId , $classId , $firstName , $lastName , $age , $school , $grade , $email, $nickname1 , $nickname2 , $avatarId){
+	public static function newProfile($userId , $classId , $firstName  , $age , $school , $grade , $email, $nickname1 , $nickname2 , $avatarId){
 
 		$profile = new GameProfile;
 		$profile->user_id = $userId;
 		$profile->class_id = $classId;
 		$profile->first_name = $firstName;
-		$profile->last_name = $lastName;
 		$profile->age = $age;
 		$profile->school = $school;
 		$profile->grade = $grade;

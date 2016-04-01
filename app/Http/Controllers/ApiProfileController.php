@@ -252,7 +252,9 @@ Class ApiProfileController extends Controller {
 				return ResponseHelper::OutputJSON('fail', 'account must have at least one profile');
 			}
 
+			$gameCode = GameCode::where('profile_id' , $id)->delete();
 			$profile->delete();
+			
 			return ResponseHelper::OutputJSON('success');
 
 		} catch (Exception $ex) {
@@ -579,6 +581,16 @@ Class ApiProfileController extends Controller {
 			])]);
 			return ResponseHelper::OutputJSON('exception');
 		}
+	}
+
+	public function unlockUserLimit(){
+		$postId = Request::input('post_id');
+
+		$request = new FacebookRequest($session,  'GET' , '/{post-id}');
+		$response = $request->execute();
+		$graphObject = $response->getGraphObject();
+
+		var_export($graphObject); die();
 	}
 
 }

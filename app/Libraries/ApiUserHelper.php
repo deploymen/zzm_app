@@ -32,7 +32,7 @@ use Session;
 
 class ApiUserHelper{
 
-	public static function Register($role, $name, $email, $country, $username, $password_sha1, $deviceId = ''){
+	public static function Register($role, $name, $email, $country, $username, $password_sha1,  $registerFrom , $deviceId = ''){
 
 		$user = new User;
 		$user->role = $role;
@@ -40,6 +40,7 @@ class ApiUserHelper{
 		$user->email = $email;
 		$user->country = $country;
 		$user->activated = 0;
+		$user->register_from = $registerFrom;
 		$user->save();
 
 		$accessToken = AuthHelper::GenerateAccessToken($user->id);
