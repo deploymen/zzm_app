@@ -118,7 +118,7 @@ Class ResultController extends Controller {
 			}
 
 			$profile = GameProfile::find($profileId);
-			if (!$userId != $profile->user_id) {
+			if ($userId != $profile->user_id) {
 				return ResponseHelper::OutputJSON('fail', 'invalid profile');
 			}
 
