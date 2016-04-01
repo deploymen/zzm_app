@@ -850,7 +850,7 @@ Class AuthUserController extends Controller {
 		if(!$userAccess){
 
 			//create new
-			return redirect(url(env('WEBSITE_URL').'/user/redirect-signup/facebook'))->with('name' , $fbUser->name)->with('email' , $fbUser->email)->with('facebook_id' , $fbUser->id);
+			return redirect(url(env('WEBSITE_URL').'/user/redirect-signup'))->with('name' , $fbUser->name)->with('email' , $fbUser->email)->with('facebook_id' , $fbUser->id);
 
 		}
 
@@ -921,7 +921,7 @@ Class AuthUserController extends Controller {
 			$classId = $gameClass->id;
 		}
 
-		$newProfile = ApiProfileHelper::newProfile($newUser , $classId , 'player 1', '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
+		$newProfile = ApiProfileHelper::newProfile($newUser , $classId , 'Default Profile' , '' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
 
 		$user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser);
 		$userExternalId = UserExternalId::where('user_id' , $newUser)->update(['facebook_id' => $facebook_id ]);

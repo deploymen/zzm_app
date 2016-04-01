@@ -137,7 +137,7 @@ Class AuthSchoologyController extends Controller {
 
         $classId = $gameClass->id;
 
-        $newProfile = ApiProfileHelper::newProfile($newUser , $classId , 'player 1', '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
+        $newProfile = ApiProfileHelper::newProfile($newUser , $classId , 'Default Profile' , '' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
 
         $user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser);
         $userExternalId = UserExternalId::where('user_id' , $newUser)->update(['schoology_id' => $schoology_id ]);

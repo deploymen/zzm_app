@@ -62,7 +62,6 @@ Route::group(['middleware' => 'auth.user'], function () {
 
 Route::group(['middleware' => 'auth.user'], function () {
 	Route::delete('1.0/remove/account', 'AuthUserController@deleteAccount');
-	Route::post('1.0/user/facebook/share-unlock', 'ApiProfileController@unlockUserLimit');
 });
 
 //third party login
