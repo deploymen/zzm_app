@@ -81,7 +81,7 @@ Class ApiClassController extends Controller {
 			}
 
 			$validator = Validator::make($request->all(),  [
-		        'name' => 'required|min:3|unique:t0112_game_class,name,'.$id.',id,user_id,'.$request->user_id,
+		        'name' => 'required|min:3|unique:t0112_game_class,name,'.$id.',id,user_id,'.$request->user_id.',deleted_at,NULL',
 		    ]);
 
 			if ($validator->fails()) {
