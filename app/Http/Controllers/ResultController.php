@@ -9,6 +9,7 @@ use App\Models\GamePlanet;
 use App\Models\GamePlay;
 use App\Models\GameProfile;
 use App\Models\GameSystem;
+use App\Models\GameSubsystem;
 use DB;
 use Exception;
 use Request;
@@ -171,7 +172,7 @@ Class ResultController extends Controller {
 				'breadcrumb' => [
 					'system_id' => $systmeId,
 					'system_name' => $system->name,
-					'subsystem_id' => $subsystmeId,
+					'subsystem_id' => $subsystemId,
 					'subsystem_name' => $subsystem->name,
 				],
 				'page' => $page,
