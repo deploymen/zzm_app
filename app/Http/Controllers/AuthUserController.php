@@ -796,14 +796,19 @@ Class AuthUserController extends Controller {
 			}
 
 			$secretKey = sha1(time() . $email);
-			$edmHtml = (string) view('emails.set-password-app-signup', [
-				'set_url' => config('app.website_url') . '/user/set-password/' . $secretKey,
+			$edmHtml = (string) view('emails.account-activation', [
+				'name' => $name,
+				'app_store_address' => config('app.app_store_url'),
+				'username' => $email,
+				'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
+				'activation_link' => config('app.website_url') . "/api/auth/activate/{$secretKey}",
+				'email_support' => config('app.support_email'),
 				'social_media_links' => config('app.fanpage_url'),
 			]);
 
 			EmailHelper::SendEmail([
 				'about' => 'Welcome',
-				'subject' => 'Please Confirm Your Password for Zap Zap Math',
+				'subject' => 'Your Zap Zap Account is now ready!',
 				'body' => $edmHtml,
 				'bodyHtml' => $edmHtml,
 				'toAddresses' => [$email],
@@ -813,11 +818,6 @@ Class AuthUserController extends Controller {
 			$logOpenAcc->user_id = $user->id;
 			$logOpenAcc->secret = $secretKey;
 			$logOpenAcc->save();
-
-			$logPasswordReset = new LogPasswordReset;
-			$logPasswordReset->user_id = $user->id;
-			$logPasswordReset->secret = $secretKey;
-			$logPasswordReset->save();
 
 			//job done - log it!
 			DatabaseUtilHelper::LogInsert($user->id, $user->table, $user->id);

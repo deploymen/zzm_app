@@ -62,6 +62,7 @@ Class ResultController extends Controller {
 
 				if($r->system_id != $preSystemId){
 					array_push($system[count($system)-1]['system'], [
+						'system_id' => $r->system_id,
 						'system_name' => $r->system_name,
 						'subsystem' => [],
 						]);
@@ -117,7 +118,7 @@ Class ResultController extends Controller {
 			}
 
 			$profile = GameProfile::find($profileId);
-			if (!$userId != $profile->user_id) {
+			if ($userId != $profile->user_id) {
 				return ResponseHelper::OutputJSON('fail', 'invalid profile');
 			}
 
