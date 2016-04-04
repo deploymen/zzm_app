@@ -452,22 +452,7 @@ Class ApiGameController extends Controller {
 			}
 	}
 
-	public function getUserMapVersion(){
-		$version = Request::input('version');
-
-		switch ($version) {
-			case '1.0':
-				return $this->getUserMapV10();
-				break;
-			case '1.1':
-				return $this->getUserMapV11();
-				break;
-
-			default: return ResponseHelper::OutputJSON('fail', 'version not support');
-
-		}
-	}
-	public function getUserMapV10(){
+	public function getUserMap(){
 		$profileId = Request::input('game_code_profile_id');
 		$userId = Request::input('user_id');
 		$deviceId = Request::input('game_code_device_id');
@@ -526,6 +511,7 @@ Class ApiGameController extends Controller {
 	}
 
 	public function getUserMapV11(){
+
 		$profileId = Request::input('game_code_profile_id');
 		$userId = Request::input('user_id');
 		$deviceId = Request::input('game_code_device_id');

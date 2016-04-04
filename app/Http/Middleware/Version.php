@@ -26,20 +26,22 @@ class Version
 
         if($route->getName() == 'try_prev_version'){
 
-           preg_match('/^api\/(?P<version>\d+\.\d+)\/{endpoint}$/', $route->getPath(), $matches);
+           preg_match('/(?P<version>\d+\.\d+)\/{endpoint}$/', $route->getPath(), $matches);
            $currentVersion = $matches['version'];
            $endpoint = $route->getParameter('endpoint');
 
            $index = array_search($currentVersion, self::$Versions);
+
            if($index===false || $index==0){
                 die('No version define in version middleware, cannot redirect.');
            }
 
            for($i=$index; $i>0; $i--){
                 $version = self::$Versions[$i-1];
-                $path = "/api/{$version}/".$endpoint;
-               
+                $path = "/{$version}/".$endpoint;
+       
                 $requestX = Request::create($path);
+
                 try {
                     $match = $routes->match($requestX);
                     if($match->getName() == 'try_prev_version'){
