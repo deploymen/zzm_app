@@ -21,7 +21,7 @@ Route::group(['prefix' => 'game'], function () {
 
 	Route::get('/top-score', 'ApiGameController@GameScreenTopScore');
 	
-	Route::post('/check-game-code' , 'ApiGameController@checkGameCode');
+	Route::post('/check-game-code' , 'ApiGameController@checkGameCodeV1_1');
 
 	Route::post('/game-code', 'ApiGameController@getGameCodeInfo');
 
@@ -44,7 +44,7 @@ Route::group(['prefix' => 'game'], function () {
 		Route::get('/result/system-planet/progress', 'ApiGameController@systemPlanetProgress');
 		Route::get('/result/system-planet/play/planet/{planet_id}', 'ApiGameController@systemPlanetPlay');
 
-		Route::get('/user-map', 'ApiGameController@getUserMapV11');
+		Route::get('/user-map', 'ApiGameController@getUserMapV1_1');
 
 		Route::get('/result/only-system', 'ResultController@onlySystem');
 		Route::get('/result/only-planet', 'ResultController@onlyPlanet');
@@ -56,4 +56,3 @@ Route::group(['prefix' => 'game'], function () {
 Route::get('set/nick', 'ApiProfileController@getNick');
 Route::post('game-code/anonymous', 'ApiProfileController@GenerateAnonymousGameCode');
 
-Route::get('/{endpoint}', ['as' => 'try_prev_version', function(){die('NEED TO HANDLE1.2');}])->where('endpoint', '.*');
