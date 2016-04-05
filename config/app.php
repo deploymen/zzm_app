@@ -16,6 +16,7 @@ return [
     'support_email' => env('SUPPORT_EMAIL'),
 
     'server_test' =>env('SERVER'),
+    'paid' =>env('PAID'),
 	/*
 	|--------------------------------------------------------------------------
 	| Application Debug Mode

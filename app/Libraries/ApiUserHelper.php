@@ -43,6 +43,7 @@ class ApiUserHelper{
 		$user->country = $country;
 		$user->activated = 0;
 		$user->register_from = $registerFrom;
+		$user->paid = Config::get('app.paid');
 		$user->save();
 
 		$accessToken = AuthHelper::GenerateAccessToken($user->id);

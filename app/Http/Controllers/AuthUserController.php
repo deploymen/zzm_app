@@ -97,6 +97,7 @@ Class AuthUserController extends Controller {
 					$user->country = $country;
 					$user->register_from = $registerFrom;
 					$user->ref = $ref;
+					$user->paid = Config::get('app.paid');
 					$user->save();
 
 					$accessToken = AuthHelper::GenerateAccessToken($user->id);
@@ -172,7 +173,7 @@ Class AuthUserController extends Controller {
 						'app_store_address' => config('app.app_store_url'),
 						'username' => $email,
 						'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
-						'activation_link' => config('app.website_url') . "/api/auth/activate/{$secretKey}",
+						'activation_link' => config('app.website_url') . "/api/1.1/auth/activate/{$secretKey}",
 						'email_support' => config('app.support_email'),
 						'social_media_links' => config('app.fanpage_url'),
 					]);
@@ -725,6 +726,7 @@ Class AuthUserController extends Controller {
 			$user->name = $name;
 			$user->email = $email;
 			$user->register_from = 'App';
+			$user->paid = Config::get('app.paid');
 			$user->save();
 
 			$accessToken = AuthHelper::GenerateAccessToken($user->id);
@@ -801,7 +803,7 @@ Class AuthUserController extends Controller {
 				'app_store_address' => config('app.app_store_url'),
 				'username' => $email,
 				'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
-				'activation_link' => config('app.website_url') . "/api/auth/activate/{$secretKey}",
+				'activation_link' => config('app.website_url') . "/api/1.1/auth/activate/{$secretKey}",
 				'email_support' => config('app.support_email'),
 				'social_media_links' => config('app.fanpage_url'),
 			]);
@@ -862,7 +864,7 @@ Class AuthUserController extends Controller {
 			'app_store_address' => config('app.app_store_url'),
 			'username' => $email,
 			'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
-			'activation_link' => config('app.website_url') . "/api/auth/activate/{$secretKey}",
+			'activation_link' => config('app.website_url') . "/api/1.1/auth/activate/{$secretKey}",
 			'email_support' => config('app.support_email'),
 			'social_media_links' => config('app.fanpage_url'),
 		]);
@@ -1053,6 +1055,12 @@ Class AuthUserController extends Controller {
 		}
 
 		return ResponseHelper::OutputJSON('success' , '' , ['within_profile_limit' => 1 ,'total_share' => $userFlag->total_share]);
+	}
+
+	public function testApi(){
+		$test = Request::input('test');
+	
+		var_export($test); die();
 	}
 }
 
