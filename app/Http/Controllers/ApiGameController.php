@@ -195,6 +195,7 @@ Class ApiGameController extends Controller {
 		$hash = Request::input('hash');
 		$random = Request::input('random');
 		$playedTime = Request::input('played_time');
+		$difficulty = Request::input('difficulty');
 
 		$profileId = Request::input('game_code_profile_id');
 		$userId = Request::input('user_id');
@@ -342,7 +343,7 @@ Class ApiGameController extends Controller {
 				default: return ResponseHelper::OutputJSON('fail', 'submit answer error');
 			}
 
-			ZapZapQuestionHelper::UserMap($profileId,$planetId,$gamePlay, $gameResult); //update user_map
+			ZapZapQuestionHelper::UserMap($profileId,$planetId,$gamePlay, $gameResult, $difficulty); //update user_map
 
 			$profile = GameProfile::find($profileId);
 			$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();
@@ -748,6 +749,41 @@ Class ApiGameController extends Controller {
 	}
 
 	public function checkGameCode(){
+		$gameCode = Request::input('game_code');
+		$deviceId = Request::input('device_id');
+
+		$checkGameCode = GameCode::where('code' , $gameCode)->first();
+
+		if(!$checkGameCode){
+			$idCounter = IdCounter::find(1);
+			$gameCodeSeed = $idCounter->game_code_seed;
+			$idCounter->game_code_seed = $gameCodeSeed + 1;
+			$idCounter->save();
+
+			$gamePro = new GameProfile;
+			$gamePro->user_id = 0;
+			$gamePro->first_name = "anonymous";
+			$gamePro->last_name = "anonymous";
+			$gamePro->nickname1 = 999;
+			$gamePro->nickname2 = 999;
+			$gamePro->avatar_id = 999;
+			$gamePro->save();
+
+			$code = new GameCode;
+			$code->profile_id = $gamePro->id;
+			$code->type = 'anonymous';
+			$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
+			$code->seed = $gameCodeSeed;
+			$code->device_id = $deviceId;
+			$code->save();
+
+			return ResponseHelper::OutputJSON('success', '', [] , [] , [] , 'change_game_code', ['game_code' => $code->code]);
+		}
+
+		return ResponseHelper::OutputJSON('success');
+	}
+
+	public function checkGameCodeV1_1(){
 		$gameCode = Request::input('game_code');
 		$deviceId = Request::input('device_id');
 
