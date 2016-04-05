@@ -510,14 +510,14 @@ Class ApiGameController extends Controller {
 		}
 	}
 
-	public function getUserMapV11(){
+	public function getUserMapV1_1(){
 
 		$profileId = Request::input('game_code_profile_id');
 		$userId = Request::input('user_id');
 		$deviceId = Request::input('game_code_device_id');
 		$gameCode = Request::input('game_code');
 
-		// try{
+		try{
 			$result = ZapZapQuestionHelper::GetUserMapV11($profileId);
 
 			$totalStar = UserMap::where('profile_id', $profileId)->sum('star');
@@ -600,14 +600,14 @@ Class ApiGameController extends Controller {
 					'system_planet' => $systems
 					 ]);
 		
-		// } catch (Exception $ex) {
+		} catch (Exception $ex) {
 
-		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-		// 		'source' => 'ApiGameController > getUserMap',
-		// 		'inputs' => Request::all(),
-		// 	])]);
-		// 	return ResponseHelper::OutputJSON('exception');
-		// }
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiGameController > getUserMap',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 	}
 
 	public function clearLeaderBoard(){
@@ -748,6 +748,41 @@ Class ApiGameController extends Controller {
 	}
 
 	public function checkGameCode(){
+		$gameCode = Request::input('game_code');
+		$deviceId = Request::input('device_id');
+
+		$checkGameCode = GameCode::where('code' , $gameCode)->first();
+
+		if(!$checkGameCode){
+			$idCounter = IdCounter::find(1);
+			$gameCodeSeed = $idCounter->game_code_seed;
+			$idCounter->game_code_seed = $gameCodeSeed + 1;
+			$idCounter->save();
+
+			$gamePro = new GameProfile;
+			$gamePro->user_id = 0;
+			$gamePro->first_name = "anonymous";
+			$gamePro->last_name = "anonymous";
+			$gamePro->nickname1 = 999;
+			$gamePro->nickname2 = 999;
+			$gamePro->avatar_id = 999;
+			$gamePro->save();
+
+			$code = new GameCode;
+			$code->profile_id = $gamePro->id;
+			$code->type = 'anonymous';
+			$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
+			$code->seed = $gameCodeSeed;
+			$code->device_id = $deviceId;
+			$code->save();
+
+			return ResponseHelper::OutputJSON('success', '', [] , [] , [] , 'change_game_code', ['game_code' => $code->code]);
+		}
+
+		return ResponseHelper::OutputJSON('success');
+	}
+
+	public function checkGameCodeV1_1(){
 		$gameCode = Request::input('game_code');
 		$deviceId = Request::input('device_id');
 
