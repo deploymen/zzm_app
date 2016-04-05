@@ -21,7 +21,7 @@ Route::group(['prefix' => 'game'], function () {
 
 	Route::get('/top-score', 'ApiGameController@GameScreenTopScore');
 	
-	Route::post('/check-game-code' , 'ApiGameController@checkGameCode');
+	//Route::post('/check-game-code' , 'ApiGameController@checkGameCode');
 
 	Route::post('/game-code', 'ApiGameController@getGameCodeInfo');
 

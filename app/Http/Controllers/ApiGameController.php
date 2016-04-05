@@ -195,6 +195,7 @@ Class ApiGameController extends Controller {
 		$hash = Request::input('hash');
 		$random = Request::input('random');
 		$playedTime = Request::input('played_time');
+		$difficulty = Request::input('difficulty');
 
 		$profileId = Request::input('game_code_profile_id');
 		$userId = Request::input('user_id');
@@ -342,7 +343,7 @@ Class ApiGameController extends Controller {
 				default: return ResponseHelper::OutputJSON('fail', 'submit answer error');
 			}
 
-			ZapZapQuestionHelper::UserMap($profileId,$planetId,$gamePlay, $gameResult); //update user_map
+			ZapZapQuestionHelper::UserMap($profileId,$planetId,$gamePlay, $gameResult, $difficulty); //update user_map
 
 			$profile = GameProfile::find($profileId);
 			$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();
