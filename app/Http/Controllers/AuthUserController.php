@@ -698,11 +698,9 @@ Class AuthUserController extends Controller {
 
 	public function signUpApp() {
 		$email = Request::input('email');
+		$name = Request::input('name');
 		$password = Request::input('password');
 		$password_sha1 = sha1($password . Config::get('app.auth_salt'));
-
-		$name = Request::input('name');
-		$deviceId = Request::input('deviceId');
 		$role = Request::input('role');
 		$classId = 0;
 

@@ -189,13 +189,12 @@ Class ApiGameController extends Controller {
 	}
 
 	//SUBMIT RESULT
-	public function result($planetId) {
+	
+	public function resultV1_0($planetId) {
 		$Planet = GamePlanet::find($planetId);
 		$jsonGameResult = Request::input('game_result');
 		$hash = Request::input('hash');
 		$random = Request::input('random');
-		$playedTime = Request::input('played_time');
-		$difficulty = Request::input('difficulty');
 
 		$profileId = Request::input('game_code_profile_id');
 		$userId = Request::input('user_id');
@@ -216,7 +215,180 @@ Class ApiGameController extends Controller {
 				return ResponseHelper::OutputJSON('fail', 'planet is not enable');
 			}
 
-			if(!$jsonGameResult || !$hash || !$random || !$playedTime){
+			if(!$jsonGameResult || !$hash || !$random){
+				return  [
+					'status' => "fail",
+					'message' => "missing parameter",
+				]; 
+			}
+
+			$gameResult = json_decode($jsonGameResult, true);
+			if(!isset($gameResult['score']) || !isset($gameResult['answers'])|| !isset($gameResult['status']) ){ 
+					return  [
+					'status' => "fail",
+					'message' => "invalid game result format",
+				]; 
+			}
+			// check hash
+			$hash1 = sha1($jsonGameResult.$random.Config::get('app.p02_key'));
+			$hash2 = $hash;
+			
+			if($hash1 != $hash2){ 
+				return  [
+					'status' => "fail",
+					'message' => "invalid hash",
+					'hash1' => $hash1,
+					'hash2' => $hash2,
+					'key' => Config::get('app.p02_key'),
+				]; 
+			}
+
+			$checkResult = GamePlay::where('hash', $hash1)->first();	
+			if($checkResult){
+				return  [
+					'status' => "fail",
+					'message' => "no double submit",
+				]; 
+			}
+
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				if(!$question){
+					return ResponseHelper::OutputJSON('fail', 'invalid question id');
+				}
+			}
+
+			$sql = "
+				SELECT `name` 
+					FROM `t0121_game_type`
+						WHERE `id` IN(
+							SELECT `game_type_id` 
+								FROM `t0123_game_planet`
+									WHERE `id` = :planet_id
+						)
+							LIMIT 1;
+			";
+
+			$result = DB::SELECT($sql, ['planet_id'=>$planetId] );
+
+			$gameStatus = $gameResult['status'];
+			if($gameStatus == 'False'){
+				$gameStatus = 'fail';
+			}elseif($gameStatus == 'True'){
+				$gameStatus = 'pass';
+			}
+				
+			$gamePlay = new GamePlay;
+			$gamePlay->user_id = $userId;
+			$gamePlay->profile_id = $profileId;
+			$gamePlay->planet_id = $planetId;
+			$gamePlay->target_type = $result[0]->name;
+			$gamePlay->type = $gameCodeType;
+			$gamePlay->score = $gameResult['score'];
+			$gamePlay->device_id = $deviceId;
+			$gamePlay->code = $gameCode;
+			$gamePlay->hash = $hash1;
+			$gamePlay->status = $gameStatus;
+
+			if(isset($gameResult['badges']) ){
+				
+				if($gameResult['badges']['speed'] == 'True'){
+					$gameResult['badges']['speed'] = '1';
+				}elseif($gameResult['badges']['speed'] == 'False'){
+					$gameResult['badges']['speed'] = '0';
+				}
+
+				if($gameResult['badges']['accuracy'] == 'True'){
+					$gameResult['badges']['accuracy'] = '1';
+				}elseif($gameResult['badges']['accuracy'] == 'False'){
+					$gameResult['badges']['accuracy'] = '0';
+				}
+
+				$gamePlay->badges_metrics = json_encode($gameResult['badges']);		
+			}
+			if(isset($gameResult['level']) ){
+				$gamePlay->level =  $gameResult['level'];
+			}
+			$gamePlay->save();
+
+			$gameCodePlayed = GameCode::where('code', $gameCode)->update([
+					'played' => '1'
+					]);;
+
+			switch($result[0]->name){
+				case 'p00': $status = ZapZapQuestionHelper::SubmitResultP00($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p01': $status = ZapZapQuestionHelper::SubmitResultP01($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p02': $status = ZapZapQuestionHelper::SubmitResultP02($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p03': $status = ZapZapQuestionHelper::SubmitResultP03($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p06': $status = ZapZapQuestionHelper::SubmitResultP06($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p07': $status = ZapZapQuestionHelper::SubmitResultP07($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p08': $status = ZapZapQuestionHelper::SubmitResultP08($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p09': $status = ZapZapQuestionHelper::SubmitResultP09($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p10': $status = ZapZapQuestionHelper::SubmitResultP10($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p11': $status = ZapZapQuestionHelper::SubmitResultP11($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p12': $status = ZapZapQuestionHelper::SubmitResultP12($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p13': $status = ZapZapQuestionHelper::SubmitResultP13($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p14': $status = ZapZapQuestionHelper::SubmitResultP14($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p15': $status = ZapZapQuestionHelper::SubmitResultP15($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p16': $status = ZapZapQuestionHelper::SubmitResultP16($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p17': $status = ZapZapQuestionHelper::SubmitResultP17($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p18': $status = ZapZapQuestionHelper::SubmitResultP18($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p23': $status = ZapZapQuestionHelper::SubmitResultP23($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p32': $status = ZapZapQuestionHelper::SubmitResultP32($planetId,$gamePlay,$gameResult,$profileId); break;
+
+				default: return ResponseHelper::OutputJSON('fail', 'submit answer error');
+			}
+
+			ZapZapQuestionHelper::UserMapV1_0($profileId,$planetId,$gamePlay, $gameResult); //update user_map
+
+			$profile = GameProfile::find($profileId);
+			$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();
+
+			ZapZapQuestionHelper::LeaderboardUpdate($profile,$systemPlanet,$gameResult);
+			LogHelper::LogPostResult($planetId , $jsonGameResult, $gameCode);//log post result
+			} catch (Exception $ex) {
+
+				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+					'source' => 'ApiGameController > result', 
+					'inputs' => Request::all(),
+				])]);
+				return ResponseHelper::OutputJSON('exception');
+			}
+
+			return ResponseHelper::OutputJSON('success');
+	}
+
+	public function resultV1_1($planetId) {
+		$Planet = GamePlanet::find($planetId);
+		$jsonGameResult = Request::input('game_result');
+		$hash = Request::input('hash');
+		$random = Request::input('random');
+		$playedTime = Request::input('played_time', 0);
+		$difficulty = Request::input('difficulty');
+
+		$profileId = Request::input('game_code_profile_id');
+		$userId = Request::input('user_id');
+		$deviceId = Request::input('game_code_device_id');
+		$gameCode = Request::input('game_code');
+		$gameCodeType = Request::input('game_code_type');
+
+		// try{
+			if($planetId < 100){
+				return ResponseHelper::OutputJSON('fail', 'planet not yet support');
+			}
+
+			if(!$Planet){
+				return ResponseHelper::OutputJSON('fail', 'planet not found');
+			}
+
+			if(!$Planet->enable){
+				return ResponseHelper::OutputJSON('fail', 'planet is not enable');
+			}
+
+			if(!$jsonGameResult || !$hash || !$random){
 				return ResponseHelper::OutputJSON('fail', 'missing parameter');
 
 			}
@@ -343,21 +515,21 @@ Class ApiGameController extends Controller {
 				default: return ResponseHelper::OutputJSON('fail', 'submit answer error');
 			}
 
-			ZapZapQuestionHelper::UserMap($profileId,$planetId,$gamePlay, $gameResult, $difficulty); //update user_map
+			ZapZapQuestionHelper::UserMapV1_1($profileId,$planetId,$gamePlay, $gameResult, $difficulty); //update user_map
 
 			$profile = GameProfile::find($profileId);
 			$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();
 
 			ZapZapQuestionHelper::LeaderboardUpdate($profile,$systemPlanet,$gameResult);
 			LogHelper::LogPostResult($planetId , $jsonGameResult, $gameCode);//log post result
-			} catch (Exception $ex) {
+			// } catch (Exception $ex) {
 
-				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-					'source' => 'ApiGameController > result', 
-					'inputs' => Request::all(),
-				])]);
-				return ResponseHelper::OutputJSON('exception');
-			}
+			// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+			// 		'source' => 'ApiGameController > result', 
+			// 		'inputs' => Request::all(),
+			// 	])]);
+			// 	return ResponseHelper::OutputJSON('exception');
+			// }
 
 			return ResponseHelper::OutputJSON('success');
 	}
@@ -453,7 +625,7 @@ Class ApiGameController extends Controller {
 			}
 	}
 
-	public function getUserMap(){
+	public function getUserMapV1_0(){
 		$profileId = Request::input('game_code_profile_id');
 		$userId = Request::input('user_id');
 		$deviceId = Request::input('game_code_device_id');
@@ -461,7 +633,7 @@ Class ApiGameController extends Controller {
 		
 
 		try{
-			$result = ZapZapQuestionHelper::GetUserMap($profileId);
+			$result = ZapZapQuestionHelper::GetUserMapV1_0($profileId);
 			$totalStar = UserMap::where('profile_id', $profileId)->sum('star');
 
 			$systems = [];		
@@ -519,7 +691,7 @@ Class ApiGameController extends Controller {
 		$gameCode = Request::input('game_code');
 
 		try{
-			$result = ZapZapQuestionHelper::GetUserMapV11($profileId);
+			$result = ZapZapQuestionHelper::GetUserMapV1_1($profileId);
 
 			$totalStar = UserMap::where('profile_id', $profileId)->sum('star');
 
@@ -962,7 +1134,7 @@ Class ApiGameController extends Controller {
 					default: return ResponseHelper::OutputJSON('fail', 'submit answer error');
 				}
 
-				ZapZapQuestionHelper::UserMap($profileId,$planetId,$gamePlay, $gameResult); //update user_map
+				ZapZapQuestionHelper::UserMapV1_1($profileId,$planetId,$gamePlay, $gameResult); //update user_map
 
 				$profile = GameProfile::find($profileId);
 				$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();

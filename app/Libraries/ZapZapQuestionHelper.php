@@ -59,6 +59,51 @@ use App\Models\LeaderboardPlanet;
 
 class ZapZapQuestionHelper{
 
+	public static function UserMapV1_0($profileId,$planetId,$gamePlay,$gameResult){
+		$userMap = UserMap::where('profile_id', $profileId)->where('planet_id' , $planetId)->first();
+			if(!$userMap){
+				$userMap = new UserMap;
+				$userMap->profile_id = $profileId;
+				$userMap->planet_id = $planetId;
+				$userMap->played = '1';
+				$userMap->save();
+			}
+			$userMap->star += ($gamePlay->status == 'pass')?1:0;
+			$userMap->star = ($userMap->star > 5)?5:$userMap->star;
+			$userMap->top_score = ($userMap->top_score > $gamePlay->score)?$userMap->top_score:$gamePlay->score;
+			$userMap->played = '1';
+			$userMap->level =  $gamePlay->level;
+			if(isset($gameResult['experience']) ){
+				$userMap->exp =  $gameResult['experience'];
+			}
+			
+			$userMap->save();		
+	}
+
+	public static function UserMapV1_1($profileId,$planetId,$gamePlay,$gameResult , $difficulty){
+		$userMap = UserMap::where('profile_id', $profileId)->where('planet_id' , $planetId)->first();
+			if(!$userMap){
+				$userMap = new UserMap;
+				$userMap->profile_id = $profileId;
+				$userMap->planet_id = $planetId;
+				$userMap->played = '1';
+				$userMap->save();
+			}
+
+			if($difficulty > $userMap->star ){
+				$userMap->star += ($gamePlay->status == 'pass')?1:0;
+				$userMap->star = ($userMap->star > 5)?5:$userMap->star;
+			}
+			$userMap->top_score = ($userMap->top_score > $gamePlay->score)?$userMap->top_score:$gamePlay->score;
+			$userMap->played = '1';
+			$userMap->level =  $gamePlay->level;
+			if(isset($gameResult['experience']) ){
+				$userMap->exp =  $gameResult['experience'];
+			}
+			
+			$userMap->save();		
+	}
+
 	public static function GetPlanetInfo( $planetId){
 		try{
 			$sql = "
@@ -88,7 +133,7 @@ class ZapZapQuestionHelper{
 		}
 	}
 
-	public static function GetUserMap($profileId, $planetId = 0){
+	public static function GetUserMapV1_0($profileId, $planetId = 0){
 		try{
 			$sqlWherePlanet = "";
 
@@ -134,7 +179,7 @@ class ZapZapQuestionHelper{
 		}
 	}
 
-	public static function GetUserMapV11($profileId){
+	public static function GetUserMapV1_1($profileId){
 		try{
 			
 			$sql = "
@@ -2714,27 +2759,6 @@ class ZapZapQuestionHelper{
 				]);		
 				return false;
 		}
-	}
-
-	public static function UserMap($profileId,$planetId,$gamePlay,$gameResult){
-		$userMap = UserMap::where('profile_id', $profileId)->where('planet_id' , $planetId)->first();
-			if(!$userMap){
-				$userMap = new UserMap;
-				$userMap->profile_id = $profileId;
-				$userMap->planet_id = $planetId;
-				$userMap->played = '1';
-				$userMap->save();
-			}
-			$userMap->star += ($gamePlay->status == 'pass')?1:0;
-			$userMap->star = ($userMap->star > 5)?5:$userMap->star;
-			$userMap->top_score = ($userMap->top_score > $gamePlay->score)?$userMap->top_score:$gamePlay->score;
-			$userMap->played = '1';
-			$userMap->level =  $gamePlay->level;
-			if(isset($gameResult['experience']) ){
-				$userMap->exp =  $gameResult['experience'];
-			}
-			
-			$userMap->save();		
 	}
 
 	public static function LeaderboardUpdate($profile,$systemPlanet,$gameResult) {

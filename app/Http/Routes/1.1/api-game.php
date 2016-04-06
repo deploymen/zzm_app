@@ -32,7 +32,7 @@ Route::group(['prefix' => 'game'], function () {
 		Route::post('/profile-transfer', 'ApiProfileController@profileTransfer');
 
 
-		Route::post('/play/{id}/result', 'ApiGameController@result');
+		Route::post('/play/{id}/result', 'ApiGameController@resultV1_1');
 		Route::get('/play/{id}/request/'  , 'ApiGameController@request');
 
 		Route::post('/play/push-result/'  , 'ApiGameController@offlinePost');
@@ -44,7 +44,7 @@ Route::group(['prefix' => 'game'], function () {
 		Route::get('/result/system-planet/progress', 'ApiGameController@systemPlanetProgress');
 		Route::get('/result/system-planet/play/planet/{planet_id}', 'ApiGameController@systemPlanetPlay');
 
-		Route::get('/user-map', 'ApiGameController@getUserMapV11');
+		Route::get('/user-map', 'ApiGameController@getUserMapV1_1');
 
 		Route::get('/result/only-system', 'ResultController@onlySystem');
 		Route::get('/result/only-planet', 'ResultController@onlyPlanet');
