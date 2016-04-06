@@ -367,7 +367,6 @@ Class ApiGameController extends Controller {
 		$hash = Request::input('hash');
 		$random = Request::input('random');
 		$playedTime = Request::input('played_time', 0);
-		$difficulty = Request::input('difficulty');
 
 		$profileId = Request::input('game_code_profile_id');
 		$userId = Request::input('user_id');
@@ -388,14 +387,14 @@ Class ApiGameController extends Controller {
 				return ResponseHelper::OutputJSON('fail', 'planet is not enable');
 			}
 
-			if(!$jsonGameResult || !$hash || !$random || $difficulty){
+			if(!$jsonGameResult || !$hash || !$random ){
 				return ResponseHelper::OutputJSON('fail', 'missing parameter');
 
 			}
 
 			$gameResult = json_decode($jsonGameResult, true);
 
-			if(!isset($gameResult['score']) || !isset($gameResult['answers'])|| !isset($gameResult['status']) ){ 
+			if(!isset($gameResult['score']) || !isset($gameResult['answers'])|| !isset($gameResult['status'] || !isset($gameResult['difficulty']) ){ 
 
 				return ResponseHelper::OutputJSON('fail', 'invalid game result format');
 
@@ -462,7 +461,7 @@ Class ApiGameController extends Controller {
 			$gamePlay->hash = $hash1;
 			$gamePlay->status = $gameStatus;
 			$gamePlay->played_time = $playedTime;
-			$gamePlay->difficulty = $difficulty;
+			$gamePlay->difficulty = $gameResult['difficulty'];
 
 			if(isset($gameResult['badges']) ){
 				
@@ -516,7 +515,7 @@ Class ApiGameController extends Controller {
 				default: return ResponseHelper::OutputJSON('fail', 'submit answer error');
 			}
 
-			ZapZapQuestionHelper::UserMapV1_1($profileId,$planetId,$gamePlay, $gameResult, $difficulty); //update user_map
+			ZapZapQuestionHelper::UserMapV1_1($profileId,$planetId,$gamePlay, $gameResult, $gameResult['difficulty']); //update user_map
 
 			$profile = GameProfile::find($profileId);
 			$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();
