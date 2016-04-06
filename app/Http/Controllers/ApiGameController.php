@@ -394,7 +394,7 @@ Class ApiGameController extends Controller {
 
 			$gameResult = json_decode($jsonGameResult, true);
 
-			if(!isset($gameResult['score']) || !isset($gameResult['answers'])|| !isset($gameResult['status'] || !isset($gameResult['difficulty']) ){ 
+			if(!isset($gameResult['score']) || !isset($gameResult['answers'])|| !isset($gameResult['status']) || !isset($gameResult['difficulty']) ){ 
 
 				return ResponseHelper::OutputJSON('fail', 'invalid game result format');
 
