@@ -40,7 +40,11 @@ class Version
                 $version = self::$Versions[$i-1];
                 $path = "/{$version}/".$endpoint;
        
-                $requestX = Request::create($path);
+                $server = $request->server();
+                $server['REQUEST_URI'] = $path;
+
+                $requestX = $request->duplicate(null, $request->all(), null, null, null, $server);
+
 
                 try {
                     $match = $routes->match($requestX);
