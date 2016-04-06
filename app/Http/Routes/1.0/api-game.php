@@ -42,7 +42,6 @@
 			Route::post('/play/push-result/'  , 'ApiGameController@offlinePost');
 
 			Route::get('/play/{id}/request/{language}', 'ApiGameController@request');
-			// Route::get('/play/{id}/result', 'ApiGameController@winScreen');
 			Route::get('/result/log', 'ApiGameController@resultLog');
 
 			Route::get('/result/system-planet/progress', 'ApiGameController@systemPlanetProgress');
@@ -50,9 +49,8 @@
 
 			Route::get('/user-map', 'ApiGameController@getUserMapV1_0');
 
-			Route::get('/result/only-system', 'ResultController@onlySystem');
-			Route::get('/result/only-planet', 'ResultController@onlyPlanet');
-			Route::get('/result/only-play', 'ResultController@onlyPlay');
+			Route::get('/result/only-system', 'ResultController@onlySystemV1_0');
+			Route::get('/result/only-planet', 'ResultController@onlyPlanetV1_0');
 			Route::get('/result/only-questions', 'ResultController@onlyQuestions');
 		});
 	});
