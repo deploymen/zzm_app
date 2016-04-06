@@ -388,7 +388,7 @@ Class ApiGameController extends Controller {
 				return ResponseHelper::OutputJSON('fail', 'planet is not enable');
 			}
 
-			if(!$jsonGameResult || !$hash || !$random){
+			if(!$jsonGameResult || !$hash || !$random || $difficulty){
 				return ResponseHelper::OutputJSON('fail', 'missing parameter');
 
 			}
@@ -462,6 +462,7 @@ Class ApiGameController extends Controller {
 			$gamePlay->hash = $hash1;
 			$gamePlay->status = $gameStatus;
 			$gamePlay->played_time = $playedTime;
+			$gamePlay->difficulty = $difficulty;
 
 			if(isset($gameResult['badges']) ){
 				
