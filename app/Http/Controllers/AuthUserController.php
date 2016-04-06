@@ -741,7 +741,6 @@ Class AuthUserController extends Controller {
 
 			$extId = new UserExternalId;
 			$extId->user_id = $user->id;
-			if ($deviceId) {$extId->device_id = $deviceId;}
 			$extId->save();
 
 			$setting = new UserSetting;
@@ -788,12 +787,6 @@ Class AuthUserController extends Controller {
 			$code->seed = $gameCodeSeed;
 			$code->profile_id = $profile->id;
 			$code->save();
-
-
-			if ($deviceId) {
-				//claim back previous game result played from this device id
-				//to do...
-			}
 
 			$secretKey = sha1(time() . $email);
 			$edmHtml = (string) view('emails.account-activation', [
