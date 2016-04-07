@@ -52,7 +52,7 @@
 	/* fade domain name */
 			Route::get('/result/only-system', 'ResultController@onlySystemV1_0');
 			Route::get('/result/only-planet', 'ResultController@onlyPlanetV1_0');
-			Route::get('/result/only-questions', 'ResultController@onlyQuestionsV1_0');
+			Route::get('/result/only-questions', 'ResultController@onlyQuestions');
 
 			Route::get('/report/profile-details', 'ApiProfileController@profileDetails');
 
