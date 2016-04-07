@@ -1084,7 +1084,7 @@ Class ApiGameController extends Controller {
 				$gamePlay->code = $gameCode;
 				$gamePlay->hash = $hash1;
 				$gamePlay->status = $gameStatus;
-				// $gamePlay->played_time = $r['played_time'];
+				$gamePlay->played_time = $r['played_time'];
 
 				if(isset($sgameResult['badges']) ){
 					
