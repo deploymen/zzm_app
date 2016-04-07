@@ -27,7 +27,7 @@ Class ResultController extends Controller {
 		$page = Request::input("page", '1');
 		$pageSize = Request::input("page_size", '30');
 		$pagination = $pageSize * ($page - 1);
-		// try {
+		try {
 
 			$sql = "
 				SELECT s.`name` , sp.`system_id` , IF(SUM(um.`played`) > 0, 1, 0) AS `played` , IFNULL(SUM(um.`star`) , 0 ) AS `star` , count(sp.`planet_id`) AS `total_planet`
@@ -68,13 +68,13 @@ Class ResultController extends Controller {
 				'page_size' => $pageSize,
 				'pageTotal' => ceil($total / $pageSize),
 			]);
-		// } catch (Exception $ex) {
-		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-		// 		'source' => 'ResultController > onlySystem',
-		// 		'inputs' => Request::all(),
-		// 	])]);
-		// 	return ResponseHelper::OutputJSON('exception');
-		// }
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ResultController > onlySystem',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 	}
 
 	public function onlySystemV1_1() {
@@ -382,11 +382,12 @@ Class ResultController extends Controller {
 		}
 
 		$breadcrumbSql = "
-				SELECT sp.`system_id`, s.`name` , sp.`planet_id` , p.`description`
-					FROM `t0124_game_system_planet` sp , `t0123_game_planet` p , `t0122_game_system` s
+				SELECT sp.`system_id`, sp.`subsystem_id`, ss.`name` AS `subsystem_name` , s.`name` , sp.`planet_id` , p.`description`
+					FROM `t0124_game_system_planet` sp , `t0123_game_planet` p , `t0122_game_system` s , `t0122_game_system_sub` ss
 						WHERE s.`id` = sp.`system_id`
 						AND p.`id` = sp.`planet_id`
 						AND sp.`planet_id` = {$planetId}
+						AND sp.`subsystem_id` = ss.`id`
 
 			";
 
@@ -438,6 +439,8 @@ Class ResultController extends Controller {
 			'breadcrumb' => [
 				'system_id' => $breadcrumb->system_id,
 				'system_name' => $breadcrumb->name,
+				'subsystem_id' => $breadcrumb->subsystem_id,
+				'subsystem_name' => $breadcrumb->subsystem_name,
 				'planet_id' => $breadcrumb->planet_id,
 				'planet_subtitle' => $breadcrumb->description,
 			],
