@@ -191,6 +191,7 @@ Class ApiGameController extends Controller {
 	//SUBMIT RESULT
 	
 	public function resultV1_0($planetId) {
+
 		$Planet = GamePlanet::find($planetId);
 		$jsonGameResult = Request::input('game_result');
 		$hash = Request::input('hash');
@@ -260,6 +261,8 @@ Class ApiGameController extends Controller {
 					return ResponseHelper::OutputJSON('fail', 'invalid question id');
 				}
 			}
+
+			LogHelper::LogPostResult($planetId , $jsonGameResult, $gameCode);//log post result
 
 			$sql = "
 				SELECT `name` 
