@@ -996,7 +996,7 @@ Class ApiGameController extends Controller {
 		// $results = array($result);
 		$results = json_decode( ($result), true );
 
-		try{
+		// try{
 
 			for($i=0; $i<=(count($results) - 1); $i++){
 				$r = $results[$i];
@@ -1016,11 +1016,11 @@ Class ApiGameController extends Controller {
 					return ResponseHelper::OutputJSON('fail', 'planet is not enable');
 				}
 
-				if(!$gameResult || !$r['hash'] || !$r['random']){
+				if(!$gameResult || !$r['hash'] || !$r['random'] || !$r['played_time']){
 					return ResponseHelper::OutputJSON('fail', 'missing parameter');
 				}
 
-				if(!isset($sgameResult['score']) || !isset($sgameResult['answers'])|| !isset($sgameResult['status']) ){ 
+				if(!isset($sgameResult['score']) || !isset($sgameResult['answers'])|| !isset($sgameResult['status']) || !isset($sgameResult['difficulty'])){ 
 					return ResponseHelper::OutputJSON('fail', 'invalid game result format');
 				}
 				// check hash
@@ -1040,7 +1040,7 @@ Class ApiGameController extends Controller {
 
 				$checkResult = GamePlay::where('hash', $hash1)->first();	
 				if($checkResult){
-					return ResponseHelper::OutputJSON('fail', 'no double submit');
+					return ResponseHelper::OutputJSON('fail', 'no double submit '.$r['planet_id']);
 				}
 
 				for($j=0; $j<count($sgameResult['answers']); $j++){
@@ -1084,6 +1084,7 @@ Class ApiGameController extends Controller {
 				$gamePlay->code = $gameCode;
 				$gamePlay->hash = $hash1;
 				$gamePlay->status = $gameStatus;
+				// $gamePlay->played_time = $r['played_time'];
 
 				if(isset($sgameResult['badges']) ){
 					
@@ -1137,7 +1138,7 @@ Class ApiGameController extends Controller {
 					default: return ResponseHelper::OutputJSON('fail', 'submit answer error');
 				}
 
-				ZapZapQuestionHelper::UserMapV1_1($profileId,$planetId,$gamePlay, $gameResult); //update user_map
+				ZapZapQuestionHelper::UserMapV1_1($profileId,$planetId,$gamePlay, $gameResult, $sgameResult['difficulty']); //update user_map
 
 				$profile = GameProfile::find($profileId);
 				$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();
@@ -1146,14 +1147,14 @@ Class ApiGameController extends Controller {
 				LogHelper::LogPostResult($planetId , $gameResult, $gameCode);//log post result
 			}
 
-		} catch (Exception $ex) {
+		// } catch (Exception $ex) {
 
-				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-					'source' => 'ApiGameController > result', 
-					'inputs' => Request::all(),
-				])]);
-				return ResponseHelper::OutputJSON('exception');
-		}
+		// 		LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 			'source' => 'ApiGameController > result', 
+		// 			'inputs' => Request::all(),
+		// 		])]);
+		// 		return ResponseHelper::OutputJSON('exception');
+		// }
 
 		return ResponseHelper::OutputJSON('success');
 	}
