@@ -72,4 +72,3 @@ Route::group(['middleware' => 'auth.user'], function () {
 	Route::post('user/invite/share-unlock', 'ApiProfileController@unlockParentLimit');
 });
 
-
