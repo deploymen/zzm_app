@@ -49,3 +49,5 @@ Route::get('status', 'ApiCheckingController@CheckGameStatus');
 Route::get('check-ip-details', 'ApiCheckingController@CheckIpDetails');
 
 Route::get('weekly-report', 'ApiController@weeklyReport');
+
+Route::post('user/invite/teacher' , 'ApiController@inviteTeacher')

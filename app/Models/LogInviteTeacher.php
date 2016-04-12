@@ -2,9 +2,9 @@
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
-class LogInvite extends Eloquent {
+class LogInviteTeacher extends Eloquent {
 
-	public $table = 't9203_log_invite_parent';
+	public $table = 't9203_log_invite_teacher';
 	protected $primaryKey = 'id';
 	public $timestamps = false;
 

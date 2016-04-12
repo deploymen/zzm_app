@@ -52,7 +52,3 @@ Route::pattern('role', '(parent)|(teacher)|(admin)|(content)|(investor)');
 	Route::get('/check-ip-details', 'ApiCheckingController@CheckIpDetails');
 
 	Route::get('send/email', 'ApiController@sendEmail');
-
-	
-Route::get('test-api', function(){ die('1.00'); });
-Route::get('/test-api123', function(){ die('1.2222'); }  );

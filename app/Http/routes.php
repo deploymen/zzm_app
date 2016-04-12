@@ -20,11 +20,4 @@ Route::group(['middleware' => 'version'], function () {
 		require __DIR__.'/Routes/1.1/api-user.php';
 		require __DIR__.'/Routes/1.1/api-game.php';
 	});
-
-	Route::group(['prefix' => '/1.2'], function () {
-		require __DIR__.'/Routes/1.2/api.php';
-		require __DIR__.'/Routes/1.2/api-user.php';
-		require __DIR__.'/Routes/1.2/api-game.php';
-	});
-
 });
