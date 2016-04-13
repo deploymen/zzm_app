@@ -47,6 +47,176 @@ Class AuthUserController extends Controller {
 		// }
 
 		$username = Request::input('email'); //username = email
+		$password = Request::input('password');
+		$password_sha1 = sha1($password . Config::get('app.auth_salt'));
+		$name = Request::input('name');
+		$email = Request::input('email');
+		$country = Request::input('country', '');
+		$accessToken = '';
+		$deviceId = Request::input('device_id'); //optional
+		$role = Request::input('role');
+		$classId = 0;
+
+		if (!$username || !$password || !$name || !$email || !$country || !$role) {
+			return ResponseHelper::OutputJSON('fail', "missing parameters");
+		}
+
+		switch ($role) {
+			case 'parent':
+
+			break;
+			case 'teacher':
+
+			break;
+			default:return ResponseHelper::OutputJSON('fail', "invalid role");
+		}
+
+		if (strlen($password) < 6) {
+			return ResponseHelper::OutputJSON('fail', 'password must be atleast 6 chars');
+		}
+
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			return ResponseHelper::OutputJSON('fail', "invalid email format");
+		}
+
+		$access = UserAccess::where('username', $username)->first();
+		if ($access) {
+			return ResponseHelper::OutputJSON('fail', "email used");
+		}
+
+		try {	
+			// DB::transaction(function ()
+				 // use ($role, $username, $password_sha1, $name, $email, $country, $deviceId, $accessToken, $classId) {
+
+					$user = new User;
+					$user->role = $role;
+					$user->name = $name;
+					$user->email = $email;
+					$user->country = $country;
+					$user->save();
+
+					$accessToken = AuthHelper::GenerateAccessToken($user->id);
+
+					$access = new UserAccess;
+					$access->user_id = $user->id;
+					$access->username = $username;
+					$access->password_sha1 = $password_sha1;
+					$access->access_token = $accessToken;
+					$access->access_token_issue_at = DB::raw('NOW()');
+					$access->access_token_issue_ip = Request::ip();
+					$access->access_token_expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 10 YEAR)'); //we dont kick them out
+					$access->save();
+
+					$extId = new UserExternalId;
+					$extId->user_id = $user->id;
+					if ($deviceId) {$extId->device_id = $deviceId;}
+					$extId->save();
+
+					$setting = new UserSetting;
+					$setting->user_id = $user->id;
+					$setting->save();
+
+					if($role == 'teacher'){
+						$gameClass = new GameClass;
+						$gameClass->user_id = $user->id;
+						$gameClass->name = 'Default Class';
+						$gameClass->save();
+
+						$classId = $gameClass->id;
+					}
+
+					$profile = new GameProfile;
+					$profile->user_id = $user->id;
+					$profile->nickname1 = 999;
+					$profile->nickname2 = 999;
+					$profile->avatar_id = 999;
+					$profile->class_id = $classId;
+					$profile->save();
+
+					$idCounter = IdCounter::find(1);
+					$gameCodeSeed = $idCounter->game_code_seed;
+					$idCounter->game_code_seed = $gameCodeSeed + 1;
+					$idCounter->save();
+
+					$code = new GameCode;
+					$code->type = 'profile';
+					$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
+					$code->seed = $gameCodeSeed;
+					$code->profile_id = $profile->id;
+					$code->save();
+
+					if ($deviceId) {
+						//claim back previous game result played from this device id
+						//to do...
+					}
+
+					$secretKey = sha1(time() . $email);
+					$edmHtml = (string) view('emails.account-activation', [
+						'name' => $name,
+						'app_store_address' => config('app.app_store_url'),
+						'username' => $email,
+						'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
+						'activation_link' => config('app.website_url') . "/api/1.0/auth/activate/{$secretKey}",
+						'email_support' => config('app.support_email'),
+						'social_media_links' => config('app.fanpage_url'),
+					]);
+
+					EmailHelper::SendEmail([
+						'about' => 'Welcome',
+						'subject' => 'Your Zap Zap Account is now ready!',
+						'body' => $edmHtml,
+						'bodyHtml' => $edmHtml,
+						'toAddresses' => [$email],
+					]);
+
+					$logOpenAcc = new LogAccountActivate;
+					$logOpenAcc->user_id = $user->id;
+					$logOpenAcc->secret = $secretKey;
+					$logOpenAcc->save();
+
+					//job done - log it!
+					DatabaseUtilHelper::LogInsert($user->id, $user->table, $user->id);
+					DatabaseUtilHelper::LogInsert($user->id, $access->table, $user->id);
+					DatabaseUtilHelper::LogInsert($user->id, $extId->table, $user->id);
+					DatabaseUtilHelper::LogInsert($user->id, $extId->table, $user->id);
+					DatabaseUtilHelper::LogInsert($user->id, $profile->table, $profile->id);
+					DatabaseUtilHelper::LogInsert($user->id, $code->table, $code->id);
+
+					Session::put('access_token', $accessToken);
+					setcookie('access_token', $accessToken, time() + (86400 * 30), "/"); // 86400 = 1 day*/
+				// }
+				// );
+
+			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
+			$list = User::select('id' , 'role' , 'name')->find($userAccess->user_id);
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'AuthUserController > signUp',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
+
+		return ResponseHelper::OutputJSON('success', '', ['user' => $list], [
+			'X-access-token' => $accessToken,
+		], [
+			'access_token' => $accessToken,
+		]);
+	}
+
+	public function signUpV1_1() {
+
+		// sign-up from web & app
+		// =======================================================================//
+		// ! this sign up is for web only, and not for mobile game client         //
+		// =======================================================================//
+
+		// if (!DatabaseUtilHelper::TrafficControl('t0101_user')) {
+		// 	return ResponseHelper::OutputJSON('fail', "traffic jam, please try again later.");
+		// }
+
+		$username = Request::input('email'); //username = email
 		$name = Request::input('name');
 		$email = Request::input('email');
 		$country = Request::input('country', '');
@@ -87,7 +257,7 @@ Class AuthUserController extends Controller {
 			return ResponseHelper::OutputJSON('fail', "email used");
 		}
 
-		// try {	
+		try {	
 			// DB::transaction(function ()
 				 // use ($role, $username, $password_sha1, $name, $email, $country, $deviceId, $accessToken, $classId) {
 
@@ -434,13 +604,13 @@ Class AuthUserController extends Controller {
 			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
 			$list = User::select('id' , 'role' , 'name' , 'register_from')->find($userAccess->user_id);
 
-		// } catch (Exception $ex) {
-		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-		// 		'source' => 'AuthUserController > signUp',
-		// 		'inputs' => Request::all(),
-		// 	])]);
-		// 	return ResponseHelper::OutputJSON('exception');
-		// }
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'AuthUserController > signUp',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 
 		return ResponseHelper::OutputJSON('success', '', ['user' => $list], [
 			'X-access-token' => $accessToken,

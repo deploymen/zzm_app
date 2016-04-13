@@ -8,7 +8,7 @@ Route::pattern('role', '(parent)|(teacher)|(admin)|(content)|(investor)');
 // ! Auth Related												          //
 // =======================================================================//
 Route::group(['prefix' => 'auth'], function () {
-	Route::post('/sign-up', 'AuthUserController@signUp'); //only for parent|teacher
+	Route::post('/sign-up', 'AuthUserController@signUpV1_1'); //only for parent|teacher
 	Route::post('/sign-in', 'AuthUserController@signIn');
 	Route::post('/sign-out', 'AuthUserController@signOut');
 
