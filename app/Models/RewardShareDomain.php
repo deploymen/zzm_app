@@ -3,13 +3,14 @@
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class UserAccess extends Eloquent{
+class RewardShareDomain extends Eloquent {
 	use SoftDeletes;
-
-	public $table = 't0102_user_access';
-	protected $primaryKey = 'user_id';
+	
+	public $table = 't0106_reward_share_domain';
+	protected $primaryKey = 'id';
 	public $timestamps = true;
 	protected $dates = ['deleted_at'];
 
 	protected $hidden = [];
+
 }

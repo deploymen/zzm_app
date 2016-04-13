@@ -1,29 +1,29 @@
-@extends('layouts.master-docs', ['sidebar_item' => 'list-game'])
+@extends('layouts.master-docs', ['sidebar_item' => 'list-general']) 
 
 @section('breadcrumb')
 <!--BEGIN TITLE & BREADCRUMB PAGE-->
 <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
     <div class="page-header pull-left">
-        <div class="page-title">GAME API</div>
+        <div class="page-title">AUTH API</div>
     </div>
     <div class="clearfix"></div>
 </div>
 <!--END TITLE & BREADCRUMB PAGE-->
-@stop
+@stop 
 
-@section('css_include')
+@section('css_include') 
 
-@stop
+@stop 
 
-@section('js_include')
+@section('js_include') 
 
-@stop
+@stop 
 
 @section('content')
 
 <div class="row">
     <div class="col-lg-8">
-        <h3>POST  /api/game/play/228/result</h3>
+        <h3>GET  /api/version</h3>
         <ul id="myTab" class="nav nav-tabs">
             <li class="active"><a href="#descriptions" data-toggle="tab">Explain</a>
             </li>
@@ -35,23 +35,10 @@
         <div id="myTabContent" class="tab-content">
             <div id="descriptions" class="tab-pane fade in active">
                 <p>
-
+                
                 </p>
             </div>
             <div id="request" class="tab-pane fade">
-                <p>Header</p>
-                <table class="table table-striped table-bordered table-hover">
-                    <tr>
-                        <th style="width:175px;">Key</th>
-                        <th style="width:500px;">Description</th>
-                        <th style="width:360px;">Example</th>
-                    </tr>
-                    <tr>
-                        <td>X-game-code</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </table>
                 <p>INPUT</p>
                 <table class="table table-striped table-bordered table-hover">
                     <tr>
@@ -60,34 +47,23 @@
                         <th style="width:360px;">Example</th>
                     </tr>
                     <tr>
-                        <td>game_result</td>
+                        <td>device</td>
                         <td></td>
-                        <td>
-                          {"score":"1","status":"pass","badges":{"speed":"1","accuracy":"1"},"game_played":"11:10","answers":[XXXX]}
-                        </td>
+                        <td></td>
                     </tr>
                     <tr>
-                        <td>random</td>
+                        <td>version</td>
                         <td></td>
-                        <td>ak55a4w78vx4a12</td>
-                    </tr>
-                    <tr>
-                        <td>hash</td>
-                        <td>hash = sha1(game_result + random + secret_key)</td>
-                        <td>
-                            <p>= sha1("{something}" + "123" + "d60dK53A40I6HBTBNVoC") </p>
-                            <p> = sha1("{something}123d60dK53A40I6HBTBNVoC") </p>
-                            <p> = ce855ac541231884f284e1e0994ef0aa590326a0 </p>
-                        </td>
+                        <td></td>
                     </tr>
                 </table>
                 <div style="margin-top:50px; height:500px; overflow:auto; font-size:12px">
-<pre class="prettyprint">
-POST http://staging.zapzapmath.com/api/game/play/228/result HTTP/1.1
-Host: staging.zapzapmath.com
-X-game-code: 0000015k
+                    <pre class="prettyprint">
+                        POST http://staging.zapzapmath.com/api/version HTTP/1.1
+                        Host: staging.zapzapmath.com
 
-</pre>
+                        device_os=ios-1&zzm_version=1.0
+                    </pre>
                 </div>
             </div>
             <div id="respone" class="tab-pane fade">
@@ -113,9 +89,14 @@ X-game-code: 0000015k
                         <td></td>
                     </tr>
                 </table>
-<pre class="prettyprint">
+                <pre class="prettyprint">
 {
-  "status": "success"
+  "status": "success",
+  "data": {
+        "version": 1.0
+        "end_point": "http://staging.zapzapmath.com/api/1.0"
+    }
+
 }
 </pre>
             </div>
@@ -124,6 +105,5 @@ X-game-code: 0000015k
     </div>
     <!--END ROW -->
 </div>
-
 
 @stop

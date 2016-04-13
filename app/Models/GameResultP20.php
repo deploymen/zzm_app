@@ -3,13 +3,13 @@
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class UserAccess extends Eloquent{
-	use SoftDeletes;
+class GameResultP20 extends Eloquent {
 
-	public $table = 't0102_user_access';
-	protected $primaryKey = 'user_id';
-	public $timestamps = true;
+	public $table = 't0320_game_result_p20';
+	protected $primaryKey = 'id';
+	public $timestamps = false;
 	protected $dates = ['deleted_at'];
 
 	protected $hidden = [];
+
 }

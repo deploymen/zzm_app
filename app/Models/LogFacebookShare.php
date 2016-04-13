@@ -2,9 +2,9 @@
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
-class LogInvite extends Eloquent {
+class LogFacebookShare extends Eloquent{
 
-	public $table = 't9203_log_invite_parent';
+	public $table = 't9413_log_facebook_share';
 	protected $primaryKey = 'id';
 	public $timestamps = false;
 

@@ -37,6 +37,7 @@ use App\Models\UserExternalId;
 use App\Models\LeaderboardWorld;
 use App\Models\LeaderboardSystem;
 use App\Models\LeaderboardPlanet;
+use App\Models\IdCounter;
 
 class ApiProfileHelper{
 
@@ -192,13 +193,12 @@ class ApiProfileHelper{
 			];
 	}
 
-	public static function newProfile($userId , $classId , $firstName , $lastName , $age , $school , $grade , $email, $nickname1 , $nickname2 , $avatarId){
+	public static function newProfile($userId , $classId , $firstName , $age , $school , $grade , $email, $nickname1 , $nickname2 , $avatarId){
 
 		$profile = new GameProfile;
 		$profile->user_id = $userId;
 		$profile->class_id = $classId;
 		$profile->first_name = $firstName;
-		$profile->last_name = $lastName;
 		$profile->age = $age;
 		$profile->school = $school;
 		$profile->grade = $grade;
@@ -208,6 +208,18 @@ class ApiProfileHelper{
 		$profile->avatar_id = $avatarId;
 		$profile->save();
 
+		$idCounter = IdCounter::find(1);
+		$gameCodeSeed = $idCounter->game_code_seed;
+		$idCounter->game_code_seed = $gameCodeSeed + 1;
+		$idCounter->save();
+
+		$code = new GameCode;
+		$code->type = 'profile';
+		$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
+		$code->seed = $gameCodeSeed;
+		$code->profile_id = $profile->id;
+		$code->save();
+		
 		return $profile;
 	}
 }
