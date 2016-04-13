@@ -30,6 +30,7 @@ Route::group(['prefix' => 'game'], function () {
 
 		Route::post('/verify-transfer', 'ApiProfileController@verifyCode');
 		Route::post('/profile-transfer', 'ApiProfileController@profileTransfer');
+		Route::post('/profile-transfer-loose', 'ApiProfileController@profileTransferLoose');
 
 
 		Route::post('/play/{id}/result', 'ApiGameController@resultV1_1');
