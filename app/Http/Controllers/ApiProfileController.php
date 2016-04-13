@@ -565,7 +565,7 @@ Class ApiProfileController extends Controller {
 			return ResponseHelper::OutputJSON('exception');
 		}
 	}
-	
+
 	public function profileTransferLoose() {
 		$gameCodeExisted = Request::input('game_code'); //game in device
 		$gameCodeEnter = Request::input('game_code_enter'); //game new key in
@@ -594,7 +594,7 @@ Class ApiProfileController extends Controller {
 			return ResponseHelper::OutputJSON('fail', 'profile no found');
 		}
 
-		if($deviceGameCode != 'anonymous' && $currentGameCode != 'signed_up_profile'){
+		if($deviceGameCode->type != 'anonymous' || $currentGameCode->type != 'signed_up_profile'){
 			return ResponseHelper::OutputJSON('fail', 'profile transfer is not allow on the inputs given');
 		}
 
