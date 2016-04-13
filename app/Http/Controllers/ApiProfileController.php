@@ -92,25 +92,6 @@ Class ApiProfileController extends Controller {
 				return ResponseHelper::OutputJSON('fail', "class not found");
 			}
 		}
-
-		$userFlag = UserFlag::find($userId);
-		if(!$userFlag){
-			return ResponseHelper::OutputJSON('fail', "user flag not found");
-		}
-		
-		if($classId){
-			$profileClass = GameProfile::where('class_id' , $classId)->where('user_id', $userId)->count();
-
-			if($profileClass >= $userFlag->profile_limit){
-				return ResponseHelper::OutputJSON('fail', "class limited" );
-			}
-		}else{
-			$userProfile = GameProfile::where('user_id' , $userId)->count();
-
-			if($userProfile >= $userFlag->profile_limit){
-				return ResponseHelper::OutputJSON('fail', "profile limited" , ['total_share' => $userFlag->total_share]);
-			}
-		}
 		
 		try {
 			$avatarIdSet = AvatarSet::find($avatarId);
@@ -135,7 +116,7 @@ Class ApiProfileController extends Controller {
 			$idCounter->save();
 
 			$code = new GameCode;
-			$code->type = 'signed_up_profile';
+			$code->type = 'profile';
 			$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
 			$code->seed = $gameCodeSeed;
 			$code->profile_id = $profile->id;
@@ -210,12 +191,6 @@ Class ApiProfileController extends Controller {
 			}
 
 			if ($classId) {
-				$profileClass = GameProfile::where('class_id' , $classId)->where('user_id', $userId)->count();
-
-				if($profileClass >= $userFlag->profile_limit){
-					return ResponseHelper::OutputJSON('fail', "limited");
-				}
-				
 				$gameClass = GameClass::find($classId);
 
 				if(!$gameClass || $gameClass->user_id != $userId ) {
