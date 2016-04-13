@@ -16,6 +16,7 @@ return [
     'support_email' => env('SUPPORT_EMAIL'),
 
     'server_test' =>env('SERVER'),
+    'paid' =>env('PAID'),
 	/*
 	|--------------------------------------------------------------------------
 	| Application Debug Mode
@@ -162,7 +163,6 @@ return [
 		'Chumper\Zipper\ZipperServiceProvider',
 		'Laravel\Socialite\SocialiteServiceProvider',
 		'GrahamCampbell\Throttle\ThrottleServiceProvider',
-		
 		'Avanderbergh\Schoology\Saml2ServiceProvider',
     	'Avanderbergh\Schoology\SchoologyServiceProvider',
 

@@ -91,6 +91,13 @@
                     <td></td>
                     <td align="center"><a href="/api/docs/api.game-leaderboard-planet-get" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr> 
+                <tr>
+                    <td>7.</td>
+                    <td>GET</td>
+                    <td>/api/version</td>
+                    <td></td>
+                    <td align="center"><a href="/api/docs/api.version-get" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                </tr> 
             </tbody>
         </table>
 
@@ -310,6 +317,13 @@
                     <td>/api/1.0/game/play/228/result </td>
                     <td>p00</td>
                     <td align="center"><a href="/api/docs/api.game-play-result-post-p00" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
+                </tr>
+                <tr>
+                    <td>12.</td>
+                    <td>POST</td>
+                    <td>/api/1.0/game/play/push-result </td>
+                    <td>offline</td>
+                    <td align="center"><a href="/api/docs/api-game-play-result-offline-post" target="_blank"><i class="fa fa-chevron-circle-right" style="font-size: 20px;"></i></a></td>
                 </tr>
             </tbody>
         </table>

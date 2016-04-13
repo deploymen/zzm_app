@@ -6,6 +6,7 @@ use PDOException;
 use Config;
 use Request;
 use DB;
+use Session;
 use App\Libraries;
 use App\Libraries\LogHelper;
 use App\Libraries\AuthHelper;
@@ -18,10 +19,9 @@ use App\Models;
 use App\Models\Subscribe;
 use App\Models\LaunchNotification;
 use App\Models\AppVersion;
+use App\Models\User;
 
 class ApiController extends Controller {
-
-
 
 	public function subscribe($source = 'pre-launch'){
 
@@ -205,21 +205,77 @@ class ApiController extends Controller {
 	}
 
 	public function getVersion(){
-		$device = Request::input('device');
+		$deviceOs = Request::input('device_os');
+		$zzmVersion = Request::input('zzm_version');
 
-		if(!$device){
+		if(!$deviceOs || !$zzmVersion){
 			return ResponseHelper::OutputJSON('fail', 'missing parameter');
 		}
 
-		$appVersion = AppVersion::where('device', $device)->first();
+		$appVersion = AppVersion::where('device_os', $deviceOs)->where('zzm_version' , $zzmVersion)->first();
 		if(!$appVersion){
 			return ResponseHelper::OutputJSON('fail', 'version not found');
 		}
 
 		return ResponseHelper::OutputJSON('success', '' , [
-			'version' => $appVersion->version,
-			'end_point' => $appVersion->end_point,
+			'device_os' => $deviceOs,
+			'zzm_version' => $zzmVersion,
+			'api_version' => $appVersion->api_version,
 			]);
-
 	}
+
+	public function weeklyReport(){
+		$email = User::where('activated', 1)->select('email')->get();
+
+		for($j=0; $j<count($email); $j++){
+			$mail = $email[$j]->email;
+
+			if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
+				continue;
+			}
+
+			EmailHelper::SendEmail([
+				'about' => '',
+				'subject' => '',
+				'body' => 'emails.password',
+				'bodyHtml' => 'emails.password',
+				'toAddresses' => [$mail], //['support@932.xxx'],
+				'bccAddresses' => [],
+				'replyToAddresses' => ['no-reply@zapzapmath.com'],
+				'data' => [],
+			]);
+		}
+		return 'success';
+	}
+
+	public function InviteTeacher(){
+		$email = Request::input('email');
+
+		if(!$email){
+			return ResponseHelper::OutputJSON('fail', 'missing parameter');
+		}
+
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			return ResponseHelper::OutputJSON('fail', "invalid email format");
+		}
+		
+		$edmHtml = (string) view('emails.account-activation-teacher-unlocked', [ 
+			'name' => $name,
+			'app_store_address' => config('app.app_store_url'),
+			'username' => $email,
+			'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
+			'activation_link' => config('app.website_url') . "/api/1.0/auth/activate/{$secretKey}",
+			'email_support' => config('app.support_email'),
+			'zzm_url' => config('app.website_url'),
+			'social_media_links' => config('app.fanpage_url'),
+		]);
+
+		EmailHelper::SendEmail([
+			'about' => 'Congratulations',
+			'subject' => 'Your Zap Zap Math premium account is unlocked!',
+			'body' => $edmHtml,
+			'bodyHtml' => $edmHtml,
+			'toAddresses' => [$email],
+		]);
+}
 }

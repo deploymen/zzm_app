@@ -606,7 +606,7 @@ class ResultHelper{
 
 		 $sql = "
        		SELECT q13.`id` AS `question_id` , r13.`answer`, r13.`id` AS `result_id` ,r13.`correct` , q13.`difficulty`
-       			FROM `t0300_game_result` r , `t0213_game_question_p13` q13 , `t0313_game_result_p13`
+       			FROM `t0300_game_result` r , `t0213_game_question_p13` q13 , `t0313_game_result_p13` r13
        				WHERE r.`target_id` = r13.`id`
        				AND r13.`target_id` = q13.`id`
        				AND r.`play_id` IN ( {$playId} )
@@ -640,7 +640,7 @@ class ResultHelper{
 		$answers = [];
 
 		 $sql = "
-       		SELECT q14.`id` AS `question_id` ,q14.`operator`, q14.`number1`,q14.`number2`,q14.`number3`,q14.`number1_multiplier`,q14.'number2_multiplier',q14.`number3_multiplier`, r14.`answer`, r14.`id` AS `result_id` ,r14.`correct` , q14.`difficulty`
+       		SELECT q14.`id` AS `question_id` ,q14.`operator`, q14.`number1`,q14.`number2`,q14.`number3`,q14.`number1_multiplier`,q14.`number2_multiplier`,q14.`number3_multiplier`, r14.`answer`, r14.`id` AS `result_id` ,r14.`correct` , q14.`difficulty`
        			FROM `t0300_game_result` r , `t0214_game_question_p14` q14 , `t0314_game_result_p14` r14
 
        				WHERE r.`target_id` = r14.`id`
@@ -922,3 +922,4 @@ class ResultHelper{
 
 
 
+//asd

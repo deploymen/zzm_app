@@ -26,6 +26,7 @@ use App\Models\LogPasswordReset;
 use App\Models\LogSignInUser;
 use App\Models\User;
 use App\Models\UserAccess;
+use App\Models\UserFlag;
 use App\Models\UserExternalId;
 use App\Models\UserSetting;
 use Session;
@@ -33,6 +34,7 @@ use Session;
 class ApiUserHelper{
 
 	public static function Register($role, $name, $email, $country, $username, $password_sha1,  $registerFrom , $deviceId = ''){
+		$classId = 0;
 
 		$user = new User;
 		$user->role = $role;
@@ -41,6 +43,7 @@ class ApiUserHelper{
 		$user->country = $country;
 		$user->activated = 0;
 		$user->register_from = $registerFrom;
+		$user->paid = Config::get('app.paid');
 		$user->save();
 
 		$accessToken = AuthHelper::GenerateAccessToken($user->id);
@@ -64,7 +67,30 @@ class ApiUserHelper{
 		$setting->user_id = $user->id;
 		$setting->save();
 
-		return $user->id;
+		$userFlag = new UserFlag;
+		$userFlag->user_id = $user->id;
+
+		if($role == 'teacher'){
+			$gameClass = new GameClass;
+			$gameClass->user_id = $user->id;
+			$gameClass->name = 'Default Class';
+			$gameClass->save();
+
+			$userFlag->profile_limit = 3;
+			$userFlag->class_limit = 50;
+			$userFlag->save();
+
+			$classId = $gameClass->id;
+		}else{
+			$userFlag->profile_limit = 1;
+			$userFlag->class_limit = 0;
+			$userFlag->save();
+		}
+
+		return [
+			'user_id' => $user->id,
+			'class_id' => $classId,
+			];
 	}
 
 	public static function ProfileGameCode($userId){
