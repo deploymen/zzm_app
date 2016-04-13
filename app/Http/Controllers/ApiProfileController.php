@@ -565,7 +565,76 @@ Class ApiProfileController extends Controller {
 			return ResponseHelper::OutputJSON('exception');
 		}
 	}
+	
+	public function profileTransferLoose() {
+		$gameCodeExisted = Request::input('game_code'); //game in device
+		$gameCodeEnter = Request::input('game_code_enter'); //game new key in
 
+		if (!$gameCodeEnter) {
+			return ResponseHelper::OutputJSON('fail', 'missing parameters');
+		}
+
+		$deviceGameCode = GameCode::where('code', $gameCodeExisted)->first();
+		if (!$deviceGameCode) {
+			return ResponseHelper::OutputJSON('fail', 'device game code no found');
+		}
+
+		$currentGameCode = GameCode::where('code', $gameCodeEnter)->first();
+		if (!$currentGameCode) {
+			return ResponseHelper::OutputJSON('fail', 'game code no found');
+		}
+
+		$deviceProfile = GameProfile::find($deviceGameCode->profile_id);
+		if (!$deviceProfile) {
+			return ResponseHelper::OutputJSON('fail', 'anonymous profile no found');
+		}
+
+		$profile = GameProfile::find($currentGameCode->profile_id);
+		if (!$profile) {
+			return ResponseHelper::OutputJSON('fail', 'profile no found');
+		}
+
+		if($deviceGameCode != 'anonymous' && $currentGameCode != 'signed_up_profile'){
+			return ResponseHelper::OutputJSON('fail', 'profile transfer is not allow on the inputs given');
+		}
+
+		try {
+
+			$gPlay = GamePlay::where('code' , $gameCodeExisted)->first();
+			if($gPlay){
+				$gamePlay = GamePlay::where('code' , $gameCodeExisted)->update([
+				'type' => 'profile',
+				'code' => $gameCodeEnter,
+				'user_id' => $profile->user_id,
+				'profile_id' => $profile->id,
+				'device_id' => $currentGameCode->device_id
+				]);
+			}
+			
+			$gUserMap = UserMap::where('profile_id' , $deviceProfile->id)->first();
+			if($gUserMap){
+				$gameUserMap = UserMap::where('profile_id' , $deviceProfile->id)->update(['profile_id' => $profile->id]);
+			}
+
+			
+			$profile->nickname1 = $deviceProfile->nickname1;
+			$profile->nickname2 = $deviceProfile->nickname2;
+			$profile->avatar_id = $deviceProfile->avatar_id;
+			$profile->save();
+
+			$currentGameCode->played = 1;
+			$currentGameCode->save();
+
+			return ResponseHelper::OutputJSON('success');
+			
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiProfileController > profileTransfer',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
+	}
 	public function profileDetails() {
 		$profileId = Request::input('profile_id');
 		$userId = Request::input('user_id');
