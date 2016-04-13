@@ -12,7 +12,6 @@ class VerifyCsrfToken extends BaseVerifier {
 	 * @param  \Closure  $next
 	 * @return mixed
 	 */
-	
 	public function handle($request, Closure $next)
 	{
 		return parent::handle($request, $next);

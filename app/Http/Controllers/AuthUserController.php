@@ -433,15 +433,6 @@ Class AuthUserController extends Controller {
 	}
 
 	public function activate($secretKey) {
-		
-		$logAccountActivated = LogAccountActivate::where('secret', $secretKey)
-			->where('expired', '1')
-			->whereNotNull('activated_at')
-			->first();
-
-		if($logAccountActivated){
-			return redirect::to('../user/activated');
-		}
 
 		$logAccountActivate = LogAccountActivate::where('secret', $secretKey)
 			->where('expired', '0')
