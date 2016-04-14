@@ -172,14 +172,14 @@ class ApiProfileHelper{
 		// pro			1			ann				1			0
 
 		if ($deviceGameCode->type == 'anonymous' && $deviceGameCode->played) {	
-			if($gameCode->type == 'profile' && $gameCode->played || $gameCode->type == 'anonymous' && $gameCode->played){
+			if($gameCode->type == 'signed_up_profile' && $gameCode->played || $gameCode->type == 'anonymous' && $gameCode->played){
 				return  [
 						'profile_transfer' => '0',
 						'action' => 'warning'
 					];
 				}
 
-			if($gameCode->type == 'anonymous' && !$gameCode->played || $gameCode->type == 'profile' && !$gameCode->played){
+			if($gameCode->type == 'anonymous' && !$gameCode->played || $gameCode->type == 'signed_up_profile' && !$gameCode->played){
 				return  [
 						'profile_transfer' => '1',
 						'action' => 'new+claim'
@@ -214,7 +214,7 @@ class ApiProfileHelper{
 		$idCounter->save();
 
 		$code = new GameCode;
-		$code->type = 'profile';
+		$code->type = 'signed_up_profile';
 		$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
 		$code->seed = $gameCodeSeed;
 		$code->profile_id = $profile->id;

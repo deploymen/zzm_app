@@ -1168,6 +1168,10 @@ Class ApiGameController extends Controller {
 
 		$gameCode = GameCode::where('code' , $code)->first();
 
+		if(!$gameCode){
+			return ResponseHelper::OutputJSON('fail' , 'game code not found');
+		}
+
 		$totalStar = UserMap::where('profile_id', $gameCode->profile_id)->sum('star');
 
 		$profile = GameProfile::find($gameCode->profile_id);
