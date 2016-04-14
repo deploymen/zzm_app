@@ -594,7 +594,7 @@ Class ApiProfileController extends Controller {
 			return ResponseHelper::OutputJSON('fail', 'profile no found');
 		}
 
-		if($deviceGameCode != 'anonymous' && $currentGameCode != 'signed_up_profile'){
+		if($deviceGameCode->type != 'anonymous' || $currentGameCode->type != 'signed_up_profile'){
 			return ResponseHelper::OutputJSON('fail', 'profile transfer is not allow on the inputs given');
 		}
 

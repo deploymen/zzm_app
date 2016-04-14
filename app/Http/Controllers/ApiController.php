@@ -206,9 +206,10 @@ class ApiController extends Controller {
 
 	public function getVersion(){
 		$deviceOs = Request::input('device_os');
+		$osVersion = Request::input('os_version');
 		$zzmVersion = Request::input('zzm_version');
 
-		if(!$deviceOs || !$zzmVersion){
+		if(!$deviceOs || !$zzmVersion || !$osVersion){
 			return ResponseHelper::OutputJSON('fail', 'missing parameter');
 		}
 
