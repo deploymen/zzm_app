@@ -1,6 +1,5 @@
 <?php
 Route::get('/', function () {return die('zzm-api');});
-Route::get('/version', 'ApiController@getVersion');
 
 Route::pattern('role', '(parent)|(teacher)|(admin)|(content)|(investor)');
 

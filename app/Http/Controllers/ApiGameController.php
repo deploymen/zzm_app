@@ -996,7 +996,7 @@ Class ApiGameController extends Controller {
 		// $results = array($result);
 		$results = json_decode( ($result), true );
 
-		// try{
+		try{
 
 			for($i=0; $i<=(count($results) - 1); $i++){
 				$r = $results[$i];
@@ -1147,14 +1147,14 @@ Class ApiGameController extends Controller {
 				LogHelper::LogPostResult($planetId , $gameResult, $gameCode);//log post result
 			}
 
-		// } catch (Exception $ex) {
+		} catch (Exception $ex) {
 
-		// 		LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-		// 			'source' => 'ApiGameController > result', 
-		// 			'inputs' => Request::all(),
-		// 		])]);
-		// 		return ResponseHelper::OutputJSON('exception');
-		// }
+				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+					'source' => 'ApiGameController > result', 
+					'inputs' => Request::all(),
+				])]);
+				return ResponseHelper::OutputJSON('exception');
+		}
 
 		return ResponseHelper::OutputJSON('success');
 	}
