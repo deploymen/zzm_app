@@ -2,6 +2,8 @@
 
 App::setLocale('en'); 
 
+Route::get('/version', 'ApiController@getVersion');
+
 require __DIR__.'/Routes/page-docs.php';
 require __DIR__.'/Routes/api-cron.php';
 
