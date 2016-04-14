@@ -603,7 +603,7 @@ Class ApiProfileController extends Controller {
 			$gPlay = GamePlay::where('code' , $gameCodeExisted)->first();
 			if($gPlay){
 				$gamePlay = GamePlay::where('code' , $gameCodeExisted)->update([
-				'type' => 'profile',
+				'type' => 'signed_up_profile',
 				'code' => $gameCodeEnter,
 				'user_id' => $profile->user_id,
 				'profile_id' => $profile->id,
