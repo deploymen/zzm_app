@@ -10,13 +10,4 @@ composer.lock
 .env*
 *.log
 *.sql
-ApiGameController.php
-app.php
-app/Http/Controllers/backup.php
-app/Libraries/ZapZapQuestionHelper.php1
-resources/views/contents/website/reset-password.php
-resources/views/contents/website/set-password.php
-resources/views/emails/prelaunch-thank-you(sample).blade.php
-resources/views/emails/prelaunch-thank-you.php
-
-/_ref
+/storage/framework
