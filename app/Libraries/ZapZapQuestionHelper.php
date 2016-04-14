@@ -194,7 +194,7 @@ class ZapZapQuestionHelper{
 				 			AND sp.`enable` = '1'
 				 			AND sp.`subsystem_id` = ss.`id`
 				 	
-				 			ORDER BY sp.`system_id` , sp.`subsystem_id`
+				 			ORDER BY sp.`system_id` , sp.`subsystem_id` , sp.`sequence`
 				";
 				
 			$result = DB::SELECT($sql, ['profileId'=>$profileId]);
