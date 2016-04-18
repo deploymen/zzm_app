@@ -250,37 +250,51 @@ class ApiController extends Controller {
 	}
 
 	public function InviteTeacher(\Illuminate\Http\Request $request){
-
-		if(!$request->emails){
+		$userEmail = Request::input('user_email');
+		$success = 0; //temporory 
+		if(!$request->emails){ //need update validation
 			return ResponseHelper::OutputJSON('fail', 'missing parameter');
-		}
-
-		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-			return ResponseHelper::OutputJSON('fail', "invalid email format");
 		}
 
 		for($i=0; $i<count($request->emails); $i++){
 			$email = $request->emails[$i];
 
-			$edmHtml = (string) view('emails.teacher-invite', [ 
-				'app_store_address' => config('app.app_store_url'),
-				'username' => $email,
-				'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
-				'email_support' => config('app.support_email'),
-				'zzm_url' => config('app.website_url'),
-				'social_media_links' => config('app.fanpage_url'),
-			]);
+			if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+				continue;
+			}
 
-			EmailHelper::SendEmail([
-				'about' => 'Zap Zap Math',
-				'subject' => 'Assist our school to get Zap Zap Math for free!',
-				'body' => $edmHtml,
-				'bodyHtml' => $edmHtml,
-				'toAddresses' => [$email],
-			]);
+			if(!$email){
+				continue;
+			}
+
+			$uEmail = explode('@' , $userEmail);
+			$domain = explode('@' , $email);
+
+			if($uEmail[1] != $domain[1]){
+				continue;
+			}
+		
+			// $edmHtml = (string) view('emails.teacher-invite', [ 
+			// 	'app_store_address' => config('app.app_store_url'),
+			// 	'username' => $email,
+			// 	'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
+			// 	'email_support' => config('app.support_email'),
+			// 	'zzm_url' => config('app.website_url'),
+			// 	'social_media_links' => config('app.fanpage_url'),
+			// ]);
+
+			// EmailHelper::SendEmail([
+			// 	'about' => 'Zap Zap Math',
+			// 	'subject' => 'Assist our school to get Zap Zap Math for free!',
+			// 	'body' => $edmHtml,
+			// 	'bodyHtml' => $edmHtml,
+			// 	'toAddresses' => [$email],
+			// ]);
+
+			$success = $success+1;
 		}
 
-		return ResponseHelper::OutputJSON('success');
+		return ResponseHelper::OutputJSON('success','' , ['sent' => $success]);
 
 	}
 }
