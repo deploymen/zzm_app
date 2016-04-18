@@ -249,34 +249,40 @@ class ApiController extends Controller {
 		return 'success';
 	}
 
-	public function InviteTeacher(){
-		$email = Request::input('email');
+	public function InviteTeacher(\Illuminate\Http\Request $request){
+		$userId = Request::input('user_id');
 
-		if(!$email){
+		if(!$request->emails){
 			return ResponseHelper::OutputJSON('fail', 'missing parameter');
 		}
 
 		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			return ResponseHelper::OutputJSON('fail', "invalid email format");
 		}
-		
-		$edmHtml = (string) view('emails.account-activation-teacher-unlocked', [ 
-			'name' => $name,
-			'app_store_address' => config('app.app_store_url'),
-			'username' => $email,
-			'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
-			'activation_link' => config('app.website_url') . "/api/1.0/auth/activate/{$secretKey}",
-			'email_support' => config('app.support_email'),
-			'zzm_url' => config('app.website_url'),
-			'social_media_links' => config('app.fanpage_url'),
-		]);
 
-		EmailHelper::SendEmail([
-			'about' => 'Congratulations',
-			'subject' => 'Your Zap Zap Math premium account is unlocked!',
-			'body' => $edmHtml,
-			'bodyHtml' => $edmHtml,
-			'toAddresses' => [$email],
-		]);
-}
+		
+		for($i=0; $i<count($request->emails); $i++){
+			$email = $request->emails[$i];
+
+			$edmHtml = (string) view('emails.teacher-invite', [ 
+				'app_store_address' => config('app.app_store_url'),
+				'username' => $email,
+				'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
+				'email_support' => config('app.support_email'),
+				'zzm_url' => config('app.website_url'),
+				'social_media_links' => config('app.fanpage_url'),
+			]);
+
+			EmailHelper::SendEmail([
+				'about' => 'Zap Zap Math',
+				'subject' => 'Assist our school to get Zap Zap Math for free!',
+				'body' => $edmHtml,
+				'bodyHtml' => $edmHtml,
+				'toAddresses' => [$email],
+			]);
+		}
+
+		return ResponseHelper::OutputJSON('success');
+
+	}
 }
