@@ -34,9 +34,9 @@ Route::group(['prefix' => 'game'], function () {
 
 
 		Route::post('/play/{id}/result', 'ApiGameController@resultV1_1');
-		Route::get('/play/{id}/request/'  , 'ApiGameController@request');
+		Route::get('/play/{id}/request'  , 'ApiGameController@request');
 
-		Route::post('/play/push-result/'  , 'ApiGameController@offlinePost');
+		Route::post('/play/push-result'  , 'ApiGameController@offlinePost');
 
 		Route::get('/play/{id}/request/{language}', 'ApiGameController@request');
 		// Route::get('/play/{id}/result', 'ApiGameController@winScreen');
