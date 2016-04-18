@@ -1066,8 +1066,15 @@ Class AuthUserController extends Controller {
 	 * @return Response
 	 */
 	public function handleProviderCallback() {
+		$error = Request::input('error');
+
+		if($error == 'access_denied'){
+			return redirect(url(env('WEBSITE_URL').'/user/signin'));
+		}
 		$client = new Client;
+
 		$firstLogin = 0;
+
 		$xsrfToken = Cookie::get('XSRF-TOKEN');
 		
 		$fbUser = Socialite::driver('facebook')->user();

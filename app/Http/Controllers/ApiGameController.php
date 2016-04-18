@@ -687,7 +687,7 @@ Class ApiGameController extends Controller {
 	}
 
 	public function getUserMapV1_1(){
-
+		//user type : 0 = no pay money , 1 = paid money, 2 = annonymous
 		$profileId = Request::input('game_code_profile_id');
 		$userId = Request::input('user_id');
 		$deviceId = Request::input('game_code_device_id');
