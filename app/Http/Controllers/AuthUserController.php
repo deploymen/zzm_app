@@ -116,6 +116,9 @@ Class AuthUserController extends Controller {
 					$setting->user_id = $user->id;
 					$setting->save();
 
+					$userFlag = new UserFlag;
+					$userFlag->user_id = $user->id;
+
 					if($role == 'teacher'){
 						$gameClass = new GameClass;
 						$gameClass->user_id = $user->id;
@@ -123,6 +126,14 @@ Class AuthUserController extends Controller {
 						$gameClass->save();
 
 						$classId = $gameClass->id;
+
+						$userFlag->profile_limit = 3;
+						$userFlag->class_limit = 50;
+						$userFlag->save();
+					}else{
+						$userFlag->profile_limit = 1;
+						$userFlag->class_limit = 0;
+						$userFlag->save();
 					}
 
 					$profile = new GameProfile;
