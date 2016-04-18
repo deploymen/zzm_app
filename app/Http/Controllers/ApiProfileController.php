@@ -63,56 +63,57 @@ Class ApiProfileController extends Controller {
 		$nickname2 = Request::input('nickname2', 999);
 		$avatarId = Request::input('avatar_id', 999);
 
-		if (!$firstName || !$school || !$age || !$grade) {
-			return ResponseHelper::OutputJSON('fail', "missing parameters");
-		}
-
-		if ($email != '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-			return ResponseHelper::OutputJSON('fail', "invalid email format");
-		}
-
-		$nickname1 = SetNickname1::find($nickname1);
-		$nickname2 = SetNickname2::find($nickname2);
-		
-		if (!$nickname1) {
-			return ResponseHelper::OutputJSON('fail', "invalid nickname id");
-		}
-
-		if (!$nickname2) {
-			return ResponseHelper::OutputJSON('fail', "invalid nickname id");
-		}
-
-		if (!$avatarId) {
-			return ResponseHelper::OutputJSON('fail', "invalid avatar id");
-		}
-
-		if($classId){
-			$gameClass = GameClass::find($classId);
-			if(!$gameClass || $gameClass->user_id != $userId) {
-				return ResponseHelper::OutputJSON('fail', "class not found");
-			}
-		}
-
-		$userFlag = UserFlag::find($userId);
-		if(!$userFlag){
-			return ResponseHelper::OutputJSON('fail', "user flag not found");
-		}
-		
-		if($classId){
-			$profileClass = GameProfile::where('class_id' , $classId)->where('user_id', $userId)->count();
-
-			if($profileClass >= $userFlag->profile_limit){
-				return ResponseHelper::OutputJSON('fail', "class limited" );
-			}
-		}else{
-			$userProfile = GameProfile::where('user_id' , $userId)->count();
-
-			if($userProfile >= $userFlag->profile_limit){
-				return ResponseHelper::OutputJSON('fail', "profile limited" , ['total_share' => $userFlag->total_share]);
-			}
-		}
-		
 		try {
+			
+			if (!$firstName || !$school || !$age || !$grade) {
+				return ResponseHelper::OutputJSON('fail', "missing parameters");
+			}
+
+			if ($email != '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+				return ResponseHelper::OutputJSON('fail', "invalid email format");
+			}
+
+			$nickname1 = SetNickname1::find($nickname1);
+			$nickname2 = SetNickname2::find($nickname2);
+			
+			if (!$nickname1) {
+				return ResponseHelper::OutputJSON('fail', "invalid nickname id");
+			}
+
+			if (!$nickname2) {
+				return ResponseHelper::OutputJSON('fail', "invalid nickname id");
+			}
+
+			if (!$avatarId) {
+				return ResponseHelper::OutputJSON('fail', "invalid avatar id");
+			}
+
+			if($classId){
+				$gameClass = GameClass::find($classId);
+				if(!$gameClass || $gameClass->user_id != $userId) {
+					return ResponseHelper::OutputJSON('fail', "class not found");
+				}
+			}
+
+			$userFlag = UserFlag::find($userId);
+			if(!$userFlag){
+				return ResponseHelper::OutputJSON('fail', "user flag not found");
+			}
+			
+			if($classId){
+				$profileClass = GameProfile::where('class_id' , $classId)->where('user_id', $userId)->count();
+
+				if($profileClass >= $userFlag->profile_limit){
+					return ResponseHelper::OutputJSON('fail', "class limited" );
+				}
+			}else{
+				$userProfile = GameProfile::where('user_id' , $userId)->count();
+
+				if($userProfile >= $userFlag->profile_limit){
+					return ResponseHelper::OutputJSON('fail', "profile limited" , ['total_share' => $userFlag->total_share]);
+				}
+			}
+		
 			$avatarIdSet = AvatarSet::find($avatarId);
 
 			$profile = new GameProfile;

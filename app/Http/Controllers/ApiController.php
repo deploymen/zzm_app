@@ -250,7 +250,6 @@ class ApiController extends Controller {
 	}
 
 	public function InviteTeacher(\Illuminate\Http\Request $request){
-		$userId = Request::input('user_id');
 
 		if(!$request->emails){
 			return ResponseHelper::OutputJSON('fail', 'missing parameter');
@@ -260,7 +259,6 @@ class ApiController extends Controller {
 			return ResponseHelper::OutputJSON('fail', "invalid email format");
 		}
 
-		
 		for($i=0; $i<count($request->emails); $i++){
 			$email = $request->emails[$i];
 

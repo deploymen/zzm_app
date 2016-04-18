@@ -47,15 +47,18 @@ Class AuthUserController extends Controller {
 		// }
 
 		$username = Request::input('email'); //username = email
-		$password = Request::input('password');
-		$password_sha1 = sha1($password . Config::get('app.auth_salt'));
 		$name = Request::input('name');
 		$email = Request::input('email');
 		$country = Request::input('country', '');
+		$password = Request::input('password');
+		$password_sha1 = sha1($password . Config::get('app.auth_salt'));
 		$accessToken = '';
 		$deviceId = Request::input('device_id'); //optional
 		$role = Request::input('role');
+		$registerFrom = Request::input('register_from' , 'website');
+		$ref = Request::input('ref');
 		$classId = 0;
+		$profileLimit = 3;
 
 		if (!$username || !$password || !$name || !$email || !$country || !$role) {
 			return ResponseHelper::OutputJSON('fail', "missing parameters");
@@ -84,7 +87,7 @@ Class AuthUserController extends Controller {
 			return ResponseHelper::OutputJSON('fail', "email used");
 		}
 
-		try {	
+		// try {	
 			// DB::transaction(function ()
 				 // use ($role, $username, $password_sha1, $name, $email, $country, $deviceId, $accessToken, $classId) {
 
@@ -93,6 +96,9 @@ Class AuthUserController extends Controller {
 					$user->name = $name;
 					$user->email = $email;
 					$user->country = $country;
+					$user->register_from = $registerFrom;
+					$user->ref = $ref;
+					$user->paid = Config::get('app.paid');
 					$user->save();
 
 					$accessToken = AuthHelper::GenerateAccessToken($user->id);
@@ -116,13 +122,24 @@ Class AuthUserController extends Controller {
 					$setting->user_id = $user->id;
 					$setting->save();
 
+					$userFlag = new UserFlag;
+					$userFlag->user_id = $user->id;
+
 					if($role == 'teacher'){
 						$gameClass = new GameClass;
 						$gameClass->user_id = $user->id;
 						$gameClass->name = 'Default Class';
 						$gameClass->save();
 
+						$userFlag->profile_limit = 3;
+						$userFlag->class_limit = 50;
+						$userFlag->save();
+
 						$classId = $gameClass->id;
+					}else{
+						$userFlag->profile_limit = 1;
+						$userFlag->class_limit = 0;
+						$userFlag->save();
 					}
 
 					$profile = new GameProfile;
@@ -131,6 +148,7 @@ Class AuthUserController extends Controller {
 					$profile->nickname2 = 999;
 					$profile->avatar_id = 999;
 					$profile->class_id = $classId;
+					$profile->school = 'default school';
 					$profile->save();
 
 					$idCounter = IdCounter::find(1);
@@ -150,30 +168,256 @@ Class AuthUserController extends Controller {
 						//to do...
 					}
 
-					$secretKey = sha1(time() . $email);
-					$edmHtml = (string) view('emails.account-activation', [
-						'name' => $name,
-						'app_store_address' => config('app.app_store_url'),
-						'username' => $email,
-						'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
-						'activation_link' => config('app.website_url') . "/api/1.0/auth/activate/{$secretKey}",
-						'email_support' => config('app.support_email'),
-						'social_media_links' => config('app.fanpage_url'),
-					]);
+					if($user->role ==  'teacher'){ //need update
+						$domain = explode('@' , $user->email);
+						$shareDomain = RewardShareDomain::where('domain' , $domain[1])->first();
+					
+						if($shareDomain){
+							if($shareDomain->blacklist){
+								//domain black list , send normal email
+								$secretKey = sha1(time() . $email);
+								$edmHtml = (string) view('emails.account-activation', [
+									'name' => $name,
+									'app_store_address' => config('app.app_store_url'),
+									'username' => $email,
+									'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
+									'activation_link' => config('app.website_url') . "/api/1.1/auth/activate/{$secretKey}",
+									'email_support' => config('app.support_email'),
+									'social_media_links' => config('app.fanpage_url'),
+								]);
 
-					EmailHelper::SendEmail([
-						'about' => 'Welcome',
-						'subject' => 'Your Zap Zap Account is now ready!',
-						'body' => $edmHtml,
-						'bodyHtml' => $edmHtml,
-						'toAddresses' => [$email],
-					]);
+								EmailHelper::SendEmail([
+									'about' => 'Welcome',
+									'subject' => 'Your Zap Zap Account is now ready!',
+									'body' => $edmHtml,
+									'bodyHtml' => $edmHtml,
+									'toAddresses' => [$email],
+								]);
 
-					$logOpenAcc = new LogAccountActivate;
-					$logOpenAcc->user_id = $user->id;
-					$logOpenAcc->secret = $secretKey;
-					$logOpenAcc->save();
+								$logOpenAcc = new LogAccountActivate;
+								$logOpenAcc->user_id = $user->id;
+								$logOpenAcc->secret = $secretKey;
+								$logOpenAcc->save();
+							}
 
+							if($shareDomain->unlock){
+								//email unlocked , send email activated 
+								$userFlag = UserFlag::find($user->id);
+								$userFlag->profile_limit = 50;
+								$userFlag->class_limit = 50;
+								$userFlag->save();
+
+								$secretKey = sha1(time() . $email);
+								$edmHtml = (string) view('emails.account-activation-teacher-unlocked', [ 
+									'name' => $name,
+									'app_store_address' => config('app.app_store_url'),
+									'username' => $email,
+									'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
+									'activation_link' => config('app.website_url') . "/api/1.0/auth/activate/{$secretKey}",
+									'email_support' => config('app.support_email'),
+									'zzm_url' => config('app.website_url'),
+									'social_media_links' => config('app.fanpage_url'),
+								]);
+
+								EmailHelper::SendEmail([
+									'about' => 'Congratulations',
+									'subject' => 'Your Zap Zap Math premium account is unlocked!',
+									'body' => $edmHtml,
+									'bodyHtml' => $edmHtml,
+									'toAddresses' => [$email],
+								]);
+
+								$logOpenAcc = new LogAccountActivate;
+								$logOpenAcc->user_id = $user->id;
+								$logOpenAcc->secret = $secretKey;
+								$logOpenAcc->save();
+							}
+
+							if(!$shareDomain->blacklist && !$shareDomain->unlock){
+								$sql = "
+									SELECT * 
+										FROM(
+											SELECT SUBSTRING_INDEX(`email`,'@', -1) AS `domain` , count(*) AS `count`
+												FROM `t0101_user` 
+												GROUP BY `domain`
+											) a
+										WHERE a.`domain` = :domain
+								";
+								$mail = DB::SELECT($sql , ["domain" => $domain[1]] );
+
+								if($mail[0]->count >= 3){
+									$shareDomain->unlock = 1;
+									$shareDomain->save();
+
+									$sqlUpdate = "  
+										UPDATE  `t0105_user_flag` a
+									        INNER JOIN (SELECT `id`
+									                    	FROM(
+										                        SELECT `id`,  SUBSTRING_INDEX(`email`,'@', -1) AS `domain`
+										                        FROM `t0101_user` 
+										                        WHERE `role` = 'teacher'
+									                    ) a
+									            WHERE a.`domain` = :domain) b
+									            ON a.`user_id` = b.`id`
+												SET a.`profile_limit` = 50,
+													a.`class_limit` = 50
+										";
+
+									$update = DB::update($sqlUpdate , ["domain" => $domain[1] ] );
+
+									// send email congrat , and send email to other 2 teacher
+									$secretKey = sha1(time() . $email);
+									$edmHtml = (string) view('emails.account-activation-teacher-third', [ 
+										'name' => $name,
+										'app_store_address' => config('app.app_store_url'),
+										'username' => $email,
+										'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
+										'activation_link' => config('app.website_url') . "/api/1.0/auth/activate/{$secretKey}",
+										'email_support' => config('app.support_email'),
+										'zzm_url' => config('app.website_url'),
+										'social_media_links' => config('app.fanpage_url'),
+									]);
+
+									EmailHelper::SendEmail([
+										'about' => 'Welcome',
+										'subject' => 'Your Zap Zap Account is now ready!',
+										'body' => $edmHtml,
+										'bodyHtml' => $edmHtml,
+										'toAddresses' => [$email],
+									]);
+
+									$logOpenAcc = new LogAccountActivate;
+									$logOpenAcc->user_id = $user->id;
+									$logOpenAcc->secret = $secretKey;
+									$logOpenAcc->save();
+
+
+									$sqlGetEmail = "
+										SELECT * 
+											FROM(
+												SELECT `name` , `email`, SUBSTRING_INDEX(`email`,'@', -1) AS `domain`
+													FROM `t0101_user` 
+												
+												) a
+											WHERE a.`domain` = :domain									
+									";
+
+									$sGet = DB::SELECT($sqlGetEmail , ["domain" => $domain[1]] );
+									for($i=0; $i<count($sGet); $i++){
+										$s = $sGet[$i];
+					
+										$edmHtml = (string) view('emails.account-school-whitelisted', [ 
+											'name' => $s->name,
+											'email_support' => config('app.support_email'),
+											'social_media_links' => config('app.fanpage_url'),
+										]);
+
+										EmailHelper::SendEmail([
+											'about' => 'Congratulations',
+											'subject' => 'Your Zap Zap Math premium account is unlocked!',
+											'body' => $edmHtml,
+											'bodyHtml' => $edmHtml,
+											'toAddresses' => [$s->email],
+										]);
+
+										$logOpenAcc = new LogAccountActivate;
+										$logOpenAcc->user_id = $user->id;
+										$logOpenAcc->secret = $secretKey;
+										$logOpenAcc->save();
+									}															
+
+								}else{
+									//send email , second 
+
+									$logInviteTeacher = LogInviteTeacher::where('email' , $user->email)->first();
+
+									if($logInviteTeacher){
+										//send invited by email
+										$secretKey = sha1(time() . $email);
+										$edmHtml = (string) view('emails.account-activation-teacher-second-invited', [ 
+											'name' => $name,
+											'app_store_address' => config('app.app_store_url'),
+											'username' => $email,
+											'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
+											'activation_link' => config('app.website_url') . "/api/1.0/auth/activate/{$secretKey}",
+											'email_support' => config('app.support_email'),
+											'zzm_url' => config('app.website_url'),
+											'social_media_links' => config('app.fanpage_url'),
+										]);
+
+										EmailHelper::SendEmail([
+											'about' => 'Welcome',
+											'subject' => 'One more teacher to unlock Zap Zap Math Premium account for your whole school!',
+											'body' => $edmHtml,
+											'bodyHtml' => $edmHtml,
+											'toAddresses' => [$email],
+										]);
+
+										$logOpenAcc = new LogAccountActivate;
+										$logOpenAcc->user_id = $user->id;
+										$logOpenAcc->secret = $secretKey;
+										$logOpenAcc->save();
+									}else{
+										$secretKey = sha1(time() . $email);
+										$edmHtml = (string) view('emails.account-activation-teacher-second', [ 
+											'name' => $name,
+											'app_store_address' => config('app.app_store_url'),
+											'username' => $email,
+											'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
+											'activation_link' => config('app.website_url') . "/api/1.0/auth/activate/{$secretKey}",
+											'email_support' => config('app.support_email'),
+											'zzm_url' => config('app.website_url'),
+											'social_media_links' => config('app.fanpage_url'),
+										]);
+
+										EmailHelper::SendEmail([
+											'about' => 'Welcome',
+											'subject' => 'One more teacher to unlock Zap Zap Math Premium account for your whole school!',
+											'body' => $edmHtml,
+											'bodyHtml' => $edmHtml,
+											'toAddresses' => [$email],
+										]);
+
+										$logOpenAcc = new LogAccountActivate;
+										$logOpenAcc->user_id = $user->id;
+										$logOpenAcc->secret = $secretKey;
+										$logOpenAcc->save();
+									}
+								}
+							}
+						}else{
+							// first new domain , send first teacher email
+							$shareDomain = new RewardShareDomain;
+							$shareDomain->domain = $domain[1];
+							$shareDomain->save();
+
+							$secretKey = sha1(time() . $email);
+							$edmHtml = (string) view('emails.account-activation-teacher-first', [
+								'name' => $name,
+								'app_store_address' => config('app.app_store_url'),
+								'username' => $email,
+								'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
+								'activation_link' => config('app.website_url') . "/api/1.0/auth/activate/{$secretKey}",
+								'email_support' => config('app.support_email'),
+								'zzm_url' => config('app.website_url'),
+								'social_media_links' => config('app.fanpage_url'),
+							]);
+					
+							EmailHelper::SendEmail([
+								'about' => 'Welcome',
+								'subject' => 'Your Zap Zap Account is now ready!',
+								'body' => $edmHtml,
+								'bodyHtml' => $edmHtml,
+								'toAddresses' => [$email],
+							]);
+
+							$logOpenAcc = new LogAccountActivate;
+							$logOpenAcc->user_id = $user->id;
+							$logOpenAcc->secret = $secretKey;
+							$logOpenAcc->save();
+						}
+					}
+					
 					//job done - log it!
 					DatabaseUtilHelper::LogInsert($user->id, $user->table, $user->id);
 					DatabaseUtilHelper::LogInsert($user->id, $access->table, $user->id);
@@ -188,15 +432,15 @@ Class AuthUserController extends Controller {
 				// );
 
 			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
-			$list = User::select('id' , 'role' , 'name')->find($userAccess->user_id);
+			$list = User::select('id' , 'role' , 'name' , 'register_from')->find($userAccess->user_id);
 
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'AuthUserController > signUp',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		// } catch (Exception $ex) {
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		'source' => 'AuthUserController > signUp',
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 
 		return ResponseHelper::OutputJSON('success', '', ['user' => $list], [
 			'X-access-token' => $accessToken,
