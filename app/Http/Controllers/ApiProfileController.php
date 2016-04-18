@@ -56,7 +56,6 @@ Class ApiProfileController extends Controller {
 		$age = Request::input('age');
 		$school = Request::input('school');
 		$grade = Request::input('grade');
-		$email = Request::input('email', '');
 		$classId = Request::input('class_id' , 0);
 
 		$nickname1 = Request::input('nickname1', 999);
@@ -69,18 +68,14 @@ Class ApiProfileController extends Controller {
 				return ResponseHelper::OutputJSON('fail', "missing parameters");
 			}
 
-			if ($email != '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-				return ResponseHelper::OutputJSON('fail', "invalid email format");
-			}
-
-			$nickname1 = SetNickname1::find($nickname1);
-			$nickname2 = SetNickname2::find($nickname2);
+			$nickname1Set = SetNickname1::find($nickname1);
+			$nickname2Set = SetNickname2::find($nickname2);
 			
-			if (!$nickname1) {
+			if (!$nickname1Set) {
 				return ResponseHelper::OutputJSON('fail', "invalid nickname id");
 			}
 
-			if (!$nickname2) {
+			if (!$nickname2Set) {
 				return ResponseHelper::OutputJSON('fail', "invalid nickname id");
 			}
 
@@ -124,7 +119,6 @@ Class ApiProfileController extends Controller {
 			$profile->age = $age;
 			$profile->school = $school;
 			$profile->grade = $grade;
-			$profile->email = $email;
 			$profile->nickname1 = $nickname1;
 			$profile->nickname2 = $nickname2;
 			$profile->avatar_id = $avatarId;
