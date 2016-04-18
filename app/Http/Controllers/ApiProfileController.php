@@ -73,8 +73,8 @@ Class ApiProfileController extends Controller {
 				return ResponseHelper::OutputJSON('fail', "invalid email format");
 			}
 
-			$nickname1 = SetNickname1::find($nickname1);
-			$nickname2 = SetNickname2::find($nickname2);
+			$nickname1Set = SetNickname1::find($nickname1);
+			$nickname2Set = SetNickname2::find($nickname2);
 			
 			if (!$nickname1) {
 				return ResponseHelper::OutputJSON('fail', "invalid nickname id");
