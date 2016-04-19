@@ -377,7 +377,7 @@ Class ApiProfileController extends Controller {
 				}
 			}
 			
-			$secret = 'SAKF3G83D83MEKX59Y9Z';
+			$secret = 'SAKA5636953H5Z26Q74Z';
 			$ip = Request::ip();
 
 			$res = file_get_contents("http://api.apigurus.com/iplocation/v1.8/locateip?key={$secret}&ip={$ip}&format=json&compact=y");			
