@@ -1179,7 +1179,7 @@ Class AuthUserController extends Controller {
 		$country = Request::input('country');
 
 		$classId = 0;
-		$authUser = User::where('email', $email)->first()
+		$authUser = User::where('email', $email)->first();
 
 		if($authUser){
 			return ResponseHelper::OutputJSON('fail', 'email used');
