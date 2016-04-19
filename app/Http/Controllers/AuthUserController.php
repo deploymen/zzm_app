@@ -1179,6 +1179,12 @@ Class AuthUserController extends Controller {
 		$country = Request::input('country');
 
 		$classId = 0;
+		$authUser = User::where('email', $email)->first()
+
+		if($authUser){
+			return ResponseHelper::OutputJSON('fail', 'email used');
+		}
+
 		$newUser = ApiUserHelper::Register($role , $name , $email , $country , $email , $facebookId , 'facebook');
 
 		$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
