@@ -17,6 +17,9 @@ return [
 
     'server_test' =>env('SERVER'),
     'paid' =>env('PAID'),
+    'teacher_profile_limit' =>env('TEACHER_PROFILE_LIMIT'),
+    'teacher_class_limit' =>env('TEACHER_CLASS_LIMIT'),
+    'parent_profile_limit' =>env('PARENT_PROFILE_LIMIT'),
 	/*
 	|--------------------------------------------------------------------------
 	| Application Debug Mode
