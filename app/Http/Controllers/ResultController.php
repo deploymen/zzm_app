@@ -97,7 +97,7 @@ Class ResultController extends Controller {
 						WHERE sp.`system_id` = s.`id`
 						AND sp.`subsystem_id` = ss.`id`
 						GROUP BY sp.`system_id`, sp.`subsystem_id`
-                        `grade` , `system_id` , sp.`subsystem_id` , sp.`sequence` ASC
+                        ORDER BY `grade` , `system_id` , sp.`subsystem_id` , sp.`sequence` ASC
 
 
 			";
