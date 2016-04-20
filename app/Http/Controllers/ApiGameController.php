@@ -54,7 +54,7 @@ Class ApiGameController extends Controller {
 
 		LogHelper::LogGetQuestions($planetId, $gameCode);
 
-		try{
+		// try{
 			$questionCount = Request::input('question_count');
 			$profileId =  Request::input('game_code_profile_id');
 			$gameType = Request::input('game_type');
@@ -134,6 +134,7 @@ Class ApiGameController extends Controller {
 					case 'p19':$questions = ZapZapQuestionHelper::GetQuestionP19($planetId,$difficulty,$questionCount); break;
 					case 'p20':$questions = ZapZapQuestionHelper::GetQuestionP20($planetId,$difficulty,$questionCount); break;
 					case 'p21':$questions = ZapZapQuestionHelper::GetQuestionP21($planetId,$difficulty,$questionCount); break;
+					case 'p22':$questions = ZapZapQuestionHelper::GetQuestionP22($planetId,$difficulty,$questionCount); break;
 					case 'p23':$questions = ZapZapQuestionHelper::GetQuestionP23($planetId,$difficulty,$questionCount); break;
 					case 'p32':$questions = ZapZapQuestionHelper::GetQuestionP32($planetId,$difficulty,$questionCount); break;
 					case 'p00':$questions = ZapZapQuestionHelper::GetQuestionP00($planetId,$gameType,$level,$profileId); break;
@@ -178,14 +179,14 @@ Class ApiGameController extends Controller {
 	            	'questions' => $questions,
 	            ]);
 
-			} catch (Exception $ex) {
+			// } catch (Exception $ex) {
 
-				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-					'source' => 'ApiGameController > request',
-					'inputs' => Request::all(),
-				])]);
-				return ResponseHelper::OutputJSON('exception');
-			}
+			// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+			// 		'source' => 'ApiGameController > request',
+			// 		'inputs' => Request::all(),
+			// 	])]);
+			// 	return ResponseHelper::OutputJSON('exception');
+			// }
 	}
 
 	//SUBMIT RESULT
@@ -512,6 +513,7 @@ Class ApiGameController extends Controller {
 				case 'p19': $status = ZapZapQuestionHelper::SubmitResultP19($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p20': $status = ZapZapQuestionHelper::SubmitResultP20($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p21': $status = ZapZapQuestionHelper::SubmitResultP21($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p22': $status = ZapZapQuestionHelper::SubmitResultP22($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p23': $status = ZapZapQuestionHelper::SubmitResultP23($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p32': $status = ZapZapQuestionHelper::SubmitResultP32($planetId,$gamePlay,$gameResult,$profileId); break;
 
@@ -937,8 +939,8 @@ Class ApiGameController extends Controller {
 
 			$gamePro = new GameProfile;
 			$gamePro->user_id = 0;
-			$gamePro->first_name = "anonymous";
-			$gamePro->last_name = "anonymous";
+			$gamePro->first_name = "Player 1";
+			$gamePro->last_name = "Player 1";
 			$gamePro->nickname1 = 999;
 			$gamePro->nickname2 = 999;
 			$gamePro->avatar_id = 999;
