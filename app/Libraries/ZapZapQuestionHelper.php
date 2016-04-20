@@ -1950,6 +1950,7 @@ class ZapZapQuestionHelper{
 					$gameResults->target_type = 'p00';
 					$gameResults->target_id = $resultP00->id;
 					$gameResults->game_type_id = '0';
+					$gameResults->correct = $rand;
 					$gameResults->save();
 
 					}
@@ -2051,6 +2052,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p00';
 				$gameResults->target_id = $resultP00->id;
 				$gameResults->game_type_id = '0';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 
 				$preUse = $inAnswer['complete_time'];
@@ -2089,6 +2091,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p01';
 				$gameResults->target_id = $resultP01->id;
 				$gameResults->game_type_id = '1';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 
 				}
@@ -2133,6 +2136,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p02';
 				$gameResults->target_id = $resultP02->id;
 				$gameResults->game_type_id = '2';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}
 
@@ -2176,6 +2180,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p03';
 				$gameResults->target_id = $resultP03->id;
 				$gameResults->game_type_id = '3';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 
 			}
@@ -2210,6 +2215,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p06';
 				$gameResults->target_id = $resultP06->id;
 				$gameResults->game_type_id = '6';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2243,6 +2249,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p07';
 				$gameResults->target_id = $resultP07->id;
 				$gameResults->game_type_id = '7';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2276,6 +2283,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p08';
 				$gameResults->target_id = $resultP08->id;
 				$gameResults->game_type_id = '8';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2309,6 +2317,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p09';
 				$gameResults->target_id = $resultP09->id;
 				$gameResults->game_type_id = '9';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2342,6 +2351,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p10';
 				$gameResults->target_id = $resultP10->id;
 				$gameResults->game_type_id = '10';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2377,6 +2387,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p11';
 				$gameResults->target_id = $resultP11->id;
 				$gameResults->game_type_id = '11';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2410,6 +2421,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p12';
 				$gameResults->target_id = $resultP12->id;
 				$gameResults->game_type_id = '12';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2443,6 +2455,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p13';
 				$gameResults->target_id = $resultP13->id;
 				$gameResults->game_type_id = '13';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2476,6 +2489,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p14';
 				$gameResults->target_id = $resultP14->id;
 				$gameResults->game_type_id = '14';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2509,6 +2523,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p15';
 				$gameResults->target_id = $resultP15->id;
 				$gameResults->game_type_id = '15';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2542,6 +2557,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p16';
 				$gameResults->target_id = $resultP16->id;
 				$gameResults->game_type_id = '16';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2575,6 +2591,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p17';
 				$gameResults->target_id = $resultP17->id;
 				$gameResults->game_type_id = '17';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2608,6 +2625,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p18';
 				$gameResults->target_id = $resultP18->id;
 				$gameResults->game_type_id = '18';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2641,6 +2659,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p19';
 				$gameResults->target_id = $resultP19->id;
 				$gameResults->game_type_id = '19';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2674,6 +2693,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p20';
 				$gameResults->target_id = $resultP20->id;
 				$gameResults->game_type_id = '20';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2707,6 +2727,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p21';
 				$gameResults->target_id = $resultP21->id;
 				$gameResults->game_type_id = '21';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2740,6 +2761,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p22';
 				$gameResults->target_id = $resultP22->id;
 				$gameResults->game_type_id = '22';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2773,6 +2795,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p23';
 				$gameResults->target_id = $resultP18->id;
 				$gameResults->game_type_id = '23';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2807,6 +2830,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p32';
 				$gameResults->target_id = $resultP18->id;
 				$gameResults->game_type_id = '32';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
