@@ -1066,6 +1066,12 @@ Class AuthUserController extends Controller {
 	 * @return Response
 	 */
 	public function handleProviderCallback() {
+		$error = Request::input('error');
+
+		if($error == 'access_denied'){
+			return redirect(url(env('WEBSITE_URL').'/user/signin?error=access-denied'));
+		}
+		
 		$client = new Client;
 		$firstLogin = 0;
 		$xsrfToken = Cookie::get('XSRF-TOKEN');
