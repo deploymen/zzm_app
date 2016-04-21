@@ -1178,16 +1178,22 @@ Class AuthUserController extends Controller {
 		$role = Request::input('role');
 		$name = Request::input('name');
 		$email = Request::input('email');
-		$facebook_id = Request::input('facebook_id');
+		$facebookId = Request::input('facebook_id');
 		$country = Request::input('country');
 
 		$classId = 0;
-		$newUser = ApiUserHelper::Register($role , $name , $email , $country , $facebook_id , '' , 'facebook');
+		$authUser = User::where('email', $email)->first();
+
+		if($authUser){
+			return ResponseHelper::OutputJSON('fail', 'email used');
+		}
+
+		$newUser = ApiUserHelper::Register($role , $name , $email , $country , $email , $facebookId , 'facebook');
 
 		$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Player 1' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
 
 		$user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser['user_id']);
-		$userExternalId = UserExternalId::where('user_id' , $newUser['user_id'])->update(['facebook_id' => $facebook_id ]);
+		$userExternalId = UserExternalId::where('user_id' , $newUser['user_id'])->update(['facebook_id' => $facebookId ]);
 		$userAccess = UserAccess::where('user_id' , $user->id)->first();
 
 		$firstLogin = 1;
