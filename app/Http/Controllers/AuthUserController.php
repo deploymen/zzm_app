@@ -131,13 +131,13 @@ Class AuthUserController extends Controller {
 						$gameClass->name = 'Default Class';
 						$gameClass->save();
 
-						$userFlag->profile_limit = 3;
-						$userFlag->class_limit = 50;
+						$userFlag->profile_limit = Config::get('app.teacher_profile_limit');
+						$userFlag->class_limit = Config::get('app.teacher_class_limit');
 						$userFlag->save();
 
 						$classId = $gameClass->id;
 					}else{
-						$userFlag->profile_limit = 1;
+						$userFlag->profile_limit = Config::get('app.parent_profile_limit');
 						$userFlag->class_limit = 0;
 						$userFlag->save();
 					}
@@ -927,13 +927,13 @@ Class AuthUserController extends Controller {
 				$gameClass->name = 'Default Class';
 				$gameClass->save();
 
-				$userFlag->profile_limit = 3;
-				$userFlag->class_limit = 50;
+				$userFlag->profile_limit = Config::get('app.teacher_profile_limit');
+				$userFlag->class_limit = Config::get('app.teacher_class_limit');
 				$userFlag->save();
 
 				$classId = $gameClass->id;
 			}else{
-				$userFlag->profile_limit = 1;
+				$userFlag->profile_limit = Config::get('app.parent_profile_limit');
 				$userFlag->class_limit = 0;
 				$userFlag->save();
 			}
