@@ -352,7 +352,7 @@ Class ApiProfileController extends Controller {
 		$nickname2 = Request::input('nickname2');
 		$avatarId = Request::input('avatar_id');
 		$age = Request::input('age' , 0);
-		$grade = Request::input('grade', 'preschool');
+		$grade = Request::input('grade', 'K');
 		
 
 		try {
