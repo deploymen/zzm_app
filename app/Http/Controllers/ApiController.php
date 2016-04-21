@@ -20,6 +20,7 @@ use App\Models\Subscribe;
 use App\Models\LaunchNotification;
 use App\Models\AppVersion;
 use App\Models\User;
+use App\Models\GameProfile;
 
 class ApiController extends Controller {
 
@@ -226,27 +227,74 @@ class ApiController extends Controller {
 	}
 
 	public function weeklyReport(){
-		$email = User::where('activated', 1)->select('email')->get();
+		$email = User::where('activated', 1)->select('id' , 'role', 'email')->get();
 
 		for($j=0; $j<count($email); $j++){
+			$e = $email[$j];
 			$mail = $email[$j]->email;
 
 			if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
 				continue;
 			}
 
+			if($e->role == 'parent'){
+				$profile = GameProfile::where('user_id' , $e->id);
+
+				if(count($profile) == 1){
+					$coc = 'child';
+				}else{
+					$coc = 'children';
+				}
+
+			}else{
+				$coc = 'class';
+			}
+
+			$sql = "
+				SELECT SEC_TO_TIME(SUM(p.`played_time`)) AS `total_played`, count(DISTINCT  DATE_FORMAT(p.`created_at`,'%m-%d-%Y')) AS `days` , count(r.`id`) AS `total_answered` , ((count(r2.`correct`) / count(r.`id`)) * 100) AS `percentage`
+					FROM `t0400_game_play` p, `t0300_game_result` r 
+					LEFT JOIN `t0300_game_result` r2 ON r2.`id` = r.`id` AND r2.`correct` = 1
+						WHERE p.`user_id` = {$e->id}
+						AND r.`play_id` = p.`id`
+						AND p.`created_at` > (NOW() - INTERVAL 7 DAY)
+						GROUP BY `user_id`
+
+			";
+
+			$results = DB::SELECT($sql);
+
+			if(!$results){
+				continue;
+			}
+
+			$result = $results[0];
+
+			$time = explode(':' , $result->total_played);
+			$percentage = explode('.', $result->percentage);
+
+			$edmHtml = (string) view('emails.weekly-report', [ 
+				'coc' => $coc,
+				'hour' => $time[0],
+				'minute' => $time[1],
+				'days' => $result->days,
+				'total_answered' => $result->total_answered,
+				'percentage' => $percentage[0],
+				'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
+				'zzm_url' => config('app.website_url'),
+				'social_media_links' => config('app.fanpage_url'),
+			]);
+
 			EmailHelper::SendEmail([
-				'about' => '',
-				'subject' => '',
-				'body' => 'emails.password',
-				'bodyHtml' => 'emails.password',
-				'toAddresses' => [$mail], //['support@932.xxx'],
-				'bccAddresses' => [],
-				'replyToAddresses' => ['no-reply@zapzapmath.com'],
-				'data' => [],
+				'about' => 'Zap Zap Math',
+				'subject' => 'Weekly Report',
+				'body' => $edmHtml,
+				'bodyHtml' => $edmHtml,
+				'toAddresses' => [$mail],
 			]);
 		}
-		return 'success';
+
+		return ResponseHelper::OutputJSON('success');
+		
 	}
 
 	public function InviteTeacher(\Illuminate\Http\Request $request){
@@ -256,40 +304,44 @@ class ApiController extends Controller {
 			return ResponseHelper::OutputJSON('fail', 'missing parameter');
 		}
 
-		for($i=0; $i<count($request->emails); $i++){
-			$email = $request->emails[$i];
-
-			if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-				continue;
-			}
+		for($j=0; $j<count($request->emails); $j++){
+			$email = $request->emails[$j];
 
 			if(!$email){
-				continue;
+				return ResponseHelper::OutputJSON('fail','missing parameter');
+			}
+
+			if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+				return ResponseHelper::OutputJSON('fail','invalid email format');
 			}
 
 			$uEmail = explode('@' , $userEmail);
 			$domain = explode('@' , $email);
 
 			if($uEmail[1] != $domain[1]){
-				continue;
+				return ResponseHelper::OutputJSON('fail','invalid email domain');
 			}
-		
-			// $edmHtml = (string) view('emails.teacher-invite', [ 
-			// 	'app_store_address' => config('app.app_store_url'),
-			// 	'username' => $email,
-			// 	'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
-			// 	'email_support' => config('app.support_email'),
-			// 	'zzm_url' => config('app.website_url'),
-			// 	'social_media_links' => config('app.fanpage_url'),
-			// ]);
+		}
 
-			// EmailHelper::SendEmail([
-			// 	'about' => 'Zap Zap Math',
-			// 	'subject' => 'Assist our school to get Zap Zap Math for free!',
-			// 	'body' => $edmHtml,
-			// 	'bodyHtml' => $edmHtml,
-			// 	'toAddresses' => [$email],
-			// ]);
+		for($i=0; $i<count($request->emails); $i++){
+			$email = $request->emails[$i];
+		
+			$edmHtml = (string) view('emails.teacher-invite', [ 
+				'app_store_address' => config('app.app_store_url'),
+				'username' => $email,
+				'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
+				'email_support' => config('app.support_email'),
+				'zzm_url' => config('app.website_url'),
+				'social_media_links' => config('app.fanpage_url'),
+			]);
+
+			EmailHelper::SendEmail([
+				'about' => 'Zap Zap Math',
+				'subject' => 'Assist our school to get Zap Zap Math for free!',
+				'body' => $edmHtml,
+				'bodyHtml' => $edmHtml,
+				'toAddresses' => [$email],
+			]);
 
 			$success = $success+1;
 		}

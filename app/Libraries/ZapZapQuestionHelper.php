@@ -1952,7 +1952,7 @@ class ZapZapQuestionHelper{
 					$gameResults->game_type_id = '0';
 					$gameResults->correct = $rand;
 					$gameResults->save();
-
+					//add
 					}
 			}
 
