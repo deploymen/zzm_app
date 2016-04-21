@@ -681,6 +681,7 @@ Class ApiProfileController extends Controller {
 	}
 
 	public function unlockParentLimit() {
+		
 		$userId = Request::input('user_id');
 
 		$fb = new Facebook([
