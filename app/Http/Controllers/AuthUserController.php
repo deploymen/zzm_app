@@ -1184,7 +1184,7 @@ Class AuthUserController extends Controller {
 		$classId = 0;
 		$newUser = ApiUserHelper::Register($role , $name , $email , $country , $facebook_id , '' , 'facebook');
 
-		$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
+		$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Player 1' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
 
 		$user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser['user_id']);
 		$userExternalId = UserExternalId::where('user_id' , $newUser['user_id'])->update(['facebook_id' => $facebook_id ]);
