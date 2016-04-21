@@ -937,8 +937,8 @@ Class ApiGameController extends Controller {
 
 			$gamePro = new GameProfile;
 			$gamePro->user_id = 0;
-			$gamePro->first_name = "anonymous";
-			$gamePro->last_name = "anonymous";
+			$gamePro->first_name = "Player 1";
+			$gamePro->last_name = "Player 1";
 			$gamePro->nickname1 = 999;
 			$gamePro->nickname2 = 999;
 			$gamePro->avatar_id = 999;

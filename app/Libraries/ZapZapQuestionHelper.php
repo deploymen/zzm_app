@@ -1548,6 +1548,66 @@ class ZapZapQuestionHelper{
 		return false;
 		}
 	}
+	public static function GetQuestionP22($planetId,$difficulty,$questionCount){
+
+		try{
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
+
+			$sql = "
+				SELECT p22.*, qc.`question_id`
+					FROM `t0222_game_question_p22` p22, `t0126_game_planet_question_cache` qc
+                        WHERE qc.`planet_id` = {$planetId}
+                        	AND qc.`difficulty` = {$difficulty}
+                        	AND p22.`id` = qc.`target_id`
+
+                        	ORDER BY RAND() 
+                        	LIMIT {$questionCount}
+			";
+
+			$result = DB::SELECT($sql);
+
+			$results = [];
+			$prevQuestionId = 0;
+
+			for($i=0; $i<count($result); $i++){
+				$r = $result[$i];
+
+				if($r->id != $prevQuestionId){
+					array_push($results, [
+						'id' => $r->question_id,
+						'question' => $r->question,
+						'difficulty' => $r->difficulty,
+						
+					]);
+				}
+				
+
+				$prevQuestionId = $r->id;
+			}
+
+			shuffle($results);
+
+			if(!$results){
+				return 'question not found';
+			}
+
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			return $results;
+
+		}catch(Exception $ex){
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp22', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
+		return false;
+		}
+	}
 
 	public static function GetQuestionP23($planetId,$difficulty,$questionCount){
 
@@ -1890,8 +1950,9 @@ class ZapZapQuestionHelper{
 					$gameResults->target_type = 'p00';
 					$gameResults->target_id = $resultP00->id;
 					$gameResults->game_type_id = '0';
+					$gameResults->correct = $rand;
 					$gameResults->save();
-
+					//add
 					}
 			}
 
@@ -1991,6 +2052,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p00';
 				$gameResults->target_id = $resultP00->id;
 				$gameResults->game_type_id = '0';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 
 				$preUse = $inAnswer['complete_time'];
@@ -2029,6 +2091,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p01';
 				$gameResults->target_id = $resultP01->id;
 				$gameResults->game_type_id = '1';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 
 				}
@@ -2073,6 +2136,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p02';
 				$gameResults->target_id = $resultP02->id;
 				$gameResults->game_type_id = '2';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}
 
@@ -2116,6 +2180,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p03';
 				$gameResults->target_id = $resultP03->id;
 				$gameResults->game_type_id = '3';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 
 			}
@@ -2150,6 +2215,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p06';
 				$gameResults->target_id = $resultP06->id;
 				$gameResults->game_type_id = '6';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2183,6 +2249,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p07';
 				$gameResults->target_id = $resultP07->id;
 				$gameResults->game_type_id = '7';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2216,6 +2283,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p08';
 				$gameResults->target_id = $resultP08->id;
 				$gameResults->game_type_id = '8';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2249,6 +2317,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p09';
 				$gameResults->target_id = $resultP09->id;
 				$gameResults->game_type_id = '9';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2282,6 +2351,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p10';
 				$gameResults->target_id = $resultP10->id;
 				$gameResults->game_type_id = '10';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2317,6 +2387,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p11';
 				$gameResults->target_id = $resultP11->id;
 				$gameResults->game_type_id = '11';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2350,6 +2421,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p12';
 				$gameResults->target_id = $resultP12->id;
 				$gameResults->game_type_id = '12';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2383,6 +2455,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p13';
 				$gameResults->target_id = $resultP13->id;
 				$gameResults->game_type_id = '13';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2416,6 +2489,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p14';
 				$gameResults->target_id = $resultP14->id;
 				$gameResults->game_type_id = '14';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2449,6 +2523,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p15';
 				$gameResults->target_id = $resultP15->id;
 				$gameResults->game_type_id = '15';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2482,6 +2557,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p16';
 				$gameResults->target_id = $resultP16->id;
 				$gameResults->game_type_id = '16';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2515,6 +2591,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p17';
 				$gameResults->target_id = $resultP17->id;
 				$gameResults->game_type_id = '17';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2548,6 +2625,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p18';
 				$gameResults->target_id = $resultP18->id;
 				$gameResults->game_type_id = '18';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2581,6 +2659,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p19';
 				$gameResults->target_id = $resultP19->id;
 				$gameResults->game_type_id = '19';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2614,6 +2693,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p20';
 				$gameResults->target_id = $resultP20->id;
 				$gameResults->game_type_id = '20';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2647,6 +2727,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p21';
 				$gameResults->target_id = $resultP21->id;
 				$gameResults->game_type_id = '21';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2680,6 +2761,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p22';
 				$gameResults->target_id = $resultP22->id;
 				$gameResults->game_type_id = '22';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2713,6 +2795,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p23';
 				$gameResults->target_id = $resultP18->id;
 				$gameResults->game_type_id = '23';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
@@ -2747,6 +2830,7 @@ class ZapZapQuestionHelper{
 				$gameResults->target_type = 'p32';
 				$gameResults->target_id = $resultP18->id;
 				$gameResults->game_type_id = '32';
+				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
 			}	
 
