@@ -298,11 +298,15 @@ class ApiController extends Controller {
 	}
 
 	public function InviteTeacher(\Illuminate\Http\Request $request){
+		$userId = Request::input('user_id');
 		$userEmail = Request::input('user_email');
+
 		$success = 0; //temporory 
 		if(!$request->emails){ //need update validation
 			return ResponseHelper::OutputJSON('fail', 'missing parameter');
 		}
+
+		$user = User::find($userId);
 
 		for($j=0; $j<count($request->emails); $j++){
 			$email = $request->emails[$j];
@@ -327,10 +331,7 @@ class ApiController extends Controller {
 			$email = $request->emails[$i];
 		
 			$edmHtml = (string) view('emails.teacher-invite', [ 
-				'app_store_address' => config('app.app_store_url'),
-				'username' => $email,
-				'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
-				'email_support' => config('app.support_email'),
+				'name' => $user->name
 				'zzm_url' => config('app.website_url'),
 				'social_media_links' => config('app.fanpage_url'),
 			]);
