@@ -186,6 +186,7 @@ Class ApiClassController extends Controller {
 	public function getGameClass($classId){
 		$userId = Request::input('user_id');
 		$profileLimit = 1;
+		$unlock = 0;
 
 		$class = GameClass::find($classId);
 
@@ -200,12 +201,17 @@ Class ApiClassController extends Controller {
 			$profileLimit = 0;
 		}
 
+		if($userFlag->profile_limit == 50){
+			$unlock = 1;
+		}
+
 		return ResponseHelper::OutputJSON('success', '', [ 
 			'id' => $class->id,
 			'user_id' => $class->user_id,
 			'name' => $class->name,
 			'profile_count' => $profileCount,
 			'within_profile_limit' => $profileLimit,
+			'unlock' => $unlock,
 			]);
 	}
 }
