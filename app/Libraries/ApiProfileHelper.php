@@ -100,13 +100,15 @@ class ApiProfileHelper{
 		}
 
 		$sql = "
-			 SELECT profile.`id` , play.`created_at`, count(result.`id`) AS `questions_played` ,play.`score`
-	    		FROM `t0111_game_profile` profile
+			 SELECT profile.`id` , play.`created_at`, play.`played_time` , p.`name` AS `planet_name`,  count(result.`id`) AS `questions_played` , SUM(um.`star`) AS `total_star` 
+	    		FROM `t0111_game_profile` profile , `t0123_game_planet` p , 
 					LEFT JOIN `t0400_game_play` play ON (play.`profile_id` = profile.`id` AND play.`user_id` = {$userId} )
 					LEFT JOIN `t0400_game_play` play2 ON (play2.`profile_id` = profile.`id` AND play2.`user_id` = {$userId} AND play2.`created_at` > play.`created_at`)
 
 					LEFT JOIN `t0400_game_play` play_all ON (play_all.`profile_id` = profile.`id` AND play_all.`user_id` = {$userId})
 					LEFT JOIN `t0300_game_result` result ON (play_all.`id` = result.`play_id` AND result.`target_type` = play_all.`target_type`)
+
+					LEFT JOIN `t0501_game_user_map` um ON(um.`profile_id` = profile.`id`)
 			    		WHERE profile.`deleted_at` IS NULL
 			    		AND play2.`id` IS NULL
 			    		{$query}
@@ -131,13 +133,13 @@ class ApiProfileHelper{
 				'city' => $p->city,
 				'email' => $p->email,
 				'questions_played' => $lp->questions_played,
-				'nickname1' => $p->nickname1,
-				'nickname2' => $p->nickname2,
-				'avatar_id' => $p->avatar_id,
-				'nick_name1' => $p->nickName1,
-				'nick_name2' => $p->nickName2,
+				'nickname1' => $p->nickName1,
+				'nickname2' => $p->nickName2,
 				'avatar' => $p->avatar,
 				'game_code' => $p->gameCode,
+				'total_star' => $lp->total_star,
+				'last_planet_name' => $lp->planet_name,
+				'last_played_time' => $lp->played_time,
 				'last_played' => $lp->created_at,
 
 			]);
