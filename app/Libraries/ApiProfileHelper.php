@@ -100,26 +100,36 @@ class ApiProfileHelper{
 		}
 
 		$sql = "
-			 SELECT profile.`id` , play.`created_at`, play.`played_time` , p.`name` AS `planet_name`,  count(result.`id`) AS `questions_played` , SUM(um.`star`) AS `total_star` 
-	    		FROM `t0111_game_profile` profile , `t0123_game_planet` p , 
-					LEFT JOIN `t0400_game_play` play ON (play.`profile_id` = profile.`id` AND play.`user_id` = {$userId} )
-					LEFT JOIN `t0400_game_play` play2 ON (play2.`profile_id` = profile.`id` AND play2.`user_id` = {$userId} AND play2.`created_at` > play.`created_at`)
+			 SELECT t1.* , t2.`total_played`, t2.`total_answered`, t2.`percentage`
+			 	FROM (
+			 		SELECT profile.`id` AS `profile_id` , play.`created_at` ,play.`score` , play.`planet_id`
+			    		FROM `t0111_game_profile` profile
+							LEFT JOIN `t0400_game_play` play ON (play.`profile_id` = profile.`id` AND play.`user_id` = {$userId} )
+							LEFT JOIN `t0400_game_play` play2 ON (play2.`profile_id` = profile.`id` AND play2.`user_id` = {$userId} AND play2.`created_at` > play.`created_at`)
 
-					LEFT JOIN `t0400_game_play` play_all ON (play_all.`profile_id` = profile.`id` AND play_all.`user_id` = {$userId})
-					LEFT JOIN `t0300_game_result` result ON (play_all.`id` = result.`play_id` AND result.`target_type` = play_all.`target_type`)
+					    		WHERE profile.`deleted_at` IS NULL
+					    		AND play2.`id` IS NULL
+					    		AND profile.`user_id` = {$userId}
 
-					LEFT JOIN `t0501_game_user_map` um ON(um.`profile_id` = profile.`id`)
-			    		WHERE profile.`deleted_at` IS NULL
-			    		AND play2.`id` IS NULL
-			    		{$query}
+			    					GROUP BY profile.`id` ) t1 , 
+			    	  (
+			    	 SELECT p.`profile_id` , SEC_TO_TIME(SUM(p.`played_time`)) AS `total_played`, count(r.`id`) AS `total_answered` , ((count(r2.`correct`) / count(r.`id`)) * 100) AS `percentage` 
+						FROM (`t0400_game_play` p, `t0300_game_result` r )
+					    	LEFT JOIN `t0300_game_result` r2 ON r2.`id` = r.`id` AND r2.`correct` = 1 
+					        	WHERE p.`user_id` = {$userId} 
+					        	AND r.`play_id` = p.`id` 
 
-	    					GROUP BY profile.`id`
+					            GROUP BY p.`profile_id`  ) t2 
+			    	WHERE t1.`profile_id` = t2.`profile_id`
 		";
 
 		$lastPlayed = DB::select($sql);
 		for ($i = 0; $i < count($profiles); $i++) {
 			$p = $profiles[$i];
 			$lp = $lastPlayed[$i];
+
+			$total_star = UserMap::where('profile_id' , $p->id)->SUM('star');
+			$planet = GamePlanet::find($lp->planet_id);
 
 			array_push($profileInfo, [
 				'id' => $p->id,
@@ -132,13 +142,13 @@ class ApiProfileHelper{
 				'grade' => $p->grade,
 				'city' => $p->city,
 				'email' => $p->email,
-				'questions_played' => $lp->questions_played,
+				'questions_played' => $lp->total_answered,
 				'nickname1' => $p->nickName1,
 				'nickname2' => $p->nickName2,
 				'avatar' => $p->avatar,
 				'game_code' => $p->gameCode,
 				'total_star' => $lp->total_star,
-				'last_planet_name' => $lp->planet_name,
+				'last_planet_name' => $planet->name,
 				'last_played_time' => $lp->played_time,
 				'last_played' => $lp->created_at,
 
