@@ -142,7 +142,11 @@ class ApiProfileHelper{
 
 			$totalStar = UserMap::where('profile_id' , $p->id)->sum('star');
 			$planet = GamePlanet::find($lp->planet_id);
-
+			if($planet){
+				$planetName = $planet->name;
+			}else{
+				$planetName = 'Null';
+			}
 			if($lp->total_played){
 				$minute = $lp->total_played / 60 ;
 				$time = explode('.' , $minute);
@@ -176,7 +180,7 @@ class ApiProfileHelper{
 				'avatar' => $p->avatar,
 				'game_code' => $p->gameCode,
 				'last_played' => [
-					'last_planet_name' => $planet->name,
+					'last_planet_name' => $planetName,
 					'last_played' => $lp->created_at,
 					'last_played_time' => $lastPlayedTime,
 				],
