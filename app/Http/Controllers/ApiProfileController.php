@@ -33,18 +33,18 @@ Class ApiProfileController extends Controller {
 	// =======================================================================//
 	public function get() {
 		$userId = Request::input('user_id');
-		try {
+		// try {
 			$profileInfo = ApiProfileHelper::GetProfile($userId , 0);
 
 			return ResponseHelper::OutputJSON('success', '', ['list' => $profileInfo]);
 
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiProfileController > get',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		// } catch (Exception $ex) {
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		'source' => 'ApiProfileController > get',
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 	}
 
 	public function create() {

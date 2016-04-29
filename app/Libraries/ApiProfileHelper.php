@@ -100,9 +100,9 @@ class ApiProfileHelper{
 		}
 
 		$sql = "
-			 SELECT t1.* , t2.`total_played`, t2.`total_answered`, t2.`percentage`
+			 SELECT t1.* , t2.`total_answered`, t2.`percentage` , t2.`total_correct` , t3.`total_played` 
 			 	FROM (
-			 		SELECT profile.`id` AS `profile_id` , play.`created_at` ,play.`score` , play.`planet_id`
+			 		SELECT profile.`id` AS `profile_id` , play.`created_at` ,play.`score` , play.`planet_id` , play.`played_time` AS `last_played_time`
 			    		FROM `t0111_game_profile` profile
 							LEFT JOIN `t0400_game_play` play ON (play.`profile_id` = profile.`id` AND play.`user_id` = {$userId} )
 							LEFT JOIN `t0400_game_play` play2 ON (play2.`profile_id` = profile.`id` AND play2.`user_id` = {$userId} AND play2.`created_at` > play.`created_at`)
@@ -113,23 +113,51 @@ class ApiProfileHelper{
 
 			    					GROUP BY profile.`id` ) t1 , 
 			    	  (
-			    	 SELECT p.`profile_id` , SEC_TO_TIME(SUM(p.`played_time`)) AS `total_played`, count(r.`id`) AS `total_answered` , ((count(r2.`correct`) / count(r.`id`)) * 100) AS `percentage` 
-						FROM (`t0400_game_play` p, `t0300_game_result` r )
+			    	 SELECT profile.`id` AS `profile_id` , count(r.`id`) AS `total_answered` , count(r2.`id`) AS `total_correct`, ((count(r2.`correct`) / count(r.`id`)) * 100) AS `percentage` 
+						FROM `t0111_game_profile` profile 
+							LEFT JOIN `t0400_game_play` p ON p.`user_id` = {$userId} AND profile.`id` = p.`profile_id` AND  p.`created_at` > DATE_SUB(NOW(), INTERVAL 3 HOUR)
+							LEFT JOIN `t0300_game_result` r ON r.`play_id` = p.`id`
 					    	LEFT JOIN `t0300_game_result` r2 ON r2.`id` = r.`id` AND r2.`correct` = 1 
-					        	WHERE p.`user_id` = {$userId} 
-					        	AND r.`play_id` = p.`id` 
+					        	WHERE profile.`user_id` = {$userId}
+					        	AND profile.`deleted_at` IS NULL
 
-					            GROUP BY p.`profile_id`  ) t2 
+					            GROUP BY profile.`id`  ) t2 ,
+					   (
+					  SELECT profile.`id` AS `profile_id`, SUM(p.`played_time`) AS `total_played`
+					   	FROM `t0111_game_profile` profile 
+							LEFT JOIN `t0400_game_play` p ON p.`user_id` = {$userId} AND profile.`id` = p.`profile_id` AND  p.`created_at` > DATE_SUB(NOW(), INTERVAL 3 HOUR)
+								WHERE profile.`user_id` = {$userId}
+					        	AND profile.`deleted_at` IS NULL
+
+					        	GROUP BY profile.`id`  ) t3
 			    	WHERE t1.`profile_id` = t2.`profile_id`
+			    	AND t1.`profile_id` = t3.`profile_id`
 		";
 
 		$lastPlayed = DB::select($sql);
+
 		for ($i = 0; $i < count($profiles); $i++) {
 			$p = $profiles[$i];
 			$lp = $lastPlayed[$i];
 
-			$total_star = UserMap::where('profile_id' , $p->id)->SUM('star');
+			$totalStar = UserMap::where('profile_id' , $p->id)->sum('star');
 			$planet = GamePlanet::find($lp->planet_id);
+
+			if($lp->total_played){
+				$minute = $lp->total_played / 60 ;
+				$time = explode('.' , $minute);
+				$totalPlayed = $time[0];
+			}else{
+				$totalPlayed = 0;
+			}
+
+			if($lp->last_played_time){
+				$minute2 = $lp->last_played_time / 60 ;
+				$time2 = explode('.' , $minute2);
+				$lastPlayedTime = $time2[0];
+			}else{
+				$lastPlayedTime = 0;
+			}
 
 			array_push($profileInfo, [
 				'id' => $p->id,
@@ -140,17 +168,27 @@ class ApiProfileHelper{
 				'age' => $p->age,
 				'school' => $p->school,
 				'grade' => $p->grade,
+				'total_star' => $totalStar,
 				'city' => $p->city,
 				'email' => $p->email,
-				'questions_played' => $lp->total_answered,
 				'nickname1' => $p->nickName1,
 				'nickname2' => $p->nickName2,
 				'avatar' => $p->avatar,
 				'game_code' => $p->gameCode,
-				'total_star' => $lp->total_star,
-				'last_planet_name' => $planet->name,
-				'last_played_time' => $lp->played_time,
-				'last_played' => $lp->created_at,
+				'last_played' => [
+					'last_planet_name' => $planet->name,
+					'last_played' => $lp->created_at,
+					'last_played_time' => $lastPlayedTime,
+				],
+				'last_three_hour' => [
+					'total_answered' => $lp->total_answered,
+					'total_correct' => $lp->total_correct,
+					'total_played_time' => $totalPlayed,
+					'accuracy' => $lp->percentage,
+				]
+				
+				
+	
 
 			]);
 		}
