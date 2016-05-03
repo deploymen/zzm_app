@@ -331,7 +331,7 @@ class ApiController extends Controller {
 			$email = $request->emails[$i];
 		
 			$edmHtml = (string) view('emails.teacher-invite', [ 
-				'name' => $user->name
+				'name' => $user->name,
 				'zzm_url' => config('app.website_url'),
 				'social_media_links' => config('app.fanpage_url'),
 			]);
