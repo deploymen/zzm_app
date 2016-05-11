@@ -52,3 +52,4 @@ Route::get('check-ip-details', 'ApiCheckingController@CheckIpDetails');
 
 Route::get('weekly-report', 'ApiController@weeklyReport');
 
+Route::get('most-active-list', 'ApiController@MostActiveList');
