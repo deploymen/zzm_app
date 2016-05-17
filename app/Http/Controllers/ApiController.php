@@ -365,7 +365,7 @@ class ApiController extends Controller {
 				            AND p.`profile_id` = pr.`id`
 				        GROUP BY p.`code`
 				        ORDER BY `rount_play` DESC
-				        LIMIT 20
+				        LIMIT 50
 			";
 
 			$results = DB::SELECT($sql);
@@ -411,9 +411,9 @@ class ApiController extends Controller {
 				
 
 			$obj_Writer = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-			$obj_Writer->save('../public/'.$today.'.xlsx');
+			$obj_Writer->save('/var/www/weekly-report/'.$today.'.xlsx');
 	
-	
+			return Libraries\ResponseHelper::OutputJSON('success');
 		} catch (\Exception $ex) {
 			Libraries\LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 				'inputs' => \Request::all(),

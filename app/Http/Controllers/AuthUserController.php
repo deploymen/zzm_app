@@ -239,6 +239,7 @@ Class AuthUserController extends Controller {
 										FROM(
 											SELECT SUBSTRING_INDEX(`email`,'@', -1) AS `domain` , count(*) AS `count`
 												FROM `t0101_user` 
+												WHERE `deleted_at` IS NULL
 												GROUP BY `domain`
 											) a
 										WHERE a.`domain` = :domain
@@ -256,6 +257,7 @@ Class AuthUserController extends Controller {
 										                        SELECT `id`,  SUBSTRING_INDEX(`email`,'@', -1) AS `domain`
 										                        FROM `t0101_user` 
 										                        WHERE `role` = 'teacher'
+										                        AND `deleted_at` IS NULL
 									                    ) a
 									            WHERE a.`domain` = :domain) b
 									            ON a.`user_id` = b.`id`
@@ -297,6 +299,7 @@ Class AuthUserController extends Controller {
 											FROM(
 												SELECT `name` , `email`, SUBSTRING_INDEX(`email`,'@', -1) AS `domain`
 													FROM `t0101_user` 
+													WHERE `deleted_at` IS NULL
 												
 												) a
 											WHERE a.`domain` = :domain									
