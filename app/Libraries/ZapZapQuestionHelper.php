@@ -59,6 +59,7 @@ use App\Models\UserExternalId;
 use App\Models\LeaderboardWorld;
 use App\Models\LeaderboardSystem;
 use App\Models\LeaderboardPlanet;
+use App\Models\LastSession;
 
 class ZapZapQuestionHelper{
 
@@ -3095,6 +3096,49 @@ class ZapZapQuestionHelper{
 
 		$playerTopScore = GamePlay::where('planet_id' , $planetId)->where('profile_id',$profileId)->select('score')->orderBy('score' , 'DESC');
 		return $playerTopScore;
+	}
+
+	public static function LastSession($userId , $profileId , $gameResult , $playedTime){
+		$lastSession = LastSession::where('profile_id' , $profileId)->orderBy('updated_at', 'DESC')->first();
+		$now = date('Y-m-d H:i:s',strtotime("-10 minute"));
+		$today = date("Y-m-d H:i:s");
+		
+		$correct = 0;
+		for($i=0; $i<count($gameResult['answers']); $i++){
+			$inAnswer = $gameResult['answers'][$i];
+			
+			if($inAnswer['correct']){
+				$correct = $correct+1;
+			}
+		}	
+
+		if($lastSession){
+			if($lastSession->updated_at > $now){
+				$lastSession->total_played_time = $lastSession->total_played_time + $playedTime;
+				$lastSession->total_correct = $lastSession->total_correct + $correct;
+				$lastSession->total_answered = $lastSession->total_answered + count($gameResult['answers']);
+
+				$accuracy = (($lastSession->total_correct / $lastSession->total_answered) * 100);
+				$lastSession->accuracy = $accuracy;
+				$lastSession->updated_at = $today;
+				$lastSession->save();
+
+				return;
+			}
+		}
+
+		$newLastSession = new LastSession;
+		$newLastSession->user_id = 
+		$newLastSession->profile_id = $profileId;
+		$newLastSession->total_played_time = $playedTime;
+		$newLastSession->total_correct = $correct;
+		$newLastSession->total_answered = count($gameResult['answers']);
+
+		$accuracy = (($newLastSession->total_correct / $newLastSession->total_answered) * 100);
+		$newLastSession->accuracy = $accuracy;
+		$newLastSession->updated_at = $today;
+		$newLastSession->save();
+		
 	}
 
 }

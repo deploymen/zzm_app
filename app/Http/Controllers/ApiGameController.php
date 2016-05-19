@@ -380,7 +380,7 @@ Class ApiGameController extends Controller {
 		$gameCode = Request::input('game_code');
 		$gameCodeType = Request::input('game_code_type');
 
-		// try{
+		try{
 			if($planetId < 100){
 				return ResponseHelper::OutputJSON('fail', 'planet not yet support');
 			}
@@ -523,20 +523,21 @@ Class ApiGameController extends Controller {
 			}
 
 			ZapZapQuestionHelper::UserMapV1_1($profileId,$planetId,$gamePlay, $gameResult, $gameResult['difficulty']); //update user_map
+			ZapZapQuestionHelper::LastSession($userId , $profileId, $gameResult, $playedTime);
 
 			$profile = GameProfile::find($profileId);
 			$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();
 
 			ZapZapQuestionHelper::LeaderboardUpdate($profile,$systemPlanet,$gameResult);
 			LogHelper::LogPostResult($planetId , $jsonGameResult, $gameCode);//log post result
-			// } catch (Exception $ex) {
+			} catch (Exception $ex) {
 
-			// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-			// 		'source' => 'ApiGameController > result', 
-			// 		'inputs' => Request::all(),
-			// 	])]);
-			// 	return ResponseHelper::OutputJSON('exception');
-			// }
+				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+					'source' => 'ApiGameController > result', 
+					'inputs' => Request::all(),
+				])]);
+				return ResponseHelper::OutputJSON('exception');
+			}
 
 			return ResponseHelper::OutputJSON('success');
 	}

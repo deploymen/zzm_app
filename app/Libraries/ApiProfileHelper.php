@@ -38,6 +38,7 @@ use App\Models\LeaderboardWorld;
 use App\Models\LeaderboardSystem;
 use App\Models\LeaderboardPlanet;
 use App\Models\IdCounter;
+use App\Models\LastSession;
 
 class ApiProfileHelper{
 
@@ -100,7 +101,7 @@ class ApiProfileHelper{
 		}
 
 		$sql = "
-			 SELECT t1.* , t2.`total_answered`, t2.`percentage` , t2.`total_correct` , t3.`total_played` 
+			 SELECT t1.* , t3.`total_played` 
 			 	FROM (
 			 		SELECT profile.`id` AS `profile_id` , play.`created_at` ,play.`score` , play.`planet_id` , play.`played_time` AS `last_played_time`
 			    		FROM `t0111_game_profile` profile
@@ -112,16 +113,6 @@ class ApiProfileHelper{
 					    		AND profile.`user_id` = {$userId}
 
 			    					GROUP BY profile.`id` ) t1 , 
-			    	  (
-			    	 SELECT profile.`id` AS `profile_id` , count(r.`id`) AS `total_answered` , count(r2.`id`) AS `total_correct`, ((count(r2.`correct`) / count(r.`id`)) * 100) AS `percentage` 
-						FROM `t0111_game_profile` profile 
-							LEFT JOIN `t0400_game_play` p ON p.`user_id` = {$userId} AND profile.`id` = p.`profile_id` AND  p.`created_at` > DATE_SUB(NOW(), INTERVAL 3 HOUR)
-							LEFT JOIN `t0300_game_result` r ON r.`play_id` = p.`id`
-					    	LEFT JOIN `t0300_game_result` r2 ON r2.`id` = r.`id` AND r2.`correct` = 1 
-					        	WHERE profile.`user_id` = {$userId}
-					        	AND profile.`deleted_at` IS NULL
-
-					            GROUP BY profile.`id`  ) t2 ,
 					   (
 					  SELECT profile.`id` AS `profile_id`, SUM(p.`played_time`) AS `total_played`
 					   	FROM `t0111_game_profile` profile 
@@ -130,8 +121,7 @@ class ApiProfileHelper{
 					        	AND profile.`deleted_at` IS NULL
 
 					        	GROUP BY profile.`id`  ) t3
-			    	WHERE t1.`profile_id` = t2.`profile_id`
-			    	AND t1.`profile_id` = t3.`profile_id`
+			    	WHERE t1.`profile_id` = t3.`profile_id`
 		";
 
 		$lastPlayed = DB::select($sql);
@@ -142,17 +132,32 @@ class ApiProfileHelper{
 
 			$totalStar = UserMap::where('profile_id' , $p->id)->sum('star');
 			$planet = GamePlanet::find($lp->planet_id);
+
 			if($planet){
 				$planetName = $planet->name;
 			}else{
 				$planetName = 'Null';
 			}
-			if($lp->total_played){
-				$minute = $lp->total_played / 60 ;
+
+			$lastSession = LastSession::where('profile_id', $p->id)->orderBy('updated_at', 'DESC')->first();
+
+			if($lastSession){
+				$minute = $lastSession->total_played_time / 60 ;
 				$time = explode('.' , $minute);
+
 				$totalPlayed = $time[0];
+				$totalAnswered = $lastSession->total_answered;
+				$totalCorrect = $lastSession->total_correct;
+				$percentage = $lastSession->accuracy;
+
+				if($totalPlayed == 0){
+					$totalPlayed = '< 1';
+				}
 			}else{
 				$totalPlayed = 0;
+				$totalAnswered = 0;
+				$totalCorrect = 0;
+				$percentage = 0;
 			}
 
 			if($lp->last_played_time){
@@ -160,7 +165,7 @@ class ApiProfileHelper{
 				$time2 = explode('.' , $minute2);
 				$lastPlayedTime = $time2[0];
 			}else{
-				$lastPlayedTime = 0;
+				$lastPlayedTime = '< 1';
 			}
 
 			array_push($profileInfo, [
@@ -184,11 +189,11 @@ class ApiProfileHelper{
 					'last_played' => $lp->created_at,
 					'last_played_time' => $lastPlayedTime,
 				],
-				'last_three_hour' => [
-					'total_answered' => $lp->total_answered,
-					'total_correct' => $lp->total_correct,
+				'last_session' => [
+					'total_answered' => $totalAnswered,
+					'total_correct' => $totalCorrect,
 					'total_played_time' => $totalPlayed,
-					'accuracy' => $lp->percentage,
+					'accuracy' => $percentage,
 				]
 				
 				
