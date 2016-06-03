@@ -138,6 +138,7 @@ Class ApiGameController extends Controller {
 					case 'p23':$questions = ZapZapQuestionHelper::GetQuestionP23($planetId,$difficulty,$questionCount); break;
 					case 'p24':$questions = ZapZapQuestionHelper::GetQuestionP24($planetId,$difficulty,$questionCount); break;
 					case 'p25':$questions = ZapZapQuestionHelper::GetQuestionP25($planetId,$difficulty,$questionCount); break;
+					case 'p27':$questions = ZapZapQuestionHelper::GetQuestionP27($planetId,$difficulty,$questionCount); break;
 					case 'p32':$questions = ZapZapQuestionHelper::GetQuestionP32($planetId,$difficulty,$questionCount); break;
 					case 'p00':$questions = ZapZapQuestionHelper::GetQuestionP00($planetId,$gameType,$level,$profileId); break;
 
@@ -517,6 +518,9 @@ Class ApiGameController extends Controller {
 				case 'p21': $status = ZapZapQuestionHelper::SubmitResultP21($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p22': $status = ZapZapQuestionHelper::SubmitResultP22($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p23': $status = ZapZapQuestionHelper::SubmitResultP23($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p24': $status = ZapZapQuestionHelper::SubmitResultP24($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p25': $status = ZapZapQuestionHelper::SubmitResultP25($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p27': $status = ZapZapQuestionHelper::SubmitResultP27($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p32': $status = ZapZapQuestionHelper::SubmitResultP32($planetId,$gamePlay,$gameResult,$profileId); break;
 
 				default: return ResponseHelper::OutputJSON('fail', 'submit answer error');
