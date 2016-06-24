@@ -140,7 +140,11 @@ Class ApiGameController extends Controller {
 					case 'p25':$questions = ZapZapQuestionHelper::GetQuestionP25($planetId,$difficulty,$questionCount); break;
 					case 'p27':$questions = ZapZapQuestionHelper::GetQuestionP27($planetId,$difficulty,$questionCount); break;
 					case 'p28':$questions = ZapZapQuestionHelper::GetQuestionP28($planetId,$difficulty,$questionCount); break;
+					case 'p29':$questions = ZapZapQuestionHelper::GetQuestionP29($planetId,$difficulty,$questionCount); break;
+					case 'p30':$questions = ZapZapQuestionHelper::GetQuestionP30($planetId,$difficulty,$questionCount); break;
+					case 'p31':$questions = ZapZapQuestionHelper::GetQuestionP31($planetId,$difficulty,$questionCount); break;
 					case 'p32':$questions = ZapZapQuestionHelper::GetQuestionP32($planetId,$difficulty,$questionCount); break;
+					case 'p33':$questions = ZapZapQuestionHelper::GetQuestionP33($planetId,$difficulty,$questionCount); break;
 					case 'p00':$questions = ZapZapQuestionHelper::GetQuestionP00($planetId,$gameType,$level,$profileId); break;
 
 					default: return ResponseHelper::OutputJSON('fail', $type->name.' not found');
@@ -877,7 +881,15 @@ Class ApiGameController extends Controller {
 						case '19':$questions = ZapZapQuestionHelper::GetQuestionP19($p->id,$difficulty,$p->question_count); break;
 						case '20':$questions = ZapZapQuestionHelper::GetQuestionP20($p->id,$difficulty,$p->question_count); break;
 						case '21':$questions = ZapZapQuestionHelper::GetQuestionP21($p->id,$difficulty,$p->question_count); break;
+						case '22':$questions = ZapZapQuestionHelper::GetQuestionP22($p->id,$difficulty,$p->question_count); break;
 						case '23':$questions = ZapZapQuestionHelper::GetQuestionP23($p->id,$difficulty,$p->question_count); break;
+						case '24':$questions = ZapZapQuestionHelper::GetQuestionP24($p->id,$difficulty,$p->question_count); break;
+						case '25':$questions = ZapZapQuestionHelper::GetQuestionP25($p->id,$difficulty,$p->question_count); break;
+						case '27':$questions = ZapZapQuestionHelper::GetQuestionP27($p->id,$difficulty,$p->question_count); break;
+						case '28':$questions = ZapZapQuestionHelper::GetQuestionP28($p->id,$difficulty,$p->question_count); break;
+						case '29':$questions = ZapZapQuestionHelper::GetQuestionP29($p->id,$difficulty,$p->question_count); break;
+						case '30':$questions = ZapZapQuestionHelper::GetQuestionP30($p->id,$difficulty,$p->question_count); break;
+						case '31':$questions = ZapZapQuestionHelper::GetQuestionP31($p->id,$difficulty,$p->question_count); break;
 						case '32':$questions = ZapZapQuestionHelper::GetQuestionP32($p->id,$difficulty,$p->question_count); break;
 						default: continue;
 					}	

@@ -253,13 +253,16 @@ class ApiController extends Controller {
 			}
 
 			$sql = "
-				SELECT SEC_TO_TIME(SUM(p.`played_time`)) AS `total_played`, count(DISTINCT  DATE_FORMAT(p.`created_at`,'%m-%d-%Y')) AS `days` , count(r.`id`) AS `total_answered` , ((count(r2.`correct`) / count(r.`id`)) * 100) AS `percentage`
-					FROM `t0400_game_play` p, `t0300_game_result` r 
+				SELECT p.`profile_id`, pr.`first_name` , pr.`last_name`, c.`code`,SEC_TO_TIME(SUM(p.`played_time`)) AS `total_played`, count(DISTINCT  DATE_FORMAT(p.`created_at`,'%m-%d-%Y')) AS `days` , count(r.`id`) AS `total_answered` , ((count(r2.`correct`) / count(r.`id`)) * 100) AS `percentage`
+					FROM `t0400_game_play` p, `t0111_game_profile` pr, `t0113_game_code` c, `t0300_game_result` r 
 					LEFT JOIN `t0300_game_result` r2 ON r2.`id` = r.`id` AND r2.`correct` = 1
 						WHERE p.`user_id` = {$e->id}
 						AND r.`play_id` = p.`id`
 						AND p.`created_at` > (NOW() - INTERVAL 7 DAY)
-						GROUP BY `user_id`
+						AND pr.`id` = p.`profile_id`
+						AND pr.`deleted_at` IS NULL
+						AND c.`profile_id` = pr.`id`
+						GROUP BY p.`profile_id`
 
 			";
 
@@ -269,19 +272,8 @@ class ApiController extends Controller {
 				continue;
 			}
 
-			$result = $results[0];
-
-			$time = explode(':' , $result->total_played);
-			$percentage = explode('.', $result->percentage);
-
 			$edmHtml = (string) view('emails.weekly-report', [ 
-				'coc' => $coc,
-				'hour' => $time[0],
-				'minute' => $time[1],
-				'days' => $result->days,
-				'total_answered' => $result->total_answered,
-				'percentage' => $percentage[0],
-				'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
+				'results' => $results,
 				'zzm_url' => config('app.website_url'),
 				'social_media_links' => config('app.fanpage_url'),
 			]);
