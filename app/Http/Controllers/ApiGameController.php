@@ -145,6 +145,8 @@ Class ApiGameController extends Controller {
 					case 'p31':$questions = ZapZapQuestionHelper::GetQuestionP31($planetId,$difficulty,$questionCount); break;
 					case 'p32':$questions = ZapZapQuestionHelper::GetQuestionP32($planetId,$difficulty,$questionCount); break;
 					case 'p33':$questions = ZapZapQuestionHelper::GetQuestionP33($planetId,$difficulty,$questionCount); break;
+					case 'p34':$questions = ZapZapQuestionHelper::GetQuestionP34($planetId,$difficulty,$questionCount); break;
+					case 'p35':$questions = ZapZapQuestionHelper::GetQuestionP35($planetId,$difficulty,$questionCount); break;
 					case 'p00':$questions = ZapZapQuestionHelper::GetQuestionP00($planetId,$gameType,$level,$profileId); break;
 
 					default: return ResponseHelper::OutputJSON('fail', $type->name.' not found');

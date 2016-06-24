@@ -110,19 +110,17 @@ class ApiProfileHelper{
 
 					    		WHERE profile.`deleted_at` IS NULL
 					    		AND play2.`id` IS NULL
-					    		{$query}
-			    				GROUP BY profile.`id`
-			    				ORDER BY profile.`id` ) t1 , 
-					    		
+					    		AND profile.`user_id` = {$userId}
+
+			    					GROUP BY profile.`id` ) t1 , 
 					   (
 					  SELECT profile.`id` AS `profile_id`, SUM(p.`played_time`) AS `total_played`
 					   	FROM `t0111_game_profile` profile 
 							LEFT JOIN `t0400_game_play` p ON p.`user_id` = {$userId} AND profile.`id` = p.`profile_id` AND  p.`created_at` > DATE_SUB(NOW(), INTERVAL 3 HOUR)
 								WHERE profile.`user_id` = {$userId}
 					        	AND profile.`deleted_at` IS NULL
-					        	{$query}
-					        	GROUP BY profile.`id`  
-					        	ORDER BY profile.`id`) t3
+
+					        	GROUP BY profile.`id`  ) t3
 			    	WHERE t1.`profile_id` = t3.`profile_id`
 		";
 
@@ -166,12 +164,8 @@ class ApiProfileHelper{
 				$minute2 = $lp->last_played_time / 60 ;
 				$time2 = explode('.' , $minute2);
 				$lastPlayedTime = $time2[0];
-				if(!$lastPlayedTime){
-					$lastPlayedTime = '< 1';
-				}
-				
 			}else{
-				$lastPlayedTime = 'Null';
+				$lastPlayedTime = '< 1';
 			}
 
 			array_push($profileInfo, [
