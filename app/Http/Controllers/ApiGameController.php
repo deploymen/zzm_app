@@ -529,7 +529,13 @@ Class ApiGameController extends Controller {
 				case 'p25': $status = ZapZapQuestionHelper::SubmitResultP25($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p27': $status = ZapZapQuestionHelper::SubmitResultP27($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p28': $status = ZapZapQuestionHelper::SubmitResultP28($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p29': $status = ZapZapQuestionHelper::SubmitResultP29($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p30': $status = ZapZapQuestionHelper::SubmitResultP30($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p31': $status = ZapZapQuestionHelper::SubmitResultP31($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p32': $status = ZapZapQuestionHelper::SubmitResultP32($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p33': $status = ZapZapQuestionHelper::SubmitResultP33($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p34': $status = ZapZapQuestionHelper::SubmitResultP34($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p35': $status = ZapZapQuestionHelper::SubmitResultP35($planetId,$gamePlay,$gameResult,$profileId); break;
 
 				default: return ResponseHelper::OutputJSON('fail', 'submit answer error');
 			}

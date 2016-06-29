@@ -51,7 +51,13 @@ use App\Models\GameResultP24;
 use App\Models\GameResultP25;
 use App\Models\GameResultP27;
 use App\Models\GameResultP28;
+use App\Models\GameResultP29;
+use App\Models\GameResultP30;
+use App\Models\GameResultP31;
 use App\Models\GameResultP32;
+use App\Models\GameResultP33;
+use App\Models\GameResultP34;
+use App\Models\GameResultP35;
 use App\Models\GameQuestion;
 use App\Models\GameQuestionP03;
 use App\Models\GameQuestionP00;
@@ -2301,7 +2307,6 @@ class ZapZapQuestionHelper{
 				if($r->id != $prevQuestionId){
 					array_push($results, [
 						'id' => $r->question_id,
-						'level' => $r->level,
 						'question_object_1' => $r->question_object_1,
 						'question_object_2' => $r->question_object_2,
 						'question_object_3' => $r->question_object_3,
@@ -3540,25 +3545,130 @@ class ZapZapQuestionHelper{
 		}
 	}
 
+	public static function submitResultP29($planetId,$gamePlay ,$gameResult,$profileId ) {
+		try{
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				$resultP29 = new GameResultP29;
+				$resultP29->target_type = 'p29';
+				$resultP29->target_id = $question->target_id;
+				$resultP29->answer_x = $inAnswer['answer_x'];
+				$resultP29->answer_y = $inAnswer['answer_y'];
+				$resultP29->correct = $inAnswer['correct'];
+				$resultP29->save();
+
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p29';
+				$gameResults->target_id = $resultP29->id;
+				$gameResults->game_type_id = '29';
+				$gameResults->correct = $inAnswer['correct'];
+				$gameResults->save();
+			}	
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP29', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
+		}
+	}
+
+	public static function submitResultP30($planetId,$gamePlay ,$gameResult,$profileId ) {
+		try{
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				$resultP30 = new GameResultP30;
+				$resultP30->target_type = 'p30';
+				$resultP30->target_id = $question->target_id;
+				$resultP30->answer_x = $inAnswer['answer_x'];
+				$resultP30->answer_y = $inAnswer['answer_y'];
+				$resultP30->correct = $inAnswer['correct'];
+				$resultP30->save();
+
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p30';
+				$gameResults->target_id = $resultP18->id;
+				$gameResults->game_type_id = '30';
+				$gameResults->correct = $inAnswer['correct'];
+				$gameResults->save();
+			}	
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP30', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
+		}
+	}
+
+	public static function submitResultP31($planetId,$gamePlay ,$gameResult,$profileId ) {
+		try{
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				$resultP31 = new GameResultP31;
+				$resultP31->target_type = 'p31';
+				$resultP31->target_id = $question->target_id;
+				$resultP31->answer_x = $inAnswer['answer_x'];
+				$resultP31->answer_y = $inAnswer['answer_y'];
+				$resultP31->correct = $inAnswer['correct'];
+				$resultP31->save();
+
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p31';
+				$gameResults->target_id = $resultP31->id;
+				$gameResults->game_type_id = '31';
+				$gameResults->correct = $inAnswer['correct'];
+				$gameResults->save();
+			}	
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP31', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
+		}
+	}
+
 	public static function submitResultP32($planetId,$gamePlay ,$gameResult,$profileId ) {
 		try{
 			for($i=0; $i<count($gameResult['answers']); $i++){
 				$inAnswer = $gameResult['answers'][$i];
 				$question = GameQuestion::find($inAnswer['question_id']);
 
-				$resultP18 = new GameResultP32;
-				$resultP18->target_type = 'p32';
-				$resultP18->target_id = $question->target_id;
-				$resultP18->answer_x = $inAnswer['answer_x'];
-				$resultP18->answer_y = $inAnswer['answer_y'];
-				$resultP18->correct = $inAnswer['correct'];
-				$resultP18->save();
+				$resultP32 = new GameResultP32;
+				$resultP32->target_type = 'p32';
+				$resultP32->target_id = $question->target_id;
+				$resultP32->answer_x = $inAnswer['answer_x'];
+				$resultP32->answer_y = $inAnswer['answer_y'];
+				$resultP32->correct = $inAnswer['correct'];
+				$resultP32->save();
 
 				$gameResults = new GameResult;
 				$gameResults->play_id = $gamePlay->id;
 				$gameResults->question_id = $inAnswer['question_id'];
 				$gameResults->target_type = 'p32';
-				$gameResults->target_id = $resultP18->id;
+				$gameResults->target_id = $resultP32->id;
 				$gameResults->game_type_id = '32';
 				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
@@ -3566,6 +3676,111 @@ class ZapZapQuestionHelper{
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP32', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
+		}
+	}
+
+	public static function submitResultP33($planetId,$gamePlay ,$gameResult,$profileId ) {
+		try{
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				$resultP33 = new GameResultP33;
+				$resultP33->target_type = 'p33';
+				$resultP33->target_id = $question->target_id;
+				$resultP33->answer_x = $inAnswer['answer_x'];
+				$resultP33->answer_y = $inAnswer['answer_y'];
+				$resultP33->correct = $inAnswer['correct'];
+				$resultP33->save();
+
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p33';
+				$gameResults->target_id = $resultP33->id;
+				$gameResults->game_type_id = '33';
+				$gameResults->correct = $inAnswer['correct'];
+				$gameResults->save();
+			}	
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP33', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
+		}
+	}
+
+	public static function submitResultP34($planetId,$gamePlay ,$gameResult,$profileId ) {
+		try{
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				$resultP34 = new GameResultP34;
+				$resultP34->target_type = 'p34';
+				$resultP34->target_id = $question->target_id;
+				$resultP34->answer_x = $inAnswer['answer_x'];
+				$resultP34->answer_y = $inAnswer['answer_y'];
+				$resultP34->correct = $inAnswer['correct'];
+				$resultP34->save();
+
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p34';
+				$gameResults->target_id = $resultP34->id;
+				$gameResults->game_type_id = '34';
+				$gameResults->correct = $inAnswer['correct'];
+				$gameResults->save();
+			}	
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP34', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
+		}
+	}
+
+	public static function submitResultP35($planetId,$gamePlay ,$gameResult,$profileId ) {
+		try{
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				$resultP35 = new GameResultP35;
+				$resultP35->target_type = 'p35';
+				$resultP35->target_id = $question->target_id;
+				$resultP35->answer_x = $inAnswer['answer_x'];
+				$resultP35->answer_y = $inAnswer['answer_y'];
+				$resultP35->correct = $inAnswer['correct'];
+				$resultP35->save();
+
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p35';
+				$gameResults->target_id = $resultP35->id;
+				$gameResults->game_type_id = '35';
+				$gameResults->correct = $inAnswer['correct'];
+				$gameResults->save();
+			}	
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP35', [
 					'environment' => json_encode([
 						'message' => $ex->getMessage(),
 						'inputs' => Request::all(),

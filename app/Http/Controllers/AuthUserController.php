@@ -32,6 +32,7 @@ use Request;
 use Session;
 use Socialite;
 use GuzzleHttp\Client;
+use Sendinblue\Mailin;
 
 Class AuthUserController extends Controller {
 
@@ -445,7 +446,16 @@ Class AuthUserController extends Controller {
 						$logOpenAcc->secret = $secretKey;
 						$logOpenAcc->save();
 					}
-					
+
+					$mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
+					$data = ["email" => $username,
+					        "attributes" => ["NAME"=>$name, "SURNAME"=>""],
+					        "listid" => [Config::get('app.send_in_blue_list_id')],
+					        "listid_unlink" => []
+					    ];
+		
+				    $mailin->create_update_user($data);
+
 					//job done - log it!
 					DatabaseUtilHelper::LogInsert($user->id, $user->table, $user->id);
 					DatabaseUtilHelper::LogInsert($user->id, $access->table, $user->id);
@@ -1089,6 +1099,7 @@ Class AuthUserController extends Controller {
 	 *
 	 * @return Response
 	 */
+
 	public function handleProviderCallback() {
 		$error = Request::input('error');
 
@@ -1138,7 +1149,8 @@ Class AuthUserController extends Controller {
 			$log->created_ip = Request::ip();
 			$log->save();
 
-			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
+            setcookie("current_user", json_encode(['user' => $user, 'first_time_login' => $firstLogin]), 0, "/");
+			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->withCookie($cookie);
 		}
 
 		//check email didnt use
@@ -1147,7 +1159,8 @@ Class AuthUserController extends Controller {
 		if(!$userAccess){
 
 			//create new
-			return redirect(url(env('WEBSITE_URL').'/user/redirect-signup/facebook'))->with('name' , $fbUser->name)->with('email' , $fbUser->email)->with('facebook_id' , $fbUser->id);
+            setcookie("current_user", json_encode(['name' => $fbUser->name, 'email' => $fbUser->email, 'facebook_id' => $fbUser->id]), 0, "/");
+			return redirect(url(env('WEBSITE_URL').'/user/redirect-signup/facebook'));
 
 		}
 
@@ -1169,9 +1182,10 @@ Class AuthUserController extends Controller {
 		$log->created_ip = Request::ip();
 		$log->save();
 
-		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
+        setcookie("current_user", json_encode(['user' => $user, 'first_time_login' => $firstLogin]), 0, "/");
+		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->withCookie($cookie);
 	}
-
+	
 	public function deleteAccount(){
 		$userId = Request::input('user_id');
 
@@ -1220,6 +1234,15 @@ Class AuthUserController extends Controller {
 		$user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser['user_id']);
 		$userExternalId = UserExternalId::where('user_id' , $newUser['user_id'])->update(['facebook_id' => $facebookId ]);
 		$userAccess = UserAccess::where('user_id' , $user->id)->first();
+
+		$mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
+		$data = ["email" => $email,
+		        "attributes" => ["NAME"=>$name, "SURNAME"=>""],
+		        "listid" => [Config::get('app.send_in_blue_list_id')],
+		        "listid_unlink" => []
+		    ];
+
+		$mailin->create_update_user($data);
 
 		$firstLogin = 1;
 

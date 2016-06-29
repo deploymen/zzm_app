@@ -30,6 +30,7 @@ use App\Models\User;
 use App\Models\UserAccess;
 use App\Models\UserExternalId;
 use App\Models\UserSetting;
+use Sendinblue\Mailin;
 
 Class AuthSchoologyController extends Controller {
 
@@ -121,6 +122,15 @@ Class AuthSchoologyController extends Controller {
         $user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser['user_id']);
         $userExternalId = UserExternalId::where('user_id' , $newUser['user_id'])->update(['schoology_id' => $schoology_id ]);
         $userAccess = UserAccess::where('user_id' , $user->id)->first();
+
+        $mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
+		$data = ["email" => $email,
+		        "attributes" => ["NAME"=>$name, "SURNAME"=>""],
+		        "listid" => [Config::get('app.send_in_blue_list_id')],
+		        "listid_unlink" => []
+		    ];
+
+		$mailin->create_update_user($data);
 
         $firstLogin = 1;
 

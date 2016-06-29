@@ -30,9 +30,6 @@ Route::group(['prefix' => 'auth'], function () {
 // =======================================================================//
 // ! Content											          //
 // =======================================================================//
-Route::group(['middleware' => 'auth.user'], function () {
-	Route::post('user/invite/teacher' , 'ApiController@inviteTeacher');
-});
 
 Route::post('/worksheets', 'ApiQuestionBankController@createGameWorksheet');
 
@@ -52,4 +49,6 @@ Route::get('check-ip-details', 'ApiCheckingController@CheckIpDetails');
 
 Route::get('weekly-report', 'ApiController@weeklyReport');
 
-Route::get('most-active-list', 'ApiController@MostActiveList');
+Route::post('user/invite/teacher' , 'ApiController@inviteTeacher');
+
+Route::get('send-in-blue' , 'ApiController@SendInBlue');
