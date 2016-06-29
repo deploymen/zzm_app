@@ -38,6 +38,7 @@ use App\Models\LeaderboardWorld;
 use App\Models\LeaderboardSystem;
 use App\Models\LeaderboardPlanet;
 use App\Models\IdCounter;
+use App\Models\LastSession;
 
 class ApiProfileHelper{
 
@@ -100,24 +101,78 @@ class ApiProfileHelper{
 		}
 
 		$sql = "
-			 SELECT profile.`id` , play.`created_at`, count(result.`id`) AS `questions_played` ,play.`score`
-	    		FROM `t0111_game_profile` profile
-					LEFT JOIN `t0400_game_play` play ON (play.`profile_id` = profile.`id` AND play.`user_id` = {$userId} )
-					LEFT JOIN `t0400_game_play` play2 ON (play2.`profile_id` = profile.`id` AND play2.`user_id` = {$userId} AND play2.`created_at` > play.`created_at`)
+			 SELECT t1.* , t3.`total_played` 
+			 	FROM (
+			 		SELECT profile.`id` AS `profile_id` , play.`created_at` ,play.`score` , play.`planet_id` , play.`played_time` AS `last_played_time`
+			    		FROM `t0111_game_profile` profile
+							LEFT JOIN `t0400_game_play` play ON (play.`profile_id` = profile.`id` AND play.`user_id` = {$userId} )
+							LEFT JOIN `t0400_game_play` play2 ON (play2.`profile_id` = profile.`id` AND play2.`user_id` = {$userId} AND play2.`created_at` > play.`created_at`)
 
-					LEFT JOIN `t0400_game_play` play_all ON (play_all.`profile_id` = profile.`id` AND play_all.`user_id` = {$userId})
-					LEFT JOIN `t0300_game_result` result ON (play_all.`id` = result.`play_id` AND result.`target_type` = play_all.`target_type`)
-			    		WHERE profile.`deleted_at` IS NULL
-			    		AND play2.`id` IS NULL
-			    		{$query}
-
-	    					GROUP BY profile.`id`
+					    		WHERE profile.`deleted_at` IS NULL
+					    		AND play2.`id` IS NULL
+					    		{$query}
+			    				GROUP BY profile.`id`
+			    				ORDER BY profile.`id` ) t1 , 
+					    		
+					   (
+					  SELECT profile.`id` AS `profile_id`, SUM(p.`played_time`) AS `total_played`
+					   	FROM `t0111_game_profile` profile 
+							LEFT JOIN `t0400_game_play` p ON p.`user_id` = {$userId} AND profile.`id` = p.`profile_id` AND  p.`created_at` > DATE_SUB(NOW(), INTERVAL 3 HOUR)
+								WHERE profile.`user_id` = {$userId}
+					        	AND profile.`deleted_at` IS NULL
+					        	{$query}
+					        	GROUP BY profile.`id`  
+					        	ORDER BY profile.`id`) t3
+			    	WHERE t1.`profile_id` = t3.`profile_id`
 		";
 
 		$lastPlayed = DB::select($sql);
+
 		for ($i = 0; $i < count($profiles); $i++) {
 			$p = $profiles[$i];
 			$lp = $lastPlayed[$i];
+
+			$totalStar = UserMap::where('profile_id' , $p->id)->sum('star');
+			$planet = GamePlanet::find($lp->planet_id);
+
+			if($planet){
+				$planetName = $planet->name;
+			}else{
+				$planetName = 'Null';
+			}
+
+			$lastSession = LastSession::where('profile_id', $p->id)->orderBy('updated_at', 'DESC')->first();
+
+			if($lastSession){
+				$minute = $lastSession->total_played_time / 60 ;
+				$time = explode('.' , $minute);
+
+				$totalPlayed = $time[0];
+				$totalAnswered = $lastSession->total_answered;
+				$totalCorrect = $lastSession->total_correct;
+				$percentage = $lastSession->accuracy;
+
+				if($totalPlayed == 0){
+					$totalPlayed = '< 1';
+				}
+			}else{
+				$totalPlayed = 0;
+				$totalAnswered = 0;
+				$totalCorrect = 0;
+				$percentage = 0;
+			}
+
+			if($lp->last_played_time){
+				$minute2 = $lp->last_played_time / 60 ;
+				$time2 = explode('.' , $minute2);
+				$lastPlayedTime = $time2[0];
+				if(!$lastPlayedTime){
+					$lastPlayedTime = '< 1';
+				}
+				
+			}else{
+				$lastPlayedTime = 'Null';
+			}
 
 			array_push($profileInfo, [
 				'id' => $p->id,
@@ -128,17 +183,27 @@ class ApiProfileHelper{
 				'age' => $p->age,
 				'school' => $p->school,
 				'grade' => $p->grade,
+				'total_star' => $totalStar,
 				'city' => $p->city,
 				'email' => $p->email,
-				'questions_played' => $lp->questions_played,
-				'nickname1' => $p->nickname1,
-				'nickname2' => $p->nickname2,
-				'avatar_id' => $p->avatar_id,
-				'nick_name1' => $p->nickName1,
-				'nick_name2' => $p->nickName2,
+				'nickname1' => $p->nickName1,
+				'nickname2' => $p->nickName2,
 				'avatar' => $p->avatar,
 				'game_code' => $p->gameCode,
-				'last_played' => $lp->created_at,
+				'last_played' => [
+					'last_planet_name' => $planetName,
+					'last_played' => $lp->created_at,
+					'last_played_time' => $lastPlayedTime,
+				],
+				'last_session' => [
+					'total_answered' => $totalAnswered,
+					'total_correct' => $totalCorrect,
+					'total_played_time' => $totalPlayed,
+					'accuracy' => $percentage,
+				]
+				
+				
+	
 
 			]);
 		}

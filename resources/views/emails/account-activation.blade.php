@@ -67,36 +67,6 @@
 									</tr>
 								</tbody>
 							</table>
-							<!-- START-email-signature -->
-							<table cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF" align="center" style="width: 600px; text-align:center; margin-bottom:50px;">
-								<tbody>
-									<tr>
-										<td style="padding: 30px;">
-											<table cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF" style="margin-bottom:20px; width: 100%; text-align:center;">
-												<tbody>
-													<tr align="left" valign="bottom">
-														<td bgcolor="#FFFFFF" height="30" width="20%" style="background-color:#FFFFFF;text-align:center">
-															<a href="#" target="_blank"><img src="https://www.zapzapmath.com/assets/img/edm/icon-twitter.png" alt="Twitter Icon"></a>
-														</td>
-														<td bgcolor="#FFFFFF" height="30" width="20%" style="background-color:#FFFFFF;text-align:center">
-															<a href="#" target="_blank"><img src="https://www.zapzapmath.com/assets/img/edm/icon-pinterest.png" alt="Pinterest Icon"></a>
-														</td>
-														<td bgcolor="#FFFFFF" height="30" width="20%" style="background-color:#FFFFFF;text-align:center">
-															<a href="#" target="_blank"><img src="https://www.zapzapmath.com/assets/img/edm/icon-youtube.png" alt="YouTube Icon"></a>
-														</td>
-														<td bgcolor="#FFFFFF" height="30" width="20%" style="background-color:#FFFFFF;text-align:center">
-															<a href="#" target="_blank"><img src="https://www.zapzapmath.com/assets/img/edm/icon-facebook.png" alt="Facebook Icon"></a>
-														</td>
-														<td bgcolor="#FFFFFF" height="30" width="20%" style="background-color:#FFFFFF;text-align:center">
-															<a href="#" target="_blank"><img src="https://www.zapzapmath.com/assets/img/edm/icon-instagram.png" alt="Instagram Icon"></a>
-														</td>
-													</tr>
-												</tbody>
-											</table>
-										</td>
-									</tr>
-								</tbody>
-							</table>
 							<!-- END-inner-table-content -->
 						</td>
 						<!--END-outer-table-holding-cell-->

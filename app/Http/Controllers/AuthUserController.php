@@ -32,6 +32,7 @@ use Request;
 use Session;
 use Socialite;
 use GuzzleHttp\Client;
+use Sendinblue\Mailin;
 
 Class AuthUserController extends Controller {
 
@@ -87,7 +88,7 @@ Class AuthUserController extends Controller {
 			return ResponseHelper::OutputJSON('fail', "email used");
 		}
 
-		// try {	
+		try {	
 			// DB::transaction(function ()
 				 // use ($role, $username, $password_sha1, $name, $email, $country, $deviceId, $accessToken, $classId) {
 
@@ -131,13 +132,13 @@ Class AuthUserController extends Controller {
 						$gameClass->name = 'Default Class';
 						$gameClass->save();
 
-						$userFlag->profile_limit = Config::get('app.teacher_profile_limit');
-						$userFlag->class_limit = Config::get('app.teacher_class_limit');
+						$userFlag->profile_limit = 100;
+						$userFlag->class_limit = 50;
 						$userFlag->save();
 
 						$classId = $gameClass->id;
 					}else{
-						$userFlag->profile_limit = Config::get('app.parent_profile_limit');
+						$userFlag->profile_limit = 1;
 						$userFlag->class_limit = 0;
 						$userFlag->save();
 					}
@@ -239,6 +240,7 @@ Class AuthUserController extends Controller {
 										FROM(
 											SELECT SUBSTRING_INDEX(`email`,'@', -1) AS `domain` , count(*) AS `count`
 												FROM `t0101_user` 
+												WHERE `deleted_at` IS NULL
 												GROUP BY `domain`
 											) a
 										WHERE a.`domain` = :domain
@@ -256,6 +258,7 @@ Class AuthUserController extends Controller {
 										                        SELECT `id`,  SUBSTRING_INDEX(`email`,'@', -1) AS `domain`
 										                        FROM `t0101_user` 
 										                        WHERE `role` = 'teacher'
+										                        AND `deleted_at` IS NULL
 									                    ) a
 									            WHERE a.`domain` = :domain) b
 									            ON a.`user_id` = b.`id`
@@ -297,6 +300,7 @@ Class AuthUserController extends Controller {
 											FROM(
 												SELECT `name` , `email`, SUBSTRING_INDEX(`email`,'@', -1) AS `domain`
 													FROM `t0101_user` 
+													WHERE `deleted_at` IS NULL
 												
 												) a
 											WHERE a.`domain` = :domain									
@@ -416,7 +420,41 @@ Class AuthUserController extends Controller {
 							$logOpenAcc->secret = $secretKey;
 							$logOpenAcc->save();
 						}
+					}else{
+						$secretKey = sha1(time() . $email);
+						$edmHtml = (string) view('emails.account-activation', [
+							'name' => $name,
+							'app_store_address' => config('app.app_store_url'),
+							'username' => $email,
+							'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
+							'activation_link' => config('app.website_url') . "/api/1.0/auth/activate/{$secretKey}",
+							'email_support' => config('app.support_email'),
+							'zzm_url' => config('app.website_url'),
+							'social_media_links' => config('app.fanpage_url'),
+						]);
+				
+						EmailHelper::SendEmail([
+							'about' => 'Welcome',
+							'subject' => 'Your Zap Zap Account is now ready!',
+							'body' => $edmHtml,
+							'bodyHtml' => $edmHtml,
+							'toAddresses' => [$email],
+						]);
+
+						$logOpenAcc = new LogAccountActivate;
+						$logOpenAcc->user_id = $user->id;
+						$logOpenAcc->secret = $secretKey;
+						$logOpenAcc->save();
 					}
+
+					$mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
+					$data = ["email" => $username,
+					        "attributes" => ["NAME"=>$name, "SURNAME"=>""],
+					        "listid" => [Config::get('app.send_in_blue_list_id')],
+					        "listid_unlink" => []
+					    ];
+		
+				    $mailin->create_update_user($data);
 					
 					//job done - log it!
 					DatabaseUtilHelper::LogInsert($user->id, $user->table, $user->id);
@@ -434,13 +472,13 @@ Class AuthUserController extends Controller {
 			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
 			$list = User::select('id' , 'role' , 'name' , 'register_from')->find($userAccess->user_id);
 
-		// } catch (Exception $ex) {
-		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-		// 		'source' => 'AuthUserController > signUp',
-		// 		'inputs' => Request::all(),
-		// 	])]);
-		// 	return ResponseHelper::OutputJSON('exception');
-		// }
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'AuthUserController > signUp',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 
 		return ResponseHelper::OutputJSON('success', '', ['user' => $list], [
 			'X-access-token' => $accessToken,
@@ -923,13 +961,13 @@ Class AuthUserController extends Controller {
 				$gameClass->name = 'Default Class';
 				$gameClass->save();
 
-				$userFlag->profile_limit = Config::get('app.teacher_profile_limit');
-				$userFlag->class_limit = Config::get('app.teacher_class_limit');
+				$userFlag->profile_limit = 3;
+				$userFlag->class_limit = 50;
 				$userFlag->save();
 
 				$classId = $gameClass->id;
 			}else{
-				$userFlag->profile_limit = Config::get('app.parent_profile_limit');
+				$userFlag->profile_limit = 1;
 				$userFlag->class_limit = 0;
 				$userFlag->save();
 			}
@@ -1067,13 +1105,14 @@ Class AuthUserController extends Controller {
 		if($error == 'access_denied'){
 			return redirect(url(env('WEBSITE_URL').'/user/signin?error=access-denied'));
 		}
-		
 		$client = new Client;
+
 		$firstLogin = 0;
+
 		$xsrfToken = Cookie::get('XSRF-TOKEN');
 		
 		$fbUser = Socialite::driver('facebook')->user();
-		
+
 		//check User facebook ID
 		$userExternalId = UserExternalId::where('facebook_id' , $fbUser->id)->first();
 
@@ -1109,7 +1148,8 @@ Class AuthUserController extends Controller {
 			$log->created_ip = Request::ip();
 			$log->save();
 
-			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
+            setcookie("current_user", json_encode(['user' => $user, 'first_time_login' => $firstLogin]), 0, "/");
+			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->withCookie($cookie);
 		}
 
 		//check email didnt use
@@ -1118,7 +1158,8 @@ Class AuthUserController extends Controller {
 		if(!$userAccess){
 
 			//create new
-			return redirect(url(env('WEBSITE_URL').'/user/redirect-signup/facebook'))->with('name' , $fbUser->name)->with('email' , $fbUser->email)->with('facebook_id' , $fbUser->id);
+            setcookie("current_user", json_encode(['name' => $fbUser->name, 'email' => $fbUser->email, 'facebook_id' => $fbUser->id]), 0, "/");
+			return redirect(url(env('WEBSITE_URL').'/user/redirect-signup/facebook'));
 
 		}
 
@@ -1140,9 +1181,10 @@ Class AuthUserController extends Controller {
 		$log->created_ip = Request::ip();
 		$log->save();
 
-		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
+        setcookie("current_user", json_encode(['user' => $user, 'first_time_login' => $firstLogin]), 0, "/");
+		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->withCookie($cookie);
 	}
-
+	
 	public function deleteAccount(){
 		$userId = Request::input('user_id');
 
@@ -1192,6 +1234,15 @@ Class AuthUserController extends Controller {
 		$userExternalId = UserExternalId::where('user_id' , $newUser['user_id'])->update(['facebook_id' => $facebookId ]);
 		$userAccess = UserAccess::where('user_id' , $user->id)->first();
 
+		$mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
+		$data = ["email" => $email,
+		        "attributes" => ["NAME"=>$name, "SURNAME"=>""],
+		        "listid" => [Config::get('app.send_in_blue_list_id')],
+		        "listid_unlink" => []
+		    ];
+
+		$mailin->create_update_user($data);
+		
 		$firstLogin = 1;
 
 		$cookie = Cookie::make('access_token', $userAccess->access_token);

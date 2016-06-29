@@ -2,11 +2,11 @@
 
 App::setLocale('en'); 
 
-Route::get('/version', 'ApiController@getVersion');
+Route::get('saml/acs', 'AuthSchoologyController@schoology');
+Route::post('/1.1/auth/schoology/signup', 'AuthSchoologyController@schoologySignUp');
 
 require __DIR__.'/Routes/page-docs.php';
 require __DIR__.'/Routes/api-cron.php';
-
 
 Route::group(['middleware' => 'version'], function () {
 
