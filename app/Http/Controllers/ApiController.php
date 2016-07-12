@@ -21,6 +21,7 @@ use App\Models\Subscribe;
 use App\Models\LaunchNotification;
 use App\Models\AppVersion;
 use App\Models\User;
+use App\Models\GameProfile;
 
 
 class ApiController extends Controller {
