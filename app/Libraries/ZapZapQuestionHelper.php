@@ -2367,7 +2367,6 @@ class ZapZapQuestionHelper{
 
 			for($i=0; $i<count($result); $i++){
 				$r = $result[$i];
-
 				if($r->id != $prevQuestionId){
 					array_push($results, [
 						'id' => $r->question_id,
@@ -2376,9 +2375,7 @@ class ZapZapQuestionHelper{
 						'question_shapes' => $r->question_shapes,
 						'answer_option_1' => $r->answer_option_1,
 						'answer_option_2' => $r->answer_option_2,
-						'answer_option_3' => $r->answer_option_3,
 						'difficulty' => $r->difficulty,
-						
 					]);
 				}
 				

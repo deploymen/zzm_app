@@ -228,27 +228,65 @@ class ApiController extends Controller {
 	}
 
 	public function weeklyReport(){
-		$email = User::where('activated', 1)->select('email')->get();
+		$email = User::where('activated', 1)->select('id' , 'role', 'email')->get();
 
 		for($j=0; $j<count($email); $j++){
+			$e = $email[$j];
 			$mail = $email[$j]->email;
 
 			if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
 				continue;
 			}
 
+			if($e->role == 'parent'){
+				$profile = GameProfile::where('user_id' , $e->id);
+
+				if(count($profile) == 1){
+					$coc = 'child';
+				}else{
+					$coc = 'children';
+				}
+
+			}else{
+				$coc = 'class';
+			}
+
+			$sql = "
+				SELECT p.`profile_id`, pr.`first_name` , pr.`last_name`, c.`code`,SEC_TO_TIME(SUM(p.`played_time`)) AS `total_played`, count(DISTINCT  DATE_FORMAT(p.`created_at`,'%m-%d-%Y')) AS `days` , count(r.`id`) AS `total_answered` , ((count(r2.`correct`) / count(r.`id`)) * 100) AS `percentage`
+					FROM `t0400_game_play` p, `t0111_game_profile` pr, `t0113_game_code` c, `t0300_game_result` r 
+					LEFT JOIN `t0300_game_result` r2 ON r2.`id` = r.`id` AND r2.`correct` = 1
+						WHERE p.`user_id` = {$e->id}
+						AND r.`play_id` = p.`id`
+						AND p.`created_at` > (NOW() - INTERVAL 7 DAY)
+						AND pr.`id` = p.`profile_id`
+						AND pr.`deleted_at` IS NULL
+						AND c.`profile_id` = pr.`id`
+						GROUP BY p.`profile_id`
+
+			";
+
+			$results = DB::SELECT($sql);
+
+			if(!$results){
+				continue;
+			}
+
+			$edmHtml = (string) view('emails.weekly-report', [ 
+				'results' => $results,
+				'zzm_url' => config('app.website_url'),
+				'social_media_links' => config('app.fanpage_url'),
+			]);
+
 			EmailHelper::SendEmail([
-				'about' => '',
-				'subject' => '',
-				'body' => 'emails.password',
-				'bodyHtml' => 'emails.password',
-				'toAddresses' => [$mail], //['support@932.xxx'],
-				'bccAddresses' => [],
-				'replyToAddresses' => ['no-reply@zapzapmath.com'],
-				'data' => [],
+				'about' => 'Zap Zap Math',
+				'subject' => 'Weekly Report',
+				'body' => $edmHtml,
+				'bodyHtml' => $edmHtml,
+				'toAddresses' => [$mail],
 			]);
 		}
-		return 'success';
+
+		return ResponseHelper::OutputJSON('success');
 	}
 
 	public function InviteTeacher(\Illuminate\Http\Request $request){
