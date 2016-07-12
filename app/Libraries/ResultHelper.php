@@ -661,20 +661,31 @@ class ResultHelper{
 					$number1_1 = $exNum1[0] * $r->number1_multiplier;
 					$number1_2 = $exNum1[1] * $r->number1_multiplier;
 
+				}else{
+					$number1_1 = '?';
+					$number1_2 = '?';
 				}
+
 				if($r->number2){
 					$exNum2 = explode('/' , $r->number2);
 					$number2_1 = $exNum2[0] * $r->number2_multiplier;
 					$number2_2 = $exNum2[1] * $r->number2_multiplier;
 
+				}else{
+					$number2_1 = '?';
+					$number2_2 = '?';
 				}
+
 				if($r->number3){
 					$exNum3 = explode('/' , $r->number3);
 					$number3_1 = $exNum3[0] * $r->number3_multiplier;
 					$number3_2 = $exNum3[1] * $r->number3_multiplier;
+				}else{
+					$number3_1 = '?';
+					$number3_2 = '?';
 				}
 
-				$question = $number1_1.'/'.$number1_2.' '.$r->operator.' '.$number2_1.'/'.$number2_2;
+				$question = $number1_1.'/'.$number1_2.' '.$r->operator.' '.$number2_1.'/'.$number2_2.' = '.$number3_1.'/'.$number3_2;
 				array_push($answers, [
 					'question' => $question,
 					'difficulty'=>$r->difficulty,
