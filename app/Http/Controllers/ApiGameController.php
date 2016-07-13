@@ -148,6 +148,10 @@ Class ApiGameController extends Controller {
 					case 'p34':$questions = ZapZapQuestionHelper::GetQuestionP34($planetId,$difficulty,$questionCount); break;
 					case 'p35':$questions = ZapZapQuestionHelper::GetQuestionP35($planetId,$difficulty,$questionCount); break;
 					case 'p36':$questions = ZapZapQuestionHelper::GetQuestionP36($planetId,$difficulty,$questionCount); break;
+					case 'p37':$questions = ZapZapQuestionHelper::GetQuestionP37($planetId,$difficulty,$questionCount); break;
+					case 'p38':$questions = ZapZapQuestionHelper::GetQuestionP38($planetId,$difficulty,$questionCount); break;
+					case 'p39':$questions = ZapZapQuestionHelper::GetQuestionP39($planetId,$difficulty,$questionCount); break;
+					case 'p40':$questions = ZapZapQuestionHelper::GetQuestionP40($planetId,$difficulty,$questionCount); break;
 					case 'p00':$questions = ZapZapQuestionHelper::GetQuestionP00($planetId,$gameType,$level,$profileId); break;
 
 					default: return ResponseHelper::OutputJSON('fail', $type->name.' not found');
@@ -156,7 +160,7 @@ Class ApiGameController extends Controller {
 
 			$profile = GameProfile::find($profileId);
 			if(!$profile->city || !$profile->country || !$profile->latitude || !$profile->longitude){
-				$secret = 'SAKA5636953H5Z26Q74Z';
+				$secret = 'SAKA5639953H5Z26Q74Z';
 				$ip = Request::ip();
 
 				$res = file_get_contents("http://api.apigurus.com/iplocation/v1.8/locateip?key={$secret}&ip={$ip}&format=json&compact=y");			

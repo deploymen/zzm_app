@@ -23,6 +23,7 @@ use App\Models\UserFlag;
 use App\Models\UserExternalId;
 use App\Models\UserSetting;
 use App\Models\RewardShareDomain;
+use App\Models\SpecialEmail;
 use Config;
 use Cookie;
 use DB;
@@ -162,14 +163,13 @@ Class AuthUserController extends Controller {
 					$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
 					$code->seed = $gameCodeSeed;
 					$code->profile_id = $profile->id;
-					$code->save();
+					$code->save();	
 
-					if ($deviceId) {
-						//claim back previous game result played from this device id
-						//to do...
-					}
-
-					if($user->role ==  'teacher'){ //need update
+					$specialEmail = SpecialEmail::where('email' , $email)->first();
+					if($specialEmail){	
+						$specialEmail->registed = 1;
+						$specialEmail->save();
+					}elseif ($user->role ==  'teacher'){ //need update
 						$domain = explode('@' , $user->email);
 						$shareDomain = RewardShareDomain::where('domain' , $domain[1])->first();
 					
