@@ -52,3 +52,5 @@ Route::get('weekly-report', 'ApiController@weeklyReport');
 Route::post('user/invite/teacher' , 'ApiController@inviteTeacher');
 
 Route::get('send-in-blue' , 'ApiController@SendInBlue');
+
+Route::get('pay-pal/ipn' , 'PaypalController@InstantPaymentNotification');

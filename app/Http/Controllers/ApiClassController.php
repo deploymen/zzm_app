@@ -23,6 +23,9 @@ Class ApiClassController extends Controller {
 			$userId = Request::input('user_id');
 			$GameClass = GameClass::where('user_id', $userId)->get();
 
+			foreach ($GameClass as $class){
+				$class->paid = ($class->expired_at > date("Y-m-d H:i:s"))?1:0;
+			}
 			return ResponseHelper::OutputJSON('success', '', ['game_class' => $GameClass]);
 
 		} catch (Exception $ex) {
@@ -189,7 +192,7 @@ Class ApiClassController extends Controller {
 		$unlock = 0;
 
 		$class = GameClass::find($classId);
-
+	
 		$profileCount = GameProfile::where('class_id' , $classId)->where('user_id' , $userId)->count();
 		$userFlag = UserFlag::find($userId);
 
@@ -212,6 +215,7 @@ Class ApiClassController extends Controller {
 			'profile_count' => $profileCount,
 			'within_profile_limit' => $profileLimit,
 			'unlock' => $unlock,
+			'paid' => ($class->expired_at > date("Y-m-d H:i:s"))?1:0,
 			]);
 	}
 }

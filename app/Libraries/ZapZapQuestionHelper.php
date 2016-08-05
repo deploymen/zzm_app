@@ -29,6 +29,8 @@ use App\Models\GameResultP00;
 use App\Models\GameResultP01;
 use App\Models\GameResultP02;
 use App\Models\GameResultP03;
+use App\Models\GameResultP04;
+use App\Models\GameResultP05;
 use App\Models\GameResultP06;
 use App\Models\GameResultP07;
 use App\Models\GameResultP08;
@@ -49,6 +51,7 @@ use App\Models\GameResultP22;
 use App\Models\GameResultP23;
 use App\Models\GameResultP24;
 use App\Models\GameResultP25;
+use App\Models\GameResultP26;
 use App\Models\GameResultP27;
 use App\Models\GameResultP28;
 use App\Models\GameResultP29;
@@ -59,6 +62,15 @@ use App\Models\GameResultP33;
 use App\Models\GameResultP34;
 use App\Models\GameResultP35;
 use App\Models\GameResultP36;
+use App\Models\GameResultP37;
+use App\Models\GameResultP38;
+use App\Models\GameResultP39;
+use App\Models\GameResultP40;
+use App\Models\GameResultP41;
+use App\Models\GameResultP42;
+use App\Models\GameResultP43;
+use App\Models\GameResultP44;
+use App\Models\GameResultP45;
 use App\Models\GameQuestion;
 use App\Models\GameQuestionP03;
 use App\Models\GameQuestionP00;
@@ -194,19 +206,17 @@ class ZapZapQuestionHelper{
 
 	public static function GetUserMapV1_1($profileId){
 		try{
-			
+			$profile = GameProfile::find($profileId);
+			$userType = '';
+
 			$sql = "
-				SELECT um.`level`,um.`exp`, um.`top_score` , s.`id` AS `system_id` , s.`name` AS `system_name` ,ss.`id` AS `subsystem_id` ,ss.`name`  AS `subsystem_name` , p.`id` AS `planet_id` , p.`name` AS `planet_name` , p.`description` ,CAST(IFNULL(um.`star`, 0) AS UNSIGNED) AS `star`
-					FROM (`t0122_game_system` s, `t0122_game_system_sub` ss, `t0123_game_planet` p , `t0124_game_system_planet` sp ) 
-						LEFT JOIN `t0501_game_user_map` um 
-							ON(
-								um.`profile_id` = :profileId AND um.`planet_id` = p.`id`
-								)
-				 		WHERE  sp.`planet_id` = p.`id`
-				 			AND sp.`system_id` = s.`id`
-				 			AND sp.`enable` = '1'
-				 			AND sp.`subsystem_id` = ss.`id`
-				 	
+				SELECT um.`level`,um.`exp`, um.`top_score` , sp.`system_id` , s.`name` AS `system_name` ,sp.`subsystem_id` ,ss.`name`  AS `subsystem_name` , sp.`planet_id` , p.`name` AS `planet_name` , p.`description` ,CAST(IFNULL(um.`star`, 0) AS UNSIGNED) AS `star` , sp.`user_type` , sp.`enable`
+					FROM `t0124_game_system_planet` sp
+                     	LEFT JOIN `t0122_game_system_sub` ss ON sp.`subsystem_id` = ss.`id`
+                    	LEFT JOIN `t0123_game_planet` p ON sp.`planet_id` = p.`id`
+						LEFT JOIN `t0501_game_user_map` um ON um.`profile_id` = :profileId AND um.`planet_id` = p.`id`
+						LEFT JOIN `t0122_game_system` s ON sp.`system_id` = s.`id`
+				 		
 				 			ORDER BY sp.`system_id` , sp.`subsystem_id` , sp.`sequence`
 				";
 				
@@ -1602,7 +1612,7 @@ class ZapZapQuestionHelper{
 			}
 
 			shuffle($results);
-
+		
 			if(!$results){
 				return 'question not found';
 			}
@@ -2403,6 +2413,181 @@ class ZapZapQuestionHelper{
 		}
 	}
 
+	public static function GetQuestionP37($planetId,$difficulty,$questionCount){
+		try{
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
+
+			$sql = "
+				SELECT p37.*, qc.`question_id`
+					FROM `t0237_game_question_p37` p37, `t0126_game_planet_question_cache` qc
+                        WHERE qc.`planet_id` = {$planetId}
+                        	AND qc.`difficulty` = {$difficulty}
+                        	AND p37.`id` = qc.`target_id`
+
+                        	ORDER BY RAND() 
+                        	LIMIT {$questionCount}
+			";
+			$result = DB::SELECT($sql);
+
+			$results = [];
+			$prevQuestionId = 0;
+
+			for($i=0; $i<count($result); $i++){
+				$r = $result[$i];
+				if($r->id != $prevQuestionId){
+					array_push($results, [
+						'id' => $r->question_id,
+						'question_rate' => $r->question_rate,
+						'question_target' => $r->question_target,
+						'answer' => $r->answer,
+						'answer_type' => $r->answer_type,
+						'difficulty' => $r->difficulty,
+					]);
+				}
+				
+
+				$prevQuestionId = $r->id;
+			}
+			shuffle($results);
+
+			if(!$results){
+				return 'question not found';
+			}
+
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			return $results;
+
+		}catch(Exception $ex){
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp37', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
+		return false;
+		}
+	}
+
+	public static function GetQuestionP38($planetId,$difficulty,$questionCount){
+		try{
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
+
+			$sql = "
+				SELECT p38.*, qc.`question_id`
+					FROM `t0238_game_question_p38` p38, `t0126_game_planet_question_cache` qc
+                        WHERE qc.`planet_id` = {$planetId}
+                        	AND qc.`difficulty` = {$difficulty}
+                        	AND p38.`id` = qc.`target_id`
+
+                        	ORDER BY RAND() 
+                        	LIMIT {$questionCount}
+			";
+			$result = DB::SELECT($sql);
+
+			$results = [];
+			$prevQuestionId = 0;
+
+			for($i=0; $i<count($result); $i++){
+				$r = $result[$i];
+				if($r->id != $prevQuestionId){
+					array_push($results, [
+						'id' => $r->question_id,
+						'question_option_1' => $r->question_option_1,
+						'question_option_2' => $r->question_option_2,
+						'answer' => $r->answer,
+						'difficulty' => $r->difficulty,
+					]);
+				}
+				
+
+				$prevQuestionId = $r->id;
+			}
+			shuffle($results);
+
+			if(!$results){
+				return 'question not found';
+			}
+
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			return $results;
+
+		}catch(Exception $ex){
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp38', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
+		return false;
+		}
+	}
+
+	public static function GetQuestionP39($planetId,$difficulty,$questionCount){
+		try{
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
+
+			$sql = "
+				SELECT p39.*, qc.`question_id`
+					FROM `t0239_game_question_p39` p39, `t0126_game_planet_question_cache` qc
+                        WHERE qc.`planet_id` = {$planetId}
+                        	AND qc.`difficulty` = {$difficulty}
+                        	AND p39.`id` = qc.`target_id`
+
+                        	ORDER BY RAND() 
+                        	LIMIT {$questionCount}
+			";
+			$result = DB::SELECT($sql);
+
+			$results = [];
+			$prevQuestionId = 0;
+
+			for($i=0; $i<count($result); $i++){
+				$r = $result[$i];
+				if($r->id != $prevQuestionId){
+					array_push($results, [
+						'id' => $r->question_id,
+						'question' => $r->question,
+						'question_unit' => $r->question_unit,
+						'answer' => $r->answer,
+						'difficulty' => $r->difficulty,
+					]);
+				}
+				
+
+				$prevQuestionId = $r->id;
+			}
+			shuffle($results);
+
+			if(!$results){
+				return 'question not found';
+			}
+
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			return $results;
+
+		}catch(Exception $ex){
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp39', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
+		return false;
+		}
+	}
+
 	public static function GetQuestionP40($planetId,$difficulty,$questionCount){
 		try{
 			if(!$questionCount){
@@ -2451,6 +2636,422 @@ class ZapZapQuestionHelper{
 
 		}catch(Exception $ex){
 			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp40', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
+		return false;
+		}
+	}
+
+	public static function GetQuestionP41($planetId,$difficulty,$questionCount){
+		try{
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
+
+			$sql = "
+				SELECT p41.*, qc.`question_id`
+					FROM `t0241_game_question_p41` p41, `t0126_game_planet_question_cache` qc
+                        WHERE qc.`planet_id` = {$planetId}
+                        	AND qc.`difficulty` = {$difficulty}
+                        	AND p41.`id` = qc.`target_id`
+
+                        	ORDER BY RAND() 
+                        	LIMIT {$questionCount}
+			";
+			$result = DB::SELECT($sql);
+
+			$results = [];
+			$prevQuestionId = 0;
+
+			for($i=0; $i<count($result); $i++){
+				$r = $result[$i];
+				if($r->id != $prevQuestionId){
+					array_push($results, [
+						'id' => $r->question_id,
+						'question' => $r->question,
+						'question_divisor' => $r->question_divisor,
+						'answer' => $r->answer,
+						'answer_remainder' => $r->answer_remainder,
+						'difficulty' => $r->difficulty,
+					]);
+				}
+				
+
+				$prevQuestionId = $r->id;
+			}
+			shuffle($results);
+
+			if(!$results){
+				return 'question not found';
+			}
+
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			return $results;
+
+		}catch(Exception $ex){
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp41', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
+		return false;
+		}
+	}
+
+	public static function GetQuestionP42($planetId,$difficulty,$questionCount){
+		try{
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
+
+			$sql = "
+				SELECT p42.*, qc.`question_id`
+					FROM `t0242_game_question_p42` p42, `t0126_game_planet_question_cache` qc
+                        WHERE qc.`planet_id` = {$planetId}
+                        	AND qc.`difficulty` = {$difficulty}
+                        	AND p42.`id` = qc.`target_id`
+
+                        	ORDER BY RAND() 
+                        	LIMIT {$questionCount}
+			";
+			$result = DB::SELECT($sql);
+
+			$results = [];
+			$prevQuestionId = 0;
+
+			for($i=0; $i<count($result); $i++){
+				$r = $result[$i];
+				if($r->id != $prevQuestionId){
+					array_push($results, [
+						'id' => $r->question_id,
+						'question' => $r->question,
+						'answer_option' => $r->answer_option,
+						'answer' => $r->answer,
+						'difficulty' => $r->difficulty,
+					]);
+				}
+				
+
+				$prevQuestionId = $r->id;
+			}
+			shuffle($results);
+
+			if(!$results){
+				return 'question not found';
+			}
+
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			return $results;
+
+		}catch(Exception $ex){
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp42', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
+		return false;
+		}
+	}
+
+	public static function GetQuestionP43($planetId,$difficulty,$questionCount){
+		try{
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
+
+			$sql = "
+				SELECT p43.*, qc.`question_id`
+					FROM `t0243_game_question_p43` p43, `t0126_game_planet_question_cache` qc
+                        WHERE qc.`planet_id` = {$planetId}
+                        	AND qc.`difficulty` = {$difficulty}
+                        	AND p43.`id` = qc.`target_id`
+
+                        	ORDER BY RAND() 
+                        	LIMIT {$questionCount}
+			";
+			$result = DB::SELECT($sql);
+
+			$results = [];
+			$prevQuestionId = 0;
+
+			for($i=0; $i<count($result); $i++){
+				$r = $result[$i];
+				if($r->id != $prevQuestionId){
+					array_push($results, [
+						'id' => $r->question_id,
+						'question' => $r->question,
+						'question_object_1' => $r->question_object_1,
+						'question_object_2' => $r->question_object_2,
+						'answer' => $r->answer,
+						'difficulty' => $r->difficulty,
+					]);
+				}
+				
+
+				$prevQuestionId = $r->id;
+			}
+			shuffle($results);
+
+			if(!$results){
+				return 'question not found';
+			}
+
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			return $results;
+
+		}catch(Exception $ex){
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp43', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
+		return false;
+		}
+	}
+
+	public static function GetQuestionP44($planetId,$difficulty,$questionCount){
+		try{
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
+
+			$sql = "
+				SELECT p44.*, qc.`question_id`
+					FROM `t0244_game_question_p44` p44, `t0126_game_planet_question_cache` qc
+                        WHERE qc.`planet_id` = {$planetId}
+                        	AND qc.`difficulty` = {$difficulty}
+                        	AND p44.`id` = qc.`target_id`
+
+                        	ORDER BY RAND() 
+                        	LIMIT {$questionCount}
+			";
+			$result = DB::SELECT($sql);
+
+			$results = [];
+			$prevQuestionId = 0;
+
+			for($i=0; $i<count($result); $i++){
+				$r = $result[$i];
+				if($r->id != $prevQuestionId){
+					array_push($results, [
+						'id' => $r->question_id,
+						'question' => $r->question,
+						'answer_option_1' => $r->answer_option_1,
+						'answer_option_2' => $r->answer_option_2,
+						'answer_option_3' => $r->answer_option_3,
+						'difficulty' => $r->difficulty,
+					]);
+				}
+				
+
+				$prevQuestionId = $r->id;
+			}
+			shuffle($results);
+
+			if(!$results){
+				return 'question not found';
+			}
+
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			return $results;
+
+		}catch(Exception $ex){
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp44', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
+		return false;
+		}
+	}
+
+	public static function GetQuestionP45($planetId,$difficulty,$questionCount){
+		try{
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
+
+			$sql = "
+				SELECT p45.*, qc.`question_id`
+					FROM `t0245_game_question_p45` p45, `t0126_game_planet_question_cache` qc
+                        WHERE qc.`planet_id` = {$planetId}
+                        	AND qc.`difficulty` = {$difficulty}
+                        	AND p45.`id` = qc.`target_id`
+
+                        	ORDER BY RAND() 
+                        	LIMIT {$questionCount}
+			";
+			$result = DB::SELECT($sql);
+
+			$results = [];
+			$prevQuestionId = 0;
+
+			for($i=0; $i<count($result); $i++){
+				$r = $result[$i];
+				if($r->id != $prevQuestionId){
+					array_push($results, [
+						'id' => $r->question_id,
+						'question' => $r->question,
+						'question_unit' => $r->question_unit,
+						'answer_1' => $r->answer_1,
+						'answer_1_unit' => $r->answer_1_unit,
+						'answer_2' => $r->answer_2,
+						'answer_2_unit' => $r->answer_2_unit,
+						'difficulty' => $r->difficulty,
+					]);
+				}
+				
+
+				$prevQuestionId = $r->id;
+			}
+			shuffle($results);
+
+			if(!$results){
+				return 'question not found';
+			}
+
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			return $results;
+
+		}catch(Exception $ex){
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp45', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
+		return false;
+		}
+	}
+
+	public static function GetQuestionP46($planetId,$difficulty,$questionCount){
+		try{
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
+
+			$sql = "
+				SELECT p46.*, qc.`question_id`
+					FROM `t0246_game_question_p46` p46, `t0126_game_planet_question_cache` qc
+                        WHERE qc.`planet_id` = {$planetId}
+                        	AND qc.`difficulty` = {$difficulty}
+                        	AND p46.`id` = qc.`target_id`
+
+                        	ORDER BY RAND() 
+                        	LIMIT {$questionCount}
+			";
+			$result = DB::SELECT($sql);
+
+			$results = [];
+			$prevQuestionId = 0;
+
+			for($i=0; $i<count($result); $i++){
+				$r = $result[$i];
+				if($r->id != $prevQuestionId){
+					array_push($results, [
+						'id' => $r->question_id,
+						'question' => $r->question,
+						'question_object_1' => $r->question_object_1,
+						'question_object_2' => $r->question_object_2,
+						'answer' => $r->answer,
+						'difficulty' => $r->difficulty,
+					]);
+				}
+				
+
+				$prevQuestionId = $r->id;
+			}
+			shuffle($results);
+
+			if(!$results){
+				return 'question not found';
+			}
+
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			return $results;
+
+		}catch(Exception $ex){
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp46', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
+		return false;
+		}
+	}
+
+	public static function GetQuestionP47($planetId,$difficulty,$questionCount){
+		try{
+			if(!$questionCount){
+				$gamePlanet = GamePlanet::find($planetId);
+				$questionCount = $gamePlanet->question_count;
+			}
+
+			$sql = "
+				SELECT p47.*, qc.`question_id`
+					FROM `t0247_game_question_p47` p47, `t0126_game_planet_question_cache` qc
+                        WHERE qc.`planet_id` = {$planetId}
+                        	AND qc.`difficulty` = {$difficulty}
+                        	AND p47.`id` = qc.`target_id`
+
+                        	ORDER BY RAND() 
+                        	LIMIT {$questionCount}
+			";
+			$result = DB::SELECT($sql);
+
+			$results = [];
+			$prevQuestionId = 0;
+
+			for($i=0; $i<count($result); $i++){
+				$r = $result[$i];
+				if($r->id != $prevQuestionId){
+					array_push($results, [
+						'id' => $r->question_id,
+						'question' => $r->question,
+						'question_multiplier_1' => $r->question_multiplier_1,
+						'question_multiplier_2' => $r->question_multiplier_2,
+						'question_row_1' => $r->question_row_1,
+						'question_row_2' => $r->question_row_2,
+						'answer' => $r->answer,
+						'difficulty' => $r->difficulty,
+					]);
+				}
+				
+
+				$prevQuestionId = $r->id;
+			}
+			shuffle($results);
+
+			if(!$results){
+				return 'question not found';
+			}
+
+			$expiresAt = Carbon::now()->addMinutes(5);
+			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			return $results;
+
+		}catch(Exception $ex){
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp47', [
 				'environment' => json_encode([
 					'message' => $ex->getMessage(),
 					'inputs' => Request::all(),
@@ -3509,7 +4110,7 @@ class ZapZapQuestionHelper{
 				$gameResults->play_id = $gamePlay->id;
 				$gameResults->question_id = $inAnswer['question_id'];
 				$gameResults->target_type = 'p23';
-				$gameResults->target_id = $resultP18->id;
+				$gameResults->target_id = $resultP23->id;
 				$gameResults->game_type_id = '23';
 				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
@@ -3543,7 +4144,7 @@ class ZapZapQuestionHelper{
 				$gameResults->play_id = $gamePlay->id;
 				$gameResults->question_id = $inAnswer['question_id'];
 				$gameResults->target_type = 'p24';
-				$gameResults->target_id = $resultP18->id;
+				$gameResults->target_id = $resultP24->id;
 				$gameResults->game_type_id = '24';
 				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
@@ -3577,7 +4178,7 @@ class ZapZapQuestionHelper{
 				$gameResults->play_id = $gamePlay->id;
 				$gameResults->question_id = $inAnswer['question_id'];
 				$gameResults->target_type = 'p25';
-				$gameResults->target_id = $resultP18->id;
+				$gameResults->target_id = $resultP25->id;
 				$gameResults->game_type_id = '25';
 				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
@@ -3612,7 +4213,7 @@ class ZapZapQuestionHelper{
 				$gameResults->play_id = $gamePlay->id;
 				$gameResults->question_id = $inAnswer['question_id'];
 				$gameResults->target_type = 'p27';
-				$gameResults->target_id = $resultP18->id;
+				$gameResults->target_id = $resultP27->id;
 				$gameResults->game_type_id = '27';
 				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
@@ -3646,7 +4247,7 @@ class ZapZapQuestionHelper{
 				$gameResults->play_id = $gamePlay->id;
 				$gameResults->question_id = $inAnswer['question_id'];
 				$gameResults->target_type = 'p28';
-				$gameResults->target_id = $resultP18->id;
+				$gameResults->target_id = $resultP28->id;
 				$gameResults->game_type_id = '28';
 				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
@@ -3672,8 +4273,7 @@ class ZapZapQuestionHelper{
 				$resultP29 = new GameResultP29;
 				$resultP29->target_type = 'p29';
 				$resultP29->target_id = $question->target_id;
-				$resultP29->answer_x = $inAnswer['answer_x'];
-				$resultP29->answer_y = $inAnswer['answer_y'];
+				$resultP29->answer = $inAnswer['answer'];
 				$resultP29->correct = $inAnswer['correct'];
 				$resultP29->save();
 
@@ -3707,8 +4307,7 @@ class ZapZapQuestionHelper{
 				$resultP30 = new GameResultP30;
 				$resultP30->target_type = 'p30';
 				$resultP30->target_id = $question->target_id;
-				$resultP30->answer_x = $inAnswer['answer_x'];
-				$resultP30->answer_y = $inAnswer['answer_y'];
+				$resultP30->answer = $inAnswer['answer'];
 				$resultP30->correct = $inAnswer['correct'];
 				$resultP30->save();
 
@@ -3716,7 +4315,7 @@ class ZapZapQuestionHelper{
 				$gameResults->play_id = $gamePlay->id;
 				$gameResults->question_id = $inAnswer['question_id'];
 				$gameResults->target_type = 'p30';
-				$gameResults->target_id = $resultP18->id;
+				$gameResults->target_id = $resultP30->id;
 				$gameResults->game_type_id = '30';
 				$gameResults->correct = $inAnswer['correct'];
 				$gameResults->save();
@@ -3742,8 +4341,7 @@ class ZapZapQuestionHelper{
 				$resultP31 = new GameResultP31;
 				$resultP31->target_type = 'p31';
 				$resultP31->target_id = $question->target_id;
-				$resultP31->answer_x = $inAnswer['answer_x'];
-				$resultP31->answer_y = $inAnswer['answer_y'];
+				$resultP31->answer = $inAnswer['answer'];
 				$resultP31->correct = $inAnswer['correct'];
 				$resultP31->save();
 
@@ -3777,8 +4375,7 @@ class ZapZapQuestionHelper{
 				$resultP32 = new GameResultP32;
 				$resultP32->target_type = 'p32';
 				$resultP32->target_id = $question->target_id;
-				$resultP32->answer_x = $inAnswer['answer_x'];
-				$resultP32->answer_y = $inAnswer['answer_y'];
+				$resultP32->answer = $inAnswer['answer'];
 				$resultP32->correct = $inAnswer['correct'];
 				$resultP32->save();
 
@@ -3812,8 +4409,7 @@ class ZapZapQuestionHelper{
 				$resultP33 = new GameResultP33;
 				$resultP33->target_type = 'p33';
 				$resultP33->target_id = $question->target_id;
-				$resultP33->answer_x = $inAnswer['answer_x'];
-				$resultP33->answer_y = $inAnswer['answer_y'];
+				$resultP33->answer = $inAnswer['answer'];
 				$resultP33->correct = $inAnswer['correct'];
 				$resultP33->save();
 
@@ -3847,8 +4443,7 @@ class ZapZapQuestionHelper{
 				$resultP34 = new GameResultP34;
 				$resultP34->target_type = 'p34';
 				$resultP34->target_id = $question->target_id;
-				$resultP34->answer_x = $inAnswer['answer_x'];
-				$resultP34->answer_y = $inAnswer['answer_y'];
+				$resultP34->answer = $inAnswer['answer'];
 				$resultP34->correct = $inAnswer['correct'];
 				$resultP34->save();
 
@@ -3882,8 +4477,7 @@ class ZapZapQuestionHelper{
 				$resultP35 = new GameResultP35;
 				$resultP35->target_type = 'p35';
 				$resultP35->target_id = $question->target_id;
-				$resultP35->answer_x = $inAnswer['answer_x'];
-				$resultP35->answer_y = $inAnswer['answer_y'];
+				$resultP35->answer = $inAnswer['answer'];
 				$resultP35->correct = $inAnswer['correct'];
 				$resultP35->save();
 
@@ -3917,8 +4511,7 @@ class ZapZapQuestionHelper{
 				$resultP36 = new GameResultP36;
 				$resultP36->target_type = 'p36';
 				$resultP36->target_id = $question->target_id;
-				$resultP36->answer_x = $inAnswer['answer_x'];
-				$resultP36->answer_y = $inAnswer['answer_y'];
+				$resultP36->answer = $inAnswer['answer'];
 				$resultP36->correct = $inAnswer['correct'];
 				$resultP36->save();
 
@@ -3934,6 +4527,338 @@ class ZapZapQuestionHelper{
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP36', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
+		}
+	}
+
+	public static function submitResultP37($planetId,$gamePlay ,$gameResult,$profileId ) {
+		try{
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				$resultP37 = new GameResultP37;
+				$resultP37->target_type = 'p37';
+				$resultP37->target_id = $question->target_id;
+				$resultP37->answer = $inAnswer['answer'];
+				$resultP37->correct = $inAnswer['correct'];
+				$resultP37->save();
+
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p37';
+				$gameResults->target_id = $resultP37->id;
+				$gameResults->game_type_id = '37';
+				$gameResults->correct = $inAnswer['correct'];
+				$gameResults->save();
+			}	
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP37', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
+		}
+	}
+	public static function submitResultP38($planetId,$gamePlay ,$gameResult,$profileId ) {
+		try{
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				$resultP38 = new GameResultP38;
+				$resultP38->target_type = 'p38';
+				$resultP38->target_id = $question->target_id;
+				$resultP38->answer = $inAnswer['answer'];
+				$resultP38->correct = $inAnswer['correct'];
+				$resultP38->save();
+
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p38';
+				$gameResults->target_id = $resultP38->id;
+				$gameResults->game_type_id = '38';
+				$gameResults->correct = $inAnswer['correct'];
+				$gameResults->save();
+			}	
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP38', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
+		}
+	}
+	public static function submitResultP39($planetId,$gamePlay ,$gameResult,$profileId ) {
+		try{
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				$resultP39 = new GameResultP39;
+				$resultP39->target_type = 'p39';
+				$resultP39->target_id = $question->target_id;
+				$resultP39->answer = $inAnswer['answer'];
+				$resultP39->correct = $inAnswer['correct'];
+				$resultP39->save();
+
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p39';
+				$gameResults->target_id = $resultP39->id;
+				$gameResults->game_type_id = '39';
+				$gameResults->correct = $inAnswer['correct'];
+				$gameResults->save();
+			}	
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP39', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
+		}
+	}
+	public static function submitResultP40($planetId,$gamePlay ,$gameResult,$profileId ) {
+		try{
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				$resultP40 = new GameResultP40;
+				$resultP40->target_type = 'p40';
+				$resultP40->target_id = $question->target_id;
+				$resultP40->answer = $inAnswer['answer'];
+				$resultP40->correct = $inAnswer['correct'];
+				$resultP40->save();
+
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p40';
+				$gameResults->target_id = $resultP40->id;
+				$gameResults->game_type_id = '40';
+				$gameResults->correct = $inAnswer['correct'];
+				$gameResults->save();
+			}	
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP40', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
+		}
+	}
+	public static function submitResultP41($planetId,$gamePlay ,$gameResult,$profileId ) {
+		try{
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				$resultP41 = new GameResultP41;
+				$resultP41->target_type = 'p41';
+				$resultP41->target_id = $question->target_id;
+				$resultP41->answer = $inAnswer['answer'];
+				$resultP41->correct = $inAnswer['correct'];
+				$resultP41->save();
+
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p41';
+				$gameResults->target_id = $resultP41->id;
+				$gameResults->game_type_id = '41';
+				$gameResults->correct = $inAnswer['correct'];
+				$gameResults->save();
+			}	
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP41', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
+		}
+	}
+	public static function submitResultP42($planetId,$gamePlay ,$gameResult,$profileId ) {
+		try{
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				$resultP42 = new GameResultP42;
+				$resultP42->target_type = 'p42';
+				$resultP42->target_id = $question->target_id;
+				$resultP42->answer = $inAnswer['answer'];
+				$resultP42->correct = $inAnswer['correct'];
+				$resultP42->save();
+
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p42';
+				$gameResults->target_id = $resultP42->id;
+				$gameResults->game_type_id = '42';
+				$gameResults->correct = $inAnswer['correct'];
+				$gameResults->save();
+			}	
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP42', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
+		}
+	}
+	public static function submitResultP43($planetId,$gamePlay ,$gameResult,$profileId ) {
+		try{
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				$resultP43 = new GameResultP43;
+				$resultP43->target_type = 'p43';
+				$resultP43->target_id = $question->target_id;
+				$resultP43->answer = $inAnswer['answer'];
+				$resultP43->correct = $inAnswer['correct'];
+				$resultP43->save();
+
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p43';
+				$gameResults->target_id = $resultP43->id;
+				$gameResults->game_type_id = '43';
+				$gameResults->correct = $inAnswer['correct'];
+				$gameResults->save();
+			}	
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP43', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
+		}
+	}
+	public static function submitResultP44($planetId,$gamePlay ,$gameResult,$profileId ) {
+		try{
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				$resultP44 = new GameResultP44;
+				$resultP44->target_type = 'p44';
+				$resultP44->target_id = $question->target_id;
+				$resultP44->answer = $inAnswer['answer'];
+				$resultP44->correct = $inAnswer['correct'];
+				$resultP44->save();
+
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p44';
+				$gameResults->target_id = $resultP44->id;
+				$gameResults->game_type_id = '44';
+				$gameResults->correct = $inAnswer['correct'];
+				$gameResults->save();
+			}	
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP44', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
+		}
+	}
+	public static function submitResultP45($planetId,$gamePlay ,$gameResult,$profileId ) {
+		try{
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				$resultP45 = new GameResultP45;
+				$resultP45->target_type = 'p45';
+				$resultP45->target_id = $question->target_id;
+				$resultP45->answer = $inAnswer['answer'];
+				$resultP45->correct = $inAnswer['correct'];
+				$resultP45->save();
+
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p45';
+				$gameResults->target_id = $resultP45->id;
+				$gameResults->game_type_id = '45';
+				$gameResults->correct = $inAnswer['correct'];
+				$gameResults->save();
+			}	
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP45', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
+		}
+	}
+
+	public static function submitResultP46($planetId,$gamePlay ,$gameResult,$profileId ) {
+		try{
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				$resultP46 = new GameResultP46;
+				$resultP46->target_type = 'p46';
+				$resultP46->target_id = $question->target_id;
+				$resultP46->answer = $inAnswer['answer'];
+				$resultP46->correct = $inAnswer['correct'];
+				$resultP46->save();
+
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p46';
+				$gameResults->target_id = $resultP46->id;
+				$gameResults->game_type_id = '46';
+				$gameResults->correct = $inAnswer['correct'];
+				$gameResults->save();
+			}	
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP46', [
 					'environment' => json_encode([
 						'message' => $ex->getMessage(),
 						'inputs' => Request::all(),

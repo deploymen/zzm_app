@@ -103,7 +103,7 @@ class ApiProfileHelper{
 		$sql = "
 			 SELECT t1.* , t3.`total_played` 
 			 	FROM (
-			 		SELECT profile.`id` AS `profile_id` , play.`created_at` ,play.`score` , play.`planet_id` , play.`played_time` AS `last_played_time`
+			 		SELECT profile.`id` AS `profile_id` , play.`created_at` ,play.`score` , play.`planet_id` , play.`played_time` AS `last_played_time` , IF(profile.`expired_at` > NOW()  , 1, 0) AS `paid`
 			    		FROM `t0111_game_profile` profile
 							LEFT JOIN `t0400_game_play` play ON (play.`profile_id` = profile.`id` AND play.`user_id` = {$userId} )
 							LEFT JOIN `t0400_game_play` play2 ON (play2.`profile_id` = profile.`id` AND play2.`user_id` = {$userId} AND play2.`created_at` > play.`created_at`)
@@ -194,10 +194,8 @@ class ApiProfileHelper{
 					'total_correct' => $totalCorrect,
 					'total_played_time' => $totalPlayed,
 					'accuracy' => $percentage,
-				]
-				
-				
-	
+				],
+				'paid' => $lp->paid
 
 			]);
 		}

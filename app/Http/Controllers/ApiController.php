@@ -14,6 +14,7 @@ use App\Libraries\ZapZapHelper;
 use App\Libraries\EmailHelper;
 use App\Libraries\ResponseHelper;
 use App\Libraries\DatabaseUtilHelper;
+use App\Libraries\ApiProfileHelper;
 use Sendinblue\Mailin;
 
 use App\Models;
@@ -230,7 +231,7 @@ class ApiController extends Controller {
 
 	public function weeklyReport(){
 		$email = User::where('activated', 1)->select('id' , 'role', 'email')->get();
-
+	
 		for($j=0; $j<count($email); $j++){
 			$e = $email[$j];
 			$mail = $email[$j]->email;
@@ -239,6 +240,8 @@ class ApiController extends Controller {
 				continue;
 			}
 
+			$profileInfo = ApiProfileHelper::GetProfile($e->id , 0);
+		
 			if($e->role == 'parent'){
 				$profile = GameProfile::where('user_id' , $e->id);
 
@@ -253,16 +256,13 @@ class ApiController extends Controller {
 			}
 
 			$sql = "
-				SELECT p.`profile_id`, pr.`first_name` , pr.`last_name`, c.`code`,SEC_TO_TIME(SUM(p.`played_time`)) AS `total_played`, count(DISTINCT  DATE_FORMAT(p.`created_at`,'%m-%d-%Y')) AS `days` , count(r.`id`) AS `total_answered` , ((count(r2.`correct`) / count(r.`id`)) * 100) AS `percentage`
-					FROM `t0400_game_play` p, `t0111_game_profile` pr, `t0113_game_code` c, `t0300_game_result` r 
+				SELECT SEC_TO_TIME(SUM(p.`played_time`)) AS `total_played`, count(DISTINCT  DATE_FORMAT(p.`created_at`,'%m-%d-%Y')) AS `days` , count(r.`id`) AS `total_answered` , ((count(r2.`correct`) / count(r.`id`)) * 100) AS `percentage`
+					FROM `t0400_game_play` p, `t0300_game_result` r 
 					LEFT JOIN `t0300_game_result` r2 ON r2.`id` = r.`id` AND r2.`correct` = 1
 						WHERE p.`user_id` = {$e->id}
 						AND r.`play_id` = p.`id`
 						AND p.`created_at` > (NOW() - INTERVAL 7 DAY)
-						AND pr.`id` = p.`profile_id`
-						AND pr.`deleted_at` IS NULL
-						AND c.`profile_id` = pr.`id`
-						GROUP BY p.`profile_id`
+						GROUP BY `user_id`
 
 			";
 
@@ -272,10 +272,32 @@ class ApiController extends Controller {
 				continue;
 			}
 
+			$result = $results[0];
+
+			$time = explode(':' , $result->total_played);
+			$percentage = explode('.', $result->percentage);
+
 			$edmHtml = (string) view('emails.weekly-report', [ 
-				'results' => $results,
-				'zzm_url' => config('app.website_url'),
-				'social_media_links' => config('app.fanpage_url'),
+				'coc' => $coc,
+				'hour' => $time[0],
+				'minute' => $time[1],
+				'days' => $result->days,
+				'total_answered' => $result->total_answered,
+				'percentage' => $percentage[0],
+				'zapzapmath_portal' => config('app.website_url') . '/user/app#/',
+
+				'school' => $profileInfo[0]['school'],
+				'game_code' => $profileInfo[0]['game_code']['code'],
+				'grade' => $profileInfo[0]['grade'],
+				'total_star' => $profileInfo[0]['total_star'],
+				'last_planet_name' => $profileInfo[0]['last_played']['last_planet_name'],
+				'last_played_date' => $profileInfo[0]['last_played']['last_played'],
+				'last_played_time' => $profileInfo[0]['last_played']['last_played_time'],
+
+				'accuracy' => $profileInfo[0]['last_session']['accuracy'],
+				'total_played_time' => $profileInfo[0]['last_session']['total_played_time'],
+				'total_answered_last' => $profileInfo[0]['last_session']['total_answered'],
+				'total_correct' => $profileInfo[0]['last_session']['total_correct'],
 			]);
 
 			EmailHelper::SendEmail([
@@ -288,6 +310,7 @@ class ApiController extends Controller {
 		}
 
 		return ResponseHelper::OutputJSON('success');
+		
 	}
 
 	public function InviteTeacher(\Illuminate\Http\Request $request){
