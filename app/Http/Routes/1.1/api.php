@@ -53,4 +53,4 @@ Route::post('user/invite/teacher' , 'ApiController@inviteTeacher');
 
 Route::get('send-in-blue' , 'ApiController@SendInBlue');
 
-Route::get('pay-pal/ipn' , 'PaypalController@InstantPaymentNotification');
+Route::any('pay-pal/ipn' , 'PaypalController@InstantPaymentNotification');

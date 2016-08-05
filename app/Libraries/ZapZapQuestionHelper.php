@@ -71,6 +71,7 @@ use App\Models\GameResultP42;
 use App\Models\GameResultP43;
 use App\Models\GameResultP44;
 use App\Models\GameResultP45;
+use App\Models\GameResultP46;
 use App\Models\GameQuestion;
 use App\Models\GameQuestionP03;
 use App\Models\GameQuestionP00;

@@ -65,12 +65,12 @@ Class ApiGameController extends Controller {
 			}
 
 			// get planet info
-			if (Cache::has('ApiGameController@request('.$planetId.')') ) {
+			// if (Cache::has('ApiGameController@request('.$planetId.')') ) {
 
-				$planet = Cache::get('ApiGameController@request('.$planetId.')');
+				// $planet = Cache::get('ApiGameController@request('.$planetId.')');
 
 
-			}else{
+			// }else{
 				$planet = GamePlanet::find($planetId);
 
 				if(!$planet){
@@ -79,7 +79,7 @@ Class ApiGameController extends Controller {
 
 			    $expiresAt = Carbon::now()->addMinutes(60);
 				Cache::put('ApiGameController@request('.$planetId.')', $planet , $expiresAt);
-			}
+			// }
 
 			if(!$planet->available){
 				Cache::forget('ApiGameController@request('.$planetId.')');
@@ -108,13 +108,13 @@ Class ApiGameController extends Controller {
 
 			$level = $userMap->level;
 
-			if ( Cache::has('ApiGameController@request('.$planetId.','.$difficulty.')') ){
+			// if ( Cache::has('ApiGameController@request('.$planetId.','.$difficulty.')') ){
 
-				$questions = Cache::get('ApiGameController@request('.$planetId.','.$difficulty.')');
-			}else{
+				// $questions = Cache::get('ApiGameController@request('.$planetId.','.$difficulty.')');
+			// }else{
 				
 				$type = GameType::find($planet->game_type_id);
-
+				
 				switch($type->name){
 					case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId,$difficulty,$questionCount , $language); break;
 					case 'p02':$questions = ZapZapQuestionHelper::GetQuestionP02($planetId,$difficulty,$questionCount); break;
@@ -164,7 +164,7 @@ Class ApiGameController extends Controller {
 
 					default: return ResponseHelper::OutputJSON('fail', $type->name.' not found');
 				}	
-			}
+			// }
 
 			$profile = GameProfile::find($profileId);
 			if(!$profile->city || !$profile->country || !$profile->latitude || !$profile->longitude){
@@ -559,6 +559,7 @@ Class ApiGameController extends Controller {
 				case 'p43': $status = ZapZapQuestionHelper::SubmitResultP43($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p44': $status = ZapZapQuestionHelper::SubmitResultP44($planetId,$gamePlay,$gameResult,$profileId); break;
 				case 'p45': $status = ZapZapQuestionHelper::SubmitResultP45($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p46': $status = ZapZapQuestionHelper::SubmitResultP46($planetId,$gamePlay,$gameResult,$profileId); break;
 				
 
 				default: return ResponseHelper::OutputJSON('fail', 'submit answer error');

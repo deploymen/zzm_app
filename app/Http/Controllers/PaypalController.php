@@ -1,16 +1,19 @@
 <?php namespace App\Http\Controllers;
+
 use DB;
 use Models;
 use Libraries;
 use Models\Plugins\SportsBet as SportsBet;
 use TesseractOCR;
+use Config;
+use App\Models\Paypal;
 
 class PaypalController extends Controller {
 
 	public function InstantPaymentNotification(){
+
 		$debug = Config::get('app.debug');
 		$sandbox = 1;
-		$logFile = Config::get('app.paypal_log');
 
 		$raw_post_data = file_get_contents('php://input');
 		$raw_post_array = explode('&', $raw_post_data);
@@ -20,7 +23,7 @@ class PaypalController extends Controller {
 			if (count($keyval) == 2)
 				$myPost[$keyval[0]] = urldecode($keyval[1]);
 		}
-		
+
 		$req = 'cmd=_notify-validate';
 		if(function_exists('get_magic_quotes_gpc')) {
 			$get_magic_quotes_exists = true;
@@ -37,6 +40,7 @@ class PaypalController extends Controller {
 		if($sandbox == true) {
 			$paypal_url = "https://www.sandbox.paypal.com/cgi-bin/webscr";
 		} else {
+
 			$paypal_url = "https://www.paypal.com/cgi-bin/webscr";
 		}
 		$ch = curl_init($paypal_url);
@@ -64,14 +68,24 @@ class PaypalController extends Controller {
 		if (curl_errno($ch) != 0) // cURL error
 		{
 			if($debug == true) {	
-				error_log(date('[Y-m-d H:i e] '). "Can't connect to PayPal to validate IPN message: " . curl_error($ch) . PHP_EOL, 3, LOG_FILE);
+				$errorLog = new Paypal;
+				$errorLog->email = 'developer@zzm.com';
+				$errorLog->COL_1 = "Can't connect to PayPal to validate IPN message:"  . curl_error($ch) . PHP_EOL;
+				$errorLog->save();
+
+				
+
 			}
 			curl_close($ch);
 			exit;
 		} else {	
 			if($debug == true) {
-				error_log(date('[Y-m-d H:i e] '). "HTTP request of validation request:". curl_getinfo($ch, CURLINFO_HEADER_OUT) ." for IPN payload: $req" . PHP_EOL, 3, LOG_FILE);
-				error_log(date('[Y-m-d H:i e] '). "HTTP response of validation request: $res" . PHP_EOL, 3, LOG_FILE);
+				$errorLog = new Paypal;
+				$errorLog->email = 'developer@zzm.com';
+				$errorLog->COL_1 = "HTTP request of validation request:". curl_getinfo($ch, CURLINFO_HEADER_OUT) ." for IPN payload: $req" . PHP_EOL;
+				$errorLog->COL_2 = "HTTP response of validation request: $res" . PHP_EOL;
+				$errorLog->save();
+
 			}
 			curl_close($ch);
 		}
@@ -80,14 +94,27 @@ class PaypalController extends Controller {
 		$res = trim(end($tokens));
 		if (strcmp ($res, "VERIFIED") == 0) {
 
+			// $paypal = new Paypal;
+			// $paypal->email = $_POST['payer_email'];
+			// $paypal->COL_1 = $_POST['item_name'];
+			// $paypal->COL_2 = $_POST['payment_status'];
+			// $paypal->COL_3 = $_POST['mc_currency'];
+			// $paypal->save();
+
 			if($debug == true) {
-				error_log(date('[Y-m-d H:i e] '). "Verified IPN: $req ". PHP_EOL, 3, LOG_FILE);
+				$errorLog = new Paypal;
+				$errorLog->email = 'developer@zzm.com';
+				$errorLog->COL_1 = "Verified IPN: $req ". PHP_EOL;
+				$errorLog->save();
 			}
 
 		} else if (strcmp ($res, "INVALID") == 0) {
 
 			if($debug == true) {
-				error_log(date('[Y-m-d H:i e] '). "Invalid IPN: $req" . PHP_EOL, 3, LOG_FILE);
+				$errorLog = new Paypal;
+				$errorLog->email = 'developer@zzm.com';
+				$errorLog->COL_1 = "Invalid IPN: $req" . PHP_EOL;
+				$errorLog->save();
 			}
 		}
 	}
