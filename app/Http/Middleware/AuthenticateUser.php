@@ -65,6 +65,7 @@ class AuthenticateUser {
 		$inputs['user_id'] = $user->id;
 		$inputs['user_name'] = $user->name;
 		$inputs['user_role'] = $user->role;
+		$inputs['user_email'] = $user->email;
 
 		Request::replace($inputs);
 

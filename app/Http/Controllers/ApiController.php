@@ -16,6 +16,8 @@ use App\Libraries\ZapZapHelper;
 use App\Libraries\EmailHelper;
 use App\Libraries\ResponseHelper;
 use App\Libraries\DatabaseUtilHelper;
+use App\Libraries\ApiProfileHelper;
+use Sendinblue\Mailin;
 
 use App\Models;
 use App\Models\Subscribe;
@@ -23,6 +25,7 @@ use App\Models\LaunchNotification;
 use App\Models\AppVersion;
 use App\Models\User;
 use App\Models\GameProfile;
+
 
 class ApiController extends Controller {
 
@@ -230,7 +233,7 @@ class ApiController extends Controller {
 
 	public function weeklyReport(){
 		$email = User::where('activated', 1)->select('id' , 'role', 'email')->get();
-
+	
 		for($j=0; $j<count($email); $j++){
 			$e = $email[$j];
 			$mail = $email[$j]->email;
@@ -239,6 +242,8 @@ class ApiController extends Controller {
 				continue;
 			}
 
+			$profileInfo = ApiProfileHelper::GetProfile($e->id , 0);
+		
 			if($e->role == 'parent'){
 				$profile = GameProfile::where('user_id' , $e->id);
 
@@ -281,9 +286,20 @@ class ApiController extends Controller {
 				'days' => $result->days,
 				'total_answered' => $result->total_answered,
 				'percentage' => $percentage[0],
-				'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
-				'zzm_url' => config('app.website_url'),
-				'social_media_links' => config('app.fanpage_url'),
+				'zapzapmath_portal' => config('app.website_url') . '/user/app#/',
+
+				'school' => $profileInfo[0]['school'],
+				'game_code' => $profileInfo[0]['game_code']['code'],
+				'grade' => $profileInfo[0]['grade'],
+				'total_star' => $profileInfo[0]['total_star'],
+				'last_planet_name' => $profileInfo[0]['last_played']['last_planet_name'],
+				'last_played_date' => $profileInfo[0]['last_played']['last_played'],
+				'last_played_time' => $profileInfo[0]['last_played']['last_played_time'],
+
+				'accuracy' => $profileInfo[0]['last_session']['accuracy'],
+				'total_played_time' => $profileInfo[0]['last_session']['total_played_time'],
+				'total_answered_last' => $profileInfo[0]['last_session']['total_answered'],
+				'total_correct' => $profileInfo[0]['last_session']['total_correct'],
 			]);
 
 			EmailHelper::SendEmail([
@@ -349,76 +365,19 @@ class ApiController extends Controller {
 			$success = $success+1;
 		}
 
-		return ResponseHelper::OutputJSON('success','' , ['sent' => $success]);
-
+		return ResponseHelper::OutputJSON('success');
 	}
 
-	public function MostActiveList() {
-
-		try{
-			$today = date("m-d-y");
-			$sql = "
-				SELECT u.`role` , u.`name` , u.`city` AS `user_city` , u.`email` , p.`code` , pr.`id` AS `profile_id` , pr.`first_name` , pr.`age`, pr.`school`, pr.`grade`, pr.`city` AS `profile_city`, pr.`country` , count(p.`id`) AS `rount_play`
-					FROM `t0400_game_play` p , `t0101_user` u , `t0111_game_profile` pr
-				    	WHERE p.`created_at` > (NOW() - INTERVAL 7 DAY)
-				        	AND p.`user_id` = u.`id`
-				            AND p.`profile_id` = pr.`id`
-				        GROUP BY p.`code`
-				        ORDER BY `rount_play` DESC
-				        LIMIT 50
-			";
-
-			$results = DB::SELECT($sql);
-
-			$objPHPExcel = new PHPExcel(); 
-			$objPHPExcel->setActiveSheetIndex(0); 
-		
-			$rowCount = 1; 
-			$objPHPExcel->getActiveSheet()->SetCellValue('A'.$rowCount,'role');
-			$objPHPExcel->getActiveSheet()->SetCellValue('B'.$rowCount,'user name');
-			$objPHPExcel->getActiveSheet()->SetCellValue('C'.$rowCount,'city');
-			$objPHPExcel->getActiveSheet()->SetCellValue('D'.$rowCount,'e-mail');
-			$objPHPExcel->getActiveSheet()->SetCellValue('E'.$rowCount,'status');
-			$objPHPExcel->getActiveSheet()->SetCellValue('F'.$rowCount,'game-code');
-			$objPHPExcel->getActiveSheet()->SetCellValue('G'.$rowCount,'profile id');
-			$objPHPExcel->getActiveSheet()->SetCellValue('H'.$rowCount,'student name');
-			$objPHPExcel->getActiveSheet()->SetCellValue('I'.$rowCount,'age');
-			$objPHPExcel->getActiveSheet()->SetCellValue('J'.$rowCount,'school');
-			$objPHPExcel->getActiveSheet()->SetCellValue('K'.$rowCount,'grade');
-			$objPHPExcel->getActiveSheet()->SetCellValue('L'.$rowCount,'city');
-			$objPHPExcel->getActiveSheet()->SetCellValue('M'.$rowCount,'country');
-			$objPHPExcel->getActiveSheet()->SetCellValue('N'.$rowCount,'round of games played');
-			
-			
-			for($i=0; $i<count($results); $i++){
-				$da = $results[$i];
-
-				$objPHPExcel->getActiveSheet()->setCellValue('A'.(2+$i), $da->role);
-				$objPHPExcel->getActiveSheet()->setCellValue('B'.(2+$i), $da->name);
-				$objPHPExcel->getActiveSheet()->setCellValue('C'.(2+$i), $da->user_city);
-				$objPHPExcel->getActiveSheet()->setCellValue('D'.(2+$i), $da->email);
-				$objPHPExcel->getActiveSheet()->setCellValue('F'.(2+$i), $da->code);
-				$objPHPExcel->getActiveSheet()->setCellValue('G'.(2+$i), $da->profile_id);
-				$objPHPExcel->getActiveSheet()->setCellValue('H'.(2+$i), $da->first_name);
-				$objPHPExcel->getActiveSheet()->setCellValue('I'.(2+$i), $da->age);
-				$objPHPExcel->getActiveSheet()->setCellValue('J'.(2+$i), $da->school);
-				$objPHPExcel->getActiveSheet()->setCellValue('K'.(2+$i), $da->grade);
-				$objPHPExcel->getActiveSheet()->setCellValue('L'.(2+$i), $da->profile_city);
-				$objPHPExcel->getActiveSheet()->setCellValue('M'.(2+$i), $da->country);
-				$objPHPExcel->getActiveSheet()->setCellValue('N'.(2+$i), $da->rount_play);
+	public function SendInBlue(){
+		$mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
 	
-			}
-				
+	    $data = array( "email" => "example@example.com",
+	        "attributes" => ["NAME"=>"wz test", "SURNAME"=>""],
+	        "listid" => [6],
+	        "listid_unlink" => []
+	    );
 
-			$obj_Writer = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-			$obj_Writer->save('/var/www/weekly-report/'.$today.'.xlsx');
-	
-			return Libraries\ResponseHelper::OutputJSON('success');
-		} catch (\Exception $ex) {
-			Libraries\LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => \Request::all(),
-			])]);
-			return Libraries\ResponseHelper::OutputJSON('exception');
-		}	
+	    var_export($mailin->create_update_user($data));
 	}
+	
 }

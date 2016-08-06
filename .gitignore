@@ -6,7 +6,6 @@
 /public/node_modules
 /public/package/
 /database/backup
-composer.lock
 .env*
 *.log
 *.sql

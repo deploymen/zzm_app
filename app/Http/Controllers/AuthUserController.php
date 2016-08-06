@@ -23,6 +23,7 @@ use App\Models\UserFlag;
 use App\Models\UserExternalId;
 use App\Models\UserSetting;
 use App\Models\RewardShareDomain;
+use App\Models\SpecialEmail;
 use Config;
 use Cookie;
 use DB;
@@ -132,7 +133,7 @@ Class AuthUserController extends Controller {
 						$gameClass->name = 'Default Class';
 						$gameClass->save();
 
-						$userFlag->profile_limit = 100;
+						$userFlag->profile_limit = 3;
 						$userFlag->class_limit = 50;
 						$userFlag->save();
 
@@ -162,14 +163,13 @@ Class AuthUserController extends Controller {
 					$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
 					$code->seed = $gameCodeSeed;
 					$code->profile_id = $profile->id;
-					$code->save();
+					$code->save();	
 
-					if ($deviceId) {
-						//claim back previous game result played from this device id
-						//to do...
-					}
-
-					if($user->role ==  'teacher'){ //need update
+					$specialEmail = SpecialEmail::where('email' , $email)->first();
+					if($specialEmail){	
+						$specialEmail->registed = 1;
+						$specialEmail->save();
+					}elseif ($user->role ==  'teacher'){ //need update
 						$domain = explode('@' , $user->email);
 						$shareDomain = RewardShareDomain::where('domain' , $domain[1])->first();
 					
@@ -455,7 +455,7 @@ Class AuthUserController extends Controller {
 					    ];
 		
 				    $mailin->create_update_user($data);
-					
+
 					//job done - log it!
 					DatabaseUtilHelper::LogInsert($user->id, $user->table, $user->id);
 					DatabaseUtilHelper::LogInsert($user->id, $access->table, $user->id);
@@ -1099,6 +1099,7 @@ Class AuthUserController extends Controller {
 	 *
 	 * @return Response
 	 */
+
 	public function handleProviderCallback() {
 		$error = Request::input('error');
 
@@ -1242,7 +1243,7 @@ Class AuthUserController extends Controller {
 		    ];
 
 		$mailin->create_update_user($data);
-		
+
 		$firstLogin = 1;
 
 		$cookie = Cookie::make('access_token', $userAccess->access_token);
