@@ -32,6 +32,7 @@ use Request;
 use Session;
 use Socialite;
 use GuzzleHttp\Client;
+use Sendinblue\Mailin;
 
 Class AuthUserController extends Controller {
 
@@ -87,7 +88,7 @@ Class AuthUserController extends Controller {
 			return ResponseHelper::OutputJSON('fail', "email used");
 		}
 
-		// try {	
+		try {	
 			// DB::transaction(function ()
 				 // use ($role, $username, $password_sha1, $name, $email, $country, $deviceId, $accessToken, $classId) {
 
@@ -131,13 +132,13 @@ Class AuthUserController extends Controller {
 						$gameClass->name = 'Default Class';
 						$gameClass->save();
 
-						$userFlag->profile_limit = Config::get('app.teacher_profile_limit');
-						$userFlag->class_limit = Config::get('app.teacher_class_limit');
+						$userFlag->profile_limit = 100;
+						$userFlag->class_limit = 50;
 						$userFlag->save();
 
 						$classId = $gameClass->id;
 					}else{
-						$userFlag->profile_limit = Config::get('app.parent_profile_limit');
+						$userFlag->profile_limit = 1;
 						$userFlag->class_limit = 0;
 						$userFlag->save();
 					}
@@ -239,6 +240,7 @@ Class AuthUserController extends Controller {
 										FROM(
 											SELECT SUBSTRING_INDEX(`email`,'@', -1) AS `domain` , count(*) AS `count`
 												FROM `t0101_user` 
+												WHERE `deleted_at` IS NULL
 												GROUP BY `domain`
 											) a
 										WHERE a.`domain` = :domain
@@ -256,6 +258,7 @@ Class AuthUserController extends Controller {
 										                        SELECT `id`,  SUBSTRING_INDEX(`email`,'@', -1) AS `domain`
 										                        FROM `t0101_user` 
 										                        WHERE `role` = 'teacher'
+										                        AND `deleted_at` IS NULL
 									                    ) a
 									            WHERE a.`domain` = :domain) b
 									            ON a.`user_id` = b.`id`
@@ -297,6 +300,7 @@ Class AuthUserController extends Controller {
 											FROM(
 												SELECT `name` , `email`, SUBSTRING_INDEX(`email`,'@', -1) AS `domain`
 													FROM `t0101_user` 
+													WHERE `deleted_at` IS NULL
 												
 												) a
 											WHERE a.`domain` = :domain									
@@ -416,7 +420,41 @@ Class AuthUserController extends Controller {
 							$logOpenAcc->secret = $secretKey;
 							$logOpenAcc->save();
 						}
+					}else{
+						$secretKey = sha1(time() . $email);
+						$edmHtml = (string) view('emails.account-activation', [
+							'name' => $name,
+							'app_store_address' => config('app.app_store_url'),
+							'username' => $email,
+							'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
+							'activation_link' => config('app.website_url') . "/api/1.0/auth/activate/{$secretKey}",
+							'email_support' => config('app.support_email'),
+							'zzm_url' => config('app.website_url'),
+							'social_media_links' => config('app.fanpage_url'),
+						]);
+				
+						EmailHelper::SendEmail([
+							'about' => 'Welcome',
+							'subject' => 'Your Zap Zap Account is now ready!',
+							'body' => $edmHtml,
+							'bodyHtml' => $edmHtml,
+							'toAddresses' => [$email],
+						]);
+
+						$logOpenAcc = new LogAccountActivate;
+						$logOpenAcc->user_id = $user->id;
+						$logOpenAcc->secret = $secretKey;
+						$logOpenAcc->save();
 					}
+
+					$mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
+					$data = ["email" => $username,
+					        "attributes" => ["NAME"=>$name, "SURNAME"=>""],
+					        "listid" => [Config::get('app.send_in_blue_list_id')],
+					        "listid_unlink" => []
+					    ];
+		
+				    $mailin->create_update_user($data);
 					
 					//job done - log it!
 					DatabaseUtilHelper::LogInsert($user->id, $user->table, $user->id);
@@ -434,13 +472,13 @@ Class AuthUserController extends Controller {
 			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
 			$list = User::select('id' , 'role' , 'name' , 'register_from')->find($userAccess->user_id);
 
-		// } catch (Exception $ex) {
-		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-		// 		'source' => 'AuthUserController > signUp',
-		// 		'inputs' => Request::all(),
-		// 	])]);
-		// 	return ResponseHelper::OutputJSON('exception');
-		// }
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'AuthUserController > signUp',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 
 		return ResponseHelper::OutputJSON('success', '', ['user' => $list], [
 			'X-access-token' => $accessToken,
@@ -923,13 +961,13 @@ Class AuthUserController extends Controller {
 				$gameClass->name = 'Default Class';
 				$gameClass->save();
 
-				$userFlag->profile_limit = Config::get('app.teacher_profile_limit');
-				$userFlag->class_limit = Config::get('app.teacher_class_limit');
+				$userFlag->profile_limit = 3;
+				$userFlag->class_limit = 50;
 				$userFlag->save();
 
 				$classId = $gameClass->id;
 			}else{
-				$userFlag->profile_limit = Config::get('app.parent_profile_limit');
+				$userFlag->profile_limit = 1;
 				$userFlag->class_limit = 0;
 				$userFlag->save();
 			}
@@ -1067,13 +1105,14 @@ Class AuthUserController extends Controller {
 		if($error == 'access_denied'){
 			return redirect(url(env('WEBSITE_URL').'/user/signin?error=access-denied'));
 		}
-		
 		$client = new Client;
+
 		$firstLogin = 0;
+
 		$xsrfToken = Cookie::get('XSRF-TOKEN');
 		
 		$fbUser = Socialite::driver('facebook')->user();
-		
+
 		//check User facebook ID
 		$userExternalId = UserExternalId::where('facebook_id' , $fbUser->id)->first();
 
@@ -1109,7 +1148,8 @@ Class AuthUserController extends Controller {
 			$log->created_ip = Request::ip();
 			$log->save();
 
-			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
+            setcookie("current_user", json_encode(['user' => $user, 'first_time_login' => $firstLogin]), 0, "/");
+			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->withCookie($cookie);
 		}
 
 		//check email didnt use
@@ -1118,7 +1158,8 @@ Class AuthUserController extends Controller {
 		if(!$userAccess){
 
 			//create new
-			return redirect(url(env('WEBSITE_URL').'/user/redirect-signup/facebook'))->with('name' , $fbUser->name)->with('email' , $fbUser->email)->with('facebook_id' , $fbUser->id);
+            setcookie("current_user", json_encode(['name' => $fbUser->name, 'email' => $fbUser->email, 'facebook_id' => $fbUser->id]), 0, "/");
+			return redirect(url(env('WEBSITE_URL').'/user/redirect-signup/facebook'));
 
 		}
 
@@ -1140,9 +1181,10 @@ Class AuthUserController extends Controller {
 		$log->created_ip = Request::ip();
 		$log->save();
 
-		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
+        setcookie("current_user", json_encode(['user' => $user, 'first_time_login' => $firstLogin]), 0, "/");
+		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->withCookie($cookie);
 	}
-
+	
 	public function deleteAccount(){
 		$userId = Request::input('user_id');
 
@@ -1192,6 +1234,15 @@ Class AuthUserController extends Controller {
 		$userExternalId = UserExternalId::where('user_id' , $newUser['user_id'])->update(['facebook_id' => $facebookId ]);
 		$userAccess = UserAccess::where('user_id' , $user->id)->first();
 
+		$mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
+		$data = ["email" => $email,
+		        "attributes" => ["NAME"=>$name, "SURNAME"=>""],
+		        "listid" => [Config::get('app.send_in_blue_list_id')],
+		        "listid_unlink" => []
+		    ];
+
+		$mailin->create_update_user($data);
+		
 		$firstLogin = 1;
 
 		$cookie = Cookie::make('access_token', $userAccess->access_token);
@@ -1225,6 +1276,189 @@ Class AuthUserController extends Controller {
 		}
 
 		return ResponseHelper::OutputJSON('success' , '' , ['within_profile_limit' => 1 ,'total_share' => $userFlag->total_share]);
+	}
+
+	public function signUpSpecial() {
+
+		// sign-up from web & app
+		// =======================================================================//
+		// ! this sign up is for web only, and not for mobile game client         //
+		// =======================================================================//
+
+		// if (!DatabaseUtilHelper::TrafficControl('t0101_user')) {
+		// 	return ResponseHelper::OutputJSON('fail', "traffic jam, please try again later.");
+		// }
+
+		$username = Request::input('email'); //username = email
+		$name = Request::input('name');
+		$email = Request::input('email');
+		$country = Request::input('country', '');
+		$password = Request::input('password');
+		$password_sha1 = sha1($password . Config::get('app.auth_salt'));
+		$accessToken = '';
+		$deviceId = Request::input('device_id'); //optional
+		$role = Request::input('role');
+		$registerFrom = Request::input('register_from' , 'website');
+		$ref = Request::input('ref');
+		$classId = 0;
+		$profileLimit = 3;
+
+		if (!$username || !$password || !$name || !$email || !$country || !$role) {
+			return ResponseHelper::OutputJSON('fail', "missing parameters");
+		}
+
+		switch ($role) {
+			case 'parent':
+
+			break;
+			case 'teacher':
+
+			break;
+			default:return ResponseHelper::OutputJSON('fail', "invalid role");
+		}
+
+		if (strlen($password) < 6) {
+			return ResponseHelper::OutputJSON('fail', 'password must be atleast 6 chars');
+		}
+
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			return ResponseHelper::OutputJSON('fail', "invalid email format");
+		}
+
+		$access = UserAccess::where('username', $username)->first();
+		if ($access) {
+			return ResponseHelper::OutputJSON('fail', "email used");
+		}
+
+		try {	
+			$user = new User;
+			$user->role = $role;
+			$user->name = $name;
+			$user->email = $email;
+			$user->country = $country;
+			$user->register_from = $registerFrom;
+			$user->ref = $ref;
+			$user->paid = Config::get('app.paid');
+			$user->save();
+
+			$accessToken = AuthHelper::GenerateAccessToken($user->id);
+
+			$access = new UserAccess;
+			$access->user_id = $user->id;
+			$access->username = $username;
+			$access->password_sha1 = $password_sha1;
+			$access->access_token = $accessToken;
+			$access->access_token_issue_at = DB::raw('NOW()');
+			$access->access_token_issue_ip = Request::ip();
+			$access->access_token_expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 10 YEAR)'); //we dont kick them out
+			$access->save();
+
+			$extId = new UserExternalId;
+			$extId->user_id = $user->id;
+			if ($deviceId) {$extId->device_id = $deviceId;}
+			$extId->save();
+
+			$setting = new UserSetting;
+			$setting->user_id = $user->id;
+			$setting->save();
+
+			$userFlag = new UserFlag;
+			$userFlag->user_id = $user->id;
+
+			if($role == 'teacher'){
+				$gameClass = new GameClass;
+				$gameClass->user_id = $user->id;
+				$gameClass->name = 'Default Class';
+				$gameClass->save();
+
+				$userFlag->profile_limit = 50;
+				$userFlag->class_limit = 50;
+				$userFlag->save();
+
+				$classId = $gameClass->id;
+			}else{
+				$userFlag->profile_limit = 1;
+				$userFlag->class_limit = 0;
+				$userFlag->save();
+			}
+
+			$profile = new GameProfile;
+			$profile->user_id = $user->id;
+			$profile->nickname1 = 999;
+			$profile->nickname2 = 999;
+			$profile->avatar_id = 999;
+			$profile->class_id = $classId;
+			$profile->school = 'default school';
+			$profile->save();
+
+			$idCounter = IdCounter::find(1);
+			$gameCodeSeed = $idCounter->game_code_seed;
+			$idCounter->game_code_seed = $gameCodeSeed + 1;
+			$idCounter->save();
+
+			$code = new GameCode;
+			$code->type = 'signed_up_profile';
+			$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
+			$code->seed = $gameCodeSeed;
+			$code->profile_id = $profile->id;
+			$code->save();	
+
+			$secret = sha1($user->name . time());
+
+			$logPasswordReset = new LogPasswordReset;
+			$logPasswordReset->user_id = $user->id;
+			$logPasswordReset->secret = $secret;
+			$logPasswordReset->save();
+
+			$edmHtml = (string) view('emails.special-welcome', [ 
+				'email' => $email,
+				'reset_url' => Config::get('app.website_url') . '/user/reset-password/' . $secret,
+			]);
+
+			EmailHelper::SendEmail([
+				'about' => 'Congratulations',
+				'subject' => 'Your Zap Zap Math premium account is unlocked!',
+				'body' => $edmHtml,
+				'bodyHtml' => $edmHtml,
+				'toAddresses' => [$email],
+			]);
+
+			$mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
+			$data = ["email" => $username,
+			        "attributes" => ["NAME"=>$name, "SURNAME"=>""],
+			        "listid" => [Config::get('app.send_in_blue_list_id')],
+			        "listid_unlink" => []
+			    ];
+
+		    $mailin->create_update_user($data);
+
+			//job done - log it!
+			DatabaseUtilHelper::LogInsert($user->id, $user->table, $user->id);
+			DatabaseUtilHelper::LogInsert($user->id, $access->table, $user->id);
+			DatabaseUtilHelper::LogInsert($user->id, $extId->table, $user->id);
+			DatabaseUtilHelper::LogInsert($user->id, $extId->table, $user->id);
+			DatabaseUtilHelper::LogInsert($user->id, $profile->table, $profile->id);
+			DatabaseUtilHelper::LogInsert($user->id, $code->table, $code->id);
+
+			Session::put('access_token', $accessToken);
+			setcookie('access_token', $accessToken, time() + (86400 * 30), "/"); // 86400 = 1 day*/
+
+			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
+			$list = User::select('id' , 'role' , 'name' , 'register_from')->find($userAccess->user_id);
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'AuthUserController > signUp',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
+
+		return ResponseHelper::OutputJSON('success', '', ['user' => $list], [
+			'X-access-token' => $accessToken,
+		], [
+			'access_token' => $accessToken,
+		]);
 	}
 }
 

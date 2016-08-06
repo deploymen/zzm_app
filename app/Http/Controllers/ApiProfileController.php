@@ -33,18 +33,18 @@ Class ApiProfileController extends Controller {
 	// =======================================================================//
 	public function get() {
 		$userId = Request::input('user_id');
-		try {
+		// try {
 			$profileInfo = ApiProfileHelper::GetProfile($userId , 0);
 
 			return ResponseHelper::OutputJSON('success', '', ['list' => $profileInfo]);
 
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiProfileController > get',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		// } catch (Exception $ex) {
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		'source' => 'ApiProfileController > get',
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 	}
 
 	public function create() {
@@ -56,7 +56,6 @@ Class ApiProfileController extends Controller {
 		$age = Request::input('age');
 		$school = Request::input('school');
 		$grade = Request::input('grade');
-		$email = Request::input('email', '');
 		$classId = Request::input('class_id' , 0);
 
 		$nickname1 = Request::input('nickname1', 999);
@@ -69,18 +68,14 @@ Class ApiProfileController extends Controller {
 				return ResponseHelper::OutputJSON('fail', "missing parameters");
 			}
 
-			if ($email != '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-				return ResponseHelper::OutputJSON('fail', "invalid email format");
-			}
-
 			$nickname1Set = SetNickname1::find($nickname1);
 			$nickname2Set = SetNickname2::find($nickname2);
 			
-			if (!$nickname1) {
+			if (!$nickname1Set) {
 				return ResponseHelper::OutputJSON('fail', "invalid nickname id");
 			}
 
-			if (!$nickname2) {
+			if (!$nickname2Set) {
 				return ResponseHelper::OutputJSON('fail', "invalid nickname id");
 			}
 
@@ -124,7 +119,6 @@ Class ApiProfileController extends Controller {
 			$profile->age = $age;
 			$profile->school = $school;
 			$profile->grade = $grade;
-			$profile->email = $email;
 			$profile->nickname1 = $nickname1;
 			$profile->nickname2 = $nickname2;
 			$profile->avatar_id = $avatarId;
@@ -681,7 +675,6 @@ Class ApiProfileController extends Controller {
 	}
 
 	public function unlockParentLimit() {
-		
 		$userId = Request::input('user_id');
 
 		$fb = new Facebook([

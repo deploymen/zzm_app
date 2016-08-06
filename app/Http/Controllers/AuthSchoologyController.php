@@ -30,11 +30,12 @@ use App\Models\User;
 use App\Models\UserAccess;
 use App\Models\UserExternalId;
 use App\Models\UserSetting;
+use Sendinblue\Mailin;
 
 Class AuthSchoologyController extends Controller {
 
 	public function schoology() {
-
+	
 		$url = Schoology::authorize();	
 		$firstLogin = 0;
 
@@ -44,7 +45,7 @@ Class AuthSchoologyController extends Controller {
 			$userExternalId = UserExternalId::where('schoology_id' , $schoologyUser['original']['id'])->first();
 
 			if($userExternalId){
-			
+				
 				$user = User::select('id','role', 'name', 'register_from')->find($userExternalId->user_id);
 				$userAccess = UserAccess::where('user_id' , $userExternalId->user_id)->first();
 
@@ -75,14 +76,17 @@ Class AuthSchoologyController extends Controller {
 				$log->created_ip = Request::ip();
 				$log->save();
 
-				return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
+				setcookie("current_user", json_encode(['user' => $user, 'first_time_login' => $firstLogin]), 0, "/");
+				return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->withCookie($cookie);
 			}
 
 			//check email didnt use
 			$userAccess = UserAccess::where('username' , $schoologyUser['original']['email'])->first();
 
 			if(!$userAccess){
-				return redirect(url(env('WEBSITE_URL').'/user/redirect-signup/schoology'))->with('name' , $schoologyUser['original']['name'])->with('email' , $schoologyUser['original']['email'])->with('schoology_id' , $schoologyUser['original']['id']);
+				setcookie("current_user", json_encode(['name' => $schoologyUser['original']['name'] , 'email' => $schoologyUser['original']['email'] , 'schoology_id' => $schoologyUser['original']['id']]), 0, "/");
+
+				return redirect(url(env('WEBSITE_URL').'/user/redirect-signup/schoology'));
 			}
 
 			//sync account
@@ -103,7 +107,8 @@ Class AuthSchoologyController extends Controller {
 			$log->created_ip = Request::ip();
 			$log->save();
 
-			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->with('user' , json_encode($user))->with('first_time_login', $firstLogin)->withCookie($cookie);
+			setcookie("current_user", json_encode(['user' => $user, 'first_time_login' => $firstLogin]), 0, "/");
+			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->withCookie($cookie);
 		}else{
 			return redirect($url);
 		}
@@ -116,13 +121,22 @@ Class AuthSchoologyController extends Controller {
         $country = Request::input('country');
 
         $newUser = ApiUserHelper::Register('teacher' , $name , $email , $country , $schoology_id , '' , 'schoology');
-        $newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  , '' , '5_or_younger' , 'default school' , 'K' , '', 999 , 999 , 999);
+        $newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  , '' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
 
         $user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser['user_id']);
         $userExternalId = UserExternalId::where('user_id' , $newUser['user_id'])->update(['schoology_id' => $schoology_id ]);
         $userAccess = UserAccess::where('user_id' , $user->id)->first();
 
         $firstLogin = 1;
+
+        $mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
+		$data = ["email" => $email,
+		        "attributes" => ["NAME"=>$name, "SURNAME"=>""],
+		        "listid" => [Config::get('app.send_in_blue_list_id')],
+		        "listid_unlink" => []
+		    ];
+
+		$mailin->create_update_user($data);
 
         $cookie = Cookie::make('access_token', $userAccess->access_token);
 

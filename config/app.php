@@ -20,6 +20,8 @@ return [
     'teacher_profile_limit' =>env('TEACHER_PROFILE_LIMIT'),
     'teacher_class_limit' =>env('TEACHER_CLASS_LIMIT'),
     'parent_profile_limit' =>env('PARENT_PROFILE_LIMIT'),
+
+    'send_in_blue_list_id' => env('LIST_ID'),
 	/*
 	|--------------------------------------------------------------------------
 	| Application Debug Mode
