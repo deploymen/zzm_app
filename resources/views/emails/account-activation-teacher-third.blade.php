@@ -1,20 +1,19 @@
 <html>
 Hi {{$name}},<br>
 <br>
-Greetings from Zapien! You have just signup to the most exciting math adventure this side of the Universe!<br>
+Greetings from the Zapions! You have just signed up for the most exciting math adventure this side of the Universe!<br>
 <br>
-Congratulations! Your school is entitled to the giveaway thanks to the awesome initiative by you and your colleagues which includes a full range of content from Kindergarten to Primary 6. <br>
+Thanks to your combined sign up, your school is now able to use the full features of the Zap Zap Math web dashboard and add more students to each class on the web dashboard. We hope you and your students will enjoy our full range of fun and highly educational math content created for young learners from Kindergarten through to Primary 6. <br>
 <br>
-To help you with your adventure ahead, here are a few vital things to remember:<br>
+To get zapping, here are a few vital things for you to remember:<br>
 Your login is: {{$username}}<br>
 Login website: {{$zapzapmath_portal}}<br>
 <br>
 To activate your account, please click on the link below: <br>
 {{$activation_link}}<br>
 <br>
-However, if you have any questions about the journey, feel free to get in touch with us. ({{$email_support}})<br>
+Feel free to zap us anytime at hello@zapzapmath.com with questions, issues, compliments and suggestions for improvement! We wish you a fulfilling journey ahead and here's to nurturing more young math lovers and geniuses in your school.
 <br>
-We look forward to adventuring with you!<br>
 <br>
 Zap Zap Math Team<br>
 {{$zzm_url}}<br>

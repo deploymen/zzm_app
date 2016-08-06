@@ -33,7 +33,7 @@ use Session;
 
 class ApiUserHelper{
 
-	public static function Register($role, $name, $email, $country, $username, $password_sha1,  $registerFrom , $deviceId = ''){
+	public static function Register($role, $name, $email, $country, $username, $password_sha1,  $registerFrom){
 		$classId = 0;
 
 		$user = new User;
@@ -60,7 +60,6 @@ class ApiUserHelper{
 
 		$extId = new UserExternalId;
 		$extId->user_id = $user->id;
-		if ($deviceId) {$extId->device_id = $deviceId;}
 		$extId->save();
 
 		$setting = new UserSetting;
