@@ -55,7 +55,7 @@ Class ApiGameController extends Controller {
 
 		LogHelper::LogGetQuestions($planetId, $gameCode);
 
-		// try{
+		try{
 			$questionCount = Request::input('question_count');
 			$profileId =  Request::input('game_code_profile_id');
 			$gameType = Request::input('game_type');
@@ -67,7 +67,7 @@ Class ApiGameController extends Controller {
 			// get planet info
 			// if (Cache::has('ApiGameController@request('.$planetId.')') ) {
 
-				// $planet = Cache::get('ApiGameController@request('.$planetId.')');
+			// 	$planet = Cache::get('ApiGameController@request('.$planetId.')');
 
 
 			// }else{
@@ -110,7 +110,7 @@ Class ApiGameController extends Controller {
 
 			// if ( Cache::has('ApiGameController@request('.$planetId.','.$difficulty.')') ){
 
-				// $questions = Cache::get('ApiGameController@request('.$planetId.','.$difficulty.')');
+			// 	$questions = Cache::get('ApiGameController@request('.$planetId.','.$difficulty.')');
 			// }else{
 				
 				$type = GameType::find($planet->game_type_id);
@@ -202,14 +202,14 @@ Class ApiGameController extends Controller {
 	            	'questions' => $questions,
 	            ]);
 
-			// } catch (Exception $ex) {
+			} catch (Exception $ex) {
 
-			// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-			// 		'source' => 'ApiGameController > request',
-			// 		'inputs' => Request::all(),
-			// 	])]);
-			// 	return ResponseHelper::OutputJSON('exception');
-			// }
+				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+					'source' => 'ApiGameController > request',
+					'inputs' => Request::all(),
+				])]);
+				return ResponseHelper::OutputJSON('exception');
+			}
 	}
 
 	//SUBMIT RESULT
@@ -741,13 +741,113 @@ Class ApiGameController extends Controller {
 		$deviceId = Request::input('game_code_device_id');
 		$gameCode = Request::input('game_code');
 
-		// try{
+		try{
 			$result = ZapZapQuestionHelper::GetUserMapV1_1($profileId);
 
 			$totalStar = UserMap::where('profile_id', $profileId)->sum('star');
 
 			$profile = GameProfile::find($profileId);
 
+			$profile->nickName1;
+			$profile->nickName2;
+			$profile->avatar;
+
+			$userType = 2;
+
+			if($userId){
+				$user = User::find($userId);
+				
+				$userType = $user->paid;
+			}
+
+			$systems = [];		
+			$prevSystemId = 0;
+			$prevSubsytemId = 0;
+			$prevPlanetStar = 5;
+			$prevPlanetEnable = true;
+
+			for($i=0; $i<count($result); $i++){
+				$r = $result[$i];
+
+				if($r->system_id != $prevSystemId){
+					array_push($systems, [
+						'system_id' => $r->system_id,
+						'name' => $r->system_name,
+						'subsystem' => [
+							[
+								'subsystem_id' => '1',
+								'subsystem_name' => 'Basics',
+								'planet' => []
+							],
+							
+						]
+					]);
+				}
+
+
+				if($r->subsystem_id != $prevSubsytemId){
+					array_push($systems[count($systems)-1]['subsystem'], [
+						'subsystem_id' => $r->subsystem_id,
+						'subsystem_name' => $r->subsystem_name,
+						'planet' => []
+					]);				
+				}
+
+				$planetEnable = ($prevPlanetStar >= 3) && $prevPlanetEnable;
+				$prevPlanetEnable = $planetEnable;
+
+				array_push($systems[count($systems)-1]['subsystem'][count($systems[count($systems)-1]['subsystem'])-1]['planet'], [
+					'planet_id' => $r->planet_id,
+					'name' => $r->planet_name,
+					'description' => $r->description,
+					'star' => $r->star,
+					'enable' => ($planetEnable)?1:0,
+
+				]);				
+				$prevPlanetStar = $r->star;
+				$prevSystemId = $r->system_id;
+				$prevSubsytemId = $r->subsystem_id;
+			}
+
+			return ResponseHelper::OutputJSON('success', '' , [
+					'profile' => [
+						'first_name' => $profile->first_name,
+						'last_name' => $profile->last_name,
+						'grade' =>$profile->grade,
+						'total_star' => $totalStar,
+						'user_type' => $userType,
+						'game_code' => $gameCode,
+						'nick_name1' =>$profile->nickName1->name,
+						'nick_name2' =>$profile->nickName2->name,
+						'avatar' => $profile->avatar,
+						] ,
+					'system_planet' => $systems
+					 ]);
+		
+		} catch (Exception $ex) {
+
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiGameController > getUserMap',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
+	}
+
+	public function getUserMapV1_2(){
+		//user type : 0 = no pay money , 1 = paid money, 2 = annonymous
+		$profileId = Request::input('game_code_profile_id');
+		$userId = Request::input('user_id');
+		$deviceId = Request::input('game_code_device_id');
+		$gameCode = Request::input('game_code');
+
+		// try{
+			$result = ZapZapQuestionHelper::GetUserMapV1_2($profileId);
+
+			$totalStar = UserMap::where('profile_id', $profileId)->sum('star');
+
+			$profile = GameProfile::find($profileId);
+			
 			$profile->nickName1;
 			$profile->nickName2;
 			$profile->avatar;

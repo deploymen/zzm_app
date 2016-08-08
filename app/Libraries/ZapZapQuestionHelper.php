@@ -205,7 +205,42 @@ class ZapZapQuestionHelper{
 		}
 	}
 
+
 	public static function GetUserMapV1_1($profileId){
+		try{
+			
+			$sql = "
+				SELECT um.`level`,um.`exp`, um.`top_score` , s.`id` AS `system_id` , s.`name` AS `system_name` ,ss.`id` AS `subsystem_id` ,ss.`name`  AS `subsystem_name` , p.`id` AS `planet_id` , p.`name` AS `planet_name` , p.`description` ,CAST(IFNULL(um.`star`, 0) AS UNSIGNED) AS `star`
+					FROM (`t0122_game_system_1` s, `t0122_game_system_sub` ss, `t0123_game_planet` p , `t0124_game_system_planet_1` sp ) 
+						LEFT JOIN `t0501_game_user_map` um 
+							ON(
+								um.`profile_id` = :profileId AND um.`planet_id` = p.`id`
+								)
+				 		WHERE  sp.`planet_id` = p.`id`
+				 			AND sp.`system_id` = s.`id`
+				 			AND sp.`enable` = '1'
+				 			AND sp.`subsystem_id` = ss.`id`
+				 			
+				 	
+				 			ORDER BY sp.`system_id` , sp.`subsystem_id` , sp.`sequence`
+				";
+				
+			$result = DB::SELECT($sql, ['profileId'=>$profileId]);
+
+			return $result;
+
+		}catch(Exception $ex){
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetUserMap', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'inputs' => Request::all(),
+				]),
+			]);		
+			return false;			
+		}
+	}
+
+	public static function GetUserMapV1_2($profileId){
 		try{
 			$profile = GameProfile::find($profileId);
 			$userType = '';

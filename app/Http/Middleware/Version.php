@@ -21,6 +21,7 @@ class Version
 
     public function handle($request, Closure $next, $guard = null)
     {
+    
         $route = Route::getCurrentRoute();
         $routes = Route::getRoutes();
 
@@ -39,7 +40,7 @@ class Version
            for($i=$index; $i>0; $i--){
                 $version = self::$Versions[$i-1];
                 $path = "/{$version}/".$endpoint;
-       
+  
                 $server = $request->server();
                 $server['REQUEST_URI'] = $path;
 
