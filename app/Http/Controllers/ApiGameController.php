@@ -64,13 +64,13 @@ Class ApiGameController extends Controller {
 				return ResponseHelper::OutputJSON('fail', 'planet not yet support');
 			}
 
-			// get planet info
-			// if (Cache::has('ApiGameController@request('.$planetId.')') ) {
+			get planet info
+			if (Cache::has('ApiGameController@request('.$planetId.')') ) {
 
-			// 	$planet = Cache::get('ApiGameController@request('.$planetId.')');
+				$planet = Cache::get('ApiGameController@request('.$planetId.')');
 
 
-			// }else{
+			}else{
 				$planet = GamePlanet::find($planetId);
 
 				if(!$planet){
@@ -79,7 +79,7 @@ Class ApiGameController extends Controller {
 
 			    $expiresAt = Carbon::now()->addMinutes(60);
 				Cache::put('ApiGameController@request('.$planetId.')', $planet , $expiresAt);
-			// }
+			}
 
 			if(!$planet->available){
 				Cache::forget('ApiGameController@request('.$planetId.')');
@@ -108,10 +108,10 @@ Class ApiGameController extends Controller {
 
 			$level = $userMap->level;
 
-			// if ( Cache::has('ApiGameController@request('.$planetId.','.$difficulty.')') ){
+			if ( Cache::has('ApiGameController@request('.$planetId.','.$difficulty.')') ){
 
-			// 	$questions = Cache::get('ApiGameController@request('.$planetId.','.$difficulty.')');
-			// }else{
+				$questions = Cache::get('ApiGameController@request('.$planetId.','.$difficulty.')');
+			}else{
 				
 				$type = GameType::find($planet->game_type_id);
 				
@@ -164,7 +164,7 @@ Class ApiGameController extends Controller {
 
 					default: return ResponseHelper::OutputJSON('fail', $type->name.' not found');
 				}	
-			// }
+			}
 
 			$profile = GameProfile::find($profileId);
 			if(!$profile->city || !$profile->country || !$profile->latitude || !$profile->longitude){

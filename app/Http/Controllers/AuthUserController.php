@@ -117,7 +117,6 @@ Class AuthUserController extends Controller {
 
 					$extId = new UserExternalId;
 					$extId->user_id = $user->id;
-					if ($deviceId) {$extId->device_id = $deviceId;}
 					$extId->save();
 
 					$setting = new UserSetting;
