@@ -33,18 +33,18 @@ Class ApiProfileController extends Controller {
 	// =======================================================================//
 	public function get() {
 		$userId = Request::input('user_id');
-		// try {
+		try {
 			$profileInfo = ApiProfileHelper::GetProfile($userId , 0);
 
 			return ResponseHelper::OutputJSON('success', '', ['list' => $profileInfo]);
 
-		// } catch (Exception $ex) {
-		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-		// 		'source' => 'ApiProfileController > get',
-		// 		'inputs' => Request::all(),
-		// 	])]);
-		// 	return ResponseHelper::OutputJSON('exception');
-		// }
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiProfileController > get',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 	}
 
 	public function create() {
@@ -62,7 +62,7 @@ Class ApiProfileController extends Controller {
 		$nickname2 = Request::input('nickname2', 999);
 		$avatarId = Request::input('avatar_id', 999);
 
-		// try {
+		try {
 			
 			if (!$firstName || !$school || !$age || !$grade) {
 				return ResponseHelper::OutputJSON('fail', "missing parameters");
@@ -139,13 +139,13 @@ Class ApiProfileController extends Controller {
 
 			DatabaseUtilHelper::LogInsert($userId, $profile->table, $userId);
 
-		// } catch (Exception $ex) {
-		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-		// 		'source' => 'ApiProfileController > create',
-		// 		'inputs' => Request::all(),
-		// 	])]);
-		// 	return ResponseHelper::OutputJSON('exception');
-		// }
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiProfileController > create',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 
 		return ResponseHelper::OutputJSON('success', '', [
 			'profile' => $profile,
@@ -313,7 +313,7 @@ Class ApiProfileController extends Controller {
 
 		try {
 
-			$profile = GameProfile::select('id', 'user_id', 'class_id', 'first_name', 'last_name', 'age', 'school', 'grade', 'city', 'country', 'email', 'nickname1', 'nickname2', 'avatar_id')->find($id);
+			$profile = GameProfile::select('id', 'user_id', 'class_id', 'first_name', 'last_name', 'age', 'school', 'grade', 'city', 'country', 'email', 'nickname1', 'nickname2', 'avatar_id' ,'expired_at')->find($id);
 
 			if (!$profile) {
 				return ResponseHelper::OutputJSON('fail', 'profile not found');
@@ -323,12 +323,14 @@ Class ApiProfileController extends Controller {
 			$profile->nickName2;
 			$profile->avatar;
 			$profile->gameCode;
+			
+			$paid = ($profile->expired_at > date("Y-m-d H:i:s") )?1:0;
 
 			if ($userId != $profile->user_id) {
 				return ResponseHelper::OutputJSON('fail', 'wrong user id');
 			}
 
-			return ResponseHelper::OutputJSON('success', '', ['profile' => $profile->toArray()]);
+			return ResponseHelper::OutputJSON('success', '', ['profile' => $profile->toArray() , 'paid' => $paid]);
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
