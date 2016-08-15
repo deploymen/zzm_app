@@ -20,6 +20,7 @@ use App\Models;
 use App\Models\GameProfile;
 use App\Models\GamePlay;
 use App\Models\GameCode;
+use App\Models\GameClass;
 use App\Models\GameSystem;
 use App\Models\GamePlanet;
 use App\Models\UserMap;
@@ -110,7 +111,7 @@ class ApiProfileHelper{
 
 					    		WHERE profile.`deleted_at` IS NULL
 					    		AND play2.`id` IS NULL
-					    		AND profile.`user_id` = {$userId}
+					    		{$query}
 
 			    					GROUP BY profile.`id` ) t1 , 
 					   (
@@ -168,6 +169,13 @@ class ApiProfileHelper{
 				$lastPlayedTime = '< 1';
 			}
 
+			if($classId){
+				$GameClass = GameClass::find($classId);
+				$paid = ($GameClass->expired_at > date("Y-m-d H:i:s") )?1:0;
+			}else{
+				$paid =  intval($lp->paid);
+			}
+
 			array_push($profileInfo, [
 				'id' => $p->id,
 				'user_id' => $p->user_id,
@@ -195,7 +203,7 @@ class ApiProfileHelper{
 					'total_played_time' => $totalPlayed,
 					'accuracy' => $percentage,
 				],
-				'paid' => $lp->paid
+				'paid' => $paid,
 
 			]);
 		}

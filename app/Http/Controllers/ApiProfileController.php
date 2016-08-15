@@ -62,7 +62,7 @@ Class ApiProfileController extends Controller {
 		$nickname2 = Request::input('nickname2', 999);
 		$avatarId = Request::input('avatar_id', 999);
 
-		try {
+		// try {
 			
 			if (!$firstName || !$school || !$age || !$grade) {
 				return ResponseHelper::OutputJSON('fail', "missing parameters");
@@ -97,8 +97,9 @@ Class ApiProfileController extends Controller {
 			
 			if($classId){
 				$profileClass = GameProfile::where('class_id' , $classId)->where('user_id', $userId)->count();
+				$profileLimit = ($gameClass->expired_at > date("Y-m-d H:i:s"))?50:5;
 
-				if($profileClass >= $userFlag->profile_limit){
+				if($profileClass >= $profileLimit){
 					return ResponseHelper::OutputJSON('fail', "class limited" );
 				}
 			}else{
@@ -138,13 +139,13 @@ Class ApiProfileController extends Controller {
 
 			DatabaseUtilHelper::LogInsert($userId, $profile->table, $userId);
 
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiProfileController > create',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		// } catch (Exception $ex) {
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		'source' => 'ApiProfileController > create',
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 
 		return ResponseHelper::OutputJSON('success', '', [
 			'profile' => $profile,
