@@ -7,8 +7,6 @@ use Config;
 use Request;
 use DB;
 use Session;
-use PHPExcel;
-use PHPExcel_IOFactory;
 use App\Libraries;
 use App\Libraries\LogHelper;
 use App\Libraries\AuthHelper;
@@ -316,40 +314,23 @@ class ApiController extends Controller {
 	}
 
 	public function InviteTeacher(\Illuminate\Http\Request $request){
-		$userId = Request::input('user_id');
-		$userEmail = Request::input('user_email');
 
-		$success = 0; //temporory 
-		if(!$request->emails){ //need update validation
+		if(!$request->emails){
 			return ResponseHelper::OutputJSON('fail', 'missing parameter');
 		}
 
-		$user = User::find($userId);
-
-		for($j=0; $j<count($request->emails); $j++){
-			$email = $request->emails[$j];
-
-			if(!$email){
-				return ResponseHelper::OutputJSON('fail','missing parameter');
-			}
-
-			if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-				return ResponseHelper::OutputJSON('fail','invalid email format');
-			}
-
-			$uEmail = explode('@' , $userEmail);
-			$domain = explode('@' , $email);
-
-			if($uEmail[1] != $domain[1]){
-				return ResponseHelper::OutputJSON('fail','invalid email domain');
-			}
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			return ResponseHelper::OutputJSON('fail', "invalid email format");
 		}
 
 		for($i=0; $i<count($request->emails); $i++){
 			$email = $request->emails[$i];
-		
+
 			$edmHtml = (string) view('emails.teacher-invite', [ 
-				'name' => $user->name,
+				'app_store_address' => config('app.app_store_url'),
+				'username' => $email,
+				'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
+				'email_support' => config('app.support_email'),
 				'zzm_url' => config('app.website_url'),
 				'social_media_links' => config('app.fanpage_url'),
 			]);
@@ -361,8 +342,6 @@ class ApiController extends Controller {
 				'bodyHtml' => $edmHtml,
 				'toAddresses' => [$email],
 			]);
-
-			$success = $success+1;
 		}
 
 		return ResponseHelper::OutputJSON('success');

@@ -2,11 +2,11 @@
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
-class Paypal extends Eloquent{
+class LogPaypal extends Eloquent{
 
-	public $table = 'try_pay_pal';
+	public $table = 't9414_log_pay_pal';
 	protected $primaryKey = 'id';
-	public $timestamps = true;
+	public $timestamps = false;
 
 	protected $hidden = [];
 }

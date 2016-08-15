@@ -5,6 +5,7 @@ App::setLocale('en');
 require __DIR__.'/Routes/page-docs.php';
 require __DIR__.'/Routes/api-cron.php';
 
+
 Route::group(['middleware' => 'version'], function () {
 
 

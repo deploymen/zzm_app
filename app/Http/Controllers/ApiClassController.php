@@ -57,13 +57,6 @@ Class ApiClassController extends Controller {
 				return ResponseHelper::OutputJSON('fail', "class name already exist");
 			}
 
-			$userFlag = UserFlag::find($userId);
-            $userClass = GameClass::where('user_id' , $userId)->count();
-
-            if($userClass >= $userFlag->class_limit){
-                return ResponseHelper::OutputJSON('fail', "limited");
-            }
-
 			$gameClass = new GameClass;
 			$gameClass->user_id = $userId;
 			$gameClass->name = $className;
@@ -176,7 +169,7 @@ Class ApiClassController extends Controller {
 	public function getProfile($classId){
 		$userId = Request::input('user_id');
 
-		$gameClass = GameClass::where('id', $classId)->where('user_id' , $userId)->get()->toarray();
+		$gameClass = GameClass::where('id', $classId)->where('user_id' , $userId)->get();
 		if(!$gameClass){
 			return ResponseHelper::OutputJSON('fail', 'class not found');
 		}
@@ -200,7 +193,9 @@ Class ApiClassController extends Controller {
 			return ResponseHelper::OutputJSON('fail', "class no found");
 		}
 
-		if($profileCount >= $userFlag->profile_limit){
+		$pLimit = ($class->expired_at > date("Y-m-d H:i:s"))?50:5;
+
+		if($profileCount >= $pLimit){
 			$profileLimit = 0;
 		}
 
