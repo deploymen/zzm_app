@@ -89,6 +89,7 @@ class ApiUserHelper{
 		return [
 			'user_id' => $user->id,
 			'class_id' => $classId,
+			'access_token' => $accessToken,
 			];
 	}
 

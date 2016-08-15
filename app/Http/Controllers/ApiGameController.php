@@ -64,7 +64,7 @@ Class ApiGameController extends Controller {
 				return ResponseHelper::OutputJSON('fail', 'planet not yet support');
 			}
 
-			get planet info
+			// get planet info
 			if (Cache::has('ApiGameController@request('.$planetId.')') ) {
 
 				$planet = Cache::get('ApiGameController@request('.$planetId.')');
@@ -213,7 +213,6 @@ Class ApiGameController extends Controller {
 	}
 
 	//SUBMIT RESULT
-	
 	public function resultV1_0($planetId) {
 
 		$Planet = GamePlanet::find($planetId);
@@ -585,95 +584,209 @@ Class ApiGameController extends Controller {
 			return ResponseHelper::OutputJSON('success');
 	}
 
-	public function resultLog(){
+	public function resultV1_2($planetId) {
+
+		$Planet = GamePlanet::find($planetId);
+		$jsonGameResult = Request::input('game_result');
+		$hash = Request::input('hash');
+		$random = Request::input('random');
+		$playedTime = Request::input('played_time', 0);
+
+		$profileId = Request::input('game_code_profile_id');
+		$userId = Request::input('user_id');
+		$deviceId = Request::input('game_code_device_id');
 		$gameCode = Request::input('game_code');
-		$page = Request::input("page", '1');
-		$pageSize = Request::input("page_size", '30');
+		$gameCodeType = Request::input('game_code_type');
 
 		try{
+			if($planetId < 100){
+				return ResponseHelper::OutputJSON('fail', 'planet not yet support');
+			}
 
-			$pagination = $pageSize*($page - 1);
-			$sql = "	
-				SELECT pl.`name`, r.`question_id`,  q.`difficulty` , r.`complite_time`, r.`target_id`, p.`target_type` 
-					FROM `t0400_game_play` p, `t0300_game_result` r , `t0123_game_planet` pl , `t0200_game_question` q
-						WHERE r.`play_id` = p.`id`
-							AND q.`id` = r.`question_id`
-							AND pl.`id` = p.`planet_id`
-							AND p.`code` = :game_code
+			if(!$Planet){
+				return ResponseHelper::OutputJSON('fail', 'planet not found');
+			}
 
-							order BY r.`created_at` ASC 
-							LIMIT :page , 30
-			";
+			if(!$Planet->enable){
+				return ResponseHelper::OutputJSON('fail', 'planet is not enable');
+			}
 
-			$count = "	
-				SELECT count(*)
-					FROM `t0400_game_play` p, `t0300_game_result` r , `t0123_game_planet` pl , `t0200_game_question` q
-						WHERE r.`play_id` = p.`id`
-							AND q.`id` = r.`question_id`
-							AND pl.`id` = p.`planet_id`
-							AND p.`code` = :game_code
+			if(!$jsonGameResult || !$hash || !$random ){
+				return ResponseHelper::OutputJSON('fail', 'missing parameter');
 
-			";
+			}
 
+			$gameResult = json_decode($jsonGameResult, true);
 
-			$result = DB::SELECT($sql, ['game_code'=>$gameCode , 'page'=>$pagination]);
+			if(!isset($gameResult['score']) || !isset($gameResult['answers'])|| !isset($gameResult['status']) || !isset($gameResult['difficulty']) ){ 
 
-			$count = DB::SELECT($count, ['game_code'=>$gameCode]);
-			$c = (array)$count[0];
-		
-			$resultHistory = [];
-			for($i=0; $i<count($result); $i++){
+				return ResponseHelper::OutputJSON('fail', 'invalid game result format');
 
-				$r = (array)$result[$i];
-				switch($r['target_type']){
-				case 'p01': 
-					$results = GameResultP01::find($r['target_id']);
-					$correct = ['correct' => $results->correct];
-					array_push($resultHistory  ,array_merge($r, $correct));
+			}
+			// check hash
+			$hash1 = sha1($jsonGameResult.$random.Config::get('app.p02_key'));
+			$hash2 = $hash;
+			
+			if($hash1 != $hash2){ 
+				return  [
+					'status' => "fail",
+					'message' => "invalid hash",
+					'hash1' => $hash1,
+					'hash2' => $hash2,
+					'key' => Config::get('app.p02_key'),
+				]; 
+			}
 
-				break;
-				case 'p02': 
-					$results = GameResultP02::find($r['target_id']);
-					$correct = ['correct' => $results->correct];
+			$checkResult = GamePlay::where('hash', $hash1)->first();	
 
-					array_push($resultHistory , array_merge($r, $correct));
-					
-				break;
-				case 'p03': 
-					$results = GameResultP03::find($r['target_id']);
-					$correct = ['correct' => $results->correct];
-					array_push($resultHistory  ,array_merge($r, $correct));
-					
-				break;
-				case 'p04': 
-					$results = GameResultP04::find($r['target_id']);
-					$correct = ['correct' => $results->correct];
-					array_push($resultHistory  ,array_merge($r, $correct));
-					
-				break;
-				case 'p06': 
-					$results = GameResultP06::find($r['target_id']);
-					$correct = ['correct' => $results->correct];
-					array_push($resultHistory  ,array_merge($r, $correct));
-					
-				break;
+			if($checkResult){
+				return ResponseHelper::OutputJSON('fail', 'no double submit');
+			}
+
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				if(!$question){
+					return ResponseHelper::OutputJSON('fail', 'invalid question id');
 				}
 			}
 
-			return ResponseHelper::OutputJSON('success', '', [
-				"result_history" => $resultHistory,
-				'pageSize' => $pageSize, 
-				'pageTotal' => ceil($c['count(*)']/$pageSize)
+			$sql = "
+				SELECT `name` 
+					FROM `t0121_game_type`
+						WHERE `id` IN(
+							SELECT `game_type_id` 
+								FROM `t0123_game_planet`
+									WHERE `id` = :planet_id
+						)
+							LIMIT 1;
+			";
 
-				]);
+			$result = DB::SELECT($sql, ['planet_id'=>$planetId] );
+
+			$gameStatus = $gameResult['status'];
+			if($gameStatus == 'False'){
+				$gameStatus = 'fail';
+			}elseif($gameStatus == 'True'){
+				$gameStatus = 'pass';
+			}
+
+			$coin = 'coin_star'.$gameResult['difficulty'];
+
+			$gamePlay = new GamePlay;
+			$gamePlay->user_id = $userId;
+			$gamePlay->profile_id = $profileId;
+			$gamePlay->planet_id = $planetId;
+			$gamePlay->target_type = $result[0]->name;
+			$gamePlay->type = $gameCodeType;
+			$gamePlay->score = $gameResult['score'];
+			$gamePlay->device_id = $deviceId;
+			$gamePlay->code = $gameCode;
+			$gamePlay->hash = $hash1;
+			$gamePlay->status = $gameStatus;
+			$gamePlay->played_time = $playedTime;
+			$gamePlay->difficulty = $gameResult['difficulty'];
+			$gamePlay->coin = $Planet->$coin;
+
+			if(isset($gameResult['badges']) ){
+				
+				if($gameResult['badges']['speed'] == 'True'){
+					$gameResult['badges']['speed'] = '1';
+				}elseif($gameResult['badges']['speed'] == 'False'){
+					$gameResult['badges']['speed'] = '0';
+				}
+
+				if($gameResult['badges']['accuracy'] == 'True'){
+					$gameResult['badges']['accuracy'] = '1';
+				}elseif($gameResult['badges']['accuracy'] == 'False'){
+					$gameResult['badges']['accuracy'] = '0';
+				}
+
+				$gamePlay->badges_metrics = json_encode($gameResult['badges']);		
+			}
+			if(isset($gameResult['level']) ){
+				$gamePlay->level =  $gameResult['level'];
+			}
+			$gamePlay->save();
+
+			$gameCodePlayed = GameCode::where('code', $gameCode)->update([
+					'played' => '1'
+					]);;
+
+			switch($result[0]->name){
+				case 'p00': $status = ZapZapQuestionHelper::SubmitResultP00($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p01': $status = ZapZapQuestionHelper::SubmitResultP01($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p02': $status = ZapZapQuestionHelper::SubmitResultP02($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p03': $status = ZapZapQuestionHelper::SubmitResultP03($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p06': $status = ZapZapQuestionHelper::SubmitResultP06($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p07': $status = ZapZapQuestionHelper::SubmitResultP07($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p08': $status = ZapZapQuestionHelper::SubmitResultP08($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p09': $status = ZapZapQuestionHelper::SubmitResultP09($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p10': $status = ZapZapQuestionHelper::SubmitResultP10($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p11': $status = ZapZapQuestionHelper::SubmitResultP11($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p12': $status = ZapZapQuestionHelper::SubmitResultP12($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p13': $status = ZapZapQuestionHelper::SubmitResultP13($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p14': $status = ZapZapQuestionHelper::SubmitResultP14($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p15': $status = ZapZapQuestionHelper::SubmitResultP15($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p16': $status = ZapZapQuestionHelper::SubmitResultP16($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p17': $status = ZapZapQuestionHelper::SubmitResultP17($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p18': $status = ZapZapQuestionHelper::SubmitResultP18($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p19': $status = ZapZapQuestionHelper::SubmitResultP19($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p20': $status = ZapZapQuestionHelper::SubmitResultP20($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p21': $status = ZapZapQuestionHelper::SubmitResultP21($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p22': $status = ZapZapQuestionHelper::SubmitResultP22($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p23': $status = ZapZapQuestionHelper::SubmitResultP23($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p24': $status = ZapZapQuestionHelper::SubmitResultP24($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p25': $status = ZapZapQuestionHelper::SubmitResultP25($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p27': $status = ZapZapQuestionHelper::SubmitResultP27($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p28': $status = ZapZapQuestionHelper::SubmitResultP28($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p29': $status = ZapZapQuestionHelper::SubmitResultP29($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p30': $status = ZapZapQuestionHelper::SubmitResultP30($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p31': $status = ZapZapQuestionHelper::SubmitResultP31($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p32': $status = ZapZapQuestionHelper::SubmitResultP32($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p33': $status = ZapZapQuestionHelper::SubmitResultP33($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p34': $status = ZapZapQuestionHelper::SubmitResultP34($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p35': $status = ZapZapQuestionHelper::SubmitResultP35($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p36': $status = ZapZapQuestionHelper::SubmitResultP36($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p37': $status = ZapZapQuestionHelper::SubmitResultP37($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p38': $status = ZapZapQuestionHelper::SubmitResultP38($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p39': $status = ZapZapQuestionHelper::SubmitResultP39($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p40': $status = ZapZapQuestionHelper::SubmitResultP40($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p41': $status = ZapZapQuestionHelper::SubmitResultP41($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p42': $status = ZapZapQuestionHelper::SubmitResultP42($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p43': $status = ZapZapQuestionHelper::SubmitResultP43($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p44': $status = ZapZapQuestionHelper::SubmitResultP44($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p45': $status = ZapZapQuestionHelper::SubmitResultP45($planetId,$gamePlay,$gameResult,$profileId); break;
+				case 'p46': $status = ZapZapQuestionHelper::SubmitResultP46($planetId,$gamePlay,$gameResult,$profileId); break;
+
+				default: return ResponseHelper::OutputJSON('fail', 'submit answer error');
+			}
+
+			$profile = GameProfile::find($profileId);
+			$profile->coin = $profile->coin + $Planet->$coin;
+			$profile->save();
+
+			ZapZapQuestionHelper::UserMapV1_1($profileId,$planetId,$gamePlay, $gameResult, $gameResult['difficulty']); //update user_map
+			ZapZapQuestionHelper::LastSession($userId , $profileId, $gameResult, $playedTime);
+
+			$profile = GameProfile::find($profileId);
+			$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();
+
+			ZapZapQuestionHelper::LeaderboardUpdate($profile,$systemPlanet,$gameResult);
+			LogHelper::LogPostResult($planetId , $jsonGameResult, $gameCode);//log post result
+			LogHelper::LogGameCoin($userId , $profileId, $planetId , $gameResult['difficulty'] ,  $Planet->$coin);//log game coin earn result
 			} catch (Exception $ex) {
 
 				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-					'source' => 'ApiGameController > resultLog',
+					'source' => 'ApiGameController > result', 
 					'inputs' => Request::all(),
 				])]);
 				return ResponseHelper::OutputJSON('exception');
 			}
+
+			return ResponseHelper::OutputJSON('success');
 	}
 
 	public function getUserMapV1_0(){
@@ -1309,28 +1422,51 @@ Class ApiGameController extends Controller {
 						'played' => '1'
 						]);;
 				switch($result[0]->name){
-					case 'p00': $status = ZapZapQuestionHelper::SubmitResultP00($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p01': $status = ZapZapQuestionHelper::SubmitResultP01($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p02': $status = ZapZapQuestionHelper::SubmitResultP02($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p03': $status = ZapZapQuestionHelper::SubmitResultP03($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p06': $status = ZapZapQuestionHelper::SubmitResultP06($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p07': $status = ZapZapQuestionHelper::SubmitResultP07($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p08': $status = ZapZapQuestionHelper::SubmitResultP08($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p09': $status = ZapZapQuestionHelper::SubmitResultP09($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p10': $status = ZapZapQuestionHelper::SubmitResultP10($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p11': $status = ZapZapQuestionHelper::SubmitResultP11($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p12': $status = ZapZapQuestionHelper::SubmitResultP12($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p13': $status = ZapZapQuestionHelper::SubmitResultP13($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p14': $status = ZapZapQuestionHelper::SubmitResultP14($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p15': $status = ZapZapQuestionHelper::SubmitResultP15($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p16': $status = ZapZapQuestionHelper::SubmitResultP16($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p17': $status = ZapZapQuestionHelper::SubmitResultP17($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p18': $status = ZapZapQuestionHelper::SubmitResultP18($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p19': $status = ZapZapQuestionHelper::SubmitResultP19($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p20': $status = ZapZapQuestionHelper::SubmitResultP20($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p21': $status = ZapZapQuestionHelper::SubmitResultP21($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p23': $status = ZapZapQuestionHelper::SubmitResultP23($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p32': $status = ZapZapQuestionHelper::SubmitResultP32($planetId,$gamePlay,$sgameResult,$profileId); break;
+
+					case 'p00': $status = ZapZapQuestionHelper::SubmitResultP00($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p01': $status = ZapZapQuestionHelper::SubmitResultP01($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p02': $status = ZapZapQuestionHelper::SubmitResultP02($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p03': $status = ZapZapQuestionHelper::SubmitResultP03($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p06': $status = ZapZapQuestionHelper::SubmitResultP06($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p07': $status = ZapZapQuestionHelper::SubmitResultP07($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p08': $status = ZapZapQuestionHelper::SubmitResultP08($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p09': $status = ZapZapQuestionHelper::SubmitResultP09($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p10': $status = ZapZapQuestionHelper::SubmitResultP10($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p11': $status = ZapZapQuestionHelper::SubmitResultP11($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p12': $status = ZapZapQuestionHelper::SubmitResultP12($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p13': $status = ZapZapQuestionHelper::SubmitResultP13($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p14': $status = ZapZapQuestionHelper::SubmitResultP14($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p15': $status = ZapZapQuestionHelper::SubmitResultP15($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p16': $status = ZapZapQuestionHelper::SubmitResultP16($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p17': $status = ZapZapQuestionHelper::SubmitResultP17($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p18': $status = ZapZapQuestionHelper::SubmitResultP18($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p19': $status = ZapZapQuestionHelper::SubmitResultP19($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p20': $status = ZapZapQuestionHelper::SubmitResultP20($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p21': $status = ZapZapQuestionHelper::SubmitResultP21($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p22': $status = ZapZapQuestionHelper::SubmitResultP22($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p23': $status = ZapZapQuestionHelper::SubmitResultP23($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p24': $status = ZapZapQuestionHelper::SubmitResultP24($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p25': $status = ZapZapQuestionHelper::SubmitResultP25($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p27': $status = ZapZapQuestionHelper::SubmitResultP27($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p28': $status = ZapZapQuestionHelper::SubmitResultP28($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p29': $status = ZapZapQuestionHelper::SubmitResultP29($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p30': $status = ZapZapQuestionHelper::SubmitResultP30($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p31': $status = ZapZapQuestionHelper::SubmitResultP31($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p32': $status = ZapZapQuestionHelper::SubmitResultP32($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p33': $status = ZapZapQuestionHelper::SubmitResultP33($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p34': $status = ZapZapQuestionHelper::SubmitResultP34($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p35': $status = ZapZapQuestionHelper::SubmitResultP35($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p36': $status = ZapZapQuestionHelper::SubmitResultP36($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p37': $status = ZapZapQuestionHelper::SubmitResultP37($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p38': $status = ZapZapQuestionHelper::SubmitResultP38($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p39': $status = ZapZapQuestionHelper::SubmitResultP39($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p40': $status = ZapZapQuestionHelper::SubmitResultP40($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p41': $status = ZapZapQuestionHelper::SubmitResultP41($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p42': $status = ZapZapQuestionHelper::SubmitResultP42($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p43': $status = ZapZapQuestionHelper::SubmitResultP43($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p44': $status = ZapZapQuestionHelper::SubmitResultP44($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p45': $status = ZapZapQuestionHelper::SubmitResultP45($planetId,$gamePlay,$gameResult,$profileId); break;
+					case 'p46': $status = ZapZapQuestionHelper::SubmitResultP46($planetId,$gamePlay,$gameResult,$profileId); break;
 
 					default: return ResponseHelper::OutputJSON('fail', 'submit answer error');
 				}
