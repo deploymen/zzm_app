@@ -50,139 +50,116 @@ Class ApiGameController extends Controller {
 	//GET QUESTION
 	public function request($planetId , $language = 'en') {	
 
-		$gameCode = Request::input('game_code');
-		$difficulty = Request::input('difficulty');
-
-		LogHelper::LogGetQuestions($planetId, $gameCode);
-
+		$ON_CACHE = true;
+		
 		try{
+			$gameCode = Request::input('game_code');
+			$difficulty = Request::input('difficulty');			
 			$questionCount = Request::input('question_count');
-			$profileId =  Request::input('game_code_profile_id');
-			$gameType = Request::input('game_type');
+			$profileId =  Request::input('game_code_profile_id');//middle
 
-			if($planetId < 100){
-				return ResponseHelper::OutputJSON('fail', 'planet not yet support');
-			}
+			LogHelper::LogGetQuestions($planetId, $gameCode);
 
+			$planetCacheKey = join('.', ['ApiGameController@request', 'planet', $planetId]);		
+		
 			// get planet info
-			// if (Cache::has('ApiGameController@request('.$planetId.')') ) {
+			if ($ON_CACHE && Cache::has($planetCacheKey)) {
+				$planet = Cache::get($planetCacheKey);
 
-			// 	$planet = Cache::get('ApiGameController@request('.$planetId.')');
-
-
-			// }else{
-				$planet = GamePlanet::find($planetId);
+			}else{
+				$planet = GamePlanet::where('available', 1)
+					->where('id', '>=', 100)
+					->find($planetId);
 
 				if(!$planet){
 					return ResponseHelper::OutputJSON('fail', 'planet not found');
 				}
 
-			    $expiresAt = Carbon::now()->addMinutes(60);
-				Cache::put('ApiGameController@request('.$planetId.')', $planet , $expiresAt);
-			// }
-
-			if(!$planet->available){
-				Cache::forget('ApiGameController@request('.$planetId.')');
-				return ResponseHelper::OutputJSON('fail', 'planet is not enable');
-			}	
+				Cache::put($planetCacheKey, $planet, Carbon::now()->addMinutes(60));
+			}
 			
 			$userMap = ZapZapQuestionHelper::GetUserMapPersonal($profileId, $planetId);
 
+			//fethcing top scores
 			$planetTopScore = ZapZapQuestionHelper::GameScreenPlanetTopScore($planetId);
-			$top_scre_result =[];
+			$topScoreResult = [];
 			for($i=0; $i<count($planetTopScore); $i++){
-
-				array_push($top_scre_result,  [
+				array_push($topScoreResult,  [
 					'nickname1'=>$planetTopScore[$i]->nickname1,
 					'nickname2'=>$planetTopScore[$i]->nickname2,
 					'avatar'=>$planetTopScore[$i]->avatar,
 					'score'=>$planetTopScore[$i]->score,
-					]);
-
+				]);
 			}
 			
-			if(!$difficulty || $difficulty > 5){
+			if(!in_array($difficulty, range(1, 5))){
 				$difficulty = $userMap->star + 1;
 				if($difficulty > 5){ $difficulty = 5; }
 			}
 
 			$level = $userMap->level;
+			$planetDifficultyCacheKey = join('.', ['ApiGameController@request', 'planet', $planetId, 'difficulty', $difficulty]);
+			if (Cache::has($planetDifficultyCacheKey)){
+			 	$questions = Cache::get($planetDifficultyCacheKey);
 
-			// if ( Cache::has('ApiGameController@request('.$planetId.','.$difficulty.')') ){
-
-			// 	$questions = Cache::get('ApiGameController@request('.$planetId.','.$difficulty.')');
-			// }else{
+			}else{
 				
 				$type = GameType::find($planet->game_type_id);
 				
 				switch($type->name){
-					case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId,$difficulty,$questionCount , $language); break;
-					case 'p02':$questions = ZapZapQuestionHelper::GetQuestionP02($planetId,$difficulty,$questionCount); break;
-					case 'p03':$questions = ZapZapQuestionHelper::GetQuestionP03($planetId,$difficulty,$questionCount); break;
-					case 'p06':$questions = ZapZapQuestionHelper::GetQuestionP06($planetId,$difficulty,$questionCount); break;
-					case 'p07':$questions = ZapZapQuestionHelper::GetQuestionP07($planetId,$difficulty,$questionCount); break;
-					case 'p08':$questions = ZapZapQuestionHelper::GetQuestionP08($planetId,$difficulty,$questionCount); break;
-					case 'p09':$questions = ZapZapQuestionHelper::GetQuestionP09($planetId,$difficulty,$questionCount); break;
-					case 'p10':$questions = ZapZapQuestionHelper::GetQuestionP10($planetId,$difficulty,$questionCount); break;
-					case 'p11':$questions = ZapZapQuestionHelper::GetQuestionP11($planetId,$difficulty,$questionCount); break;
-					case 'p12':$questions = ZapZapQuestionHelper::GetQuestionP12($planetId,$difficulty,$questionCount); break;
-					case 'p13':$questions = ZapZapQuestionHelper::GetQuestionP13($planetId,$difficulty,$questionCount); break;
-					case 'p14':$questions = ZapZapQuestionHelper::GetQuestionP14($planetId,$difficulty,$questionCount); break;
-					case 'p15':$questions = ZapZapQuestionHelper::GetQuestionP15($planetId,$difficulty,$questionCount); break;
-					case 'p16':$questions = ZapZapQuestionHelper::GetQuestionP16($planetId,$difficulty,$questionCount); break;
-					case 'p17':$questions = ZapZapQuestionHelper::GetQuestionP17($planetId,$difficulty,$questionCount); break;
-					case 'p18':$questions = ZapZapQuestionHelper::GetQuestionP18($planetId,$difficulty,$questionCount); break;
-					case 'p19':$questions = ZapZapQuestionHelper::GetQuestionP19($planetId,$difficulty,$questionCount); break;
-					case 'p20':$questions = ZapZapQuestionHelper::GetQuestionP20($planetId,$difficulty,$questionCount); break;
-					case 'p21':$questions = ZapZapQuestionHelper::GetQuestionP21($planetId,$difficulty,$questionCount); break;
-					case 'p22':$questions = ZapZapQuestionHelper::GetQuestionP22($planetId,$difficulty,$questionCount); break;
-					case 'p23':$questions = ZapZapQuestionHelper::GetQuestionP23($planetId,$difficulty,$questionCount); break;
-					case 'p24':$questions = ZapZapQuestionHelper::GetQuestionP24($planetId,$difficulty,$questionCount); break;
-					case 'p25':$questions = ZapZapQuestionHelper::GetQuestionP25($planetId,$difficulty,$questionCount); break;
-					case 'p27':$questions = ZapZapQuestionHelper::GetQuestionP27($planetId,$difficulty,$questionCount); break;
-					case 'p28':$questions = ZapZapQuestionHelper::GetQuestionP28($planetId,$difficulty,$questionCount); break;
-					case 'p29':$questions = ZapZapQuestionHelper::GetQuestionP29($planetId,$difficulty,$questionCount); break;
-					case 'p30':$questions = ZapZapQuestionHelper::GetQuestionP30($planetId,$difficulty,$questionCount); break;
-					case 'p31':$questions = ZapZapQuestionHelper::GetQuestionP31($planetId,$difficulty,$questionCount); break;
-					case 'p32':$questions = ZapZapQuestionHelper::GetQuestionP32($planetId,$difficulty,$questionCount); break;
-					case 'p33':$questions = ZapZapQuestionHelper::GetQuestionP33($planetId,$difficulty,$questionCount); break;
-					case 'p34':$questions = ZapZapQuestionHelper::GetQuestionP34($planetId,$difficulty,$questionCount); break;
-					case 'p35':$questions = ZapZapQuestionHelper::GetQuestionP35($planetId,$difficulty,$questionCount); break;
-					case 'p36':$questions = ZapZapQuestionHelper::GetQuestionP36($planetId,$difficulty,$questionCount); break;
-					case 'p37':$questions = ZapZapQuestionHelper::GetQuestionP37($planetId,$difficulty,$questionCount); break;
-					case 'p38':$questions = ZapZapQuestionHelper::GetQuestionP38($planetId,$difficulty,$questionCount); break;
-					case 'p39':$questions = ZapZapQuestionHelper::GetQuestionP39($planetId,$difficulty,$questionCount); break;
-					case 'p40':$questions = ZapZapQuestionHelper::GetQuestionP40($planetId,$difficulty,$questionCount); break;
-					case 'p41':$questions = ZapZapQuestionHelper::GetQuestionP41($planetId,$difficulty,$questionCount); break;
-					case 'p42':$questions = ZapZapQuestionHelper::GetQuestionP42($planetId,$difficulty,$questionCount); break;
-					case 'p43':$questions = ZapZapQuestionHelper::GetQuestionP43($planetId,$difficulty,$questionCount); break;
-					case 'p44':$questions = ZapZapQuestionHelper::GetQuestionP44($planetId,$difficulty,$questionCount); break;
-					case 'p45':$questions = ZapZapQuestionHelper::GetQuestionP45($planetId,$difficulty,$questionCount); break;
-					case 'p46':$questions = ZapZapQuestionHelper::GetQuestionP46($planetId,$difficulty,$questionCount); break;
-					case 'p47':$questions = ZapZapQuestionHelper::GetQuestionP47($planetId,$difficulty,$questionCount); break;
+					case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId, $difficulty, $questionCount , $language); break;
+					case 'p02':$questions = ZapZapQuestionHelper::GetQuestionP02($planetId, $difficulty, $questionCount); break;
+					case 'p03':$questions = ZapZapQuestionHelper::GetQuestionP03($planetId, $difficulty, $questionCount); break;
+					case 'p06':$questions = ZapZapQuestionHelper::GetQuestionP06($planetId, $difficulty, $questionCount); break;
+					case 'p07':$questions = ZapZapQuestionHelper::GetQuestionP07($planetId, $difficulty, $questionCount); break;
+					case 'p08':$questions = ZapZapQuestionHelper::GetQuestionP08($planetId, $difficulty, $questionCount); break;
+					case 'p09':$questions = ZapZapQuestionHelper::GetQuestionP09($planetId, $difficulty, $questionCount); break;
+					case 'p10':$questions = ZapZapQuestionHelper::GetQuestionP10($planetId, $difficulty, $questionCount); break;
+					case 'p11':$questions = ZapZapQuestionHelper::GetQuestionP11($planetId, $difficulty, $questionCount); break;
+					case 'p12':$questions = ZapZapQuestionHelper::GetQuestionP12($planetId, $difficulty, $questionCount); break;
+					case 'p13':$questions = ZapZapQuestionHelper::GetQuestionP13($planetId, $difficulty, $questionCount); break;
+					case 'p14':$questions = ZapZapQuestionHelper::GetQuestionP14($planetId, $difficulty, $questionCount); break;
+					case 'p15':$questions = ZapZapQuestionHelper::GetQuestionP15($planetId, $difficulty, $questionCount); break;
+					case 'p16':$questions = ZapZapQuestionHelper::GetQuestionP16($planetId, $difficulty, $questionCount); break;
+					case 'p17':$questions = ZapZapQuestionHelper::GetQuestionP17($planetId, $difficulty, $questionCount); break;
+					case 'p18':$questions = ZapZapQuestionHelper::GetQuestionP18($planetId, $difficulty, $questionCount); break;
+					case 'p19':$questions = ZapZapQuestionHelper::GetQuestionP19($planetId, $difficulty, $questionCount); break;
+					case 'p20':$questions = ZapZapQuestionHelper::GetQuestionP20($planetId, $difficulty, $questionCount); break;
+					case 'p21':$questions = ZapZapQuestionHelper::GetQuestionP21($planetId, $difficulty, $questionCount); break;
+					case 'p22':$questions = ZapZapQuestionHelper::GetQuestionP22($planetId, $difficulty, $questionCount); break;
+					case 'p23':$questions = ZapZapQuestionHelper::GetQuestionP23($planetId, $difficulty, $questionCount); break;
+					case 'p24':$questions = ZapZapQuestionHelper::GetQuestionP24($planetId, $difficulty, $questionCount); break;
+					case 'p25':$questions = ZapZapQuestionHelper::GetQuestionP25($planetId, $difficulty, $questionCount); break;
+					case 'p27':$questions = ZapZapQuestionHelper::GetQuestionP27($planetId, $difficulty, $questionCount); break;
+					case 'p28':$questions = ZapZapQuestionHelper::GetQuestionP28($planetId, $difficulty, $questionCount); break;
+					case 'p29':$questions = ZapZapQuestionHelper::GetQuestionP29($planetId, $difficulty, $questionCount); break;
+					case 'p30':$questions = ZapZapQuestionHelper::GetQuestionP30($planetId, $difficulty, $questionCount); break;
+					case 'p31':$questions = ZapZapQuestionHelper::GetQuestionP31($planetId, $difficulty, $questionCount); break;
+					case 'p32':$questions = ZapZapQuestionHelper::GetQuestionP32($planetId, $difficulty, $questionCount); break;
+					case 'p33':$questions = ZapZapQuestionHelper::GetQuestionP33($planetId, $difficulty, $questionCount); break;
+					case 'p34':$questions = ZapZapQuestionHelper::GetQuestionP34($planetId, $difficulty, $questionCount); break;
+					case 'p35':$questions = ZapZapQuestionHelper::GetQuestionP35($planetId, $difficulty, $questionCount); break;
+					case 'p36':$questions = ZapZapQuestionHelper::GetQuestionP36($planetId, $difficulty, $questionCount); break;
+					case 'p37':$questions = ZapZapQuestionHelper::GetQuestionP37($planetId, $difficulty, $questionCount); break;
+					case 'p38':$questions = ZapZapQuestionHelper::GetQuestionP38($planetId, $difficulty, $questionCount); break;
+					case 'p39':$questions = ZapZapQuestionHelper::GetQuestionP39($planetId, $difficulty, $questionCount); break;
+					case 'p40':$questions = ZapZapQuestionHelper::GetQuestionP40($planetId, $difficulty, $questionCount); break;
+					case 'p41':$questions = ZapZapQuestionHelper::GetQuestionP41($planetId, $difficulty, $questionCount); break;
+					case 'p42':$questions = ZapZapQuestionHelper::GetQuestionP42($planetId, $difficulty, $questionCount); break;
+					case 'p43':$questions = ZapZapQuestionHelper::GetQuestionP43($planetId, $difficulty, $questionCount); break;
+					case 'p44':$questions = ZapZapQuestionHelper::GetQuestionP44($planetId, $difficulty, $questionCount); break;
+					case 'p45':$questions = ZapZapQuestionHelper::GetQuestionP45($planetId, $difficulty, $questionCount); break;
+					case 'p46':$questions = ZapZapQuestionHelper::GetQuestionP46($planetId, $difficulty, $questionCount); break;
+					case 'p47':$questions = ZapZapQuestionHelper::GetQuestionP47($planetId, $difficulty, $questionCount); break;
 					case 'p00':$questions = ZapZapQuestionHelper::GetQuestionP00($planetId,$gameType,$level,$profileId); break;
 
 					default: return ResponseHelper::OutputJSON('fail', $type->name.' not found');
-				}	
-			// }
-
-			$profile = GameProfile::find($profileId);
-			if(!$profile->city || !$profile->country || !$profile->latitude || !$profile->longitude){
-				$secret = 'SAKA5639953H5Z26Q74Z';
-				$ip = Request::ip();
-
-				$res = file_get_contents("http://api.apigurus.com/iplocation/v1.8/locateip?key={$secret}&ip={$ip}&format=json&compact=y");			
-				$ipDetail = json_decode($res, true);
-
-				if(isset($ipDetail['geolocation_data'])) { 
-					$geolocationData = $ipDetail['geolocation_data'];
-					$profile->city = $geolocationData['city'];
-					$profile->country = $geolocationData['country_name'];
-					$profile->latitude = $geolocationData['latitude'];
-					$profile->longitude = $geolocationData['longitude'];
-					$profile->save();
 				}
+
+				Cache::put($planetDifficultyCacheKey, $questions, Carbon::now()->addMinutes(60));
 			}
+
+			$this->updateGameProfileLocationInfo($profileId);
 			
 			return ResponseHelper::OutputJSON('success', '', [
 					'planet' => [
@@ -197,7 +174,7 @@ Class ApiGameController extends Controller {
 						'difficulty' =>$difficulty,
 						'top_score' => $userMap->top_score,
 					],
-					'planet_top_score'=>$top_scre_result,
+					'planet_top_score'=>$topScoreResult,
 						
 	            	'questions' => $questions,
 	            ]);
@@ -1388,5 +1365,27 @@ Class ApiGameController extends Controller {
 				'avatar_id' => $profile->avatar->id,
 		 ]);
 	}
+
+	function updateGameProfileLocationInfo($profileId){
+		$profile = GameProfile::find($profileId);
+		if(!$profile){return;}
+
+		if(!$profile->country || !$profile->latitude || !$profile->longitude){
+			$secret = 'SAKA5639953H5Z26Q74Z';
+			$ip = Request::ip();
+		
+			$res = json_decode(file_get_contents("http://api.apigurus.com/iplocation/v1.8/locateip?key={$secret}&ip={$ip}&format=json&compact=y"), true);
+
+			if(isset($res['geolocation_data'])) { 
+				$data = $res['geolocation_data'];
+
+				$profile->city = $data['city'];
+				$profile->country = $data['country_name'];
+				$profile->latitude = $data['latitude'];
+				$profile->longitude = $data['longitude'];
+				$profile->save();
+			}
+		}
+	}	
 
 }
