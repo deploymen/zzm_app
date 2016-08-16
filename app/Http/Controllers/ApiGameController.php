@@ -99,7 +99,7 @@ Class ApiGameController extends Controller {
 
 			$level = $userMap->level;
 			$planetDifficultyCacheKey = join('.', ['ApiGameController@request', 'planet', $planetId, 'difficulty', $difficulty]);
-			if (Cache::has($planetDifficultyCacheKey)){
+			if ($ON_CACHE && Cache::has($planetDifficultyCacheKey)){
 			 	$questions = Cache::get($planetDifficultyCacheKey);
 
 			}else{
@@ -156,7 +156,7 @@ Class ApiGameController extends Controller {
 					default: return ResponseHelper::OutputJSON('fail', $type->name.' not found');
 				}
 
-				Cache::put($planetDifficultyCacheKey, $questions, Carbon::now()->addMinutes(60));
+				Cache::put($planetDifficultyCacheKey, $questions, Carbon::now()->addMinutes(5));
 			}
 
 			$this->updateGameProfileLocationInfo($profileId);
