@@ -666,16 +666,22 @@ Class ApiGameController extends Controller {
 
 			$result = DB::SELECT($sql, ['planet_id'=>$planetId] );
 
+			$gamePlay = new GamePlay;
+
 			$gameStatus = $gameResult['status'];
 			if($gameStatus == 'False'){
+
 				$gameStatus = 'fail';
+
 			}elseif($gameStatus == 'True'){
+
 				$gameStatus = 'pass';
+				$gamePlay->coin = $Planet->$coin;
+				
 			}
 
 			$coin = 'coin_star'.$gameResult['difficulty'];
 
-			$gamePlay = new GamePlay;
 			$gamePlay->user_id = $userId;
 			$gamePlay->profile_id = $profileId;
 			$gamePlay->planet_id = $planetId;
@@ -688,7 +694,6 @@ Class ApiGameController extends Controller {
 			$gamePlay->status = $gameStatus;
 			$gamePlay->played_time = $playedTime;
 			$gamePlay->difficulty = $gameResult['difficulty'];
-			$gamePlay->coin = $Planet->$coin;
 
 			if(isset($gameResult['badges']) ){
 				
