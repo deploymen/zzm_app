@@ -85,49 +85,45 @@ use App\Models\LastSession;
 
 class ZapZapQuestionHelper{
 
-	public static function UserMapV1_0($profileId,$planetId,$gamePlay,$gameResult){
-		$userMap = UserMap::where('profile_id', $profileId)->where('planet_id' , $planetId)->first();
-			if(!$userMap){
-				$userMap = new UserMap;
-				$userMap->profile_id = $profileId;
-				$userMap->planet_id = $planetId;
-				$userMap->played = '1';
-				$userMap->save();
-			}
-			$userMap->star += ($gamePlay->status == 'pass')?1:0;
-			$userMap->star = ($userMap->star > 5)?5:$userMap->star;
-			$userMap->top_score = ($userMap->top_score > $gamePlay->score)?$userMap->top_score:$gamePlay->score;
+	public static function UserMapV1_0($profileId, $planetId, $gamePlay, $gameResult){
+		$userMap = UserMap::where('profile_id', $profileId)->where('planet_id', $planetId)->first();
+		if(!$userMap){
+			$userMap = new UserMap;
+			$userMap->profile_id = $profileId;
+			$userMap->planet_id = $planetId;
 			$userMap->played = '1';
-			$userMap->level =  $gamePlay->level;
-			if(isset($gameResult['experience']) ){
-				$userMap->exp =  $gameResult['experience'];
-			}
-			
-			$userMap->save();		
+			$userMap->save();
+		}
+		$userMap->star += (in_array($userMap->star, range(0, 4)) && $gamePlay->status == 'pass')?1:0;
+		$userMap->top_score = max($userMap->top_score, $gamePlay->score);
+		$userMap->played = '1';
+		$userMap->level =  $gamePlay->level;
+		if(isset($gameResult['experience']) ){
+			$userMap->exp =  $gameResult['experience'];
+		}
+		
+		$userMap->save();		
 	}
 
 	public static function UserMapV1_1($profileId,$planetId,$gamePlay,$gameResult , $difficulty){
 		$userMap = UserMap::where('profile_id', $profileId)->where('planet_id' , $planetId)->first();
-			if(!$userMap){
-				$userMap = new UserMap;
-				$userMap->profile_id = $profileId;
-				$userMap->planet_id = $planetId;
-				$userMap->played = '1';
-				$userMap->save();
-			}
-
-			if($difficulty > $userMap->star ){
-				$userMap->star += ($gamePlay->status == 'pass')?1:0;
-				$userMap->star = ($userMap->star > 5)?5:$userMap->star;
-			}
-			$userMap->top_score = ($userMap->top_score > $gamePlay->score)?$userMap->top_score:$gamePlay->score;
+		if(!$userMap){
+			$userMap = new UserMap;
+			$userMap->profile_id = $profileId;
+			$userMap->planet_id = $planetId;
 			$userMap->played = '1';
-			$userMap->level =  $gamePlay->level;
-			if(isset($gameResult['experience']) ){
-				$userMap->exp =  $gameResult['experience'];
-			}
-			
-			$userMap->save();		
+			$userMap->save();
+		}
+
+		$userMap->star += (in_array($userMap->star, range(0, 4)) && ($difficulty > $userMap->star) && ($gamePlay->status == 'pass'))?1:0;			
+		$userMap->top_score = max($userMap->top_score, $gamePlay->score);
+		$userMap->played = '1';
+		$userMap->level =  $gamePlay->level;
+		if(isset($gameResult['experience']) ){
+			$userMap->exp =  $gameResult['experience'];
+		}
+		
+		$userMap->save();		
 	}
 
 	public static function GetPlanetInfo( $planetId){
@@ -136,11 +132,10 @@ class ZapZapQuestionHelper{
 				SELECT t.`name` AS `game_type` , p.`id` ,p.`name` , p.`description` , p.`badges_metrics` , p.`question_count` , p.`enable` 
 					FROM `t0123_game_planet` p, `t0124_game_system_planet` sp, `t0122_game_system` s , `t0121_game_type` t
 						WHERE sp.`system_id` = s.`id`
-						AND t.id = p.`game_type_id`
-						AND sp.`planet_id` = p.`id`
-						AND sp.`planet_id`= :planet_id
-
-						LIMIT 1;
+							AND t.id = p.`game_type_id`
+							AND sp.`planet_id` = p.`id`
+							AND sp.`planet_id`= :planet_id
+								LIMIT 1;
 			";
 
 			$result = DB::SELECT($sql, ['planet_id' => $planetId]);
