@@ -2,9 +2,9 @@
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
-class LogGameCoin extends Eloquent {
+class GameCoinTransaction extends Eloquent {
 
-	public $table = 't9207_log_game_coin';
+	public $table = 't0114_game_coin_transaction';
 	protected $primaryKey = 'id';
 	public $timestamps = false;
 
