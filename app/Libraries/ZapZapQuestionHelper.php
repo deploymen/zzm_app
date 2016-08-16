@@ -344,8 +344,7 @@ class ZapZapQuestionHelper{
 			if(!$results){
 				return 'question not found';
 			}
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.','.$language.')', $results , $expiresAt);
+
 			return $results;
 
 		}catch(Exception $ex){
@@ -411,8 +410,7 @@ class ZapZapQuestionHelper{
 			if(!$results){
 				return 'question not found';
 			}
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -478,8 +476,7 @@ class ZapZapQuestionHelper{
 			if(!$results){
 				return 'question not found';
 			}
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -568,8 +565,7 @@ class ZapZapQuestionHelper{
 			if(!$results){
 				return 'question not found';
 			}
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -637,8 +633,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -703,8 +698,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -770,8 +764,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -832,8 +825,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -897,8 +889,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -967,8 +958,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -1048,8 +1038,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -1118,8 +1107,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -1179,8 +1167,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -1241,8 +1228,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -1314,8 +1300,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -1379,8 +1364,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -1520,8 +1504,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 		
 			return $results;
 
@@ -1592,8 +1575,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 		
 			return $results;
 
@@ -1653,8 +1635,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -1716,8 +1697,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -1777,8 +1757,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -1841,8 +1820,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -1904,8 +1882,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -1968,8 +1945,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -1989,8 +1965,7 @@ class ZapZapQuestionHelper{
 
 			$results = ['difficulty' => $difficulty];
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -2050,8 +2025,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -2116,8 +2090,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -2189,8 +2162,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -2249,8 +2221,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -2311,8 +2282,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -2374,8 +2344,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -2434,8 +2403,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -2493,8 +2461,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -2551,8 +2518,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -2609,8 +2575,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -2666,8 +2631,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -2725,8 +2689,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -2783,8 +2746,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -2842,8 +2804,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -2901,8 +2862,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -2962,8 +2922,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -3021,8 +2980,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -3082,8 +3040,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -3140,8 +3097,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -3203,8 +3159,7 @@ class ZapZapQuestionHelper{
 				return 'question not found';
 			}
 
-			$expiresAt = Carbon::now()->addMinutes(5);
-			Cache::put('ApiGameController@request('.$planetId.','.$difficulty.')', $results , $expiresAt);
+			
 			return $results;
 
 		}catch(Exception $ex){
@@ -5017,6 +4972,108 @@ class ZapZapQuestionHelper{
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP46', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
+		}
+	}
+
+	public static function submitResultP47($planetId,$gamePlay ,$gameResult,$profileId ) {
+		try{
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				$resultP47 = new GameResultP47;
+				$resultP47->target_type = 'p47';
+				$resultP47->target_id = $question->target_id;
+				$resultP47->answer = $inAnswer['answer'];
+				$resultP47->correct = $inAnswer['correct'];
+				$resultP47->save();
+
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p47';
+				$gameResults->target_id = $resultP47->id;
+				$gameResults->game_type_id = '47';
+				$gameResults->correct = $inAnswer['correct'];
+				$gameResults->save();
+			}	
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP47', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
+		}
+	}
+
+	public static function submitResultP48($planetId,$gamePlay ,$gameResult,$profileId ) {
+		try{
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				$resultP48 = new GameResultP48;
+				$resultP48->target_type = 'p48';
+				$resultP48->target_id = $question->target_id;
+				$resultP48->answer = $inAnswer['answer'];
+				$resultP48->correct = $inAnswer['correct'];
+				$resultP48->save();
+
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p48';
+				$gameResults->target_id = $resultP48->id;
+				$gameResults->game_type_id = '48';
+				$gameResults->correct = $inAnswer['correct'];
+				$gameResults->save();
+			}	
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP48', [
+					'environment' => json_encode([
+						'message' => $ex->getMessage(),
+						'inputs' => Request::all(),
+					]),
+				]);		
+				return false;
+		}
+	}
+
+	public static function submitResultP49($planetId,$gamePlay ,$gameResult,$profileId ) {
+		try{
+			for($i=0; $i<count($gameResult['answers']); $i++){
+				$inAnswer = $gameResult['answers'][$i];
+				$question = GameQuestion::find($inAnswer['question_id']);
+
+				$resultP49 = new GameResultP49;
+				$resultP49->target_type = 'p49';
+				$resultP49->target_id = $question->target_id;
+				$resultP49->answer = $inAnswer['answer'];
+				$resultP49->correct = $inAnswer['correct'];
+				$resultP49->save();
+
+				$gameResults = new GameResult;
+				$gameResults->play_id = $gamePlay->id;
+				$gameResults->question_id = $inAnswer['question_id'];
+				$gameResults->target_type = 'p49';
+				$gameResults->target_id = $resultP49->id;
+				$gameResults->game_type_id = '49';
+				$gameResults->correct = $inAnswer['correct'];
+				$gameResults->save();
+			}	
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@SubmitResultP49', [
 					'environment' => json_encode([
 						'message' => $ex->getMessage(),
 						'inputs' => Request::all(),
