@@ -475,13 +475,13 @@ class ZapZapQuestionHelper{
 			return $results;
 
 		}catch(Exception $ex){
-				LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp03', [
+			LogHelper::LogToDatabase('ZapZapQuestionHelper@GetQuestionp03', [
 				'environment' => json_encode([
 					'message' => $ex->getMessage(),
 					'inputs' => Request::all(),
 				]),
 			]);		
-		return false;
+			return false;
 		}
 	}
 

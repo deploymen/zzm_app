@@ -35,7 +35,7 @@ use App\Models\GameResultP03;
 use App\Models\GameResultP06;
 use App\Models\GameResultP07;
 use App\Models\GameQuestion;
-use App\Models\GameQuestionp03;
+//use App\Models\GameQuestionp03;
 use App\Models\GameQuestionP04ChallengeSet;
 use App\Models\GameSystemPlanet;
 use App\Models\UserExternalId;
@@ -45,13 +45,17 @@ use App\Models\LeaderboardPlanet;
 use App\Models\IdCounter;
 use App\Models\GameCoinTransaction;
 
+use App\Models\Questions\AbstractGameQuestion;
+
+
+
 
 Class ApiGameController extends Controller {
 
 	//GET QUESTION
 	public function requestV1_0($planetId , $language = 'en') {	
 
-		$ON_CACHE = true;
+		$ON_CACHE = false;
 		
 		try{
 			$gameCode = Request::input('game_code');
@@ -61,7 +65,7 @@ Class ApiGameController extends Controller {
 
 			LogHelper::LogGetQuestions($planetId, $gameCode);
 
-			$planetCacheKey = join('.', ['ApiGameController@request', 'planet', $planetId]);		
+			$planetCacheKey = join('.', ['ApiGameController@request', 'v1.0', 'planet', $planetId]);		
 		
 			// get planet info
 			if ($ON_CACHE && Cache::has($planetCacheKey)) {
@@ -99,7 +103,7 @@ Class ApiGameController extends Controller {
 			}
 
 			$level = $userMap->level;
-			$planetDifficultyCacheKey = join('.', ['ApiGameController@request', 'planet', $planetId, 'difficulty', $difficulty]);
+			$planetDifficultyCacheKey = join('.', ['ApiGameController@request', 'v1.0', 'planet', $planetId, 'difficulty', $difficulty]);
 			if ($ON_CACHE && Cache::has($planetDifficultyCacheKey)){
 			 	$questions = Cache::get($planetDifficultyCacheKey);
 
@@ -159,7 +163,7 @@ Class ApiGameController extends Controller {
 					default: return ResponseHelper::OutputJSON('fail', $type->name.' not found');
 				}
 
-				Cache::put($planetDifficultyCacheKey, $questions, Carbon::now()->addMinutes(5));
+				Cache::put($planetDifficultyCacheKey, $questions, Carbon::now()->addMinutes(5));//!handle child func error!
 			}
 
 			$this->updateGameProfileLocationInfo($profileId);
@@ -194,7 +198,7 @@ Class ApiGameController extends Controller {
 
 	public function requestV1_3($planetId , $language = 'en') {	
 
-		$ON_CACHE = true;
+		$ON_CACHE = false;
 		
 		try{
 			$gameCode = Request::input('game_code');
@@ -204,7 +208,7 @@ Class ApiGameController extends Controller {
 
 			LogHelper::LogGetQuestions($planetId, $gameCode);
 
-			$planetCacheKey = join('.', ['ApiGameController@request', 'planet', $planetId]);		
+			$planetCacheKey = join('.', ['ApiGameController@request', 'v1.3', 'planet', $planetId]);		
 		
 			// get planet info
 			if ($ON_CACHE && Cache::has($planetCacheKey)) {
@@ -242,18 +246,33 @@ Class ApiGameController extends Controller {
 			}
 
 			$level = $userMap->level;
-			$planetDifficultyCacheKey = join('.', ['ApiGameController@request', 'planet', $planetId, 'difficulty', $difficulty]);
+			$planetDifficultyCacheKey = join('.', ['ApiGameController@request', 'v1.3', 'planet', $planetId, 'difficulty', $difficulty]);
 			if ($ON_CACHE && Cache::has($planetDifficultyCacheKey)){
 			 	$questions = Cache::get($planetDifficultyCacheKey);
 
 			}else{
 				
 				$type = GameType::find($planet->game_type_id);
+
+				$questions = AbstractGameQuestion::GetQuestions($type->name, [
+					'planetId' => $planetId, 
+					'difficulty' => $difficulty, 
+					'questionCount' => $questionCount, 
+					'language' => $language, 
+				]);
+
+
+dd($questions);
+die('-OK-');
 				
 				switch($type->name){
+
+
+
+
 					case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId, $difficulty, $questionCount , $language); break;
 					case 'p02':$questions = ZapZapQuestionHelper::GetQuestionP02($planetId, $difficulty, $questionCount); break;
-					case 'p03':$questions = ZapZapQuestionHelper::GetQuestionP03($planetId, $difficulty, $questionCount); break;
+					//case 'p03':$questions = ZapZapQuestionHelper::GetQuestionP03($planetId, $difficulty, $questionCount); break;
 					case 'p06':$questions = ZapZapQuestionHelper::GetQuestionP06($planetId, $difficulty, $questionCount); break;
 					case 'p07':$questions = ZapZapQuestionHelper::GetQuestionP07($planetId, $difficulty, $questionCount); break;
 					case 'p08':$questions = ZapZapQuestionHelper::GetQuestionP08($planetId, $difficulty, $questionCount); break;
