@@ -22,6 +22,8 @@ Route::group(['middleware' => 'version'], function () {
 	});
 
 	Route::group(['prefix' => '/1.2'], function () {
+		require __DIR__.'/Routes/1.2/api.php';
+		require __DIR__.'/Routes/1.2/api-user.php';
 		require __DIR__.'/Routes/1.2/api-game.php';
 	});
 });

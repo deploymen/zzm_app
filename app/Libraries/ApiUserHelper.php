@@ -33,7 +33,7 @@ use Session;
 
 class ApiUserHelper{
 
-	public static function Register($role, $name, $email, $country, $username, $password_sha1,  $registerFrom){
+	public static function Register($role, $name, $email, $country, $username, $password_sha1,  $registerFrom, $ref){
 		$classId = 0;
 
 		$user = new User;
@@ -41,8 +41,8 @@ class ApiUserHelper{
 		$user->name = $name;
 		$user->email = $email;
 		$user->country = $country;
-		$user->activated = 0;
 		$user->register_from = $registerFrom;
+		$user->ref = $ref;
 		$user->paid = Config::get('app.paid');
 		$user->save();
 
@@ -89,6 +89,7 @@ class ApiUserHelper{
 		return [
 			'user_id' => $user->id,
 			'class_id' => $classId,
+			'access_token' => $accessToken,
 			];
 	}
 

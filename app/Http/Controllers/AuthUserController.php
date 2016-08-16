@@ -90,131 +90,48 @@ Class AuthUserController extends Controller {
 		}
 
 		try {	
-			// DB::transaction(function ()
-				 // use ($role, $username, $password_sha1, $name, $email, $country, $deviceId, $accessToken, $classId) {
-
-					$user = new User;
-					$user->role = $role;
-					$user->name = $name;
-					$user->email = $email;
-					$user->country = $country;
-					$user->register_from = $registerFrom;
-					$user->ref = $ref;
-					$user->paid = Config::get('app.paid');
-					$user->save();
-
-					$accessToken = AuthHelper::GenerateAccessToken($user->id);
-
-					$access = new UserAccess;
-					$access->user_id = $user->id;
-					$access->username = $username;
-					$access->password_sha1 = $password_sha1;
-					$access->access_token = $accessToken;
-					$access->access_token_issue_at = DB::raw('NOW()');
-					$access->access_token_issue_ip = Request::ip();
-					$access->access_token_expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 10 YEAR)'); //we dont kick them out
-					$access->save();
-
-					$extId = new UserExternalId;
-					$extId->user_id = $user->id;
-					if ($deviceId) {$extId->device_id = $deviceId;}
-					$extId->save();
-
-					$setting = new UserSetting;
-					$setting->user_id = $user->id;
-					$setting->save();
-
-					$userFlag = new UserFlag;
-					$userFlag->user_id = $user->id;
-
-					if($role == 'teacher'){
-						$gameClass = new GameClass;
-						$gameClass->user_id = $user->id;
-						$gameClass->name = 'Default Class';
-						$gameClass->save();
-
-						$userFlag->profile_limit = Config::get('app.teacher_profile_limit');
-						$userFlag->class_limit = Config::get('app.teacher_class_limit');
-						$userFlag->save();
-
-						$classId = $gameClass->id;
-					}else{
-						$userFlag->profile_limit = Config::get('app.parent_profile_limit');
-						$userFlag->class_limit = 0;
-						$userFlag->save();
-					}
-
-					$profile = new GameProfile;
-					$profile->user_id = $user->id;
-					$profile->nickname1 = 999;
-					$profile->nickname2 = 999;
-					$profile->avatar_id = 999;
-					$profile->class_id = $classId;
-					$profile->school = 'default school';
-					$profile->save();
-
-					$idCounter = IdCounter::find(1);
-					$gameCodeSeed = $idCounter->game_code_seed;
-					$idCounter->game_code_seed = $gameCodeSeed + 1;
-					$idCounter->save();
-
-					$code = new GameCode;
-					$code->type = 'signed_up_profile';
-					$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
-					$code->seed = $gameCodeSeed;
-					$code->profile_id = $profile->id;
-					$code->save();	
-
-					
-					$secretKey = sha1(time() . $email);
-					$edmHtml = (string) view('emails.account-activation', [
-						'name' => $name,
-						'app_store_address' => config('app.app_store_url'),
-						'username' => $email,
-						'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
-						'activation_link' => config('app.website_url') . "/api/1.0/auth/activate/{$secretKey}",
-						'email_support' => config('app.support_email'),
-						'zzm_url' => config('app.website_url'),
-						'social_media_links' => config('app.fanpage_url'),
-					]);
 			
-					EmailHelper::SendEmail([
-						'about' => 'Welcome',
-						'subject' => 'Your Zap Zap Account is now ready!',
-						'body' => $edmHtml,
-						'bodyHtml' => $edmHtml,
-						'toAddresses' => [$email],
-					]);
-
-					$logOpenAcc = new LogAccountActivate;
-					$logOpenAcc->user_id = $user->id;
-					$logOpenAcc->secret = $secretKey;
-					$logOpenAcc->save();
+			$newUser = ApiUserHelper::Register($role , $name , $email , $country , $email , $password_sha1 , $registerFrom , $ref);
+			$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Anonymous' , '5_or_younger' , 'default school' , 'K' , '', 999 , 999 , 999);
 					
-					$mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
-					$data = ["email" => $username,
-					        "attributes" => ["NAME"=>$name, "SURNAME"=>""],
-					        "listid" => [Config::get('app.send_in_blue_list_id')],
-					        "listid_unlink" => []
-					    ];
+			$secretKey = sha1(time() . $email);
+			$edmHtml = (string) view('emails.account-activation', [
+				'name' => $name,
+				'app_store_address' => config('app.app_store_url'),
+				'username' => $email,
+				'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
+				'activation_link' => config('app.website_url') . "/api/1.0/auth/activate/{$secretKey}",
+				'email_support' => config('app.support_email'),
+				'zzm_url' => config('app.website_url'),
+				'social_media_links' => config('app.fanpage_url'),
+			]);
+			
+			EmailHelper::SendEmail([
+				'about' => 'Welcome',
+				'subject' => 'Your Zap Zap Account is now ready!',
+				'body' => $edmHtml,
+				'bodyHtml' => $edmHtml,
+				'toAddresses' => [$email],
+			]);
+
+			$logOpenAcc = new LogAccountActivate;
+			$logOpenAcc->user_id = $newUser['user_id'];
+			$logOpenAcc->secret = $secretKey;
+			$logOpenAcc->save();
+					
+			$mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
+			$data = ["email" => $username,
+			        "attributes" => ["NAME"=>$name, "SURNAME"=>""],
+			        "listid" => [Config::get('app.send_in_blue_list_id')],
+			        "listid_unlink" => []
+			    ];
 		
-				    $mailin->create_update_user($data);
+		    $mailin->create_update_user($data);
 
-					//job done - log it!
-					DatabaseUtilHelper::LogInsert($user->id, $user->table, $user->id);
-					DatabaseUtilHelper::LogInsert($user->id, $access->table, $user->id);
-					DatabaseUtilHelper::LogInsert($user->id, $extId->table, $user->id);
-					DatabaseUtilHelper::LogInsert($user->id, $extId->table, $user->id);
-					DatabaseUtilHelper::LogInsert($user->id, $profile->table, $profile->id);
-					DatabaseUtilHelper::LogInsert($user->id, $code->table, $code->id);
+			Session::put('access_token', $newUser['access_token']);
+			setcookie('access_token', $newUser['access_token'], time() + (86400 * 30), "/"); // 86400 = 1 day*/
 
-					Session::put('access_token', $accessToken);
-					setcookie('access_token', $accessToken, time() + (86400 * 30), "/"); // 86400 = 1 day*/
-				// }
-				// );
-
-			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
-			$list = User::select('id' , 'role' , 'name' , 'register_from')->find($userAccess->user_id);
+			$list = User::select('id' , 'role' , 'name' , 'register_from')->find($newUser['user_id']);
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -667,75 +584,10 @@ Class AuthUserController extends Controller {
 			return ResponseHelper::OutputJSON('fail', "email used");
 		}
 
-		try {
-			$user = new User;
-			$user->role = $role;
-			$user->name = $name;
-			$user->email = $email;
-			$user->register_from = 'App';
-			$user->paid = Config::get('app.paid');
-			$user->save();
+		// try {
 
-			$accessToken = AuthHelper::GenerateAccessToken($user->id);
-
-			$access = new UserAccess;
-			$access->user_id = $user->id;
-			$access->username = $email;
-			$access->password_sha1 = $password_sha1;
-			$access->access_token = $accessToken;
-			$access->access_token_issue_at = DB::raw('NOW()');
-			$access->access_token_issue_ip = Request::ip();
-			$access->access_token_expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 10 YEAR)'); //we dont kick them out
-			$access->save();
-
-			$extId = new UserExternalId;
-			$extId->user_id = $user->id;
-			$extId->save();
-
-			$setting = new UserSetting;
-			$setting->user_id = $user->id;
-			$setting->save();
-
-			$userFlag = new UserFlag;
-			$userFlag->user_id = $user->id;
-
-			if($role == 'teacher'){
-				$gameClass = new GameClass;
-				$gameClass->user_id = $user->id;
-				$gameClass->name = 'Default Class';
-				$gameClass->save();
-
-				$userFlag->profile_limit = Config::get('app.teacher_profile_limit');
-				$userFlag->class_limit = Config::get('app.teacher_class_limit');
-				$userFlag->save();
-
-				$classId = $gameClass->id;
-			}else{
-				$userFlag->profile_limit = Config::get('app.parent_profile_limit');
-				$userFlag->class_limit = 0;
-				$userFlag->save();
-			}
-
-			$profile = new GameProfile;
-			$profile->user_id = $user->id;
-			$profile->nickname1 = 999;
-			$profile->nickname2 = 999;
-			$profile->avatar_id = 999;
-			$profile->class_id = $classId;
-			$profile->school = 'default school';
-			$profile->save();
-
-			$idCounter = IdCounter::find(1);
-			$gameCodeSeed = $idCounter->game_code_seed;
-			$idCounter->game_code_seed = $gameCodeSeed + 1;
-			$idCounter->save();
-
-			$code = new GameCode;
-			$code->type = 'signed_up_profile';
-			$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
-			$code->seed = $gameCodeSeed;
-			$code->profile_id = $profile->id;
-			$code->save();
+			$newUser = ApiUserHelper::Register($role , $name , $email , '' , $email , $password_sha1 , 'App' , '');
+			$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Anonymous' , '5_or_younger' , 'default school' , 'K' , '', 999 , 999 , 999);
 
 			$secretKey = sha1(time() . $email);
 			$edmHtml = (string) view('emails.account-activation', [
@@ -757,28 +609,22 @@ Class AuthUserController extends Controller {
 			]);
 
 			$logOpenAcc = new LogAccountActivate;
-			$logOpenAcc->user_id = $user->id;
+			$logOpenAcc->user_id = $newUser['user_id'];
 			$logOpenAcc->secret = $secretKey;
 			$logOpenAcc->save();
 
-			//job done - log it!
-			DatabaseUtilHelper::LogInsert($user->id, $user->table, $user->id);
-			DatabaseUtilHelper::LogInsert($user->id, $access->table, $user->id);
-			DatabaseUtilHelper::LogInsert($user->id, $extId->table, $user->id);
-			DatabaseUtilHelper::LogInsert($user->id, $extId->table, $user->id);
-			DatabaseUtilHelper::LogInsert($user->id, $profile->table, $profile->id);
-			DatabaseUtilHelper::LogInsert($user->id, $code->table, $code->id);
-
+			$code = GameCode::where('profile_id' , $newProfile['code']);
+var_export($code); die();
 			return ResponseHelper::OutputJSON('success', '', $code->code);
 
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'AuthUserController > signUp',
-				'inputs' => Request::all(),
+		// } catch (Exception $ex) {
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		'source' => 'AuthUserController > signUp',
+		// 		'inputs' => Request::all(),
 
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 	}
 
 	public function ResendACtivateCode(){
@@ -971,7 +817,7 @@ Class AuthUserController extends Controller {
 			return ResponseHelper::OutputJSON('fail', 'email used');
 		}
 
-		$newUser = ApiUserHelper::Register($role , $name , $email , $country , $email , $facebookId , 'facebook');
+		$newUser = ApiUserHelper::Register($role , $name , $email , $country , $email , $facebookId , 'facebook' , '');
 
 		$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Player 1' , '5_or_younger' , 'default school' , 'K' , '', 999 , 999 , 999);
 
