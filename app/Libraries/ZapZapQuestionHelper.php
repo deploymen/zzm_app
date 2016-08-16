@@ -4532,7 +4532,8 @@ class ZapZapQuestionHelper{
 				$resultP32 = new GameResultP32;
 				$resultP32->target_type = 'p32';
 				$resultP32->target_id = $question->target_id;
-				$resultP32->answer = $inAnswer['answer'];
+				$resultP32->answer = $inAnswer['answer_x'];
+				$resultP32->answer = $inAnswer['answer_y'];
 				$resultP32->correct = $inAnswer['correct'];
 				$resultP32->save();
 

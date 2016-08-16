@@ -33,7 +33,7 @@ Route::group(['prefix' => 'game'], function () {
 		Route::post('/profile-transfer-loose', 'ApiProfileController@profileTransferLoose');
 
 
-		Route::post('/play/{id}/result', 'ApiGameController@resultV1_1');
+		Route::post('/play/{id}/result', 'ApiGameController@resultV1_2');
 		Route::get('/play/{id}/request'  , 'ApiGameController@request');
 
 		Route::post('/play/push-result'  , 'ApiGameController@offlinePost');
