@@ -6,9 +6,9 @@ use App\Models\GamePlanet;
 use App\Models\Questions\AbstractGameQuestion;
 use DB;
 
-class GameQuestionP08 extends Eloquent {
+class GameQuestionP17 extends Eloquent {
 
-	public $table = 't0208_game_question_p08';
+	public $table = 't0217_game_question_p17';
 	protected $primaryKey = 'id';
 	public $timestamps = true;
 	protected $dates = ['deleted_at'];
@@ -27,11 +27,11 @@ class GameQuestionP08 extends Eloquent {
 
 
 		$sql = "
-			SELECT p08.*, qc.`question_id`
-				FROM `t0208_game_question_p08` p08, `t0126_game_planet_question_cache` qc
+			SELECT p17.*, qc.`question_id`
+				FROM `t0217_game_question_p17` p17, `t0126_game_planet_question_cache` qc
 	                    WHERE qc.`planet_id` = :planet_id
 	                    	AND qc.`difficulty` = :difficulty
-	                    	AND p08.`id` = qc.`target_id`
+	                    	AND p17.`id` = qc.`target_id`
 		                    	ORDER BY RAND() 
 		                    		LIMIT :count
 		";
@@ -42,24 +42,29 @@ class GameQuestionP08 extends Eloquent {
 			'count' => $questionCount,
 		]);	
 
-
 		$questions = [];
 		foreach ($result as $value){
 			array_push($questions, array_only((array)$value, [
-				'id',
-				'param_1',
-				'param_2',
-				'param_3',
-				'param_4',
-				'param_5',
-				'param_6',
-				'param_7',
-				'hexagon_path',
-				'difficulty',
+				'id' ,
+				'color_1' ,
+				'number_1' ,
+				'color_2' ,
+				'number_2' ,
+				'color_3' ,
+				'number_3' ,
+				'color_4' ,
+				'number_4' ,
+				'color_5' ,
+				'number_5' ,
+				'color_6' ,
+				'number_6' ,
+				'fake_color_1' ,
+				'fake_number_1' ,
+				'fake_color_2' ,
+				'fake_number_2' ,
+				'difficulty' ,
 			]));
 		}
-
-
 
 		return $questions;
 	}

@@ -3,6 +3,7 @@
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\GamePlanet;
+use App\Models\Questions\AbstractGameQuestion;
 use DB;
 
 class GameQuestionP06 extends Eloquent {
@@ -26,9 +27,8 @@ class GameQuestionP06 extends Eloquent {
 
 
 		$sql = "
-			SELECT p06.*, qc.`question_id`, obj.`question_object_1`,obj.`question_object_2`, obj.`question_type`
-				FROM (`t0206_game_question_p06` p06, `t0126_game_planet_question_cache` qc)
-					LEFT JOIN `t0206_game_question_p06_object` obj ON (obj.`question_id` = p06.`id` )
+			SELECT p06.*, qc.`question_id`
+				FROM `t0206_game_question_p06` p06, `t0126_game_planet_question_cache` qc
 	                    WHERE qc.`planet_id` = :planet_id
 	                    	AND qc.`difficulty` = :difficulty
 	                    	AND p06.`id` = qc.`target_id`

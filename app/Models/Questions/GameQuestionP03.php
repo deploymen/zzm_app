@@ -3,6 +3,7 @@
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\GamePlanet;
+use App\Models\Questions\AbstractGameQuestion;
 use DB;
 
 class GameQuestionP03 extends Eloquent {

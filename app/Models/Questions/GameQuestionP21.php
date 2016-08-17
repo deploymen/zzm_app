@@ -6,9 +6,9 @@ use App\Models\GamePlanet;
 use App\Models\Questions\AbstractGameQuestion;
 use DB;
 
-class GameQuestionP08 extends Eloquent {
+class GameQuestionP21 extends Eloquent {
 
-	public $table = 't0208_game_question_p08';
+	public $table = 't0221_game_question_p21';
 	protected $primaryKey = 'id';
 	public $timestamps = true;
 	protected $dates = ['deleted_at'];
@@ -27,11 +27,11 @@ class GameQuestionP08 extends Eloquent {
 
 
 		$sql = "
-			SELECT p08.*, qc.`question_id`
-				FROM `t0208_game_question_p08` p08, `t0126_game_planet_question_cache` qc
+			SELECT p21.*, qc.`question_id`
+				FROM `t0221_game_question_p21` p21, `t0126_game_planet_question_cache` qc
 	                    WHERE qc.`planet_id` = :planet_id
 	                    	AND qc.`difficulty` = :difficulty
-	                    	AND p08.`id` = qc.`target_id`
+	                    	AND p21.`id` = qc.`target_id`
 		                    	ORDER BY RAND() 
 		                    		LIMIT :count
 		";
@@ -42,24 +42,23 @@ class GameQuestionP08 extends Eloquent {
 			'count' => $questionCount,
 		]);	
 
-
 		$questions = [];
 		foreach ($result as $value){
 			array_push($questions, array_only((array)$value, [
-				'id',
-				'param_1',
-				'param_2',
-				'param_3',
-				'param_4',
-				'param_5',
-				'param_6',
-				'param_7',
-				'hexagon_path',
-				'difficulty',
+				'id' ,
+				'question' ,
+				'param_time' ,
+				'param_minimum' ,
+				'param_lazy' ,
+				'param_low' ,
+				'param_very_low' ,
+				'param_peak' ,
+				'param_over' ,
+				'param_increase_rate' ,
+				'param_decrease_rate' ,
+				'difficulty' ,
 			]));
 		}
-
-
 
 		return $questions;
 	}

@@ -3,6 +3,7 @@
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\GamePlanet;
+use App\Models\Questions\AbstractGameQuestion;
 use DB;
 
 class GameQuestionP07 extends Eloquent {
@@ -26,9 +27,8 @@ class GameQuestionP07 extends Eloquent {
 
 
 		$sql = "
-			SELECT p07.*, qc.`question_id`, obj.`question_object_1`,obj.`question_object_2`, obj.`question_type`
-				FROM (`t0207_game_question_p07` p07, `t0126_game_planet_question_cache` qc)
-					LEFT JOIN `t0207_game_question_p07_object` obj ON (obj.`question_id` = p07.`id` )
+			SELECT p07.*, qc.`question_id`
+				FROM `t0207_game_question_p07` p07, `t0126_game_planet_question_cache` qc
 	                    WHERE qc.`planet_id` = :planet_id
 	                    	AND qc.`difficulty` = :difficulty
 	                    	AND p07.`id` = qc.`target_id`
@@ -44,21 +44,22 @@ class GameQuestionP07 extends Eloquent {
 
 		$questions = [];
 		foreach ($result as $value){
-			array_push($questions, array_only((array)$value, [
-				'id'
-				'difficulty' => 
+			array_push($questions, [
+				'id' => $value->question_id,
+				'difficulty' => $value->difficulty,
 				'questions' => [
-					'left_question_1'
-					'left_question_2'
-					'left_question_3'
-					'right_question_1'
-					'right_question_2'
-					'right_question_3'
+					'left_question_1'=>$value->left_question_1,
+					'left_question_2'=>$value->left_question_2,
+					'left_question_3'=>$value->left_question_3,
+					'right_question_1'=>$value->right_question_1,
+					'right_question_2'=>$value->right_question_2,
+					'right_question_3'=>$value->right_question_3,
 				],
 				'answers' => [
-					'answer' => $r->answer,
+					'answer' => $value->answer,
 				],
-			]));
+				
+			]);
 		}
 
 		return $questions;

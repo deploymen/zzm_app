@@ -6,9 +6,9 @@ use App\Models\GamePlanet;
 use App\Models\Questions\AbstractGameQuestion;
 use DB;
 
-class GameQuestionP08 extends Eloquent {
+class GameQuestionP14 extends Eloquent {
 
-	public $table = 't0208_game_question_p08';
+	public $table = 't0214_game_question_p14';
 	protected $primaryKey = 'id';
 	public $timestamps = true;
 	protected $dates = ['deleted_at'];
@@ -27,11 +27,11 @@ class GameQuestionP08 extends Eloquent {
 
 
 		$sql = "
-			SELECT p08.*, qc.`question_id`
-				FROM `t0208_game_question_p08` p08, `t0126_game_planet_question_cache` qc
+			SELECT p14.*, qc.`question_id`
+				FROM `t0214_game_question_p14` p14, `t0126_game_planet_question_cache` qc
 	                    WHERE qc.`planet_id` = :planet_id
 	                    	AND qc.`difficulty` = :difficulty
-	                    	AND p08.`id` = qc.`target_id`
+	                    	AND p14.`id` = qc.`target_id`
 		                    	ORDER BY RAND() 
 		                    		LIMIT :count
 		";
@@ -42,24 +42,25 @@ class GameQuestionP08 extends Eloquent {
 			'count' => $questionCount,
 		]);	
 
-
 		$questions = [];
 		foreach ($result as $value){
 			array_push($questions, array_only((array)$value, [
-				'id',
-				'param_1',
-				'param_2',
-				'param_3',
-				'param_4',
-				'param_5',
-				'param_6',
-				'param_7',
-				'hexagon_path',
-				'difficulty',
+				'id' ,
+				'answer' ,
+				'op' ,
+				'number1' ,
+				'number1_multiplier' ,
+				'number2' ,
+				'number2_multiplier' ,
+				'number3' ,
+				'number3_multiplier' ,
+				'answer_option_1' ,
+				'answer_option_2' ,
+				'answer_option_3' ,
+				'answer_option_4' ,
+				'difficulty' ,
 			]));
 		}
-
-
 
 		return $questions;
 	}

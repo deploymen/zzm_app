@@ -3,6 +3,7 @@
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\GamePlanet;
+use App\Models\Questions\AbstractGameQuestion;
 use DB;
 
 class GameQuestionP10 extends Eloquent {
@@ -26,9 +27,8 @@ class GameQuestionP10 extends Eloquent {
 
 
 		$sql = "
-			SELECT p10.*, qc.`question_id`, obj.`question_object_1`,obj.`question_object_2`, obj.`question_type`
-				FROM (`t0210_game_question_p10` p10, `t0126_game_planet_question_cache` qc)
-					LEFT JOIN `t0210_game_question_p10_object` obj ON (obj.`question_id` = p10.`id` )
+			SELECT p10.*, qc.`question_id`
+				FROM `t0210_game_question_p10` p10, `t0126_game_planet_question_cache` qc
 	                    WHERE qc.`planet_id` = :planet_id
 	                    	AND qc.`difficulty` = :difficulty
 	                    	AND p10.`id` = qc.`target_id`
@@ -45,19 +45,12 @@ class GameQuestionP10 extends Eloquent {
 		$questions = [];
 		foreach ($result as $value){
 			array_push($questions, array_only((array)$value, [
-				'id'
-				'difficulty' => 
-				'questions' => [
-					'left_question_1'
-					'left_question_2'
-					'left_question_3'
-					'right_question_1'
-					'right_question_2'
-					'right_question_3'
-				],
-				'answers' => [
-					'answer' => $r->answer,
-				],
+				'id',
+				'question',
+				'answer',
+				'option_type',
+				'option_generate',
+				'difficulty',
 			]));
 		}
 
