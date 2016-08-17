@@ -11,23 +11,21 @@ use App\Libraries\LogHelper;
 class AbstractGameQuestion extends Eloquent {
 
 	public static function GetQuestions($typeName, $params){
-		// try{
+		try{
 			$questions = self::GetQuestionsFromChild($typeName, $params);
-
-			shuffle($questions);//why need to random again?
 
 			return $questions;
 
-		// }catch(Exception $ex){
-		// 	LogHelper::LogToDatabase('AbstractGameQuestion@GetQuestions', [
-		// 		'environment' => json_encode([
-		// 			'message' => $ex->getMessage(),
-		// 			'typeName' => $typeName,
-		// 			'params' => $params,
-		// 		]),
-		// 	]);		
-		// 	return null;
-		// }
+		}catch(Exception $ex){
+			LogHelper::LogToDatabase('AbstractGameQuestion@GetQuestions', [
+				'environment' => json_encode([
+					'message' => $ex->getMessage(),
+					'typeName' => $typeName,
+					'params' => $params,
+				]),
+			]);		
+			return null;
+		}
 
 	}
 
