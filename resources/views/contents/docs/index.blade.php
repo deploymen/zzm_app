@@ -21,33 +21,30 @@
 
 @section('content')
 
-<div class="row">
-    <div class="col-lg-8">
-        <p>Development Default Game Code:</p>
-        <p>-devanm01</p>
-        <p>-devanm02</p>
-        <p>-devanm03</p>
-        <br>
-        <p>Development version's planets </p>
-        <p>id: 1 for P01</p>
-        <p>id: 2 for P02</p>
-        <p>id: 3 for P03</p>
-        <p>id: 4 for P04</p>
-        <p>id: 6 for P06</p>
-        <br>
-        <p>SECRET KEY = d60dK53A40I6HBTBNVoC</p>
-        <br>
-        <p> URL - ENCODE - DECODE</p>
-        <a href="http://www.url-encode-decode.com/" target="_blank"> http://www.url-encode-decode.com/</a>
-        <br>
-        <br>
-        <p>SHA1</p>
-        <a href="http://www.sha1-online.com/" target="_blank"> http://www.sha1-online.com/</a>
-        <br>
-        <br>
-        <p>ONLINE JSON VIEWER</p>
-        <a href="http://jsonviewer.stack.hu/" target="_blank">http://jsonviewer.stack.hu/</a>
-    </div>
-</div>
+<dl>
+    <dt>Development Default Game Code:</dt>
+    <dd>-devanm01</dd>
+    <dd>-devanm02</dd>
+    <dd>-devanm03</dd>
+
+    <dt>Development version's planets </dt>
+    <dd>id: 1 for P01</dd>
+    <dd>id: 2 for P02</dd>
+    <dd>id: 3 for P03</dd>
+    <dd>id: 4 for P04</dd>
+    <dd>id: 6 for P06</dd>
+
+    <dt>SECRET KEY</dt>
+    <dd>d60dK53A40I6HBTBNVoC</dd>
+
+    <dt>URL - ENCODE - DECODE</dt>
+    <dd><a href="http://www.url-encode-decode.com/" target="_blank"> http://www.url-encode-decode.com/</a></dd>
+
+    <dt>SHA1</dt>
+    <dd><a href="http://www.sha1-online.com/" target="_blank"> http://www.sha1-online.com/</a></dd>
+
+    <dt>ONLINE JSON VIEWER</dt>
+    <dd><a href="http://jsonviewer.stack.hu/" target="_blank">http://jsonviewer.stack.hu/</a></dd>
+</dl>
 
 @stop

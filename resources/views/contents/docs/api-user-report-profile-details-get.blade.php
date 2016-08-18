@@ -21,83 +21,81 @@
 
 @section('content')
 
-<div class="row">
-    <div class="col-lg-8">
-        <h3>GET   /api/profiles/report/profile-details</h3>
-        <ul id="myTab" class="nav nav-tabs">
-            <li class="active"><a href="#descriptions" data-toggle="tab">Explain</a>
-            </li>
-            <li><a href="#request" data-toggle="tab">Request</a>
-            </li>
-            <li><a href="#respone" data-toggle="tab">Response</a>
-            </li>
+<h3>GET   /api/profiles/report/profile-details</h3>
+<ul id="myTab" class="nav nav-tabs">
+    <li class="active"><a href="#descriptions" data-toggle="tab">Explain</a>
+    </li>
+    <li><a href="#request" data-toggle="tab">Request</a>
+    </li>
+    <li><a href="#respone" data-toggle="tab">Response</a>
+    </li>
 
-        </ul>
-        <div id="myTabContent" class="tab-content">
-            <div id="descriptions" class="tab-pane fade in active">
-                <p>
+</ul>
+<div id="myTabContent" class="tab-content">
+    <div id="descriptions" class="tab-pane fade in active">
+        <p>
 
-                </p>
-            </div>
-            <div id="request" class="tab-pane fade">
-                <p>Header</p>
-                <table class="table table-striped table-bordered table-hover">
-                    <tr>
-                        <th style="width:175px;">Key</th>
-                        <th style="width:500px;">Description</th>
-                        <th style="width:360px;">Example</th>
-                    </tr>
-                    <tr>
-                        <td>X-access-token</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </table>
-                <table class="table table-striped table-bordered table-hover">
-                    <tr>
-                        <th style="width:175px;">Key</th>
-                        <th style="width:500px;">Description</th>
-                        <th style="width:360px;">Example</th>
-                    </tr>
-                    <tr>
-                        <td>profile_id</td>
-                        <td></td>
-                        <td></td> 
-                    </tr>
-                </table>
-                <div style="margin-top:50px; height:500px; overflow:auto; font-size:12px">
-<pre class="prettyprint">
+        </p>
+    </div>
+    <div id="request" class="tab-pane fade">
+        <p>Header</p>
+        <table class="table table-striped table-bordered table-hover">
+            <tr>
+                <th style="width:175px;">Key</th>
+                <th style="width:500px;">Description</th>
+                <th style="width:360px;">Example</th>
+            </tr>
+            <tr>
+                <td>X-access-token</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+        <table class="table table-striped table-bordered table-hover">
+            <tr>
+                <th style="width:175px;">Key</th>
+                <th style="width:500px;">Description</th>
+                <th style="width:360px;">Example</th>
+            </tr>
+            <tr>
+                <td>profile_id</td>
+                <td></td>
+                <td></td> 
+            </tr>
+        </table>
+        <div style="margin-top:50px; height:500px; overflow:auto; font-size:12px">
+            <pre class="prettyprint">
 GET http://dev.zapzapmath.com/api/profiles/report/profile-details?profile_id=1 HTTP/1.1
 Host: dev.zapzapmath.com
 X-access-token: 123
-</pre>
-                </div>
-            </div>
+            </pre>
+        </div>
+    </div>
 
-            <div id="respone" class="tab-pane fade">
-                <table class="table table-striped table-bordered table-hover">
-                    <tr>
-                        <th style="width:175px;">Key</th>
-                        <th style="width:500px;">Description</th>
-                        <th style="width:360px;">Example</th>
-                    </tr>
-                    <tr>
-                        <td>status</td>
-                        <td></td>
-                        <td>success, fail, exception</td>
-                    </tr>
-                    <tr>
-                        <td>message</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>data</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </table>
-<pre class="prettyprint">
+    <div id="respone" class="tab-pane fade">
+        <table class="table table-striped table-bordered table-hover">
+            <tr>
+                <th style="width:175px;">Key</th>
+                <th style="width:500px;">Description</th>
+                <th style="width:360px;">Example</th>
+            </tr>
+            <tr>
+                <td>status</td>
+                <td></td>
+                <td>success, fail, exception</td>
+            </tr>
+            <tr>
+                <td>message</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>data</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+        <pre class="prettyprint">
 {
   "status": "success",
   "data": {
@@ -234,11 +232,9 @@ X-access-token: 123
     ]
   }
 }
-</pre>
-            </div>
-
-        </div>
+        </pre>
     </div>
-    <!--END ROW -->
+
 </div>
+
 @stop

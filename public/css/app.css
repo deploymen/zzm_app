@@ -8,3 +8,8 @@
 .menu .active > a {
     background-color: #e74c3c;
 }
+
+/*Main content*/
+.main {
+    padding-top: 1rem;
+}

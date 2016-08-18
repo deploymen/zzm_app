@@ -18,7 +18,7 @@
         @include('includes/nav')
 
         <!--Content-->
-        <div class="column row">
+        <div class="main column row">
             @yield('content')
         </div>
 
