@@ -110,60 +110,15 @@ Class ApiGameController extends Controller {
 			}else{
 				
 				$type = GameType::find($planet->game_type_id);
-				
-				switch($type->name){
-					case 'p01':$questions = ZapZapQuestionHelper::GetQuestionP01($planetId, $difficulty, $questionCount , $language); break;
-					case 'p02':$questions = ZapZapQuestionHelper::GetQuestionP02($planetId, $difficulty, $questionCount); break;
-					case 'p03':$questions = ZapZapQuestionHelper::GetQuestionP03($planetId, $difficulty, $questionCount); break;
-					case 'p06':$questions = ZapZapQuestionHelper::GetQuestionP06($planetId, $difficulty, $questionCount); break;
-					case 'p07':$questions = ZapZapQuestionHelper::GetQuestionP07($planetId, $difficulty, $questionCount); break;
-					case 'p08':$questions = ZapZapQuestionHelper::GetQuestionP08($planetId, $difficulty, $questionCount); break;
-					case 'p09':$questions = ZapZapQuestionHelper::GetQuestionP09($planetId, $difficulty, $questionCount); break;
-					case 'p10':$questions = ZapZapQuestionHelper::GetQuestionP10($planetId, $difficulty, $questionCount); break;
-					case 'p11':$questions = ZapZapQuestionHelper::GetQuestionP11($planetId, $difficulty, $questionCount); break;
-					case 'p12':$questions = ZapZapQuestionHelper::GetQuestionP12($planetId, $difficulty, $questionCount); break;
-					case 'p13':$questions = ZapZapQuestionHelper::GetQuestionP13($planetId, $difficulty, $questionCount); break;
-					case 'p14':$questions = ZapZapQuestionHelper::GetQuestionP14($planetId, $difficulty, $questionCount); break;
-					case 'p15':$questions = ZapZapQuestionHelper::GetQuestionP15($planetId, $difficulty, $questionCount); break;
-					case 'p16':$questions = ZapZapQuestionHelper::GetQuestionP16($planetId, $difficulty, $questionCount); break;
-					case 'p17':$questions = ZapZapQuestionHelper::GetQuestionP17($planetId, $difficulty, $questionCount); break;
-					case 'p18':$questions = ZapZapQuestionHelper::GetQuestionP18($planetId, $difficulty, $questionCount); break;
-					case 'p19':$questions = ZapZapQuestionHelper::GetQuestionP19($planetId, $difficulty, $questionCount); break;
-					case 'p20':$questions = ZapZapQuestionHelper::GetQuestionP20($planetId, $difficulty, $questionCount); break;
-					case 'p21':$questions = ZapZapQuestionHelper::GetQuestionP21($planetId, $difficulty, $questionCount); break;
-					case 'p22':$questions = ZapZapQuestionHelper::GetQuestionP22($planetId, $difficulty, $questionCount); break;
-					case 'p23':$questions = ZapZapQuestionHelper::GetQuestionP23($planetId, $difficulty, $questionCount); break;
-					case 'p24':$questions = ZapZapQuestionHelper::GetQuestionP24($planetId, $difficulty, $questionCount); break;
-					case 'p25':$questions = ZapZapQuestionHelper::GetQuestionP25($planetId, $difficulty, $questionCount); break;
-					case 'p27':$questions = ZapZapQuestionHelper::GetQuestionP27($planetId, $difficulty, $questionCount); break;
-					case 'p28':$questions = ZapZapQuestionHelper::GetQuestionP28($planetId, $difficulty, $questionCount); break;
-					case 'p29':$questions = ZapZapQuestionHelper::GetQuestionP29($planetId, $difficulty, $questionCount); break;
-					case 'p30':$questions = ZapZapQuestionHelper::GetQuestionP30($planetId, $difficulty, $questionCount); break;
-					case 'p31':$questions = ZapZapQuestionHelper::GetQuestionP31($planetId, $difficulty, $questionCount); break;
-					case 'p32':$questions = ZapZapQuestionHelper::GetQuestionP32($planetId, $difficulty, $questionCount); break;
-					case 'p33':$questions = ZapZapQuestionHelper::GetQuestionP33($planetId, $difficulty, $questionCount); break;
-					case 'p34':$questions = ZapZapQuestionHelper::GetQuestionP34($planetId, $difficulty, $questionCount); break;
-					case 'p35':$questions = ZapZapQuestionHelper::GetQuestionP35($planetId, $difficulty, $questionCount); break;
-					case 'p36':$questions = ZapZapQuestionHelper::GetQuestionP36($planetId, $difficulty, $questionCount); break;
-					case 'p37':$questions = ZapZapQuestionHelper::GetQuestionP37($planetId, $difficulty, $questionCount); break;
-					case 'p38':$questions = ZapZapQuestionHelper::GetQuestionP38($planetId, $difficulty, $questionCount); break;
-					case 'p39':$questions = ZapZapQuestionHelper::GetQuestionP39($planetId, $difficulty, $questionCount); break;
-					case 'p40':$questions = ZapZapQuestionHelper::GetQuestionP40($planetId, $difficulty, $questionCount); break;
-					case 'p41':$questions = ZapZapQuestionHelper::GetQuestionP41($planetId, $difficulty, $questionCount); break;
-					case 'p42':$questions = ZapZapQuestionHelper::GetQuestionP42($planetId, $difficulty, $questionCount); break;
-					case 'p43':$questions = ZapZapQuestionHelper::GetQuestionP43($planetId, $difficulty, $questionCount); break;
-					case 'p44':$questions = ZapZapQuestionHelper::GetQuestionP44($planetId, $difficulty, $questionCount); break;
-					case 'p45':$questions = ZapZapQuestionHelper::GetQuestionP45($planetId, $difficulty, $questionCount); break;
-					case 'p46':$questions = ZapZapQuestionHelper::GetQuestionP46($planetId, $difficulty, $questionCount); break;
-					case 'p47':$questions = ZapZapQuestionHelper::GetQuestionP47($planetId, $difficulty, $questionCount); break;
-					case 'p48':$questions = ZapZapQuestionHelper::GetQuestionP48($planetId, $difficulty, $questionCount); break;
-					case 'p49':$questions = ZapZapQuestionHelper::GetQuestionP49($planetId, $difficulty, $questionCount); break;
-					case 'p00':$questions = ZapZapQuestionHelper::GetQuestionP00($planetId,$gameType,$level,$profileId); break;
 
-					default: return ResponseHelper::OutputJSON('fail', $type->name.' not found');
-				}
+				$questions = AbstractGameQuestion::GetTypeQuestions($type->name, [
+					'planetId' => $planetId, 
+					'difficulty' => $difficulty, 
+					'questionCount' => $questionCount, 
+					'language' => $language, 
+				]);
 
-				Cache::put($planetDifficultyCacheKey, $questions, Carbon::now()->addMinutes(5));//!handle child func error!
+				Cache::put($planetDifficultyCacheKey, $questions, Carbon::now()->addMinutes(5));
 			}
 
 			$this->updateGameProfileLocationInfo($profileId);
