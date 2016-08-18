@@ -6,7 +6,7 @@ use App\Models\GamePlanet;
 use App\Models\Questions\AbstractGameQuestion;
 use DB;
 
-class GameQuestionP43 extends Eloquent {
+class GameQuestionP43 extends AbstractGameQuestion {
 
 	public $table = 't0243_game_question_p43';
 	protected $primaryKey = 'id';

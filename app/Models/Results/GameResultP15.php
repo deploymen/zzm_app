@@ -3,12 +3,13 @@
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Captcha extends Eloquent{
-use SoftDeletes;
+class GameResultP15 extends Eloquent {
 
-	protected $table = 't1191_plugin_sports_captcha';
+	public $table = 't0315_game_result_p15';
 	protected $primaryKey = 'id';
-	public $timestamps = true;
+	public $timestamps = false;
 	protected $dates = ['deleted_at'];
+
+	protected $hidden = [];
 
 }

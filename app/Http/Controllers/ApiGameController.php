@@ -199,7 +199,7 @@ Class ApiGameController extends Controller {
 	public function requestV1_3($planetId , $language = 'en') {	
 
 		$ON_CACHE = false;
-		$CATCH_EX = true;
+		$CATCH_EX = false;
 		
 		try{
 			$gameCode = Request::input('game_code');
@@ -216,7 +216,7 @@ Class ApiGameController extends Controller {
 				$planet = Cache::get($planetCacheKey);
 
 			}else{
-				$planet = GamePlanet::where('available', 1)
+				$planet = GamePlanet::where('enable', 1)
 					->where('id', '>=', 100)
 					->find($planetId);
 
@@ -255,7 +255,7 @@ Class ApiGameController extends Controller {
 				
 				$type = GameType::find($planet->game_type_id);
 
-				$questions = AbstractGameQuestion::GetQuestions($type->name, [
+				$questions = AbstractGameQuestion::GetTypeQuestions($type->name, [
 					'planetId' => $planetId, 
 					'difficulty' => $difficulty, 
 					'questionCount' => $questionCount, 
@@ -288,7 +288,7 @@ Class ApiGameController extends Controller {
 
 			} catch (Exception $ex) {
 				if(!$CATCH_EX){
-					throw $e;
+					throw $ex;
 				}
 				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 					'source' => 'ApiGameController > request',
@@ -658,7 +658,7 @@ Class ApiGameController extends Controller {
 			$gameCode = Request::input('game_code');
 			$gameCodeType = Request::input('game_code_type');
 
-			$planet = GamePlanet::where('available', 1)
+			$planet = GamePlanet::where('enable', 1)
 					->where('id', '>=', 100)
 					->find($planetId);
 
@@ -725,6 +725,8 @@ Class ApiGameController extends Controller {
 				case 'false': $gameStatus = 'fail'; break;
 				case 'true': $gameStatus = 'pass'; break;
 			}
+
+
 
 			if($gameStatus === 'pass'){
 				$gamePlay->coin = $planet->{'coin_star'.$gameResult['difficulty']};
@@ -843,97 +845,6 @@ Class ApiGameController extends Controller {
 			}
 
 			return ResponseHelper::OutputJSON('success');
-	}
-
-	public function resultLog(){
-		$gameCode = Request::input('game_code');
-		$page = Request::input("page", '1');
-		$pageSize = Request::input("page_size", '30');
-
-		try{
-
-			$pagination = $pageSize*($page - 1);
-			$sql = "	
-				SELECT pl.`name`, r.`question_id`,  q.`difficulty` , r.`complite_time`, r.`target_id`, p.`target_type` 
-					FROM `t0400_game_play` p, `t0300_game_result` r , `t0123_game_planet` pl , `t0200_game_question` q
-						WHERE r.`play_id` = p.`id`
-							AND q.`id` = r.`question_id`
-							AND pl.`id` = p.`planet_id`
-							AND p.`code` = :game_code
-
-							order BY r.`created_at` ASC 
-							LIMIT :page , 30
-			";
-
-			$count = "	
-				SELECT count(*)
-					FROM `t0400_game_play` p, `t0300_game_result` r , `t0123_game_planet` pl , `t0200_game_question` q
-						WHERE r.`play_id` = p.`id`
-							AND q.`id` = r.`question_id`
-							AND pl.`id` = p.`planet_id`
-							AND p.`code` = :game_code
-
-			";
-
-
-			$result = DB::SELECT($sql, ['game_code'=>$gameCode , 'page'=>$pagination]);
-
-			$count = DB::SELECT($count, ['game_code'=>$gameCode]);
-			$c = (array)$count[0];
-		
-			$resultHistory = [];
-			for($i=0; $i<count($result); $i++){
-
-				$r = (array)$result[$i];
-				switch($r['target_type']){
-				case 'p01': 
-					$results = GameResultP01::find($r['target_id']);
-					$correct = ['correct' => $results->correct];
-					array_push($resultHistory  ,array_merge($r, $correct));
-
-				break;
-				case 'p02': 
-					$results = GameResultP02::find($r['target_id']);
-					$correct = ['correct' => $results->correct];
-
-					array_push($resultHistory , array_merge($r, $correct));
-					
-				break;
-				case 'p03': 
-					$results = GameResultP03::find($r['target_id']);
-					$correct = ['correct' => $results->correct];
-					array_push($resultHistory  ,array_merge($r, $correct));
-					
-				break;
-				case 'p04': 
-					$results = GameResultP04::find($r['target_id']);
-					$correct = ['correct' => $results->correct];
-					array_push($resultHistory  ,array_merge($r, $correct));
-					
-				break;
-				case 'p06': 
-					$results = GameResultP06::find($r['target_id']);
-					$correct = ['correct' => $results->correct];
-					array_push($resultHistory  ,array_merge($r, $correct));
-					
-				break;
-				}
-			}
-
-			return ResponseHelper::OutputJSON('success', '', [
-				"result_history" => $resultHistory,
-				'pageSize' => $pageSize, 
-				'pageTotal' => ceil($c['count(*)']/$pageSize)
-
-				]);
-			} catch (Exception $ex) {
-
-				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-					'source' => 'ApiGameController > resultLog',
-					'inputs' => Request::all(),
-				])]);
-				return ResponseHelper::OutputJSON('exception');
-			}
 	}
 
 	public function getUserMapV1_0(){
@@ -1118,16 +1029,8 @@ Class ApiGameController extends Controller {
 			if($profile->user_id){
 				$userType = 0;
 
-				if($profile->expired_at > date("Y-m-d H:i:s")){
+				if($profile->expired_at > date("Y-m-d H:i:s") || GameClass::find($profile->class_id)->expired_at > date("Y-m-d H:i:s")){
 					$userType = 1;
-				}else{
-					$class = GameClass::find($profile->class_id);
-					if($class){
-						if($class->expired_at > date("Y-m-d H:i:s")){
-							$userType = 1;
-						}
-					}
-					
 				}
 			}
 
@@ -1169,11 +1072,7 @@ Class ApiGameController extends Controller {
 				$enable = 1;
 
 				if($r->enable){
-					if($userType == 2 && $r->user_type != 2){
-						$enable = 0;
-					}
-
-					if($userType == 0 && $r->user_type == 1 ){
+					if($userType == 2 && $r->user_type != 2 || $userType == 0 && $r->user_type == 1){
 						$enable = 0;
 					}
 				}else{
@@ -1239,27 +1138,17 @@ Class ApiGameController extends Controller {
 
 			$userEnablePlanet = 0;
 
-			$userType = 2;
 			if($profile->user_id){
 				$userType = 0;
 
-				if($profile->expired_at > date("Y-m-d H:i:s")){
+				if($profile->expired_at > date("Y-m-d H:i:s") || GameClass::find($profile->class_id)->expired_at > date("Y-m-d H:i:s")){
 					$userType = 1;
-				}else{
-					$class = GameClass::find($profile->class_id);
-					if($class){
-						if($class->expired_at > date("Y-m-d H:i:s")){
-							$userType = 1;
-						}
-					}
-					
 				}
 			}
 
 			$systems = [];		
 			$prevSystemId = 0;
 			$prevSubsytemId = 0;
-			$prevPlanetStar = 5;
 			$prevPlanetEnable = true;
 
 			for($i=0; $i<count($result); $i++){
@@ -1294,17 +1183,12 @@ Class ApiGameController extends Controller {
 				$enable = 1;
 
 				if($r->enable){
-					if($userType == 2 && $r->user_type != 2){
-						$enable = 0;
-					}
-
-					if($userType == 0 && $r->user_type == 1 ){
+					if($userType == 2 && $r->user_type != 2 || $userType == 0 && $r->user_type == 1){
 						$enable = 0;
 					}
 				}else{
 					$enable = 0;
 				}
-
 
 				array_push($systems[count($systems)-1]['subsystem'][count($systems[count($systems)-1]['subsystem'])-1]['planet'], [
 					'planet_id' => $r->planet_id,
@@ -1314,7 +1198,6 @@ Class ApiGameController extends Controller {
 					'enable' => $enable,
 
 				]);				
-				$prevPlanetStar = $r->star;
 				$prevSystemId = $r->system_id;
 				$prevSubsytemId = $r->subsystem_id;
 			}

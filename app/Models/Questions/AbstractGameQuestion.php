@@ -10,13 +10,17 @@ use App\Libraries\LogHelper;
 
 class AbstractGameQuestion extends Eloquent {
 
-	public static function GetQuestions($typeName, $params){
+	public static function GetTypeQuestions($typeName, $params){
 		try{
+
 			$questions = self::GetQuestionsFromChild($typeName, $params);
 
 			return $questions;
 
 		}catch(Exception $ex){
+
+			throw $ex;
+
 			LogHelper::LogToDatabase('AbstractGameQuestion@GetQuestions', [
 				'environment' => json_encode([
 					'message' => $ex->getMessage(),
