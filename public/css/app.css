@@ -1,0 +1,10 @@
+/*Navigation*/
+.top-bar, .top-bar ul {
+    background-color: #33485c ; 
+}
+.menu > li > a {
+    color: #fff;
+}
+.menu .active > a {
+    background-color: #e74c3c;
+}
