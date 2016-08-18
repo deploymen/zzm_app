@@ -2,16 +2,16 @@
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\GameQuestion;
 
-
-class GameResultP03 extends Eloquent {
+class GameResultP03 extends AbstractGameResult {
 
 	public $table = 't0303_game_result_p03';
 	protected $primaryKey = 'id';
 	public $timestamps = true;
 	protected $dates = ['deleted_at'];
 
-	protected $fillable = ['correct', 'target_type', 'target_id', 'answer', 'answer_text'];
+	protected $fillable = ['correct', 'target_id', 'answer', 'answer_text'];
 	protected $hidden = [];
 
 	public static function SubmitResult($params){

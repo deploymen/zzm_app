@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use App\Models\GameQuestion;
 use Exception;
 
 use App\Libraries\LogHelper;
@@ -18,7 +18,7 @@ class AbstractGameResult extends Eloquent {
 
 		}catch(Exception $ex){
 
-			throw $ex;
+			// throw $ex;
 
 			LogHelper::LogToDatabase('AbstractGameResult@SubmitTypeResult', [
 				'environment' => json_encode([
@@ -34,6 +34,7 @@ class AbstractGameResult extends Eloquent {
 	}
 
 	private static function SubmitResultFromChild($typeName, $params){
+
 		switch ($typeName) {
 			case 'p01':return GameResultP01::SubmitResult($params); break;
 			case 'p02':return GameResultP02::SubmitResult($params); break;

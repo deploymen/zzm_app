@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-class GameResult extends Eloquent {
+use App\Models\GameQuestion;
+class GameResult extends AbstractGameResult {
 
 	public $table = 't0300_game_result';
 	protected $primaryKey = 'id';

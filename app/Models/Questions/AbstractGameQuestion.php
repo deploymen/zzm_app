@@ -19,7 +19,7 @@ class AbstractGameQuestion extends Eloquent {
 
 		}catch(Exception $ex){
 
-			throw $ex;
+			// throw $ex;
 
 			LogHelper::LogToDatabase('AbstractGameQuestion@GetQuestions', [
 				'environment' => json_encode([
