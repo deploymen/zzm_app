@@ -1,6 +1,6 @@
-<header>
+<header class="">
     <div class="top-bar">
-        <div class="top-bar-left">
+        <div class="top-bar-left column row">
             <ul class="dropdown menu" data-dropdown-menu>
                 <li {!! \Request::route()->getUri() == 'docs/index' ? 'class="active"' : '' !!}>
                     <a id="logo" href="/api/docs/index">

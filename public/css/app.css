@@ -1,6 +1,6 @@
 /*Navigation*/
 .top-bar, .top-bar ul {
-    background-color: #33485c ; 
+    background-color: #33485c; 
 }
 .menu > li > a {
     color: #fff;
@@ -12,4 +12,13 @@
 /*Main content*/
 .main {
     padding-top: 1rem;
+}
+h2.docs {
+    font-family: monospace;
+}
+td .fa {
+    color: #33485c;  
+}
+td.url {
+    font-family: monospace;
 }
