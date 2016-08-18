@@ -45,7 +45,7 @@ Route::group(['prefix' => 'game'], function () {
 		Route::get('/result/system-planet/progress', 'ApiGameController@systemPlanetProgress');
 		Route::get('/result/system-planet/play/planet/{planet_id}', 'ApiGameController@systemPlanetPlay');
 
-		Route::get('/user-map', 'ApiGameController@getUserMapV1_2');
+		Route::get('/user-map', 'ApiGameController@getUserMapV1_3');
 
 		Route::get('/result/only-system', 'ResultController@onlySystemV1_1');
 		Route::get('/result/only-planet', 'ResultController@onlyPlanetV1_1');
