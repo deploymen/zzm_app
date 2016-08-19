@@ -33,19 +33,19 @@ Route::group(['prefix' => 'game'], function () {
 		Route::post('/profile-transfer-loose', 'ApiProfileController@profileTransferLoose');
 
 
-		Route::post('/play/{id}/result', 'ApiGameController@resultV1_1');
-		Route::get('/play/{id}/request'  , 'ApiGameController@requestV1_0');
+		Route::post('/play/{id}/result', 'ApiGameController@resultV1_3');
+		Route::get('/play/{id}/request'  , 'ApiGameController@requestV1_3');
 
 		Route::post('/play/push-result'  , 'ApiGameController@offlinePost');
 
-		Route::get('/play/{id}/request/{language}', 'ApiGameController@requestV1_0');
+		Route::get('/play/{id}/request/{language}', 'ApiGameController@request');
 		// Route::get('/play/{id}/result', 'ApiGameController@winScreen');
 		Route::get('/result/log', 'ApiGameController@resultLog');
 
 		Route::get('/result/system-planet/progress', 'ApiGameController@systemPlanetProgress');
 		Route::get('/result/system-planet/play/planet/{planet_id}', 'ApiGameController@systemPlanetPlay');
 
-		Route::get('/user-map', 'ApiGameController@getUserMapV1_2');
+		Route::get('/user-map', 'ApiGameController@getUserMapV1_3');
 
 		Route::get('/result/only-system', 'ResultController@onlySystemV1_1');
 		Route::get('/result/only-planet', 'ResultController@onlyPlanetV1_1');

@@ -3,14 +3,11 @@
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use App\Models\Questions\AbstractGameQuestion;
+class GameResultP49 extends Eloquent {
 
-class GameQuestion extends AbstractGameQuestion {
-	use SoftDeletes;
-
-	public $table = 't0200_game_question';
+	public $table = 't0349_game_result_p49';
 	protected $primaryKey = 'id';
-	public $timestamps = true;
+	public $timestamps = false;
 	protected $dates = ['deleted_at'];
 
 	protected $hidden = [];
