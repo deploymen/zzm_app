@@ -86,10 +86,10 @@ class ApiProfileHelper{
 		$profileInfo = [];
 
 		if($classId){
-			$profiles = GameProfile::select('id', 'user_id', 'class_id', 'first_name', 'last_name', 'age', 'school', 'grade', 'city', 'email', 'nickname1', 'nickname2', 'avatar_id')->where('class_id', $classId)->orderBy('id')->get();
+			$profiles = GameProfile::select('id', 'user_id', 'class_id', 'student_id' , 'first_name', 'last_name', 'age', 'school', 'grade', 'city', 'email', 'nickname1', 'nickname2', 'avatar_id')->where('class_id', $classId)->orderBy('id')->get();
 			$query = 'AND profile.`class_id` = '.$classId;
 		}else{
-			$profiles = GameProfile::select('id', 'user_id', 'class_id', 'first_name', 'last_name', 'age', 'school', 'grade', 'city', 'email', 'nickname1', 'nickname2', 'avatar_id')->where('user_id', $userId)->orderBy('id')->get();
+			$profiles = GameProfile::select('id', 'user_id', 'class_id', 'student_id' , 'first_name', 'last_name', 'age', 'school', 'grade', 'city', 'email', 'nickname1', 'nickname2', 'avatar_id')->where('user_id', $userId)->orderBy('id')->get();
 			$query = 'AND profile.`user_id` = '.$userId;
 	
 		}
@@ -98,7 +98,6 @@ class ApiProfileHelper{
 			$profile->nickName1;
 			$profile->nickName2;
 			$profile->avatar;
-			$profile->gameCode;
 		}
 
 		$sql = "
@@ -180,6 +179,7 @@ class ApiProfileHelper{
 				'id' => $p->id,
 				'user_id' => $p->user_id,
 				'class_id' => $p->class_id,
+				'student_id' => $p->student_id,
 				'first_name' => $p->first_name,
 				'last_name' => $p->last_name,
 				'age' => $p->age,
@@ -191,7 +191,6 @@ class ApiProfileHelper{
 				'nickname1' => $p->nickName1,
 				'nickname2' => $p->nickName2,
 				'avatar' => $p->avatar,
-				'game_code' => $p->gameCode,
 				'last_played' => [
 					'last_planet_name' => $planetName,
 					'last_played' => $lp->created_at,
@@ -258,32 +257,36 @@ class ApiProfileHelper{
 			];
 	}
 
-	public static function newProfile($userId , $classId , $firstName , $age , $school , $grade , $email, $nickname1 , $nickname2 , $avatarId){
+	public static function newProfile($userId , $classId , $firstName , $age , $school , $grade , $nickname1 , $nickname2 , $avatarId , $studentId = ''){
+
+		$profileType = 'signed_up_profile';
+		$seed = 0;
+
+		if($studentId == ''){
+			$idCounter = IdCounter::find(1);
+			$seed = $idCounter->game_code_seed;
+			$idCounter->game_code_seed = $seed + 1;
+			$idCounter->save();
+
+			$studentId = ZapZapHelper::GenerateGameCode($seed);
+			$profileType = 'anonymous';
+
+		}
 
 		$profile = new GameProfile;
+		$profile->profile_type = $profileType;
 		$profile->user_id = $userId;
 		$profile->class_id = $classId;
+		$profile->student_id = $studentId;
 		$profile->first_name = $firstName;
 		$profile->age = $age;
 		$profile->school = $school;
 		$profile->grade = $grade;
-		$profile->email = $email;
 		$profile->nickname1 = $nickname1;
 		$profile->nickname2 = $nickname2;
 		$profile->avatar_id = $avatarId;
+		$profile->seed = $seed;
 		$profile->save();
-
-		$idCounter = IdCounter::find(1);
-		$gameCodeSeed = $idCounter->game_code_seed;
-		$idCounter->game_code_seed = $gameCodeSeed + 1;
-		$idCounter->save();
-
-		$code = new GameCode;
-		$code->type = 'signed_up_profile';
-		$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
-		$code->seed = $gameCodeSeed;
-		$code->profile_id = $profile->id;
-		$code->save();
 		
 		return $profile;
 	}

@@ -32,17 +32,17 @@ class GameCoinTransaction extends Eloquent {
 	public static function GetDescription($template, $params = []){
 		$templates = [
 			'sign-up' => 'sign-up',
-			'play-basic' => 'play-basic.planet-{planetId}.difficulty-{difficulty}',
-			'play-hot' => 'play-hot.planet-{planetId}.difficulty-{difficulty}',
-			'play-repeat' => 'play-repeat.planet-{planetId}.difficulty-{difficulty}',
-			'play-daily' => 'play-daily.planet-{planetId}.difficulty-{difficulty}',
-			'watch-tutorial' => 'watch-tutorial',
+			'play-basic' => join('.', ['play-basic' , 'play-{playId}', 'planet-{planetId}', 'difficulty-{difficulty}', ]),
+			'play-hot' => join('.', ['play-hot' , 'play-{playId}', 'planet-{planetId}', 'difficulty-{difficulty}', ]),
+			'play-repeat' => join('.', ['play-repeat' , 'play-{playId}', 'planet-{planetId}', 'difficulty-{difficulty}', ]),
+			'play-daily' => join('.', ['play-daily' , 'play-{playId}', ]),
+			'watch-tutorial' => join('.', ['watch-tutorial' , 'play-{playId}', ]),
 			'watch-video' => 'watch-video',
 			'elf-mission' => 'elf-mission',
 		];
 
 
-		$template = $templates['$template'];
+		$template = $templates[$template];
 		foreach ($params as $key => $value) {
 			$template = str_replace('{'.$key.'}', $value, $template);
 		}

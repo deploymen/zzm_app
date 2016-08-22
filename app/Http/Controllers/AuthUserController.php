@@ -24,6 +24,8 @@ use App\Models\UserExternalId;
 use App\Models\UserSetting;
 use App\Models\RewardShareDomain;
 use App\Models\SpecialEmail;
+use App\Models\CoinReward;
+use App\Models\GameCoinTransaction;
 use Config;
 use Cookie;
 use DB;
@@ -92,7 +94,7 @@ Class AuthUserController extends Controller {
 		try {	
 			
 			$newUser = ApiUserHelper::Register($role , $name , $email , $country , $email , $password_sha1 , $registerFrom , $ref);
-			$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Anonymous' , '5_or_younger' , 'default school' , 'K' , '', 999 , 999 , 999);
+			$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Anonymous' , '5_or_younger' , 'default school' , 'K' , 999 , 999 , 999 );
 					
 			$secretKey = sha1(time() . $email);
 			$edmHtml = (string) view('emails.account-activation', [
@@ -132,6 +134,10 @@ Class AuthUserController extends Controller {
 			setcookie('access_token', $newUser['access_token'], time() + (86400 * 30), "/"); // 86400 = 1 day*/
 
 			$list = User::select('id' , 'role' , 'name' , 'register_from')->find($newUser['user_id']);
+
+			$coinValue = CoinReward::GetEntitleCoinReward('sign-up');
+			$coinDescription = GameCoinTransaction::GetDescription('sign-up');
+			GameCoinTransaction::DoTransaction($newProfile['id'] , $coinValue , $coinDescription);
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -584,10 +590,10 @@ Class AuthUserController extends Controller {
 			return ResponseHelper::OutputJSON('fail', "email used");
 		}
 
-		// try {
+		try {
 
 			$newUser = ApiUserHelper::Register($role , $name , $email , '' , $email , $password_sha1 , 'App' , '');
-			$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Anonymous' , '5_or_younger' , 'default school' , 'K' , '', 999 , 999 , 999);
+			$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Anonymous' , '5_or_younger' , 'default school' , 'K' , 999 , 999 , 999);
 
 			$secretKey = sha1(time() . $email);
 			$edmHtml = (string) view('emails.account-activation', [
@@ -614,17 +620,21 @@ Class AuthUserController extends Controller {
 			$logOpenAcc->save();
 
 			$code = GameCode::where('profile_id' , $newProfile['code']);
-var_export($code); die();
+
+			$coinValue = CoinReward::GetEntitleCoinReward('sign-up');
+			$coinDescription = GameCoinTransaction::GetDescription('sign-up');
+			GameCoinTransaction::DoTransaction($newProfile['id'] , $coinValue , $coinDescription);
+
 			return ResponseHelper::OutputJSON('success', '', $code->code);
 
-		// } catch (Exception $ex) {
-		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-		// 		'source' => 'AuthUserController > signUp',
-		// 		'inputs' => Request::all(),
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'AuthUserController > signUp',
+				'inputs' => Request::all(),
 
-		// 	])]);
-		// 	return ResponseHelper::OutputJSON('exception');
-		// }
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 	}
 
 	public function ResendACtivateCode(){
@@ -818,8 +828,7 @@ var_export($code); die();
 		}
 
 		$newUser = ApiUserHelper::Register($role , $name , $email , $country , $email , $facebookId , 'facebook' , '');
-
-		$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Player 1' , '5_or_younger' , 'default school' , 'K' , '', 999 , 999 , 999);
+		$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Anonymous' , '5_or_younger' , 'default school' , 'K' , 999 , 999 , 999);
 
 		$user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser['user_id']);
 		$userExternalId = UserExternalId::where('user_id' , $newUser['user_id'])->update(['facebook_id' => $facebookId ]);
@@ -838,6 +847,10 @@ var_export($code); die();
 
 		$cookie = Cookie::make('access_token', $userAccess->access_token);
 
+		$coinValue = CoinReward::GetEntitleCoinReward('sign-up');
+		$coinDescription = GameCoinTransaction::GetDescription('sign-up');
+		GameCoinTransaction::DoTransaction($newProfile['id'] , $coinValue , $coinDescription);
+		
 		$log = new LogSignInUser;
 		$log->username = $userAccess->username;
 		$log->password_sha1 = '';
