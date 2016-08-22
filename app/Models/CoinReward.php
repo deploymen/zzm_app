@@ -13,7 +13,7 @@ class CoinReward extends Eloquent {
 	public $timestamps = false;
 
 	public static function GetEntitleCoinReward($name, $desciption=''){
-		return self::where('name', $name)->where('desciption', $desciption)->select('coin_reward')->first();
+		return intval(self::where('name', $name)->where('desciption', $desciption)->select('coin_reward')->first()['coin_reward']);
 	}
 
 }

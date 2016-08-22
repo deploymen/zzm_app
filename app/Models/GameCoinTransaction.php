@@ -20,14 +20,16 @@ class GameCoinTransaction extends Eloquent {
 
 		self::create([
 			'profile_id' => $profileId, 
-			'description' => $profileId, 
+			'description' => $description, 
 			'coin_amount' => $coin,  
 			'coin_balance' => $profile->coin, 
 		]);
 
+		return true;
+
 	}
 
-	public static function GetDescription($template, $params){
+	public static function GetDescription($template, $params = []){
 		$templates = [
 			'sign-up' => 'sign-up',
 			'play-basic' => 'play-basic.planet-{planetId}.difficulty-{difficulty}',
