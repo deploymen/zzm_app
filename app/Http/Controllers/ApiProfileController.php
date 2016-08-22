@@ -52,7 +52,6 @@ Class ApiProfileController extends Controller {
 		$userId = Request::input('user_id');
 
 		$firstName = Request::input('first_name');
-		$lastName = Request::input('last_name', '');
 		$age = Request::input('age');
 		$school = Request::input('school');
 		$grade = Request::input('grade');
@@ -71,11 +70,7 @@ Class ApiProfileController extends Controller {
 			$nickname1Set = SetNickname1::find($nickname1);
 			$nickname2Set = SetNickname2::find($nickname2);
 			
-			if (!$nickname1Set) {
-				return ResponseHelper::OutputJSON('fail', "invalid nickname id");
-			}
-
-			if (!$nickname2Set) {
+			if (!$nickname1Set || $nickname2Set) {
 				return ResponseHelper::OutputJSON('fail', "invalid nickname id");
 			}
 
@@ -109,33 +104,8 @@ Class ApiProfileController extends Controller {
 					return ResponseHelper::OutputJSON('fail', "profile limited" , ['total_share' => $userFlag->total_share]);
 				}
 			}
-		
-			$avatarIdSet = AvatarSet::find($avatarId);
-
-			$profile = new GameProfile;
-			$profile->user_id = $userId;
-			$profile->class_id = $classId;
-			$profile->first_name = $firstName;
-			$profile->last_name = $lastName;
-			$profile->age = $age;
-			$profile->school = $school;
-			$profile->grade = $grade;
-			$profile->nickname1 = $nickname1;
-			$profile->nickname2 = $nickname2;
-			$profile->avatar_id = $avatarId;
-			$profile->save();
-
-			$idCounter = IdCounter::find(1);
-			$gameCodeSeed = $idCounter->game_code_seed;
-			$idCounter->game_code_seed = $gameCodeSeed + 1;
-			$idCounter->save();
-
-			$code = new GameCode;
-			$code->type = 'signed_up_profile';
-			$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
-			$code->seed = $gameCodeSeed;
-			$code->profile_id = $profile->id;
-			$code->save();
+			
+			$newProfile = ApiProfileHelper::newProfile($userId, $classId  ,$firstName, $age , $school , $grade , $nickname1 , $nickname2 , );
 
 			DatabaseUtilHelper::LogInsert($userId, $profile->table, $userId);
 
@@ -155,6 +125,7 @@ Class ApiProfileController extends Controller {
 	public function update($id) {
 		$userId = Request::input('user_id');
 
+		$studentId = Request::input('student_id');
 		$firstName = Request::input('first_name');
 		$lastName = Request::input('last_name');
 		$age = Request::input('age');
@@ -208,15 +179,17 @@ Class ApiProfileController extends Controller {
 			if ($classId) {
 				$profileClass = GameProfile::where('class_id' , $classId)->where('user_id', $userId)->count();
 
-				if($profileClass >= $userFlag->profile_limit){
-					return ResponseHelper::OutputJSON('fail', "limited");
-				}
-				
 				$gameClass = GameClass::find($classId);
-
 				if(!$gameClass || $gameClass->user_id != $userId ) {
 					return ResponseHelper::OutputJSON('fail', "class not found");
 				}
+
+				$profileLimit = ($gameClass->expired_at > date("Y-m-d H:i:s"))?50:5;
+
+				if($profileClass >= $profileLimit){
+					return ResponseHelper::OutputJSON('fail', "class limited" );
+				}
+				
 				$profile->class_id = $classId;
 			}
 
@@ -313,7 +286,7 @@ Class ApiProfileController extends Controller {
 
 		try {
 
-			$profile = GameProfile::select('id', 'user_id', 'class_id', 'first_name', 'last_name', 'age', 'school', 'grade', 'city', 'country', 'email', 'nickname1', 'nickname2', 'avatar_id' ,'expired_at')->find($id);
+			$profile = GameProfile::select('id', 'user_id', 'class_id', 'first_name', 56'last_name', 'age', 'school', 'grade', 'city', 'country', 'email', 'nickname1', 'nickname2', 'avatar_id' ,'expired_at')->find($id);
 
 			if (!$profile) {
 				return ResponseHelper::OutputJSON('fail', 'profile not found');
@@ -322,16 +295,14 @@ Class ApiProfileController extends Controller {
 			$profile->nickName1;
 			$profile->nickName2;
 			$profile->avatar;
-			$profile->gameCode;
-			
-			$paid = ($profile->expired_at > date("Y-m-d H:i:s") )?1:0;
+			$profile->paid = ($profile->expired_at > date("Y-m-d H:i:s") )?1:0;
 
 			if ($userId != $profile->user_id) {
 				return ResponseHelper::OutputJSON('fail', 'wrong user id');
 			}
 
-			return ResponseHelper::OutputJSON('success', '', ['profile' => $profile->toArray() , 'paid' => $paid]);
-
+			return ResponseHelper::OutputJSON('success', '', ['profile' => $profile->toArray()] );
+			
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 				'source' => 'ApiProfileController > getProfile',
