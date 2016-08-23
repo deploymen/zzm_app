@@ -26,6 +26,10 @@ use Request;
 use Facebook\Facebook;
 use Facebook\FacebookRequest;
 
+use PHPExcel_IOFactory;
+use PHPExcel_Style_Color;
+use PHPExcel_Style_NumberFormat;
+
 Class ApiProfileController extends Controller {
 
 	// =======================================================================//
@@ -710,15 +714,36 @@ Class ApiProfileController extends Controller {
 	}
 
 	public function createMultipleProfile() {
+		$userId = Request::input('user_id');
+		$classId = Request::input('class_id' , 0);
+		$age = Request::input('age');
+		$school = Request::input('school');
+		$grade = Request::input('grade');
+
 		DB::beginTransaction();
 		try {
+
+			if (!$school || !$age || !$grade) {
+				return ResponseHelper::OutputJSON('fail', "missing parameters");
+			}
+
+			$gameClass = GameClass::find($classId);
+			if(!$gameClass || $gameClass->user_id != $userId) {
+				return ResponseHelper::OutputJSON('fail', "class not found");
+			}
+			
+			$userFlag = UserFlag::find($userId);
+			if(!$userFlag){
+				return ResponseHelper::OutputJSON('fail', "user flag not found");
+			}
+
 			$filename = time();
-			$storage = new \Upload\Storage\FileSystem(public_path() . '/uploads/', true); //neeed update
+			$storage = new \Upload\Storage\FileSystem(public_path() . '/student-id/', true); //neeed update
 			$uploadFile = new \Upload\File('fileUpload', $storage);
 			$uploadFile->setName($filename);	
 			$uploadFile->upload();
 
-			$file = public_path().'/uploads/'.$filename.'.xlsx'; //set path //need update
+			$file = public_path().'/student-id/'.$filename.'.xlsx'; //set path //need update
 
 			$objReader = PHPExcel_IOFactory::createReader('Excel2007');
 			if (!$objReader->canRead($file)) {
@@ -733,29 +758,56 @@ Class ApiProfileController extends Controller {
 			$highestRow = $sheet->getHighestRow(); 
 			$highestColumn = $sheet->getHighestColumn();
 
-			$th = [];
+
+			$profileClass = GameProfile::where('class_id' , $classId)->where('user_id', $userId)->count();
+			$profileLimit = ($gameClass->expired_at > date("Y-m-d H:i:s"))?50:5;
+			
+			if( ($profileClass + ($highestRow- 1)) >= $profileLimit){
+				return ResponseHelper::OutputJSON('fail', "class limited" );
+			}
+
+			$exist = [];
 			//  Loop through each row of the worksheet in turn
 			for ($i= 2; $i<= $highestRow; $i++){ 
 			    //  Read a row of data into an array
 			    $rowData = $sheet->rangeToArray('A' . $i . ':' . $highestColumn . $i , NULL , TRUE, FALSE);
-			   
-			   var_export($rowData); die();
+			  
+			   	if(!$rowData[0][0]){
+			   		continue;
+			   	}
 
-			   	// if(!$rowData[0][0]){
-			   	// 	continue;
-			   	// }
+			   	$studentId = $rowData[0][0];
+			   	$firstName = $rowData[0][1];
 
+			   	$profile = GameProfile::where('student_id' , $rowData[0][0])->first();
+			   	if($profile){
+			   		array_push($exist, [
+						'student_id' => $studentId,
+						'first_name' => $firstName,
+					]);
+			   	}
 
+				ApiProfileHelper::newProfile($userId , $classId  , $firstName , $age , $school , $grade , 999 , 999 , 999 ,$studentId );
 			}
+
+			if($exist){
+				return ResponseHelper::OutputJSON('fail' , 'student id has been used' , $exist);
+			}
+
 			DB::commit();
 			unlink($file);
 
+			return ResponseHelper::OutputJSON('success');
+
+
 		} catch (Exception $ex) {
 			DB::rollback();
-			Libraries\LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiProfileController > createMultipleProfile',
 				'inputs' => \Request::all(),
 			])]);
-			return Libraries\ResponseHelper::OutputJSON('exception');
+			return ResponseHelper::OutputJSON('exception');
 		}
+
 	}
 }
