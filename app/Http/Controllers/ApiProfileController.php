@@ -737,13 +737,13 @@ Class ApiProfileController extends Controller {
 				return ResponseHelper::OutputJSON('fail', "user flag not found");
 			}
 
-			$filename = time();
-			$storage = new \Upload\Storage\FileSystem(public_path() . '/student-id/', true); //neeed update
+			$filename = join('.', [$userId , date("YmdHis")] );
+			$storage = new \Upload\Storage\FileSystem( '../resources/upload/create-student-bulk/' , true); //neeed update
 			$uploadFile = new \Upload\File('fileUpload', $storage);
 			$uploadFile->setName($filename);	
 			$uploadFile->upload();
 
-			$file = public_path().'/student-id/'.$filename.'.xlsx'; //set path //need update
+			$file = '../resources/upload/create-student-bulk/'.$filename.'.xlsx'; //set path //need update
 
 			$objReader = PHPExcel_IOFactory::createReader('Excel2007');
 			if (!$objReader->canRead($file)) {
@@ -759,11 +759,14 @@ Class ApiProfileController extends Controller {
 			$highestColumn = $sheet->getHighestColumn();
 
 
-			$profileClass = GameProfile::where('class_id' , $classId)->where('user_id', $userId)->count();
+			$profileCount = GameProfile::where('class_id' , $classId)->where('user_id', $userId)->count();
 			$profileLimit = ($gameClass->expired_at > date("Y-m-d H:i:s"))?50:5;
-			
-			if( ($profileClass + ($highestRow- 1)) >= $profileLimit){
-				return ResponseHelper::OutputJSON('fail', "class limited" );
+
+			if( ($profileCount + ($highestRow- 1)) >= $profileLimit){
+				return ResponseHelper::OutputJSON('fail', "class limited" , [
+					'remain' => ($profileLimit - $profileCount),
+					'upload' => ($highestRow - 1),
+					]);
 			}
 
 			$exist = [];
