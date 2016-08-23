@@ -323,15 +323,14 @@ Class ApiProfileController extends Controller {
 			$profile->nickName2;
 			$profile->avatar;
 			$profile->gameCode;
-			
-			$paid = ($profile->expired_at > date("Y-m-d H:i:s") )?1:0;
+			$profile->paid = ($profile->expired_at > date("Y-m-d H:i:s") )?1:0;
 
 			if ($userId != $profile->user_id) {
 				return ResponseHelper::OutputJSON('fail', 'wrong user id');
 			}
 
-			return ResponseHelper::OutputJSON('success', '', ['profile' => $profile->toArray() , 'paid' => $paid]);
-
+			return ResponseHelper::OutputJSON('success', '', ['profile' => $profile->toArray()] );
+			
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 				'source' => 'ApiProfileController > getProfile',
