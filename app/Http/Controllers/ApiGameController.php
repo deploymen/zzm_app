@@ -216,6 +216,28 @@ Class ApiGameController extends Controller {
 				Cache::put($planetDifficultyCacheKey, $questions, Carbon::now()->addMinutes(5));
 			}
 
+			$coinDaily = 0;
+			$coinTutorial = 0;
+
+			$playedEver = !!GamePlay::where('planet_id', $planetId)->where('profile_id', $profileId)->where('difficulty', $difficulty)->count();			
+			$playedDaily = GamePlay::where('profile_id', $profileId)->whereRaw('DATE(`created_at`) = DATE(NOW())')->count();
+			$watchedTutorial = GamePlay::where('planet_id', $planetId)->where('profile_id', $profileId)->where('difficulty', $difficulty)->where('watched_tutorial' , 1)->first();
+
+			$rewardName = ($planet->popularity == 'basic')?'play-basic':'play-hot';
+			if($playedEver){
+				$rewardName = 'play-repeat';
+			}
+
+			$coinRegular = CoinReward::GetEntitleCoinReward($rewardName , 'difficulty-'.$difficulty );
+
+			if(!$playedDaily){
+				$coinDaily = CoinReward::GetEntitleCoinReward('play-daily');
+			}
+
+			if(!$watchedTutorial){
+				$coinTutorial = CoinReward::GetEntitleCoinReward('watch-tutorial');
+			}
+
 			$this->updateGameProfileLocationInfo($profileId);
 			
 			return ResponseHelper::OutputJSON('success', '', [
@@ -229,8 +251,12 @@ Class ApiGameController extends Controller {
 					'status' => [
 						'star' => $userMap->star,	
 						'difficulty' =>$difficulty,
-						'coin' => $planet->{'coin_star'.$difficulty},
 						'top_score' => $userMap->top_score,
+					],
+					'coin_rewards' => [
+						'game_pass' => $coinRegular,
+						'game_daily_first' => $coinDaily,
+						'watch_tutorial' => $coinTutorial,
 					],
 					'planet_top_score'=>$topScoreResult,
 						

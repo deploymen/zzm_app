@@ -614,6 +614,16 @@ Class AuthUserController extends Controller {
 				'toAddresses' => [$email],
 			]);
 
+			$mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
+			$data = ["email" => $email,
+			        "attributes" => ["NAME"=>$name, "SURNAME"=>""],
+			        "listid" => [Config::get('app.send_in_blue_list_id')],
+			        "listid_unlink" => []
+			    ];
+		
+		    $mailin->create_update_user($data);
+
+
 			$logOpenAcc = new LogAccountActivate;
 			$logOpenAcc->user_id = $newUser['user_id'];
 			$logOpenAcc->secret = $secretKey;
