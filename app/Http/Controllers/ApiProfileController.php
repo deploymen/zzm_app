@@ -294,7 +294,7 @@ Class ApiProfileController extends Controller {
 
 		try {
 
-			$profile = GameProfile::select('id', 'user_id', 'class_id', 'student_id' , 'first_name', 'last_name', 'age', 'school', 'grade', 'city', 'country', 'email', 'nickname1', 'nickname2', 'avatar_id' ,'expired_at')->find($id);
+			$profile = GameProfile::select('id', 'user_id', 'class_id', 'student_id' , 'first_name', 'last_name', 'age', 'school', 'grade', 'city', 'country', 'email', 'nickname1', 'nickname2', 'avatar_id', 'coin' ,'expired_at')->find($id);
 
 			if (!$profile) {
 				return ResponseHelper::OutputJSON('fail', 'profile not found');
@@ -398,7 +398,7 @@ Class ApiProfileController extends Controller {
 
 			$newProfile = ApiProfileHelper::newProfile('0', '0', 'Anonymous', '5_or_younger' , 'default school' , 'K' , 999 , 999 , 999);
 
-			return ResponseHelper::OutputJSON('success', '', ['student_id' => $newProfile['student_id'] );
+			return ResponseHelper::OutputJSON('success', '', ['student_id' => $newProfile['student_id'] ]);
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -706,6 +706,56 @@ Class ApiProfileController extends Controller {
 				'inputs' => Request::all(),
 			])]);
 			return ResponseHelper::OutputJSON('exception');
+		}
+	}
+
+	public function createMultipleProfile() {
+		DB::beginTransaction();
+		try {
+			$filename = time();
+			$storage = new \Upload\Storage\FileSystem(public_path() . '/uploads/', true); //neeed update
+			$uploadFile = new \Upload\File('fileUpload', $storage);
+			$uploadFile->setName($filename);	
+			$uploadFile->upload();
+
+			$file = public_path().'/uploads/'.$filename.'.xlsx'; //set path //need update
+
+			$objReader = PHPExcel_IOFactory::createReader('Excel2007');
+			if (!$objReader->canRead($file)) {
+				$objReader = PHPExcel_IOFactory::createReader('Excel5');
+				if (!$objReader->canRead($file)) {
+					return Libraries\ResponseHelper::OutputJSON('fail', "invalid file type");
+				}
+			}
+
+		    $objPHPExcel = $objReader->load($file);
+			$sheet = $objPHPExcel->getSheet(0); 
+			$highestRow = $sheet->getHighestRow(); 
+			$highestColumn = $sheet->getHighestColumn();
+
+			$th = [];
+			//  Loop through each row of the worksheet in turn
+			for ($i= 2; $i<= $highestRow; $i++){ 
+			    //  Read a row of data into an array
+			    $rowData = $sheet->rangeToArray('A' . $i . ':' . $highestColumn . $i , NULL , TRUE, FALSE);
+			   
+			   var_export($rowData); die();
+
+			   	// if(!$rowData[0][0]){
+			   	// 	continue;
+			   	// }
+
+
+			}
+			DB::commit();
+			unlink($file);
+
+		} catch (Exception $ex) {
+			DB::rollback();
+			Libraries\LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'inputs' => \Request::all(),
+			])]);
+			return Libraries\ResponseHelper::OutputJSON('exception');
 		}
 	}
 }
