@@ -636,19 +636,6 @@ Class ApiGameController extends Controller {
 			$result = DB::SELECT($sql, ['planet_id'=>$planetId]);
 	
 			$typeName = $result[0]->name;
-///////////////////////////////////////////////////////////////////////////////////
-			$playedEver = !!GamePlay::where('planet_id', $planetId)->where('profile_id', $profileId)->where('difficulty', $gameResult['difficulty'])->count();			
-			$playedDaily = GamePlay::where('profile_id', $profileId)->whereRaw('DATE(`created_at`) = DATE(NOW())')->count();
-
-			$rewardName = ($planet->popularity == 'basic')?'play-basic':'play-hot';
-			if($playedEver){
-				$rewardName = 'play-repeat';
-			}
-
-			$coinRegular = CoinReward::GetEntitleCoinReward($rewardName , 'difficulty-'.$gameResult['difficulty'] );
-
-			///////////////////////////////////////////////////////////////			
-
 
 			$gamePlay = new GamePlay;
 
@@ -656,10 +643,6 @@ Class ApiGameController extends Controller {
 			switch($gameStatus){
 				case 'false': $gameStatus = 'fail'; break;
 				case 'true': $gameStatus = 'pass'; break;
-			}
-
-			if($gameStatus === 'pass'){
-				$gamePlay->coin = $coinRegular;
 			}
 
 			$gamePlay->user_id = $userId;
@@ -691,7 +674,6 @@ Class ApiGameController extends Controller {
 				'played' => '1'
 			]);;
 
-
 			AbstractGameResult::SubmitTypeResult($typeName, [
 				'planetId' => $planetId, 
 				'gamePlay' => $gamePlay, 
@@ -699,9 +681,16 @@ Class ApiGameController extends Controller {
 				'profileId' => $profileId, 
 			]);
 
-			///////////////////////////////////////////////////////////////////////////////////
+			//= Coin Rewards @start
+			$playedEver = !!GamePlay::where('planet_id', $planetId)->where('profile_id', $profileId)->where('difficulty', $gameResult['difficulty'])->count();			
+			$playedDaily = GamePlay::where('profile_id', $profileId)->whereRaw('DATE(`created_at`) = DATE(NOW())')->count();
 
-			//$coinRegular = CoinReward::GetEntitleCoinReward($rewardName , 'difficulty-'.$gameResult['difficulty'] );
+			$rewardName = ($planet->popularity == 'basic')?'play-basic':'play-hot';
+			if($playedEver){
+				$rewardName = 'play-repeat';
+			}
+
+			$coinRegular = CoinReward::GetEntitleCoinReward($rewardName , 'difficulty-'.$gameResult['difficulty'] );
 			$descriptionRegular = GameCoinTransaction::GetDescription($rewardName , ['playId' => $gamePlay->id , 'planetId' => $planetId , 'difficulty' => $gameResult['difficulty'] ]);
 			GameCoinTransaction::DoTransaction($profileId , $coinRegular , $descriptionRegular);
 
@@ -709,16 +698,21 @@ Class ApiGameController extends Controller {
 				$coinDaily = CoinReward::GetEntitleCoinReward('play-daily');
 				$descriptionDaily = GameCoinTransaction::GetDescription('play-daily' , ['playId' => $gamePlay->id, 'planetId' => $planetId , 'difficulty' => $gameResult['difficulty'] ]);
 				GameCoinTransaction::DoTransaction($profileId , $coinDaily , $descriptionDaily);	
-
 			}
 
 			if($watchedTutorial){
 				$coinTutorial = CoinReward::GetEntitleCoinReward('watch-tutorial' , 'difficuldifficulty' );
 				$descriptionTutorial = GameCoinTransaction::GetDescription('watch-tutorial' , ['playId' => $gamePlay->id, 'planetI' => $gameResult['difficulty'] ]);
 				GameCoinTransaction::DoTransaction($profileId , $coinTutorial , $descriptionTutorial);	
-
 			}
-			///////////////////////////////////////////////////////////////	
+
+			//update play record too, again.
+			if($gameStatus === 'pass'){
+				$gamePlay->coin = $coinRegular;
+				$gamePlay->save();
+			}			
+			//= Coin Rewards @end
+
 
 			ZapZapQuestionHelper::UserMapV1_1($profileId, $planetId, $gamePlay, $gameResult, $gameResult['difficulty']); //update user_map
 			ZapZapQuestionHelper::LastSession($userId , $profileId, $gameResult, $playedTime);
