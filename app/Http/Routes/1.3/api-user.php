@@ -13,7 +13,7 @@ Route::group(['middleware' => 'auth.user'], function () {
 			Route::put('/{id}/edit', 'ApiProfileController@update');
 			Route::delete('/{id}', 'ApiProfileController@delete');
 
-			Route::post('/excel' , 'ApiProfileController@createMultipleProfile');
+			Route::post('/create-bulk' , 'ApiProfileController@createBulk');
 		});
 	});
 });

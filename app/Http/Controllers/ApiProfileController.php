@@ -713,7 +713,7 @@ Class ApiProfileController extends Controller {
 		}
 	}
 
-	public function createMultipleProfile() {
+	public function createBulk() {
 		$userId = Request::input('user_id');
 		$classId = Request::input('class_id' , 0);
 		$age = Request::input('age');
