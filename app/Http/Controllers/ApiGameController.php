@@ -150,15 +150,15 @@ Class ApiGameController extends Controller {
 	public function requestV1_3($planetId , $language = 'en') {	
 
 		$ON_CACHE = false;
-		$CATCH_EX = true;
+		$CATCH_EX = false;
 		
 		try{
-			$gameCode = Request::input('game_code');
+			$studentId = Request::input('student_id');
 			$difficulty = Request::input('difficulty');			
 			$questionCount = Request::input('question_count');
-			$profileId =  Request::input('game_code_profile_id');//middle
+			$profileId =  Request::input('student_profile_id');//middle
 
-			LogHelper::LogGetQuestions($planetId, $gameCode);
+			LogHelper::LogGetQuestions($planetId, $studentId);
 
 			$planetCacheKey = join('.', ['ApiGameController@request', 'v1.3', 'planet', $planetId]);		
 		
@@ -587,11 +587,10 @@ Class ApiGameController extends Controller {
 			$playedTime = Request::input('played_time', 0);
 			$watchedTutorial = Request::input('watch_tutorial', 0);
 
-			$profileId = Request::input('game_code_profile_id');
+			$profileId = Request::input('student_profile_id');
 			$userId = Request::input('user_id');
-			$deviceId = Request::input('game_code_device_id');
-			$gameCode = Request::input('game_code');
-			$gameCodeType = Request::input('game_code_type');
+			$studentId = Request::input('student_id');
+			$profileType = Request::input('student_profile_type');
 
 			$planet = GamePlanet::where('enable', 1)
 					->where('id', '>=', 100)
@@ -675,10 +674,9 @@ Class ApiGameController extends Controller {
 			$gamePlay->profile_id = $profileId;
 			$gamePlay->planet_id = $planetId;
 			$gamePlay->target_type = $typeName;
-			$gamePlay->type = $gameCodeType;
+			$gamePlay->type = $profileType;
 			$gamePlay->score = $gameResult['score'];
-			$gamePlay->device_id = $deviceId;
-			$gamePlay->code = $gameCode;
+			$gamePlay->code = $studentId;
 			$gamePlay->hash = $hash1;
 			$gamePlay->status = $gameStatus;
 			$gamePlay->played_time = $playedTime;
@@ -696,7 +694,7 @@ Class ApiGameController extends Controller {
 
 			$gamePlay->save();
 
-			GameCode::where('code', $gameCode)->update([
+			GameCode::where('code', $studentId)->update([
 				'played' => '1'
 			]);;
 
@@ -747,7 +745,7 @@ Class ApiGameController extends Controller {
 			$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();
 
 			ZapZapQuestionHelper::LeaderboardUpdate($profile,$systemPlanet,$gameResult);
-			LogHelper::LogPostResult($planetId , $jsonGameResult, $gameCode);//log post result
+			LogHelper::LogPostResult($planetId , $jsonGameResult, $studentId);//log post result
 		
 			
 			} catch (Exception $ex) {
@@ -1037,10 +1035,9 @@ Class ApiGameController extends Controller {
 
 	public function getUserMapV1_3(){
 		//user type : 0 = no pay money , 1 = paid money, 2 = annonymous
-		$profileId = Request::input('game_code_profile_id');
+		$profileId = Request::input('student_profile_id');
 		$userId = Request::input('user_id');
-		$deviceId = Request::input('game_code_device_id');
-		$gameCode = Request::input('game_code');
+		$studentId = Request::input('student_id');
 
 		try{
 			$result = ZapZapQuestionHelper::GetUserMapV1_2($profileId);
@@ -1126,7 +1123,7 @@ Class ApiGameController extends Controller {
 						'grade' =>$profile->grade,
 						'total_star' => $totalStar,
 						'user_type' => $userType,
-						'game_code' => $gameCode,
+						'game_code' => $studentId,
 						'nick_name1' =>$profile->nickName1->name,
 						'nick_name2' =>$profile->nickName2->name,
 						'avatar' => $profile->avatar,
@@ -1162,7 +1159,7 @@ Class ApiGameController extends Controller {
 		}
 	}
 
-	public function leaderBoardPlanet($version ,$planetId){
+	public function leaderBoardPlanetV1_3($version ,$planetId){
 		try{
 
 			$leaderBoardPlanet = LeaderBoardPlanet::where('planet_id', $planetId)->where('rank' ,'<' ,101)->orderBy('rank')->get()->toArray();
@@ -1370,6 +1367,20 @@ Class ApiGameController extends Controller {
 		return ResponseHelper::OutputJSON('success', '' , ['account_type' => $result[0]->type] );
 	}
 
+	public function checkGameCodeV1_3(){
+		$studentId = Request::input('student_id');
+
+		$gameProfile = GameProfile::where('student_id' , $studentId)->first();
+
+		if(!$checkGameCode){
+			$newProfile = ApiProfileHelper::newProfile(0 , 0 ,'Anonymous' , '5_or_younger' , 'default school' , 'K' , 999 , 999 , 999 );
+
+			return ResponseHelper::OutputJSON('success', '', [] , [] , [] , 'change_student_id', ['student_id' => $newProfile->student_id]);
+		}
+
+		return ResponseHelper::OutputJSON('success');
+	}
+
 	public function offlinePost(){
 		$result = Request::input('result');
 
@@ -1544,6 +1555,193 @@ Class ApiGameController extends Controller {
 		return ResponseHelper::OutputJSON('success');
 	}
 
+	public function offlinePostV1_3(){
+		$jsonGameResult = Request::input('game_result');
+		$hash = Request::input('hash');
+		$random = Request::input('random');
+		$playedTime = Request::input('played_time', 0);
+		$watchedTutorial = Request::input('watch_tutorial', 0);
+
+		$profileId = Request::input('student_profile_id');
+		$userId = Request::input('user_id');
+		$studentId = Request::input('student_id');
+		$profileType = Request::input('student_profile_type');
+		// $results = array($result);
+		$results = json_decode( ($result), true );
+
+		try{
+
+			for($i=0; $i<=(count($results) - 1); $i++){
+				$r = $results[$i];
+
+				$gameResult = $r['game_result'];
+
+				$sgameResult = json_decode(($gameResult), true);
+				$planetId = $r['planet_id'];
+
+				$planet = GamePlanet::where('enable', 1)
+						->where('id', '>=', 100)
+						->find($planetId);
+
+				$coinCollected = 0;
+
+				if(!$gameResult || !$r['hash'] || !$r['random'] || !$r['played_time']){
+					return ResponseHelper::OutputJSON('fail', 'missing parameter');
+				}
+
+				if(!isset($sgameResult['score']) || !isset($sgameResult['answers'])|| !isset($sgameResult['status']) || !isset($sgameResult['difficulty'])){ 
+					return ResponseHelper::OutputJSON('fail', 'invalid game result format');
+				}
+				// check hash
+
+				$hash1 = sha1($gameResult.$r['random'].Config::get('app.p02_key'));
+				$hash2 = $r['hash'];
+			
+				if($hash1 != $hash2){ 
+					return  [
+						'status' => "fail",
+						'message' => "invalid hash",
+						'hash1' => $hash1,
+						'hash2' => $hash2,
+						'key' => Config::get('app.p02_key'),
+					]; 
+				}
+
+				$checkResult = GamePlay::where('hash', $hash1)->first();	
+				if($checkResult){
+					return ResponseHelper::OutputJSON('fail', 'no double submit');
+				}
+
+				//validate question ids
+				$questionIds = [];
+				foreach ($sgameResult['answers'] as $answer){
+					array_push($questionIds, $answer['question_id']); 
+				}
+
+				$sql = "
+					SELECT COUNT(*) AS `count`
+						FROM `t0200_game_question`
+							WHERE `id` IN(".join(',', $questionIds).")	
+				";
+				$result = DB::SELECT($sql);
+
+				if($result[0]->count !== count($questionIds)){
+					return ResponseHelper::OutputJSON('fail', 'invalid question id');
+				}
+				//validate question ids =end
+
+				$sql = "
+					SELECT t.`name`
+						FROM `t0123_game_planet` p, `t0121_game_type` t
+							WHERE p.`id` = :planet_id	
+								AND p.`game_type_id` = t.`id`
+									LIMIT 1;		
+				";
+
+				$result = DB::SELECT($sql, ['planet_id'=>$planetId]);
+		
+				$typeName = $result[0]->name;
+
+				$gamePlay = new GamePlay;
+
+				$gameStatus = strtolower($sgameResult['status']);
+				switch($gameStatus){
+					case 'false': $gameStatus = 'fail'; break;
+					case 'true': $gameStatus = 'pass'; break;
+				}
+
+				$gamePlay->user_id = $userId;
+				$gamePlay->profile_id = $profileId;
+				$gamePlay->planet_id = $planetId;
+				$gamePlay->target_type = $typeName;
+				$gamePlay->type = $profileType;
+				$gamePlay->score = $sgameResult['score'];
+				$gamePlay->code = $studentId;
+				$gamePlay->hash = $hash1;
+				$gamePlay->status = $gameStatus;
+				$gamePlay->played_time = $playedTime;
+				$gamePlay->difficulty = $sgameResult['difficulty'];
+
+				if(isset($sgameResult['badges'])){
+					$sgameResult['badges']['speed'] = ($sgameResult['badges']['speed'] == 'True')?1:0;
+					$sgameResult['badges']['accuracy'] = ($sgameResult['badges']['accuracy'] == 'True')?1:0;
+
+					$gamePlay->badges_metrics = json_encode($sgameResult['badges']);		
+				}
+
+				if(isset($sgameResult['level'])){
+					$gamePlay->level =  $sgameResult['level'];
+				}
+
+				$gamePlay->save();
+
+				GameCode::where('code', $studentId)->update([
+					'played' => '1'
+				]);;
+
+
+				AbstractGameResult::SubmitTypeResult($typeName, [
+					'planetId' => $planetId, 
+					'gamePlay' => $gamePlay, 
+					'gameResult' => $sgameResult, 
+					'profileId' => $profileId, 
+				]);
+				
+				//= Coin Rewards @start
+				$playedEver = !!GamePlay::where('planet_id', $planetId)->where('profile_id', $profileId)->where('difficulty', $sgameResult['difficulty'])->count();			
+				$playedDaily = GamePlay::where('profile_id', $profileId)->whereRaw('DATE(`created_at`) = DATE(NOW())')->count();
+
+				$rewardName = ($planet->popularity == 'basic')?'play-basic':'play-hot';
+				if($playedEver){
+					$rewardName = 'play-repeat';
+				}
+
+				$coinRegular = CoinReward::GetEntitleCoinReward($rewardName , 'difficulty-'.$sgameResult['difficulty'] );
+				$descriptionRegular = GameCoinTransaction::GetDescription($rewardName , ['playId' => $gamePlay->id , 'planetId' => $planetId , 'difficulty' => $sgameResult['difficulty'] ]);
+				GameCoinTransaction::DoTransaction($profileId , $coinRegular , $descriptionRegular);
+
+				if(!$playedDaily){
+					$coinDaily = CoinReward::GetEntitleCoinReward('play-daily');
+					$descriptionDaily = GameCoinTransaction::GetDescription('play-daily' , ['playId' => $gamePlay->id, 'planetId' => $planetId , 'difficulty' => $sgameResult['difficulty'] ]);
+					GameCoinTransaction::DoTransaction($profileId , $coinDaily , $descriptionDaily);	
+				}
+
+				if($watchedTutorial){
+					$coinTutorial = CoinReward::GetEntitleCoinReward('watch-tutorial' , 'difficuldifficulty' );
+					$descriptionTutorial = GameCoinTransaction::GetDescription('watch-tutorial' , ['playId' => $gamePlay->id, 'planetI' => $sgameResult['difficulty'] ]);
+					GameCoinTransaction::DoTransaction($profileId , $coinTutorial , $descriptionTutorial);	
+				}
+
+				//update play record too, again.
+				if($gameStatus === 'pass'){
+					$gamePlay->coin = $coinRegular;
+					$gamePlay->save();
+				}			
+				//= Coin Rewards @end
+
+
+				ZapZapQuestionHelper::UserMapV1_1($profileId, $planetId, $gamePlay, $sgameResult, $sgameResult['difficulty']); //update user_map
+				ZapZapQuestionHelper::LastSession($userId , $profileId, $sgameResult, $playedTime);
+
+				$profile = GameProfile::find($profileId);
+				$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();
+
+				ZapZapQuestionHelper::LeaderboardUpdate($profile,$systemPlanet,$sgameResult);
+				LogHelper::LogPostResult($planetId , $jsonGameResult, $studentId);//log post result
+			}
+
+		} catch (Exception $ex) {
+
+				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+					'source' => 'ApiGameController > result', 
+					'inputs' => Request::all(),
+				])]);
+				return ResponseHelper::OutputJSON('exception');
+		}
+
+		return ResponseHelper::OutputJSON('success');
+	}
+
 	public function getGameCodeInfo(){
 		$code = Request::input('game_code');
 
@@ -1574,6 +1772,36 @@ Class ApiGameController extends Controller {
 				'nick_name1' =>$profile->nickName1->name,
 				'nick_name2' =>$profile->nickName2->name,
 				'avatar_id' => $profile->avatar->id,
+		 ]);
+	}
+
+	public function getGameCodeInfoV1_3(){
+		$studentId = Request::input('student_id');
+
+		if(!$studentId){
+			return ResponseHelper::OutputJSON('fail' , 'missing parameter');
+		}
+
+		$gameProfile = GameCode::where('student_id' , $studentId)->first();
+
+		if(!$gameCode){
+			return ResponseHelper::OutputJSON('fail' , 'student id not found');
+		}
+
+		$totalStar = UserMap::where('profile_id', $gameProfile->id)->sum('star');
+		$gameProfile->nickName1;
+		$gameProfile->nickName2;
+		$gameProfile->avatar;
+
+		return ResponseHelper::OutputJSON('success', '' , [
+				'first_name' => $gameProfile->first_name,
+				'last_name' => $gameProfile->last_name,
+				'grade' =>$gameProfile->grade,
+				'total_star' => $totalStar,
+				'game_code' => $studentId,
+				'nick_name1' =>$gameProfile->nickName1->name,
+				'nick_name2' =>$gameProfile->nickName2->name,
+				'avatar_id' => $gameProfile->avatar->id,
 		 ]);
 	}
 

@@ -258,7 +258,7 @@ class ApiProfileHelper{
 			];
 	}
 
-	public static function newProfile($userId , $classId , $firstName , $age , $school , $grade , $nickname1 , $nickname2 , $avatarId , $studentId = ''){
+	public static function newProfile($userId , $classId , $firstName, $age , $school , $grade , $nickname1 , $nickname2 , $avatarId , $studentId = ''){
 
 		$profileType = 'signed_up_profile';
 		$seed = 0;

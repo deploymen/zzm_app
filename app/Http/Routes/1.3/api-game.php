@@ -25,7 +25,7 @@ Route::group(['prefix' => 'game'], function () {
 
 	Route::post('/game-code', 'ApiGameController@getGameCodeInfo');
 
-	Route::group(['middleware' => 'auth.game'], function () {
+	Route::group(['middleware' => 'auth.student'], function () {
 		Route::put('/profiles', 'ApiProfileController@gameUpdate');
 
 		Route::post('/verify-transfer', 'ApiProfileController@verifyCode');
