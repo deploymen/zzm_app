@@ -27,7 +27,7 @@ class GameQuestionP07 extends AbstractGameQuestion {
 
 
 		$sql = "
-			SELECT p07.*, qc.`question_id`
+			SELECT  qc.`question_id` ,p07.*
 				FROM `t0207_game_question_p07` p07, `t0126_game_planet_question_cache` qc
 	                    WHERE qc.`planet_id` = :planet_id
 	                    	AND qc.`difficulty` = :difficulty

@@ -27,9 +27,9 @@ class GameQuestionP03 extends AbstractGameQuestion {
 
 
 		$sql = "
-			SELECT p03.*, qc.`question_id`, obj.`question_object_1`,obj.`question_object_2`, obj.`question_type`
+			SELECT  qc.`question_id`,p03.*, obj.`question_object_1`,obj.`question_object_2`, obj.`question_type`
 				FROM (`t0203_game_question_p03` p03, `t0126_game_planet_question_cache` qc)
-					LEFT JOIN `t0203_game_question_p03_object` obj ON (obj.`question_id` = p03.`id` )
+					LEFT JOIN `t0203_game_question_p03_object` obj ON (obj.`id` = p03.`id` )
 	                    WHERE qc.`planet_id` = :planet_id
 	                    	AND qc.`difficulty` = :difficulty
 	                    	AND p03.`id` = qc.`target_id`
@@ -45,18 +45,18 @@ class GameQuestionP03 extends AbstractGameQuestion {
 
 		$questions = [];
 		foreach ($result as $value){
-			array_push($questions, array_only((array)$value, [
-				'id', 
-				'question', 
-				'question_type', 
-				'question_object_1', 
-				'question_object_2', 
-				'answer', 
-				'answer_option_1', 
-				'answer_option_2', 
-				'image_id', 
-				'difficulty', 
-			]));
+			array_push($questions, [
+				'id' => $value->question_id, 
+				'question'=> $value->question, 
+				'question_type'=> $value->question_type, 
+				'question_object_1'=> $value->question_object_1, 
+				'question_object_2'=> $value->question_object_2, 
+				'answer'=> $value->answer, 
+				'answer_option_1'=> $value->answer_option_1, 
+				'answer_option_2'=> $value->answer_option_2, 
+				'image_id'=> $value->image_id, 
+				'difficulty'=> $value->difficulty, 
+			]);
 		}
 
 		return $questions;

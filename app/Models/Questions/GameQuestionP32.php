@@ -27,7 +27,7 @@ class GameQuestionP32 extends AbstractGameQuestion {
 
 
 		$sql = "
-			SELECT p32.*, qc.`question_id`
+			SELECT  qc.`question_id` ,p32.*
 				FROM `t0232_game_question_p32` p32, `t0126_game_planet_question_cache` qc
 	                    WHERE qc.`planet_id` = :planet_id
 	                    	AND qc.`difficulty` = :difficulty
@@ -44,25 +44,25 @@ class GameQuestionP32 extends AbstractGameQuestion {
 
 		$questions = [];
 		foreach ($result as $value){
-			array_push($questions, array_only((array)$value, [
-				'id' ,
-				'question' ,
-				'answer_x' ,
-				'answer_y' ,
-				'origin_x' ,
-				'origin_y' ,
-				'diff_x' ,
-				'diff_y' ,
-				'initial_x' ,
-				'initial_y' ,
-				'planet_1' ,
-				'planet_1_x' ,
-				'planet_1_y' ,
-				'planet_2' ,
-				'planet_2_x' ,
-				'planet_2_y' ,
-				'difficulty' ,
-			]));
+			array_push($questions,  [
+				'id' => $value->question_id,
+				'question' => $value->question,
+				'answer_x' => $value->answer_x,
+				'answer_y' => $value->answer_y,
+				'origin_x' => $value->origin_x,
+				'origin_y' => $value->origin_y,
+				'diff_x' => $value->diff_x,
+				'diff_y' => $value->diff_y,
+				'initial_x' => $value->initial_x,
+				'initial_y' => $value->initial_y,
+				'planet_1' => $value->planet_1,
+				'planet_1_x' => $value->planet_1_x,
+				'planet_1_y' => $value->planet_1_y,
+				'planet_2' => $value->planet_2,
+				'planet_2_x' => $value->planet_2_x,
+				'planet_2_y' => $value->planet_2_y,
+				'difficulty' => $value->difficulty,
+			]);
 		}
 
 		return $questions;

@@ -27,7 +27,7 @@ class GameQuestionP17 extends AbstractGameQuestion {
 
 
 		$sql = "
-			SELECT p17.*, qc.`question_id`
+			SELECT qc.`question_id` , p17.*
 				FROM `t0217_game_question_p17` p17, `t0126_game_planet_question_cache` qc
 	                    WHERE qc.`planet_id` = :planet_id
 	                    	AND qc.`difficulty` = :difficulty
@@ -44,26 +44,26 @@ class GameQuestionP17 extends AbstractGameQuestion {
 
 		$questions = [];
 		foreach ($result as $value){
-			array_push($questions, array_only((array)$value, [
-				'id' ,
-				'color_1' ,
-				'number_1' ,
-				'color_2' ,
-				'number_2' ,
-				'color_3' ,
-				'number_3' ,
-				'color_4' ,
-				'number_4' ,
-				'color_5' ,
-				'number_5' ,
-				'color_6' ,
-				'number_6' ,
-				'fake_color_1' ,
-				'fake_number_1' ,
-				'fake_color_2' ,
-				'fake_number_2' ,
-				'difficulty' ,
-			]));
+			array_push($questions, [
+				'id'=> $value->question_id,
+				'color_1' => $value->color_1,
+				'number_1' => $value->number_1,
+				'color_2' => $value->color_2,
+				'number_2' => $value->number_2,
+				'color_3' => $value->color_3,
+				'number_3' => $value->number_3,
+				'color_4' => $value->color_4,
+				'number_4' => $value->number_4,
+				'color_5' => $value->color_5,
+				'number_5' => $value->number_5,
+				'color_6' => $value->color_6,
+				'number_6' => $value->number_6,
+				'fake_color_1' => $value->fake_color_1,
+				'fake_number_1' => $value->fake_number_1,
+				'fake_color_2' => $value->fake_color_2,
+				'fake_number_2' => $value->fake_number_2,
+				'difficulty' => $value->difficulty,
+			]);
 		}
 
 		return $questions;

@@ -223,7 +223,7 @@ Class ApiGameController extends Controller {
 			$playedDaily = GamePlay::where('profile_id', $profileId)->whereRaw('DATE(`created_at`) = DATE(NOW())')->count();
 			$watchedTutorial = GamePlay::where('planet_id', $planetId)->where('profile_id', $profileId)->where('difficulty', $difficulty)->where('watched_tutorial' , 1)->first();
 
-			$rewardName = ($planet->popularity == 'basic')?'play-basic':'play-hot';
+			$rewardName = ($planet->popularity == 'basic')?'play-basic':'play-hots';
 			if($playedEver){
 				$rewardName = 'play-repeat';
 			}
@@ -348,7 +348,7 @@ Class ApiGameController extends Controller {
 			";
 			$result = DB::SELECT($sql);
 
-			if($result[0]->count !== count($questionIds)){
+			if($result[0]->count != count($questionIds)){
 				return ResponseHelper::OutputJSON('fail', 'invalid question id');
 			}
 			//validate question ids =end
@@ -446,6 +446,8 @@ Class ApiGameController extends Controller {
 			$gameCode = Request::input('game_code');
 			$gameCodeType = Request::input('game_code_type');
 
+			LogHelper::LogPostResult($planetId , $jsonGameResult, $gameCode);//log post result
+
 			if(!$jsonGameResult || !$hash || !$random ){
 				return ResponseHelper::OutputJSON('fail', 'missing parameter');
 
@@ -499,9 +501,11 @@ Class ApiGameController extends Controller {
 			";
 			$result = DB::SELECT($sql);
 
-			if($result[0]->count !== count($questionIds)){
+			if($result[0]->count != count($questionIds)){
 				return ResponseHelper::OutputJSON('fail', 'invalid question id');
 			}
+
+
 			//validate question ids =end
 
 			$sql = "
@@ -564,7 +568,6 @@ Class ApiGameController extends Controller {
 			$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();
 
 			ZapZapQuestionHelper::LeaderboardUpdate($profile,$systemPlanet,$gameResult);
-			LogHelper::LogPostResult($planetId , $jsonGameResult, $gameCode);//log post result
 		} catch (Exception $ex) {
 
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -645,7 +648,7 @@ Class ApiGameController extends Controller {
 			";
 			$result = DB::SELECT($sql);
 
-			if($result[0]->count !== count($questionIds)){
+			if($result[0]->count != count($questionIds)){
 				return ResponseHelper::OutputJSON('fail', 'invalid question id');
 			}
 			//validate question ids =end

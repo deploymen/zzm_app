@@ -27,7 +27,7 @@ class GameQuestionP37 extends AbstractGameQuestion {
 
 
 		$sql = "
-			SELECT p37.*, qc.`question_id`
+			SELECT qc.`question_id`,  p37.*
 				FROM `t0237_game_question_p37` p37, `t0126_game_planet_question_cache` qc
 	                    WHERE qc.`planet_id` = :planet_id
 	                    	AND qc.`difficulty` = :difficulty
@@ -44,14 +44,14 @@ class GameQuestionP37 extends AbstractGameQuestion {
 
 		$questions = [];
 		foreach ($result as $value){
-			array_push($questions, array_only((array)$value, [
-				'id' ,
-				'question_rate' ,
-				'question_target' ,
-				'answer' ,
-				'answer_type' ,
-				'difficulty' ,
-			]));
+			array_push($questions, [
+				'id' => $value->question_id,
+				'question_rate' => $value->question_rate,
+				'question_target' => $value->question_target,
+				'answer' => $value->answer,
+				'answer_type' => $value->answer_type,
+				'difficulty' => $value->difficulty,
+			]);
 		}
 
 		return $questions;

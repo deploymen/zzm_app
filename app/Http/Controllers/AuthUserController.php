@@ -35,7 +35,7 @@ use Request;
 use Session;
 use Socialite;
 use GuzzleHttp\Client;
-use Sendinblue\Mailin;
+use SendinBlue\SendinBlueApiBundle\Wrapper\Mailin;
 
 Class AuthUserController extends Controller {
 
@@ -121,7 +121,7 @@ Class AuthUserController extends Controller {
 			$logOpenAcc->secret = $secretKey;
 			$logOpenAcc->save();
 					
-			$mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
+			$mailin = new Mailin(['base_url' => "https://api.sendinblue.com/v2.0", 'api_key' => "AC0B8IKZ2nw64hSW", 'timeout' => 5000]);
 			$data = ["email" => $username,
 			        "attributes" => ["NAME"=>$name, "SURNAME"=>""],
 			        "listid" => [Config::get('app.send_in_blue_list_id')],
@@ -132,7 +132,7 @@ Class AuthUserController extends Controller {
 
 			Session::put('access_token', $newUser['access_token']);
 			setcookie('access_token', $newUser['access_token'], time() + (86400 * 30), "/"); // 86400 = 1 day*/
-
+           			
 			$list = User::select('id' , 'role' , 'name' , 'register_from')->find($newUser['user_id']);
 
 			$coinValue = CoinReward::GetEntitleCoinReward('sign-up');
@@ -614,7 +614,7 @@ Class AuthUserController extends Controller {
 				'toAddresses' => [$email],
 			]);
 
-			$mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
+			$mailin = new Mailin(['base_url' => "https://api.sendinblue.com/v2.0", 'api_key' => "AC0B8IKZ2nw64hSW", 'timeout' => 5000]);
 			$data = ["email" => $email,
 			        "attributes" => ["NAME"=>$name, "SURNAME"=>""],
 			        "listid" => [Config::get('app.send_in_blue_list_id')],
@@ -844,7 +844,7 @@ Class AuthUserController extends Controller {
 		$userExternalId = UserExternalId::where('user_id' , $newUser['user_id'])->update(['facebook_id' => $facebookId ]);
 		$userAccess = UserAccess::where('user_id' , $user->id)->first();
 
-		$mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
+		$mailin = new Mailin(['base_url' => "https://api.sendinblue.com/v2.0", 'api_key' => "AC0B8IKZ2nw64hSW", 'timeout' => 5000]);
 		$data = ["email" => $email,
 		        "attributes" => ["NAME"=>$name, "SURNAME"=>""],
 		        "listid" => [Config::get('app.send_in_blue_list_id')],
