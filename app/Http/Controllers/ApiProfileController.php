@@ -91,7 +91,7 @@ Class ApiProfileController extends Controller {
 				return ResponseHelper::OutputJSON('fail', "student id has been used");
 			}
 					
-			if (!$nickname1Set || $nickname2Set) {
+			if (!$nickname1Set || !$nickname2Set) {
 				return ResponseHelper::OutputJSON('fail', "invalid nickname id");
 			}
 
@@ -137,7 +137,7 @@ Class ApiProfileController extends Controller {
 		// }
 
 		return ResponseHelper::OutputJSON('success', '', [
-			'profile' => $profile,
+			'profile' => $newProfile,
 		]);
 	}
 
@@ -778,10 +778,9 @@ Class ApiProfileController extends Controller {
 			if(!$userFlag){
 				return ResponseHelper::OutputJSON('fail', "user flag not found");
 			}
-
 			$filename = join('.', [$userId , date("YmdHis")] );
 			$storage = new \Upload\Storage\FileSystem( '../resources/upload/create-student-bulk/' , true); //neeed update
-			$uploadFile = new \Upload\File('file', $storage);
+			$uploadFile = new \Upload\File('fileUpload', $storage);
 			$uploadFile->setName($filename);	
 			$uploadFile->upload();
 
