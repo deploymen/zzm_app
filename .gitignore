@@ -6,6 +6,7 @@
 /public/node_modules
 /public/package/
 /database/backup
+/resource/upload
 .env*
 *.log
 *.sql

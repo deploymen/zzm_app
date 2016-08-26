@@ -781,7 +781,7 @@ Class ApiProfileController extends Controller {
 
 			$filename = join('.', [$userId , date("YmdHis")] );
 			$storage = new \Upload\Storage\FileSystem( '../resources/upload/create-student-bulk/' , true); //neeed update
-			$uploadFile = new \Upload\File('fileUpload', $storage);
+			$uploadFile = new \Upload\File('file', $storage);
 			$uploadFile->setName($filename);	
 			$uploadFile->upload();
 
@@ -830,7 +830,10 @@ Class ApiProfileController extends Controller {
 			$sql = "
 				SELECT `student_id`
 					FROM `t0111_game_profile`
-						WHERE `student_id` IN('".join(" ', '", $studentIds)."')	
+						WHERE `deleted_at` IS NULL
+						AND `student_id` IN('".join(" ', '", $studentIds)."')	
+
+
 			";
 
 			$result = DB::SELECT($sql);
