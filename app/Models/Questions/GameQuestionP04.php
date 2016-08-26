@@ -49,8 +49,8 @@ class GameQuestionP04 extends AbstractGameQuestion {
 				'question'=> $value->question, 
 				'answer_option_1'=> $value->answer_option_1, 
 				'answer_option_2'=> $value->answer_option_2, 
-				'answer_option_2'=> $value->answer_option_3, 
-				'answer_option_2'=> $value->answer_option_4, 
+				'answer_option_3'=> $value->answer_option_3, 
+				'answer_option_4'=> $value->answer_option_4, 
 				'difficulty'=> $value->difficulty, 
 			]);
 		}
