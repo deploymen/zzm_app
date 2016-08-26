@@ -24,7 +24,9 @@ use DB;
 use Exception;
 use Request;
 use Facebook\Facebook;
+use Validator;
 use Facebook\FacebookRequest;
+use Input;
 
 use PHPExcel_IOFactory;
 use PHPExcel_Style_Color;
@@ -55,31 +57,40 @@ Class ApiProfileController extends Controller {
 
 		$userId = Request::input('user_id');
 
-		$studentId = Request::input('student_id');
 		$firstName = Request::input('first_name');
 		$age = Request::input('age');
 		$school = Request::input('school');
 		$grade = Request::input('grade');
+		$studentId = Request::input('student_id');
 		$classId = Request::input('class_id' , 0);
 
 		$nickname1 = Request::input('nickname1', 999);
 		$nickname2 = Request::input('nickname2', 999);
 		$avatarId = Request::input('avatar_id', 999);
 
-		try {
-			
-			if (!$firstName || !$school || !$age || !$grade || $studentId) {
-				return ResponseHelper::OutputJSON('fail', "missing parameters");
-			}
-
+		// try {
+		
 			$nickname1Set = SetNickname1::find($nickname1);
 			$nickname2Set = SetNickname2::find($nickname2);
+
+			$validator = Validator::make( Input::all(), [
+				'first_name' => 'required',
+				'age' => 'required',
+				'school' => 'required',
+				'grade' => 'required',
+				'student_id' => 'required|min:6|max:20|regex:/^[a-zA-Z0-9@()_\-:\/]+$/',
+			]);
+
+			if ($validator->fails()) {
+				return ResponseHelper::OutputJSON('fail', array_flatten(head($validator->errors()))[0]);
+			}
+
 			$profile = GameProfile::where('student_id', $studentId)->first();
 
 			if($profile){
 				return ResponseHelper::OutputJSON('fail', "student id has been used");
 			}
-			
+					
 			if (!$nickname1Set || $nickname2Set) {
 				return ResponseHelper::OutputJSON('fail', "invalid nickname id");
 			}
@@ -117,13 +128,13 @@ Class ApiProfileController extends Controller {
 			
 			$newProfile = ApiProfileHelper::newProfile($userId, $classId  ,$firstName, $age, $school, $grade, $nickname1, $nickname2, $studentId);
 
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiProfileController > create',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		// } catch (Exception $ex) {
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		'source' => 'ApiProfileController > create',
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 
 		return ResponseHelper::OutputJSON('success', '', [
 			'profile' => $profile,
@@ -391,7 +402,44 @@ Class ApiProfileController extends Controller {
 		}
 	}
 
-	public function GenerateAnonymousGameCode() {
+	public function GenerateAnonymousGameCode(){
+		$deviceId = Request::input('device_id');
+
+		try {
+			$idCounter = IdCounter::find(1);
+			$gameCodeSeed = $idCounter->game_code_seed;
+			$idCounter->game_code_seed = $gameCodeSeed + 1;
+			$idCounter->save();
+
+			$gamePro = new GameProfile;
+			$gamePro->user_id = 0;
+			$gamePro->first_name = "Player 1";
+			$gamePro->last_name = "Player 1";
+			$gamePro->nickname1 = 999;
+			$gamePro->nickname2 = 999;
+			$gamePro->avatar_id = 999;
+			$gamePro->save();
+
+			$code = new GameCode;
+			$code->profile_id = $gamePro->id;
+			$code->type = 'anonymous';
+			$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
+			$code->seed = $gameCodeSeed;
+			$code->device_id = $deviceId;
+			$code->save();
+
+			return ResponseHelper::OutputJSON('success', '', ['game_code' => $code->code]);
+			
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiProfileController > GenerateAnonymousGameCode',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
+	}
+
+	public function GenerateAnonymousGameCodeV1_3() {
 
 		try {
 

@@ -44,7 +44,7 @@ class GameQuestionP30 extends AbstractGameQuestion {
 
 		$questions = [];
 		foreach ($result as $value){
-			array_push($questions, array_only((array)$value, [
+			array_push($questions, [
 				'id' => $value->question_id,
 				'question'=> $value->question,
 				'question_modifier'=> $value->question_modifier,

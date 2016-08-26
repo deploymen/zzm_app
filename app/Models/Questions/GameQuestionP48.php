@@ -21,13 +21,14 @@ class GameQuestionP48 extends AbstractGameQuestion {
 		$difficulty = $params['difficulty'];
 		$questionCount = $params['questionCount'];
 
+
 		if(!$questionCount){
 			$questionCount = GamePlanet::find($planetId)->question_count;
 		}
 
 
 		$sql = "
-			SELECT  qc.`question_id` AS `id`, p48.*
+			SELECT  qc.`question_id` , p48.*
 				FROM `t0248_game_question_p48` p48, `t0126_game_planet_question_cache` qc
 	                    WHERE qc.`planet_id` = :planet_id
 	                    	AND qc.`difficulty` = :difficulty

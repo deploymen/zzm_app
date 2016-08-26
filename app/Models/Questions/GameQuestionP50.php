@@ -49,7 +49,7 @@ class GameQuestionP50 extends AbstractGameQuestion {
 				'id' => $value->question_id,
 				'question_number1'  => $value->question_number1,
 				'question_number2'  => $value->question_number2,
-				'answer_gcf'  => $value->answer_gcf,
+				'answer'  => $value->answer_gcf,
 				'question_option'  => $value->question_option,
 				'answer_number1'  => $value->answer_number1,
 				'answer_number2'  => $value->answer_number2,

@@ -21,9 +21,9 @@ Route::group(['prefix' => 'game'], function () {
 
 	Route::get('/top-score', 'ApiGameController@GameScreenTopScore');
 	
-	Route::post('/check-game-code' , 'ApiGameController@checkGameCodeV1_1');
+	Route::post('/check-game-code' , 'ApiGameController@checkGameCodeV1_3');
 
-	Route::post('/game-code', 'ApiGameController@getGameCodeInfo');
+	Route::post('/game-code', 'ApiGameController@getGameCodeInfoV1_3');
 
 	Route::group(['middleware' => 'auth.student'], function () {
 		Route::put('/profiles', 'ApiProfileController@gameUpdate');
@@ -36,7 +36,7 @@ Route::group(['prefix' => 'game'], function () {
 		Route::post('/play/{id}/result', 'ApiGameController@resultV1_3');
 		Route::get('/play/{id}/request'  , 'ApiGameController@requestV1_3');
 
-		Route::post('/play/push-result'  , 'ApiGameController@offlinePost');
+		Route::post('/play/push-result'  , 'ApiGameController@offlinePostV1_3');
 
 		Route::get('/play/{id}/request/{language}', 'ApiGameController@request');
 		// Route::get('/play/{id}/result', 'ApiGameController@winScreen');
@@ -54,6 +54,6 @@ Route::group(['prefix' => 'game'], function () {
 });
  
 Route::get('set/nick', 'ApiProfileController@getNick');
-Route::post('game-code/anonymous', 'ApiProfileController@GenerateAnonymousGameCode');
+Route::post('game-code/anonymous', 'ApiProfileController@GenerateAnonymousGameCodeV1_3');
 
 Route::any('/{endpoint}', ['as' => 'try_prev_version', function(){die('NEED TO HANDLE1.2');}])->where('endpoint', '.*');

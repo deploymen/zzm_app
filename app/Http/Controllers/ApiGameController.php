@@ -1162,7 +1162,7 @@ Class ApiGameController extends Controller {
 		}
 	}
 
-	public function leaderBoardPlanetV1_3($version ,$planetId){
+	public function leaderBoardPlanet($version ,$planetId){
 		try{
 
 			$leaderBoardPlanet = LeaderBoardPlanet::where('planet_id', $planetId)->where('rank' ,'<' ,101)->orderBy('rank')->get()->toArray();
@@ -1205,56 +1205,16 @@ Class ApiGameController extends Controller {
 				}
 
 				for($j=0; $j<$set[$i][1]; $j++){
-					switch($p->game_type_id){
-						case '1':$questions = ZapZapQuestionHelper::GetQuestionP01($p->id,$difficulty,$p->question_count,'en'); break;
-						case '2':$questions = ZapZapQuestionHelper::GetQuestionP02($p->id,$difficulty,$p->question_count); break;
-						case '3':$questions = ZapZapQuestionHelper::GetQuestionP03($p->id,$difficulty,$p->question_count); break;
-						case '6':$questions = ZapZapQuestionHelper::GetQuestionP06($p->id,$difficulty,$p->question_count); break;
-						case '7':$questions = ZapZapQuestionHelper::GetQuestionP07($p->id,$difficulty,$p->question_count); break;
-						case '8':$questions = ZapZapQuestionHelper::GetQuestionP08($p->id,$difficulty,$p->question_count); break;
-						case '9':$questions = ZapZapQuestionHelper::GetQuestionP09($p->id,$difficulty,$p->question_count); break;
-						case '10':$questions = ZapZapQuestionHelper::GetQuestionP10($p->id,$difficulty,$p->question_count); break;
-						case '11':$questions = ZapZapQuestionHelper::GetQuestionP11($p->id,$difficulty,$p->question_count); break;
-						case '12':$questions = ZapZapQuestionHelper::GetQuestionP12($p->id,$difficulty,$p->question_count); break;
-						case '13':$questions = ZapZapQuestionHelper::GetQuestionP13($p->id,$difficulty,$p->question_count); break;
-						case '14':$questions = ZapZapQuestionHelper::GetQuestionP14($p->id,$difficulty,$p->question_count); break;
-						case '15':$questions = ZapZapQuestionHelper::GetQuestionP15($p->id,$difficulty,$p->question_count); break;
-						case '16':$questions = ZapZapQuestionHelper::GetQuestionP16($p->id,$difficulty,$p->question_count); break;
-						case '17':$questions = ZapZapQuestionHelper::GetQuestionP17($p->id,$difficulty,$p->question_count); break;
-						case '18':$questions = ZapZapQuestionHelper::GetQuestionP18($p->id,$difficulty,$p->question_count); break;
-						case '19':$questions = ZapZapQuestionHelper::GetQuestionP19($p->id,$difficulty,$p->question_count); break;
-						case '20':$questions = ZapZapQuestionHelper::GetQuestionP20($p->id,$difficulty,$p->question_count); break;
-						case '21':$questions = ZapZapQuestionHelper::GetQuestionP21($p->id,$difficulty,$p->question_count); break;
-						case '22':$questions = ZapZapQuestionHelper::GetQuestionP22($p->id,$difficulty,$p->question_count); break;
-						case '23':$questions = ZapZapQuestionHelper::GetQuestionP23($p->id,$difficulty,$p->question_count); break;
-						case '24':$questions = ZapZapQuestionHelper::GetQuestionP24($p->id,$difficulty,$p->question_count); break;
-						case '25':$questions = ZapZapQuestionHelper::GetQuestionP25($p->id,$difficulty,$p->question_count); break;
-						case '26':$questions = ZapZapQuestionHelper::GetQuestionP26($p->id,$difficulty,$p->question_count); break;
-						case '27':$questions = ZapZapQuestionHelper::GetQuestionP27($p->id,$difficulty,$p->question_count); break;
-						case '28':$questions = ZapZapQuestionHelper::GetQuestionP28($p->id,$difficulty,$p->question_count); break;
-						case '29':$questions = ZapZapQuestionHelper::GetQuestionP29($p->id,$difficulty,$p->question_count); break;
-						case '30':$questions = ZapZapQuestionHelper::GetQuestionP30($p->id,$difficulty,$p->question_count); break;
-						case '31':$questions = ZapZapQuestionHelper::GetQuestionP31($p->id,$difficulty,$p->question_count); break;
-						case '32':$questions = ZapZapQuestionHelper::GetQuestionP32($p->id,$difficulty,$p->question_count); break;
-						case '33':$questions = ZapZapQuestionHelper::GetQuestionP33($p->id,$difficulty,$p->question_count); break;
-						case '34':$questions = ZapZapQuestionHelper::GetQuestionP34($p->id,$difficulty,$p->question_count); break;
-						case '35':$questions = ZapZapQuestionHelper::GetQuestionP35($p->id,$difficulty,$p->question_count); break;
-						case '36':$questions = ZapZapQuestionHelper::GetQuestionP36($p->id,$difficulty,$p->question_count); break;
-						case '37':$questions = ZapZapQuestionHelper::GetQuestionP37($p->id,$difficulty,$p->question_count); break;
-						case '38':$questions = ZapZapQuestionHelper::GetQuestionP38($p->id,$difficulty,$p->question_count); break;
-						case '39':$questions = ZapZapQuestionHelper::GetQuestionP39($p->id,$difficulty,$p->question_count); break;
-						case '40':$questions = ZapZapQuestionHelper::GetQuestionP40($p->id,$difficulty,$p->question_count); break;
-						case '41':$questions = ZapZapQuestionHelper::GetQuestionP41($p->id,$difficulty,$p->question_count); break;
-						case '42':$questions = ZapZapQuestionHelper::GetQuestionP42($p->id,$difficulty,$p->question_count); break;
-						case '43':$questions = ZapZapQuestionHelper::GetQuestionP43($p->id,$difficulty,$p->question_count); break;
-						case '44':$questions = ZapZapQuestionHelper::GetQuestionP44($p->id,$difficulty,$p->question_count); break;
-						case '45':$questions = ZapZapQuestionHelper::GetQuestionP45($p->id,$difficulty,$p->question_count); break;
-						case '46':$questions = ZapZapQuestionHelper::GetQuestionP46($p->id,$difficulty,$p->question_count); break;
-						case '47':$questions = ZapZapQuestionHelper::GetQuestionP47($p->id,$difficulty,$p->question_count); break;
-						case '48':$questions = ZapZapQuestionHelper::GetQuestionP48($p->id,$difficulty,$p->question_count); break;
-						case '49':$questions = ZapZapQuestionHelper::GetQuestionP49($p->id,$difficulty,$p->question_count); break;
-						default: continue;
-					}	
+					$language = 'en';
+
+					$type = GameType::find($p->game_type_id);
+					$questions = AbstractGameQuestion::GetTypeQuestions($type->name, [
+						'planetId' => $p->id, 
+						'difficulty' => $difficulty, 
+						'questionCount' => $p->question_count, 
+						'language' => $language, 
+					]);
+					
 					
 					$file = [
 						'status' => "success",
@@ -1375,10 +1335,10 @@ Class ApiGameController extends Controller {
 
 		$gameProfile = GameProfile::where('student_id' , $studentId)->first();
 
-		if(!$checkGameCode){
+		if(!$gameProfile){
 			$newProfile = ApiProfileHelper::newProfile(0 , 0 ,'Anonymous' , '5_or_younger' , 'default school' , 'K' , 999 , 999 , 999 );
 
-			return ResponseHelper::OutputJSON('success', '', [] , [] , [] , 'change_student_id', ['student_id' => $newProfile->student_id]);
+			return ResponseHelper::OutputJSON('success', '', [] , [] , [] , 'replace_student_id', ['student_id' => $newProfile->student_id]);
 		}
 
 		return ResponseHelper::OutputJSON('success');
