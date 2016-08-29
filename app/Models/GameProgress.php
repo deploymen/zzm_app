@@ -5,6 +5,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class GameProgress extends Eloquent {
 
+	use SoftDeletes;
+	
 	public $table = 't0401_game_progress';
 	protected $primaryKey = 'id';
 	public $timestamps = true;
@@ -14,6 +16,7 @@ class GameProgress extends Eloquent {
 	protected $hidden = [];
 
 	public static function FailOrPass($status , $params){ // need change name
+
 		switch ($status) {
 			case 'pass':return self::pass($params); break;
 			case 'fail':return self::fail($params); break;
