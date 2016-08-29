@@ -780,7 +780,7 @@ Class ApiProfileController extends Controller {
 			}
 			$filename = join('.', [$userId , date("YmdHis")] );
 			$storage = new \Upload\Storage\FileSystem( '../resources/upload/create-student-bulk/' , true); //neeed update
-			$uploadFile = new \Upload\File('fileUpload', $storage);
+			$uploadFile = new \Upload\File('file', $storage);
 			$uploadFile->setName($filename);	
 			$uploadFile->upload();
 
