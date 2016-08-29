@@ -25,7 +25,7 @@ class GameResultP10 extends AbstractGameResult {
 			$result = GameResultP10::create([
 				'correct' => $answer['correct'],
 				'target_id' => $question->target_id,
-				'answer' => $answer['answer'];
+				'answer' => $answer['answer']
 			]);
 
 			GameResult::create([
