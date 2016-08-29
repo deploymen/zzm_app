@@ -23,6 +23,7 @@ use App\Models\GameProfile;
 use App\Models\User;
 use App\Models\GameClass;
 use App\Models\GamePlay;
+use App\Models\GameProgress;
 use App\Models\GameCode;
 use App\Models\GameSystem;
 use App\Models\GamePlanet;
@@ -631,9 +632,9 @@ Class ApiGameController extends Controller {
 
 			$checkResult = GamePlay::where('hash', $hash1)->first();	
 
-			if($checkResult){
-				return ResponseHelper::OutputJSON('fail', 'no double submit');
-			}
+			// if($checkResult){
+			// 	return ResponseHelper::OutputJSON('fail', 'no double submit');
+			// }
 
 			//validate question ids
 			$questionIds = [];
@@ -707,6 +708,12 @@ Class ApiGameController extends Controller {
 				'gameResult' => $gameResult, 
 				'profileId' => $profileId, 
 			]);
+
+			GameProgress::FailOrPass($gameStatus, [
+				'profile_id' => $profileId,
+				'planet_id' => $planetId,
+				'difficulty' => $gameResult['difficulty'],
+				]);
 
 			//= Coin Rewards @start
 			$playedEver = !!GamePlay::where('planet_id', $planetId)->where('profile_id', $profileId)->where('difficulty', $gameResult['difficulty'])->count();			
