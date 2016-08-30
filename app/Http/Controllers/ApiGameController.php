@@ -23,7 +23,7 @@ use App\Models\GameProfile;
 use App\Models\User;
 use App\Models\GameClass;
 use App\Models\GamePlay;
-use App\Models\GameProgress;
+use App\Models\PlayThresholdFail;
 use App\Models\GameCode;
 use App\Models\GameSystem;
 use App\Models\GamePlanet;
@@ -709,7 +709,7 @@ Class ApiGameController extends Controller {
 				'profileId' => $profileId, 
 			]);
 
-			GameProgress::FailOrPass($gameStatus, [
+			PlayThresholdFail::FailOrPass($gameStatus, [
 				'profile_id' => $profileId,
 				'planet_id' => $planetId,
 				'difficulty' => $gameResult['difficulty'],
@@ -750,13 +750,17 @@ Class ApiGameController extends Controller {
 
 			ZapZapQuestionHelper::UserMapV1_1($profileId, $planetId, $gamePlay, $gameResult, $gameResult['difficulty']); //update user_map
 			ZapZapQuestionHelper::LastSession($userId , $profileId, $gameResult, $playedTime);
+			EmailHelper::SendNotify([
+				'profile_id' => $profileId,
+				'planet_id' => $planetId,
+				'difficulty' => $gameResult['difficulty'],
+			]);
 
 			$profile = GameProfile::find($profileId);
 			$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();
 
 			ZapZapQuestionHelper::LeaderboardUpdate($profile,$systemPlanet,$gameResult);
 			LogHelper::LogPostResult($planetId , $jsonGameResult, $studentId);//log post result
-		
 			
 			} catch (Exception $ex) {
 				if(!$CATCH_EX){

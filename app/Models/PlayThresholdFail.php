@@ -3,11 +3,11 @@
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class GameProgress extends Eloquent {
+class PlayThresholdFail extends Eloquent {
 
 	use SoftDeletes;
 	
-	public $table = 't0401_game_progress';
+	public $table = 't0401_play_threshold_fail';
 	protected $primaryKey = 'id';
 	public $timestamps = true;
 	protected $dates = ['deleted_at'];
@@ -30,7 +30,7 @@ class GameProgress extends Eloquent {
 		$planetId = $params['planet_id'];
 		$difficulty = $params['difficulty'];
 
-		$gameProgress = GameProgress::where('profile_id' , $profileId)
+		$gameProgress = PlayThresholdFail::where('profile_id' , $profileId)
 							->where('planet_id' , $planetId)
 							->where('difficulty', $difficulty)
 							->delete();
@@ -41,7 +41,7 @@ class GameProgress extends Eloquent {
 		$planetId = $params['planet_id'];
 		$difficulty = $params['difficulty'];
 
-		$gameProgress = GameProgress::where('profile_id' , $profileId)
+		$gameProgress = PlayThresholdFail::where('profile_id' , $profileId)
 									->where('planet_id' , $planetId)
 									->where('difficulty', $difficulty)
 									->first();
@@ -50,7 +50,7 @@ class GameProgress extends Eloquent {
 			$gameProgress->fail_count += 1;
 			$gameProgress->save();
 		}else{
-			$gameProgress = GameProgress::create([
+			$gameProgress = PlayThresholdFail::create([
 				'profile_id' => $profileId,
 				'planet_id' => $planetId,
 				'difficulty' => $difficulty,
