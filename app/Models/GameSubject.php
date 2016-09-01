@@ -19,6 +19,6 @@ class GameSubject extends Eloquent {
 			case 'prev' : $nxtPlanet = GameSubject::where('planet_to' , $planetId)->select('planet_from')->get()->shuffle();
 		}
 
-		return $nxtPlanet;
+		return $nxtPlanet[0];
 	}
 }

@@ -219,6 +219,7 @@ Class ApiGameController extends Controller {
 
 			$coinDaily = 0;
 			$coinTutorial = 0;
+			$coinVideo = 0;
 
 			$playedEver = !!GamePlay::where('planet_id', $planetId)->where('profile_id', $profileId)->where('difficulty', $difficulty)->count();			
 			$playedDaily = GamePlay::where('profile_id', $profileId)->whereRaw('DATE(`created_at`) = DATE(NOW())')->count();
@@ -240,10 +241,9 @@ Class ApiGameController extends Controller {
 			}
 
 			//fail 2 time show video
-			$showVideo = 0;
-			$video = PlayThresholdFail::where('profile_id', $profileId)->where('planet_id' , $planetId)->where('difficulty', $difficulty)->first();
-			if($video){
-				$showVideo = ($video->fail_count == 2)?1:0;
+			$failCount = PlayThresholdFail::where('profile_id', $profileId)->where('planet_id' , $planetId)->where('difficulty', $difficulty)->where('fail_count' , 2)->first();
+			if($failCount){
+				$coinVideo = CoinReward::GetEntitleCoinReward('watch-video');
 			}
 			//end show video
 			$this->updateGameProfileLocationInfo($profileId);
@@ -265,8 +265,8 @@ Class ApiGameController extends Controller {
 						'game_pass' => $coinRegular,
 						'game_daily_first' => $coinDaily,
 						'watch_tutorial' => $coinTutorial,
+						'watch_video' => $coinVideo,
 					],
-				
 					'planet_top_score'=>$topScoreResult,
 						
 	            	'questions' => $questions,
@@ -640,9 +640,9 @@ Class ApiGameController extends Controller {
 
 			$checkResult = GamePlay::where('hash', $hash1)->first();	
 
-			// if($checkResult){
-			// 	return ResponseHelper::OutputJSON('fail', 'no double submit');
-			// }
+			if($checkResult){
+				return ResponseHelper::OutputJSON('fail', 'no double submit');
+			}
 
 			//validate question ids
 			$questionIds = [];

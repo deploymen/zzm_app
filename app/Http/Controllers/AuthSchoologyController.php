@@ -127,14 +127,10 @@ Class AuthSchoologyController extends Controller {
         $userExternalId = UserExternalId::where('user_id' , $newUser['user_id'])->update(['schoology_id' => $schoology_id ]);
         $userAccess = UserAccess::where('user_id' , $user->id)->first();
 
-        $mailin = new Mailin(['base_url' => "https://api.sendinblue.com/v2.0", 'api_key' => "AC0B8IKZ2nw64hSW", 'timeout' => 5000]);
-		$data = ["email" => $email,
-		        "attributes" => ["NAME"=>$name, "SURNAME"=>""],
-		        "listid" => [Config::get('app.send_in_blue_list_id')],
-		        "listid_unlink" => []
-		    ];
-
-		$mailin->create_update_user($data);
+        ApiUserHelper::mailin($role , [
+			'username' => $username,
+			'name' => $name,
+		]);	
 
         $firstLogin = 1;
 
