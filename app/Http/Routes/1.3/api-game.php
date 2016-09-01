@@ -2,7 +2,6 @@
 // =======================================================================//
 // ! Game Profile(Kid)										 			      //
 // =======================================================================//
-
 Route::group(['prefix' => 'game'], function () {
 	Route::get('/create-package', 'ApiGameController@createPackage');
 
@@ -53,7 +52,10 @@ Route::group(['prefix' => 'game'], function () {
 	});
 });
  
+
 Route::get('set/nick', 'ApiProfileController@getNick');
 Route::post('game-code/anonymous', 'ApiProfileController@GenerateAnonymousGameCodeV1_3');
+Route::post('elf/test-function' , 'ApiGameController@testGetELFPlanet' );
 
-Route::any('/{endpoint}', ['as' => 'try_prev_version', function(){die('NEED TO HANDLE1.2');}])->where('endpoint', '.*');
+Route::any('/{endpoint}', ['as' => 'try_prev_version', function(){die('NEED TO HANDLE1.3');}])->where('endpoint', '.*');
+

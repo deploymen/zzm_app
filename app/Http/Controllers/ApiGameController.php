@@ -30,7 +30,7 @@ use App\Models\GamePlanet;
 use App\Models\GameType;
 use App\Models\UserMap;
 use App\Models\GameQuestion;
-//use App\Models\GameQuestionp03;
+use App\Models\GameSubject;
 use App\Models\GameQuestionP04ChallengeSet;
 use App\Models\GameSystemPlanet;
 use App\Models\UserExternalId;
@@ -239,6 +239,13 @@ Class ApiGameController extends Controller {
 				$coinTutorial = CoinReward::GetEntitleCoinReward('watch-tutorial');
 			}
 
+			//fail 2 time show video
+			$showVideo = 0;
+			$video = PlayThresholdFail::where('profile_id', $profileId)->where('planet_id' , $planetId)->where('difficulty', $difficulty)->first();
+			if($video){
+				$showVideo = ($video->fail_count == 2)?1:0;
+			}
+			//end show video
 			$this->updateGameProfileLocationInfo($profileId);
 			
 			return ResponseHelper::OutputJSON('success', '', [
@@ -259,6 +266,7 @@ Class ApiGameController extends Controller {
 						'game_daily_first' => $coinDaily,
 						'watch_tutorial' => $coinTutorial,
 					],
+				
 					'planet_top_score'=>$topScoreResult,
 						
 	            	'questions' => $questions,
@@ -1799,6 +1807,6 @@ Class ApiGameController extends Controller {
 				$profile->save();
 			}
 		}
-	}	
+	}
 
 }

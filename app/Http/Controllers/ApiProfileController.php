@@ -68,7 +68,7 @@ Class ApiProfileController extends Controller {
 		$nickname2 = Request::input('nickname2', 999);
 		$avatarId = Request::input('avatar_id', 999);
 
-		// try {
+		try {
 		
 			$nickname1Set = SetNickname1::find($nickname1);
 			$nickname2Set = SetNickname2::find($nickname2);
@@ -113,7 +113,7 @@ Class ApiProfileController extends Controller {
 			
 			if($classId){
 				$profileClass = GameProfile::where('class_id', $classId)->where('user_id', $userId)->count();
-				$profileLimit = ($gameClass->expired_at > date("Y-m-d H:i:s"))?50:5;
+				$profileLimit = ($gameClass->expired_at > date("Y-m-d H:i:s"))?50:30;
 
 				if($profileClass >= $profileLimit){
 					return ResponseHelper::OutputJSON('fail', "class limited" );
@@ -128,13 +128,13 @@ Class ApiProfileController extends Controller {
 			
 			$newProfile = ApiProfileHelper::newProfile($userId, $classId  ,$firstName, $age, $school, $grade, $nickname1, $nickname2, $studentId);
 
-		// } catch (Exception $ex) {
-		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-		// 		'source' => 'ApiProfileController > create',
-		// 		'inputs' => Request::all(),
-		// 	])]);
-		// 	return ResponseHelper::OutputJSON('exception');
-		// }
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiProfileController > create',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 
 		return ResponseHelper::OutputJSON('success', '', [
 			'profile' => $newProfile,
@@ -202,7 +202,7 @@ Class ApiProfileController extends Controller {
 					return ResponseHelper::OutputJSON('fail', "class not found");
 				}
 
-				$profileLimit = ($gameClass->expired_at > date("Y-m-d H:i:s"))?50:5;
+				$profileLimit = ($gameClass->expired_at > date("Y-m-d H:i:s"))?50:30;
 
 				if($profileClass >= $profileLimit){
 					return ResponseHelper::OutputJSON('fail', "class limited" );
@@ -780,7 +780,7 @@ Class ApiProfileController extends Controller {
 			}
 			$filename = join('.', [$userId , date("YmdHis")] );
 			$storage = new \Upload\Storage\FileSystem( '../resources/upload/create-student-bulk/' , true); //neeed update
-			$uploadFile = new \Upload\File('fileUpload', $storage);
+			$uploadFile = new \Upload\File('file', $storage);
 			$uploadFile->setName($filename);	
 			$uploadFile->upload();
 
@@ -798,33 +798,52 @@ Class ApiProfileController extends Controller {
 			$sheet = $objPHPExcel->getSheet(0); 
 			$highestRow = $sheet->getHighestRow(); 
 			$highestColumn = $sheet->getHighestColumn();
-
-
-			$profileCount = GameProfile::where('class_id', $classId)->where('user_id', $userId)->count();
-			$profileLimit = ($gameClass->expired_at > date("Y-m-d H:i:s"))?50:5;
-
-			if( ($profileCount + ($highestRow- 1)) > $profileLimit){
-				return ResponseHelper::OutputJSON('fail', "class limited" , [
-					'remain' => ($profileLimit - $profileCount),
-					'upload' => ($highestRow - 1),
-					]);
-			}
 			
 			// loop: validate @start
 			$studentIds = [];
+			$firstNames = [];
 			for ($i= 2; $i<= $highestRow; $i++){ 
 			    //  Read a row of data into an array
-			    $rowData = $sheet->rangeToArray('A' . $i . ':' . $highestColumn . $i , NULL , TRUE, FALSE);
-			  
-			   	if(!$rowData[0][0] || !$rowData[0][1]){
-			   		continue;
-			   	}
+			    $data = $sheet->rangeToArray('A' . $i . ':' . $highestColumn . $highestRow , NULL , TRUE, FALSE);
+			    $data = array_map('array_filter', $data);
+ 				$data = array_filter($data);
 
-			   	$studentId = $rowData[0][0];
+			  	$profileCount = GameProfile::where('class_id', $classId)->where('user_id', $userId)->count();
+				$profileLimit = ($gameClass->expired_at > date("Y-m-d H:i:s"))?50:30;
+
+				if( ($profileCount + count($data)) > $profileLimit){
+					return ResponseHelper::OutputJSON('fail', "class limited" , [
+						'remain' => ($profileLimit - $profileCount),
+						'upload' => count($data),
+						]);
+				}
+
+			    $rowData = $sheet->rangeToArray('A' . $i . ':' . $highestColumn . $i , NULL , TRUE, FALSE);
+			    $rowData = array_map('array_filter', $rowData);
+
+
+			    $validateValue = array_merge($rowData[0] , [0,0]);	
+
+			    if(!$validateValue[0] && !$validateValue[1] ){
+					continue;
+				}
+
+				if(!$validateValue[0] || !$validateValue[1] ){
+					return ResponseHelper::OutputJSON('fail', 'incomplete info');
+				}
+
+				$studentId = $rowData[0][0];
 			   	$firstName = $rowData[0][1];
 
 			  	array_push($studentIds, $studentId);
-			}	
+			  	array_push($firstNames, $firstName);
+
+
+			}
+
+			if(!$studentIds && !$firstNames ){
+				return ResponseHelper::OutputJSON('fail', 'no profile in upload file');
+			}
 
 			$sql = "
 				SELECT `student_id`

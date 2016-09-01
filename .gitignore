@@ -12,3 +12,4 @@
 *.sql
 /storage/framework
 node_modules
+*.xlsx
