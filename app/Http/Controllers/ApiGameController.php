@@ -31,6 +31,7 @@ use App\Models\GameType;
 use App\Models\UserMap;
 use App\Models\GameQuestion;
 use App\Models\GameSubject;
+use App\Models\GameSubjectSchedule;
 use App\Models\GameQuestionP04ChallengeSet;
 use App\Models\GameSystemPlanet;
 use App\Models\UserExternalId;
@@ -738,13 +739,13 @@ Class ApiGameController extends Controller {
 
 			if(!$playedDaily){
 				$coinDaily = CoinReward::GetEntitleCoinReward('play-daily');
-				$descriptionDaily = GameCoinTransaction::GetDescription('play-daily' , ['playId' => $gamePlay->id, 'planetId' => $planetId , 'difficulty' => $gameResult['difficulty'] ]);
+				$descriptionDaily = GameCoinTransaction::GetDescription('play-daily' , ['playId' => $gamePlay->id ]);
 				GameCoinTransaction::DoTransaction($profileId , $coinDaily , $descriptionDaily);	
 			}
 
 			if($watchedTutorial){
-				$coinTutorial = CoinReward::GetEntitleCoinReward('watch-tutorial' , 'difficuldifficulty' );
-				$descriptionTutorial = GameCoinTransaction::GetDescription('watch-tutorial' , ['playId' => $gamePlay->id, 'planetI' => $gameResult['difficulty'] ]);
+				$coinTutorial = CoinReward::GetEntitleCoinReward('watch-tutorial');
+				$descriptionTutorial = GameCoinTransaction::GetDescription('watch-tutorial' , ['playId' => $gamePlay->id ]);
 				GameCoinTransaction::DoTransaction($profileId , $coinTutorial , $descriptionTutorial);	
 			}
 
@@ -754,7 +755,6 @@ Class ApiGameController extends Controller {
 				$gamePlay->save();
 			}			
 			//= Coin Rewards @end
-
 
 			ZapZapQuestionHelper::UserMapV1_1($profileId, $planetId, $gamePlay, $gameResult, $gameResult['difficulty']); //update user_map
 			ZapZapQuestionHelper::LastSession($userId , $profileId, $gameResult, $playedTime);
@@ -1807,6 +1807,10 @@ Class ApiGameController extends Controller {
 				$profile->save();
 			}
 		}
+	}
+
+	Public function testGetELFPlanet(){
+		return ResponseHelper::OutputJSON('success' ,  '' , GameSubjectSchedule::GetNextPlanets('next' , '103'));
 	}
 
 }
