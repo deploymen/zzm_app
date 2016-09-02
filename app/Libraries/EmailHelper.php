@@ -6,6 +6,9 @@ use Config;
 use App\Models\PlayThresholdFail;
 use App\Models\GameProfile;
 use App\Models\UserMap;
+use App\Models\GameSubjectSchedule;
+use App\Models\GamePlanet;
+use DB;
 
 class EmailHelper {
 
@@ -53,67 +56,6 @@ class EmailHelper {
 			],
 			'ReplyToAddresses' => $params['replyToAddresses'],
 			'ReturnPath' => Config::get('app.support_email'),
-		]);
-	}
-
-	public static function SendNotify($params){
-		$profileId = $params['profile_id'];
-		$planetId = $params['planet_id'];
-		$difficulty = $params['difficulty'];
-
-		$gameProgress = PlayThresholdFail::where('profile_id' , $profileId)
-									->where('planet_id' , $planetId)
-									->where('difficulty', $difficulty)
-									->first();
-
-		$count = ($gameProgress)?$gameProgress->fail_count:0;
-
-		switch(true){
-			case $count == 0 : self::SendGoodNews($profileId , $planetId); break;
-			case $count > 0 : self::SendBadNews($profileId); break;
-		}
-	}
-
-	static function SendGoodNews($profileId , $planetId){
-		$userMap = UserMap::where('profile_id' , $profileId)->where('planet_id' , $planetId)->first();
-
-		if($userMap->sent == 1 || $userMap->star != 5){
-			return True;
-		}
-
-		$profile = GameProfile::find($profileId)->User;
-
-		$edmHtml = (string) view('emails.news-good', [
-
-			]);
-		
-		self::SendEmail([
-			'about' => 'Welcome',
-			'subject' => 'Your Zap Zap Account is now ready!',
-			'body' => $edmHtml,
-			'bodyHtml' => $edmHtml,
-			'toAddresses' => [$profile->email],
-		]);
-
-		$userMap->sent = 1;
-		$userMap->save();
-
-	}
-
-	static function SendBadNews($profileId){
-		
-		$profile = GameProfile::find($profileId)->User;
-
-		$edmHtml = (string) view('emails.news-bad', [
-			
-			]);
-		
-		self::SendEmail([
-			'about' => 'Welcome',
-			'subject' => 'Your Zap Zap Account is now ready!',
-			'body' => $edmHtml,
-			'bodyHtml' => $edmHtml,
-			'toAddresses' => [$profile->email],
 		]);
 	}
 }

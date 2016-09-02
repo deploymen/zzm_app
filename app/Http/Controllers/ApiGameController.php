@@ -17,6 +17,7 @@ use App\Libraries\EmailHelper;
 use App\Libraries\ResponseHelper;
 use App\Libraries\DatabaseUtilHelper;
 use App\Libraries\ZapZapQuestionHelper;
+use App\Libraries\ApiProfileHelper;
 
 use App\Models;
 use App\Models\GameProfile;
@@ -49,6 +50,11 @@ use App\Models\Results\AbstractGameResult;
 
 
 Class ApiGameController extends Controller {
+
+	public function diee(){
+		die('25');
+		die('Z');
+	}
 
 	//GET QUESTION
 	public function requestV1_0($planetId , $language = 'en') {	
@@ -494,9 +500,9 @@ Class ApiGameController extends Controller {
 
 			$checkResult = GamePlay::where('hash', $hash1)->first();	
 
-			if($checkResult){
-				return ResponseHelper::OutputJSON('fail', 'no double submit');
-			}
+			// if($checkResult){
+			// 	return ResponseHelper::OutputJSON('fail', 'no double submit');
+			// }
 
 			//validate question ids
 			$questionIds = [];
@@ -641,9 +647,9 @@ Class ApiGameController extends Controller {
 
 			$checkResult = GamePlay::where('hash', $hash1)->first();	
 
-			if($checkResult){
-				return ResponseHelper::OutputJSON('fail', 'no double submit');
-			}
+			// if($checkResult){
+			// 	return ResponseHelper::OutputJSON('fail', 'no double submit');
+			// }
 
 			//validate question ids
 			$questionIds = [];
@@ -758,10 +764,12 @@ Class ApiGameController extends Controller {
 
 			ZapZapQuestionHelper::UserMapV1_1($profileId, $planetId, $gamePlay, $gameResult, $gameResult['difficulty']); //update user_map
 			ZapZapQuestionHelper::LastSession($userId , $profileId, $gameResult, $playedTime);
+
 			EmailHelper::SendNotify([
 				'profile_id' => $profileId,
 				'planet_id' => $planetId,
 				'difficulty' => $gameResult['difficulty'],
+				'game_status' =>$gameStatus,
 			]);
 
 			$profile = GameProfile::find($profileId);
@@ -1357,7 +1365,19 @@ Class ApiGameController extends Controller {
 		if(!$gameProfile){
 			$newProfile = ApiProfileHelper::newProfile(0 , 0 ,'Anonymous' , '5_or_younger' , 'default school' , 'K' , 999 , 999 , 999 );
 
-			return ResponseHelper::OutputJSON('success', '', [] , [] , [] , 'replace_student_id', ['student_id' => $newProfile->student_id]);
+			return ResponseHelper::OutputJSON('success', '', [] , [] , [] , [
+						'name' => 'replace_student_id',
+						'param' => [
+							'student_id_from' => $studentId,
+							'student_id_to' => $newProfile->student_id,
+						]
+						]);
+
+
+			// return ResponseHelper::OutputJSON('success', '', [] , [] , [] , [
+			// 			'name' => 'set_api_endpoint',
+			// 			'param.endpoint' => 'https://www.zzm.com/api/1.3/',
+			// 			]);
 		}
 
 		return ResponseHelper::OutputJSON('success');

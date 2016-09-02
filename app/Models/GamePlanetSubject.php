@@ -2,9 +2,10 @@
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\GameSubjectSchedule;
+
 
 class GamePlanetSubject extends Eloquent {
-	use SoftDeletes;
 
 	public $table = 't0132_game_planet_subject';
 	protected $primaryKey = 'id';
@@ -12,5 +13,10 @@ class GamePlanetSubject extends Eloquent {
 	protected $dates = ['deleted_at'];
 
 	protected $hidden = [];
+
+	public function schedule()
+    {
+        return $this->hasOne('App\Models\GameSubjectSchedule', 'subject_id', 'subject_id');
+    }	
 
 }
