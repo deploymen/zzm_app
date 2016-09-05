@@ -17,79 +17,46 @@ class GameMission extends Eloquent {
 	protected $fillable = ['profile_id', 'subject_id', 'planet_id', 'remark', 'approved' , 'play_id' , 'status' ,'difficulty'];
 
 
-	public static function CheckMission($params){
+	public static function CheckMission($threshold){
 
-		$profileId = $params['profile_id'];
-		$planetId = $params['planet_id'];
-		$difficulty = $params['difficulty'];
-		$gameStatus = $params['game_status'];//pass,fail
-
-		$schedule = GamePlanetSubject::where('planet_id', $planetId)->first()->schedule;
+		$schedule = GamePlanetSubject::where('planet_id', $threshold->planet_id)->first()->schedule;
 
 		//check for promotion mission
-		if($gameStatus=='pass' && $difficulty==5){
-			
-			$schedule = GameSubjectSchedule::next([
-				'subject_category' => $schedule->subject_category,
-				'sequence' => $schedule->sequence,
-				]);
-
-			if(!$schedule){
-				return false;
-			}
-
-			self::RegisterPromotionMission($profileId, $schedule->subject_id);
-		}
-
-		//check for demotion mission
-		if($gameStatus=='fail'){
-
-			$failThreshold = PlayThresholdFail::where('profile_id' , $profileId)
-								->where('planet_id' , $planetId)
-								->where('difficulty', $difficulty)
-								->first();
-
-			if($failThreshold->fail_count == 2){
-				die('2 time');
-				$profile = GameProfile::find($profileId)->User;
-				$edmHtml = (string) view('emails.news-bad', [
-					
-					]);
-
-				//need update
-				// self::SendEmail([
-				// 	'about' => 'Welcome',
-				// 	'subject' => 'BAD RESULT',
-				// 	'body' => $edmHtml,
-				// 	'bodyHtml' => $edmHtml,
-				// 	'toAddresses' => [$profile->email],
-				// ]);
-
-			}
-
-			if($failThreshold->fail_count != 4){
-				return false;
-			}
-			
-			if($difficulty == 1){
-
-				$schedule = GameSubjectSchedule::prev([
-					'subject_category' => $schedule->subject_category,
-					'sequence' => $schedule->sequence,
-				]);
+		if($threshold->mission_promotion == 'never'){
+			if($threshold->type=='pass' && $threshold->difficulty==5){
+				
+				$schedule = $schedule->next();
 
 				if(!$schedule){
 					return false;
 				}
 
-				self::RegisterDemotionMission($profileId, $schedule->subject_id, 5);
-
-				return true;
-			}else{
-				self::RegisterDemotionMission($profileId, $schedule->subject_id, ($difficulty-1));
-			}
+				self::RegisterPromotionMission($threshold->profile_id, $schedule, 1);
+			}			
 		}
 
+
+		//check for demotion mission
+		if($threshold->mission_demotion == 'never'){
+			if($threshold->type=='fail'){
+				switch ($threshold->hit) {
+					case 2:
+						//send email to parent
+						break;
+
+					case 4:						
+						if($threshold->difficulty==1){
+							$schedule = $schedule->prev();
+							self::RegisterDemotionMission($threshold->profile_id, $schedule, 5);
+						}else{
+							self::RegisterDemotionMission($threshold->profile_id, $schedule, $threshold->difficulty - 1);
+						}
+						break;						
+					
+					default: break;
+				}
+			}
+		}
 	}
 
 	public static function RegisterPromotionMission($profileId, $subjectId){
