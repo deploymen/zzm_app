@@ -25,13 +25,14 @@ class GameMission extends Eloquent {
 		if($threshold->mission_promotion == 'never'){
 			if($threshold->type=='pass' && $threshold->difficulty==5){
 				
-				$schedule = $schedule->next();
+				$schedule = $schedule->next->first();
 
 				if(!$schedule){
 					return false;
 				}
 
 				self::RegisterPromotionMission($threshold->profile_id, $schedule, 1);
+				$threshold->mission_promotion = 'sent';
 			}			
 		}
 
@@ -46,11 +47,12 @@ class GameMission extends Eloquent {
 
 					case 4:						
 						if($threshold->difficulty==1){
-							$schedule = $schedule->prev();
+							$schedule = $schedule->prev->first();
 							self::RegisterDemotionMission($threshold->profile_id, $schedule, 5);
 						}else{
 							self::RegisterDemotionMission($threshold->profile_id, $schedule, $threshold->difficulty - 1);
 						}
+						$threshold->mission_demotion = 'sent';
 						break;						
 					
 					default: break;
@@ -59,32 +61,32 @@ class GameMission extends Eloquent {
 		}
 	}
 
-	public static function RegisterPromotionMission($profileId, $subjectId){
-		$planet = GamePlanetSubject::where('subject_id' , $subjectId)->get()->toArray();
-		shuffle($planet);
+	public static function RegisterPromotionMission($profileId, $schedule, $difficulty){
+		$planets = $schedule->planets;
+		shuffle($planets);
 
 		self::create([
 			'subject_id' => $subjectId,
 			'profile_id' => $profileId,
-			'planet_id' => $planet[0]['planet_id'],
+			'planet_id' => $planets[0]->planet_id,
 			'difficulty' => 1,
 			'remark' => 'need update',
-			]);
+		]);
 
 		return true;
 	}
 
-	public static function RegisterDemotionMission($profileId, $subjectId , $difficulty){
-		$planet = GamePlanetSubject::where('subject_id' , $subjectId)->get()->toArray();
-		shuffle($planet);
+	public static function RegisterDemotionMission($profileId, $schedule, $difficulty){
+		$planets = $schedule->planets;
+		shuffle($planets);
 
 		self::create([
 			'subject_id' => $subjectId,
 			'profile_id' => $profileId,
-			'planet_id' => $planet[0]['planet_id'],
+			'planet_id' => $planets[0]->planet_id,
 			'difficulty' => $difficulty,
 			'remark' => 'need update',
-			]);
+		]);
 
 		return true;
 	}

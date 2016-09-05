@@ -52,6 +52,10 @@ use App\Models\Results\AbstractGameResult;
 
 Class ApiGameController extends Controller {
 
+	public function aaa(){
+		die('aaa');
+	}
+
 	//GET QUESTION
 	public function requestV1_0($planetId, $language = 'en') {	
 

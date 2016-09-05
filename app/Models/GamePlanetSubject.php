@@ -1,4 +1,4 @@
-<?php namespace App\Models;
+<?php namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,5 +18,7 @@ class GamePlanetSubject extends Eloquent {
     {
         return $this->hasOne('App\Models\GameSubjectSchedule', 'subject_id', 'subject_id');
     }	
+
+    public function 
 
 }
