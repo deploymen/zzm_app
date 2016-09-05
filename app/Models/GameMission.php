@@ -14,80 +14,113 @@ class GameMission extends Eloquent {
 	protected $dates = ['deleted_at'];
 
 	protected $hidden = [];
+	protected $fillable = ['profile_id', 'subject_id', 'planet_id', 'remark', 'approved' , 'play_id' , 'status' ,'difficulty'];
+
 
 	public static function CheckMission($params){
 
 		$profileId = $params['profile_id'];
 		$planetId = $params['planet_id'];
 		$difficulty = $params['difficulty'];
-		$gameStatus = $param['game_status'];//pass,fail
+		$gameStatus = $params['game_status'];//pass,fail
 
 		$schedule = GamePlanetSubject::where('planet_id', $planetId)->first()->schedule;
 
 		//check for promotion mission
 		if($gameStatus=='pass' && $difficulty==5){
-			$schedule = $schedule->next;
+			
+			$schedule = GameSubjectSchedule::next([
+				'subject_category' => $schedule->subject_category,
+				'sequence' => $schedule->sequence,
+				]);
+
 			if(!$schedule){
 				return false;
 			}
-			self::RegisterPromotionMission($profileId, $planetId);
 
+			self::RegisterPromotionMission($profileId, $schedule->subject_id);
 		}
 
 		//check for demotion mission
 		if($gameStatus=='fail'){
+
 			$failThreshold = PlayThresholdFail::where('profile_id' , $profileId)
 								->where('planet_id' , $planetId)
 								->where('difficulty', $difficulty)
 								->first();
 
-			$failThreshold->fail_count += 1;
-			$failThreshold->save();
+			if($failThreshold->fail_count == 2){
+				die('2 time');
+				$profile = GameProfile::find($profileId)->User;
+				$edmHtml = (string) view('emails.news-bad', [
+					
+					]);
+
+				//need update
+				// self::SendEmail([
+				// 	'about' => 'Welcome',
+				// 	'subject' => 'BAD RESULT',
+				// 	'body' => $edmHtml,
+				// 	'bodyHtml' => $edmHtml,
+				// 	'toAddresses' => [$profile->email],
+				// ]);
+
+			}
 
 			if($failThreshold->fail_count != 4){
 				return false;
 			}
-				
-			$schedule = $schedule->prev;
-			if(!$schedule){
-				return false;
+			
+			if($difficulty == 1){
+
+				$schedule = GameSubjectSchedule::prev([
+					'subject_category' => $schedule->subject_category,
+					'sequence' => $schedule->sequence,
+				]);
+
+				if(!$schedule){
+					return false;
+				}
+
+				self::RegisterDemotionMission($profileId, $schedule->subject_id, 5);
+
+				return true;
+			}else{
+				self::RegisterDemotionMission($profileId, $schedule->subject_id, ($difficulty-1));
 			}
-			self::RegisterDemotionMission($profileId, $planetId);
-
 		}
-
-
-/*		switch($gameStatus){
-			case 'pass': 
-				$userMap = UserMap::where('profile_id' , $profileId)->where('planet_id' , $planetId)->first();
-
-				if($userMap->sent == 1 || $userMap->star != 5){
-					return True;
-				}
-			break;
-
-			case 'fail': 
-				$gameProgress = PlayThresholdFail::where('profile_id' , $profileId)
-									->where('planet_id' , $planetId)
-									->where('difficulty', $difficulty)
-									->first();
-
-				if($gameProgress->fail_count == 2){
-					//send bad news
-				}
-
-				if($gameProgress->fail_count == 4){
-					//send mission
-				}
-
-			break;
-		}*/
 
 	}
 
-	public static function RegisterPromotionMission($profileId, $planetId){}
+	public static function RegisterPromotionMission($profileId, $subjectId){
+		$planet = GamePlanetSubject::where('subject_id' , $subjectId)->get()->toArray();
+		shuffle($planet);
 
-	public static function RegisterDemotionMission($profileId, $planetId){}
+		self::create([
+			'subject_id' => $subjectId,
+			'profile_id' => $profileId,
+			'planet_id' => $planet[0]['planet_id'],
+			'difficulty' => 1,
+			'remark' => 'need update',
+			]);
+
+		return true;
+	}
+
+	public static function RegisterDemotionMission($profileId, $subjectId , $difficulty){
+		$planet = GamePlanetSubject::where('subject_id' , $subjectId)->get()->toArray();
+		shuffle($planet);
+
+		self::create([
+			'subject_id' => $subjectId,
+			'profile_id' => $profileId,
+			'planet_id' => $planet[0]['planet_id'],
+			'difficulty' => $difficulty,
+			'remark' => 'need update',
+			]);
+
+		return true;
+	}
 
 
 
@@ -116,22 +149,6 @@ class GameMission extends Eloquent {
 
 	}
 
-	public static function SendBadNews($profileId){
-		
-		$profile = GameProfile::find($profileId)->User;
-
-		$edmHtml = (string) view('emails.news-bad', [
-			
-			]);
-		
-		self::SendEmail([
-			'about' => 'Welcome',
-			'subject' => 'Your Zap Zap Account is now ready!',
-			'body' => $edmHtml,
-			'bodyHtml' => $edmHtml,
-			'toAddresses' => [$profile->email],
-		]);
-	}
 
 
 }

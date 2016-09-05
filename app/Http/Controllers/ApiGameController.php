@@ -33,6 +33,7 @@ use App\Models\UserMap;
 use App\Models\GameQuestion;
 use App\Models\GameSubject;
 use App\Models\GameSubjectSchedule;
+use App\Models\GameMission;
 use App\Models\GameQuestionP04ChallengeSet;
 use App\Models\GameSystemPlanet;
 use App\Models\UserExternalId;
@@ -50,11 +51,6 @@ use App\Models\Results\AbstractGameResult;
 
 
 Class ApiGameController extends Controller {
-
-	public function diee(){
-		die('25');
-		die('Z');
-	}
 
 	//GET QUESTION
 	public function requestV1_0($planetId , $language = 'en') {	
@@ -765,11 +761,11 @@ Class ApiGameController extends Controller {
 			ZapZapQuestionHelper::UserMapV1_1($profileId, $planetId, $gamePlay, $gameResult, $gameResult['difficulty']); //update user_map
 			ZapZapQuestionHelper::LastSession($userId , $profileId, $gameResult, $playedTime);
 
-			EmailHelper::SendNotify([
-				'profile_id' => $profileId,
-				'planet_id' => $planetId,
-				'difficulty' => $gameResult['difficulty'],
-				'game_status' =>$gameStatus,
+			GameMission::CheckMission([
+				'profile_id' => $profileId, 
+				'planet_id' => $planetId, 
+				'difficulty' => $gameResult['difficulty'], 
+				'game_status' => $gameStatus, 
 			]);
 
 			$profile = GameProfile::find($profileId);

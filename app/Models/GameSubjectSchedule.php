@@ -15,59 +15,34 @@ class GameSubjectSchedule extends Eloquent {
 
 	protected $hidden = [];
 
-	public function next(){
-		$current = $this->first();
-		return GameSubjectSchedule::where('subject_id', $current->subject_id)
-									->where('subject_category', $current->subject_category)
-									->where('sequence', $current->sequence - 1)
+	public static function next($params){
+		$subjectCategory = $params['subject_category'];
+		$sequence = $params['sequence'];
+
+		// $current = $this->first();
+		$schedule = GameSubjectSchedule::where('subject_category', $subjectCategory)
+									->where('sequence', $sequence + 1)
 									->first();
-	}
-
-	public function prev(){
-		$current = $this->first();
-		return GameSubjectSchedule::where('subject_id', $current->subject_id)
-									->where('subject_category', $current->subject_category)
-									->where('sequence', $current->sequence + 1)
-									->first();
-	}
-
-/*	public static function GetPlanets($planetId, $direction = 'next'){
-
-		$subject = GamePlanetSubject::where('planet_id', $planetId)->first();
-		$subjectTarget = GameSubjectSchedule::where('subject')->first();
-
-
-
-		switch($order){
-			case 'next' : 
-				// $nextPlanet = self::where('subject_from', $planetSubject->subject_code)->first();
-				// $subject = GamePlanetSubject::where('subject_code' , $nextPlanet->subject_to)->get()->toArray();
-
-				$sql = "
-					SELECT ps.`subject_code` , `planet_id`
-						FROM `t0133_game_subject_schedule` ss , `t0132_game_planet_subject` ps
-							WHERE ss.`subject_from` = :subject_code
-								AND ps.`subject_code` = ss.`subject_to`
-						ORDER BY RAND()
-				";
-
-				$result = DB::select($sql , [ 'subject_code' => $planetSubject->subject_code]);
-				break;
-
-			case 'prev':
-				$nextPlanet = self::where('subject_to' , $planetSubject->subject_code)->first();
-				$subject = GamePlanetSubject::where('subject_code' , $nextPlanet->subject_from)->get()->toArray();
-				break;
-
-			default: break;
+		if(!$schedule){
+			return false;
 		}
-		
-		return $result;
+
+		return $schedule;
 	}
-*/
 
+	public static function prev($params){
 
+		$subjectCategory = $params['subject_category'];
+		$sequence = $params['sequence'];
 
-
+		// $current = $this->first();
+		$schedule = GameSubjectSchedule::where('subject_category', $subjectCategory)
+									->where('sequence', $sequence - 1)
+									->first();
+		if(!$schedule){
+			return false;
+		}
+		return $schedule;
+	}
 
 }
