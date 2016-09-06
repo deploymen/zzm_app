@@ -5,6 +5,7 @@ App::setLocale('en');
 require __DIR__.'/Routes/page-docs.php';
 require __DIR__.'/Routes/api-cron.php';
 
+Route::any('saml/acs', 'schoologyController@schoology');
 
 Route::group(['middleware' => 'version'], function () {
 
@@ -22,6 +23,15 @@ Route::group(['middleware' => 'version'], function () {
 	});
 
 	Route::group(['prefix' => '/1.2'], function () {
+		require __DIR__.'/Routes/1.2/api.php';
+		require __DIR__.'/Routes/1.2/api-user.php';
 		require __DIR__.'/Routes/1.2/api-game.php';
+	});
+
+
+	Route::group(['prefix' => '/1.3'], function () {
+		require __DIR__.'/Routes/1.3/api.php';
+		require __DIR__.'/Routes/1.3/api-user.php';
+		require __DIR__.'/Routes/1.3/api-game.php';
 	});
 });
