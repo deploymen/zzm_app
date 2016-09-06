@@ -190,14 +190,10 @@ Class AuthUserController extends Controller {
 					$logOpenAcc->secret = $secretKey;
 					$logOpenAcc->save();
 					
-					$mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
-					$data = ["email" => $username,
-					        "attributes" => ["NAME"=>$name, "SURNAME"=>""],
-					        "listid" => [Config::get('app.send_in_blue_list_id')],
-					        "listid_unlink" => []
-					    ];
-		
-				    $mailin->create_update_user($data);
+					ApiUserHelper::mailin($role , [
+						'username' => $username,
+						'name' => $name,
+					]);
 
 					//job done - log it!
 					DatabaseUtilHelper::LogInsert($user->id, $user->table, $user->id);
@@ -755,14 +751,10 @@ Class AuthUserController extends Controller {
 				'toAddresses' => [$email],
 			]);
 
-			$mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
-			$data = ["email" => $email,
-			        "attributes" => ["NAME"=>$name, "SURNAME"=>""],
-			        "listid" => [Config::get('app.send_in_blue_list_id')],
-			        "listid_unlink" => []
-			    ];
-
-		    $mailin->create_update_user($data);
+			ApiUserHelper::mailin($role , [
+				'username' => $username,
+				'name' => $name,
+			]);
 
 			$logOpenAcc = new LogAccountActivate;
 			$logOpenAcc->user_id = $user->id;
@@ -987,14 +979,11 @@ Class AuthUserController extends Controller {
 		$userExternalId = UserExternalId::where('user_id' , $newUser['user_id'])->update(['facebook_id' => $facebookId ]);
 		$userAccess = UserAccess::where('user_id' , $user->id)->first();
 
-		$mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
-		$data = ["email" => $email,
-		        "attributes" => ["NAME"=>$name, "SURNAME"=>""],
-		        "listid" => [Config::get('app.send_in_blue_list_id')],
-		        "listid_unlink" => []
-		    ];
+		ApiUserHelper::mailin($role , [
+			'username' => $username,
+			'name' => $name,
+		]);
 
-		$mailin->create_update_user($data);
 
 		$firstLogin = 1;
 

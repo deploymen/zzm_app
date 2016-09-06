@@ -30,6 +30,8 @@ use App\Models\UserFlag;
 use App\Models\UserExternalId;
 use App\Models\UserSetting;
 use Session;
+use GuzzleHttp\Client;
+use Sendinblue\Mailin;
 
 class ApiUserHelper{
 
@@ -168,5 +170,22 @@ class ApiUserHelper{
 		$list = User::select('role', 'name')->find($userAccess->user_id);
 
 		return $list;
+	}
+
+	public static function mailin($role , $params){
+
+		switch($role){
+			case 'parent' : $listId = Config::get('app.send_in_blue_parent_list_id') break;
+			case 'teacher' : $listId = Config::get('app.send_in_blue_teacher_list_id') break;
+		}
+
+		$mailin = new Mailin(['base_url' => "https://api.sendinblue.com/v2.0", 'api_key' => "AC0B8IKZ2nw64hSW", 'timeout' => 5000]);
+		$data = ["email" => $params->username,
+		        "attributes" => ["NAME"=>$params->name, "SURNAME"=>""],
+		        "listid" => [$listId],
+		        "listid_unlink" => []
+		    ];
+	
+	    $mailin->create_update_user($data);
 	}
 }
