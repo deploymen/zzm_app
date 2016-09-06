@@ -22,6 +22,8 @@ return [
     'parent_profile_limit' =>env('PARENT_PROFILE_LIMIT'),
 
     'send_in_blue_list_id' => env('LIST_ID'),
+    'send_in_blue_parent_list_id' => env('SEND_IN_BLUE_PARENT_LIST_ID'),
+    'send_in_blue_teacher_list_id' => env('SEND_IN_BLUE_TEACHER_LIST_ID'),
 	/*
 	|--------------------------------------------------------------------------
 	| Application Debug Mode
