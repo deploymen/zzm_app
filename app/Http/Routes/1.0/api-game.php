@@ -37,11 +37,11 @@
 
 
 			Route::post('/play/{id}/result', 'ApiGameController@resultV1_0');
-			Route::get('/play/{id}/request/'  , 'ApiGameController@requestV1_0');
+			Route::get('/play/{id}/request/'  , 'ApiGameController@request');
 
 			Route::post('/play/push-result/'  , 'ApiGameController@offlinePost');
 
-			Route::get('/play/{id}/request/{language}', 'ApiGameController@requestV1_0');
+			Route::get('/play/{id}/request/{language}', 'ApiGameController@request');
 			Route::get('/result/log', 'ApiGameController@resultLog');
 
 			Route::get('/result/system-planet/progress', 'ApiGameController@systemPlanetProgress');

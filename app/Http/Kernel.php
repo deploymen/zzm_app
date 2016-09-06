@@ -26,7 +26,6 @@ class Kernel extends HttpKernel {
 	protected $routeMiddleware = [
 		'auth.user' => 'App\Http\Middleware\AuthenticateUser',
 		'auth.game' => 'App\Http\Middleware\AuthenticateGamePlay',
-		'auth.student' => 'App\Http\Middleware\AuthenticateStudent',
 		'auth.parent' => 'App\Http\Middleware\AuthenticateParent',
 		'auth.teacher' => 'App\Http\Middleware\AuthenticateTeacher',
 		'auth.content' => 'App\Http\Middleware\AuthenticateContent',

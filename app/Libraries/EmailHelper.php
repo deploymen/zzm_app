@@ -3,12 +3,6 @@
 use Aws\Common\Aws;
 use Aws\Common\Credentials\Credentials;
 use Config;
-use App\Models\PlayThresholdFail;
-use App\Models\GameProfile;
-use App\Models\UserMap;
-use App\Models\GameSubjectSchedule;
-use App\Models\GamePlanet;
-use DB;
 
 class EmailHelper {
 
@@ -57,5 +51,6 @@ class EmailHelper {
 			'ReplyToAddresses' => $params['replyToAddresses'],
 			'ReturnPath' => Config::get('app.support_email'),
 		]);
+
 	}
 }

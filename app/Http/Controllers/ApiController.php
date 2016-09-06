@@ -346,5 +346,17 @@ class ApiController extends Controller {
 
 		return ResponseHelper::OutputJSON('success');
 	}
+
+	public function SendInBlue(){
+		$mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
+	
+	    $data = array( "email" => "example@example.com",
+	        "attributes" => ["NAME"=>"wz test", "SURNAME"=>""],
+	        "listid" => [6],
+	        "listid_unlink" => []
+	    );
+
+	    var_export($mailin->create_update_user($data));
+	}
 	
 }

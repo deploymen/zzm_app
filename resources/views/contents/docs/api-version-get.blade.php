@@ -1,72 +1,109 @@
-@extends('layouts.docs-page', ['sidebar_item' => 'list-general'])
+@extends('layouts.master-docs', ['sidebar_item' => 'list-general']) 
 
-@section('title', 'GET  /api/version')
+@section('breadcrumb')
+<!--BEGIN TITLE & BREADCRUMB PAGE-->
+<div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
+    <div class="page-header pull-left">
+        <div class="page-title">AUTH API</div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<!--END TITLE & BREADCRUMB PAGE-->
+@stop 
 
-@section('desc')
-<p>
+@section('css_include') 
 
-</p>
-@stop
+@stop 
 
-@section('req')
-<p>INPUT</p>
-<table class="hover">
-    <tr>
-        <th style="width:175px;">Key</th>
-        <th style="width:500px;">Description</th>
-        <th style="width:360px;">Example</th>
-    </tr>
-    <tr>
-        <td>device</td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>version</td>
-        <td></td>
-        <td></td>
-    </tr>
-</table>
-<div style="margin-top:50px; height:500px; overflow:auto; font-size:12px">
-    <pre class="prettyprint">
+@section('js_include') 
+
+@stop 
+
+@section('content')
+
+<div class="row">
+    <div class="col-lg-8">
+        <h3>GET  /api/version</h3>
+        <ul id="myTab" class="nav nav-tabs">
+            <li class="active"><a href="#descriptions" data-toggle="tab">Explain</a>
+            </li>
+            <li><a href="#request" data-toggle="tab">Request</a>
+            </li>
+            <li><a href="#respone" data-toggle="tab">Response</a>
+            </li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div id="descriptions" class="tab-pane fade in active">
+                <p>
+                
+                </p>
+            </div>
+            <div id="request" class="tab-pane fade">
+                <p>INPUT</p>
+                <table class="table table-striped table-bordered table-hover">
+                    <tr>
+                        <th style="width:175px;">Key</th>
+                        <th style="width:500px;">Description</th>
+                        <th style="width:360px;">Example</th>
+                    </tr>
+                    <tr>
+                        <td>device</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>version</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+                <div style="margin-top:50px; height:500px; overflow:auto; font-size:12px">
+                    <pre class="prettyprint">
                         POST http://staging.zapzapmath.com/api/version HTTP/1.1
                         Host: staging.zapzapmath.com
 
                         device_os=ios-1&zzm_version=1.0
-    </pre>
-</div>
-@stop
-
-@section('resp')
-<table class="hover">
-    <tr>
-        <th style="width:175px;">Key</th>
-        <th style="width:500px;">Description</th>
-        <th style="width:360px;">Example</th>
-    </tr>
-    <tr>
-        <td>status</td>
-        <td></td>
-        <td>success, fail, exception</td>
-    </tr>
-    <tr>
-        <td>message</td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>data</td>
-        <td></td>
-        <td></td>
-    </tr>
-</table>
-<pre class="prettyprint">
+                    </pre>
+                </div>
+            </div>
+            <div id="respone" class="tab-pane fade">
+                <table class="table table-striped table-bordered table-hover">
+                    <tr>
+                        <th style="width:175px;">Key</th>
+                        <th style="width:500px;">Description</th>
+                        <th style="width:360px;">Example</th>
+                    </tr>
+                    <tr>
+                        <td>status</td>
+                        <td></td>
+                        <td>success, fail, exception</td>
+                    </tr>
+                    <tr>
+                        <td>message</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>data</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+                <pre class="prettyprint">
 {
   "status": "success",
   "data": {
         "version": 1.0
         "end_point": "http://staging.zapzapmath.com/api/1.0"
     }
+
 }
 </pre>
+            </div>
+
+        </div>
+    </div>
+    <!--END ROW -->
+</div>
+
 @stop

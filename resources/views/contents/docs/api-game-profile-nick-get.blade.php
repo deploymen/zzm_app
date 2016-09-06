@@ -1,62 +1,91 @@
-@extends('layouts.docs-page', ['sidebar_item' => 'list-game'])
+@extends('layouts.master-docs', ['sidebar_item' => 'list-game'])
 
-@section('title', 'GET   api/set/nick')
-
-@section('desc')
-<p>
-    Allow game client to retrieve a set of predefine nicknames and avatars.
-</p>
+@section('breadcrumb')
+<!--BEGIN TITLE & BREADCRUMB PAGE-->
+<div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
+    <div class="page-header pull-left">
+        <div class="page-title">GAME API</div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<!--END TITLE & BREADCRUMB PAGE-->
 @stop
 
-@section('req')
-<p>Header</p>
-<table class="hover">
-    <tr>
-        <th style="width:175px;">Key</th>
-        <th style="width:500px;">Description</th>
-        <th style="width:360px;">Example</th>
-    </tr>
-</table>
-<p>INPUT</p>
-<table class="hover">
-    <tr>
-        <th style="width:175px;">Key</th>
-        <th style="width:500px;">Description</th>
-        <th style="width:360px;">Example</th>
-    </tr>
+@section('css_include')
 
-</table>
-<div style="margin-top:50px; height:500px; overflow:auto; font-size:12px">
-    <pre class="prettyprint">GET http://staging.zapzapmath.com/api/set/nick HTTP/1.1
+@stop
+
+@section('js_include')
+
+@stop
+
+@section('content')
+
+<div class="row">
+    <div class="col-lg-8">
+        <h3>GET   api/set/nick</h3>
+        <ul id="myTab" class="nav nav-tabs">
+            <li class="active"><a href="#descriptions" data-toggle="tab">Explain</a>
+            </li>
+            <li><a href="#request" data-toggle="tab">Request</a>
+            </li>
+            <li><a href="#respone" data-toggle="tab">Response</a>
+            </li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div id="descriptions" class="tab-pane fade in active">
+                <p>
+                    Allow game client to retrieve a set of predefine nicknames and avatars.
+                </p>
+            </div>
+            <div id="request" class="tab-pane fade">
+                <p>Header</p>
+                <table class="table table-striped table-bordered table-hover">
+                    <tr>
+                        <th style="width:175px;">Key</th>
+                        <th style="width:500px;">Description</th>
+                        <th style="width:360px;">Example</th>
+                    </tr>
+                </table>
+                <p>INPUT</p>
+                <table class="table table-striped table-bordered table-hover">
+                    <tr>
+                        <th style="width:175px;">Key</th>
+                        <th style="width:500px;">Description</th>
+                        <th style="width:360px;">Example</th>
+                    </tr>
+
+                </table>
+                <div style="margin-top:50px; height:500px; overflow:auto; font-size:12px">
+<pre class="prettyprint">GET http://staging.zapzapmath.com/api/set/nick HTTP/1.1
 Host: staging.zapzapmath.com
 Cookie: __utmx=208893977.kkr4s3aaRwa7IjcDX5IuXg$99127049-2:0; __utmxx=208893977.kkr4s3aaRwa7IjcDX5IuXg$99127049-2:1431580824:15552000; __utmx=204351314.kkr4s3aaRwa7IjcDX5IuXg$99127049-2:0; __utmxx=204351314.kkr4s3aaRwa7IjcDX5IuXg$99127049-2:1431584530:15552000; _ga=GA1.2.238970283.1430284975; laravel_session=eyJpdiI6InlyczVJWGpZSDZUYlhXbG53WXJmV2c9PSIsInZhbHVlIjoic0VnelJkOXo1TmQ3T2RCd1JBdDdZZjA3bGRsOUJqQ0o4ZGZla3NYRmRVa211V0NaYldTYTRXVW1qTXlBNk16Q0IrWUJzc1l3TzFzRmFDMjRRYW1PRkE9PSIsIm1hYyI6IjczM2U5NDNiNWVkNzUyOGY2YzdkZjg4NGE1NmQzMmUxNzE5YmY4NjZiZGM2Yjc5OTFhZDFhYWUzN2U3NjU1ZTAifQ%3D%3D
-    </pre>
-</div>
-@stop
-
-@section('resp')
-<table class="hover">
-    <tr>
-        <th style="width:175px;">Key</th>
-        <th style="width:500px;">Description</th>
-        <th style="width:360px;">Example</th>
-    </tr>
-    <tr>
-        <td>status</td>
-        <td></td>
-        <td>success, fail, exception</td>
-    </tr>
-    <tr>
-        <td>message</td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>data</td>
-        <td></td>
-        <td></td>
-    </tr>
-</table>
+</pre>
+                </div>
+            </div>
+            <div id="respone" class="tab-pane fade">
+                <table class="table table-striped table-bordered table-hover">
+                    <tr>
+                        <th style="width:175px;">Key</th>
+                        <th style="width:500px;">Description</th>
+                        <th style="width:360px;">Example</th>
+                    </tr>
+                    <tr>
+                        <td>status</td>
+                        <td></td>
+                        <td>success, fail, exception</td>
+                    </tr>
+                    <tr>
+                        <td>message</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>data</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
 <pre class="prettyprint">
 {
   "status": "success",
@@ -272,4 +301,12 @@ Cookie: __utmx=208893977.kkr4s3aaRwa7IjcDX5IuXg$99127049-2:0; __utmxx=208893977.
   }
 }
 </pre>
+            </div>
+
+        </div>
+    </div>
+    <!--END ROW -->
+</div>
+
+
 @stop

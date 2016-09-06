@@ -1,1 +1,0 @@
-it's a good news email ^.^

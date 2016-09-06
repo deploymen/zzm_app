@@ -1,0 +1,72 @@
+<div class="row">
+    <div class="small-12 large-6 large-centered columns text-center">
+        <h3 class="grey-heading">Create a new Profile</h3>
+        <p class="subline-desc">Profiles allow you to follow the progress of each individual child</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="small-12 large-6 large-centered columns">
+        <div class="content-group--content">
+
+            <form ng-submit="vm.submitProfile()" name="addProfileForm" class="new-profile-form" novalidate="novalidate">
+
+                <div class="row">
+                    <div class="small-12 columns">
+                        <label for="firstName">First Name <small>required</small></label>
+                        <input type="text" name="firstName" id="firstName" required zzm-autofocus ng-model="vm.profileData.first_name" />
+                        <p ng-show="addProfileForm.firstName.$error.required && addProfileForm.firstName.$touched" class="help-block">First name is required.</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="small-12 medium-6 columns">
+                        <label for="age">Age <small>required</small></label>
+                        <select id="age" ng-model="vm.profileData.age">
+                            <option ng-selected="profileData.age == age.name" ng-repeat="age in vm.ages" ng-value="age.id">{{ age.name}}</option>
+                        </select>
+                        <p ng-show="addProfileForm.age.$error.required && addProfileForm.age.$touched" class="help-block">Age is required.</p>
+                    </div>
+                    <div class="small-12 medium-6 end columns">
+                        <label for="grade">Grade <small>required</small></label>
+                        <select id="grade" ng-model="vm.profileData.grade">
+                            <option ng-selected="profileData.grade == grade.name" ng-repeat="grade in vm.grades" ng-value="grade.id">{{ grade.name}}</option>
+                        </select>
+                        <p ng-show="addProfileForm.grade.$error.required && addProfileForm.grade.$touched" class="help-block">Grade is required.</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="small-12 columns">
+                        <label for="school">School <small>required</small></label>
+                        <p class="subline-desc">This will be used to connect students and teachers from the same school</p>
+                        <input name="school" id="school" type="text" required ng-model="vm.profileData.school" />
+                        <p ng-show="addProfileForm.school.$error.required && addProfileForm.school.$touched" class="help-block">School is required.</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="small-12 columns">
+                        <label for="city">City <small>required</small></label>
+                        <p class="subline-desc">This will be used to compare results against other cities and places in the world</p>
+                        <input name="city" id="city" type="text" required ng-model="vm.profileData.city" />
+                        <p ng-show="addProfileForm.city.$error.required && addProfileForm.city.$touched" class="help-block">City is required.</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="small-12 columns">
+                        <input type="submit" value="Create My Profile" id="btn-create-profile" class="button wide radius blue" ng-disabled="addProfileForm.$invalid" />
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="small-12 large-6 large-centered columns text-center">
+        <a href="profiles">back to dashboard</a>
+    </div>
+</div>
