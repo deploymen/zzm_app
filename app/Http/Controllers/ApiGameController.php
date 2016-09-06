@@ -24,7 +24,7 @@ use App\Models\GameProfile;
 use App\Models\User;
 use App\Models\GameClass;
 use App\Models\GamePlay;
-use App\Models\PlayThresholdFail;
+use App\Models\GamePlayThreshold;
 use App\Models\GameCode;
 use App\Models\GameSystem;
 use App\Models\GamePlanet;
@@ -32,6 +32,7 @@ use App\Models\GameType;
 use App\Models\UserMap;
 use App\Models\GameQuestion;
 use App\Models\GameSubject;
+use App\Models\GamePlanetSubject;
 use App\Models\GameSubjectSchedule;
 use App\Models\GameMission;
 use App\Models\GameQuestionP04ChallengeSet;
@@ -51,9 +52,9 @@ use App\Models\Results\AbstractGameResult;
 
 
 Class ApiGameController extends Controller {
-
+	
 	//GET QUESTION
-	public function requestV1_0($planetId , $language = 'en') {	
+	public function requestV1_0($planetId, $language = 'en') {	
 
 		$ON_CACHE = false;
 		
@@ -151,7 +152,7 @@ Class ApiGameController extends Controller {
 			}
 	}
 
-	public function requestV1_3($planetId , $language = 'en') {	
+	public function requestV1_3($planetId, $language = 'en') {	
 
 		$ON_CACHE = false;
 		$CATCH_EX = false;
@@ -243,8 +244,8 @@ Class ApiGameController extends Controller {
 				$coinTutorial = CoinReward::GetEntitleCoinReward('watch-tutorial');
 			}
 
-			//fail 2 time show video
-			$failCount = PlayThresholdFail::where('profile_id', $profileId)->where('planet_id' , $planetId)->where('difficulty', $difficulty)->where('fail_count' , 2)->first();
+			//fail 2 time show video!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			$failCount = GamePlayThreshold::where('profile_id', $profileId)->where('planet_id', $planetId)->where('difficulty', $difficulty)->where('hit' , 2)->first();
 			if($failCount){
 				$coinVideo = CoinReward::GetEntitleCoinReward('watch-video');
 			}
@@ -365,7 +366,7 @@ Class ApiGameController extends Controller {
 			}
 			//validate question ids =end
 
-			LogHelper::LogPostResult($planetId , $jsonGameResult, $gameCode);//log post result
+			LogHelper::LogPostResult($planetId, $jsonGameResult, $gameCode);//log post result
 
 			$sql = "
 				SELECT t.`name` 
@@ -425,11 +426,11 @@ Class ApiGameController extends Controller {
 			ZapZapQuestionHelper::UserMapV1_0($profileId, $planetId, $gamePlay, $gameResult); //update user_map
 
 			$profile = GameProfile::find($profileId);
-			$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();
+			$systemPlanet = GameSystemPlanet::where('planet_id', $planetId)->first();
 
 			ZapZapQuestionHelper::LeaderboardUpdate($profile, $systemPlanet, $gameResult);
 
-			LogHelper::LogPostResult($planetId , $jsonGameResult, $gameCode);//log post result
+			LogHelper::LogPostResult($planetId, $jsonGameResult, $gameCode);//log post result
 
 		} catch (Exception $ex) {
 
@@ -458,7 +459,7 @@ Class ApiGameController extends Controller {
 			$gameCode = Request::input('game_code');
 			$gameCodeType = Request::input('game_code_type');
 
-			LogHelper::LogPostResult($planetId , $jsonGameResult, $gameCode);//log post result
+			LogHelper::LogPostResult($planetId, $jsonGameResult, $gameCode);//log post result
 
 			if(!$jsonGameResult || !$hash || !$random ){
 				return ResponseHelper::OutputJSON('fail', 'missing parameter');
@@ -574,12 +575,12 @@ Class ApiGameController extends Controller {
 			]);
 
 			ZapZapQuestionHelper::UserMapV1_1($profileId, $planetId, $gamePlay, $gameResult, $gameResult['difficulty']); //update user_map
-			ZapZapQuestionHelper::LastSession($userId , $profileId, $gameResult, $playedTime);
+			ZapZapQuestionHelper::LastSession($userId, $profileId, $gameResult, $playedTime);
 
 			$profile = GameProfile::find($profileId);
-			$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();
+			$systemPlanet = GameSystemPlanet::where('planet_id', $planetId)->first();
 
-			ZapZapQuestionHelper::LeaderboardUpdate($profile,$systemPlanet,$gameResult);
+			ZapZapQuestionHelper::LeaderboardUpdate($profile, $systemPlanet, $gameResult);
 		} catch (Exception $ex) {
 
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -621,8 +622,7 @@ Class ApiGameController extends Controller {
 				return ResponseHelper::OutputJSON('fail', 'missing parameter');
 			}
 
-			$gameResult = json_decode($jsonGameResult, true);
-
+			$gameResult = json_decode($jsonGameResult, true);			
 			if(!isset($gameResult['score']) || !isset($gameResult['answers'])|| !isset($gameResult['status']) || !isset($gameResult['difficulty'])){ 
 				return ResponseHelper::OutputJSON('fail', 'invalid game result format');
 			}
@@ -646,6 +646,9 @@ Class ApiGameController extends Controller {
 			// if($checkResult){
 			// 	return ResponseHelper::OutputJSON('fail', 'no double submit');
 			// }
+
+
+			$difficulty = $gameResult['difficulty'];
 
 			//validate question ids
 			$questionIds = [];
@@ -695,7 +698,7 @@ Class ApiGameController extends Controller {
 			$gamePlay->hash = $hash1;
 			$gamePlay->status = $gameStatus;
 			$gamePlay->played_time = $playedTime;
-			$gamePlay->difficulty = $gameResult['difficulty'];
+			$gamePlay->difficulty = $difficulty;
 
 			if(isset($gameResult['badges'])){
 				$gameResult['badges']['speed'] = ($gameResult['badges']['speed'] == 'True')?1:0;
@@ -720,14 +723,8 @@ Class ApiGameController extends Controller {
 				'profileId' => $profileId, 
 			]);
 
-			PlayThresholdFail::FailOrPass($gameStatus, [
-				'profile_id' => $profileId,
-				'planet_id' => $planetId,
-				'difficulty' => $gameResult['difficulty'],
-				]);
-
 			//= Coin Rewards @start
-			$playedEver = !!GamePlay::where('planet_id', $planetId)->where('profile_id', $profileId)->where('difficulty', $gameResult['difficulty'])->count();			
+			$playedEver = !!GamePlay::where('planet_id', $planetId)->where('profile_id', $profileId)->where('difficulty', $difficulty)->count();			
 			$playedDaily = GamePlay::where('profile_id', $profileId)->whereRaw('DATE(`created_at`) = DATE(NOW())')->count();
 
 			$rewardName = ($planet->popularity == 'basic')?'play-basic':'play-hot';
@@ -735,20 +732,20 @@ Class ApiGameController extends Controller {
 				$rewardName = 'play-repeat';
 			}
 
-			$coinRegular = CoinReward::GetEntitleCoinReward($rewardName , 'difficulty-'.$gameResult['difficulty'] );
-			$descriptionRegular = GameCoinTransaction::GetDescription($rewardName , ['playId' => $gamePlay->id , 'planetId' => $planetId , 'difficulty' => $gameResult['difficulty'] ]);
-			GameCoinTransaction::DoTransaction($profileId , $coinRegular , $descriptionRegular);
+			$coinRegular = CoinReward::GetEntitleCoinReward($rewardName , 'difficulty-'.$difficulty );
+			$descriptionRegular = GameCoinTransaction::GetDescription($rewardName , ['playId' => $gamePlay->id , 'planetId' => $planetId , 'difficulty' => $difficulty ]);
+			GameCoinTransaction::DoTransaction($profileId, $coinRegular, $descriptionRegular);
 
 			if(!$playedDaily){
 				$coinDaily = CoinReward::GetEntitleCoinReward('play-daily');
 				$descriptionDaily = GameCoinTransaction::GetDescription('play-daily' , ['playId' => $gamePlay->id ]);
-				GameCoinTransaction::DoTransaction($profileId , $coinDaily , $descriptionDaily);	
+				GameCoinTransaction::DoTransaction($profileId, $coinDaily, $descriptionDaily);	
 			}
 
 			if($watchedTutorial){
 				$coinTutorial = CoinReward::GetEntitleCoinReward('watch-tutorial');
 				$descriptionTutorial = GameCoinTransaction::GetDescription('watch-tutorial' , ['playId' => $gamePlay->id ]);
-				GameCoinTransaction::DoTransaction($profileId , $coinTutorial , $descriptionTutorial);	
+				GameCoinTransaction::DoTransaction($profileId, $coinTutorial, $descriptionTutorial);	
 			}
 
 			//update play record too, again.
@@ -758,21 +755,18 @@ Class ApiGameController extends Controller {
 			}			
 			//= Coin Rewards @end
 
-			ZapZapQuestionHelper::UserMapV1_1($profileId, $planetId, $gamePlay, $gameResult, $gameResult['difficulty']); //update user_map
-			ZapZapQuestionHelper::LastSession($userId , $profileId, $gameResult, $playedTime);
+			ZapZapQuestionHelper::UserMapV1_1($profileId, $planetId, $gamePlay, $gameResult, $difficulty); //update user_map
+			ZapZapQuestionHelper::LastSession($userId, $profileId, $gameResult, $playedTime);
 
-			GameMission::CheckMission([
-				'profile_id' => $profileId, 
-				'planet_id' => $planetId, 
-				'difficulty' => $gameResult['difficulty'], 
-				'game_status' => $gameStatus, 
-			]);
+			//check mission
+			$threshold = GamePlayThreshold::UpdateThreshold($profileId, $planetId, $difficulty, $gameStatus);		
+			GameMission::CheckMission($threshold);
 
 			$profile = GameProfile::find($profileId);
-			$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();
+			$systemPlanet = GameSystemPlanet::where('planet_id', $planetId)->first();
 
-			ZapZapQuestionHelper::LeaderboardUpdate($profile,$systemPlanet,$gameResult);
-			LogHelper::LogPostResult($planetId , $jsonGameResult, $studentId);//log post result
+			ZapZapQuestionHelper::LeaderboardUpdate($profile, $systemPlanet, $gameResult);
+			LogHelper::LogPostResult($planetId, $jsonGameResult, $studentId);//log post result
 			
 			} catch (Exception $ex) {
 				if(!$CATCH_EX){
@@ -834,7 +828,7 @@ Class ApiGameController extends Controller {
 			}
 
 	
-			return ResponseHelper::OutputJSON('success', '' , $systems );
+			return ResponseHelper::OutputJSON('success', '', $systems );
 		
 		} catch (Exception $ex) {
 
@@ -1185,7 +1179,7 @@ Class ApiGameController extends Controller {
 		}
 	}
 
-	public function leaderBoardPlanet($version ,$planetId){
+	public function leaderBoardPlanet($version, $planetId){
 		try{
 
 			$leaderBoardPlanet = LeaderBoardPlanet::where('planet_id', $planetId)->where('rank' ,'<' ,101)->orderBy('rank')->get()->toArray();
@@ -1295,7 +1289,7 @@ Class ApiGameController extends Controller {
 		$gameCode = Request::input('game_code');
 		$deviceId = Request::input('device_id');
 
-		$checkGameCode = GameCode::where('code' , $gameCode)->first();
+		$checkGameCode = GameCode::where('code', $gameCode)->first();
 
 		if(!$checkGameCode){
 			$idCounter = IdCounter::find(1);
@@ -1356,7 +1350,7 @@ Class ApiGameController extends Controller {
 	public function checkGameCodeV1_3(){
 		$studentId = Request::input('student_id');
 
-		$gameProfile = GameProfile::where('student_id' , $studentId)->first();
+		$gameProfile = GameProfile::where('student_id', $studentId)->first();
 
 		if(!$gameProfile){
 			$newProfile = ApiProfileHelper::newProfile(0 , 0 ,'Anonymous' , '5_or_younger' , 'default school' , 'K' , 999 , 999 , 999 );
@@ -1506,28 +1500,28 @@ Class ApiGameController extends Controller {
 						'played' => '1'
 						]);;
 				switch($result[0]->name){
-					case 'p00': $status = ZapZapQuestionHelper::SubmitResultP00($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p01': $status = ZapZapQuestionHelper::SubmitResultP01($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p02': $status = ZapZapQuestionHelper::SubmitResultP02($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p03': $status = ZapZapQuestionHelper::SubmitResultP03($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p06': $status = ZapZapQuestionHelper::SubmitResultP06($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p07': $status = ZapZapQuestionHelper::SubmitResultP07($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p08': $status = ZapZapQuestionHelper::SubmitResultP08($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p09': $status = ZapZapQuestionHelper::SubmitResultP09($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p10': $status = ZapZapQuestionHelper::SubmitResultP10($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p11': $status = ZapZapQuestionHelper::SubmitResultP11($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p12': $status = ZapZapQuestionHelper::SubmitResultP12($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p13': $status = ZapZapQuestionHelper::SubmitResultP13($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p14': $status = ZapZapQuestionHelper::SubmitResultP14($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p15': $status = ZapZapQuestionHelper::SubmitResultP15($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p16': $status = ZapZapQuestionHelper::SubmitResultP16($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p17': $status = ZapZapQuestionHelper::SubmitResultP17($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p18': $status = ZapZapQuestionHelper::SubmitResultP18($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p19': $status = ZapZapQuestionHelper::SubmitResultP19($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p20': $status = ZapZapQuestionHelper::SubmitResultP20($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p21': $status = ZapZapQuestionHelper::SubmitResultP21($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p23': $status = ZapZapQuestionHelper::SubmitResultP23($planetId,$gamePlay,$sgameResult,$profileId); break;
-					case 'p32': $status = ZapZapQuestionHelper::SubmitResultP32($planetId,$gamePlay,$sgameResult,$profileId); break;
+					case 'p00': $status = ZapZapQuestionHelper::SubmitResultP00($planetId, $gamePlay, $sgameResult, $profileId); break;
+					case 'p01': $status = ZapZapQuestionHelper::SubmitResultP01($planetId, $gamePlay, $sgameResult, $profileId); break;
+					case 'p02': $status = ZapZapQuestionHelper::SubmitResultP02($planetId, $gamePlay, $sgameResult, $profileId); break;
+					case 'p03': $status = ZapZapQuestionHelper::SubmitResultP03($planetId, $gamePlay, $sgameResult, $profileId); break;
+					case 'p06': $status = ZapZapQuestionHelper::SubmitResultP06($planetId, $gamePlay, $sgameResult, $profileId); break;
+					case 'p07': $status = ZapZapQuestionHelper::SubmitResultP07($planetId, $gamePlay, $sgameResult, $profileId); break;
+					case 'p08': $status = ZapZapQuestionHelper::SubmitResultP08($planetId, $gamePlay, $sgameResult, $profileId); break;
+					case 'p09': $status = ZapZapQuestionHelper::SubmitResultP09($planetId, $gamePlay, $sgameResult, $profileId); break;
+					case 'p10': $status = ZapZapQuestionHelper::SubmitResultP10($planetId, $gamePlay, $sgameResult, $profileId); break;
+					case 'p11': $status = ZapZapQuestionHelper::SubmitResultP11($planetId, $gamePlay, $sgameResult, $profileId); break;
+					case 'p12': $status = ZapZapQuestionHelper::SubmitResultP12($planetId, $gamePlay, $sgameResult, $profileId); break;
+					case 'p13': $status = ZapZapQuestionHelper::SubmitResultP13($planetId, $gamePlay, $sgameResult, $profileId); break;
+					case 'p14': $status = ZapZapQuestionHelper::SubmitResultP14($planetId, $gamePlay, $sgameResult, $profileId); break;
+					case 'p15': $status = ZapZapQuestionHelper::SubmitResultP15($planetId, $gamePlay, $sgameResult, $profileId); break;
+					case 'p16': $status = ZapZapQuestionHelper::SubmitResultP16($planetId, $gamePlay, $sgameResult, $profileId); break;
+					case 'p17': $status = ZapZapQuestionHelper::SubmitResultP17($planetId, $gamePlay, $sgameResult, $profileId); break;
+					case 'p18': $status = ZapZapQuestionHelper::SubmitResultP18($planetId, $gamePlay, $sgameResult, $profileId); break;
+					case 'p19': $status = ZapZapQuestionHelper::SubmitResultP19($planetId, $gamePlay, $sgameResult, $profileId); break;
+					case 'p20': $status = ZapZapQuestionHelper::SubmitResultP20($planetId, $gamePlay, $sgameResult, $profileId); break;
+					case 'p21': $status = ZapZapQuestionHelper::SubmitResultP21($planetId, $gamePlay, $sgameResult, $profileId); break;
+					case 'p23': $status = ZapZapQuestionHelper::SubmitResultP23($planetId, $gamePlay, $sgameResult, $profileId); break;
+					case 'p32': $status = ZapZapQuestionHelper::SubmitResultP32($planetId, $gamePlay, $sgameResult, $profileId); break;
 
 					default: return ResponseHelper::OutputJSON('fail', 'submit answer error');
 				}
@@ -1535,10 +1529,10 @@ Class ApiGameController extends Controller {
 				ZapZapQuestionHelper::UserMapV1_1($profileId, $planetId, $gamePlay, $gameResult, $sgameResult['difficulty']); //update user_map
 
 				$profile = GameProfile::find($profileId);
-				$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();
+				$systemPlanet = GameSystemPlanet::where('planet_id', $planetId)->first();
 
-				ZapZapQuestionHelper::LeaderboardUpdate($profile,$systemPlanet,$gameResult);
-				LogHelper::LogPostResult($planetId , $gameResult, $gameCode);//log post result
+				ZapZapQuestionHelper::LeaderboardUpdate($profile, $systemPlanet, $gameResult);
+				LogHelper::LogPostResult($planetId, $gameResult, $gameCode);//log post result
 			}
 
 		} catch (Exception $ex) {
@@ -1696,18 +1690,18 @@ Class ApiGameController extends Controller {
 
 				$coinRegular = CoinReward::GetEntitleCoinReward($rewardName , 'difficulty-'.$sgameResult['difficulty'] );
 				$descriptionRegular = GameCoinTransaction::GetDescription($rewardName , ['playId' => $gamePlay->id , 'planetId' => $planetId , 'difficulty' => $sgameResult['difficulty'] ]);
-				GameCoinTransaction::DoTransaction($profileId , $coinRegular , $descriptionRegular);
+				GameCoinTransaction::DoTransaction($profileId, $coinRegular, $descriptionRegular);
 
 				if(!$playedDaily){
 					$coinDaily = CoinReward::GetEntitleCoinReward('play-daily');
 					$descriptionDaily = GameCoinTransaction::GetDescription('play-daily' , ['playId' => $gamePlay->id, 'planetId' => $planetId , 'difficulty' => $sgameResult['difficulty'] ]);
-					GameCoinTransaction::DoTransaction($profileId , $coinDaily , $descriptionDaily);	
+					GameCoinTransaction::DoTransaction($profileId, $coinDaily, $descriptionDaily);	
 				}
 
 				if($watchedTutorial){
 					$coinTutorial = CoinReward::GetEntitleCoinReward('watch-tutorial' , 'difficuldifficulty' );
 					$descriptionTutorial = GameCoinTransaction::GetDescription('watch-tutorial' , ['playId' => $gamePlay->id, 'planetI' => $sgameResult['difficulty'] ]);
-					GameCoinTransaction::DoTransaction($profileId , $coinTutorial , $descriptionTutorial);	
+					GameCoinTransaction::DoTransaction($profileId, $coinTutorial, $descriptionTutorial);	
 				}
 
 				//update play record too, again.
@@ -1719,13 +1713,13 @@ Class ApiGameController extends Controller {
 
 
 				ZapZapQuestionHelper::UserMapV1_1($profileId, $planetId, $gamePlay, $sgameResult, $sgameResult['difficulty']); //update user_map
-				ZapZapQuestionHelper::LastSession($userId , $profileId, $sgameResult, $playedTime);
+				ZapZapQuestionHelper::LastSession($userId, $profileId, $sgameResult, $playedTime);
 
 				$profile = GameProfile::find($profileId);
-				$systemPlanet = GameSystemPlanet::where('planet_id' , $planetId)->first();
+				$systemPlanet = GameSystemPlanet::where('planet_id', $planetId)->first();
 
-				ZapZapQuestionHelper::LeaderboardUpdate($profile,$systemPlanet,$sgameResult);
-				LogHelper::LogPostResult($planetId , $jsonGameResult, $studentId);//log post result
+				ZapZapQuestionHelper::LeaderboardUpdate($profile, $systemPlanet, $sgameResult);
+				LogHelper::LogPostResult($planetId, $jsonGameResult, $studentId);//log post result
 			}
 
 		} catch (Exception $ex) {
@@ -1747,7 +1741,7 @@ Class ApiGameController extends Controller {
 			return ResponseHelper::OutputJSON('fail' , 'missing parameter');
 		}
 
-		$gameCode = GameCode::where('code' , $code)->first();
+		$gameCode = GameCode::where('code', $code)->first();
 
 		if(!$gameCode){
 			return ResponseHelper::OutputJSON('fail' , 'game code not found');
@@ -1780,7 +1774,7 @@ Class ApiGameController extends Controller {
 			return ResponseHelper::OutputJSON('fail' , 'missing parameter');
 		}
 
-		$gameProfile = GameCode::where('student_id' , $studentId)->first();
+		$gameProfile = GameCode::where('student_id', $studentId)->first();
 
 		if(!$gameCode){
 			return ResponseHelper::OutputJSON('fail' , 'student id not found');

@@ -15,13 +15,10 @@ class GameSubjectSchedule extends Eloquent {
 
 	protected $hidden = [];
 
-	public static function next($params){
-		$subjectCategory = $params['subject_category'];
-		$sequence = $params['sequence'];
+	public function scopePrev(){
 
-		// $current = $this->first();
-		$schedule = GameSubjectSchedule::where('subject_category', $subjectCategory)
-									->where('sequence', $sequence + 1)
+		$schedule = self::where('subject_category', $this->subject_category)
+									->where('sequence', $this->sequence - 1)
 									->first();
 		if(!$schedule){
 			return false;
@@ -30,19 +27,21 @@ class GameSubjectSchedule extends Eloquent {
 		return $schedule;
 	}
 
-	public static function prev($params){
-
-		$subjectCategory = $params['subject_category'];
-		$sequence = $params['sequence'];
-
-		// $current = $this->first();
-		$schedule = GameSubjectSchedule::where('subject_category', $subjectCategory)
-									->where('sequence', $sequence - 1)
+	public function scopeNext(){
+		$schedule = self::where('subject_category', $this->subject_category)
+									->where('sequence', $this->sequence + 1)
 									->first();
 		if(!$schedule){
 			return false;
 		}
+
 		return $schedule;
 	}
+
+	public function subject(){
+		return $this->belongsTo('App\Models\GameSubject');
+	}
+
+
 
 }

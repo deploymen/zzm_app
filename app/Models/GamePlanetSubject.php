@@ -19,4 +19,6 @@ class GamePlanetSubject extends Eloquent {
         return $this->hasOne('App\Models\GameSubjectSchedule', 'subject_id', 'subject_id');
     }	
 
+
+	
 }
