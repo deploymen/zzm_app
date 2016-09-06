@@ -31,7 +31,7 @@ use App\Models\UserExternalId;
 use App\Models\UserSetting;
 use Session;
 use GuzzleHttp\Client;
-use Sendinblue\Mailin;
+use SendinBlue\SendinBlueApiBundle\Wrapper\Mailin;
 
 class ApiUserHelper{
 
@@ -182,8 +182,8 @@ class ApiUserHelper{
 		}
 
 		$mailin = new Mailin(['base_url' => "https://api.sendinblue.com/v2.0", 'api_key' => "AC0B8IKZ2nw64hSW", 'timeout' => 5000]);
-		$data = ["email" => $params->username,
-		        "attributes" => ["NAME"=>$params->name, "SURNAME"=>""],
+		$data = ["email" => $params['username'],
+		        "attributes" => ["NAME"=>$params['name'], "SURNAME"=>""],
 		        "listid" => [$listId],
 		        "listid_unlink" => []
 		    ];
