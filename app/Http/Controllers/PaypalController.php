@@ -22,7 +22,7 @@ class PaypalController extends Controller {
 	public function InstantPaymentNotification(Request $request){
 		try{
 			$debug = 1;
-			$sandbox = 1;
+			$sandbox = 0;
 
 			$raw_post_data = file_get_contents('php://input');
 			$raw_post_array = explode('&', $raw_post_data);
@@ -146,6 +146,10 @@ class PaypalController extends Controller {
 					$logPaypalTransaction->payment_date = Request::input('payment_date');
 					$logPaypalTransaction->mc_gross = Request::input('mc_gross');
 					
+				}elseif ($txnType == 'web_accept'){
+					$logPaypalTransaction->payment_gross = Request::input('payment_gross');
+					$logPaypalTransaction->payment_date = Request::input('payment_date');
+					$logPaypalTransaction->mc_gross = Request::input('mc_gross');
 				}
 
 				$logPaypalTransaction->save();
