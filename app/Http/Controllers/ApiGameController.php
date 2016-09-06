@@ -32,6 +32,7 @@ use App\Models\GameType;
 use App\Models\UserMap;
 use App\Models\GameQuestion;
 use App\Models\GameSubject;
+use App\Models\GamePlanetSubject;
 use App\Models\GameSubjectSchedule;
 use App\Models\GameMission;
 use App\Models\GameQuestionP04ChallengeSet;
@@ -51,11 +52,7 @@ use App\Models\Results\AbstractGameResult;
 
 
 Class ApiGameController extends Controller {
-
-	public function aaa(){
-		die('aaa');
-	}
-
+	
 	//GET QUESTION
 	public function requestV1_0($planetId, $language = 'en') {	
 

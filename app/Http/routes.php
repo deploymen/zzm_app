@@ -35,5 +35,3 @@ Route::group(['middleware' => 'version'], function () {
 		require __DIR__.'/Routes/1.3/api-game.php';
 	});
 });
-
-Route::get('/aaa', 'ApiGameController@aaa');

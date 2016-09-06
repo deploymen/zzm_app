@@ -31,11 +31,10 @@ class GameMission extends Eloquent {
 					return false;
 				}
 
-				self::RegisterPromotionMission($threshold->profile_id, $schedule, 1);
+				self::sendMission($threshold->profile_id, $schedule, 1);
 				$threshold->mission_promotion = 'sent';
 			}			
 		}
-
 
 		//check for demotion mission
 		if($threshold->mission_demotion == 'never'){
@@ -48,9 +47,9 @@ class GameMission extends Eloquent {
 					case 4:						
 						if($threshold->difficulty==1){
 							$schedule = $schedule->prev->first();
-							self::RegisterDemotionMission($threshold->profile_id, $schedule, 5);
+							self::sendMission($threshold->profile_id, $schedule, 5);
 						}else{
-							self::RegisterDemotionMission($threshold->profile_id, $schedule, $threshold->difficulty - 1);
+							self::sendMission($threshold->profile_id, $schedule, $threshold->difficulty - 1);
 						}
 						$threshold->mission_demotion = 'sent';
 						break;						
@@ -61,41 +60,22 @@ class GameMission extends Eloquent {
 		}
 	}
 
-	public static function RegisterPromotionMission($profileId, $schedule, $difficulty){
-		$planets = $schedule->planets;
-		shuffle($planets);
+	public static function sendMission($profileId, $schedule, $difficulty){
+		$planets = $schedule->subject->planets->toArray();
+		$planet = head(shuffle($planets));
 
 		self::create([
 			'subject_id' => $subjectId,
 			'profile_id' => $profileId,
-			'planet_id' => $planets[0]->planet_id,
+			'planet_id' => $planet['id'],
 			'difficulty' => 1,
-			'remark' => 'need update',
+			'remark' => '',
 		]);
 
 		return true;
 	}
 
-	public static function RegisterDemotionMission($profileId, $schedule, $difficulty){
-		$planets = $schedule->planets;
-		shuffle($planets);
-
-		self::create([
-			'subject_id' => $subjectId,
-			'profile_id' => $profileId,
-			'planet_id' => $planets[0]->planet_id,
-			'difficulty' => $difficulty,
-			'remark' => 'need update',
-		]);
-
-		return true;
-	}
-
-
-
-
-
-	public static function SendGoodNews($profileId , $planetId){
+/*	public static function SendGoodNews($profileId , $planetId){
 
 		$nextPlanet = GameSubjectSchedule::GetNextPlanets('next' , $planetId);
 		$planet = GamePlanet::where('id', $nextPlanet->planet_id);
@@ -116,7 +96,7 @@ class GameMission extends Eloquent {
 		$userMap->sent = 1;
 		$userMap->save();
 
-	}
+	}*/
 
 
 
