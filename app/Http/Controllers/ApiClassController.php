@@ -193,7 +193,7 @@ Class ApiClassController extends Controller {
 			return ResponseHelper::OutputJSON('fail', "class no found");
 		}
 
-		$pLimit = ($class->expired_at > date("Y-m-d H:i:s"))?50:5;
+		$pLimit = ($class->expired_at > date("Y-m-d H:i:s"))?50:30;
 
 		if($profileCount >= $pLimit){
 			$profileLimit = 0;

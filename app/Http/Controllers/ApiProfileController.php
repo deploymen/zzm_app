@@ -97,7 +97,7 @@ Class ApiProfileController extends Controller {
 			
 			if($classId){
 				$profileClass = GameProfile::where('class_id' , $classId)->where('user_id', $userId)->count();
-				$profileLimit = ($gameClass->expired_at > date("Y-m-d H:i:s"))?50:5;
+				$profileLimit = ($gameClass->expired_at > date("Y-m-d H:i:s"))?50:30;
 
 				if($profileClass >= $profileLimit){
 					return ResponseHelper::OutputJSON('fail', "class limited" );
