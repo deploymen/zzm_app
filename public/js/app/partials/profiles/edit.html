@@ -1,0 +1,121 @@
+<div class="row">
+    <div class="small-12 large-10 large-centered columns text-center">
+        <h3 class="grey-heading">Editing Profile</h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="small-12 large-10 large-centered columns">
+        <div class="content-group--content">
+
+            <div class="row">
+                <div class="small-12 large-2 columns">
+                    <div class="avatar-holder">
+                        <img src="{{vm.APP_CONFIG.cdnStatic}}/images/user/avatars/{{ vm.profile.avatar.filename}}" alt="">
+                    </div>
+                </div>
+
+                <div class="small-12 large-7 columns nickname-middle">
+                    <p class="profile-nickname" ng-bind="vm.profile.nick_name1.name + ' ' + vm.profile.nick_name2.name"></p>
+                </div>
+
+                <div class="small-12 large-3 columns text-right">
+                    <p class="profile-code bold"><span class="blue-text">Class ID:</span> <span class="user-id" ng-bind="vm.profile.class_id"></span></p>
+                    <p class="profile-code bold"><span class="blue-text">Player ID:</span> <span class="user-id" ng-bind="vm.profile.game_code.code"></span></p>
+                </div>
+            </div>
+
+            <form ng-submit="vm.updateProfile(editProfileForm)" id="edit-profile-form" class="edit-profile-form" name="editProfileForm" novalidate="novalidate">
+                <div class="row">
+                    <div class="small-12 columns">
+                        <label for="profile-first-name">First Name</label>
+                        <input name="first_name" id="profile-first-name" class="profile-first-name" type="text" required zzm-autofocus ng-model="vm.profile.first_name" />
+                        <p ng-show="editProfileForm.first_name.$error.required && editProfileForm.first_name.$touched" class="help-block">First name is required.</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="small-12 large-6 columns">
+                        <label for="profile-age-edit">Age</label>
+                        <select id="profile-age-edit" ng-model="vm.profile.age" name="age" required>
+                            <option ng-selected="vm.profile.age == age.name" ng-repeat="age in vm.ages" ng-value="age.id">{{ age.name}}</option>
+                        </select>
+                        <p ng-show="editProfileForm.age.$error.required && editProfileForm.age.$touched" class="help-block">Age is required.</p>
+                    </div>
+
+                    <div class="small-12 large-6 columns">
+                        <label for="profile-grade-edit">Grade</label>
+                        <select id="profile-grade-edit" ng-model="vm.profile.grade" name="grade" required>
+                            <option ng-selected="vm.profile.grade == grade.name" ng-repeat="grade in vm.grades" ng-value="grade.id">{{ grade.name}}</option>
+                        </select>
+                    </div>
+                    <p ng-show="editProfileForm.grade.$error.required && editProfileForm.grade.$touched" class="help-block">Grade is required.</p>
+                </div>
+
+                <div class="row">
+                    <div class="small-12 columns">
+                        <label for="profile-school">School</label>
+                        <p class="subline-desc">This will be used to connect students and teachers from the same school</p>
+                        <input id="profile-school" class="profile-school" type="text" ng-model="vm.profile.school" name="school" required />
+                        <p ng-show="editProfileForm.school.$error.required && editProfileForm.school.$touched" class="help-block">School is required.</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="small-12 columns">
+                        <label for="profile-city">City</label>
+                        <p class="subline-desc">This will be used to compare results against other cities and places in the world</p>
+                        <input id="profile-city" class="profile-city" type="text" ng-model="vm.profile.city" name="city" required />
+                        <p ng-show="editProfileForm.city.$error.required && editProfileForm.city.$touched" class="help-block">City is required.</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="small-12 large-6 columns">
+                        <a class="button wide radius grey" href="." ng-click="analytics.analyticsService.sendEvent('Edit Profile', 'Cancel', 'Cancel - Edit Profile', false)">Cancel</a>
+                    </div>
+                    <div class="small-12 large-6 columns">
+                        <input type="submit" value="Save Changes" id="btn-save-profile" class="button wide radius blue" ng-disabled="editProfileForm.$invalid" ng-click="analytics.analyticsService.sendEvent('Edit Profile', 'Save', 'Save - Edit Profile', false)" />
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="small-12 large-10 large-centered text-center columns">
+        <p class="privacydisclaimer">Your child's name is kept strictly confidential and is only visible to you.<br />We do not use it for any purpose, it is just to associate your child with their profile.</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="content-group--content red small-8 large-5 small-centered columns">
+        <div class="text-center">
+            <h3>Delete Profile</h3>
+            <p class="red-text">Please be careful, this action is irreversible. Once you delete this profile, all the results and content associated with it will be gone for good.</p>
+        </div>
+
+        <div class="row">
+            <div class="small-12 medium-6 medium-centered columns">
+                <button class="button wide radius alert btn-delete-profile" onclick="$('#profiledelete').foundation('reveal', 'open');">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="profiledelete" class="reveal-modal text-center" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" data-options="close_on_background_click:false">
+    <h3 id="modalTitle">Be Careful!</h3>
+    <p class="lead">You are about to delete this profile. Are you sure?</p>
+    <div class="row">
+        <div class="small-12 large-centered columns">
+            <div class="small-6 columns text-center">
+                <button class="button wide radius blue" aria-label="Close" onclick="$('#profiledelete').foundation('reveal', 'close');">Cancel</button>
+            </div>
+            <div class="small-6 columns text-center">
+                <button class="button wide radius alert btn-delete-profile" ng-click="analytics.analyticsService.sendEvent('Edit Profile', 'Delete', 'Delete - Edit Profile', false); vm.deleteProfile(vm.profile)">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>

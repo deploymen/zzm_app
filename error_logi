@@ -1,0 +1,6 @@
+[Tue Feb 17 19:48:03 2015] [error] [client 14.192.214.177] File does not exist: /var/www/html/favicon.ico
+[Tue Feb 17 19:48:03 2015] [error] [client 14.192.214.177] File does not exist: /var/www/html/favicon.ico
+[Tue Feb 17 19:48:03 2015] [error] [client 14.192.214.177] File does not exist: /var/www/html/favicon.ico
+[Wed Feb 18 13:07:31 2015] [error] [client 98.145.2.9] client sent HTTP/1.1 request without hostname (see RFC2616 section 14.23): /
+[Wed Feb 18 13:07:31 2015] [error] [client 98.145.2.9] File does not exist: /var/www/html/rom-0
+[Wed Feb 18 18:54:23 2015] [error] [client 128.61.240.66] File does not exist: /var/www/html/readme.html

@@ -1,0 +1,14 @@
+<section>
+    <div class="row">
+        <div id="profile-list" class="cf ng-cloak">
+            <div class="profile-item" ng-repeat="profile in vm.profiles" ng-include src="'/js/app/partials/profiles/profile.html'"></div>
+            <div class="profile-item add-button">
+                <section class="profile-info">
+                    <p class="">Add Profile</p>
+                    <div class="add-plus-box"><i class="fa fa-plus"></i></div>
+                    <a class="btn-show-profile-form" href="profiles/add" ng-click="analytics.analyticsService.sendEvent('Dashboard Main', 'Add Profile', 'Add Profile - Dashboard Main', false)"></a>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>

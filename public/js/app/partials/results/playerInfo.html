@@ -1,0 +1,26 @@
+<div class="profile-bar clearfix">
+    <div class="small-12 medium-2 columns">
+        <div class="avatar-holder">
+            <img src="{{vm.APP_CONFIG.cdnStatic}}/images/user/avatars/{{vm.profile.avatar.filename}}" alt="">
+        </div>
+    </div>
+
+    <div class="small-12 medium-7 columns">
+        <div class="nickname">
+            <p class="profile-name"><span ng-bind="vm.profile.first_name"></span></p>
+            <p class="profile-nickname"><span ng-bind="vm.profile.nick_name1.name"></span> <span ng-bind="vm.profile.nick_name2.name"></span></p>
+        </div>        
+    </div>
+
+    <div class="small-12 medium-3 columns text-right">
+        <div class="profile-code bold"><span class="blue-text">Class ID:</span> <span class="user-id" ng-bind="vm.profile.class_id"></span></div>
+        <div class="profile-code bold"><span class="bluer-text">Player ID:</span> <span class="user-id" ng-bind="vm.profile.game_code.code"></span></div>
+    </div>
+</div>
+
+<div class="profile-bar clearfix">
+    <div class="small-12 columns">
+        <p class="profile-school-name truncate" ng-bind="vm.profile.school"></p>
+        <p class="profile-school-grade truncate">Grade <span ng-bind="vm.profile.grade"></span></p>
+    </div>
+</div>

@@ -9,16 +9,16 @@
     "packages": [
         {
             "name": "avanderbergh/laravel-schoology",
-            "version": "1.9.2",
+            "version": "0.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/avanderbergh/laravel-schoology.git",
-                "reference": "870dbe2c78c1fbcfc6c86518071eb342e0a629e5"
+                "reference": "130de38d3fe57c904da930152647251032b6851c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/avanderbergh/laravel-schoology/zipball/870dbe2c78c1fbcfc6c86518071eb342e0a629e5",
-                "reference": "870dbe2c78c1fbcfc6c86518071eb342e0a629e5",
+                "url": "https://api.github.com/repos/avanderbergh/laravel-schoology/zipball/130de38d3fe57c904da930152647251032b6851c",
+                "reference": "130de38d3fe57c904da930152647251032b6851c",
                 "shasum": ""
             },
             "require": {
@@ -51,7 +51,7 @@
                 "saml",
                 "schoology"
             ],
-            "time": "2015-09-21 19:25:49"
+            "time": "2016-06-26 21:57:03"
         },
         {
             "name": "aws/aws-sdk-php",

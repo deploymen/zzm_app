@@ -25,14 +25,13 @@ class GameMission extends Eloquent {
 		if($threshold->mission_promotion == 'never'){
 			if($threshold->type=='pass' && $threshold->difficulty==5){
 				
-				$schedule = $schedule->next->first();
+				$schedule = $schedule->next();
 
-				if(!$schedule){
-					return false;
-				}
+				if(!$schedule){ return false; }
 
-				self::SendMission($threshold->profile_id, $schedule, 1);
 				$threshold->mission_promotion = 'sent';
+				return self::SendMission($threshold->profile_id, $schedule, 1);
+				
 			}			
 		}
 
@@ -46,15 +45,19 @@ class GameMission extends Eloquent {
 
 					case 4:						
 						if($threshold->difficulty==1){
-							$schedule = $schedule->prev->first();
-							self::SendMission($threshold->profile_id, $schedule, 5);
+							$schedule = $schedule->prev();
+							if(!$schedule){ return false; }
+
+							$threshold->mission_demotion = 'sent';
+							return self::SendMission($threshold->profile_id, $schedule, 5);
 						}else{
-							self::SendMission($threshold->profile_id, $schedule, $threshold->difficulty - 1);
+							$threshold->mission_demotion = 'sent';
+							return self::SendMission($threshold->profile_id, $schedule, $threshold->difficulty - 1);
 						}
-						$threshold->mission_demotion = 'sent';
+						
 						break;						
 					
-					default: break;
+					default: return false; break;
 				}
 			}
 		}
@@ -64,7 +67,7 @@ class GameMission extends Eloquent {
 		$planets = $schedule->subject->planets->toArray();
 		$planet = head(shuffle($planets));
 
-		self::create([
+		return self::create([
 			'subject_id' => $subjectId,
 			'profile_id' => $profileId,
 			'planet_id' => $planet['id'],
@@ -72,7 +75,6 @@ class GameMission extends Eloquent {
 			'remark' => '',
 		]);
 
-		return true;
 	}
 
 /*	public static function SendGoodNews($profileId , $planetId){
