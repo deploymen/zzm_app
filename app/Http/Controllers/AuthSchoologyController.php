@@ -121,31 +121,18 @@ Class AuthSchoologyController extends Controller {
         $country = Request::input('country');
 
         $newUser = ApiUserHelper::Register('teacher' , $name , $email , $country , $schoology_id , '' , 'schoology');
-        $newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  , '' , '5_or_younger' , 'default school' , 'preschool' , '', 999 , 999 , 999);
+        $newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  , '' , '' , '' , '', 999 , 999 , 999);
 
         $user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser['user_id']);
         $userExternalId = UserExternalId::where('user_id' , $newUser['user_id'])->update(['schoology_id' => $schoology_id ]);
         $userAccess = UserAccess::where('user_id' , $user->id)->first();
 
-        $mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
-		$data = ["email" => $email,
-		        "attributes" => ["NAME"=>$name, "SURNAME"=>""],
-		        "listid" => [Config::get('app.send_in_blue_list_id')],
-		        "listid_unlink" => []
-		    ];
-
-		$mailin->create_update_user($data);
+        ApiUserHelper::mailin($role , [
+			'username' => $username,
+			'name' => $name,
+		]);	
 
         $firstLogin = 1;
-
-        $mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
-		$data = ["email" => $email,
-		        "attributes" => ["NAME"=>$name, "SURNAME"=>""],
-		        "listid" => [Config::get('app.send_in_blue_list_id')],
-		        "listid_unlink" => []
-		    ];
-
-		$mailin->create_update_user($data);
 
         $cookie = Cookie::make('access_token', $userAccess->access_token);
 

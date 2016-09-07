@@ -36,4 +36,8 @@ class GameProfile extends Eloquent {
 	public function nickName2() {
 		return $this->hasOne('App\Models\SetNickname2', 'id', 'nickname2');
 	}
+
+	public function User(){
+		return $this->hasOne('App\Models\User', 'id', 'user_id');
+	}
 }

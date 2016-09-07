@@ -16,32 +16,6 @@ use App\Libraries\ZapZapQuestionHelper;
 use App\Libraries\ApiProfileHelper;
 
 
-use App\Models;
-use App\Models\GameProfile;
-use App\Models\GamePlay;
-use App\Models\GameCode;
-use App\Models\GameSystem;
-use App\Models\GamePlanet;
-use App\Models\UserMap;
-use App\Models\GameResult;
-use App\Models\GameResultP00;
-use App\Models\GameResultP01;
-use App\Models\GameResultP02;
-use App\Models\GameResultP03;
-use App\Models\GameResultP06;
-use App\Models\GameResultP07;
-use App\Models\GameResultP08;
-use App\Models\GameResultP09;
-use App\Models\GameResultP10;
-use App\Models\GameQuestion;
-use App\Models\GameQuestionP03;
-use App\Models\GameQuestionP04ChallengeSet;
-use App\Models\GameSystemPlanet;
-use App\Models\UserExternalId;
-use App\Models\LeaderboardWorld;
-use App\Models\LeaderboardSystem;
-use App\Models\LeaderboardPlanet;
-
 class ResultHelper{
 
 	public static function ResultQuestionP00($playId){
