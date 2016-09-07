@@ -1,0 +1,25 @@
+<div class="row">
+    <div class="indicator-holder">
+        <span class="indicator-bar"></span>
+        <ul class="indicator-list">
+            <li class="indicator-list-item active">
+                <a href="."><img src="{{vm.APP_CONFIG.cdnStatic}}/images/user/nav/icon-profiles-1.png" alt="Icon Profiles"></a>
+            </li>
+            <li class="indicator-list-item" ng-class="{ 'active': vm.profile.id !== undefined }">
+                <a ng-if="vm.profile.id !== undefined" href="profiles/systems/{{ vm.profile.id}}">
+                    <img src="{{vm.APP_CONFIG.cdnStatic}}/images/user/nav/icon-profiles-2.png" alt="Icon Systems">
+                </a>
+                <img ng-if="vm.profile.id === undefined" src="{{vm.APP_CONFIG.cdnStatic}}/images/user/nav/icon-profiles-2.png" alt="Icon Systems">
+            </li>
+            <li class="indicator-list-item" ng-class="{ 'active': vm.breadcrumbs.system_id !== undefined }">
+                <a ng-if="vm.breadcrumbs.system_id !== undefined" href="profiles/planets/{{ vm.profile.id}}/{{ vm.breadcrumbs.system_id}}">
+                    <img src="{{vm.APP_CONFIG.cdnStatic}}/images/user/nav/icon-profiles-3.png" alt="Icon Planets">
+                </a>
+                <img ng-if="vm.breadcrumbs.system_id === undefined" src="{{vm.APP_CONFIG.cdnStatic}}/images/user/nav/icon-profiles-3.png" alt="Icon Planets">
+            </li>
+            <li class="indicator-list-item" ng-class="{ 'active': vm.planetId !== undefined }">
+                <img src="{{vm.APP_CONFIG.cdnStatic}}/images/user/nav/icon-profiles-4.png" alt="Icon Questions">
+            </li>
+        </ul>
+    </div>
+</div>

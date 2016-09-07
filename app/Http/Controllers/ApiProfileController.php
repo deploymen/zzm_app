@@ -97,7 +97,7 @@ Class ApiProfileController extends Controller {
 			
 			if($classId){
 				$profileClass = GameProfile::where('class_id' , $classId)->where('user_id', $userId)->count();
-				$profileLimit = ($gameClass->expired_at > date("Y-m-d H:i:s"))?50:30;
+				$profileLimit = ($gameClass->expired_at > date("Y-m-d H:i:s"))?50:5;
 
 				if($profileClass >= $profileLimit){
 					return ResponseHelper::OutputJSON('fail', "class limited" );
@@ -323,14 +323,15 @@ Class ApiProfileController extends Controller {
 			$profile->nickName2;
 			$profile->avatar;
 			$profile->gameCode;
-			$profile->paid = ($profile->expired_at > date("Y-m-d H:i:s") )?1:0;
+			
+			$paid = ($profile->expired_at > date("Y-m-d H:i:s") )?1:0;
 
 			if ($userId != $profile->user_id) {
 				return ResponseHelper::OutputJSON('fail', 'wrong user id');
 			}
 
-			return ResponseHelper::OutputJSON('success', '', ['profile' => $profile->toArray()] );
-			
+			return ResponseHelper::OutputJSON('success', '', ['profile' => $profile->toArray() , 'paid' => $paid]);
+
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 				'source' => 'ApiProfileController > getProfile',
