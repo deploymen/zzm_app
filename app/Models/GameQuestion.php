@@ -3,7 +3,9 @@
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class GameQuestion extends Eloquent {
+use App\Models\Questions\AbstractGameQuestion;
+
+class GameQuestion extends AbstractGameQuestion {
 	use SoftDeletes;
 
 	public $table = 't0200_game_question';

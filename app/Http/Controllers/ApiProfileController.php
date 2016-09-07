@@ -24,7 +24,13 @@ use DB;
 use Exception;
 use Request;
 use Facebook\Facebook;
+use Validator;
 use Facebook\FacebookRequest;
+use Input;
+
+use PHPExcel_IOFactory;
+use PHPExcel_Style_Color;
+use PHPExcel_Style_NumberFormat;
 
 Class ApiProfileController extends Controller {
 
@@ -52,10 +58,10 @@ Class ApiProfileController extends Controller {
 		$userId = Request::input('user_id');
 
 		$firstName = Request::input('first_name');
-		$lastName = Request::input('last_name', '');
 		$age = Request::input('age');
 		$school = Request::input('school');
 		$grade = Request::input('grade');
+		$studentId = Request::input('student_id');
 		$classId = Request::input('class_id' , 0);
 
 		$nickname1 = Request::input('nickname1', 999);
@@ -63,19 +69,29 @@ Class ApiProfileController extends Controller {
 		$avatarId = Request::input('avatar_id', 999);
 
 		try {
-			
-			if (!$firstName || !$school || !$age || !$grade) {
-				return ResponseHelper::OutputJSON('fail', "missing parameters");
-			}
-
+		
 			$nickname1Set = SetNickname1::find($nickname1);
 			$nickname2Set = SetNickname2::find($nickname2);
-			
-			if (!$nickname1Set) {
-				return ResponseHelper::OutputJSON('fail', "invalid nickname id");
+
+			$validator = Validator::make( Input::all(), [
+				'first_name' => 'required',
+				'age' => 'required',
+				'school' => 'required',
+				'grade' => 'required',
+				'student_id' => 'required|min:6|max:20|regex:/^[a-zA-Z0-9@()_\-:\/]+$/',
+			]);
+
+			if ($validator->fails()) {
+				return ResponseHelper::OutputJSON('fail', array_flatten(head($validator->errors()))[0]);
 			}
 
-			if (!$nickname2Set) {
+			$profile = GameProfile::where('student_id', $studentId)->first();
+
+			if($profile){
+				return ResponseHelper::OutputJSON('fail', "student id has been used");
+			}
+					
+			if (!$nickname1Set || !$nickname2Set) {
 				return ResponseHelper::OutputJSON('fail', "invalid nickname id");
 			}
 
@@ -96,48 +112,21 @@ Class ApiProfileController extends Controller {
 			}
 			
 			if($classId){
-				$profileClass = GameProfile::where('class_id' , $classId)->where('user_id', $userId)->count();
-				$profileLimit = ($gameClass->expired_at > date("Y-m-d H:i:s"))?50:5;
+				$profileClass = GameProfile::where('class_id', $classId)->where('user_id', $userId)->count();
+				$profileLimit = ($gameClass->expired_at > date("Y-m-d H:i:s"))?50:30;
 
 				if($profileClass >= $profileLimit){
 					return ResponseHelper::OutputJSON('fail', "class limited" );
 				}
 			}else{
-				$userProfile = GameProfile::where('user_id' , $userId)->count();
+				$userProfile = GameProfile::where('user_id', $userId)->count();
 
 				if($userProfile >= $userFlag->profile_limit){
 					return ResponseHelper::OutputJSON('fail', "profile limited" , ['total_share' => $userFlag->total_share]);
 				}
 			}
-		
-			$avatarIdSet = AvatarSet::find($avatarId);
-
-			$profile = new GameProfile;
-			$profile->user_id = $userId;
-			$profile->class_id = $classId;
-			$profile->first_name = $firstName;
-			$profile->last_name = $lastName;
-			$profile->age = $age;
-			$profile->school = $school;
-			$profile->grade = $grade;
-			$profile->nickname1 = $nickname1;
-			$profile->nickname2 = $nickname2;
-			$profile->avatar_id = $avatarId;
-			$profile->save();
-
-			$idCounter = IdCounter::find(1);
-			$gameCodeSeed = $idCounter->game_code_seed;
-			$idCounter->game_code_seed = $gameCodeSeed + 1;
-			$idCounter->save();
-
-			$code = new GameCode;
-			$code->type = 'signed_up_profile';
-			$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
-			$code->seed = $gameCodeSeed;
-			$code->profile_id = $profile->id;
-			$code->save();
-
-			DatabaseUtilHelper::LogInsert($userId, $profile->table, $userId);
+			
+			$newProfile = ApiProfileHelper::newProfile($userId, $classId  ,$firstName, $age, $school, $grade, $nickname1, $nickname2, $studentId);
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -148,15 +137,15 @@ Class ApiProfileController extends Controller {
 		}
 
 		return ResponseHelper::OutputJSON('success', '', [
-			'profile' => $profile,
+			'profile' => $newProfile,
 		]);
 	}
 
 	public function update($id) {
 		$userId = Request::input('user_id');
 
+		$studentId = Request::input('student_id');
 		$firstName = Request::input('first_name');
-		$lastName = Request::input('last_name');
 		$age = Request::input('age');
 		$school = Request::input('school');
 		$grade = Request::input('grade');
@@ -181,12 +170,12 @@ Class ApiProfileController extends Controller {
 				return ResponseHelper::OutputJSON('fail', 'wrong user id');
 			}
 
-			if ($firstName) {
-				$profile->first_name = $firstName;
+			if ($studentId) {
+				$profile->student_id = $studentId;
 			}
 
-			if ($lastName) {
-				$profile->last_name = $lastName;
+			if ($firstName) {
+				$profile->first_name = $firstName;
 			}
 
 			if ($age) {
@@ -206,17 +195,19 @@ Class ApiProfileController extends Controller {
 			}
 
 			if ($classId) {
-				$profileClass = GameProfile::where('class_id' , $classId)->where('user_id', $userId)->count();
+				$profileClass = GameProfile::where('class_id', $classId)->where('user_id', $userId)->count();
 
-				if($profileClass >= $userFlag->profile_limit){
-					return ResponseHelper::OutputJSON('fail', "limited");
-				}
-				
 				$gameClass = GameClass::find($classId);
-
 				if(!$gameClass || $gameClass->user_id != $userId ) {
 					return ResponseHelper::OutputJSON('fail', "class not found");
 				}
+
+				$profileLimit = ($gameClass->expired_at > date("Y-m-d H:i:s"))?50:30;
+
+				if($profileClass >= $profileLimit){
+					return ResponseHelper::OutputJSON('fail', "class limited" );
+				}
+				
 				$profile->class_id = $classId;
 			}
 
@@ -272,7 +263,7 @@ Class ApiProfileController extends Controller {
 				return ResponseHelper::OutputJSON('fail', 'wrong user id');
 			}
 
-			$gameCode = GameCode::where('profile_id' , $id)->delete();
+			$gameCode = GameCode::where('profile_id', $id)->delete();
 			$profile->delete();
 			
 			return ResponseHelper::OutputJSON('success');
@@ -313,7 +304,7 @@ Class ApiProfileController extends Controller {
 
 		try {
 
-			$profile = GameProfile::select('id', 'user_id', 'class_id', 'first_name', 'last_name', 'age', 'school', 'grade', 'city', 'country', 'email', 'nickname1', 'nickname2', 'avatar_id' ,'expired_at')->find($id);
+			$profile = GameProfile::select('id', 'user_id', 'class_id', 'student_id' , 'first_name', 'age', 'school', 'grade', 'city', 'country', 'email', 'nickname1', 'nickname2', 'avatar_id', 'coin' ,'expired_at')->find($id);
 
 			if (!$profile) {
 				return ResponseHelper::OutputJSON('fail', 'profile not found');
@@ -322,16 +313,14 @@ Class ApiProfileController extends Controller {
 			$profile->nickName1;
 			$profile->nickName2;
 			$profile->avatar;
-			$profile->gameCode;
-			
-			$paid = ($profile->expired_at > date("Y-m-d H:i:s") )?1:0;
+			$profile->paid = ($profile->expired_at > date("Y-m-d H:i:s") )?1:0;
 
 			if ($userId != $profile->user_id) {
 				return ResponseHelper::OutputJSON('fail', 'wrong user id');
 			}
 
-			return ResponseHelper::OutputJSON('success', '', ['profile' => $profile->toArray() , 'paid' => $paid]);
-
+			return ResponseHelper::OutputJSON('success', '', ['profile' => $profile->toArray()] );
+			
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 				'source' => 'ApiProfileController > getProfile',
@@ -342,7 +331,7 @@ Class ApiProfileController extends Controller {
 	}
 
 	public function gameUpdate() {
-		$profileId = Request::input('game_code_profile_id');
+		$profileId = Request::input('profile_id');
 		$userId = Request::input('user_id');
 
 		$nickname1 = Request::input('nickname1');
@@ -413,7 +402,7 @@ Class ApiProfileController extends Controller {
 		}
 	}
 
-	public function GenerateAnonymousGameCode() {
+	public function GenerateAnonymousGameCode(){
 		$deviceId = Request::input('device_id');
 
 		try {
@@ -440,6 +429,23 @@ Class ApiProfileController extends Controller {
 			$code->save();
 
 			return ResponseHelper::OutputJSON('success', '', ['game_code' => $code->code]);
+			
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiProfileController > GenerateAnonymousGameCode',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
+	}
+
+	public function GenerateAnonymousGameCodeV1_3() {
+
+		try {
+
+			$newProfile = ApiProfileHelper::newProfile('0', '0', 'Anonymous', '5_or_younger' , 'default school' , 'K' , 999 , 999 , 999);
+
+			return ResponseHelper::OutputJSON('success', '', ['student_id' => $newProfile['student_id'] ]);
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -479,7 +485,7 @@ Class ApiProfileController extends Controller {
 		}
 
 		try {
-			$verifyHelper = ApiProfileHelper::verifyTransfer($deviceGameCode , $currentGameCode);
+			$verifyHelper = ApiProfileHelper::verifyTransfer($deviceGameCode, $currentGameCode);
 
 			if(!$verifyHelper){
 				return ResponseHelper::OutputJSON('fail', 'verify error');
@@ -529,10 +535,10 @@ Class ApiProfileController extends Controller {
 		}
 
 		try {
-			$verifyHelper = ApiProfileHelper::verifyTransfer($deviceGameCode , $currentGameCode);
+			$verifyHelper = ApiProfileHelper::verifyTransfer($deviceGameCode, $currentGameCode);
 
 			if($verifyHelper['profile_transfer']){
-				$gamePlay = GamePlay::where('code' , $gameCodeExisted)->update([
+				$gamePlay = GamePlay::where('code', $gameCodeExisted)->update([
 					'type' => 'signed_up_profile',
 					'code' => $gameCodeEnter,
 					'user_id' => $profile->user_id,
@@ -540,7 +546,7 @@ Class ApiProfileController extends Controller {
 					'device_id' => $currentGameCode->device_id
 					]);
 
-				$gameUserMap = UserMap::where('profile_id' , $deviceProfile->id)->update(['profile_id' => $profile->id]);
+				$gameUserMap = UserMap::where('profile_id', $deviceProfile->id)->update(['profile_id' => $profile->id]);
 				
 				$profile->nickname1 = $deviceProfile->nickname1;
 				$profile->nickname2 = $deviceProfile->nickname2;
@@ -598,9 +604,9 @@ Class ApiProfileController extends Controller {
 
 		try {
 
-			$gPlay = GamePlay::where('code' , $gameCodeExisted)->first();
+			$gPlay = GamePlay::where('code', $gameCodeExisted)->first();
 			if($gPlay){
-				$gamePlay = GamePlay::where('code' , $gameCodeExisted)->update([
+				$gamePlay = GamePlay::where('code', $gameCodeExisted)->update([
 				'type' => 'signed_up_profile',
 				'code' => $gameCodeEnter,
 				'user_id' => $profile->user_id,
@@ -609,9 +615,9 @@ Class ApiProfileController extends Controller {
 				]);
 			}
 			
-			$gUserMap = UserMap::where('profile_id' , $deviceProfile->id)->first();
+			$gUserMap = UserMap::where('profile_id', $deviceProfile->id)->first();
 			if($gUserMap){
-				$gameUserMap = UserMap::where('profile_id' , $deviceProfile->id)->update(['profile_id' => $profile->id]);
+				$gameUserMap = UserMap::where('profile_id', $deviceProfile->id)->update(['profile_id' => $profile->id]);
 			}
 
 			
@@ -658,7 +664,6 @@ Class ApiProfileController extends Controller {
 
 			return ResponseHelper::OutputJSON('success', '', [
 				'first_name' => $profile->first_name,
-				'last_name' => $profile->last_name,
 				'game_code' => $gameCode->code,
 				'total_play' => $totalPlay->total_play,
 				'total_pass' => $totalPlay->total_pass,
@@ -714,7 +719,7 @@ Class ApiProfileController extends Controller {
 		try {
 	        $postId = Request::input('post_id');
 
-	        $response = $fb->get('/' . $postId. '?fields=privacy' , $accessToken->getValue());
+	        $response = $fb->get('/' . $postId. '?fields=privacy', $accessToken->getValue());
 	        $graphObject = $response->getGraphObject();
 
 	        //get user Flag
@@ -748,5 +753,145 @@ Class ApiProfileController extends Controller {
 			])]);
 			return ResponseHelper::OutputJSON('exception');
 		}
+	}
+
+	public function createBulk() {
+		$userId = Request::input('user_id');
+		$classId = Request::input('class_id' , 0);
+		$age = Request::input('age');
+		$school = Request::input('school');
+		$grade = Request::input('grade');
+
+		DB::beginTransaction();
+		try {
+
+			if (!$school || !$age || !$grade) {
+				return ResponseHelper::OutputJSON('fail', "missing parameters");
+			}
+
+			$gameClass = GameClass::find($classId);
+			if(!$gameClass || $gameClass->user_id != $userId) {
+				return ResponseHelper::OutputJSON('fail', "class not found");
+			}
+			
+			$userFlag = UserFlag::find($userId);
+			if(!$userFlag){
+				return ResponseHelper::OutputJSON('fail', "user flag not found");
+			}
+			$filename = join('.', [$userId , date("YmdHis")] );
+			$storage = new \Upload\Storage\FileSystem( '../resources/upload/create-student-bulk/' , true); //neeed update
+			$uploadFile = new \Upload\File('file', $storage);
+			$uploadFile->setName($filename);	
+			$uploadFile->upload();
+
+			$file = '../resources/upload/create-student-bulk/'.$filename.'.xlsx'; //set path //need update
+
+			$objReader = PHPExcel_IOFactory::createReader('Excel2007');
+			if (!$objReader->canRead($file)) {
+				$objReader = PHPExcel_IOFactory::createReader('Excel5');
+				if (!$objReader->canRead($file)) {
+					return Libraries\ResponseHelper::OutputJSON('fail', "invalid file type");
+				}
+			}
+
+		    $objPHPExcel = $objReader->load($file);
+			$sheet = $objPHPExcel->getSheet(0); 
+			$highestRow = $sheet->getHighestRow(); 
+			$highestColumn = $sheet->getHighestColumn();
+			
+			// loop: validate @start
+			$studentIds = [];
+			$firstNames = [];
+			for ($i= 2; $i<= $highestRow; $i++){ 
+			    //  Read a row of data into an array
+			    $data = $sheet->rangeToArray('A' . $i . ':' . $highestColumn . $highestRow , NULL , TRUE, FALSE);
+			    $data = array_map('array_filter', $data);
+ 				$data = array_filter($data);
+
+			  	$profileCount = GameProfile::where('class_id', $classId)->where('user_id', $userId)->count();
+				$profileLimit = ($gameClass->expired_at > date("Y-m-d H:i:s"))?50:30;
+
+				if( ($profileCount + count($data)) > $profileLimit){
+					return ResponseHelper::OutputJSON('fail', "class limited" , [
+						'remain' => ($profileLimit - $profileCount),
+						'upload' => count($data),
+						]);
+				}
+
+			    $rowData = $sheet->rangeToArray('A' . $i . ':' . $highestColumn . $i , NULL , TRUE, FALSE);
+			    $rowData = array_map('array_filter', $rowData);
+
+
+			    $validateValue = array_merge($rowData[0] , [0,0]);	
+
+			    if(!$validateValue[0] && !$validateValue[1] ){
+					continue;
+				}
+
+				if(!$validateValue[0] || !$validateValue[1] ){
+					return ResponseHelper::OutputJSON('fail', 'incomplete info');
+				}
+
+				$studentId = $rowData[0][0];
+			   	$firstName = $rowData[0][1];
+
+			  	array_push($studentIds, $studentId);
+			  	array_push($firstNames, $firstName);
+
+
+			}
+
+			if(!$studentIds && !$firstNames ){
+				return ResponseHelper::OutputJSON('fail', 'no profile in upload file');
+			}
+
+			$sql = "
+				SELECT `student_id`
+					FROM `t0111_game_profile`
+						WHERE `deleted_at` IS NULL
+						AND `student_id` IN('".join(" ', '", $studentIds)."')	
+
+
+			";
+
+			$result = DB::SELECT($sql);
+
+			if($result){
+				return ResponseHelper::OutputJSON('fail', 'student id has been used', $result);
+			}
+			// loop: validate @end
+		
+			// loop: create	@start	
+			for ($i= 2; $i<= $highestRow; $i++){ 
+			    //  Read a row of data into an array
+			    $rowData = $sheet->rangeToArray('A' . $i . ':' . $highestColumn . $i , NULL , TRUE, FALSE);
+			  
+			   	if(!$rowData[0][0] || !$rowData[0][1]){
+			   		continue;
+			   	}
+
+			   	$studentId = $rowData[0][0];
+			   	$firstName = $rowData[0][1];
+
+				ApiProfileHelper::newProfile($userId, $classId, $firstName, $age, $school, $grade , 999 , 999 , 999 ,$studentId );
+			}
+			// loop: create	@end
+
+			DB::commit();
+			unlink($file);
+
+			return ResponseHelper::OutputJSON('success');
+
+
+		} catch (Exception $ex) {
+			throw $ex;
+			DB::rollback();
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiProfileController > createMultipleProfile',
+				'inputs' => \Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
+
 	}
 }

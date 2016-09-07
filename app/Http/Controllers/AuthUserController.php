@@ -24,6 +24,8 @@ use App\Models\UserExternalId;
 use App\Models\UserSetting;
 use App\Models\RewardShareDomain;
 use App\Models\SpecialEmail;
+use App\Models\CoinReward;
+use App\Models\GameCoinTransaction;
 use Config;
 use Cookie;
 use DB;
@@ -33,7 +35,7 @@ use Request;
 use Session;
 use Socialite;
 use GuzzleHttp\Client;
-use Sendinblue\Mailin;
+use SendinBlue\SendinBlueApiBundle\Wrapper\Mailin;
 
 Class AuthUserController extends Controller {
 
@@ -92,7 +94,7 @@ Class AuthUserController extends Controller {
 		try {	
 			
 			$newUser = ApiUserHelper::Register($role , $name , $email , $country , $email , $password_sha1 , $registerFrom , $ref);
-			$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Anonymous' , '5_or_younger' , 'default school' , 'K' , '', 999 , 999 , 999);
+			$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Anonymous' , '5_or_younger' , 'default school' , 'K' , 999 , 999 , 999 );
 					
 			$secretKey = sha1(time() . $email);
 			$edmHtml = (string) view('emails.account-activation', [
@@ -118,20 +120,20 @@ Class AuthUserController extends Controller {
 			$logOpenAcc->user_id = $newUser['user_id'];
 			$logOpenAcc->secret = $secretKey;
 			$logOpenAcc->save();
-					
-			$mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
-			$data = ["email" => $username,
-			        "attributes" => ["NAME"=>$name, "SURNAME"=>""],
-			        "listid" => [Config::get('app.send_in_blue_list_id')],
-			        "listid_unlink" => []
-			    ];
-		
-		    $mailin->create_update_user($data);
+
+			ApiUserHelper::mailin($role , [
+				'username' => $username,
+				'name' => $name,
+				]);
 
 			Session::put('access_token', $newUser['access_token']);
 			setcookie('access_token', $newUser['access_token'], time() + (86400 * 30), "/"); // 86400 = 1 day*/
-
+           			
 			$list = User::select('id' , 'role' , 'name' , 'register_from')->find($newUser['user_id']);
+
+			$coinValue = CoinReward::GetEntitleCoinReward('sign-up');
+			$coinDescription = GameCoinTransaction::GetDescription('sign-up');
+			GameCoinTransaction::DoTransaction($newProfile['id'] , $coinValue , $coinDescription);
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -584,10 +586,10 @@ Class AuthUserController extends Controller {
 			return ResponseHelper::OutputJSON('fail', "email used");
 		}
 
-		// try {
+		try {
 
 			$newUser = ApiUserHelper::Register($role , $name , $email , '' , $email , $password_sha1 , 'App' , '');
-			$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Anonymous' , '5_or_younger' , 'default school' , 'K' , '', 999 , 999 , 999);
+			$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Anonymous' , '5_or_younger' , 'default school' , 'K' , 999 , 999 , 999);
 
 			$secretKey = sha1(time() . $email);
 			$edmHtml = (string) view('emails.account-activation', [
@@ -608,23 +610,33 @@ Class AuthUserController extends Controller {
 				'toAddresses' => [$email],
 			]);
 
+			ApiUserHelper::mailin($role , [
+				'username' => $email,
+				'name' => $name,
+			]);
+
+
 			$logOpenAcc = new LogAccountActivate;
 			$logOpenAcc->user_id = $newUser['user_id'];
 			$logOpenAcc->secret = $secretKey;
 			$logOpenAcc->save();
 
 			$code = GameCode::where('profile_id' , $newProfile['code']);
-var_export($code); die();
+
+			$coinValue = CoinReward::GetEntitleCoinReward('sign-up');
+			$coinDescription = GameCoinTransaction::GetDescription('sign-up');
+			GameCoinTransaction::DoTransaction($newProfile['id'] , $coinValue , $coinDescription);
+
 			return ResponseHelper::OutputJSON('success', '', $code->code);
 
-		// } catch (Exception $ex) {
-		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-		// 		'source' => 'AuthUserController > signUp',
-		// 		'inputs' => Request::all(),
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'AuthUserController > signUpApp',
+				'inputs' => Request::all(),
 
-		// 	])]);
-		// 	return ResponseHelper::OutputJSON('exception');
-		// }
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 	}
 
 	public function ResendACtivateCode(){
@@ -818,26 +830,25 @@ var_export($code); die();
 		}
 
 		$newUser = ApiUserHelper::Register($role , $name , $email , $country , $email , $facebookId , 'facebook' , '');
-
-		$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Player 1' , '5_or_younger' , 'default school' , 'K' , '', 999 , 999 , 999);
+		$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Anonymous' , '5_or_younger' , 'default school' , 'K' , 999 , 999 , 999);
 
 		$user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser['user_id']);
 		$userExternalId = UserExternalId::where('user_id' , $newUser['user_id'])->update(['facebook_id' => $facebookId ]);
 		$userAccess = UserAccess::where('user_id' , $user->id)->first();
 
-		$mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
-		$data = ["email" => $email,
-		        "attributes" => ["NAME"=>$name, "SURNAME"=>""],
-		        "listid" => [Config::get('app.send_in_blue_list_id')],
-		        "listid_unlink" => []
-		    ];
-
-		$mailin->create_update_user($data);
+		ApiUserHelper::mailin($role , [
+			'username' => $username,
+			'name' => $name,
+		]);
 
 		$firstLogin = 1;
 
 		$cookie = Cookie::make('access_token', $userAccess->access_token);
 
+		$coinValue = CoinReward::GetEntitleCoinReward('sign-up');
+		$coinDescription = GameCoinTransaction::GetDescription('sign-up');
+		GameCoinTransaction::DoTransaction($newProfile['id'] , $coinValue , $coinDescription);
+		
 		$log = new LogSignInUser;
 		$log->username = $userAccess->username;
 		$log->password_sha1 = '';
