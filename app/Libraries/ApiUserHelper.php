@@ -33,7 +33,7 @@ use Session;
 
 class ApiUserHelper{
 
-	public static function Register($role, $name, $email, $country, $username, $password_sha1,  $registerFrom, $ref){
+	public static function Register($role, $name, $email, $country, $username, $password_sha1,  $registerFrom, $ref = ''){
 		$classId = 0;
 
 		$user = new User;
