@@ -258,30 +258,41 @@ class ApiProfileHelper{
 			];
 	}
 
-	public static function newProfile($userId , $classId , $firstName , $age , $school , $grade , $email, $nickname1 , $nickname2 , $avatarId){
+	public static function newProfile($userId , $classId , $firstName, $age, $school , $grade, $nickname1 , $nickname2 , $avatarId , $studentId = ''){
+
+		$profileType = 'signed_up_profile';
+		$seed = 0;
+
+		if($studentId == ''){
+			$idCounter = IdCounter::find(1);
+			$seed = $idCounter->game_code_seed;
+			$idCounter->game_code_seed = $seed + 1;
+			$idCounter->save();
+
+			$studentId = ZapZapHelper::GenerateGameCode($seed);
+			$profileType = 'anonymous';
+
+		}
 
 		$profile = new GameProfile;
+		$profile->profile_type = $profileType;
 		$profile->user_id = $userId;
 		$profile->class_id = $classId;
+		$profile->student_id = $studentId;
 		$profile->first_name = $firstName;
 		$profile->age = $age;
 		$profile->school = $school;
 		$profile->grade = $grade;
-		$profile->email = $email;
 		$profile->nickname1 = $nickname1;
 		$profile->nickname2 = $nickname2;
 		$profile->avatar_id = $avatarId;
+		$profile->seed = $seed;
 		$profile->save();
 
-		$idCounter = IdCounter::find(1);
-		$gameCodeSeed = $idCounter->game_code_seed;
-		$idCounter->game_code_seed = $gameCodeSeed + 1;
-		$idCounter->save();
-
 		$code = new GameCode;
-		$code->type = 'signed_up_profile';
-		$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
-		$code->seed = $gameCodeSeed;
+		$code->type = $profileType;
+		$code->code = $studentId;
+		$code->seed = $seed;
 		$code->profile_id = $profile->id;
 		$code->save();
 		
