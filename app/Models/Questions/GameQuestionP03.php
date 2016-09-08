@@ -29,7 +29,7 @@ class GameQuestionP03 extends AbstractGameQuestion {
 		$sql = "
 			SELECT  qc.`question_id`,p03.*, obj.`question_object_1`,obj.`question_object_2`, obj.`question_type`
 				FROM (`t0203_game_question_p03` p03, `t0126_game_planet_question_cache` qc)
-					LEFT JOIN `t0203_game_question_p03_object` obj ON (obj.`id` = p03.`id` )
+					LEFT JOIN `t0203_game_question_p03_object` obj ON (obj.`question_id` = p03.`id` )
 	                    WHERE qc.`planet_id` = :planet_id
 	                    	AND qc.`difficulty` = :difficulty
 	                    	AND p03.`id` = qc.`target_id`
