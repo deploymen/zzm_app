@@ -213,7 +213,7 @@ Class AuthUserController extends Controller {
 			$log->save();
 
 			$user = User::find($userAccess->user_id);
-			$campaign = CampaignReferralSubscribe::CheckSubscribe2016RefferalCampaign($user);
+			$subscription = CampaignReferralSubscribe::CheckSubscribe2016RefferalCampaign($user);
 
 			Session::put('access_token', $accessToken);
 			setcookie('access_token', $accessToken, time() + (86400 * 30), "/"); // 86400 = 1 day*/
@@ -243,7 +243,7 @@ Class AuthUserController extends Controller {
 					'register_from' => $user->register_from,
 				] , 
 				'first_time_login' => $firstLogin, 
-				'campaign' => $campaign 
+				'subscription' => $subscription, 
 				], ['X-access-token' => $accessToken,], ['access_token' => $accessToken,]);
 
 		} catch (Exception $ex) {

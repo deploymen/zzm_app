@@ -46,6 +46,8 @@ use SoftDeletes;
 	 			'campaign_id' => $campaignId,
 	 			'expired_at' => DB::raw('DATE_ADD(NOW(), INTERVAL '.$campaign->challenge_length.' DAY)'),
 			]);
+
+			$subscription = self::find($subscription->id);
  		}
  		$subscription->campaign;
 

@@ -28,6 +28,7 @@ class Kernel extends HttpKernel {
 		'auth.game' => 'App\Http\Middleware\AuthenticateGamePlay',
 		'auth.parent' => 'App\Http\Middleware\AuthenticateParent',
 		'auth.teacher' => 'App\Http\Middleware\AuthenticateTeacher',
+		'auth.student' => 'App\Http\Middleware\AuthenticateStudent',
 		'auth.content' => 'App\Http\Middleware\AuthenticateContent',
 		'version' => 'App\Http\Middleware\Version'
 	];
