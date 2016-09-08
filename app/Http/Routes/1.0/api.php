@@ -31,10 +31,10 @@ Route::pattern('role', '(parent)|(teacher)|(admin)|(content)|(investor)');
 	});
 
 	// =======================================================================//
-	// ! Content											          //
+	// ! Content											          		  //
 	// =======================================================================//
 
-	Route::post('/worksheets', 'ApiQuestionBankController@createGameWorksheet');
+	//Route::post('/worksheets', 'ApiQuestionBankController@createGameWorksheet');
 
 	Route::get('/flag', 'ApiCmsController@getFlag');
 

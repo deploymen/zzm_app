@@ -23,6 +23,7 @@ use App\Models\LaunchNotification;
 use App\Models\AppVersion;
 use App\Models\User;
 use App\Models\GameProfile;
+use App\Models\CampaignReferralSubscribe;
 
 
 class ApiController extends Controller {
