@@ -36,10 +36,11 @@ Route::group(['prefix' => 'auth'], function () {
 Route::get('/flag', 'ApiCmsController@getFlag');
 
 Route::group(['prefix' => 'pre-launch'], function () {
-	Route::post('/subscribe', 'ApiController@subscribe');
 	Route::post('/contact-us', 'ApiController@contactUs');
 	Route::get('/subscribe-external', 'ApiController@subscribeExternal');
 });
+
+Route::post('/subscribe', 'ApiController@subscribe');
 
 Route::post('launch-notification', 'ApiController@launchNotification');
 

@@ -752,7 +752,7 @@ Class AuthUserController extends Controller {
 			]);
 
 			ApiUserHelper::mailin($role , [
-				'username' => $username,
+				'username' => $email,
 				'name' => $name,
 			]);
 

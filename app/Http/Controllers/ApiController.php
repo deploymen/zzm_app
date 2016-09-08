@@ -27,11 +27,12 @@ use App\Models\GameProfile;
 
 class ApiController extends Controller {
 
-	public function subscribe($source = 'pre-launch'){
+	public function subscribe(){
 
 		$email = Request::input("email");
+		$source = Request::input('source');
 		$ip = Request::ip();
-		$secret = 'SAK6B2WE8688VT69G9DZ';
+		$secret = 'SAKA5639953H5Z26Q74Z';
 
 		$emails =  Subscribe::where('email' , $email)->first();
 
@@ -45,7 +46,7 @@ class ApiController extends Controller {
 		}
 
 		if($emails){
-				return ResponseHelper::OutputJSON('fail', "no double subscribe");
+			return ResponseHelper::OutputJSON('fail', "no double subscribe");
 		}
 
 		try {
@@ -85,18 +86,14 @@ class ApiController extends Controller {
 			}
 			
 
-		} catch (PDOException $ex) {
-			if ($ex->errorInfo[1] == 1062) {
-				return ResponseHelper::OutputJSON('exception');
-			}else{
-			 	throw $ex;			 	
-			}
 		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment'=>json_encode([
+
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiController > subscribe',
 				'inputs' => Request::all(),
 			])]);
 			return ResponseHelper::OutputJSON('exception');
-		}		
+		}	
 
 
 		return ResponseHelper::OutputJSON('success');
