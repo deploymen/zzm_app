@@ -85,6 +85,8 @@ class AbstractGameQuestion extends Eloquent {
 			case 'p48':return GameQuestionP48::GetQuestions($params); break;
 			case 'p49':return GameQuestionP49::GetQuestions($params); break;
 			case 'p50':return GameQuestionP50::GetQuestions($params); break;
+			case 'p51':return GameQuestionP51::GetQuestions($params); break;
+			case 'p52':return GameQuestionP52::GetQuestions($params); break;
 			
 			default:break;
 		}
