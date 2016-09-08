@@ -812,7 +812,6 @@ Class ApiGameController extends Controller {
 			return ResponseHelper::OutputJSON('success', '' , [
 					'profile' => [
 						'first_name' => $profile->first_name,
-						'last_name' => $profile->last_name,
 						'grade' =>$profile->grade,
 						'total_star' => $totalStar,
 						'user_type' => $userType,
@@ -841,7 +840,7 @@ Class ApiGameController extends Controller {
 		$deviceId = Request::input('game_code_device_id');
 		$gameCode = Request::input('game_code');
 
-		// try{
+		try{
 			$result = ZapZapQuestionHelper::GetUserMapV1_2($profileId);
 
 			$totalStar = UserMap::where('profile_id', $profileId)->sum('star');
@@ -937,7 +936,6 @@ Class ApiGameController extends Controller {
 			return ResponseHelper::OutputJSON('success', '' , [
 					'profile' => [
 						'first_name' => $profile->first_name,
-						'last_name' => $profile->last_name,
 						'grade' =>$profile->grade,
 						'total_star' => $totalStar,
 						'user_type' => $userType,
@@ -949,14 +947,14 @@ Class ApiGameController extends Controller {
 					'system_planet' => $systems
 					 ]);
 		
-		// } catch (Exception $ex) {
+		} catch (Exception $ex) {
 
-		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-		// 		'source' => 'ApiGameController > getUserMap',
-		// 		'inputs' => Request::all(),
-		// 	])]);
-		// 	return ResponseHelper::OutputJSON('exception');
-		// }
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiGameController > getUserMap',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 	}
 
 	public function clearLeaderBoard(){
@@ -1134,8 +1132,7 @@ Class ApiGameController extends Controller {
 
 			$gamePro = new GameProfile;
 			$gamePro->user_id = 0;
-			$gamePro->first_name = "Player 1";
-			$gamePro->last_name = "Player 1";
+			$gamePro->first_name = "Anonymous";
 			$gamePro->nickname1 = 999;
 			$gamePro->nickname2 = 999;
 			$gamePro->avatar_id = 999;
@@ -1379,7 +1376,6 @@ Class ApiGameController extends Controller {
 
 		return ResponseHelper::OutputJSON('success', '' , [
 				'first_name' => $profile->first_name,
-				'last_name' => $profile->last_name,
 				'grade' =>$profile->grade,
 				'total_star' => $totalStar,
 				'game_code' => $code,
