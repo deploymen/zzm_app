@@ -31,7 +31,7 @@ Route::group(['prefix' => 'auth'], function () {
 // ! Content											          //
 // =======================================================================//
 
-//Route::post('/worksheets', 'ApiQuestionBankController@createGameWorksheet');
+Route::post('/worksheets', 'ApiQuestionBankController@createGameWorksheet');
 
 Route::get('/flag', 'ApiCmsController@getFlag');
 
