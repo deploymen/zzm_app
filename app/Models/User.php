@@ -18,4 +18,13 @@ class User extends Eloquent {
 		return $this->belongsTo('UserAccess', 'user_id', 'id');
 	}
 
+	public function campaigns_2016Refferal(){
+		return $this->belongsToMany('App\Models\CampaignReferral', with(new CampaignReferralSubscribe)->getTable(), 'user_id', 'campaign_id');
+	}
+
+	public function subscriptions_2016Refferal(){
+		return $this->hasMany('App\Models\CampaignReferralSubscribe' , 'user_id' , 'id');
+
+	}	
+
 }
