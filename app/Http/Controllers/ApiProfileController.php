@@ -835,7 +835,7 @@ Class ApiProfileController extends Controller {
 			   	$firstName = $rowData[0][1];
 
 			   	if(!in_array($studentId, $studentIds, true)){
-			        die('student_id duplicate')
+			        die('student_id duplicate');
 			    }
 			  	array_push($studentIds, $studentId);
 			  	array_push($firstNames, $firstName);
