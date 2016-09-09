@@ -211,6 +211,9 @@ Class ApiGameController extends Controller {
 				
 				$type = GameType::find($planet->game_type_id);
 
+				if(!$type){
+					return ResponseHelper::OutputJSON('fail', 'missing game type');
+				}
 				$questions = AbstractGameQuestion::GetTypeQuestions($type->name, [
 					'planetId' => $planetId, 
 					'difficulty' => $difficulty, 
