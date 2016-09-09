@@ -130,8 +130,8 @@ Class AuthUserController extends Controller {
 						'name' => $name,
 					]);
 
-					Session::put('access_token', $accessToken);
-					setcookie('access_token', $accessToken, time() + (86400 * 30), "/"); // 86400 = 1 day*/
+					Session::put('access_token', $newUser['access_token']);
+					setcookie('access_token', $newUser['access_token'], time() + (86400 * 30), "/"); // 86400 = 1 day*/
 				// }
 				// );
 
@@ -154,9 +154,9 @@ Class AuthUserController extends Controller {
 		}
 
 		return ResponseHelper::OutputJSON('success', '', ['user' => $list], [
-			'X-access-token' => $accessToken,
+			'X-access-token' => $newUser['access_token'],
 		], [
-			'access_token' => $accessToken,
+			'access_token' => $newUser['access_token'],
 		]);
 	}
 
