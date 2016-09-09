@@ -19,6 +19,7 @@ class GameProfile extends Eloquent {
 	protected $dates = ['deleted_at']; 
 
 	protected $hidden = [];
+	protected $fillable = ['profile_type', 'user_id', 'class_id' , 'student_id' , 'first_name' , 'age' , 'school' , 'grade' , 'country' , 'latitude' , 'longitude' , 'city' , 'nickname1' , 'nickname2' , 'avatar_id' , 'coin' , 'expired_at' , 'seed'];
 
 
 	public function avatar() {

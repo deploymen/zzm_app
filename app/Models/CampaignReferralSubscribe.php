@@ -4,6 +4,8 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use DB;
 use App\Models\CampaignReferral;
+use App\Models\GameClass;
+use App\Models\GameProfile;
 
 class CampaignReferralSubscribe extends Eloquent{
 use SoftDeletes;
@@ -52,7 +54,40 @@ use SoftDeletes;
  		$subscription->campaign;
 
  		return $subscription;
- 		
+	}
+
+	public static function RedeemReward($param){
+		$ids = explode('/', $param);
+		$campaingId = $ids[0];
+		$userId = $ids[1];
+
+		$user = User::find($userId);	
+		$subscribe = self::where('user_id' , $userId)->first();
+		$campaignReferral = CampaignReferral::find($campaingId);
+
+		if($subscribe->hit != 5 || $subscribe->expired_at < date("Y-m-d H:i:s") || $campaignReferral->expired_at > date("Y-m-d H:i:s") || !$campaignReferral->enable){
+			return false;
+		}
+								
+		switch($user->role){
+			case 'teacher' : GameClass::where('user_id' , $userId)->whereNull('expired_at')->first()->update([ 
+								'expired_at' => DB::Raw('DATE_ADD(NOW(), INTERVAL '.$campaignReferral->reward_item_length.' DAY)') 
+							]); 
+			break;
+			case 'parent' : GameProfile::where('user_id' , $userId)->whereNull('expired_at')->first()->update([
+								'expired_at' => DB::Raw('DATE_ADD(NOW(), INTERVAL '.$campaignReferral->reward_item_length.' DAY)')
+							]); 
+			break;
+		}
+
+		$subscribe->update([
+			'expired_at' => DB::RAW('now()'),
+			'redeemed_at' => DB::RAW('now()'),
+			'redeemed_remark' => $campaignReferral->name,
+			]);
+
+
+
 	}
 
 	
