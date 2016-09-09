@@ -61,6 +61,9 @@ Route::group(['middleware' => 'auth.user'], function () {
 	Route::get('auth/facebook', 'AuthUserController@redirectToProvider');
 	Route::get('auth/facebook/callback', 'AuthUserController@handleProviderCallback');
 	Route::post('auth/facebook/signup', 'AuthUserController@facebookSignUp');
+
+	Route::any('auth/schoology/signup', 'AuthSchoologyController@schoologySignUp');
+
 	
 Route::group(['middleware' => 'auth.user'], function () {
 	Route::delete('remove/account', 'AuthUserController@deleteAccount');
