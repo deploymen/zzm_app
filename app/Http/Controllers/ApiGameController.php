@@ -1138,6 +1138,8 @@ Class ApiGameController extends Controller {
 				$prevSubsytemId = $r->subsystem_id;
 			}
 
+			$mission = GameMission::GetMission($profileId);
+
 			return ResponseHelper::OutputJSON('success', '' , [
 					'profile' => [
 						'first_name' => $profile->first_name,
@@ -1150,7 +1152,8 @@ Class ApiGameController extends Controller {
 						'avatar' => $profile->avatar,
 						'coin' => $profile->coin,
 						] ,
-					'system_planet' => $systems
+					'game_mission' => $mission,
+					'system_planet' => $systems,
 					 ]);
 		
 		} catch (Exception $ex) {
@@ -1816,10 +1819,6 @@ Class ApiGameController extends Controller {
 				$profile->save();
 			}
 		}
-	}
-
-	Public function testGetELFPlanet(){
-		return ResponseHelper::OutputJSON('success' ,  '' , GameSubjectSchedule::GetNextPlanets('next' , '103'));
 	}
 
 }

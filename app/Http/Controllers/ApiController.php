@@ -355,9 +355,5 @@ class ApiController extends Controller {
 
 	    var_export($mailin->create_update_user($data));
 	}
-
-	public function test(){
-		return ResponseHelper::OutputJSON('success', 'this is message' , ['id' => 1]);
-	}
 	
 }

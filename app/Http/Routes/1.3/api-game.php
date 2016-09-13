@@ -55,7 +55,7 @@ Route::group(['prefix' => 'game'], function () {
 
 Route::get('set/nick', 'ApiProfileController@getNick');
 Route::post('game-code/anonymous', 'ApiProfileController@GenerateAnonymousGameCodeV1_3');
-Route::post('elf/test-function' , 'ApiGameController@testGetELFPlanet' );
+Route::get('test/mission', 'ApiGameController@test');
 
 Route::any('/{endpoint}', ['as' => 'try_prev_version', function(){die('NEED TO HANDLE1.3');}])->where('endpoint', '.*');
 

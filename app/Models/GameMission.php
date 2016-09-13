@@ -13,7 +13,7 @@ class GameMission extends Eloquent {
 	public $timestamps = true;
 	protected $dates = ['deleted_at'];
 
-	protected $hidden = [];
+	protected $hidden = ['created_at' , 'updated_at' , 'deleted_at'];
 	protected $fillable = ['profile_id', 'subject_id', 'planet_id', 'remark', 'approved' , 'play_id' , 'status' ,'difficulty'];
 
 
@@ -99,29 +99,8 @@ class GameMission extends Eloquent {
 
 	}
 
-/*	public static function SendGoodNews($profileId , $planetId){
-
-		$nextPlanet = GameSubjectSchedule::GetNextPlanets('next' , $planetId);
-		$planet = GamePlanet::where('id', $nextPlanet->planet_id);
-		$user = GameProfile::find($profileId)->User;
-
-		$edmHtml = (string) view('emails.news-good', [
-
-			]);
-		
-		self::SendEmail([
-			'about' => 'Welcome',
-			'subject' => 'Your Zap Zap Account is now ready!',
-			'body' => $edmHtml,
-			'bodyHtml' => $edmHtml,
-			'toAddresses' => [$user->email],
-		]);
-
-		$userMap->sent = 1;
-		$userMap->save();
-
-	}*/
-
-
-
+	public static function GetMission($profileId){
+		$mission = self::where('profile_id' , $profileId)->where('approved', 1)->where('status', 'open')->groupBy('planet_id')->limit(3)->orderBy('created_at' , 'desc')->get();
+		return $mission;
+	}
 }
