@@ -16,10 +16,6 @@ class AfterMiddleware{
         $response = $next($request);
       	$response = json_decode($response->content(), true);
 
-      	// if(config::get('app.server_maintenance')){
-      	// 	return ResponseHelper::OutputJSON('fail' , 'server maintenance');
-      	// }
-
       	// if(){ // check student_id change
       		$response['cmd'] = [
 	      		'name' => 'replace_student_id',

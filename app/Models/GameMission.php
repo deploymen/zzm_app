@@ -96,11 +96,11 @@ class GameMission extends Eloquent {
 			])]);
 			return ResponseHelper::OutputJSON('exception');
 		}
-
 	}
 
 	public static function GetMission($profileId){
-		$mission = self::where('profile_id' , $profileId)->where('approved', 1)->where('status', 'open')->groupBy('planet_id')->limit(3)->orderBy('created_at' , 'desc')->get();
-		return $mission;
-	}
+        $mission = self::where('profile_id' , $profileId)->where('approved', 1)->where('status', 'open')->groupBy('planet_id')->limit(3)->orderBy('created_at' , 'desc')->get();
+        return $mission;
+    }
+
 }

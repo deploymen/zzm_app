@@ -86,10 +86,10 @@ class ApiProfileHelper{
 		$profileInfo = [];
 
 		if($classId){
-			$profiles = GameProfile::select('id', 'user_id', 'profile_id', 'class_id', 'first_name', 'age', 'school', 'grade', 'city', 'email', 'nickname1', 'nickname2', 'avatar_id')->where('class_id', $classId)->orderBy('id')->get();
+			$profiles = GameProfile::select('id', 'user_id', 'student_id', 'class_id', 'first_name', 'age', 'school', 'grade', 'city', 'email', 'nickname1', 'nickname2', 'avatar_id')->where('class_id', $classId)->orderBy('id')->get();
 			$query = 'AND profile.`class_id` = '.$classId;
 		}else{
-			$profiles = GameProfile::select('id', 'user_id', 'profile_id', 'class_id', 'first_name', 'age', 'school', 'grade', 'city', 'email', 'nickname1', 'nickname2', 'avatar_id')->where('user_id', $userId)->orderBy('id')->get();
+			$profiles = GameProfile::select('id', 'user_id', 'student_id', 'class_id', 'first_name', 'age', 'school', 'grade', 'city', 'email', 'nickname1', 'nickname2', 'avatar_id')->where('user_id', $userId)->orderBy('id')->get();
 			$query = 'AND profile.`user_id` = '.$userId;
 	
 		}

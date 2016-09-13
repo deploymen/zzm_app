@@ -55,9 +55,7 @@ class AuthenticateStudent {
 		$inputs = \Request::all();
 		$inputs['student_id'] = $studentId;
 		$inputs['student_profile_type'] = $studentIdObj->profile_type;
-
 		$inputs['user_id'] = $studentIdObj->user_id;
-
 		$inputs['student_profile_id'] = $studentIdObj->id;
 
 		Request::replace($inputs);

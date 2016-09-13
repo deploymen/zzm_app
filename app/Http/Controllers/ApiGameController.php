@@ -1061,7 +1061,7 @@ Class ApiGameController extends Controller {
 		$userId = Request::input('user_id');
 		$studentId = Request::input('student_id');
 
-		try{
+		// try{
 			$result = ZapZapQuestionHelper::GetUserMapV1_2($profileId);
 
 			$totalStar = UserMap::where('profile_id', $profileId)->sum('star');
@@ -1073,7 +1073,7 @@ Class ApiGameController extends Controller {
 			$profile->avatar;
 
 			$userEnablePlanet = 0;
-
+			$userType = 2;
 			if($profile->user_id){
 				$userType = 0;
 
@@ -1146,7 +1146,7 @@ Class ApiGameController extends Controller {
 						'grade' =>$profile->grade,
 						'total_star' => $totalStar,
 						'user_type' => $userType,
-						'game_code' => $studentId,
+						'student_id' => $studentId,
 						'nick_name1' =>$profile->nickName1->name,
 						'nick_name2' =>$profile->nickName2->name,
 						'avatar' => $profile->avatar,
@@ -1156,14 +1156,14 @@ Class ApiGameController extends Controller {
 					'system_planet' => $systems,
 					 ]);
 		
-		} catch (Exception $ex) {
+		// } catch (Exception $ex) {
 
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiGameController > getUserMap',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		'source' => 'ApiGameController > getUserMap',
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 	}
 
 	public function clearLeaderBoard(){
@@ -1792,7 +1792,7 @@ Class ApiGameController extends Controller {
 				'last_name' => $gameProfile->last_name,
 				'grade' =>$gameProfile->grade,
 				'total_star' => $totalStar,
-				'game_code' => $studentId,
+				'student_id' => $studentId,
 				'nick_name1' =>$gameProfile->nickName1->name,
 				'nick_name2' =>$gameProfile->nickName2->name,
 				'avatar_id' => $gameProfile->avatar->id,

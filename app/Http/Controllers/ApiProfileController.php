@@ -891,6 +891,5 @@ Class ApiProfileController extends Controller {
 			])]);
 			return ResponseHelper::OutputJSON('exception');
 		}
-
 	}
 }
