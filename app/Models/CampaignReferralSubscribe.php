@@ -22,6 +22,10 @@ use SoftDeletes;
 		return $this->hasOne('App\Models\CampaignReferral' , 'id' , 'campaign_id');
 	}
 
+	public function scopeExpired($query){
+		return $query->where('expired_at' , '>' , DB::raw('now()'));
+	}
+
 	public static function CheckSubscribe2016RefferalCampaign($user){
 
 
@@ -56,19 +60,28 @@ use SoftDeletes;
  		return $subscription;
 	}
 
-	public static function RedeemReward($param){
-		$ids = explode('/', $param);
+	public static function RedeemReward($referralCode){
+		$ids = explode('/', $referralCode);
 		$campaingId = $ids[0];
 		$userId = $ids[1];
 
 		$user = User::find($userId);	
-		$subscribe = self::where('user_id' , $userId)->first();
-		$campaignReferral = CampaignReferral::find($campaingId);
+		$subscribe = self::where('user_id' , $userId)
+							->expired()
+							->first();
 
-		if($subscribe->hit != 5 || $subscribe->expired_at < date("Y-m-d H:i:s") || $campaignReferral->expired_at > date("Y-m-d H:i:s") || !$campaignReferral->enable){
+		$campaignReferral = CampaignReferral::where('id' , $campaingId)
+							->expired()
+							->first();
+
+		if(!$subscribe || !$campaignReferral){
 			return false;
 		}
-								
+
+		if($subscribe->hit != 5  || !$campaignReferral->enable){
+			return false;
+		}
+		die('123');			
 		switch($user->role){
 			case 'teacher' : GameClass::where('user_id' , $userId)->whereNull('expired_at')->first()->update([ 
 								'expired_at' => DB::Raw('DATE_ADD(NOW(), INTERVAL '.$campaignReferral->reward_item_length.' DAY)') 
@@ -86,8 +99,7 @@ use SoftDeletes;
 			'redeemed_remark' => $campaignReferral->name,
 			]);
 
-
-
+		return true;
 	}
 
 	

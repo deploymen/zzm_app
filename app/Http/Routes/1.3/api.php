@@ -59,3 +59,7 @@ Route::any('pay-pal/ipn' , 'PaypalController@InstantPaymentNotification');
 Route::group(['prefix' => 'admin'], function () {
 	Route::get('/paypal/transaction-history', 'ApiAdminController@getTransaction');
 });
+
+Route::group(['middleware' => ['auth.after', 'auth.student']], function () {
+	Route::get('test/response' , 'ApiController@test');
+});

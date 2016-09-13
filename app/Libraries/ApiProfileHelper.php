@@ -86,10 +86,10 @@ class ApiProfileHelper{
 		$profileInfo = [];
 
 		if($classId){
-			$profiles = GameProfile::select('id', 'user_id', 'class_id', 'first_name', 'age', 'school', 'grade', 'city', 'email', 'nickname1', 'nickname2', 'avatar_id')->where('class_id', $classId)->orderBy('id')->get();
+			$profiles = GameProfile::select('id', 'user_id', 'profile_id', 'class_id', 'first_name', 'age', 'school', 'grade', 'city', 'email', 'nickname1', 'nickname2', 'avatar_id')->where('class_id', $classId)->orderBy('id')->get();
 			$query = 'AND profile.`class_id` = '.$classId;
 		}else{
-			$profiles = GameProfile::select('id', 'user_id', 'class_id', 'first_name', 'age', 'school', 'grade', 'city', 'email', 'nickname1', 'nickname2', 'avatar_id')->where('user_id', $userId)->orderBy('id')->get();
+			$profiles = GameProfile::select('id', 'user_id', 'profile_id', 'class_id', 'first_name', 'age', 'school', 'grade', 'city', 'email', 'nickname1', 'nickname2', 'avatar_id')->where('user_id', $userId)->orderBy('id')->get();
 			$query = 'AND profile.`user_id` = '.$userId;
 	
 		}
@@ -98,7 +98,6 @@ class ApiProfileHelper{
 			$profile->nickName1;
 			$profile->nickName2;
 			$profile->avatar;
-			$profile->gameCode;
 		}
 
 		$sql = "
@@ -190,7 +189,7 @@ class ApiProfileHelper{
 				'nickname1' => $p->nickName1,
 				'nickname2' => $p->nickName2,
 				'avatar' => $p->avatar,
-				'game_code' => $p->gameCode,
+				'student_id' => $p->student_id,
 				'last_played' => [
 					'last_planet_name' => $planetName,
 					'last_played' => $lp->created_at,

@@ -307,8 +307,7 @@ class ApiController extends Controller {
 			]);
 		}
 
-		return ResponseHelper::OutputJSON('success');
-		
+		return ResponseHelper::OutputJSON('success');	
 	}
 
 	public function InviteTeacher(\Illuminate\Http\Request $request){
@@ -355,6 +354,10 @@ class ApiController extends Controller {
 	    );
 
 	    var_export($mailin->create_update_user($data));
+	}
+
+	public function test(){
+		return ResponseHelper::OutputJSON('success', 'this is message' , ['id' => 1]);
 	}
 	
 }
