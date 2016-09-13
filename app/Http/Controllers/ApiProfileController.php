@@ -20,6 +20,8 @@ use App\Models\UserMap;
 use App\Models\UserFlag;
 use App\Models\Age;
 use App\Models\LogFacebookShare;
+use App\Models\StudentIdHistory;
+use App\Models\StudentIdChange;
 use DB;
 use Exception;
 use Request;
@@ -86,8 +88,9 @@ Class ApiProfileController extends Controller {
 			}
 
 			$profile = GameProfile::where('student_id', $studentId)->first();
+			$history = StudentIdHistory::where('student_id', $studentId)->first();
 
-			if($profile){
+			if($profile || $history){
 				return ResponseHelper::OutputJSON('fail', "student id has been used");
 			}
 					
@@ -126,7 +129,8 @@ Class ApiProfileController extends Controller {
 				}
 			}
 			
-			$newProfile = ApiProfileHelper::newProfile($userId, $classId  ,$firstName, $age, $school, $grade, $nickname1, $nickname2, $studentId);
+			$newProfile = ApiProfileHelper::newProfile($userId, $classId  ,$firstName, $age, $school, $grade, $nickname1, $nickname2, $avatarId , $studentId);
+			StudentIdHistory::create(['student_id' => $studentId]);
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -155,13 +159,14 @@ Class ApiProfileController extends Controller {
 		$avatarId = Request::input('avatar_id');
 		$classId = Request::input('class_id');
 
-		try {
+		// try {
 
 			if ($email && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 				return ResponseHelper::OutputJSON('fail', "invalid email format");
 			}
 
 			$profile = GameProfile::find($id);
+
 			if (!$profile) {
 				return ResponseHelper::OutputJSON('fail', "profile not found");
 			}
@@ -170,7 +175,19 @@ Class ApiProfileController extends Controller {
 				return ResponseHelper::OutputJSON('fail', 'wrong user id');
 			}
 
+			$history = StudentIdHistory::where('student_id', $studentId)->first();
+			$checkProfile = GameProfile::where('student_id', $studentId)->first();
+
+			if($checkProfile || $history){
+				return ResponseHelper::OutputJSON('fail', "student id has been used");
+			}
+
 			if ($studentId) {
+				$studentIdChange = new StudentIdChange;
+				$studentIdChange->user_id = $userId;
+				$studentIdChange->profile_id = $profile->id;
+				$studentIdChange->student_id = $profile->student_id;
+						
 				$profile->student_id = $studentId;
 			}
 
@@ -236,16 +253,19 @@ Class ApiProfileController extends Controller {
 			}
 
 			$profile->save();
+			$studentIdChange->save();
+
+			StudentIdHistory::create(['student_id' => $studentId]);
 
 			return ResponseHelper::OutputJSON('success', '', $profile->toArray());
 
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiProfileController > update',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
+		// } catch (Exception $ex) {
+		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+		// 		// 'source' => 'ApiProfileController > update',
+		// 		'inputs' => Request::all(),
+		// 	])]);
+		// 	return ResponseHelper::OutputJSON('exception');
+		// }
 	}
 
 	public function delete($id) {
@@ -822,10 +842,6 @@ Class ApiProfileController extends Controller {
 
 
 			    $validateValue = array_merge($rowData[0] , [0,0]);	
-
-			    if(!$validateValue[0] && !$validateValue[1] ){
-					continue;
-				}
 
 				if(!$validateValue[0] || !$validateValue[1] ){
 					return ResponseHelper::OutputJSON('fail', 'incomplete info');

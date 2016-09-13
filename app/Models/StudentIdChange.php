@@ -1,9 +1,9 @@
-<?php namespace App\Models\Results;
+<?php namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\GameQuestion;
-class StudentIdChange extends AbstractGameResult {
+class StudentIdChange extends Eloquent {
 
 	public $table = 't0111_student_id_change';
 	protected $primaryKey = 'id';

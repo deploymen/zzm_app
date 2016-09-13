@@ -256,12 +256,13 @@ class ApiProfileHelper{
 			];
 	}
 
-	public static function newProfile($userId , $classId , $firstName, $age, $school , $grade, $nickname1 , $nickname2 , $avatarId , $studentId = ''){
+	public static function newProfile($userId , $classId , $firstName, $age, $school , $grade, $nickname1 , $nickname2 , $avatarId , $studentId){
 
 		$profileType = 'signed_up_profile';
 		$seed = 0;
 
-		if($studentId == ''){
+		if(!$studentId){
+			die('123');
 			$idCounter = IdCounter::find(1);
 			$seed = $idCounter->game_code_seed;
 			$idCounter->game_code_seed = $seed + 1;
@@ -269,7 +270,6 @@ class ApiProfileHelper{
 
 			$studentId = ZapZapHelper::GenerateGameCode($seed);
 			$profileType = 'anonymous';
-
 		}
 
 		$profile = new GameProfile;
