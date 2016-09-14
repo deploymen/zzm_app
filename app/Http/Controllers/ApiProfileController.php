@@ -20,7 +20,6 @@ use App\Models\UserMap;
 use App\Models\UserFlag;
 use App\Models\Age;
 use App\Models\LogFacebookShare;
-use App\Models\StudentIdHistory;
 use App\Models\StudentIdChange;
 use DB;
 use Exception;
@@ -88,9 +87,9 @@ Class ApiProfileController extends Controller {
 			}
 
 			$profile = GameProfile::where('student_id', $studentId)->first();
-			$history = StudentIdHistory::where('student_id', $studentId)->first();
+			$studentIdChange = StudentIdChange::where('student_id', $studentId)->first();
 
-			if($profile || $history){
+			if($profile || $studentIdChange){
 				return ResponseHelper::OutputJSON('fail', "student id has been used");
 			}
 					
@@ -130,7 +129,6 @@ Class ApiProfileController extends Controller {
 			}
 			
 			$newProfile = ApiProfileHelper::newProfile($userId, $classId  ,$firstName, $age, $school, $grade, $nickname1, $nickname2, $avatarId , $studentId);
-			StudentIdHistory::create(['student_id' => $studentId]);
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -175,10 +173,10 @@ Class ApiProfileController extends Controller {
 				return ResponseHelper::OutputJSON('fail', 'wrong user id');
 			}
 
-			$history = StudentIdHistory::where('student_id', $studentId)->first();
+			$studentIdChange = StudentIdChange::where('student_id', $studentId)->first();
 			$checkProfile = GameProfile::where('student_id', $studentId)->first();
 
-			if($checkProfile || $history){
+			if($checkProfile || $studentIdChange){
 				return ResponseHelper::OutputJSON('fail', "student id has been used");
 			}
 
@@ -254,8 +252,6 @@ Class ApiProfileController extends Controller {
 
 			$profile->save();
 			$studentIdChange->save();
-
-			StudentIdHistory::create(['student_id' => $studentId]);
 
 			return ResponseHelper::OutputJSON('success', '', $profile->toArray());
 
@@ -876,7 +872,12 @@ Class ApiProfileController extends Controller {
 
 			$sql = "
 				SELECT `student_id`
-					FROM `t9103_student_id_history` 
+					FROM `t0111_game_profile` 
+						WHERE `deleted_at` IS NULL
+						AND `student_id` IN('".join("','", $studentIds)."')	
+				UNION 
+				SELECT `student_id`
+					FROM `t9103_student_id_change` 
 						WHERE `deleted_at` IS NULL
 						AND `student_id` IN('".join("','", $studentIds)."')	
 			";
@@ -902,7 +903,6 @@ Class ApiProfileController extends Controller {
 			   	$firstName = $rowData[0][1];
 
 				ApiProfileHelper::newProfile($userId, $classId, $firstName, $age, $school, $grade , 999 , 999 , 999 ,$studentId );
-				StudentIdHistory::create(['student_id' => $studentId]);
 			}
 			// loop: create	@end
 

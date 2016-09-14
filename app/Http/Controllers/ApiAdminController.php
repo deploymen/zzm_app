@@ -12,6 +12,18 @@ Class ApiAdminController extends Controller {
 	public function getTransaction() {
 
 		try{
+			$ips = [
+				'52.76.40.203',
+				'52.2.173.202',
+				'52.8.88.160',
+			];
+
+			$ip = Request::ip();
+
+			if(!in_array($ip , $ips, true) ) {
+				
+				return ResponseHelper::OutputJSON('fail', 'access denied' , [$ip]);
+			}
 
 			$transaction = LogPaypalTransaction::GetTransactionDetail();
 

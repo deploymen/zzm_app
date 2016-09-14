@@ -7,7 +7,7 @@ use App\Models\GameProfile;
 
 class StudentIdChange extends Eloquent {
 
-	public $table = 't0111_student_id_change';
+	public $table = 't9103_student_id_change';
 	protected $primaryKey = 'id';
 	public $timestamps = true;
 	protected $dates = ['deleted_at'];

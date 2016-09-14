@@ -23,21 +23,8 @@ use App\Models\GameCode;
 use App\Models\GameClass;
 use App\Models\GameSystem;
 use App\Models\GamePlanet;
+use App\Models\GameMission;
 use App\Models\UserMap;
-use App\Models\GameResult;
-use App\Models\GameResultP01;
-use App\Models\GameResultP02;
-use App\Models\GameResultP03;
-use App\Models\GameResultP06;
-use App\Models\GameResultP07;
-use App\Models\GameQuestion;
-use App\Models\GameQuestionP03;
-use App\Models\GameQuestionP04ChallengeSet;
-use App\Models\GameSystemPlanet;
-use App\Models\UserExternalId;
-use App\Models\LeaderboardWorld;
-use App\Models\LeaderboardSystem;
-use App\Models\LeaderboardPlanet;
 use App\Models\IdCounter;
 use App\Models\LastSession;
 
@@ -175,6 +162,8 @@ class ApiProfileHelper{
 				$paid =  intval($lp->paid);
 			}
 
+			$mission = GameMission::GetMission($p->id);
+
 			array_push($profileInfo, [
 				'id' => $p->id,
 				'user_id' => $p->user_id,
@@ -190,6 +179,7 @@ class ApiProfileHelper{
 				'nickname2' => $p->nickName2,
 				'avatar' => $p->avatar,
 				'student_id' => $p->student_id,
+				'paid' => $paid,
 				'last_played' => [
 					'last_planet_name' => $planetName,
 					'last_played' => $lp->created_at,
@@ -201,8 +191,7 @@ class ApiProfileHelper{
 					'total_played_time' => $totalPlayed,
 					'accuracy' => $percentage,
 				],
-				'paid' => $paid,
-
+				'game_mission' => $mission,
 			]);
 		}
 
@@ -262,7 +251,6 @@ class ApiProfileHelper{
 		$seed = 0;
 
 		if(!$studentId){
-			die('123');
 			$idCounter = IdCounter::find(1);
 			$seed = $idCounter->game_code_seed;
 			$idCounter->game_code_seed = $seed + 1;
