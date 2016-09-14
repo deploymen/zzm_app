@@ -12,6 +12,6 @@ class StudentIdHistory extends Eloquent {
 	protected $dates = [];
 
 	protected $hidden = [];
-	protected $fillable = ['student_id'];
+	protected $fillable = ['student_id' , 'created_at' , 'updated_at' , 'deleted_at'];
 
 }

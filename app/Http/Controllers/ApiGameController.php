@@ -1060,8 +1060,8 @@ Class ApiGameController extends Controller {
 		$profileId = Request::input('student_profile_id');
 		$userId = Request::input('user_id');
 		$studentId = Request::input('student_id');
-
-		// try{
+ 
+		try{
 			$result = ZapZapQuestionHelper::GetUserMapV1_2($profileId);
 
 			$totalStar = UserMap::where('profile_id', $profileId)->sum('star');
@@ -1156,14 +1156,14 @@ Class ApiGameController extends Controller {
 					'system_planet' => $systems,
 					 ]);
 		
-		// } catch (Exception $ex) {
+		} catch (Exception $ex) {
 
-		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-		// 		'source' => 'ApiGameController > getUserMap',
-		// 		'inputs' => Request::all(),
-		// 	])]);
-		// 	return ResponseHelper::OutputJSON('exception');
-		// }
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiGameController > getUserMap',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 	}
 
 	public function clearLeaderBoard(){
