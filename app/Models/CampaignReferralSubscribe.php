@@ -82,18 +82,22 @@ use SoftDeletes;
 		if($subscribe->hit != 5  || !$campaignReferral->enable){
 			return false;
 		}
-		
-		switch($user->role){
-			case 'teacher' : GameClass::where('user_id' , $userId)->whereNull('expired_at')->orderBy('created_at' , 'asc')->first()->update([ 
-								'expired_at' => DB::Raw('DATE_ADD(NOW(), INTERVAL '.$campaignReferral->reward_item_length.' DAY)') 
-							]); 
-			break;
-			case 'parent' : GameProfile::where('user_id' , $userId)->whereNull('expired_at')->orderBy('created_at' , 'asc')->first()->update([
-								'expired_at' => DB::Raw('DATE_ADD(NOW(), INTERVAL '.$campaignReferral->reward_item_length.' DAY)')
-							]); 
-			break;
+		try{
+			switch($user->role){
+				case 'teacher' : GameClass::where('user_id' , $userId)->whereNull('expired_at')->orderBy('created_at' , 'asc')->first()->update([ 
+									'expired_at' => DB::Raw('DATE_ADD(NOW(), INTERVAL '.$campaignReferral->reward_item_length.' DAY)') 
+								]); 
+				break;
+				case 'parent' : GameProfile::where('user_id' , $userId)->whereNull('expired_at')->orderBy('created_at' , 'asc')->first()->update([
+									'expired_at' => DB::Raw('DATE_ADD(NOW(), INTERVAL '.$campaignReferral->reward_item_length.' DAY)')
+								]); 
+				break;
+			}
+			
+		} catch (Exception $ex) {
+			return false;
 		}
-	
+
 		$subscribe->update([
 			'expired_at' => DB::RAW('now()'),
 			'redeemed_at' => DB::RAW('now()'),
