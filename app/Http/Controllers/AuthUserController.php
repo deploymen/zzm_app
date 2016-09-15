@@ -98,7 +98,10 @@ Class AuthUserController extends Controller {
 					$newUser = ApiUserHelper::Register($role , $name , $email , $country , $email , $password_sha1 , $registerFrom, $ref);
 					$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Anonymous' , '5_or_younger' , 'default school' , 'K', 999 , 999 , 999);
 
-					CampaignReferralHit::insert($newUser['user_id'] , $referralCode);
+					if($referralCode){
+						CampaignReferralHit::insert($newUser['user_id'] , $referralCode);
+						CampaignReferralSubscribe::RedeemReward($referralCode);
+					}
 
 					$secretKey = sha1(time() . $email);
 					$edmHtml = (string) view('emails.account-activation', [

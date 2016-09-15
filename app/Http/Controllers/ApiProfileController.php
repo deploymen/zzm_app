@@ -747,4 +747,157 @@ Class ApiProfileController extends Controller {
 			return ResponseHelper::OutputJSON('exception');
 		}
 	}
+
+	public function createBulk() {
+		$userId = Request::input('user_id');
+		$classId = Request::input('class_id' , 0);
+		$age = Request::input('age');
+		$school = Request::input('school');
+		$grade = Request::input('grade');
+
+		DB::beginTransaction();
+		try {
+
+			if (!$school || !$age || !$grade) {
+				return ResponseHelper::OutputJSON('fail', "missing parameters");
+			}
+
+			$gameClass = GameClass::find($classId);
+
+			if(!$gameClass || $gameClass->user_id != $userId) {
+				return ResponseHelper::OutputJSON('fail', "class not found");
+			}
+			
+			$userFlag = UserFlag::find($userId);
+			if(!$userFlag){
+				return ResponseHelper::OutputJSON('fail', "user flag not found");
+			}
+			$filename = join('.', [$userId , date("YmdHis")] );
+			$storage = new \Upload\Storage\FileSystem( '../resources/upload/create-student-bulk/' , true); //neeed update
+			$uploadFile = new \Upload\File('file', $storage);
+			$uploadFile->setName($filename);	
+			$uploadFile->upload();
+
+			$file = '../resources/upload/create-student-bulk/'.$filename.'.xlsx'; //set path //need update
+
+			$objReader = PHPExcel_IOFactory::createReader('Excel2007');
+			if (!$objReader->canRead($file)) {
+				$objReader = PHPExcel_IOFactory::createReader('Excel5');
+				if (!$objReader->canRead($file)) {
+					unlink($file);
+					return Libraries\ResponseHelper::OutputJSON('fail', "invalid file type");
+				}
+			}
+
+		    $objPHPExcel = $objReader->load($file);
+			$sheet = $objPHPExcel->getSheet(0); 
+			$highestRow = $sheet->getHighestRow(); 
+			$highestColumn = $sheet->getHighestColumn();
+			
+			// loop: validate @start
+			$studentIds = [];
+			$firstNames = [];
+			for ($i= 2; $i<= $highestRow; $i++){ 
+
+				$rowData = $sheet->rangeToArray('A' . $i . ':' . $highestColumn . $i , NULL , TRUE, FALSE);
+			    $rowData = array_map('array_filter', $rowData);
+
+
+			    $validateValue = array_merge($rowData[0] , [0,0]);	
+
+			    if(!$validateValue[0] && !$validateValue[1] ){
+					continue;
+				}
+
+				if(!$validateValue[0] || !$validateValue[1] ){
+					unlink($file);
+					return ResponseHelper::OutputJSON('fail', 'incomplete info');
+				}
+
+				$studentId = $rowData[0][0];
+			   	$firstName = $rowData[0][1];
+
+			   	if(in_array($studentId, $studentIds, true)){
+					unlink($file);
+					return ResponseHelper::OutputJSON('fail', 'student id duplicate');
+			    }
+
+			    //  Read a row of data into an array
+			    $data = $sheet->rangeToArray('A' . $i . ':' . $highestColumn . $highestRow , NULL , TRUE, FALSE);
+			    $data = array_map('array_filter', $data);
+ 				$data = array_filter($data);
+
+			  	$profileCount = GameProfile::where('class_id', $classId)->where('user_id', $userId)->count();
+				$profileLimit = ($gameClass->expired_at > date("Y-m-d H:i:s"))?50:30;
+
+				if( ($profileCount + count($data)) > $profileLimit){
+					unlink($file);
+					return ResponseHelper::OutputJSON('fail', "class limited" , [
+						'remain' => ($profileLimit - $profileCount),
+						'upload' => count($data),
+						]);
+				}
+
+			  	array_push($studentIds, $studentId);
+			  	array_push($firstNames, $firstName);
+
+			}
+
+			if(!$studentIds && !$firstNames ){
+				unlink($file);
+				return ResponseHelper::OutputJSON('fail', 'no profile in upload file');
+			}
+
+			$sql = "
+				SELECT `student_id`
+					FROM `t0111_game_profile` 
+						WHERE `deleted_at` IS NULL
+						AND `student_id` IN('".join("','", $studentIds)."')	
+				UNION 
+				SELECT `student_id`
+					FROM `t9103_student_id_change` 
+						WHERE `deleted_at` IS NULL
+						AND `student_id` IN('".join("','", $studentIds)."')	
+			";
+
+			$result = DB::SELECT($sql);
+
+			if($result){
+				unlink($file);
+				return ResponseHelper::OutputJSON('fail', 'student id has been used', $result);
+			}
+			// loop: validate @end
+		
+			// loop: create	@start	
+			for ($i= 2; $i<= $highestRow; $i++){ 
+			    //  Read a row of data into an array
+			    $rowData = $sheet->rangeToArray('A' . $i . ':' . $highestColumn . $i , NULL , TRUE, FALSE);
+			  
+			   	if(!$rowData[0][0] || !$rowData[0][1]){
+			   		continue;
+			   	}
+
+			   	$studentId = $rowData[0][0];
+			   	$firstName = $rowData[0][1];
+
+				ApiProfileHelper::newProfile($userId, $classId, $firstName, $age, $school, $grade , 999 , 999 , 999 ,$studentId );
+			}
+			// loop: create	@end
+
+			DB::commit();
+			unlink($file);
+
+			return ResponseHelper::OutputJSON('success');
+
+
+		} catch (Exception $ex) {
+			throw $ex;
+			DB::rollback();
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiProfileController > createMultipleProfile',
+				'inputs' => \Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
+	}
 }
