@@ -842,6 +842,8 @@ Class AuthUserController extends Controller {
 		$userExternalId = UserExternalId::where('user_id' , $userAccess->user_id)->update(['facebook_id' => $fbUser->id ]);
 		$checkFirstLogin = LogSignInUser::where('username' , $userAccess->username)->where('success' , 1)->first();
 
+		$subscription = CampaignReferralSubscribe::CheckSubscribe2016RefferalCampaign($user);
+
 		if(!$checkFirstLogin){
 			$firstLogin = 1;
 		}
@@ -855,7 +857,7 @@ Class AuthUserController extends Controller {
 		$log->created_ip = Request::ip();
 		$log->save();
 
-        setcookie("current_user", json_encode(['user' => $user, 'first_time_login' => $firstLogin]), 0, "/");
+        setcookie("current_user", json_encode(['user' => $user, 'first_time_login' => $firstLogin , 'subscription' => $subscription]), 0, "/");
 		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->withCookie($cookie);
 	}
 	
@@ -892,6 +894,7 @@ Class AuthUserController extends Controller {
 		$email = Request::input('email');
 		$facebookId = Request::input('facebook_id');
 		$country = Request::input('country');
+		$referralCode = Request::input('referral_code' , '');
 
 		$classId = 0;
 		$authUser = User::where('email', $email)->first();
@@ -904,6 +907,11 @@ Class AuthUserController extends Controller {
 
 		$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Player 1' , '5_or_younger' , 'default school' , 'K' , 999 , 999 , 999 , '');
 
+		if($referralCode){
+			CampaignReferralHit::insert($newUser['user_id'] , $referralCode);
+			CampaignReferralSubscribe::RedeemReward($referralCode);
+		}
+		
 		$user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser['user_id']);
 		$userExternalId = UserExternalId::where('user_id' , $newUser['user_id'])->update(['facebook_id' => $facebookId ]);
 		$userAccess = UserAccess::where('user_id' , $user->id)->first();
