@@ -852,6 +852,7 @@ Class AuthUserController extends Controller {
 		}
 
 		$cookie = Cookie::make('access_token', $userAccess->access_token);
+		$cookieSubscription = Cookie::make('subscription', $subscription);
 
 		$log = new LogSignInUser;
 		$log->username = $userAccess->username;
@@ -861,7 +862,9 @@ Class AuthUserController extends Controller {
 		$log->save();
 
         setcookie("current_user", json_encode(['user' => $user, 'first_time_login' => $firstLogin , 'subscription' => $subscription]), 0, "/");
-		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->withCookie($cookie);
+		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))
+			->withCookie($cookie)
+			->withCookie($cookieSubscription);
 	}
 	
 	public function deleteAccount(){
