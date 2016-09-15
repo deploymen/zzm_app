@@ -41,7 +41,7 @@ use SoftDeletes;
  			switch($user->role){
  				case 'teacher' : $campaignId = head($cmpTeacher);
  				break;
- 				case 'parent' : return false; /* $campaignId = head($cmpParent) */;
+ 				case 'parent' :  $campaignId = head($cmpParent) ;
  				break;
  			}
 

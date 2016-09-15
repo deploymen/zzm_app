@@ -140,6 +140,7 @@ Class AuthUserController extends Controller {
 
 			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
 			$list = User::select('id' , 'role' , 'name' , 'register_from')->find($userAccess->user_id);
+			$subscription = CampaignReferralSubscribe::CheckSubscribe2016RefferalCampaign($list);
 
 			$log = new LogSignInUser;
 			$log->username = $userAccess->username;
@@ -156,7 +157,7 @@ Class AuthUserController extends Controller {
 			return ResponseHelper::OutputJSON('exception');
 		}
 
-		return ResponseHelper::OutputJSON('success', '', ['user' => $list], [
+		return ResponseHelper::OutputJSON('success', '', ['user' => $list , 'subscription' => $subscription], [
 			'X-access-token' => $newUser['access_token'],
 		], [
 			'access_token' => $newUser['access_token'],
@@ -911,10 +912,12 @@ Class AuthUserController extends Controller {
 			CampaignReferralHit::insert($newUser['user_id'] , $referralCode);
 			CampaignReferralSubscribe::RedeemReward($referralCode);
 		}
-		
+
 		$user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser['user_id']);
 		$userExternalId = UserExternalId::where('user_id' , $newUser['user_id'])->update(['facebook_id' => $facebookId ]);
 		$userAccess = UserAccess::where('user_id' , $user->id)->first();
+
+		$subscription = CampaignReferralSubscribe::CheckSubscribe2016RefferalCampaign($user);
 
 		ApiUserHelper::mailin($role , [
 			'username' => $email,
@@ -933,7 +936,7 @@ Class AuthUserController extends Controller {
 		$log->created_ip = Request::ip();
 		$log->save();
 
-		return ResponseHelper::OutputJSON('success', '', ['user' => $user], [
+		return ResponseHelper::OutputJSON('success', '', ['user' => $user , 'subscription' => $subscription], [
 			'X-access-token' => $userAccess->access_token,
 		], [
 			'access_token' => $userAccess->access_token,
