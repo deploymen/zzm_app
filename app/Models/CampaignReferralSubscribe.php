@@ -41,7 +41,7 @@ use SoftDeletes;
  			switch($user->role){
  				case 'teacher' : $campaignId = head($cmpTeacher);
  				break;
- 				case 'parent' : $campaignId = head($cmpParent);
+ 				case 'parent' :  $campaignId = head($cmpParent) ;
  				break;
  			}
 
@@ -81,7 +81,7 @@ use SoftDeletes;
 		if($subscribe->hit != 5  || !$campaignReferral->enable){
 			return false;
 		}
-		die('123');			
+				
 		switch($user->role){
 			case 'teacher' : GameClass::where('user_id' , $userId)->whereNull('expired_at')->first()->update([ 
 								'expired_at' => DB::Raw('DATE_ADD(NOW(), INTERVAL '.$campaignReferral->reward_item_length.' DAY)') 
