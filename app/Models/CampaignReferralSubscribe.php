@@ -84,11 +84,11 @@ use SoftDeletes;
 		}
 		
 		switch($user->role){
-			case 'teacher' : GameClass::where('user_id' , $userId)->whereNull('expired_at')->first()->update([ 
+			case 'teacher' : GameClass::where('user_id' , $userId)->whereNull('expired_at')->orderBy('created_at' , 'asc')->first()->update([ 
 								'expired_at' => DB::Raw('DATE_ADD(NOW(), INTERVAL '.$campaignReferral->reward_item_length.' DAY)') 
 							]); 
 			break;
-			case 'parent' : GameProfile::where('user_id' , $userId)->whereNull('expired_at')->first()->update([
+			case 'parent' : GameProfile::where('user_id' , $userId)->whereNull('expired_at')->orderBy('created_at' , 'asc')->first()->update([
 								'expired_at' => DB::Raw('DATE_ADD(NOW(), INTERVAL '.$campaignReferral->reward_item_length.' DAY)')
 							]); 
 			break;
