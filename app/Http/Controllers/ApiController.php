@@ -66,24 +66,9 @@ class ApiController extends Controller {
 	
 			}
 			$subscribe->source = $source;			
+			$subscribe->name = $name;
+			$subscribe->consent = $consent;
 			$subscribe->save();
-			DatabaseUtilHelper::LogInsert(0, 't0101_subscribe', $subscribe->id);
-
-			if($source == 'pre-launch' || $source == 'mathexpression'){
-				$secretKey = sha1(time() . $email);
-
-					$edmHtml = (string) view('emails.prelaunch-thank-you', [
-						'social_media_links' => Config::get('app.fanpage_url')
-					]);
-
-					EmailHelper::SendEmail([
-						'about' => 'Welcome',
-						'subject' => 'The Mathventure Begins Here!',
-						'body' => $edmHtml,
-						'bodyHtml' => $edmHtml,
-						'toAddresses' => [$email],
-					]);
-			}
 			
 
 		} catch (Exception $ex) {

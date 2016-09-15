@@ -28,7 +28,7 @@ return [
 	|
 	*/
 
-	'model' => 'Avanderbergh\Schoology\SchoologyUser',
+	'model' => Avanderbergh\Schoology\SchoologyUser::class,
 
 	/*
 	|--------------------------------------------------------------------------
