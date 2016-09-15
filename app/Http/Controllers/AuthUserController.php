@@ -96,7 +96,7 @@ Class AuthUserController extends Controller {
 				 // use ($role, $username, $password_sha1, $name, $email, $country, $deviceId, $accessToken, $classId) {
 
 					$newUser = ApiUserHelper::Register($role , $name , $email , $country , $email , $password_sha1 , $registerFrom, $ref);
-					$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Anonymous' , '5_or_younger' , 'default school' , 'K', 999 , 999 , 999);
+					$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Anonymous' , '5_or_younger' , 'default school' , 'K', 999 , 999 , 999 , '');
 
 					if($referralCode){
 						CampaignReferralHit::insert($newUser['user_id'] , $referralCode);
@@ -900,16 +900,16 @@ Class AuthUserController extends Controller {
 			return ResponseHelper::OutputJSON('fail', 'email used');
 		}
 
-		$newUser = ApiUserHelper::Register($role , $name , $email , $country , $email , $facebookId , 'facebook');
+		$newUser = ApiUserHelper::Register($role , $name , $email , $country , $email , $facebookId , 'facebook' , '');
 
-		$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Player 1' , '5_or_younger' , 'default school' , 'K' , '', 999 , 999 , 999);
+		$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Player 1' , '5_or_younger' , 'default school' , 'K' , 999 , 999 , 999 , '');
 
 		$user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser['user_id']);
 		$userExternalId = UserExternalId::where('user_id' , $newUser['user_id'])->update(['facebook_id' => $facebookId ]);
 		$userAccess = UserAccess::where('user_id' , $user->id)->first();
 
 		ApiUserHelper::mailin($role , [
-			'username' => $username,
+			'username' => $email,
 			'name' => $name,
 		]);
 

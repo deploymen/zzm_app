@@ -873,13 +873,11 @@ Class ApiProfileController extends Controller {
 			$sql = "
 				SELECT `student_id`
 					FROM `t0111_game_profile` 
-						WHERE `deleted_at` IS NULL
-						AND `student_id` IN('".join("','", $studentIds)."')	
+						WHERE `student_id` IN('".join("','", $studentIds)."')	
 				UNION 
 				SELECT `student_id`
 					FROM `t9103_student_id_change` 
-						WHERE `deleted_at` IS NULL
-						AND `student_id` IN('".join("','", $studentIds)."')	
+						WHERE `student_id` IN('".join("','", $studentIds)."')	
 			";
 
 			$result = DB::SELECT($sql);

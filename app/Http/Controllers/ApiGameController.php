@@ -1356,7 +1356,7 @@ Class ApiGameController extends Controller {
 		$gameProfile = GameProfile::where('student_id', $studentId)->first();
 
 		if(!$gameProfile){
-			$newProfile = ApiProfileHelper::newProfile(0 , 0 ,'Anonymous' , '5_or_younger' , 'default school' , 'K' , 999 , 999 , 999 );
+			$newProfile = ApiProfileHelper::newProfile(0 , 0 ,'Anonymous' , '5_or_younger' , 'default school' , 'K' , 999 , 999 , 999,'' );
 
 			return ResponseHelper::OutputJSON('success', '', [] , [] , [] , [
 						'name' => 'replace_student_id',
