@@ -24,6 +24,8 @@ use App\Models\UserExternalId;
 use App\Models\UserSetting;
 use App\Models\RewardShareDomain;
 use App\Models\SpecialEmail;
+use App\Models\CampaignReferralSubscribe;
+use App\Models\CampaignReferralHit;
 use Config;
 use Cookie;
 use DB;
@@ -54,11 +56,11 @@ Class AuthUserController extends Controller {
 		$country = Request::input('country', '');
 		$password = Request::input('password');
 		$password_sha1 = sha1($password . Config::get('app.auth_salt'));
-		$accessToken = '';
-		$deviceId = Request::input('device_id'); //optional
 		$role = Request::input('role');
 		$registerFrom = Request::input('register_from' , 'website');
 		$ref = Request::input('ref');
+		$referralCode = Request::input('referral_code' , '');
+		$accessToken = '';
 		$classId = 0;
 		$profileLimit = 3;
 
@@ -93,78 +95,14 @@ Class AuthUserController extends Controller {
 			// DB::transaction(function ()
 				 // use ($role, $username, $password_sha1, $name, $email, $country, $deviceId, $accessToken, $classId) {
 
-					$user = new User;
-					$user->role = $role;
-					$user->name = $name;
-					$user->email = $email;
-					$user->country = $country;
-					$user->register_from = $registerFrom;
-					$user->ref = $ref;
-					$user->paid = Config::get('app.paid');
-					$user->save();
+					$newUser = ApiUserHelper::Register($role , $name , $email , $country , $email , $password_sha1 , $registerFrom, $ref);
+					$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Anonymous' , '5_or_younger' , 'default school' , 'K', 999 , 999 , 999 , '');
 
-					$accessToken = AuthHelper::GenerateAccessToken($user->id);
-
-					$access = new UserAccess;
-					$access->user_id = $user->id;
-					$access->username = $username;
-					$access->password_sha1 = $password_sha1;
-					$access->access_token = $accessToken;
-					$access->access_token_issue_at = DB::raw('NOW()');
-					$access->access_token_issue_ip = Request::ip();
-					$access->access_token_expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 10 YEAR)'); //we dont kick them out
-					$access->save();
-
-					$extId = new UserExternalId;
-					$extId->user_id = $user->id;
-					$extId->save();
-
-					$setting = new UserSetting;
-					$setting->user_id = $user->id;
-					$setting->save();
-
-					$userFlag = new UserFlag;
-					$userFlag->user_id = $user->id;
-
-					if($role == 'teacher'){
-						$gameClass = new GameClass;
-						$gameClass->user_id = $user->id;
-						$gameClass->name = 'Default Class';
-						$gameClass->save();
-
-						$userFlag->profile_limit = Config::get('app.teacher_profile_limit');
-						$userFlag->class_limit = Config::get('app.teacher_class_limit');
-						$userFlag->save();
-
-						$classId = $gameClass->id;
-					}else{
-						$userFlag->profile_limit = Config::get('app.parent_profile_limit');
-						$userFlag->class_limit = 0;
-						$userFlag->save();
+					if($referralCode){
+						CampaignReferralHit::insert($newUser['user_id'] , $referralCode);
+						CampaignReferralSubscribe::RedeemReward($referralCode);
 					}
 
-					$profile = new GameProfile;
-					$profile->user_id = $user->id;
-					$profile->nickname1 = 999;
-					$profile->nickname2 = 999;
-					$profile->avatar_id = 999;
-					$profile->class_id = $classId;
-					$profile->school = 'default school';
-					$profile->save();
-
-					$idCounter = IdCounter::find(1);
-					$gameCodeSeed = $idCounter->game_code_seed;
-					$idCounter->game_code_seed = $gameCodeSeed + 1;
-					$idCounter->save();
-
-					$code = new GameCode;
-					$code->type = 'signed_up_profile';
-					$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
-					$code->seed = $gameCodeSeed;
-					$code->profile_id = $profile->id;
-					$code->save();	
-
-					
 					$secretKey = sha1(time() . $email);
 					$edmHtml = (string) view('emails.account-activation', [
 						'name' => $name,
@@ -186,7 +124,7 @@ Class AuthUserController extends Controller {
 					]);
 
 					$logOpenAcc = new LogAccountActivate;
-					$logOpenAcc->user_id = $user->id;
+					$logOpenAcc->user_id = $newUser['user_id'];
 					$logOpenAcc->secret = $secretKey;
 					$logOpenAcc->save();
 					
@@ -195,21 +133,21 @@ Class AuthUserController extends Controller {
 						'name' => $name,
 					]);
 
-					//job done - log it!
-					DatabaseUtilHelper::LogInsert($user->id, $user->table, $user->id);
-					DatabaseUtilHelper::LogInsert($user->id, $access->table, $user->id);
-					DatabaseUtilHelper::LogInsert($user->id, $extId->table, $user->id);
-					DatabaseUtilHelper::LogInsert($user->id, $extId->table, $user->id);
-					DatabaseUtilHelper::LogInsert($user->id, $profile->table, $profile->id);
-					DatabaseUtilHelper::LogInsert($user->id, $code->table, $code->id);
-
-					Session::put('access_token', $accessToken);
-					setcookie('access_token', $accessToken, time() + (86400 * 30), "/"); // 86400 = 1 day*/
+					Session::put('access_token', $newUser['access_token']);
+					setcookie('access_token', $newUser['access_token'], time() + (86400 * 30), "/"); // 86400 = 1 day*/
 				// }
 				// );
 
 			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
 			$list = User::select('id' , 'role' , 'name' , 'register_from')->find($userAccess->user_id);
+			$subscription = CampaignReferralSubscribe::CheckSubscribe2016RefferalCampaign($list);
+
+			$log = new LogSignInUser;
+			$log->username = $userAccess->username;
+			$log->password_sha1 = '';
+			$log->success = 1;
+			$log->created_ip = Request::ip();
+			$log->save();
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -219,10 +157,10 @@ Class AuthUserController extends Controller {
 			return ResponseHelper::OutputJSON('exception');
 		}
 
-		return ResponseHelper::OutputJSON('success', '', ['user' => $list], [
-			'X-access-token' => $accessToken,
+		return ResponseHelper::OutputJSON('success', '', ['user' => $list , 'subscription' => $subscription], [
+			'X-access-token' => $newUser['access_token'],
 		], [
-			'access_token' => $accessToken,
+			'access_token' => $newUser['access_token'],
 		]);
 	}
 
@@ -235,9 +173,8 @@ Class AuthUserController extends Controller {
 		$username = Request::input('username');
 		$password = Request::input('password');
 		$password_sha1 = sha1($password . Config::get('app.auth_salt'));
-		$deviceId = Request::input('device_id'); //optional
+	
 		$firstLogin = 0;
-
 
 		if (!$username || !$password) {
 			return ResponseHelper::OutputJSON('fail', 'missing parameters');
@@ -246,7 +183,6 @@ Class AuthUserController extends Controller {
 		//trial control //will implement here
 		try {
 
-			// $userAccess = UserAccess::all();
 			$userAccess = UserAccess::where('username', $username)->where('password_sha1', $password_sha1)->first();
 
 			if (!$userAccess) {
@@ -258,18 +194,6 @@ Class AuthUserController extends Controller {
 				$log->save();
 				return ResponseHelper::OutputJSON('fail', 'invalid username/password');
 			}
-
-			// $user = User::where('id', $userAccess->user_id)->where('activated', 1)->first();
-			
-			// if (!$user) {
-			// 	$log = new LogSignInUser;
-			// 	$log->username = $username;
-			// 	$log->password_sha1 = $password_sha1;
-			// 	$log->success = 0;
-			// 	$log->created_ip = Request::ip();
-			// 	$log->save();
-			// 	return ResponseHelper::OutputJSON('fail', 'account is not activated');
-			// }
 
 			if ($userAccess->access_token == '') {
 				$accessToken = AuthHelper::GenerateAccessToken($userAccess->user_id);
@@ -296,7 +220,8 @@ Class AuthUserController extends Controller {
 			$log->created_ip = Request::ip();
 			$log->save();
 
-			$list = User::select('id' , 'role', 'name' , 'register_from')->find($userAccess->user_id);
+			$user = User::find($userAccess->user_id);
+			$subscription = CampaignReferralSubscribe::CheckSubscribe2016RefferalCampaign($user);
 
 			Session::put('access_token', $accessToken);
 			setcookie('access_token', $accessToken, time() + (86400 * 30), "/"); // 86400 = 1 day*/
@@ -318,11 +243,16 @@ Class AuthUserController extends Controller {
 				}
 			}
 
-			return ResponseHelper::OutputJSON('success', '', ['user' => $list , 'first_time_login' => $firstLogin], [
-				'X-access-token' => $accessToken,
-			], [
-				'access_token' => $accessToken,
-			]);
+			return ResponseHelper::OutputJSON('success', '', [
+				'user' => [
+					'id' => $user->id,
+					'role' => $user->role,
+					'name' => $user->name,
+					'register_from' => $user->register_from,
+				] , 
+				'first_time_login' => $firstLogin, 
+				'subscription' => $subscription 
+				], ['X-access-token' => $accessToken,], ['access_token' => $accessToken,]);
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -913,6 +843,8 @@ Class AuthUserController extends Controller {
 		$userExternalId = UserExternalId::where('user_id' , $userAccess->user_id)->update(['facebook_id' => $fbUser->id ]);
 		$checkFirstLogin = LogSignInUser::where('username' , $userAccess->username)->where('success' , 1)->first();
 
+		$subscription = CampaignReferralSubscribe::CheckSubscribe2016RefferalCampaign($user);
+
 		if(!$checkFirstLogin){
 			$firstLogin = 1;
 		}
@@ -926,7 +858,7 @@ Class AuthUserController extends Controller {
 		$log->created_ip = Request::ip();
 		$log->save();
 
-        setcookie("current_user", json_encode(['user' => $user, 'first_time_login' => $firstLogin]), 0, "/");
+        setcookie("current_user", json_encode(['user' => $user, 'first_time_login' => $firstLogin , 'subscription' => $subscription]), 0, "/");
 		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->withCookie($cookie);
 	}
 	
@@ -963,6 +895,7 @@ Class AuthUserController extends Controller {
 		$email = Request::input('email');
 		$facebookId = Request::input('facebook_id');
 		$country = Request::input('country');
+		$referralCode = Request::input('referral_code' , '');
 
 		$classId = 0;
 		$authUser = User::where('email', $email)->first();
@@ -971,13 +904,20 @@ Class AuthUserController extends Controller {
 			return ResponseHelper::OutputJSON('fail', 'email used');
 		}
 
-		$newUser = ApiUserHelper::Register($role , $name , $email , $country , $email , $facebookId , 'facebook');
+		$newUser = ApiUserHelper::Register($role , $name , $email , $country , $email , $facebookId , 'facebook' , '');
 
-		$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Player 1' , '5_or_younger' , 'default school' , 'K' , '', 999 , 999 , 999);
+		$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Player 1' , '5_or_younger' , 'default school' , 'K' , 999 , 999 , 999 , '');
+
+		if($referralCode){
+			CampaignReferralHit::insert($newUser['user_id'] , $referralCode);
+			CampaignReferralSubscribe::RedeemReward($referralCode);
+		}
 
 		$user = User::select('id' , 'role', 'name' ,'register_from')->find($newUser['user_id']);
 		$userExternalId = UserExternalId::where('user_id' , $newUser['user_id'])->update(['facebook_id' => $facebookId ]);
 		$userAccess = UserAccess::where('user_id' , $user->id)->first();
+
+		$subscription = CampaignReferralSubscribe::CheckSubscribe2016RefferalCampaign($user);
 
 		ApiUserHelper::mailin($role , [
 			'username' => $email,
@@ -996,7 +936,7 @@ Class AuthUserController extends Controller {
 		$log->created_ip = Request::ip();
 		$log->save();
 
-		return ResponseHelper::OutputJSON('success', '', ['user' => $user], [
+		return ResponseHelper::OutputJSON('success', '', ['user' => $user , 'subscription' => $subscription], [
 			'X-access-token' => $userAccess->access_token,
 		], [
 			'access_token' => $userAccess->access_token,
