@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Subscribe extends Eloquent {
 	use SoftDeletes;
 	
-	protected $table = 't0101_subscribe';
+	protected $table = 't0199_subscribe';
 	protected $primaryKey = 'id';
 	public $timestamps = true;
 	protected $dates = ['deleted_at'];

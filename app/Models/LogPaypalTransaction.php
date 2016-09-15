@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use DB;
-
 class LogPaypalTransaction extends Eloquent{
 
 	public $table = 't9206_log_paypal_transaction';
@@ -13,16 +12,19 @@ class LogPaypalTransaction extends Eloquent{
 
 	public static function GetTransactionDetail(){
 		$sql = "
-			SELECT t.`first_name` , u.`role` , u.`email` ,u.`country`, u.`city`,  g.`code`, g.`profile_id` , t.`payment_gross`, t.`payment_status`, t.`created_at` 
-				FROM `t0101_user` u ,  `t0113_game_code` g , `t9206_log_paypal_transaction` t
-					WHERE t.`user_id` = u.`id`
-					AND t.`target_id` = g.`profile_id`
-
-					ORDER BY t.`created_at` DESC
+			SELECT * 
+				FROM (SELECT t.`first_name` , u.`role` , u.`email` ,u.`country`, u.`city`,  g.`code`, g.`profile_id` , t.`payment_gross`, t.`payment_status`, t.`created_at` 
+			                FROM `t0101_user` u ,  `t0113_game_code` g , `t9206_log_paypal_transaction` t
+			                    WHERE t.`user_id` = u.`id`
+			                    AND t.`target_id` = g.`profile_id`
+			                    AND t.`payment_status` IS NOT NULL
+			            
+			                    ORDER BY t.`created_at` DESC
+			          )a
+			          GROUP BY a.`profile_id`
 		";
 
-		$result = DB::SELECT($sql);
-
-		return $result;
+		return DB::select($sql);
+		
 	}
 }

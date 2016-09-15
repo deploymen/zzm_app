@@ -752,7 +752,7 @@ Class AuthUserController extends Controller {
 			]);
 
 			ApiUserHelper::mailin($role , [
-				'username' => $username,
+				'username' => $email,
 				'name' => $name,
 			]);
 
@@ -980,7 +980,7 @@ Class AuthUserController extends Controller {
 		$userAccess = UserAccess::where('user_id' , $user->id)->first();
 
 		ApiUserHelper::mailin($role , [
-			'username' => $username,
+			'username' => $email,
 			'name' => $name,
 		]);
 
