@@ -646,10 +646,9 @@ Class ApiGameController extends Controller {
 
 			$checkResult = GamePlay::where('hash', $hash1)->first();	
 
-			// if($checkResult){
-			// 	return ResponseHelper::OutputJSON('fail', 'no double submit');
-			// }
-
+			if($checkResult){
+				return ResponseHelper::OutputJSON('fail', 'no double submit');
+			}
 
 			$difficulty = $gameResult['difficulty'];
 
@@ -1351,6 +1350,7 @@ Class ApiGameController extends Controller {
 	}
 
 	public function checkGameCodeV1_3(){
+		die('please contact developer');
 		$studentId = Request::input('student_id');
 
 		$gameProfile = GameProfile::where('student_id', $studentId)->first();
@@ -1776,7 +1776,7 @@ Class ApiGameController extends Controller {
 			return ResponseHelper::OutputJSON('fail' , 'missing parameter');
 		}
 
-		$gameProfile = GameCode::where('student_id', $studentId)->first();
+		$gameProfile = GameProfile::where('student_id', $studentId)->first();
 
 		if(!$gameCode){
 			return ResponseHelper::OutputJSON('fail' , 'student id not found');

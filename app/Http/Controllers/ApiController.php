@@ -23,7 +23,6 @@ use App\Models\LaunchNotification;
 use App\Models\AppVersion;
 use App\Models\User;
 use App\Models\GameProfile;
-use App\Models\CampaignReferralSubscribe;
 
 
 class ApiController extends Controller {
@@ -32,6 +31,8 @@ class ApiController extends Controller {
 
 		$email = Request::input("email");
 		$source = Request::input('source');
+		$name = Request::input('name');
+		$consent = Request::input('consent');
 		$ip = Request::ip();
 		$secret = 'SAKA5639953H5Z26Q74Z';
 
@@ -67,26 +68,10 @@ class ApiController extends Controller {
 	
 			}
 			$subscribe->source = $source;			
+			$subscribe->name = $name;
+			$subscribe->consent = $consent;
 			$subscribe->save();
-			DatabaseUtilHelper::LogInsert(0, 't0101_subscribe', $subscribe->id);
-
-			if($source == 'pre-launch' || $source == 'mathexpression'){
-				$secretKey = sha1(time() . $email);
-
-					$edmHtml = (string) view('emails.prelaunch-thank-you', [
-						'social_media_links' => Config::get('app.fanpage_url')
-					]);
-
-					EmailHelper::SendEmail([
-						'about' => 'Welcome',
-						'subject' => 'The Mathventure Begins Here!',
-						'body' => $edmHtml,
-						'bodyHtml' => $edmHtml,
-						'toAddresses' => [$email],
-					]);
-			}
 			
-
 		} catch (Exception $ex) {
 
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -307,7 +292,8 @@ class ApiController extends Controller {
 			]);
 		}
 
-		return ResponseHelper::OutputJSON('success');	
+		return ResponseHelper::OutputJSON('success');
+		
 	}
 
 	public function InviteTeacher(\Illuminate\Http\Request $request){
