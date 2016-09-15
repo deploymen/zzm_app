@@ -12,5 +12,6 @@ class GameClass extends Eloquent {
 	protected $dates = ['deleted_at'];
 
 	protected $hidden = [];
+	protected $fillable = ['user_id', 'name', 'expired_at'];
 
 }
