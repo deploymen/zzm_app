@@ -812,6 +812,8 @@ Class AuthUserController extends Controller {
 
 			$checkFirstLogin = LogSignInUser::where('username' , $userAccess->username)->where('success' , 1)->first();
 
+			$subscription = CampaignReferralSubscribe::CheckSubscribe2016RefferalCampaign($user);
+			
 			if(!$checkFirstLogin){
 				$firstLogin = 1;
 			}
@@ -825,7 +827,7 @@ Class AuthUserController extends Controller {
 			$log->created_ip = Request::ip();
 			$log->save();
 
-            setcookie("current_user", json_encode(['user' => $user, 'first_time_login' => $firstLogin]), 0, "/");
+            setcookie("current_user", json_encode(['user' => $user, 'first_time_login' => $firstLogin, 'subscription' => $subscription]), 0, "/");
 			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->withCookie($cookie);
 		}
 
@@ -852,7 +854,6 @@ Class AuthUserController extends Controller {
 		}
 
 		$cookie = Cookie::make('access_token', $userAccess->access_token);
-		$cookieSubscription = Cookie::make('subscription', $subscription);
 
 		$log = new LogSignInUser;
 		$log->username = $userAccess->username;
@@ -863,8 +864,7 @@ Class AuthUserController extends Controller {
 
         setcookie("current_user", json_encode(['user' => $user, 'first_time_login' => $firstLogin , 'subscription' => $subscription]), 0, "/");
 		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))
-			->withCookie($cookie)
-			->withCookie($cookieSubscription);
+			->withCookie($cookie);
 	}
 	
 	public function deleteAccount(){
