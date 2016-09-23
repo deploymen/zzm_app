@@ -157,7 +157,7 @@ Class ApiProfileController extends Controller {
 		$avatarId = Request::input('avatar_id');
 		$classId = Request::input('class_id');
 
-		// try {
+		try {
 
 			if ($email && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 				return ResponseHelper::OutputJSON('fail', "invalid email format");
@@ -255,13 +255,13 @@ Class ApiProfileController extends Controller {
 
 			return ResponseHelper::OutputJSON('success', '', $profile->toArray());
 
-		// } catch (Exception $ex) {
-		// 	LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-		// 		// 'source' => 'ApiProfileController > update',
-		// 		'inputs' => Request::all(),
-		// 	])]);
-		// 	return ResponseHelper::OutputJSON('exception');
-		// }
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				// 'source' => 'ApiProfileController > update',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 	}
 
 	public function delete($id) {
@@ -418,6 +418,78 @@ Class ApiProfileController extends Controller {
 		}
 	}
 
+	public function gameUpdateV1_3() {
+		$profileId = Request::input('student_profile_id');
+		$userId = Request::input('user_id');
+
+		$nickname1 = Request::input('nickname1');
+		$nickname2 = Request::input('nickname2');
+		$avatarId = Request::input('avatar_id');
+		$age = Request::input('age' , 0);
+		$grade = Request::input('grade', 'K');
+		
+
+		try {
+			$profile = GameProfile::find($profileId);
+			if (!$profile) {
+				return ResponseHelper::OutputJSON('fail', "profile not found");
+			}
+
+			$nicknameSet = SetNickname1::find($nickname1);
+			if (!$nicknameSet) {
+				return ResponseHelper::OutputJSON('fail', "nickname1 not found");
+			}
+
+			$nicknameSet = SetNickname2::find($nickname2);
+			if (!$nicknameSet) {
+				return ResponseHelper::OutputJSON('fail', "nickname2 not found");
+			}
+
+			$avatarSet = AvatarSet::find($avatarId);
+			if (!$avatarSet) {
+				return ResponseHelper::OutputJSON('fail', "avatar not found");
+			}
+			
+			if($age){
+				$ageSet = Age::where('age', $age)->first();
+				if (!$ageSet) {
+					return ResponseHelper::OutputJSON('fail', "age not found");
+				}
+			}
+			
+			$secret = 'SAKA5636953H5Z26Q74Z';
+			$ip = Request::ip();
+
+			$res = file_get_contents("http://api.apigurus.com/iplocation/v1.8/locateip?key={$secret}&ip={$ip}&format=json&compact=y");			
+			$ipDetail = json_decode($res, true);
+
+			if(isset($ipDetail['geolocation_data']))
+			{ 
+				$geolocationData = $ipDetail['geolocation_data'];
+				$profile->city = $geolocationData['city'];
+				$profile->country = $geolocationData['country_name'];
+				$profile->latitude = $geolocationData['latitude'];
+				$profile->longitude = $geolocationData['longitude'];
+			}
+
+			$profile->nickname1 = $nickname1;
+			$profile->nickname2 = $nickname2;
+			$profile->avatar_id = $avatarId;
+			$profile->age = $age;
+			$profile->grade = $grade;
+			$profile->save();
+
+			return ResponseHelper::OutputJSON('success', '', $profile->toArray());
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiProfileController > gameUpdate',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
+	}
+
 	public function GenerateAnonymousGameCode(){
 		$deviceId = Request::input('device_id');
 
@@ -428,11 +500,14 @@ Class ApiProfileController extends Controller {
 			$idCounter->save();
 
 			$gamePro = new GameProfile;
+			$gamePro->profile_type = 'anonymous';
 			$gamePro->user_id = 0;
+			$gamePro->student_id = ZapZapHelper::GenerateGameCode($gameCodeSeed);
 			$gamePro->first_name = "Anonymous";
 			$gamePro->nickname1 = 999;
 			$gamePro->nickname2 = 999;
 			$gamePro->avatar_id = 999;
+			$gamePro->seed = $gameCodeSeed;
 			$gamePro->save();
 
 			$code = new GameCode;
@@ -454,11 +529,11 @@ Class ApiProfileController extends Controller {
 		}
 	}
 
-	public function GenerateAnonymousGameCodeV1_3() {
+	public function GenerateAnonymousStudentId() {
 
 		try {
 
-			$newProfile = ApiProfileHelper::newProfile('0', '0', 'Anonymous', '5_or_younger' , 'default school' , 'K' , 999 , 999 , 999);
+			$newProfile = ApiProfileHelper::newProfile('0', '0', 'Anonymous', '5_or_younger' , 'default school' , 'K' , 999 , 999 , 999 , '');
 
 			return ResponseHelper::OutputJSON('success', '', ['student_id' => $newProfile['student_id'] ]);
 
@@ -509,6 +584,46 @@ Class ApiProfileController extends Controller {
 			return ResponseHelper::OutputJSON('success', '' , [
 				'device_game_code' => $deviceGameCode,
 				'enter_game_code' => $currentGameCode,
+				'status' => $verifyHelper,
+				]);
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiProfileController > verifyCode',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
+	}
+
+	public function verifyCodeV1_3() {
+		$studentIdExisted = Request::input('student_id'); //game in device
+		$studentIdEnter = Request::input('student_id_enter'); //game new key in
+
+		if (!$studentIdEnter) {
+			return ResponseHelper::OutputJSON('fail', 'missing parameters');
+		}
+
+		$deviceProfile = GameProfile::find($studentIdExisted);
+		if (!$deviceProfile) {
+			return ResponseHelper::OutputJSON('fail', 'anonymous profile no found');
+		}
+
+		$profile = GameProfile::find($studentIdEnter);
+		if (!$profile) {
+			return ResponseHelper::OutputJSON('fail', 'profile no found');
+		}
+
+		try {
+			$verifyHelper = ApiProfileHelper::verifyTransfer($deviceProfile, $profile);
+
+			if(!$verifyHelper){
+				return ResponseHelper::OutputJSON('fail', 'verify error');
+			}
+
+			return ResponseHelper::OutputJSON('success', '' , [
+				'device_student_id' => $studentIdExisted,
+				'enter_student_id' => $studentIdEnter,
 				'status' => $verifyHelper,
 				]);
 
@@ -585,6 +700,57 @@ Class ApiProfileController extends Controller {
 		}
 	}
 
+	public function profileTransferV1_3() {
+		$studentIdExisted = Request::input('student_id'); //game in device
+		$studentIdEnter = Request::input('student_id_enter'); //game new key in
+
+		if (!$studentIdEnter) {
+			return ResponseHelper::OutputJSON('fail', 'missing parameters');
+		}
+
+		$deviceProfile = GameProfile::find($studentIdExisted);
+		if (!$deviceProfile) {
+			return ResponseHelper::OutputJSON('fail', 'anonymous profile no found');
+		}
+
+		$profile = GameProfile::find($studentIdEnter);
+		if (!$profile) {
+			return ResponseHelper::OutputJSON('fail', 'profile no found');
+		}
+
+		try {
+			$verifyHelper = ApiProfileHelper::verifyTransfer($deviceProfile, $profile);
+
+			if($verifyHelper['profile_transfer']){
+				$gamePlay = GamePlay::where('code', $studentIdExisted)->update([
+					'type' => 'signed_up_profile',
+					'code' => $studentIdEnter,
+					'user_id' => $profile->user_id,
+					'profile_id' => $profile->id,
+					]);
+
+				$gameUserMap = UserMap::where('profile_id', $deviceProfile->id)->update(['profile_id' => $profile->id]);
+				
+				$profile->nickname1 = $deviceProfile->nickname1;
+				$profile->nickname2 = $deviceProfile->nickname2;
+				$profile->avatar_id = $deviceProfile->avatar_id;
+				$profile->played = 1;
+				$profile->save();
+
+				return ResponseHelper::OutputJSON('success');
+			}
+
+			return ResponseHelper::OutputJSON('fail', 'profile transfer is not allow on the inputs given');
+			
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiProfileController > profileTransfer',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
+	}
+
 	public function profileTransferLoose() {
 		$gameCodeExisted = Request::input('game_code'); //game in device
 		$gameCodeEnter = Request::input('game_code_enter'); //game new key in
@@ -643,6 +809,62 @@ Class ApiProfileController extends Controller {
 
 			$currentGameCode->played = 1;
 			$currentGameCode->save();
+
+			return ResponseHelper::OutputJSON('success');
+			
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiProfileController > profileTransfer',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
+	}
+
+	public function profileTransferLooseV1_3() {
+		$studentIdExisted = Request::input('student_id'); //game in device
+		$studentIdEnter = Request::input('student_id_enter'); //game new key in
+
+		if (!$studentIdEnter) {
+			return ResponseHelper::OutputJSON('fail', 'missing parameters');
+		}
+
+		$deviceProfile = GameProfile::find($studentIdExisted);
+		if (!$deviceProfile) {
+			return ResponseHelper::OutputJSON('fail', 'anonymous profile no found');
+		}
+
+		$profile = GameProfile::find($studentIdEnter);
+		if (!$profile) {
+			return ResponseHelper::OutputJSON('fail', 'profile no found');
+		}
+
+		if($deviceProfile->profilea_type != 'anonymous' || $profile->profile_type != 'signed_up_profile'){
+			return ResponseHelper::OutputJSON('fail', 'profile transfer is not allow on the inputs given');
+		}
+
+		try {
+
+			$gPlay = GamePlay::where('code', $studentIdExisted)->first();
+			if($gPlay){
+				$gamePlay = GamePlay::where('code', $studentIdExisted)->update([
+				'type' => 'signed_up_profile',
+				'code' => $studentIdEnter,
+				'user_id' => $profile->user_id,
+				'profile_id' => $profile->id,
+				]);
+			}
+			
+			$gUserMap = UserMap::where('profile_id', $deviceProfile->id)->first();
+			if($gUserMap){
+				$gameUserMap = UserMap::where('profile_id', $deviceProfile->id)->update(['profile_id' => $profile->id]);
+			}
+
+			$profile->nickname1 = $deviceProfile->nickname1;
+			$profile->nickname2 = $deviceProfile->nickname2;
+			$profile->avatar_id = $deviceProfile->avatar_id;
+			$profile->played = 1;
+			$profile->save();
 
 			return ResponseHelper::OutputJSON('success');
 			

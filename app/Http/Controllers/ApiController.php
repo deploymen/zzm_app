@@ -24,6 +24,8 @@ use App\Models\AppVersion;
 use App\Models\User;
 use App\Models\GameProfile;
 
+use GuzzleHttp;
+use ReceiptValidator\iTunes\Validator as iTunesValidator;
 
 class ApiController extends Controller {
 
@@ -341,5 +343,108 @@ class ApiController extends Controller {
 
 	    var_export($mailin->create_update_user($data));
 	}
+
+	public function AppleValidation(){
+		// $sandbox = config::get('app.sandbox');
+		$sandbox = 1;
+		// $sessionKey = Request::input('key');
+		$receipt = Request::input('receipt');
+
+		$statusStr = "";
+
+		// if(!isset($sessionKey)) {
+		// 	return 'error';
+		// }
+		if(!isset($receipt)) {
+			return 'error';
+		}
+
+		// if( $sessionKey = 'Your session key'){
+			$postData = json_encode(array(
+				'receipt-data' => $receipt,
+				'password' => '65c19378e32e47149339df84de781ecc',
+				));
+
+			$http = new GuzzleHttp\Client();
+			if($sandbox){
+				//sandbox testing debug
+				$response = $http->request('POST', 'https://sandbox.itunes.apple.com/verifyReceipt', [ 
+					'json' => [
+						'receipt-data' => $receipt,
+						'password' => '65c19378e32e47149339df84de781ecc',
+						] ]);
+				
+				$result = $response->getBody();
+
+				// $ch = curl_init("https://sandbox.itunes.apple.com/verifyReceipt");
+				// curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				// curl_setopt($ch, CURLOPT_POST, true);
+				// curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+				// curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+				// $response = json_decode(curl_exec($ch));
+
+				// curl_close($ch);
+
+			}else{
+				
+				//production server
+				// $response = $http->request('POST', 'https://buy.itunes.apple.com/verifyReceipt', [$postData]);
+				die('go sandbox');
+				// $ch = curl_init('https://buy.itunes.apple.com/verifyReceipt');
+				// curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				// curl_setopt($ch, CURLOPT_POST, true);
+				// curl_setopt($ch, CURLOPT_POSTFIELDS, $receipt);
+				// $response = json_decode(curl_exec($ch));
+				// curl_close($ch);
+
+			}
+			var_export($result); die();
+			if ($response->status == 0) {
+				$transaction_id = $response->receipt->transaction_id;
+				$finalResult = array( "status"=> "200", "reason"=> " Apple Store OK", "transaction_id"=> $transaction_id);
+					
+				$rspStr = "unique_identifier: ". $response->receipt->unique_identifier;
+				$rspStr .= " original_transaction_id: ". $response->receipt->original_transaction_id;
+				$rspStr .= " quantity: ". $response->receipt->quantity;
+				$rspStr .= " unique_vendor_identifier: ". $response->receipt->unique_vendor_identifier;
+				$rspStr .= " item_id: ". $response->receipt->item_id;
+				$rspStr .= " product_id: ". $response->receipt->product_id;
+				$rspStr .= " purchase_date: ". $response->receipt->purchase_date;
+				$rspStr .= " original_purchase_date: ". $response->receipt->original_purchase_date;
+				
+				error_log(" Succ response: ". $rspStr);
+			
+			}else {
+				$statusStr .= " Apple Store Error code:". $response->status;
+				$finalResult = array( "status"=> "500", "reason"=> $statusStr );
+			}	
+		// }else{
+			// $finalResult = array( "status"=> "404", "reason"=> $statusStr);
+		// }
+		
+		var_export($finalResult); die();	
+	}
 	
+// 	public function AppleValidation(){
+// 		$validator = new iTunesValidator(iTunesValidator::ENDPOINT_SANDBOX);
+
+// 		$receiptBase64Data = Request::input('receipt');
+
+// 		// try {
+// 		  $response = $validator->setReceiptData($receiptBase64Data)->validate();
+// var_export($response); die();
+// 		// } catch (Exception $e) {
+// 		//   echo 'got error = ' . $e->getMessage() . PHP_EOL;
+// 		// }
+
+// 		if ($response->isValid()) {
+// 		  echo 'Receipt is valid.' . PHP_EOL;
+// 		  echo 'Receipt data = ' . print_r($response->getReceipt()) . PHP_EOL;
+// 		} else {
+// 		  echo 'Receipt is not valid.' . PHP_EOL;
+// 		  echo 'Receipt result code = ' . $response->getResultCode() . PHP_EOL;
+// 		}
+// 	}
+
 }
+

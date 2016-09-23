@@ -6,9 +6,9 @@ use App\Models\GamePlanet;
 use App\Models\Questions\AbstractGameQuestion;
 use DB;
 
-class GameQuestionP53 extends AbstractGameQuestion {
+class GameQuestionP54 extends AbstractGameQuestion {
 
-	public $table = 't0253_game_question_p53';
+	public $table = 't0254_game_question_p54';
 	protected $primaryKey = 'id';
 	public $timestamps = true;
 	protected $dates = ['deleted_at'];
@@ -27,11 +27,11 @@ class GameQuestionP53 extends AbstractGameQuestion {
 
 
 		$sql = "
-			SELECT qc.`question_id`, p53.*
-				FROM `t0253_game_question_p53` p53, `t0126_game_planet_question_cache` qc
+			SELECT qc.`question_id`, p54.*
+				FROM `t0254_game_question_p54` p54, `t0126_game_planet_question_cache` qc
 	                    WHERE qc.`planet_id` = :planet_id
 	                    	AND qc.`difficulty` = :difficulty
-	                    	AND p53.`id` = qc.`target_id`
+	                    	AND p54.`id` = qc.`target_id`
 		                    	ORDER BY RAND() 
 		                    		LIMIT :count
 
@@ -47,9 +47,13 @@ class GameQuestionP53 extends AbstractGameQuestion {
 		foreach ($result as $value){
 			array_push($questions, [
 				'id' => $value->question_id,
-				'question'  => $value->question,
-				'question_param_1'  => $value->question_param_1,
-				'question_param_2'  => $value->question_param_2,
+				'question_object'  => $value->question_object,
+				'answer_option_1'  => $value->answer_option_1,
+				'answer_option_2'  => $value->answer_option_2,
+				'answer_option_3'  => $value->answer_option_3,
+				'answer_option_4'  => $value->answer_option_4,
+				'answer_option_5'  => $value->answer_option_5,
+				'plot_point' => $value->plot_point,
 				'difficulty'  => $value->difficulty,
 			]);
 		}

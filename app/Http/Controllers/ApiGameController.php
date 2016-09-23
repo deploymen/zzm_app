@@ -961,13 +961,20 @@ Class ApiGameController extends Controller {
 			$profile->avatar;
 
 			$userEnablePlanet = 0;
-
 			$userType = 2;
 			if($profile->user_id){
 				$userType = 0;
 
-				if($profile->expired_at > date("Y-m-d H:i:s") || GameClass::find($profile->class_id)->expired_at > date("Y-m-d H:i:s")){
+				if($profile->expired_at > date("Y-m-d H:i:s") ){
 					$userType = 1;
+				}else{
+					$class = GameClass::find($profile->class_id);
+					if($class){
+						if($class->expired_at > date("Y-m-d H:i:s") ){
+							$userType = 1;
+						}
+					}
+					
 				}
 			}
 
@@ -1071,13 +1078,27 @@ Class ApiGameController extends Controller {
 			$profile->nickName2;
 			$profile->avatar;
 
+			$userRole = 'anonymous';
+			$user = User::find($profile->user_id);
+			if($user){
+				$userRole = $user->role;
+			}
+
 			$userEnablePlanet = 0;
 			$userType = 2;
 			if($profile->user_id){
 				$userType = 0;
 
-				if($profile->expired_at > date("Y-m-d H:i:s") || GameClass::find($profile->class_id)->expired_at > date("Y-m-d H:i:s")){
+				if($profile->expired_at > date("Y-m-d H:i:s") ){
 					$userType = 1;
+				}else{
+					$class = GameClass::find($profile->class_id);
+					if($class){
+						if($class->expired_at > date("Y-m-d H:i:s") ){
+							$userType = 1;
+						}
+					}
+					
 				}
 			}
 
@@ -1150,13 +1171,14 @@ Class ApiGameController extends Controller {
 						'nick_name2' =>$profile->nickName2->name,
 						'avatar' => $profile->avatar,
 						'coin' => $profile->coin,
+						'user_role' => $userRole,
 						] ,
 					'game_mission' => $mission,
 					'system_planet' => $systems,
 					 ]);
 		
 		} catch (Exception $ex) {
-
+			throw $ex;
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 				'source' => 'ApiGameController > getUserMap',
 				'inputs' => Request::all(),
@@ -1349,31 +1371,11 @@ Class ApiGameController extends Controller {
 		return ResponseHelper::OutputJSON('success', '' , ['account_type' => $result[0]->type] );
 	}
 
-	public function checkGameCodeV1_3(){
-		die('please contact developer');
+	public function checkStudentIdV1_3(){
+		// middleware check
 		$studentId = Request::input('student_id');
-
-		$gameProfile = GameProfile::where('student_id', $studentId)->first();
-
-		if(!$gameProfile){
-			$newProfile = ApiProfileHelper::newProfile(0 , 0 ,'Anonymous' , '5_or_younger' , 'default school' , 'K' , 999 , 999 , 999,'' );
-
-			return ResponseHelper::OutputJSON('success', '', [] , [] , [] , [
-						'name' => 'replace_student_id',
-						'param' => [
-							'student_id_from' => $studentId,
-							'student_id_to' => $newProfile->student_id,
-						]
-						]);
-
-
-			// return ResponseHelper::OutputJSON('success', '', [] , [] , [] , [
-			// 			'name' => 'set_api_endpoint',
-			// 			'param.endpoint' => 'https://www.zzm.com/api/1.3/',
-			// 			]);
-		}
-
 		return ResponseHelper::OutputJSON('success');
+
 	}
 
 	public function offlinePost(){
@@ -1769,7 +1771,7 @@ Class ApiGameController extends Controller {
 		 ]);
 	}
 
-	public function getGameCodeInfoV1_3(){
+	public function getStudentIdInfo(){
 		$studentId = Request::input('student_id');
 
 		if(!$studentId){
@@ -1778,7 +1780,7 @@ Class ApiGameController extends Controller {
 
 		$gameProfile = GameProfile::where('student_id', $studentId)->first();
 
-		if(!$gameCode){
+		if(!$studentId){
 			return ResponseHelper::OutputJSON('fail' , 'student id not found');
 		}
 

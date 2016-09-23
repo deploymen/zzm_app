@@ -198,7 +198,7 @@ class ApiProfileHelper{
 		return $profileInfo;
 	}
 
-	public static function verifyTransfer($deviceGameCode , $gameCode){
+	public static function verifyTransfer($deviceProfile , $profile){
 
 		// device 		d.Played 	entered 		e.Played 	Can Transfer
 		// ================================================================
@@ -223,15 +223,15 @@ class ApiProfileHelper{
 		// pro			1			ann				0			0
 		// pro			1			ann				1			0
 
-		if ($deviceGameCode->type == 'anonymous' && $deviceGameCode->played) {	
-			if($gameCode->type == 'signed_up_profile' && $gameCode->played || $gameCode->type == 'anonymous' && $gameCode->played){
+		if ($deviceProfile->profile_type == 'anonymous' && $deviceProfile->played) {	
+			if($profile->profile_type == 'signed_up_profile' && $profile->played || $profile->profile_type == 'anonymous' && $profile->played){
 				return  [
 						'profile_transfer' => '0',
 						'action' => 'warning'
 					];
 				}
 
-			if($gameCode->type == 'anonymous' && !$gameCode->played || $gameCode->type == 'signed_up_profile' && !$gameCode->played){
+			if($profile->profile_type == 'anonymous' && !$profile->played || $profile->profile_type == 'signed_up_profile' && !$profile->played){
 				return  [
 						'profile_transfer' => '1',
 						'action' => 'new+claim'

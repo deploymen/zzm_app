@@ -51,7 +51,7 @@ class AuthenticateStudent {
 		$studentIdObj = GameProfile::where('student_id', $studentId)->first();
 
 		if (!$studentIdObj) {
-			$studentIdObj = StudentIdChange::where('student_id', $studentId)->first()->profile;
+			$studentIdObj = StudentIdChange::where('student_id', $studentId)->first();
 
 			if(!$studentIdObj){
 				return ResponseHelper::OutputJSON('fail-unauthorised', 'invalid student id');
@@ -61,11 +61,10 @@ class AuthenticateStudent {
 	      		'name' => 'replace_student_id',
 	      		'param' => [
 	      			'student_id_from' => $studentId,
-	      			'student_id_to' => $studentIdObj->student_id,
+	      			'student_id_to' => $studentIdObj->profile->student_id,
 	      		]
 	      	];
 		}
-
 
 		$inputs['student_id'] = $studentIdObj->student_id;
 		$inputs['student_profile_type'] = $studentIdObj->profile_type;
