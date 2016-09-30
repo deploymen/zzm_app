@@ -377,105 +377,70 @@ class ApiController extends Controller {
                 $productId = $receipt->product_id;
 
                 switch ($productId) {
-                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_1':
-                        $profile = GameProfile::find($request->student_profile_id);               
-						$profile->expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 1 YEAR)');
-						$profile->save();
+                	 case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear':
+                    	$this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
-						$productId = 'profile-yearly-4.99';
+           				$claimed = true;
+                        break;
+
+                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_1':
+                    	$this->updateExpired($request, $receipt , 'profile-yearly-4.99');
+
+           				 $claimed = true;
                         break;
 
                     case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_2':
-                        $profile = GameProfile::find($request->student_profile_id);               
-						$profile->expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 1 YEAR)');
-						$profile->save();
+                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
-						$productId = 'profile-yearly-4.99';
+           				$claimed = true;
                         break;
 
                     case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_3':
-                        $profile = GameProfile::find($request->student_profile_id);               
-						$profile->expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 1 YEAR)');
-						$profile->save();
+                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
-						$productId = 'profile-yearly-4.99';
+           				$claimed = true;
                         break;
 
                     case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_4':
-                        $profile = GameProfile::find($request->student_profile_id);               
-						$profile->expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 1 YEAR)');
-						$profile->save();
+                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
-						$productId = 'profile-yearly-4.99';
+           				$claimed = true;
                         break;
 
                     case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_5':
-                        $profile = GameProfile::find($request->student_profile_id);               
-						$profile->expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 1 YEAR)');
-						$profile->save();
+                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
-						$productId = 'profile-yearly-4.99';
+           				$claimed = true;
                         break;
                     case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_6':
-                        $profile = GameProfile::find($request->student_profile_id);               
-						$profile->expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 1 YEAR)');
-						$profile->save();
+                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
-						$productId = 'profile-yearly-4.99';
+           				$claimed = true;
                         break;
                     case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_7':
-                        $profile = GameProfile::find($request->student_profile_id);               
-						$profile->expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 1 YEAR)');
-						$profile->save();
+                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
-						$productId = 'profile-yearly-4.99';
+           				$claimed = true;
                         break;
                     case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_8':
-                        $profile = GameProfile::find($request->student_profile_id);               
-						$profile->expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 1 YEAR)');
-						$profile->save();
+                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
-						$productId = 'profile-yearly-4.99';
+           				$claimed = true;
                         break;
                     case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_9':
-                        $profile = GameProfile::find($request->student_profile_id);               
-						$profile->expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 1 YEAR)');
-						$profile->save();
+                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
-						$productId = 'profile-yearly-4.99';
+           				$claimed = true;
                         break;
                     case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_10':
-                        $profile = GameProfile::find($request->student_profile_id);               
-						$profile->expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 1 YEAR)');
-						$profile->save();
+                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
-						$productId = 'profile-yearly-4.99';
+           				$claimed = true;
                         break;
                     
                     default: continue; break;
                 }
-
-                LogAppleTransaction::create([
-                	'user_id' => $request->user_id,
-                	'profile_id' => $request->student_profile_id,
-                	'transaction_id' => $receipt->transaction_id,
-                	'product_id' => $productId,
-                	'quantity' => $receipt->quantity,
-                	'original_transaction_id' => $receipt->original_transaction_id,
-                	'purchase_date' => $receipt->purchase_date,
-                	'purchase_date_ms' => $receipt->purchase_date_ms,
-                	'purchase_date_pst' => $receipt->purchase_date_pst,
-                	'original_purchase_date' => $receipt->original_purchase_date,
-                	'original_purchase_date_ms' => $receipt->original_purchase_date_ms,
-                	'original_purchase_date_pst' => $receipt->original_purchase_date_pst,
-                	'expires_date' => $receipt->expires_date,
-                	'expires_date_ms' => $receipt->expires_date_ms,
-                	'web_order_line_item_id' => $receipt->web_order_line_item_id,
-                	'is_trial_period' => $receipt->is_trial_period,
-                	]);
-                
-                $claimed = true;
-
+ 
             }
 
             if($claimed){
@@ -489,8 +454,41 @@ class ApiController extends Controller {
 
         }else{
 			return ResponseHelper::OutputJSON('fail', 'validation fail');
-        }
-        
+        } 
+    }
+
+    function updateExpired($request, $receipt , $productId){
+
+    	if($receipt->is_trial_period == true){
+    		$profile = GameProfile::find($request->student_profile_id);               
+			$profile->expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 1 YEAR)');
+			$profile->save();
+
+    	}else{
+    		$profile = GameProfile::find($request->student_profile_id);               
+			$profile->expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 1 YEAR)');
+			$profile->save();
+    	}
+
+    	LogAppleTransaction::create([
+        	'user_id' => $request->user_id,
+        	'profile_id' => $request->student_profile_id,
+        	'transaction_id' => $receipt->transaction_id,
+        	'product_id' => $productId,
+        	'quantity' => $receipt->quantity,
+        	'original_transaction_id' => $receipt->original_transaction_id,
+        	'purchase_date' => $receipt->purchase_date,
+        	'purchase_date_ms' => $receipt->purchase_date_ms,
+        	'purchase_date_pst' => $receipt->purchase_date_pst,
+        	'original_purchase_date' => $receipt->original_purchase_date,
+        	'original_purchase_date_ms' => $receipt->original_purchase_date_ms,
+        	'original_purchase_date_pst' => $receipt->original_purchase_date_pst,
+        	'expires_date' => $receipt->expires_date,
+        	'expires_date_ms' => $receipt->expires_date_ms,
+        	'web_order_line_item_id' => $receipt->web_order_line_item_id,
+        	'is_trial_period' => $receipt->is_trial_period,
+    	]);
+    	
     }
 
     public function scheduleAppleCheckRecurring_onPremiumProfile(){
