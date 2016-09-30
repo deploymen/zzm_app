@@ -1,4 +1,4 @@
-<?php namespace App\Models\Results\Results;
+<?php namespace App\Models\Results;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
