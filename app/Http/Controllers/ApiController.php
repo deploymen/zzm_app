@@ -377,62 +377,62 @@ class ApiController extends Controller {
                 $productId = $receipt->product_id;
 
                 switch ($productId) {
-                	 case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear':
+                	case 'com.visualmathinteractive.zapzapmath.testprofilesubscriptionforoneyear':
                     	$this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
            				$claimed = true;
                         break;
 
-                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_1':
+                    case 'com.visualmathinteractive.zapzapmath.testprofilesubscriptionforoneyear_1':
                     	$this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
            				 $claimed = true;
                         break;
 
-                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_2':
+                    case 'com.visualmathinteractive.zapzapmath.testprofilesubscriptionforoneyear_2':
                         $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
            				$claimed = true;
                         break;
 
-                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_3':
+                    case 'com.visualmathinteractive.zapzapmath.testprofilesubscriptionforoneyear_3':
                         $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
            				$claimed = true;
                         break;
 
-                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_4':
+                    case 'com.visualmathinteractive.zapzapmath.testprofilesubscriptionforoneyear_4':
                         $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
            				$claimed = true;
                         break;
 
-                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_5':
+                    case 'com.visualmathinteractive.zapzapmath.testprofilesubscriptionforoneyear_5':
                         $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
            				$claimed = true;
                         break;
-                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_6':
+                    case 'com.visualmathinteractive.zapzapmath.testprofilesubscriptionforoneyear_6':
                         $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
            				$claimed = true;
                         break;
-                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_7':
+                    case 'com.visualmathinteractive.zapzapmath.testprofilesubscriptionforoneyear_7':
                         $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
            				$claimed = true;
                         break;
-                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_8':
+                    case 'com.visualmathinteractive.zapzapmath.testprofilesubscriptionforoneyear_8':
                         $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
            				$claimed = true;
                         break;
-                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_9':
+                    case 'com.visualmathinteractive.zapzapmath.testprofilesubscriptionforoneyear_9':
                         $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
            				$claimed = true;
                         break;
-                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_10':
+                    case 'com.visualmathinteractive.zapzapmath.testprofilesubscriptionforoneyear_10':
                         $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
            				$claimed = true;
@@ -511,6 +511,43 @@ class ApiController extends Controller {
             $receiptObject = json_decode($response->getBody(), false);            
             //the rest same as first time subscription
         }
+    }
+
+    public function appleGetStudentIdByReceipt(\Illuminate\Http\Request $request){
+
+    	$receipt = $request->receipt;
+        $plus = rawurldecode($request->plus);
+        $receipt = str_replace(' ', '+', $receipt);//should not use this because it wont happen. unless client forgot to do urlencode()
+
+        $client = new Client(['base_uri' => 'https://sandbox.itunes.apple.com']);
+        $response = $client->request('POST', '/verifyReceipt', [
+            'headers' => ['content-type' => 'application/json'],
+            'json' => [
+                'password' => '65c19378e32e47149339df84de781ecc',
+                'receipt-data' => $receipt
+            ]
+        ]);
+
+        $receiptObject = json_decode($response->getBody(), false);
+        $prevProfileId = 0;
+
+        if($receiptObject->status==0){
+            $profiles = [];
+            foreach ($receiptObject->receipt->in_app as $receipt) {
+            	$profile = LogAppleTransaction::where('transaction_id' , $receipt->transaction_id)->first()->studentId;
+
+            	if($profile->id != $prevProfileId){
+            		array_push($profiles, $profile);
+            	}
+
+            	$prevProfileId = $profile->id;
+            }
+
+        }else{
+			return ResponseHelper::OutputJSON('fail' , 'validation fail');
+        }
+
+		return ResponseHelper::OutputJSON('success' , '' , $profiles);
 
     }
 
