@@ -22,7 +22,7 @@ class PaypalController extends Controller {
 	public function InstantPaymentNotification(Request $request){
 		try{
 			$debug = 1;
-			$sandbox = 0;
+			$sandbox = config::get('app.sandbox');
 
 			$raw_post_data = file_get_contents('php://input');
 			$raw_post_array = explode('&', $raw_post_data);

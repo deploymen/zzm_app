@@ -35,7 +35,7 @@ use SendinBlue\SendinBlueApiBundle\Wrapper\Mailin;
 
 class ApiUserHelper{
 
-	public static function Register($role, $name, $email, $country, $username, $password_sha1,  $registerFrom, $ref ){
+	public static function Register($role, $name, $email, $country, $username, $password_sha1,  $registerFrom, $ref){
 		$classId = 0;
 
 		$user = new User;
@@ -92,6 +92,7 @@ class ApiUserHelper{
 			'user_id' => $user->id,
 			'class_id' => $classId,
 			'access_token' => $accessToken,
+			
 			];
 	}
 

@@ -4,7 +4,7 @@ return [
 
 	'auth_salt' => env('AUTH_SALT'),
 	'p02_key' => env('P02_KEY'),
-	
+	'sandbox' => env('SANDBOX'),
 
 	'ses_key' => env('AWS_SES_KEY'),
 	'ses_secret' => env('AWS_SES_SECRET'),

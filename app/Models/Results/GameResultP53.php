@@ -3,9 +3,9 @@
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\GameQuestion;
-class GameResultP08 extends AbstractGameResult {
+class GameResultP53 extends AbstractGameResult {
 
-	public $table = 't0308_game_result_p08';
+	public $table = 't0353_game_result_p53';
 	protected $primaryKey = 'id';
 	public $timestamps = true;
 	protected $dates = ['deleted_at'];
@@ -22,21 +22,22 @@ class GameResultP08 extends AbstractGameResult {
 		foreach ($gameResult['answers'] as $answer){
 			$question = GameQuestion::find($answer['question_id']);
 
-			$result = GameResultP08::create([
+			$result = GameResultP53::create([
 				'correct' => $answer['correct'],
 				'target_id' => $question->target_id,
-				'answer' => $answer['answer'],
+				'answer' => $answer['answer']
 			]);
 
 			GameResult::create([
 				'play_id' => $gamePlay->id,
 				'question_id' => $answer['question_id'],
-				'target_type' => 'p08',
+				'target_type' => 'p53',
 				'target_id' => $result->id,
-				'game_type_id' => '8',
+				'game_type_id' => '53',
 				'correct' => $answer['correct'],
 			]);
 		}
 
 	}
 }
+	
