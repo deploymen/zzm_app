@@ -85,6 +85,12 @@ class AbstractGameResult extends Eloquent {
 			case 'p47':return GameResultP47::SubmitResult($params); break;
 			case 'p48':return GameResultP48::SubmitResult($params); break;
 			case 'p49':return GameResultP49::SubmitResult($params); break;
+			case 'p50':return GameResultP50::SubmitResult($params); break;
+			case 'p51':return GameResultP51::SubmitResult($params); break;
+			case 'p52':return GameResultP52::SubmitResult($params); break;
+			case 'p53':return GameResultP53::SubmitResult($params); break;
+			case 'p54':return GameResultP54::SubmitResult($params); break;
+			case 'p55':return GameResultP55::SubmitResult($params); break;
 			
 			default:break;
 		}

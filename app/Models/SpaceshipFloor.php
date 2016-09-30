@@ -2,14 +2,16 @@
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DB;
 
-class GameResultP15 extends Eloquent {
-
-	public $table = 't0315_game_result_p15';
+class SpaceshipFloor extends Eloquent {
+	use SoftDeletes;
+	
+	protected $table = 't0142_spaceship_floor';
 	protected $primaryKey = 'id';
-	public $timestamps = false;
+	public $timestamps = true;
 	protected $dates = ['deleted_at'];
 
 	protected $hidden = [];
 
-}
+} 

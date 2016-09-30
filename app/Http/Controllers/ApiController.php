@@ -16,6 +16,7 @@ use App\Libraries\ResponseHelper;
 use App\Libraries\DatabaseUtilHelper;
 use App\Libraries\ApiProfileHelper;
 use Sendinblue\Mailin;
+use GuzzleHttp\Client;
 
 use App\Models;
 use App\Models\Subscribe;
@@ -23,7 +24,10 @@ use App\Models\LaunchNotification;
 use App\Models\AppVersion;
 use App\Models\User;
 use App\Models\GameProfile;
+use App\Models\LogAppleTransaction;
 
+use GuzzleHttp;
+use ReceiptValidator\iTunes\Validator as iTunesValidator;
 
 class ApiController extends Controller {
 
@@ -72,7 +76,6 @@ class ApiController extends Controller {
 			$subscribe->consent = $consent;
 			$subscribe->save();
 			
-
 		} catch (Exception $ex) {
 
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -342,5 +345,176 @@ class ApiController extends Controller {
 
 	    var_export($mailin->create_update_user($data));
 	}
-	
+
+	public function appleValidateSubscription(\Illuminate\Http\Request $request){
+
+        //this method is to validate new subscription
+        $receipt = $request->receipt;
+        $plus = rawurldecode($request->plus);
+        $receipt = str_replace(' ', '+', $receipt);//should not use this because it wont happen. unless client forgot to do urlencode()
+
+        $client = new Client(['base_uri' => 'https://sandbox.itunes.apple.com']);
+        $response = $client->request('POST', '/verifyReceipt', [
+            'headers' => ['content-type' => 'application/json'],
+            'json' => [
+                'password' => '65c19378e32e47149339df84de781ecc',
+                'receipt-data' => $receipt
+            ]
+        ]);
+
+        $receiptObject = json_decode($response->getBody(), false);
+
+        if($receiptObject->status==0){
+            //OK
+            //Loop until a receipt id that never subscript in our db
+            $claimed = false;
+            foreach ($receiptObject->receipt->in_app as $receipt) {
+                //dd($receipt);
+                //check receipt used before or not
+                $used = LogAppleTransaction::where('transaction_id' , $receipt->transaction_id)->first(); //replace this with actual model method
+                if($used){ continue; }
+
+                $productId = $receipt->product_id;
+
+                switch ($productId) {
+                	 case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear':
+                    	$this->updateExpired($request, $receipt , 'profile-yearly-4.99');
+
+           				$claimed = true;
+                        break;
+
+                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_1':
+                    	$this->updateExpired($request, $receipt , 'profile-yearly-4.99');
+
+           				 $claimed = true;
+                        break;
+
+                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_2':
+                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
+
+           				$claimed = true;
+                        break;
+
+                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_3':
+                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
+
+           				$claimed = true;
+                        break;
+
+                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_4':
+                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
+
+           				$claimed = true;
+                        break;
+
+                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_5':
+                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
+
+           				$claimed = true;
+                        break;
+                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_6':
+                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
+
+           				$claimed = true;
+                        break;
+                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_7':
+                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
+
+           				$claimed = true;
+                        break;
+                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_8':
+                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
+
+           				$claimed = true;
+                        break;
+                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_9':
+                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
+
+           				$claimed = true;
+                        break;
+                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_10':
+                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
+
+           				$claimed = true;
+                        break;
+                    
+                    default: continue; break;
+                }
+ 
+            }
+
+            if($claimed){
+				return ResponseHelper::OutputJSON('success');
+                	
+            }else{
+				return ResponseHelper::OutputJSON('fail' , 'data incorrect');
+               
+            }
+
+
+        }else{
+			return ResponseHelper::OutputJSON('fail', 'validation fail');
+        } 
+    }
+
+    function updateExpired($request, $receipt , $productId){
+
+    	if($receipt->is_trial_period == true){
+    		$profile = GameProfile::find($request->student_profile_id);               
+			$profile->expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 1 YEAR)');
+			$profile->save();
+
+    	}else{
+    		$profile = GameProfile::find($request->student_profile_id);               
+			$profile->expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 1 YEAR)');
+			$profile->save();
+    	}
+
+    	LogAppleTransaction::create([
+        	'user_id' => $request->user_id,
+        	'profile_id' => $request->student_profile_id,
+        	'transaction_id' => $receipt->transaction_id,
+        	'product_id' => $productId,
+        	'quantity' => $receipt->quantity,
+        	'original_transaction_id' => $receipt->original_transaction_id,
+        	'purchase_date' => $receipt->purchase_date,
+        	'purchase_date_ms' => $receipt->purchase_date_ms,
+        	'purchase_date_pst' => $receipt->purchase_date_pst,
+        	'original_purchase_date' => $receipt->original_purchase_date,
+        	'original_purchase_date_ms' => $receipt->original_purchase_date_ms,
+        	'original_purchase_date_pst' => $receipt->original_purchase_date_pst,
+        	'expires_date' => $receipt->expires_date,
+        	'expires_date_ms' => $receipt->expires_date_ms,
+        	'web_order_line_item_id' => $receipt->web_order_line_item_id,
+        	'is_trial_period' => $receipt->is_trial_period,
+    	]);
+    	
+    }
+
+    public function scheduleAppleCheckRecurring_onPremiumProfile(){
+        //get all grace period 
+        $graces = []; //replace this with actual model method
+        foreach ($graces as $grace) {
+            $originalReceipt = $grace->originalReceipt; //replace this with actual model method
+            if(!$originalReceipt){ continue; /* this should not happen */}
+            
+            //query apple
+            $client = new Client(['base_uri' => 'https://sandbox.itunes.apple.com']);
+            $response = $client->request('POST', '/verifyReceipt', [
+                'headers' => ['content-type' => 'application/json'],
+                'json' => [
+                    'password' => '65c19378e32e47149339df84de781ecc',
+                    'receipt-data' => $receipt
+                ]
+            ]);
+
+            $receiptObject = json_decode($response->getBody(), false);            
+            //the rest same as first time subscription
+        }
+
+    }
+
+
+
 }
+

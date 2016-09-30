@@ -34,6 +34,7 @@ class AbstractGameQuestion extends Eloquent {
 	}
 
 	private static function GetQuestionsFromChild($typeName, $params){
+
 		switch ($typeName) {
 			case 'p01':return GameQuestionP01::GetQuestions($params); break;
 			case 'p02':return GameQuestionP02::GetQuestions($params); break;
@@ -85,7 +86,12 @@ class AbstractGameQuestion extends Eloquent {
 			case 'p48':return GameQuestionP48::GetQuestions($params); break;
 			case 'p49':return GameQuestionP49::GetQuestions($params); break;
 			case 'p50':return GameQuestionP50::GetQuestions($params); break;
-			
+			case 'p51':return GameQuestionP51::GetQuestions($params); break;
+			case 'p52':return GameQuestionP52::GetQuestions($params); break;
+			case 'p53':return GameQuestionP53::GetQuestions($params); break;
+			case 'p54':return GameQuestionP54::GetQuestions($params); break;
+			case 'p55':return GameQuestionP55::GetQuestions($params); break;
+
 			default:break;
 		}
 	}

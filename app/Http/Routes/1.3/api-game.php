@@ -6,9 +6,6 @@ Route::group(['prefix' => 'game'], function () {
 	Route::get('/create-package', 'ApiGameController@createPackage');
 
 	Route::post('/sign-up', 'AuthUserController@signUpApp');
-	
-	Route::post('/map/system', 'ApiGameController@mapSystem');
-	Route::post('/map/system/{id}/planet', 'ApiGameController@mapPlanet');
 
 	Route::get('/profile/{profile_id}/result/system-planet/progress', 'ApiGameController@systemPlanetProgress');
 	Route::get('/profile/{profile_id}/result/system-planet/planet/{planet_id}', 'ApiGameController@systemPlanetPlay');
@@ -19,17 +16,17 @@ Route::group(['prefix' => 'game'], function () {
 	Route::get('/leaderboard/planet/{id}', 'ApiGameController@leaderBoardPlanet');
 
 	Route::get('/top-score', 'ApiGameController@GameScreenTopScore');
-	
-	Route::post('/check-game-code' , 'ApiGameController@checkGameCodeV1_3');
+	Route::post('student-id/anonymous', 'ApiProfileController@GenerateAnonymousStudentId');
 
-	Route::post('/game-code', 'ApiGameController@getGameCodeInfoV1_3');
+	Route::group(['middleware' => ['auth.student' , 'auth.cmd']], function () {
+		Route::post('/student-id', 'ApiGameController@getStudentIdInfo');
+		Route::post('/check-student-id' , 'ApiGameController@checkStudentIdV1_3');
 
-	Route::group(['middleware' => 'auth.student'], function () {
-		Route::put('/profiles', 'ApiProfileController@gameUpdate');
+		Route::put('/profiles', 'ApiProfileController@gameUpdateV1_3');
 
-		Route::post('/verify-transfer', 'ApiProfileController@verifyCode');
-		Route::post('/profile-transfer', 'ApiProfileController@profileTransfer');
-		Route::post('/profile-transfer-loose', 'ApiProfileController@profileTransferLoose');
+		Route::post('/verify-transfer', 'ApiProfileController@verifyCodeV1_3');
+		Route::post('/profile-transfer', 'ApiProfileController@profileTransferV1_3');
+		Route::post('/profile-transfer-loose', 'ApiProfileController@profileTransferLooseV1_3');
 
 
 		Route::post('/play/{id}/result', 'ApiGameController@resultV1_3');
@@ -49,13 +46,21 @@ Route::group(['prefix' => 'game'], function () {
 		Route::get('/result/only-system', 'ResultController@onlySystemV1_1');
 		Route::get('/result/only-planet', 'ResultController@onlyPlanetV1_1');
 		Route::get('/result/only-questions', 'ResultController@onlyQuestions');
+
+		Route::get('/spaceship', 'ApiGameController@getSpaceship');
+		Route::post('/spaceship/unlock/floor', 'ApiGameController@unlockFloor');
+		Route::post('/spaceship/unlock/item', 'ApiGameController@unlockItem');
+		Route::put('/spaceship/floor/{floor_id}/items', 'ApiGameController@spaceshipItemSelected');
+
 	});
 });
- 
+
+Route::group(['middleware' => ['auth.student']], function () {
+	Route::post('subscription/validation/apple' , 'ApiController@appleValidateSubscription');
+});
 
 Route::get('set/nick', 'ApiProfileController@getNick');
-Route::post('game-code/anonymous', 'ApiProfileController@GenerateAnonymousGameCodeV1_3');
-Route::post('elf/test-function' , 'ApiGameController@testGetELFPlanet' );
+Route::get('test/mission', 'ApiGameController@test');
 
 Route::any('/{endpoint}', ['as' => 'try_prev_version', function(){die('NEED TO HANDLE1.3');}])->where('endpoint', '.*');
 

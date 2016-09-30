@@ -26,7 +26,23 @@ class GameCoinTransaction extends Eloquent {
 		]);
 
 		return true;
+	}
 
+	public static function DoPaymentTransaction($profileId, $coin, $description){
+		$profile = GameProfile::find($profileId);
+		if(!$profile){ return false; }
+
+		$profile->coin -= $coin;
+		$profile->save();
+
+		self::create([
+			'profile_id' => $profileId, 
+			'description' => $description, 
+			'coin_amount' => $coin,  
+			'coin_balance' => $profile->coin, 
+		]);
+
+		return true;
 	}
 
 	public static function GetDescription($template, $params = []){
