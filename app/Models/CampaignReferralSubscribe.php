@@ -61,6 +61,7 @@ use SoftDeletes;
 	}
 
 	public static function RedeemReward($referralCode){
+		
 		$ids = explode('/', $referralCode);
 		$campaingId = $ids[0];
 		$userId = $ids[1];
@@ -78,7 +79,7 @@ use SoftDeletes;
 			return false;
 		}
 
-		if($subscribe->hit != 5  || !$campaignReferral->enable){
+		if($subscribe->hit < 5  || !$campaignReferral->enable){
 			return false;
 		}
 				

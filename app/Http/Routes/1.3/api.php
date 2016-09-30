@@ -55,6 +55,7 @@ Route::post('user/invite/teacher' , 'ApiController@inviteTeacher');
 Route::get('send-in-blue' , 'ApiController@SendInBlue');
 
 Route::any('pay-pal/ipn' , 'PaypalController@InstantPaymentNotification');
+Route::post('subscription/validation/apple' , 'ApiController@AppleValidation');
 
 Route::group(['prefix' => 'admin'], function () {
 	Route::get('/paypal/transaction-history', 'ApiAdminController@getTransaction');

@@ -594,7 +594,9 @@ Class AuthUserController extends Controller {
 
 		try {
 			$newUser = ApiUserHelper::Register($role , $name , $email , '' , $email , $password_sha1 , 'app', '');
-			$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'sing' , '5_or_younger' , 'default school' , 'K', 999 , 999 , 999 , '');
+
+
+			$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Anonymous' , '5_or_younger' , 'default school' , 'K', 999 , 999 , 999 , '');
 
 			$secretKey = sha1(time() . $email);
 			$edmHtml = (string) view('emails.account-activation', [
@@ -736,6 +738,8 @@ Class AuthUserController extends Controller {
 
 			$checkFirstLogin = LogSignInUser::where('username' , $userAccess->username)->where('success' , 1)->first();
 
+			$subscription = CampaignReferralSubscribe::CheckSubscribe2016RefferalCampaign($user);
+			
 			if(!$checkFirstLogin){
 				$firstLogin = 1;
 			}
@@ -749,7 +753,7 @@ Class AuthUserController extends Controller {
 			$log->created_ip = Request::ip();
 			$log->save();
 
-            setcookie("current_user", json_encode(['user' => $user, 'first_time_login' => $firstLogin]), 0, "/");
+            setcookie("current_user", json_encode(['user' => $user, 'first_time_login' => $firstLogin, 'subscription' => $subscription]), 0, "/");
 			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->withCookie($cookie);
 		}
 
@@ -785,7 +789,8 @@ Class AuthUserController extends Controller {
 		$log->save();
 
         setcookie("current_user", json_encode(['user' => $user, 'first_time_login' => $firstLogin , 'subscription' => $subscription]), 0, "/");
-		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->withCookie($cookie);
+		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))
+			->withCookie($cookie);
 	}
 	
 	public function deleteAccount(){
