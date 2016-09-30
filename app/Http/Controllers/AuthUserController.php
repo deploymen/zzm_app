@@ -150,10 +150,8 @@ Class AuthUserController extends Controller {
 			$log->save();
 
 		} catch (Exception $ex) {
-			throw $ex;
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 				'source' => 'AuthUserController > signUp',
-				'message' => $ex->getMessage(),
 				'inputs' => Request::all(),
 			])]);
 			return ResponseHelper::OutputJSON('exception');
@@ -595,74 +593,8 @@ Class AuthUserController extends Controller {
 		}
 
 		try {
-			$user = new User;
-			$user->role = $role;
-			$user->name = $name;
-			$user->email = $email;
-			$user->register_from = 'App';
-			$user->paid = Config::get('app.paid');
-			$user->save();
-
-			$accessToken = AuthHelper::GenerateAccessToken($user->id);
-
-			$access = new UserAccess;
-			$access->user_id = $user->id;
-			$access->username = $email;
-			$access->password_sha1 = $password_sha1;
-			$access->access_token = $accessToken;
-			$access->access_token_issue_at = DB::raw('NOW()');
-			$access->access_token_issue_ip = Request::ip();
-			$access->access_token_expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 10 YEAR)'); //we dont kick them out
-			$access->save();
-
-			$extId = new UserExternalId;
-			$extId->user_id = $user->id;
-			$extId->save();
-
-			$setting = new UserSetting;
-			$setting->user_id = $user->id;
-			$setting->save();
-
-			$userFlag = new UserFlag;
-			$userFlag->user_id = $user->id;
-
-			if($role == 'teacher'){
-				$gameClass = new GameClass;
-				$gameClass->user_id = $user->id;
-				$gameClass->name = 'Default Class';
-				$gameClass->save();
-
-				$userFlag->profile_limit = Config::get('app.teacher_profile_limit');
-				$userFlag->class_limit = Config::get('app.teacher_class_limit');
-				$userFlag->save();
-
-				$classId = $gameClass->id;
-			}else{
-				$userFlag->profile_limit = Config::get('app.parent_profile_limit');
-				$userFlag->class_limit = 0;
-				$userFlag->save();
-			}
-
-			$profile = new GameProfile;
-			$profile->user_id = $user->id;
-			$profile->nickname1 = 999;
-			$profile->nickname2 = 999;
-			$profile->avatar_id = 999;
-			$profile->class_id = $classId;
-			$profile->school = 'default school';
-			$profile->save();
-
-			$idCounter = IdCounter::find(1);
-			$gameCodeSeed = $idCounter->game_code_seed;
-			$idCounter->game_code_seed = $gameCodeSeed + 1;
-			$idCounter->save();
-
-			$code = new GameCode;
-			$code->type = 'signed_up_profile';
-			$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
-			$code->seed = $gameCodeSeed;
-			$code->profile_id = $profile->id;
-			$code->save();
+			$newUser = ApiUserHelper::Register($role , $name , $email , '' , $email , $password_sha1 , 'app', '');
+			$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'sing' , '5_or_younger' , 'default school' , 'K', 999 , 999 , 999 , '');
 
 			$secretKey = sha1(time() . $email);
 			$edmHtml = (string) view('emails.account-activation', [
@@ -688,22 +620,14 @@ Class AuthUserController extends Controller {
 				'name' => $name,
 			]);
 
-			$logOpenAcc = new LogAccountActivate;
-			$logOpenAcc->user_id = $user->id;
-			$logOpenAcc->secret = $secretKey;
-			$logOpenAcc->save();
+			$userAccess = UserAccess::where('username', $email)->where('password_sha1', $password_sha1)->first();
+			$list = User::select('id' , 'role' , 'name' , 'register_from')->find($userAccess->user_id);
+			$subscription = CampaignReferralSubscribe::CheckSubscribe2016RefferalCampaign($list);
 
-			//job done - log it!
-			DatabaseUtilHelper::LogInsert($user->id, $user->table, $user->id);
-			DatabaseUtilHelper::LogInsert($user->id, $access->table, $user->id);
-			DatabaseUtilHelper::LogInsert($user->id, $extId->table, $user->id);
-			DatabaseUtilHelper::LogInsert($user->id, $extId->table, $user->id);
-			DatabaseUtilHelper::LogInsert($user->id, $profile->table, $profile->id);
-			DatabaseUtilHelper::LogInsert($user->id, $code->table, $code->id);
-
-			return ResponseHelper::OutputJSON('success', '', $code->code);
+			return ResponseHelper::OutputJSON('success', '', $newProfile['student_id']);
 
 		} catch (Exception $ex) {
+			throw $ex;
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 				'source' => 'AuthUserController > signUp',
 				'inputs' => Request::all(),
@@ -812,8 +736,6 @@ Class AuthUserController extends Controller {
 
 			$checkFirstLogin = LogSignInUser::where('username' , $userAccess->username)->where('success' , 1)->first();
 
-			$subscription = CampaignReferralSubscribe::CheckSubscribe2016RefferalCampaign($user);
-			
 			if(!$checkFirstLogin){
 				$firstLogin = 1;
 			}
@@ -827,7 +749,7 @@ Class AuthUserController extends Controller {
 			$log->created_ip = Request::ip();
 			$log->save();
 
-            setcookie("current_user", json_encode(['user' => $user, 'first_time_login' => $firstLogin, 'subscription' => $subscription]), 0, "/");
+            setcookie("current_user", json_encode(['user' => $user, 'first_time_login' => $firstLogin]), 0, "/");
 			return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->withCookie($cookie);
 		}
 
@@ -863,8 +785,7 @@ Class AuthUserController extends Controller {
 		$log->save();
 
         setcookie("current_user", json_encode(['user' => $user, 'first_time_login' => $firstLogin , 'subscription' => $subscription]), 0, "/");
-		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))
-			->withCookie($cookie);
+		return redirect(url(env('WEBSITE_URL').'/user/auth-redirect'))->withCookie($cookie);
 	}
 	
 	public function deleteAccount(){

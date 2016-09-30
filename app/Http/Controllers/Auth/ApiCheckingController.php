@@ -79,8 +79,6 @@ class ApiCheckingController extends Controller {
 
 		if(isset($ipDetail['geolocation_data'])) { 
 			$geolocationData = $ipDetail['geolocation_data'];
-
-			var_export($geolocationData); die();
 			$profile->city = $geolocationData['city'];
 			$profile->country = $geolocationData['country_name'];
 			$profile->save();

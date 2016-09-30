@@ -30,6 +30,7 @@ class Kernel extends HttpKernel {
 		'auth.teacher' => 'App\Http\Middleware\AuthenticateTeacher',
 		'auth.student' => 'App\Http\Middleware\AuthenticateStudent',
 		'auth.content' => 'App\Http\Middleware\AuthenticateContent',
+		'auth.cmd' => 'App\Http\Middleware\CmdMiddleware',
 		'version' => 'App\Http\Middleware\Version'
 	];
 

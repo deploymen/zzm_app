@@ -40,7 +40,7 @@ Route::group(['prefix' => 'pre-launch'], function () {
 	Route::get('/subscribe-external', 'ApiController@subscribeExternal');
 });
 
-Route::post('/subscribe', 'ApiController@subscribe');
+Route::any('/subscribe', 'ApiController@subscribe');
 
 Route::post('launch-notification', 'ApiController@launchNotification');
 
