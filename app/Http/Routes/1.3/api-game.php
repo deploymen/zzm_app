@@ -16,6 +16,7 @@ Route::group(['prefix' => 'game'], function () {
 	Route::get('/leaderboard/planet/{id}', 'ApiGameController@leaderBoardPlanet');
 
 	Route::get('/top-score', 'ApiGameController@GameScreenTopScore');
+	Route::post('student-id/anonymous', 'ApiProfileController@GenerateAnonymousStudentId');
 
 	Route::group(['middleware' => ['auth.student' , 'auth.cmd']], function () {
 		Route::post('/student-id', 'ApiGameController@getStudentIdInfo');
@@ -45,12 +46,20 @@ Route::group(['prefix' => 'game'], function () {
 		Route::get('/result/only-system', 'ResultController@onlySystemV1_1');
 		Route::get('/result/only-planet', 'ResultController@onlyPlanetV1_1');
 		Route::get('/result/only-questions', 'ResultController@onlyQuestions');
+
+		Route::get('/spaceship', 'ApiGameController@getSpaceship');
+		Route::post('/spaceship/unlock/floor', 'ApiGameController@unlockFloor');
+		Route::post('/spaceship/unlock/item', 'ApiGameController@unlockItem');
+		Route::put('/spaceship/floor/{floor_id}/items', 'ApiGameController@spaceshipItemSelected');
+
 	});
 });
- 
+
+Route::group(['middleware' => ['auth.student']], function () {
+	Route::post('subscription/validation/apple' , 'ApiController@appleValidateSubscription');
+});
 
 Route::get('set/nick', 'ApiProfileController@getNick');
-Route::post('student-id/anonymous', 'ApiProfileController@GenerateAnonymousStudentId');
 Route::get('test/mission', 'ApiGameController@test');
 
 Route::any('/{endpoint}', ['as' => 'try_prev_version', function(){die('NEED TO HANDLE1.3');}])->where('endpoint', '.*');

@@ -257,6 +257,9 @@ class ApiProfileHelper{
 			$idCounter->save();
 
 			$studentId = ZapZapHelper::GenerateGameCode($seed);
+		}
+
+		if(!$userId){
 			$profileType = 'anonymous';
 		}
 

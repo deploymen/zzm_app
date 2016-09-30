@@ -20,7 +20,9 @@ use App\Models\UserMap;
 use App\Models\UserFlag;
 use App\Models\Age;
 use App\Models\LogFacebookShare;
-use App\Models\StudentIdChange;
+use App\Models\SpaceshipUser;
+use App\Models\GameCoinTransaction;
+use App\Models\GameMission;
 use DB;
 use Exception;
 use Request;
@@ -604,12 +606,12 @@ Class ApiProfileController extends Controller {
 			return ResponseHelper::OutputJSON('fail', 'missing parameters');
 		}
 
-		$deviceProfile = GameProfile::find($studentIdExisted);
+		$deviceProfile = GameProfile::where('student_id', $studentIdExisted);
 		if (!$deviceProfile) {
 			return ResponseHelper::OutputJSON('fail', 'anonymous profile no found');
 		}
 
-		$profile = GameProfile::find($studentIdEnter);
+		$profile = GameProfile::find('student_id' , $studentIdEnter);
 		if (!$profile) {
 			return ResponseHelper::OutputJSON('fail', 'profile no found');
 		}
@@ -708,12 +710,12 @@ Class ApiProfileController extends Controller {
 			return ResponseHelper::OutputJSON('fail', 'missing parameters');
 		}
 
-		$deviceProfile = GameProfile::find($studentIdExisted);
+		$deviceProfile = GameProfile::where('student_id' , $studentIdExisted);
 		if (!$deviceProfile) {
 			return ResponseHelper::OutputJSON('fail', 'anonymous profile no found');
 		}
 
-		$profile = GameProfile::find($studentIdEnter);
+		$profile = GameProfile::where('student_id' , $studentIdEnter);
 		if (!$profile) {
 			return ResponseHelper::OutputJSON('fail', 'profile no found');
 		}
@@ -734,8 +736,22 @@ Class ApiProfileController extends Controller {
 				$profile->nickname1 = $deviceProfile->nickname1;
 				$profile->nickname2 = $deviceProfile->nickname2;
 				$profile->avatar_id = $deviceProfile->avatar_id;
+				$profile->coin += $deviceProfile->avatar_id;
 				$profile->played = 1;
 				$profile->save();
+
+				SpaceshipUser::where('profile_id' , $deviceProfile->id)->update([
+					'user_id' => $profile->user_id,
+					'profile_id' => $profile->id
+					]);
+
+				GameCoinTransaction::where('profile_id', $deviceProfile->id)->update([
+					'profile_id' => $profile->id
+					]);
+
+				GameMission::where('profile_id', $deviceProfile->id)->update([
+					'profile_id' => $profile->id
+					]);
 
 				return ResponseHelper::OutputJSON('success');
 			}
@@ -829,17 +845,17 @@ Class ApiProfileController extends Controller {
 			return ResponseHelper::OutputJSON('fail', 'missing parameters');
 		}
 
-		$deviceProfile = GameProfile::find($studentIdExisted);
+		$deviceProfile = GameProfile::where('student_id' , $studentIdExisted)->first();
 		if (!$deviceProfile) {
 			return ResponseHelper::OutputJSON('fail', 'anonymous profile no found');
 		}
 
-		$profile = GameProfile::find($studentIdEnter);
+		$profile = GameProfile::where('student_id' , $studentIdEnter)->first();
 		if (!$profile) {
 			return ResponseHelper::OutputJSON('fail', 'profile no found');
 		}
 
-		if($deviceProfile->profilea_type != 'anonymous' || $profile->profile_type != 'signed_up_profile'){
+		if($deviceProfile->profile_type != 'anonymous' || $profile->profile_type != 'signed_up_profile'){
 			return ResponseHelper::OutputJSON('fail', 'profile transfer is not allow on the inputs given');
 		}
 
@@ -863,8 +879,22 @@ Class ApiProfileController extends Controller {
 			$profile->nickname1 = $deviceProfile->nickname1;
 			$profile->nickname2 = $deviceProfile->nickname2;
 			$profile->avatar_id = $deviceProfile->avatar_id;
+			$profile->coin += $deviceProfile->coin;
 			$profile->played = 1;
 			$profile->save();
+
+			SpaceshipUser::where('profile_id' , $deviceProfile->id)->update([
+				'user_id' => $profile->user_id,
+				'profile_id' => $profile->id
+				]);
+
+			GameCoinTransaction::where('profile_id', $deviceProfile->id)->update([
+				'profile_id' => $profile->id
+				]);
+
+			GameMission::where('profile_id', $deviceProfile->id)->update([
+				'profile_id' => $profile->id
+				]);
 
 			return ResponseHelper::OutputJSON('success');
 			

@@ -43,11 +43,12 @@ class GameQuestionP14 extends AbstractGameQuestion {
 		]);	
 
 		$questions = [];
+	
 		foreach ($result as $value){
 			array_push($questions, [
 				'id'=> $value->question_id,
 				'answer' => $value->answer,
-				'op' => $value->op,
+				'op' => $value->operator,
 				'number1' => $value->number1,
 				'number1_multiplier' => $value->number1_multiplier,
 				'number2' => $value->number2,
