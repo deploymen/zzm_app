@@ -45,13 +45,13 @@ class GameQuestionP36 extends AbstractGameQuestion {
 		$questions = [];
 		foreach ($result as $value){
 			array_push($questions,  [
-				'id' => 'question_id',
-				'question_1',
-				'question_2',
-				'question_shapes',
-				'answer_option_1',
-				'answer_option_2',
-				'difficulty',
+				'id' => $value->question_id,
+				'question_1' => $value->question_1 ,
+				'question_2' => $value->question_2 ,
+				'question_shapes' => $value->question_shapes ,
+				'answer_option_1' => $value->answer_option_1 ,
+				'answer_option_2' => $value->answer_option_2 ,
+				'difficulty' => $value->difficulty ,
 			]);
 		}
 
