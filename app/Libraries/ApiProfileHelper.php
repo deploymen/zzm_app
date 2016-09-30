@@ -163,6 +163,7 @@ class ApiProfileHelper{
 			}
 
 			$mission = GameMission::GetMission($p->id);
+			$gameCode = GameCode::where('profile_id' , $p->id)->first();
 
 			array_push($profileInfo, [
 				'id' => $p->id,
@@ -179,6 +180,7 @@ class ApiProfileHelper{
 				'nickname2' => $p->nickName2,
 				'avatar' => $p->avatar,
 				'student_id' => $p->student_id,
+				'game_code' => $gameCode->code,
 				'paid' => $paid,
 				'last_played' => [
 					'last_planet_name' => $planetName,
