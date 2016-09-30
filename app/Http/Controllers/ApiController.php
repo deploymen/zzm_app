@@ -31,6 +31,8 @@ class ApiController extends Controller {
 
 		$email = Request::input("email");
 		$source = Request::input('source');
+		$name = Request::input('name');
+		$consent = Request::input('consent');
 		$ip = Request::ip();
 		$secret = 'SAKA5639953H5Z26Q74Z';
 

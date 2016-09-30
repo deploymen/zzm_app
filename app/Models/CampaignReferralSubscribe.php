@@ -61,6 +61,7 @@ use SoftDeletes;
 	}
 
 	public static function RedeemReward($referralCode){
+		
 		$ids = explode('/', $referralCode);
 		$campaingId = $ids[0];
 		$userId = $ids[1];
@@ -79,9 +80,10 @@ use SoftDeletes;
 			return false;
 		}
 
-		if($subscribe->hit != 5  || !$campaignReferral->enable){
+		if($subscribe->hit < 5  || !$campaignReferral->enable){
 			return false;
 		}
+	
 		try{
 			switch($user->role){
 				case 'teacher' : GameClass::where('user_id' , $userId)->whereNull('expired_at')->orderBy('created_at' , 'asc')->first()->update([ 
@@ -93,8 +95,8 @@ use SoftDeletes;
 								]); 
 				break;
 			}
-			
 		} catch (Exception $ex) {
+
 			return false;
 		}
 
