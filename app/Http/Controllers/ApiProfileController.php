@@ -57,6 +57,111 @@ Class ApiProfileController extends Controller {
 		}
 	}
 
+	public function create() {
+
+		$userId = Request::input('user_id');
+
+		$firstName = Request::input('first_name');
+		$lastName = Request::input('last_name', '');
+		$age = Request::input('age');
+		$school = Request::input('school');
+		$grade = Request::input('grade');
+		$classId = Request::input('class_id' , 0);
+
+		$nickname1 = Request::input('nickname1', 999);
+		$nickname2 = Request::input('nickname2', 999);
+		$avatarId = Request::input('avatar_id', 999);
+
+		try {
+			
+			if (!$firstName || !$school || !$age || !$grade) {
+				return ResponseHelper::OutputJSON('fail', "missing parameters");
+			}
+
+			$nickname1Set = SetNickname1::find($nickname1);
+			$nickname2Set = SetNickname2::find($nickname2);
+			
+			if (!$nickname1Set) {
+				return ResponseHelper::OutputJSON('fail', "invalid nickname id");
+			}
+
+			if (!$nickname2Set) {
+				return ResponseHelper::OutputJSON('fail', "invalid nickname id");
+			}
+
+			if (!$avatarId) {
+				return ResponseHelper::OutputJSON('fail', "invalid avatar id");
+			}
+
+			if($classId){
+				$gameClass = GameClass::find($classId);
+				if(!$gameClass || $gameClass->user_id != $userId) {
+					return ResponseHelper::OutputJSON('fail', "class not found");
+				}
+			}
+
+			$userFlag = UserFlag::find($userId);
+			if(!$userFlag){
+				return ResponseHelper::OutputJSON('fail', "user flag not found");
+			}
+			
+			if($classId){
+				$profileClass = GameProfile::where('class_id' , $classId)->where('user_id', $userId)->count();
+				$profileLimit = ($gameClass->expired_at > date("Y-m-d H:i:s"))?50:30;
+
+				if($profileClass >= $profileLimit){
+					return ResponseHelper::OutputJSON('fail', "class limited" );
+				}
+			}else{
+				$userProfile = GameProfile::where('user_id' , $userId)->count();
+
+				if($userProfile >= $userFlag->profile_limit){
+					return ResponseHelper::OutputJSON('fail', "profile limited" , ['total_share' => $userFlag->total_share]);
+				}
+			}
+		
+			$avatarIdSet = AvatarSet::find($avatarId);
+
+			$profile = new GameProfile;
+			$profile->user_id = $userId;
+			$profile->class_id = $classId;
+			$profile->first_name = $firstName;
+			$profile->last_name = $lastName;
+			$profile->age = $age;
+			$profile->school = $school;
+			$profile->grade = $grade;
+			$profile->nickname1 = $nickname1;
+			$profile->nickname2 = $nickname2;
+			$profile->avatar_id = $avatarId;
+			$profile->save();
+
+			$idCounter = IdCounter::find(1);
+			$gameCodeSeed = $idCounter->game_code_seed;
+			$idCounter->game_code_seed = $gameCodeSeed + 1;
+			$idCounter->save();
+
+			$code = new GameCode;
+			$code->type = 'signed_up_profile';
+			$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
+			$code->seed = $gameCodeSeed;
+			$code->profile_id = $profile->id;
+			$code->save();
+
+			DatabaseUtilHelper::LogInsert($userId, $profile->table, $userId);
+
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiProfileController > create',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
+
+		return ResponseHelper::OutputJSON('success', '', [
+			'profile' => $profile,
+		]);
+	}
+
 	// public function create() {
 
 	// 	$userId = Request::input('user_id');
