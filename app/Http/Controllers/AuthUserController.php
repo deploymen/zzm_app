@@ -594,7 +594,9 @@ Class AuthUserController extends Controller {
 
 		try {
 			$newUser = ApiUserHelper::Register($role , $name , $email , '' , $email , $password_sha1 , 'app', '');
-			$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'sing' , '5_or_younger' , 'default school' , 'K', 999 , 999 , 999 , '');
+
+
+			$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Anonymous' , '5_or_younger' , 'default school' , 'K', 999 , 999 , 999 , '');
 
 			$secretKey = sha1(time() . $email);
 			$edmHtml = (string) view('emails.account-activation', [
