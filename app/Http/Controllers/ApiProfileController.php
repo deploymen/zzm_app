@@ -927,10 +927,12 @@ Class ApiProfileController extends Controller {
 				$gameUserMap = UserMap::where('profile_id', $deviceProfile->id)->update(['profile_id' => $profile->id]);
 			}
 
-			
+			$profile->grade = $deviceProfile->grade;
 			$profile->nickname1 = $deviceProfile->nickname1;
 			$profile->nickname2 = $deviceProfile->nickname2;
 			$profile->avatar_id = $deviceProfile->avatar_id;
+			$profile->coin += $deviceProfile->coin;
+			$profile->played = 1;
 			$profile->save();
 
 			$currentGameCode->played = 1;
@@ -986,6 +988,7 @@ Class ApiProfileController extends Controller {
 				$gameUserMap = UserMap::where('profile_id', $deviceProfile->id)->update(['profile_id' => $profile->id]);
 			}
 
+			$profile->grade = $deviceProfile->grade;
 			$profile->nickname1 = $deviceProfile->nickname1;
 			$profile->nickname2 = $deviceProfile->nickname2;
 			$profile->avatar_id = $deviceProfile->avatar_id;
