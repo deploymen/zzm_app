@@ -25,6 +25,7 @@ use App\Models\AppVersion;
 use App\Models\User;
 use App\Models\GameProfile;
 use App\Models\LogAppleTransaction;
+use App\Models\UserSubsTransaction;
 
 use GuzzleHttp;
 use ReceiptValidator\iTunes\Validator as iTunesValidator;
@@ -489,6 +490,13 @@ class ApiController extends Controller {
         	'is_trial_period' => $receipt->is_trial_period,
     	]);
     	
+		UserSubsTransaction::create([
+			'user_id' => $custom[2],
+			'package_id' => $package,
+			'target_type' => $targetType,
+			'target_id' => $custom[3],
+			'expired_at' => $expiredAt,
+			]);
     }
 
     public function scheduleAppleCheckRecurring_onPremiumProfile(){

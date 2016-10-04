@@ -12,6 +12,7 @@ use App\Models\LogPaypalTransaction;
 use App\Models\LogPaypalSubscriptTransaction;
 use App\Models\GameProfile;
 use App\Models\GameClass;
+use App\Models\UserSubsTransaction;
 use App\Libraries\LogHelper;
 use App\Libraries\ResponseHelper;
 use Request;
@@ -153,23 +154,37 @@ class PaypalController extends Controller {
 				}
 
 				$logPaypalTransaction->save();
+				$expiredAt = date("Y-m-d H:i:s", strtotime('+1 year'));
 
 				if($custom[1] == 'parent'){
 					$profile = GameProfile::find($custom[3]);
-					$profile->expired_at = date("Y-m-d H:i:s", strtotime('+1 year'));
+					$profile->expired_at = $expiredAt;
 					$profile->save();
+
+					$targetType = 'profile';
+					$package = 'profile-yearly-4.99';
 				}	
 
 				if($custom[1] == 'teacher'){
 					$class = GameClass::find($custom[3]);
-					$class->expired_at = date("Y-m-d H:i:s", strtotime('+1 year'));
+					$class->expired_at = $expiredAt;
 					$class->save();
 
+					$targetType = 'class';
+					$package = 'class-yearly-99';
 				}
 				
 				if($debug) {
 					$this->log("Verified IPN: $req ", '');
 				}
+
+				UserSubsTransaction::create([
+					'user_id' => $custom[2],
+					'package_id' => $package,
+					'target_type' => $targetType,
+					'target_id' => $custom[3],
+					'expired_at' => $expiredAt,
+					]);
 
 			} else if (strcmp ($res, "INVALID") == 0) {
 
