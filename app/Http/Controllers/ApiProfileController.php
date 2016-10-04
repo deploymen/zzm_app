@@ -159,7 +159,7 @@ Class ApiProfileController extends Controller {
 
 		return ResponseHelper::OutputJSON('success', '', [
 			'profile' => $profile,
-		]);
+		]); //production
 	}
 
 	// public function create() {
@@ -248,7 +248,7 @@ Class ApiProfileController extends Controller {
 
 	// 	return ResponseHelper::OutputJSON('success', '', [
 	// 		'profile' => $newProfile,
-	// 	]);
+	// 	]); //dev
 	// }
 
 	public function update($id) {
