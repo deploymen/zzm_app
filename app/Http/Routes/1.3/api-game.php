@@ -58,6 +58,7 @@ Route::group(['prefix' => 'game'], function () {
 Route::group(['middleware' => ['auth.student']], function () {
 	Route::post('subscription/validation/apple' , 'ApiController@appleValidateSubscription');
 });
+	Route::post('subscription/profile' , 'ApiController@appleGetStudentIdByReceipt');
 
 Route::get('set/nick', 'ApiProfileController@getNick');
 Route::get('test/mission', 'ApiGameController@test');

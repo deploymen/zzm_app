@@ -180,7 +180,7 @@ class ApiProfileHelper{
 				'nickname2' => $p->nickName2,
 				'avatar' => $p->avatar,
 				'student_id' => $p->student_id,
-				'game_code' => $gameCode->code,
+				'game_code' => ['code' => $gameCode->code],
 				'paid' => $paid,
 				'last_played' => [
 					'last_planet_name' => $planetName,
