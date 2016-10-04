@@ -14,6 +14,28 @@ class LogAppleTransaction extends Eloquent{
 	public function studentId() {
 
 		return $this->hasOne('App\Models\GameProfile', 'id' , 'profile_id');
-	}	
+	}
+
+	public static function getProfile($transactionId){
+
+		$sql = "
+			SELECT p.`id` 
+				FROM `t9207_log_apple_transaction` t, `t0111_game_profile` p
+					WHERE t.`transaction_id` IN(".join(',', $transactionId).")
+						AND p.`id` = t.`profile_id`
+					GROUP BY p.`id`
+		";
+
+		$result = DB::select($sql);
+
+		$ids = json_decode(json_encode($result), true);
+        $pId = [];
+        foreach($ids as $id){
+
+        	array_push($pId , $id['id']);
+        }
+     
+		return $pId;
+	}
 
 }

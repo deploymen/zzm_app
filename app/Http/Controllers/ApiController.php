@@ -25,7 +25,6 @@ use App\Models\AppVersion;
 use App\Models\User;
 use App\Models\GameProfile;
 use App\Models\LogAppleTransaction;
-use App\Models\UserSubsTransaction;
 
 use GuzzleHttp;
 use ReceiptValidator\iTunes\Validator as iTunesValidator;
@@ -378,68 +377,63 @@ class ApiController extends Controller {
                 $productId = $receipt->product_id;
 
                 switch ($productId) {
-                	case 'com.visualmathinteractive.zapzapmath.testprofilesubscriptionforoneyear':
-                    	$this->updateExpired($request, $receipt , 'profile-yearly-4.99');
-
-           				$claimed = true;
-                        break;
-
-                    case 'com.visualmathinteractive.zapzapmath.testprofilesubscriptionforoneyear_1':
+                    case 'com.visualmathinteractive.zapzapmath.oneyearprofilesubscription_1':
                     	$this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
            				 $claimed = true;
                         break;
 
-                    case 'com.visualmathinteractive.zapzapmath.testprofilesubscriptionforoneyear_2':
+                    case 'com.visualmathinteractive.zapzapmath.oneyearprofilesubscription_2':
                         $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
            				$claimed = true;
                         break;
 
-                    case 'com.visualmathinteractive.zapzapmath.testprofilesubscriptionforoneyear_3':
+                    case 'com.visualmathinteractive.zapzapmath.oneyearprofilesubscription_3':
+                
                         $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
            				$claimed = true;
                         break;
 
-                    case 'com.visualmathinteractive.zapzapmath.testprofilesubscriptionforoneyear_4':
+                    case 'com.visualmathinteractive.zapzapmath.oneyearprofilesubscription_4':
                         $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
            				$claimed = true;
                         break;
 
-                    case 'com.visualmathinteractive.zapzapmath.testprofilesubscriptionforoneyear_5':
+                    case 'com.visualmathinteractive.zapzapmath.oneyearprofilesubscription_5':
                         $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
            				$claimed = true;
                         break;
-                    case 'com.visualmathinteractive.zapzapmath.testprofilesubscriptionforoneyear_6':
+                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_6':
                         $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
            				$claimed = true;
                         break;
-                    case 'com.visualmathinteractive.zapzapmath.testprofilesubscriptionforoneyear_7':
+                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_7':
                         $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
            				$claimed = true;
                         break;
-                    case 'com.visualmathinteractive.zapzapmath.testprofilesubscriptionforoneyear_8':
+                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_8':
                         $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
            				$claimed = true;
                         break;
-                    case 'com.visualmathinteractive.zapzapmath.testprofilesubscriptionforoneyear_9':
+                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_9':
                         $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
            				$claimed = true;
                         break;
-                    case 'com.visualmathinteractive.zapzapmath.testprofilesubscriptionforoneyear_10':
+                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_10':
                         $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
            				$claimed = true;
                         break;
-                    
-                    default: continue; break;
+                   
+                    default: return ResponseHelper::OutputJSON('fail' , 'incorrect product id'); ; break;
                 }
  
             }
@@ -448,7 +442,7 @@ class ApiController extends Controller {
 				return ResponseHelper::OutputJSON('success');
                 	
             }else{
-				return ResponseHelper::OutputJSON('fail' , 'data incorrect');
+				return ResponseHelper::OutputJSON('fail' , 'duplicated data');
                
             }
 
@@ -462,7 +456,7 @@ class ApiController extends Controller {
 
     	if($receipt->is_trial_period == true){
     		$profile = GameProfile::find($request->student_profile_id);               
-			$profile->expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 1 YEAR)');
+			$profile->expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 3 MONTH)');
 			$profile->save();
 
     	}else{
@@ -490,13 +484,6 @@ class ApiController extends Controller {
         	'is_trial_period' => $receipt->is_trial_period,
     	]);
     	
-		UserSubsTransaction::create([
-			'user_id' => $custom[2],
-			'package_id' => $package,
-			'target_type' => $targetType,
-			'target_id' => $custom[3],
-			'expired_at' => $expiredAt,
-			]);
     }
 
     public function scheduleAppleCheckRecurring_onPremiumProfile(){
@@ -521,45 +508,94 @@ class ApiController extends Controller {
         }
     }
 
-    public function appleGetStudentIdByReceipt(\Illuminate\Http\Request $request){
+  //   public function appleGetStudentIdByReceipt(\Illuminate\Http\Request $request){
 
-    	$receipt = $request->receipt;
-        $plus = rawurldecode($request->plus);
-        $receipt = str_replace(' ', '+', $receipt);//should not use this because it wont happen. unless client forgot to do urlencode()
+  //   	$receipt = $request->receipt;
+  //       $plus = rawurldecode($request->plus);
+  //       $receipt = str_replace(' ', '+', $receipt);//should not use this because it wont happen. unless client forgot to do urlencode()
 
-        $client = new Client(['base_uri' => 'https://sandbox.itunes.apple.com']);
-        $response = $client->request('POST', '/verifyReceipt', [
-            'headers' => ['content-type' => 'application/json'],
-            'json' => [
-                'password' => '65c19378e32e47149339df84de781ecc',
-                'receipt-data' => $receipt
-            ]
-        ]);
+  //       $client = new Client(['base_uri' => 'https://sandbox.itunes.apple.com']);
+  //       $response = $client->request('POST', '/verifyReceipt', [
+  //           'headers' => ['content-type' => 'application/json'],
+  //           'json' => [
+  //               'password' => '65c19378e32e47149339df84de781ecc',
+  //               'receipt-data' => $receipt
+  //           ]
+  //       ]);
 
-        $receiptObject = json_decode($response->getBody(), false);
-        $prevProfileId = 0;
+  //       $receiptObject = json_decode($response->getBody(), false);
+  //       $prevProfileId = 0;
 
-        if($receiptObject->status==0){
-            $profiles = [];
-            foreach ($receiptObject->receipt->in_app as $receipt) {
-            	$profile = LogAppleTransaction::where('transaction_id' , $receipt->transaction_id)->first()->studentId;
+  //       if($receiptObject->status==0){
+  //           $profiles = [];
 
-            	if($profile->id != $prevProfileId){
-            		array_push($profiles, $profile);
-            	}
+  //           foreach ($receiptObject->receipt->in_app as $receipt) {
+  //           	$profile = LogAppleTransaction::where('transaction_id' , $receipt->transaction_id)->first()->studentId;
 
-            	$prevProfileId = $profile->id;
-            }
+  //           	if(!$profile){ continue; }
 
-        }else{
-			return ResponseHelper::OutputJSON('fail' , 'validation fail');
-        }
+  //           	if($profile->id != $prevProfileId){
+  //           		array_push($profiles, $profile);
+  //           	}
 
-		return ResponseHelper::OutputJSON('success' , '' , $profiles);
+  //           	$prevProfileId = $profile->id;
+  //           }
 
-    }
+  //       }else{
+		// 	return ResponseHelper::OutputJSON('fail' , 'validation fail');
+  //       }
 
+  //       if(!$profiles){
+		// 	return ResponseHelper::OutputJSON('success' , 'data not found');
+  //       }
+		// return ResponseHelper::OutputJSON('success' , '' , $profiles);
 
+  //   }
+
+	public function appleGetStudentIdByReceipt(\Illuminate\Http\Request $request){
+
+	    	$receipt = $request->receipt;
+	        $plus = rawurldecode($request->plus);
+	        $receipt = str_replace(' ', '+', $receipt);//should not use this because it wont happen. unless client forgot to do urlencode()
+
+	        $client = new Client(['base_uri' => 'https://sandbox.itunes.apple.com']);
+	        $response = $client->request('POST', '/verifyReceipt', [
+	            'headers' => ['content-type' => 'application/json'],
+	            'json' => [
+	                'password' => '65c19378e32e47149339df84de781ecc',
+	                'receipt-data' => $receipt
+	            ]
+	        ]);
+
+	        $receiptObject = json_decode($response->getBody(), false);
+	        $prevProfileId = 0;
+
+	        if($receiptObject->status==0){
+	            $transactionId = [];
+	           
+	            foreach ($receiptObject->receipt->in_app as $receipt){
+
+	            	array_push($transactionId , $receipt->transaction_id);
+
+	            }
+
+	            $profileIds = LogAppleTransaction::getProfile($transactionId);
+
+	            $profiles = GameProfile::whereIn('id',$profileIds )->get();
+	      
+	            foreach($profiles as $profile){
+	            	$profile->nickName1;
+					$profile->nickName2;
+					$profile->avatar;
+	            }
+	            	
+	        }else{
+				return ResponseHelper::OutputJSON('fail' , 'validation fail');
+	        }
+
+			return ResponseHelper::OutputJSON('success' , '' , $profiles);
+
+	    }
 
 }
 

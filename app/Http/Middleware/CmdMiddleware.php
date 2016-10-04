@@ -13,11 +13,12 @@ class CmdMiddleware{
 		$cmd = \Request::input('cmd');
 		
         $response = $next($request);
-      	$response = json_decode($response->content(), true);
+       
+      	// $response = json_decode($response->content(), true);
 
-      	if($cmd){
-      		$response['cmd'] = $cmd;
-      	}
+      	// if($cmd){
+      	// 	$response['cmd'] = $cmd;
+      	// }
 
         return $response;
     }
