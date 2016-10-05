@@ -14,4 +14,5 @@ class SpaceshipFloor extends Eloquent {
 
 	protected $hidden = [];
 
+
 } 

@@ -428,7 +428,7 @@ Class ApiProfileController extends Controller {
 
 		try {
 
-			$profile = GameProfile::select('id', 'user_id', 'class_id', 'student_id' , 'first_name', 'age', 'school', 'grade', 'city', 'country', 'email', 'nickname1', 'nickname2', 'avatar_id', 'coin' ,'expired_at')->find($id);
+			$profile = GameProfile::select('id', 'user_id', 'class_id', 'student_id' , 'first_name', 'age', 'school', 'grade', 'city', 'country', 'nickname1', 'nickname2', 'avatar_id', 'coin' ,'expired_at')->find($id);
 
 			if (!$profile) {
 				return ResponseHelper::OutputJSON('fail', 'profile not found');
