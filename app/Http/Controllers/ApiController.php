@@ -289,7 +289,6 @@ class ApiController extends Controller {
 		}
 
 		return ResponseHelper::OutputJSON('success');
-		
 	}
 
 	public function InviteTeacher(\Illuminate\Http\Request $request){

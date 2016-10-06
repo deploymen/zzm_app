@@ -1988,7 +1988,7 @@ Class ApiGameController extends Controller {
 
 	public function unlockItem(\Illuminate\Http\Request $request){
 
-		if(!$request->item_id){
+		if(!$request->item_id || !$request->floor_id){
 			return ResponseHelper::OutputJSON('fail' , 'missing parameter');
 		}
 
@@ -2060,7 +2060,9 @@ Class ApiGameController extends Controller {
 			'coin' => $coin
 			]);
 
-		return ResponseHelper::OutputJSON('success');
+		$spaceship = $this->getSpaceshipSub($request->student_profile_id);
+
+		return ResponseHelper::OutputJSON('success', '', $spaceship);
 
 	}
 

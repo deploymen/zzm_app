@@ -169,7 +169,7 @@ Class ApiProfileController extends Controller {
 				return ResponseHelper::OutputJSON('fail', array_flatten(head($validator->errors()))[0]);
 			}
 
-			$profile = GameProfile::where('student_id', $studentId)->first();
+			$profile = GameProfile::checkStudentId($studentId);
 			$studentIdChange = StudentIdChange::where('student_id', $studentId)->first();
 
 			if($profile || $studentIdChange){

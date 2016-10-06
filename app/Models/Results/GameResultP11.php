@@ -25,9 +25,9 @@ class GameResultP11 extends AbstractGameResult {
 			$result = GameResultP11::create([
 				'correct' => $answer['correct'],
 				'target_id' => $question->target_id,
-				'patty' => $answer['patty'];
-				'green' => $answer['green'];
-				'cheese' => $answer['cheese'];
+				'patty' => $answer['patty'],
+				'green' => $answer['green'],
+				'cheese' => $answer['cheese'],
 			]);
 
 			GameResult::create([
