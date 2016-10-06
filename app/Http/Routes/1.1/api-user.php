@@ -52,8 +52,6 @@ Route::group(['middleware' => 'auth.user'], function () {
 		Route::get('/result/only-planet', 'ResultController@onlyPlanetV1_1');
 		Route::get('/result/only-questions', 'ResultController@onlyQuestions');
 
-		Route::get('/report/profile-details', 'ApiProfileController@profileDetails');
-
 	});
 });
 

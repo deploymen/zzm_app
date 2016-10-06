@@ -90,15 +90,6 @@ class ApiController extends Controller {
 		return ResponseHelper::OutputJSON('success');
 	}
 
-	public function subscribeExternal(){
-		$source = Request::input('source', 'unknown');
-		$callback = Request::input('callback', 'welldone');
-		$this->subscribe($source);
-
-		$response = "{$callback}('welldone');";
-		die($response); 
-	}
-
 	public function contactUs(){
 
 		$email = Request::input("email");

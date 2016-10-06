@@ -13,6 +13,7 @@ class SpaceshipUserSpaceship extends Eloquent {
 	protected $dates = ['deleted_at'];
 
 	protected $hidden = [];
+	protected $fillable = ['user_id', 'profile_id' , 'spaceship_id', 'locked'];
 
 	public static function totalFloor($profileId, $spaceshipId){
 		$sql = " 

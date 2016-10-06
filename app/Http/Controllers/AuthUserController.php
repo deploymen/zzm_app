@@ -263,31 +263,10 @@ Class AuthUserController extends Controller {
 		}
 	}
 
-	public function connectGoogle() {
-		return ResponseHelper::OutputJSON('fail', 'not yet support');
-	}
-
 	public function signOut() {
 		Session::forget('access_token');
 		$cookie = Cookie::forget('access_token');
 		return redirect('user/signin')->withCookie($cookie);
-	}
-
-	public function check() {
-		try {
-
-			return ResponseHelper::OutputJSON('success', '', [
-				'user_id' => Request::input('user_id'),
-				'user_name' => Request::input('user_name'),
-				'user_role' => Request::input('user_role'),
-			]);
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'AuthUserController > check',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
 	}
 
 	public function changePassword() {
