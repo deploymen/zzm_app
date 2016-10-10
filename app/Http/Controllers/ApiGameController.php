@@ -227,13 +227,14 @@ Class ApiGameController extends Controller {
 
 				Cache::put($planetDifficultyCacheKey, $questions, Carbon::now()->addMinutes(5));
 			}
-
 			$coinDaily = 0;
 			$coinTutorial = 0;
 			$coinVideo = 0;
 
-			$playedEver = !!GamePlay::where('planet_id', $planetId)->where('profile_id', $profileId)->where('difficulty', $difficulty)->count();			
+			$playedEver = !!GamePlay::where('planet_id', $planetId)->where('profile_id', $profileId)->where('difficulty', $difficulty)->count();
+
 			$playedDaily = GamePlay::where('profile_id', $profileId)->whereRaw('DATE(`created_at`) = DATE(NOW())')->count();
+
 			$watchedTutorial = GamePlay::where('planet_id', $planetId)->where('profile_id', $profileId)->where('difficulty', $difficulty)->where('watched_tutorial' , 1)->first();
 
 			$rewardName = ($planet->popularity == 'basic')?'play-basic':'play-hots';
@@ -253,6 +254,7 @@ Class ApiGameController extends Controller {
 
 			//fail 2 time show video!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			$failCount = GamePlayThreshold::where('profile_id', $profileId)->where('planet_id', $planetId)->where('difficulty', $difficulty)->where('hit' , 2)->first();
+
 			if($failCount){
 				$coinVideo = CoinReward::GetEntitleCoinReward('watch-video');
 			}
@@ -284,9 +286,9 @@ Class ApiGameController extends Controller {
 	            ]);
 
 			} catch (Exception $ex) {
-				if(!$CATCH_EX){
+
 					throw $ex;
-				}
+			
 				LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 					'source' => 'ApiGameController > request',
 					'inputs' => Request::all(),
@@ -601,7 +603,6 @@ Class ApiGameController extends Controller {
 	}
 
 	public function resultV1_3($planetId) {
-		$CATCH_EX = false;
 
 		try{
 			$jsonGameResult = Request::input('game_result');
@@ -720,13 +721,6 @@ Class ApiGameController extends Controller {
 				'played' => '1'
 			]);;
 
-			AbstractGameResult::SubmitTypeResult($typeName, [
-				'planetId' => $planetId, 
-				'gamePlay' => $gamePlay, 
-				'gameResult' => $gameResult, 
-				'profileId' => $profileId, 
-			]);
-
 			//= Coin Rewards @start
 			$playedEver = !!GamePlay::where('planet_id', $planetId)->where('profile_id', $profileId)->where('difficulty', $difficulty)->count();			
 			$playedDaily = GamePlay::where('profile_id', $profileId)->whereRaw('DATE(`created_at`) = DATE(NOW())')->count();
@@ -735,6 +729,8 @@ Class ApiGameController extends Controller {
 			if($playedEver){
 				$rewardName = 'play-repeat';
 			}
+
+			$gamePlay->save();
 
 			$coinRegular = CoinReward::GetEntitleCoinReward($rewardName , 'difficulty-'.$difficulty );
 			$descriptionRegular = GameCoinTransaction::GetDescription($rewardName , ['playId' => $gamePlay->id , 'planetId' => $planetId , 'difficulty' => $difficulty ]);
@@ -745,7 +741,6 @@ Class ApiGameController extends Controller {
 				$descriptionDaily = GameCoinTransaction::GetDescription('play-daily' , ['playId' => $gamePlay->id ]);
 				GameCoinTransaction::DoTransaction($profileId, $coinDaily, $descriptionDaily);	
 			}
-
 			if($watchedTutorial){
 				$coinTutorial = CoinReward::GetEntitleCoinReward('watch-tutorial');
 				$descriptionTutorial = GameCoinTransaction::GetDescription('watch-tutorial' , ['playId' => $gamePlay->id ]);
@@ -756,9 +751,15 @@ Class ApiGameController extends Controller {
 			if($gameStatus === 'pass'){
 				$gamePlay->coin = $coinRegular;
 				$gamePlay->save();
-			}			
+			}	
 			//= Coin Rewards @end
-			$gamePlay->save();
+
+			AbstractGameResult::SubmitTypeResult($typeName, [
+				'planetId' => $planetId, 
+				'gamePlay' => $gamePlay, 
+				'gameResult' => $gameResult, 
+				'profileId' => $profileId, 
+			]);
 			
 			ZapZapQuestionHelper::UserMapV1_1($profileId, $planetId, $gamePlay, $gameResult, $difficulty); //update user_map
 			ZapZapQuestionHelper::LastSession($userId, $profileId, $gameResult, $playedTime);
@@ -1076,7 +1077,6 @@ Class ApiGameController extends Controller {
 			$totalStar = UserMap::where('profile_id', $profileId)->sum('star');
 
 			$profile = GameProfile::find($profileId);
-			
 			$profile->nickName1;
 			$profile->nickName2;
 			$profile->avatar;
@@ -1182,7 +1182,7 @@ Class ApiGameController extends Controller {
 					 ]);
 		
 		} catch (Exception $ex) {
-			throw $ex;
+	
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 				'source' => 'ApiGameController > getUserMap',
 				'inputs' => Request::all(),
@@ -1568,7 +1568,7 @@ Class ApiGameController extends Controller {
 		$studentId = Request::input('student_id');
 		$profileType = Request::input('student_profile_type');
 		// $results = array($result);
-		$results = json_decode( ($result), true );
+		$results = json_decode( ($jsonGameResult), true );
 
 		try{
 
