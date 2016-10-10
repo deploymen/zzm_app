@@ -1559,11 +1559,7 @@ Class ApiGameController extends Controller {
 	}
 
 	public function offlinePostV1_3(){
-		$jsonGameResult = Request::input('game_result');
-		$hash = Request::input('hash');
-		$random = Request::input('random');
-		$playedTime = Request::input('played_time', 0);
-		$watchedTutorial = Request::input('watch_tutorial', 0);
+		$jsonGameResult = Request::input('result');
 
 		$profileId = Request::input('student_profile_id');
 		$userId = Request::input('user_id');
@@ -1797,7 +1793,6 @@ Class ApiGameController extends Controller {
 
 		return ResponseHelper::OutputJSON('success', '' , [
 				'first_name' => $gameProfile->first_name,
-				'last_name' => $gameProfile->last_name,
 				'grade' =>$gameProfile->grade,
 				'total_star' => $totalStar,
 				'student_id' => $studentId,

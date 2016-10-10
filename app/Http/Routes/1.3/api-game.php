@@ -6,9 +6,6 @@ Route::group(['prefix' => 'game'], function () {
 	Route::get('/create-package', 'ApiGameController@createPackage');
 
 	Route::post('/sign-up', 'AuthUserController@signUpApp');
-
-	Route::get('/leaderboard/planet/{id}', 'ApiGameController@leaderBoardPlanet');
-
 	Route::post('student-id/anonymous', 'ApiProfileController@GenerateAnonymousStudentId');
 
 	Route::group(['middleware' => ['auth.student' , 'auth.cmd']], function () {

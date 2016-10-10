@@ -49,3 +49,4 @@ Route::group(['middleware' => ['auth.student']], function () {
 
 Route::any('pay-pal/ipn' , 'PaypalController@InstantPaymentNotification');
 Route::post('subscription/profile' , 'ApiController@appleGetStudentIdByReceipt');
+Route::get('braintree/client-token' , 'braintreeController@generateToken');
