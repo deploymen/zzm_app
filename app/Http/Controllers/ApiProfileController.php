@@ -20,7 +20,9 @@ use App\Models\UserMap;
 use App\Models\UserFlag;
 use App\Models\Age;
 use App\Models\LogFacebookShare;
-use App\Models\SpaceshipUser;
+use App\Models\SpaceshipUserSpaceship;
+use App\Models\SpaceshipUserItem;
+use App\Models\SpaceshipUserFloor;
 use App\Models\GameCoinTransaction;
 use App\Models\GameMission;
 use App\Models\StudentIdChange;
@@ -971,7 +973,17 @@ Class ApiProfileController extends Controller {
 			$profile->played = 1;
 			$profile->save();
 
-			SpaceshipUser::where('profile_id' , $deviceProfile->id)->update([
+			SpaceshipUserSpaceship::where('profile_id' , $deviceProfile->id)->update([
+				'user_id' => $profile->user_id,
+				'profile_id' => $profile->id
+				]);
+
+			SpaceshipUserFloor::where('profile_id' , $deviceProfile->id)->update([
+				'user_id' => $profile->user_id,
+				'profile_id' => $profile->id
+				]);
+
+			SpaceshipUserItem::where('profile_id' , $deviceProfile->id)->update([
 				'user_id' => $profile->user_id,
 				'profile_id' => $profile->id
 				]);
@@ -989,79 +1001,6 @@ Class ApiProfileController extends Controller {
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 				'source' => 'ApiProfileController > profileTransfer',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
-	}
-
-	public function unlockParentLimit() {
-		$userId = Request::input('user_id');
-
-		$fb = new Facebook([
-            'app_id' => env('FACEBOOK_APP_KEY'),
-            'app_secret' => env('FACEBOOK_APP_SECRET'),
-            'default_graph_version' => 'v2.5',
-       	 ]);
-
-		$helper = $fb->getJavaScriptHelper();
-
-        try {
-            $accessToken = $helper->getAccessToken();
-        } catch (Facebook\Exceptions\FacebookResponseException $e) {
-            // When Graph returns an error
-            // echo 'Graph returned an error: ' . $e->getMessage();
-            LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiProfileController > unlockUserLimit',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-        } catch (Facebook\Exceptions\FacebookSDKException $e) {
-            // When validation fails or other local issues
-            // echo 'Facebook SDK returned an error: ' . $e->getMessage();
-            LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiProfileController > unlockUserLimit',
-				'inputs' => Request::all(),
-			])]);
-        }
-
-        if (!isset($accessToken)) {
-			return ResponseHelper::OutputJSON('fail' , 'No cookie set or no OAuth data could be obtained from cookie.');
-        }
-
-		try {
-	        $postId = Request::input('post_id');
-
-	        $response = $fb->get('/' . $postId. '?fields=privacy', $accessToken->getValue());
-	        $graphObject = $response->getGraphObject();
-
-	        //get user Flag
-	        $userFlag = UserFlag::find($userId);
-	        if(!$userFlag){
-				return ResponseHelper::OutputJSON('fail' , 'user flag not found');
-	        }
-
-			if($graphObject['privacy']['value'] == 'SELF'){
-				return ResponseHelper::OutputJSON('fail' , 'privacy is not allow');
-			}
-
-			$userFlag->profile_limit = 5;
-			$userFlag->total_share = $userFlag->total_share+1;
-			$userFlag->save();
-
-			$logFacebookShare = new LogFacebookShare;
-			$logFacebookShare->user_id = $userId;
-			$logFacebookShare->privacy = $graphObject['privacy']['value'];
-			$logFacebookShare->post_id = $postId;
-			$logFacebookShare->created_ip = Request::ip();
-			$logFacebookShare->save();
-
-			return ResponseHelper::OutputJSON('success');
-
-
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiProfileController > unlockUserLimitt',
 				'inputs' => Request::all(),
 			])]);
 			return ResponseHelper::OutputJSON('exception');
@@ -1209,7 +1148,6 @@ Class ApiProfileController extends Controller {
 
 
 		} catch (Exception $ex) {
-			throw $ex;
 			DB::rollback();
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 				'source' => 'ApiProfileController > createMultipleProfile',

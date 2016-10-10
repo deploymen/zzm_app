@@ -49,6 +49,7 @@ use App\Models\SpaceshipUserSpaceship;
 use App\Models\SpaceshipUserItem;
 use App\Models\SpaceshipUserFloor;
 use App\Models\SpaceshipFloor;
+use App\Models\SpaceshipItem;
 
 use App\Models\Questions\AbstractGameQuestion;
 use App\Models\Results\AbstractGameResult;
@@ -1966,13 +1967,24 @@ Class ApiGameController extends Controller {
 		}
 
 		$coinUnlockFloor = 'coin_unlock_floor_'.$count;
+		$spaceship = Spaceship::find($request->spaceship_id);
 
-		$gameCoinTransaction = GameCoinTransaction::DoPaymentTransaction( $request->student_profile_id , $coinUnlockFloor ,'unlock-spaceship-floor-'.$request->floor_id);
+		$gameCoinTransaction = GameCoinTransaction::DoPaymentTransaction( $request->student_profile_id , $spaceship->$coinUnlockFloor ,'unlock-spaceship-floor-'.$request->floor_id);
 
 		if(!$gameCoinTransaction){
 			return ResponseHelper::OutputJSON('fail' , 'transaction denied');
 		}
 
+		$spaceshipItem = SpaceshipItem::where('floor_id', $request->floor_id)->first();
+
+		SpaceshipUserItem::create([
+			'user_id' => $request->user_id,
+			'profile_id' => $request->student_profile_id,
+			'floor_id' => $request->floor_id,
+			'item_id' => $spaceshipItem->id,
+			'selected' => 1,
+			'locked' => 0,
+			]);
 		//CANNOT INSERT THIS EVERYTIME
 		SpaceshipUserFloor::create([
 			'user_id' => $request->user_id,
@@ -2006,10 +2018,7 @@ Class ApiGameController extends Controller {
 		}
 
 		$nextPurchase = 'coin_unlock_item_'.$count;
-		$coinValue = $floor->nextPurchase;
-		if($floor->nextPurchase == 0){
-			$coinValue = '0';
-		}
+		$coinValue = $floor->$nextPurchase;
 
 		$gameCoinTransaction = GameCoinTransaction::DoPaymentTransaction( $request->student_profile_id , $coinValue ,'unlock-spaceship-item-'.$request->item_id);
 		if(!$gameCoinTransaction){
@@ -2038,7 +2047,7 @@ Class ApiGameController extends Controller {
 			return ResponseHelper::OutputJSON('fail' , 'missing parameter');	
 		}
 
-		SpaceshipUserItem::where('profile_id' , $profileId)->update([
+		SpaceshipUserItem::where('profile_id' , $profileId)->where('floor_id' , $floorId)->update([
 			'selected' => 0
 		]);
 
@@ -2056,11 +2065,12 @@ Class ApiGameController extends Controller {
 	public function addCoin(){
 		$studentId = Request::input('student_id');
 		$coin = Request::input('coin');
+		$profileId = Request::input('student_profile_id');
 		$profile = GameProfile::where('student_id' , $studentId)->update([
 			'coin' => $coin
 			]);
 
-		$spaceship = $this->getSpaceshipSub($request->student_profile_id);
+		$spaceship = $this->getSpaceshipSub($profileId);
 
 		return ResponseHelper::OutputJSON('success', '', $spaceship);
 

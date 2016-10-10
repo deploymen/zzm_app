@@ -37,7 +37,6 @@ class GameCoinTransaction extends Eloquent {
 		if($profile->coin < 0){
 			return false;
 		}
-		
 		$profile->save();
 
 		self::create([

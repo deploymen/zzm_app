@@ -13,7 +13,7 @@ class SpaceshipUserItem extends Eloquent {
 	protected $dates = ['deleted_at'];
 
 	protected $hidden = [];
-	protected $fillable = ['user_id', 'profile_id', 'floor_id' , 'item_id' , 'locked'];
+	protected $fillable = ['user_id', 'profile_id', 'floor_id' , 'item_id' , 'locked' , 'selected'];
 
 	public static function totalItems($profileId, $floorId){
 		$sql = " 

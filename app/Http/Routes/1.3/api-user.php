@@ -67,7 +67,6 @@ Route::get('set/nick', 'ApiProfileController@getNick');
 Route::group(['middleware' => 'auth.user'], function () {
 	Route::delete('remove/account', 'AuthUserController@deleteAccount');
 	Route::get('user/check-user-flag', 'AuthUserController@checkUserFlag');
-	Route::post('user/facebook/share-unlock', 'ApiProfileController@unlockParentLimit');
-	Route::post('user/invite/share-unlock', 'ApiProfileController@unlockParentLimit');
+
 });
 

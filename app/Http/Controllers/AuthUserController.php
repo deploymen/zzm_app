@@ -263,12 +263,6 @@ Class AuthUserController extends Controller {
 		}
 	}
 
-	public function signOut() {
-		Session::forget('access_token');
-		$cookie = Cookie::forget('access_token');
-		return redirect('user/signin')->withCookie($cookie);
-	}
-
 	public function changePassword() {
 
 		$userId = Request::input('user_id');
@@ -836,9 +830,6 @@ Class AuthUserController extends Controller {
 			'username' => $email,
 			'name' => $name,
 		]);
-
-
-		$firstLogin = 1;
 
 		$cookie = Cookie::make('access_token', $userAccess->access_token);
 
