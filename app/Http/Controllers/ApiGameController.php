@@ -1924,7 +1924,7 @@ Class ApiGameController extends Controller {
 			$cointUnlockSpaceship = '10000';
 		}
 
-		$gameCoinTransaction = GameCoinTransaction::DoPaymentTransaction( $request->student_profile_id , $cointUnlockSpaceship ,'unlock-spaceship-floor-'.$request->spaceship_id);
+		$gameCoinTransaction = GameCoinTransaction::DoPaymentTransaction( $request->student_profile_id , $cointUnlockSpaceship ,'unlock-spaceship-spaceship-'.$request->spaceship_id);
 
 		if(!$gameCoinTransaction){
 			return ResponseHelper::OutputJSON('fail' , 'transaction denied');
