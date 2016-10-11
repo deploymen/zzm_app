@@ -8,7 +8,7 @@ Route::group(['middleware' => 'auth.user'], function () {
 	Route::group(['middleware' => 'auth.parent'], function () {
 		Route::group(['prefix' => '/profiles'], function () {
 			Route::get('/', 'ApiProfileController@get');
-			Route::post('/', 'ApiProfileController@create');
+			Route::post('/', 'ApiProfileController@createV1_3');
 			Route::get('/{id}', 'ApiProfileController@getProfile');
 			Route::put('/{id}/edit', 'ApiProfileController@update');
 			Route::delete('/{id}', 'ApiProfileController@delete');
