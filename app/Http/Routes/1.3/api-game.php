@@ -39,4 +39,3 @@ Route::group(['prefix' => 'game'], function () {
 
 
 Route::any('/{endpoint}', ['as' => 'try_prev_version', function(){die('NEED TO HANDLE1.3');}])->where('endpoint', '.*');
-
