@@ -8,7 +8,7 @@ use App\Models\AvatarSet;
 use App\Models\GameCode;
 use App\Models\SetNickname1;
 use App\Models\SetNickname2;
-
+use DB;
 
 class GameProfile extends Eloquent {
 	use SoftDeletes;
@@ -36,5 +36,15 @@ class GameProfile extends Eloquent {
 
 	public function nickName2() {
 		return $this->hasOne('App\Models\SetNickname2', 'id', 'nickname2');
+	}
+
+	public static function checkStudentId($studentId){
+		$sql = "
+			SELECT * 
+				FROM `t0111_game_profile` 
+					WHERE `student_id` = :student_id
+		";
+
+		return DB::select($sql , ['student_id' => $studentId]);
 	}
 }

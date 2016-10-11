@@ -25,6 +25,7 @@ use App\Models\AppVersion;
 use App\Models\User;
 use App\Models\GameProfile;
 use App\Models\LogAppleTransaction;
+use App\Models\UserSubsTransaction;
 
 use GuzzleHttp;
 use ReceiptValidator\iTunes\Validator as iTunesValidator;
@@ -87,15 +88,6 @@ class ApiController extends Controller {
 
 
 		return ResponseHelper::OutputJSON('success');
-	}
-
-	public function subscribeExternal(){
-		$source = Request::input('source', 'unknown');
-		$callback = Request::input('callback', 'welldone');
-		$this->subscribe($source);
-
-		$response = "{$callback}('welldone');";
-		die($response); 
 	}
 
 	public function contactUs(){
@@ -297,7 +289,6 @@ class ApiController extends Controller {
 		}
 
 		return ResponseHelper::OutputJSON('success');
-		
 	}
 
 	public function InviteTeacher(\Illuminate\Http\Request $request){
@@ -349,11 +340,17 @@ class ApiController extends Controller {
 	public function appleValidateSubscription(\Illuminate\Http\Request $request){
 
         //this method is to validate new subscription
+        $sandbox = config::get('app.sandbox');
         $receipt = $request->receipt;
         $plus = rawurldecode($request->plus);
         $receipt = str_replace(' ', '+', $receipt);//should not use this because it wont happen. unless client forgot to do urlencode()
 
-        $client = new Client(['base_uri' => 'https://sandbox.itunes.apple.com']);
+        if($sandbox){
+     	   	$client = new Client(['base_uri' => 'https://sandbox.itunes.apple.com']);
+        }else{
+        	$client = new Client(['base_uri' => 'https://buy.itunes.apple.com/verifyReceipt']);
+        }
+    
         $response = $client->request('POST', '/verifyReceipt', [
             'headers' => ['content-type' => 'application/json'],
             'json' => [
@@ -439,6 +436,7 @@ class ApiController extends Controller {
             }
 
             if($claimed){
+
 				return ResponseHelper::OutputJSON('success');
                 	
             }else{
@@ -483,18 +481,33 @@ class ApiController extends Controller {
         	'web_order_line_item_id' => $receipt->web_order_line_item_id,
         	'is_trial_period' => $receipt->is_trial_period,
     	]);
+
+		UserSubsTransaction::create([
+			'user_id' => $request->user_id,
+			'package_id' => $productId,
+			'target_type' => 'profile',
+			'target_id' => $request->student_profile_id,
+			'expired_at' => $receipt->expires_date,
+			]);
     	
     }
 
     public function scheduleAppleCheckRecurring_onPremiumProfile(){
         //get all grace period 
+    	$sandbox = config::get('app.sandbox');
         $graces = []; //replace this with actual model method
         foreach ($graces as $grace) {
             $originalReceipt = $grace->originalReceipt; //replace this with actual model method
             if(!$originalReceipt){ continue; /* this should not happen */}
             
             //query apple
-            $client = new Client(['base_uri' => 'https://sandbox.itunes.apple.com']);
+
+    	    if($sandbox){
+	     	   	$client = new Client(['base_uri' => 'https://sandbox.itunes.apple.com']);
+	        }else{
+	        	$client = new Client(['base_uri' => 'https://buy.itunes.apple.com/verifyReceipt']);
+	        }
+
             $response = $client->request('POST', '/verifyReceipt', [
                 'headers' => ['content-type' => 'application/json'],
                 'json' => [
@@ -554,48 +567,54 @@ class ApiController extends Controller {
 
 	public function appleGetStudentIdByReceipt(\Illuminate\Http\Request $request){
 
-	    	$receipt = $request->receipt;
-	        $plus = rawurldecode($request->plus);
-	        $receipt = str_replace(' ', '+', $receipt);//should not use this because it wont happen. unless client forgot to do urlencode()
+    	$sandbox = config::get('app.sandbox');
+    	$receipt = $request->receipt;
+        $plus = rawurldecode($request->plus);
+        $receipt = str_replace(' ', '+', $receipt);//should not use this because it wont happen. unless client forgot to do urlencode()
 
-	        $client = new Client(['base_uri' => 'https://sandbox.itunes.apple.com']);
-	        $response = $client->request('POST', '/verifyReceipt', [
-	            'headers' => ['content-type' => 'application/json'],
-	            'json' => [
-	                'password' => '65c19378e32e47149339df84de781ecc',
-	                'receipt-data' => $receipt
-	            ]
-	        ]);
-
-	        $receiptObject = json_decode($response->getBody(), false);
-	        $prevProfileId = 0;
-
-	        if($receiptObject->status==0){
-	            $transactionId = [];
-	           
-	            foreach ($receiptObject->receipt->in_app as $receipt){
-
-	            	array_push($transactionId , $receipt->transaction_id);
-
-	            }
-
-	            $profileIds = LogAppleTransaction::getProfile($transactionId);
-
-	            $profiles = GameProfile::whereIn('id',$profileIds )->get();
-	      
-	            foreach($profiles as $profile){
-	            	$profile->nickName1;
-					$profile->nickName2;
-					$profile->avatar;
-	            }
-	            	
-	        }else{
-				return ResponseHelper::OutputJSON('fail' , 'validation fail');
-	        }
-
-			return ResponseHelper::OutputJSON('success' , '' , $profiles);
-
+        if($sandbox){
+	 	   	$client = new Client(['base_uri' => 'https://sandbox.itunes.apple.com']);
+	    }else{
+	    	$client = new Client(['base_uri' => 'https://buy.itunes.apple.com/verifyReceipt']);
 	    }
+	    
+        $response = $client->request('POST', '/verifyReceipt', [
+            'headers' => ['content-type' => 'application/json'],
+            'json' => [
+                'password' => '65c19378e32e47149339df84de781ecc',
+                'receipt-data' => $receipt
+            ]
+        ]);
+
+        $receiptObject = json_decode($response->getBody(), false);
+        $prevProfileId = 0;
+
+        if($receiptObject->status==0){
+            $transactionId = [];
+           
+            foreach ($receiptObject->receipt->in_app as $receipt){
+
+            	array_push($transactionId , $receipt->transaction_id);
+
+            }
+
+            $profileIds = LogAppleTransaction::getProfile($transactionId);
+
+            $profiles = GameProfile::whereIn('id',$profileIds )->get();
+      
+            foreach($profiles as $profile){
+            	$profile->nickName1;
+				$profile->nickName2;
+				$profile->avatar;
+            }
+            	
+        }else{
+			return ResponseHelper::OutputJSON('fail' , 'validation fail');
+        }
+
+		return ResponseHelper::OutputJSON('success' , '' , $profiles);
+
+    }
 
 }
 

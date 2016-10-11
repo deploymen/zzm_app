@@ -9,10 +9,6 @@ Route::pattern('role', '(parent)|(teacher)|(admin)|(content)|(investor)');
 Route::group(['prefix' => 'auth'], function () {
 	Route::post('/sign-up', 'AuthUserController@signUp'); //only for parent|teacher
 	Route::post('/sign-in', 'AuthUserController@signIn');
-	Route::post('/sign-out', 'AuthUserController@signOut');
-
-	Route::post('/connect/facebook', 'AuthUserController@connectFacebook');
-	Route::post('/connect/google', 'AuthUserController@connectGoogle');
 
 	Route::get('/activate/{secret_key}', 'AuthUserController@activate');
 	Route::post('/activate-code', 'AuthUserController@ResendACtivateCode');
@@ -22,7 +18,6 @@ Route::group(['prefix' => 'auth'], function () {
 	Route::post('/invite-parent', 'AuthUserController@invite');
 
 	Route::group(['middleware' => 'auth.user'], function () {
-		Route::post('/check', 'AuthUserController@check');
 		Route::post('/change-password', 'AuthUserController@changePassword');
 	});
 });
@@ -37,26 +32,22 @@ Route::get('/flag', 'ApiCmsController@getFlag');
 
 Route::group(['prefix' => 'pre-launch'], function () {
 	Route::post('/contact-us', 'ApiController@contactUs');
-	Route::get('/subscribe-external', 'ApiController@subscribeExternal');
 });
 
 Route::any('/subscribe', 'ApiController@subscribe');
-
-Route::post('launch-notification', 'ApiController@launchNotification');
-
-Route::get('status', 'ApiCheckingController@CheckGameStatus');
-
 Route::get('check-ip-details', 'ApiCheckingController@CheckIpDetails');
-
 Route::get('weekly-report', 'ApiController@weeklyReport');
-
 Route::post('user/invite/teacher' , 'ApiController@inviteTeacher');
-
 Route::get('send-in-blue' , 'ApiController@SendInBlue');
-
-Route::any('pay-pal/ipn' , 'PaypalController@InstantPaymentNotification');
-Route::post('subscription/validation/apple' , 'ApiController@AppleValidation');
 
 Route::group(['prefix' => 'admin'], function () {
 	Route::get('/paypal/transaction-history', 'ApiAdminController@getTransaction');
 });
+Route::group(['middleware' => ['auth.student']], function () {
+	Route::post('subscription/validation/apple' , 'ApiController@appleValidateSubscription');
+});
+
+Route::any('pay-pal/ipn' , 'PaypalController@InstantPaymentNotification');
+Route::post('subscription/profile' , 'ApiController@appleGetStudentIdByReceipt');
+Route::get('braintree/client-token' , 'BraintreeController@generateToken');
+Route::post('braintree/validation' , 'BraintreeController@braintreeValidation');

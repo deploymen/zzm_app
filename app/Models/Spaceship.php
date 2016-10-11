@@ -16,10 +16,11 @@ class Spaceship extends Eloquent {
 
 	public static function getSpaceship($profileId){
 		$sql = "
-			SELECT s.`id` AS `spaceship_id` , s.`name` AS `spaceship_name`, f.`id` AS `floor_id` , f.`name` AS `floor_name`, i.`id` AS `item_id` , i.`name` AS `item_name`, IF(u.`selected`,u.`selected`, 0) AS `selected` , IF(u.`locked` ,u.`locked`,0) AS `locked`, IF(uf.`id` , 1, 0) AS `unlock`
+			SELECT s.`id` AS `spaceship_id` , s.`name` AS `spaceship_name`, f.`id` AS `floor_id` , f.`name` AS `floor_name`, i.`id` AS `item_id` , i.`name` AS `item_name`, IF(ui.`selected`,ui.`selected`, 0) AS `selected` , IF(ui.`locked`= 0 , 0, 1) AS `item_locked` , IF(us.`locked` = 0 , 0, 1) AS `spaceship_locked` , IF(uf.`locked`= 0 , 0, 1) AS `floor_locked`
 				FROM (`t0141_spaceship` s, `t0142_spaceship_floor` f, `t0143_spaceship_item` i)
-					LEFT JOIN `t0140_spaceship_user` u ON u.`item_id` = i.`id` AND u.`profile_id` = :profile_id
-					LEFT JOIN `t0140_spaceship_user_floor` uf ON uf.`floor_id` = f.`id` AND uf.`profile_id` =:profile_id2
+					LEFT JOIN `t0140_spaceship_user_spaceship` us ON us.`spaceship_id` = s.`id` AND us.`profile_id` = :profile_id1
+					LEFT JOIN `t0140_spaceship_user_item` ui ON ui.`item_id` = i.`id` AND ui.`profile_id` = :profile_id2
+					LEFT JOIN `t0140_spaceship_user_floor` uf ON uf.`floor_id` = f.`id` AND uf.`profile_id` =:profile_id3
 					WHERE s.`enable` = 1
 					AND f.`enable` = 1
 					AND i.`enable` = 1
@@ -29,7 +30,7 @@ class Spaceship extends Eloquent {
 					ORDER BY s.`sequence` ASC , f.`sequence` ASC , i.`sequence` ASC
 		";
 
-		$result = DB::select($sql , ['profile_id' => $profileId, 'profile_id2' => $profileId]);
+		$result = DB::select($sql , ['profile_id1' => $profileId, 'profile_id2' => $profileId, 'profile_id3' => $profileId]);
 		return $result;
 	}
 
