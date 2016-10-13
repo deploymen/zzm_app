@@ -21,9 +21,10 @@ class ApiQuizController extends Controller
         }
 
         try{
-            $output = [];
             $quiz = new QuizGameQuestion();
             $questions = $quiz->getQuestion($difficulty);
+
+            QuizUser::deleteInactivePlayers();
 
             $players = new QuizUser;
             $top_players = $players->leaderBoard();
@@ -34,38 +35,30 @@ class ApiQuizController extends Controller
 
             $current_player_id = $players->id;
 
-            array_push($output, [
-                'questions' => $questions,
+            return ResponseHelper::OutputJSON('success', '', ['questions' => $questions,
                 'top_players' => $top_players,
                 'current_player_id' => $current_player_id
             ]);
-
-            if($output){
-                return ResponseHelper::OutputJSON('success', $output);
-            }
 
         }catch (Exception $ex){
             return ResponseHelper::OutputJSON('failed', $ex->getMessage());
         }
 
-        return null;
     }
 
     public function getLeaderBoard() {
 
         try{
             $top_players = new QuizUser();
-            $data = $top_players->LeaderBoard();
+            $data = $top_players->leaderBoard();
 
-            if($data){
-                return ResponseHelper::OutputJSON('success', $data);
-            }
+            return ResponseHelper::OutputJSON('success', '', [
+                'leader_board' => $data
+            ]);
 
         }catch (Exception $ex){
             return ResponseHelper::OutputJSON('Failed: Unable to load leader board', $ex->getMessage());
         }
-
-        return null;
     }
 
     public function updateResult(){
@@ -73,7 +66,7 @@ class ApiQuizController extends Controller
         $score = Request::input('score');
 
         if(($user_id != "" && is_numeric($user_id)) && ($score != "" && is_numeric($score)) ){
-            $username = Request::input('username');
+            $username = Request::input('name');
             $email = Request::input('email');
 
             try{
@@ -81,10 +74,13 @@ class ApiQuizController extends Controller
                 $player->name = $username;
                 $player->email = $email;
                 $player->score = $score;
+                $player->finished_game = 1;
 
                 $player->save();
 
-                return ResponseHelper::OutputJSON('success', '', $player->toArray());
+                return ResponseHelper::OutputJSON('success', '', [
+                    'player_result' => $player->toArray()
+                ]);
 
             }catch (Exception $ex){
                 return ResponseHelper::OutputJSON('Failed '.Request::all(), $ex->getMessage());

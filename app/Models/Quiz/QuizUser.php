@@ -13,7 +13,6 @@ class QuizUser extends Model
     protected $fillable = ['name', 'email', 'score'];
     protected $limit = 10;
 
-
     public function leaderBoard(){
 
         $query = "SELECT * FROM {$this->table} WHERE score > :score ORDER BY score DESC LIMIT :limit";
@@ -39,6 +38,24 @@ class QuizUser extends Model
         }
 
         return $output;
+    }
+
+    public static function deleteInactivePlayers() {
+
+        $query = "DELETE FROM t9999_quiz_users WHERE finished_game = :finished_game
+                        AND created_at < (NOW() - INTERVAL 3 MINUTE)";
+
+        DB::DELETE($query, [
+            'finished_game' => 0
+        ]);
+
+        $max = DB::SELECT("SELECT id FROM t9999_quiz_users ORDER BY id DESC LIMIT 1");
+
+        foreach ($max as $maxId){
+            $reset_id = "ALTER TABLE t9999_quiz_users AUTO_INCREMENT = {$maxId->id}";
+        }
+
+        DB::statement($reset_id);
     }
 
 }
