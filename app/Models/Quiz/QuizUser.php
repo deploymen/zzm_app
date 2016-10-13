@@ -25,13 +25,20 @@ class QuizUser extends Model
         $output = [];
 
         if($users){
+            $index = 1;
+
+            $positions = array('th','st','nd','rd','th','th','th','th','th','th');
+
             foreach ($users as $user){
                 array_push($output, [
                     'user_id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
-                    'score' => $user->score
+                    'score' => $user->score,
+                    'position' => $index.$positions[$index % 10]
                 ]);
+
+                $index++;
             }
         }else{
             return "No user found";
