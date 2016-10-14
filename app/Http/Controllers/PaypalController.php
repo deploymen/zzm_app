@@ -154,22 +154,27 @@ class PaypalController extends Controller {
 				}
 
 				$logPaypalTransaction->save();
+
+				$this->log('transaction safe','');
 				$expiredAt = date("Y-m-d H:i:s", strtotime('+1 year'));
 
 				if($custom[1] == 'parent'){
 					$profile = GameProfile::find($custom[3]);
 					$profile->expired_at = $expiredAt;
 					$profile->save();
+					$this->log('upgrade profile  safe','');
 
 					$targetType = 'profile';
 					$package = 'profile-yearly-4.99';
+					
+
 				}	
 
 				if($custom[1] == 'teacher'){
 					$class = GameClass::find($custom[3]);
 					$class->expired_at = $expiredAt;
 					$class->save();
-
+					$this->log('upgrade class  safe','');
 					$targetType = 'class';
 					$package = 'class-yearly-99';
 				}
@@ -185,6 +190,9 @@ class PaypalController extends Controller {
 					'target_id' => $custom[3],
 					'expired_at' => $expiredAt,
 					]);
+
+				$this->log('userSubtransaction safe','');
+
 
 			} else if (strcmp ($res, "INVALID") == 0) {
 

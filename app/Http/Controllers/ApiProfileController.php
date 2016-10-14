@@ -20,7 +20,9 @@ use App\Models\UserMap;
 use App\Models\UserFlag;
 use App\Models\Age;
 use App\Models\LogFacebookShare;
-use App\Models\SpaceshipUser;
+use App\Models\SpaceshipUserSpaceship;
+use App\Models\SpaceshipUserItem;
+use App\Models\SpaceshipUserFloor;
 use App\Models\GameCoinTransaction;
 use App\Models\GameMission;
 use App\Models\StudentIdChange;
@@ -121,33 +123,8 @@ Class ApiProfileController extends Controller {
 			}
 		
 			$avatarIdSet = AvatarSet::find($avatarId);
+			$newProfile = ApiProfileHelper::newProfile($userId, $classId  ,$firstName, $age, $school, $grade, $nickname1, $nickname2, $avatarId , '');
 
-			$profile = new GameProfile;
-			$profile->user_id = $userId;
-			$profile->class_id = $classId;
-			$profile->first_name = $firstName;
-			$profile->last_name = $lastName;
-			$profile->age = $age;
-			$profile->school = $school;
-			$profile->grade = $grade;
-			$profile->nickname1 = $nickname1;
-			$profile->nickname2 = $nickname2;
-			$profile->avatar_id = $avatarId;
-			$profile->save();
-
-			$idCounter = IdCounter::find(1);
-			$gameCodeSeed = $idCounter->game_code_seed;
-			$idCounter->game_code_seed = $gameCodeSeed + 1;
-			$idCounter->save();
-
-			$code = new GameCode;
-			$code->type = 'signed_up_profile';
-			$code->code = ZapZapHelper::GenerateGameCode($gameCodeSeed);
-			$code->seed = $gameCodeSeed;
-			$code->profile_id = $profile->id;
-			$code->save();
-
-			DatabaseUtilHelper::LogInsert($userId, $profile->table, $userId);
 
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
@@ -158,98 +135,98 @@ Class ApiProfileController extends Controller {
 		}
 
 		return ResponseHelper::OutputJSON('success', '', [
-			'profile' => $profile,
+			'profile' => $newProfile,
 		]); //production
 	}
 
-	// public function create() {
+	public function createV1_3() {
 
-	// 	$userId = Request::input('user_id');
+		$userId = Request::input('user_id');
 
-	// 	$firstName = Request::input('first_name');
-	// 	$age = Request::input('age');
-	// 	$school = Request::input('school');
-	// 	$grade = Request::input('grade');
-	// 	$studentId = Request::input('student_id');
-	// 	$classId = Request::input('class_id' , 0);
+		$firstName = Request::input('first_name');
+		$age = Request::input('age');
+		$school = Request::input('school');
+		$grade = Request::input('grade');
+		$studentId = Request::input('student_id');
+		$classId = Request::input('class_id' , 0);
 
-	// 	$nickname1 = Request::input('nickname1', 999);
-	// 	$nickname2 = Request::input('nickname2', 999);
-	// 	$avatarId = Request::input('avatar_id', 999);
+		$nickname1 = Request::input('nickname1', 999);
+		$nickname2 = Request::input('nickname2', 999);
+		$avatarId = Request::input('avatar_id', 999);
 
-	// 	try {
+		try {
 		
-	// 		$nickname1Set = SetNickname1::find($nickname1);
-	// 		$nickname2Set = SetNickname2::find($nickname2);
+			$nickname1Set = SetNickname1::find($nickname1);
+			$nickname2Set = SetNickname2::find($nickname2);
 
-	// 		$validator = Validator::make( Input::all(), [
-	// 			'first_name' => 'required',
-	// 			'age' => 'required',
-	// 			'school' => 'required',
-	// 			'grade' => 'required',
-	// 			'student_id' => 'required|min:6|max:20|regex:/^[a-zA-Z0-9@()_\-:\/]+$/',
-	// 		]);
+			$validator = Validator::make( Input::all(), [
+				'first_name' => 'required',
+				'age' => 'required',
+				'school' => 'required',
+				'grade' => 'required',
+				'student_id' => 'required|min:6|max:20|regex:/^[a-zA-Z0-9@()_\-:\/]+$/',
+			]);
 
-	// 		if ($validator->fails()) {
-	// 			return ResponseHelper::OutputJSON('fail', array_flatten(head($validator->errors()))[0]);
-	// 		}
+			if ($validator->fails()) {
+				return ResponseHelper::OutputJSON('fail', array_flatten(head($validator->errors()))[0]);
+			}
 
-	// 		$profile = GameProfile::where('student_id', $studentId)->first();
-	// 		$studentIdChange = StudentIdChange::where('student_id', $studentId)->first();
+			$profile = GameProfile::checkStudentId($studentId);
+			$studentIdChange = StudentIdChange::where('student_id', $studentId)->first();
 
-	// 		if($profile || $studentIdChange){
-	// 			return ResponseHelper::OutputJSON('fail', "student id has been used");
-	// 		}
+			if($profile || $studentIdChange){
+				return ResponseHelper::OutputJSON('fail', "student id has been used");
+			}
 					
-	// 		if (!$nickname1Set || !$nickname2Set) {
-	// 			return ResponseHelper::OutputJSON('fail', "invalid nickname id");
-	// 		}
+			if (!$nickname1Set || !$nickname2Set) {
+				return ResponseHelper::OutputJSON('fail', "invalid nickname id");
+			}
 
-	// 		if (!$avatarId) {
-	// 			return ResponseHelper::OutputJSON('fail', "invalid avatar id");
-	// 		}
+			if (!$avatarId) {
+				return ResponseHelper::OutputJSON('fail', "invalid avatar id");
+			}
 
-	// 		if($classId){
-	// 			$gameClass = GameClass::find($classId);
-	// 			if(!$gameClass || $gameClass->user_id != $userId) {
-	// 				return ResponseHelper::OutputJSON('fail', "class not found");
-	// 			}
-	// 		}
+			if($classId){
+				$gameClass = GameClass::find($classId);
+				if(!$gameClass || $gameClass->user_id != $userId) {
+					return ResponseHelper::OutputJSON('fail', "class not found");
+				}
+			}
 
-	// 		$userFlag = UserFlag::find($userId);
-	// 		if(!$userFlag){
-	// 			return ResponseHelper::OutputJSON('fail', "user flag not found");
-	// 		}
+			$userFlag = UserFlag::find($userId);
+			if(!$userFlag){
+				return ResponseHelper::OutputJSON('fail', "user flag not found");
+			}
 			
-	// 		if($classId){
-	// 			$profileClass = GameProfile::where('class_id', $classId)->where('user_id', $userId)->count();
-	// 			$profileLimit = ($gameClass->expired_at > date("Y-m-d H:i:s"))?50:30;
+			if($classId){
+				$profileClass = GameProfile::where('class_id', $classId)->where('user_id', $userId)->count();
+				$profileLimit = ($gameClass->expired_at > date("Y-m-d H:i:s"))?50:30;
 
-	// 			if($profileClass >= $profileLimit){
-	// 				return ResponseHelper::OutputJSON('fail', "class limited" );
-	// 			}
-	// 		}else{
-	// 			$userProfile = GameProfile::where('user_id', $userId)->count();
+				if($profileClass >= $profileLimit){
+					return ResponseHelper::OutputJSON('fail', "class limited" );
+				}
+			}else{
+				$userProfile = GameProfile::where('user_id', $userId)->count();
 
-	// 			if($userProfile >= $userFlag->profile_limit){
-	// 				return ResponseHelper::OutputJSON('fail', "profile limited" , ['total_share' => $userFlag->total_share]);
-	// 			}
-	// 		}
+				if($userProfile >= $userFlag->profile_limit){
+					return ResponseHelper::OutputJSON('fail', "profile limited" , ['total_share' => $userFlag->total_share]);
+				}
+			}
 			
-	// 		$newProfile = ApiProfileHelper::newProfile($userId, $classId  ,$firstName, $age, $school, $grade, $nickname1, $nickname2, $avatarId , $studentId);
+			$newProfile = ApiProfileHelper::newProfile($userId, $classId  ,$firstName, $age, $school, $grade, $nickname1, $nickname2, $avatarId , $studentId);
 
-	// 	} catch (Exception $ex) {
-	// 		LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-	// 			'source' => 'ApiProfileController > create',
-	// 			'inputs' => Request::all(),
-	// 		])]);
-	// 		return ResponseHelper::OutputJSON('exception');
-	// 	}
+		} catch (Exception $ex) {
+			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+				'source' => 'ApiProfileController > create',
+				'inputs' => Request::all(),
+			])]);
+			return ResponseHelper::OutputJSON('exception');
+		}
 
-	// 	return ResponseHelper::OutputJSON('success', '', [
-	// 		'profile' => $newProfile,
-	// 	]); //dev
-	// }
+		return ResponseHelper::OutputJSON('success', '', [
+			'profile' => $newProfile,
+		]); //dev
+	}
 
 	public function update($id) {
 		$userId = Request::input('user_id');
@@ -293,7 +270,8 @@ Class ApiProfileController extends Controller {
 				$studentIdChange->user_id = $userId;
 				$studentIdChange->profile_id = $profile->id;
 				$studentIdChange->student_id = $profile->student_id;
-						
+				$studentIdChange->save();
+				
 				$profile->student_id = $studentId;
 			}
 
@@ -359,7 +337,6 @@ Class ApiProfileController extends Controller {
 			}
 
 			$profile->save();
-			$studentIdChange->save();
 
 			return ResponseHelper::OutputJSON('success', '', $profile->toArray());
 
@@ -428,7 +405,7 @@ Class ApiProfileController extends Controller {
 
 		try {
 
-			$profile = GameProfile::select('id', 'user_id', 'class_id', 'student_id' , 'first_name', 'age', 'school', 'grade', 'city', 'country', 'email', 'nickname1', 'nickname2', 'avatar_id', 'coin' ,'expired_at')->find($id);
+			$profile = GameProfile::select('id', 'user_id', 'class_id', 'student_id' , 'first_name', 'age', 'school', 'grade', 'city', 'country', 'nickname1', 'nickname2', 'avatar_id', 'coin' ,'expired_at')->find($id);
 
 			if (!$profile) {
 				return ResponseHelper::OutputJSON('fail', 'profile not found');
@@ -996,7 +973,17 @@ Class ApiProfileController extends Controller {
 			$profile->played = 1;
 			$profile->save();
 
-			SpaceshipUser::where('profile_id' , $deviceProfile->id)->update([
+			SpaceshipUserSpaceship::where('profile_id' , $deviceProfile->id)->update([
+				'user_id' => $profile->user_id,
+				'profile_id' => $profile->id
+				]);
+
+			SpaceshipUserFloor::where('profile_id' , $deviceProfile->id)->update([
+				'user_id' => $profile->user_id,
+				'profile_id' => $profile->id
+				]);
+
+			SpaceshipUserItem::where('profile_id' , $deviceProfile->id)->update([
 				'user_id' => $profile->user_id,
 				'profile_id' => $profile->id
 				]);
@@ -1014,121 +1001,6 @@ Class ApiProfileController extends Controller {
 		} catch (Exception $ex) {
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 				'source' => 'ApiProfileController > profileTransfer',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
-	}
-
-	public function profileDetails() {
-		$profileId = Request::input('profile_id');
-		$userId = Request::input('user_id');
-
-		try {
-			if (!$profileId) {
-				return ResponseHelper::OutputJSON('fail', 'misssing parameters');
-			}
-
-			$profile = GameProfile::find($profileId);
-			if ($userId != $profile->user_id) {
-				return ResponseHelper::OutputJSON('fail', 'invalid profile');
-			}
-
-			$gameCode = GameCode::where('profile_id', $profileId)->first();
-			$planetCount = GamePlanet::where('enable', 1)->count();
-
-			$lastPlay = ReportProfileHelper::LastPlay($profileId);
-			$totalPlay = ReportProfileHelper::TotalPlay($profileId);
-			$planetProgress = ReportProfileHelper::planetProgress($profileId);
-			$TotalCompletedPlanet = ReportProfileHelper::TotalCompletedPlanet($profileId);
-
-			return ResponseHelper::OutputJSON('success', '', [
-				'first_name' => $profile->first_name,
-				'game_code' => $gameCode->code,
-				'total_play' => $totalPlay->total_play,
-				'total_pass' => $totalPlay->total_pass,
-				'total_fail' => $totalPlay->total_fail,
-				'total_completed_planet' => $TotalCompletedPlanet->completed_planet . '/' . $planetCount,
-				'last_play' => $lastPlay,
-				'planet_progress' => $planetProgress,
-			]);
-
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiProfileController > profileDetails',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
-	}
-
-	public function unlockParentLimit() {
-		$userId = Request::input('user_id');
-
-		$fb = new Facebook([
-            'app_id' => env('FACEBOOK_APP_KEY'),
-            'app_secret' => env('FACEBOOK_APP_SECRET'),
-            'default_graph_version' => 'v2.5',
-       	 ]);
-
-		$helper = $fb->getJavaScriptHelper();
-
-        try {
-            $accessToken = $helper->getAccessToken();
-        } catch (Facebook\Exceptions\FacebookResponseException $e) {
-            // When Graph returns an error
-            // echo 'Graph returned an error: ' . $e->getMessage();
-            LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiProfileController > unlockUserLimit',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-        } catch (Facebook\Exceptions\FacebookSDKException $e) {
-            // When validation fails or other local issues
-            // echo 'Facebook SDK returned an error: ' . $e->getMessage();
-            LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiProfileController > unlockUserLimit',
-				'inputs' => Request::all(),
-			])]);
-        }
-
-        if (!isset($accessToken)) {
-			return ResponseHelper::OutputJSON('fail' , 'No cookie set or no OAuth data could be obtained from cookie.');
-        }
-
-		try {
-	        $postId = Request::input('post_id');
-
-	        $response = $fb->get('/' . $postId. '?fields=privacy', $accessToken->getValue());
-	        $graphObject = $response->getGraphObject();
-
-	        //get user Flag
-	        $userFlag = UserFlag::find($userId);
-	        if(!$userFlag){
-				return ResponseHelper::OutputJSON('fail' , 'user flag not found');
-	        }
-
-			if($graphObject['privacy']['value'] == 'SELF'){
-				return ResponseHelper::OutputJSON('fail' , 'privacy is not allow');
-			}
-
-			$userFlag->profile_limit = 5;
-			$userFlag->total_share = $userFlag->total_share+1;
-			$userFlag->save();
-
-			$logFacebookShare = new LogFacebookShare;
-			$logFacebookShare->user_id = $userId;
-			$logFacebookShare->privacy = $graphObject['privacy']['value'];
-			$logFacebookShare->post_id = $postId;
-			$logFacebookShare->created_ip = Request::ip();
-			$logFacebookShare->save();
-
-			return ResponseHelper::OutputJSON('success');
-
-
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiProfileController > unlockUserLimitt',
 				'inputs' => Request::all(),
 			])]);
 			return ResponseHelper::OutputJSON('exception');
@@ -1276,7 +1148,6 @@ Class ApiProfileController extends Controller {
 
 
 		} catch (Exception $ex) {
-			throw $ex;
 			DB::rollback();
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 				'source' => 'ApiProfileController > createMultipleProfile',

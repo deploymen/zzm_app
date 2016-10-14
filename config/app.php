@@ -24,6 +24,10 @@ return [
     'send_in_blue_list_id' => env('LIST_ID'),
     'send_in_blue_parent_list_id' => env('SEND_IN_BLUE_PARENT_LIST_ID'),
     'send_in_blue_teacher_list_id' => env('SEND_IN_BLUE_TEACHER_LIST_ID'),
+
+    'braintree_merchant_id' => env('BRAINTREE_MERCHANT_ID'),
+    'braintree_public_key' => env('BRAINTREE_PUBLIC_KEY'),
+    'braintree_private_key' => env('BRAINTREE_PRIVATE_KEY'),
 	/*
 	|--------------------------------------------------------------------------
 	| Application Debug Mode

@@ -263,33 +263,6 @@ Class AuthUserController extends Controller {
 		}
 	}
 
-	public function connectGoogle() {
-		return ResponseHelper::OutputJSON('fail', 'not yet support');
-	}
-
-	public function signOut() {
-		Session::forget('access_token');
-		$cookie = Cookie::forget('access_token');
-		return redirect('user/signin')->withCookie($cookie);
-	}
-
-	public function check() {
-		try {
-
-			return ResponseHelper::OutputJSON('success', '', [
-				'user_id' => Request::input('user_id'),
-				'user_name' => Request::input('user_name'),
-				'user_role' => Request::input('user_role'),
-			]);
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'AuthUserController > check',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
-	}
-
 	public function changePassword() {
 
 		$userId = Request::input('user_id');
@@ -594,8 +567,6 @@ Class AuthUserController extends Controller {
 
 		try {
 			$newUser = ApiUserHelper::Register($role , $name , $email , '' , $email , $password_sha1 , 'app', '');
-
-
 			$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Anonymous' , '5_or_younger' , 'default school' , 'K', 999 , 999 , 999 , '');
 
 			$secretKey = sha1(time() . $email);
@@ -604,7 +575,7 @@ Class AuthUserController extends Controller {
 				'app_store_address' => config('app.app_store_url'),
 				'username' => $email,
 				'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
-				'activation_link' => config('app.website_url') . "/api/1.1/auth/activate/{$secretKey}",
+				'activation_link' => config('app.website_url') . "/api/1.0/auth/activate/{$secretKey}",
 				'email_support' => config('app.support_email'),
 				'social_media_links' => config('app.fanpage_url'),
 			]);
@@ -616,6 +587,11 @@ Class AuthUserController extends Controller {
 				'bodyHtml' => $edmHtml,
 				'toAddresses' => [$email],
 			]);
+			
+			$logOpenAcc = new LogAccountActivate;
+			$logOpenAcc->user_id = $newUser['user_id'];
+			$logOpenAcc->secret = $secretKey;
+			$logOpenAcc->save();
 
 			ApiUserHelper::mailin($role , [
 				'username' => $email,
@@ -854,9 +830,6 @@ Class AuthUserController extends Controller {
 			'username' => $email,
 			'name' => $name,
 		]);
-
-
-		$firstLogin = 1;
 
 		$cookie = Cookie::make('access_token', $userAccess->access_token);
 

@@ -45,9 +45,11 @@ use App\Models\IdCounter;
 use App\Models\GameCoinTransaction;
 use App\Models\CoinReward;
 use App\Models\Spaceship;
-use App\Models\SpaceshipUser;
+use App\Models\SpaceshipUserSpaceship;
+use App\Models\SpaceshipUserItem;
 use App\Models\SpaceshipUserFloor;
 use App\Models\SpaceshipFloor;
+use App\Models\SpaceshipItem;
 
 use App\Models\Questions\AbstractGameQuestion;
 use App\Models\Results\AbstractGameResult;
@@ -1557,11 +1559,7 @@ Class ApiGameController extends Controller {
 	}
 
 	public function offlinePostV1_3(){
-		$jsonGameResult = Request::input('game_result');
-		$hash = Request::input('hash');
-		$random = Request::input('random');
-		$playedTime = Request::input('played_time', 0);
-		$watchedTutorial = Request::input('watch_tutorial', 0);
+		$jsonGameResult = Request::input('result');
 
 		$profileId = Request::input('student_profile_id');
 		$userId = Request::input('user_id');
@@ -1795,7 +1793,6 @@ Class ApiGameController extends Controller {
 
 		return ResponseHelper::OutputJSON('success', '' , [
 				'first_name' => $gameProfile->first_name,
-				'last_name' => $gameProfile->last_name,
 				'grade' =>$gameProfile->grade,
 				'total_star' => $totalStar,
 				'student_id' => $studentId,
@@ -1829,8 +1826,23 @@ Class ApiGameController extends Controller {
 
 	public function getSpaceship(){
 		$profileId = Request::input('student_profile_id');
+		$spaceship = $this->getSpaceshipSub($profileId);
+
+		return ResponseHelper::OutputJSON('success', '' ,$spaceship);
+	}
+
+	function getSpaceshipSub($profileId){
 		$spaceship = Spaceship::getSpaceShip($profileId);
 
+		$profile = GameProfile::select('id', 'user_id', 'class_id', 'student_id' , 'first_name', 'age', 'school', 'grade', 'city', 'country', 'nickname1', 'nickname2', 'avatar_id', 'coin' ,'expired_at')->find($profileId);
+
+		if (!$profile) {
+			return ResponseHelper::OutputJSON('fail', 'profile not found');
+		}
+
+		$profile->nickName1;
+		$profile->nickName2;
+		$profile->avatar;
 
 		$spaceshipArray = [];		
 		$prevSpaceshipId = 0;
@@ -1841,15 +1853,26 @@ Class ApiGameController extends Controller {
 			$r = $spaceship[$i];
 
 			if($r->spaceship_id != $prevSpaceshipId){
+				$floors = SpaceshipUserFloor::totalFloor($profileId , $r->spaceship_id);
+				$spaceships = Spaceship::find($r->spaceship_id);
+				$count = $floors + 1;
+
+				if($count >= 4){
+					$count = 4;
+				}
+
+				$coinUnlockFloor = 'coin_unlock_floor_'.$count;
 				array_push($spaceshipArray, [
 					'spaceship_id' => $r->spaceship_id,
 					'spaceship_name' => $r->spaceship_name,
+					'locked' => $r->spaceship_locked,
+					'next_floor_coin' => $spaceships->$coinUnlockFloor,
 					'floor' => []
 				]);
 			}
 
 			if($r->floor_id != $prevFloorId){
-				$items = SpaceshipUser::totalItems($profileId , $r->floor_id);
+				$items = SpaceshipUserItem::totalItems($profileId , $r->floor_id);
 				$floor = SpaceshipFloor::find($r->floor_id);
 				$count = $items + 1;
 
@@ -1857,12 +1880,12 @@ Class ApiGameController extends Controller {
 					$count = 16;
 				}
 
-				$nextPurchase = 'coin_unlock_item_'.$count;
+				$coinUnlockItem = 'coin_unlock_item_'.$count;
 				array_push($spaceshipArray[count($spaceshipArray)-1]['floor'], [
 					'floor_id' => $r->floor_id,
 					'floor_name' => $r->floor_name,
-					'unlock' =>$r->unlock,
-					'next_unlock_coin' => $floor->$nextPurchase,
+					'locked' =>$r->floor_locked,
+					'next_item_coin' => $floor->$coinUnlockItem,
 					'selected_items' => [],
 					'items' => []
 				]);				
@@ -1874,7 +1897,7 @@ Class ApiGameController extends Controller {
 			array_push($spaceshipArray[count($spaceshipArray)-1]['floor'][count($spaceshipArray[count($spaceshipArray)-1]['floor'])-1]['items'], [
 				'item_id' => $r->item_id,
 				'item_name' => $r->item_name,
-				'locked' => $r->locked,
+				'locked' => $r->item_locked,
 				'selected' => $r->selected,
 
 			]);				
@@ -1882,36 +1905,106 @@ Class ApiGameController extends Controller {
 			$prevFloorId = $r->floor_id;
 		}
 
-		return ResponseHelper::OutputJSON('success', '' ,['spaceship' => $spaceshipArray] );
+		return [
+			'profile' => $profile,
+			'spaceship' => $spaceshipArray
+			];
+	}
+
+	public function unlockSpaceship(\Illuminate\Http\Request $request){
+
+		if(!$request->spaceship_id){
+			return ResponseHelper::OutputJSON('fail' , 'missing parameter');
+		}
+
+		$spaceship = SpaceshipUserSpaceship::where('profile_id' , $request->student_profile_id)->count();
+		
+		$cointUnlockSpaceship = '0';
+		if($spaceship == 1){
+			$cointUnlockSpaceship = '10000';
+		}
+
+		$gameCoinTransaction = GameCoinTransaction::DoPaymentTransaction( $request->student_profile_id , $cointUnlockSpaceship ,'unlock-spaceship-floor-'.$request->spaceship_id);
+
+		if(!$gameCoinTransaction){
+			return ResponseHelper::OutputJSON('fail' , 'transaction denied');
+		}
+
+		SpaceshipUserSpaceship::create([
+			'user_id' => $request->user_id,
+			'profile_id' => $request->student_profile_id,
+			'spaceship_id' => $request->spaceship_id,
+			'locked' => 0,
+			]);
+
+		$spaceship = $this->getSpaceshipSub($request->student_profile_id);
+
+		return ResponseHelper::OutputJSON('success' , '' , $spaceship);
 	}
 
 	public function unlockFloor(\Illuminate\Http\Request $request){
 
-		if(!$request->floor_id){
+		if(!$request->floor_id || !$request->spaceship_id){
 			return ResponseHelper::OutputJSON('fail' , 'missing parameter');
 		}
 
-		$floor = SpaceshipFloor::find($request->floor_id);
-		$gameCoinTransaction = GameCoinTransaction::DoPaymentTransaction( $request->student_profile_id , $floor->coin_unlock ,'unlock-spaceship-floor-'.$request->floor_id);
-
-		if($gameCoinTransaction){ //if payment success
-			SpaceshipUserFloor::create([
-				'user_id' => $request->user_id,
-				'profile_id' => $request->student_profile_id,
-				'floor_id' => $request->floor_id,
-				]);
+		$userFloor = SpaceshipUserFloor::where('floor_id' ,$request->floor_id )->where('profile_id', $request->student_profile_id)->first();
+		if($userFloor){
+			return ResponseHelper::OutputJSON('fail' , 'floor already unlocked');
 		}
+
+		$floors = SpaceshipUserFloor::totalFloor($request->student_profile_id , $request->spaceship_id);
+		$spaceships = Spaceship::find($request->spaceship_id);
+		$count = $floors + 1;
+
+		if($count >= 4){
+			$count = 4;
+		}
+
+		$coinUnlockFloor = 'coin_unlock_floor_'.$count;
+		$spaceship = Spaceship::find($request->spaceship_id);
+
+		$gameCoinTransaction = GameCoinTransaction::DoPaymentTransaction( $request->student_profile_id , $spaceship->$coinUnlockFloor ,'unlock-spaceship-floor-'.$request->floor_id);
+
+		if(!$gameCoinTransaction){
+			return ResponseHelper::OutputJSON('fail' , 'transaction denied');
+		}
+
+		$spaceshipItem = SpaceshipItem::where('floor_id', $request->floor_id)->first();
+
+		SpaceshipUserItem::create([
+			'user_id' => $request->user_id,
+			'profile_id' => $request->student_profile_id,
+			'floor_id' => $request->floor_id,
+			'item_id' => $spaceshipItem->id,
+			'selected' => 1,
+			'locked' => 0,
+			]);
+		//CANNOT INSERT THIS EVERYTIME
+		SpaceshipUserFloor::create([
+			'user_id' => $request->user_id,
+			'profile_id' => $request->student_profile_id,
+			'floor_id' => $request->floor_id,
+			'locked' => 0,
+			]);
 		
-		return ResponseHelper::OutputJSON('success');
+		$spaceship = $this->getSpaceshipSub($request->student_profile_id);
+
+		return ResponseHelper::OutputJSON('success' , '' , $spaceship);
 	}
 
 	public function unlockItem(\Illuminate\Http\Request $request){
 
-		if(!$reqeust->item_id){
+		if(!$request->item_id || !$request->floor_id){
 			return ResponseHelper::OutputJSON('fail' , 'missing parameter');
 		}
 
-		$items = SpaceshipUser::totalItems($request->student_profile_id , $request->floor_id);
+		$userItem = SpaceshipUserItem::where('item_id', $request->item_id)->where('profile_id' , $request->student_profile_id)->first();
+		if($userItem){
+			return ResponseHelper::OutputJSON('fail' , 'item already unlocked');
+		}
+
+		$items = SpaceshipUserItem::totalItems($request->student_profile_id , $request->floor_id);
 		$floor = SpaceshipFloor::find($request->floor_id);
 
 		$count = $items + 1;
@@ -1920,10 +2013,25 @@ Class ApiGameController extends Controller {
 		}
 
 		$nextPurchase = 'coin_unlock_item_'.$count;
+		$coinValue = $floor->$nextPurchase;
 
-		$gameCoinTransaction = GameCoinTransaction::DoPaymentTransaction( $request->student_profile_id , $floor->nextPurchase ,'unlock-spaceship-item-'.$request->item_id);
+		$gameCoinTransaction = GameCoinTransaction::DoPaymentTransaction( $request->student_profile_id , $coinValue ,'unlock-spaceship-item-'.$request->item_id);
+		if(!$gameCoinTransaction){
+			return ResponseHelper::OutputJSON('fail' , 'transaction denied');
+		}
 
-		return ResponseHelper::OutputJSON('success');
+		//CANNOT INSERT THIS EVERYTIME
+		SpaceshipUserItem::create([
+			'user_id' => $request->user_id,
+			'profile_id' => $request->student_profile_id,
+			'floor_id' => $request->floor_id,
+			'item_id' => $request->item_id,
+			'locked' => 0,
+		]);
+
+		$spaceship = $this->getSpaceshipSub($request->student_profile_id);
+
+		return ResponseHelper::OutputJSON('success' , '' , $spaceship);
 	}
 
 	public function spaceshipItemSelected($floorId){
@@ -1934,17 +2042,32 @@ Class ApiGameController extends Controller {
 			return ResponseHelper::OutputJSON('fail' , 'missing parameter');	
 		}
 
-		SpaceshipUser::where('profile_id' , $profileId)->update([
+		SpaceshipUserItem::where('profile_id' , $profileId)->where('floor_id' , $floorId)->update([
 			'selected' => 0
-			]);
+		]);
 
 		$item = explode(',', $items);
 
 		foreach($item as $i){
-			SpaceshipUser::where('profile_id' , $profileId)->where('floor_id',$floor_id)->where('item_id', $i)->update(['selected' => 1]);
+			SpaceshipUserItem::where('profile_id' , $profileId)->where('floor_id',$floorId)->where('item_id', $i)->update(['selected' => 1]);
 		}
+
+		$spaceship = $this->getSpaceshipSub($profileId);
 		
-		return ResponseHelper::OutputJSON('success');
+		return ResponseHelper::OutputJSON('success' , '' , $spaceship);
+	}
+
+	public function addCoin(){
+		$studentId = Request::input('student_id');
+		$coin = Request::input('coin');
+		$profileId = Request::input('student_profile_id');
+		$profile = GameProfile::where('student_id' , $studentId)->update([
+			'coin' => $coin
+			]);
+
+		$spaceship = $this->getSpaceshipSub($profileId);
+
+		return ResponseHelper::OutputJSON('success', '', $spaceship);
 
 	}
 
