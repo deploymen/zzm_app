@@ -340,7 +340,8 @@ class ApiController extends Controller {
 	public function appleValidateSubscription(\Illuminate\Http\Request $request){
 
         //this method is to validate new subscription
-        $sandbox = config::get('app.sandbox');
+        // $sandbox = config::get('app.sandbox');
+        $sandbox = true;
         $receipt = $request->receipt;
         $plus = rawurldecode($request->plus);
         $receipt = str_replace(' ', '+', $receipt);//should not use this because it wont happen. unless client forgot to do urlencode()
