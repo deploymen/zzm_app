@@ -60,3 +60,9 @@ Route::post('subscription/validation/apple' , 'ApiController@AppleValidation');
 Route::group(['prefix' => 'admin'], function () {
 	Route::get('/paypal/transaction-history', 'ApiAdminController@getTransaction');
 });
+
+Route::group(['prefix' => 'admin'], function () {
+    Route::get('/test', function (){
+        dd("okay test");
+    });
+});

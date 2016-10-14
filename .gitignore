@@ -10,3 +10,4 @@
 *.log
 *.sql
 /storage/framework
+/.idea
