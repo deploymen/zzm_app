@@ -64,12 +64,19 @@ class AuthenticateStudent {
 	      			'student_id_to' => $studentIdObj->profile->student_id,
 	      		]
 	      	];
+
+	      	$inputs['student_id'] = $studentIdObj->profile->student_id;
+			$inputs['student_profile_type'] = $studentIdObj->profile->profile_type;
+			$inputs['user_id'] = $studentIdObj->profile->user_id;
+			$inputs['student_profile_id'] = $studentIdObj->profile->id;
+		}else{
+			$inputs['student_id'] = $studentIdObj->student_id;
+			$inputs['student_profile_type'] = $studentIdObj->profile_type;
+			$inputs['user_id'] = $studentIdObj->user_id;
+			$inputs['student_profile_id'] = $studentIdObj->id;
 		}
 
-		$inputs['student_id'] = $studentIdObj->student_id;
-		$inputs['student_profile_type'] = $studentIdObj->profile_type;
-		$inputs['user_id'] = $studentIdObj->user_id;
-		$inputs['student_profile_id'] = $studentIdObj->id;
+		
 
 		Request::replace($inputs);
 

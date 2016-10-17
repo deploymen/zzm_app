@@ -11,4 +11,6 @@ class UserExternalId extends Eloquent{
 	public $timestamps = true;
 	protected $dates = ['deleted_at'];
 	protected $hidden = [];
+
+	protected $fillable = ['braintree_id'];
 }

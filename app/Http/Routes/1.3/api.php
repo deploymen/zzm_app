@@ -49,5 +49,14 @@ Route::group(['middleware' => ['auth.student']], function () {
 
 Route::any('pay-pal/ipn' , 'PaypalController@InstantPaymentNotification');
 Route::post('subscription/profile' , 'ApiController@appleGetStudentIdByReceipt');
-Route::get('braintree/client-token' , 'BraintreeController@generateToken');
-Route::post('braintree/validation' , 'BraintreeController@braintreeValidation');
+
+// Route::group(['prefix' => 'braintree' , 'middleware' => 'auth.user'], function(){
+Route::group(['prefix' => 'braintree'], function(){
+	Route::post('/customer' , 'BraintreeController@createCustomer');
+	Route::get('/customer' , 'BraintreeController@getCustomer');
+
+	Route::get('/client-token' , 'BraintreeController@generateToken');
+	Route::post('/validation' , 'BraintreeController@braintreeValidation');
+	Route::post('/subscribe' , 'BraintreeController@braintreeSubscribe');
+});
+

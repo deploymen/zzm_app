@@ -266,6 +266,9 @@ Class ApiProfileController extends Controller {
 			}
 
 			if ($studentId) {
+				$validator = Validator::make( Input::all(), [
+					'student_id' => 'required|min:6|max:20|regex:/^[a-zA-Z0-9@()_\-:\/]+$/'
+				]);
 				$studentIdChange = new StudentIdChange;
 				$studentIdChange->user_id = $userId;
 				$studentIdChange->profile_id = $profile->id;
@@ -273,6 +276,10 @@ Class ApiProfileController extends Controller {
 				$studentIdChange->save();
 				
 				$profile->student_id = $studentId;
+
+				$gameCode = GameCode::where('profile_id' , $profile->id)->first();
+				$gameCode->code = $studentId;
+				$gameCode->save();
 			}
 
 			if ($firstName) {
@@ -1149,6 +1156,7 @@ Class ApiProfileController extends Controller {
 
 		} catch (Exception $ex) {
 			DB::rollback();
+			throw $ex;
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 				'source' => 'ApiProfileController > createMultipleProfile',
 				'inputs' => \Request::all(),

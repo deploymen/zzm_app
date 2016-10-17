@@ -8,9 +8,10 @@ Route::group(['prefix' => 'game'], function () {
 	Route::post('/sign-up', 'AuthUserController@signUpApp');
 	Route::post('student-id/anonymous', 'ApiProfileController@GenerateAnonymousStudentId');
 
+
 	Route::group(['middleware' => ['auth.student' , 'auth.cmd']], function () {
-		Route::post('/student-id', 'ApiGameController@getStudentIdInfo');
 		Route::post('/check-student-id' , 'ApiGameController@checkStudentIdV1_3');
+		Route::post('/student-id', 'ApiGameController@getStudentIdInfo');
 
 		Route::put('/profiles', 'ApiProfileController@gameUpdateV1_3');
 
