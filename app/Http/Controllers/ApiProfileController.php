@@ -1156,6 +1156,7 @@ Class ApiProfileController extends Controller {
 
 		} catch (Exception $ex) {
 			DB::rollback();
+			throw $ex;
 			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
 				'source' => 'ApiProfileController > createMultipleProfile',
 				'inputs' => \Request::all(),
