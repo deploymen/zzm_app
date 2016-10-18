@@ -1072,7 +1072,7 @@ Class ApiGameController extends Controller {
 		$profileId = Request::input('student_profile_id');
 		$userId = Request::input('user_id');
 		$studentId = Request::input('student_id');
- 
+
 		try{
 			$result = ZapZapQuestionHelper::GetUserMapV1_3($profileId);
 
@@ -1380,7 +1380,18 @@ Class ApiGameController extends Controller {
 	public function checkStudentIdV1_3(){
 		// middleware check
 		$studentId = Request::input('student_id');
-		return ResponseHelper::OutputJSON('success');
+
+		if(!$studentId){
+			return ResponseHelper::OutputJSON('fail', 'missing parameter' );
+		}
+
+		$profile = GameProfile::where('student_id' , $studentId)->first();
+
+		if(!$profile){
+			return ResponseHelper::OutputJSON('fail', 'student id not found' );
+		}
+
+		return ResponseHelper::OutputJSON('success',  '' , ['account_type' => $profile->profile_type]);
 
 	}
 
@@ -1782,7 +1793,7 @@ Class ApiGameController extends Controller {
 
 		$gameProfile = GameProfile::where('student_id', $studentId)->first();
 
-		if(!$studentId){
+		if(!$gameProfile){
 			return ResponseHelper::OutputJSON('fail' , 'student id not found');
 		}
 
@@ -1834,15 +1845,11 @@ Class ApiGameController extends Controller {
 	function getSpaceshipSub($profileId){
 		$spaceship = Spaceship::getSpaceShip($profileId);
 
-		$profile = GameProfile::select('id', 'user_id', 'class_id', 'student_id' , 'first_name', 'age', 'school', 'grade', 'city', 'country', 'nickname1', 'nickname2', 'avatar_id', 'coin' ,'expired_at')->find($profileId);
+		$profile = GameProfile::select('coin')->find($profileId);
 
 		if (!$profile) {
 			return ResponseHelper::OutputJSON('fail', 'profile not found');
 		}
-
-		$profile->nickName1;
-		$profile->nickName2;
-		$profile->avatar;
 
 		$spaceshipArray = [];		
 		$prevSpaceshipId = 0;
@@ -1924,7 +1931,7 @@ Class ApiGameController extends Controller {
 			$cointUnlockSpaceship = '10000';
 		}
 
-		$gameCoinTransaction = GameCoinTransaction::DoPaymentTransaction( $request->student_profile_id , $cointUnlockSpaceship ,'unlock-spaceship-floor-'.$request->spaceship_id);
+		$gameCoinTransaction = GameCoinTransaction::DoPaymentTransaction( $request->student_profile_id , $cointUnlockSpaceship ,'unlock-spaceship-spaceship-'.$request->spaceship_id);
 
 		if(!$gameCoinTransaction){
 			return ResponseHelper::OutputJSON('fail' , 'transaction denied');

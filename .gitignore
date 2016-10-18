@@ -10,3 +10,9 @@
 *.log
 *.sql
 /storage/framework
+.idea/copyright/profiles_settings.xml
+.idea/deployment.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
+.idea/zapzapmath-api.iml
