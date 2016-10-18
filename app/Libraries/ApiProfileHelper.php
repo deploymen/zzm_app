@@ -111,6 +111,25 @@ class ApiProfileHelper{
 			    	WHERE t1.`profile_id` = t3.`profile_id`
 		";
 
+			"SELECT t1.* , t3.`total_played` 
+				FROM ( 
+					SELECT profile.`id` AS `profile_id` , play.`created_at` ,play.`score` , play.`planet_id` , play.`played_time` AS `last_played_time` , IF(profile.`expired_at` > NOW() , 1, 0) AS `paid` 
+						FROM `t0111_game_profile` profile 
+							LEFT JOIN `t0400_game_play` play ON (play.`profile_id` = profile.`id` AND play.`user_id` = 18773 ) 
+							LEFT JOIN `t0400_game_play` play2 ON (play2.`profile_id` = profile.`id` AND play2.`user_id` = 18773 AND play2.`created_at` > play.`created_at`) 
+
+								WHERE profile.`deleted_at` IS NULL AND play2.`id` IS NULL 
+								AND profile.`class_id` = 7425 
+
+									GROUP BY profile.`id` ) t1 , 
+						( SELECT profile.`id` AS `profile_id`, SUM(p.`played_time`) AS `total_played` 
+							FROM `t0111_game_profile` profile 
+								LEFT JOIN `t0400_game_play` p ON p.`user_id` = 18773 AND profile.`id` = p.`profile_id` AND p.`created_at` > DATE_SUB(NOW(), INTERVAL 3 HOUR) WHERE profile.`user_id` = 18773 
+									AND profile.`deleted_at` IS NULL 
+
+									GROUP BY profile.`id` ) t3 
+							WHERE t1.`profile_id` = t3.`profile_id` "
+
 		$lastPlayed = DB::select($sql);
 
 		for ($i = 0; $i < count($profiles); $i++) {

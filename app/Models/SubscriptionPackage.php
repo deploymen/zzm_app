@@ -3,14 +3,14 @@
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class UserExternalId extends Eloquent{
+class SubscriptionPackage extends Eloquent {
 	use SoftDeletes;
-
-	public $table = 't0103_user_external_id';
-	protected $primaryKey = 'user_id';
+	
+	protected $table = 't8906_subscription_package';
+	protected $primaryKey = 'id';
 	public $timestamps = true;
 	protected $dates = ['deleted_at'];
+
 	protected $hidden = [];
 
-	protected $fillable = ['braintree_id'];
 }

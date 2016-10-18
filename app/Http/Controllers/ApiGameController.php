@@ -1072,7 +1072,7 @@ Class ApiGameController extends Controller {
 		$profileId = Request::input('student_profile_id');
 		$userId = Request::input('user_id');
 		$studentId = Request::input('student_id');
- 
+
 		try{
 			$result = ZapZapQuestionHelper::GetUserMapV1_3($profileId);
 
@@ -1845,15 +1845,11 @@ Class ApiGameController extends Controller {
 	function getSpaceshipSub($profileId){
 		$spaceship = Spaceship::getSpaceShip($profileId);
 
-		$profile = GameProfile::select('id', 'user_id', 'class_id', 'student_id' , 'first_name', 'age', 'school', 'grade', 'city', 'country', 'nickname1', 'nickname2', 'avatar_id', 'coin' ,'expired_at')->find($profileId);
+		$profile = GameProfile::select('coin')->find($profileId);
 
 		if (!$profile) {
 			return ResponseHelper::OutputJSON('fail', 'profile not found');
 		}
-
-		$profile->nickName1;
-		$profile->nickName2;
-		$profile->avatar;
 
 		$spaceshipArray = [];		
 		$prevSpaceshipId = 0;
