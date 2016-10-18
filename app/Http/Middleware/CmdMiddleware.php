@@ -16,9 +16,9 @@ class CmdMiddleware{
        
       	$response = json_decode($response->content(), true);
 
-      	if($cmd){
-      		$response['cmd'] = $cmd;
-      	}
+      	// if($cmd){
+      	// 	$response['cmd'] = $cmd;
+      	// }
 
         return $response;
     }
