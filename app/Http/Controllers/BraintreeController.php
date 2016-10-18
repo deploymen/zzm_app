@@ -27,6 +27,17 @@ use App\Models\LogBraintreeTransaction;
 
 class BraintreeController extends Controller {
 
+	public function generateToken(){
+
+		Braintree_Configuration::environment('sandbox');
+		Braintree_Configuration::merchantId('sn37rg5tcpydtbt3');
+		Braintree_Configuration::publicKey('3xdbz3s8mbrqnjpt');
+		Braintree_Configuration::privateKey('2a10e16734ee11bee5c7b0aab86be986');
+		$clientToken = Braintree_ClientToken::generate();
+
+		return ResponseHelper::OutputJSON('success', '' , ['token' => $clientToken]);
+	}
+
 	public function getCustomer(Request $request){
 		Braintree_Configuration::environment('sandbox');
 		Braintree_Configuration::merchantId('sn37rg5tcpydtbt3');
@@ -77,62 +88,29 @@ class BraintreeController extends Controller {
 		]);
 	}	
 
- 	public function braintreeValidation(Request $request){
+ 	// public function braintreeValidation(Request $request){
 
-		Braintree_Configuration::environment('sandbox');
-		Braintree_Configuration::merchantId('sn37rg5tcpydtbt3');
-		Braintree_Configuration::publicKey('3xdbz3s8mbrqnjpt');
-		Braintree_Configuration::privateKey('2a10e16734ee11bee5c7b0aab86be986');
+	// }
 
-		
-		$result = Braintree_PaymentMethod::create([
-		    'customerId' => '17833695',
-		    'paymentMethodNonce' => $request->nonce
-		]);
-		// $result = Braintree_Customer::create([
-		//     'firstName' => 'Mike',
-		//     'lastName' => 'Jones',
-		//     'company' => 'Jones Co.',
-		//     'paymentMethodNonce' => $request->nonce
-		// ]);
-		var_export($result); die();
-		if($result->success){
-
-			// $result = Braintree_Transaction::sale([
-			//   'amount' => $request->amount,
-			//   'paymentMethodNonce' => $request->nonce,
-			//   'options' => [
-			//     'submitForSettlement' => True
-			//   ]
-			// ]);
-
-
-			return ResponseHelper::OutputJSON('success');
-
-		}else{
-			
-			return ResponseHelper::OutputJSON('fail');
-
-		}
-	}
-
-	public function braintreeSubscribe(Request $request){
+	public function braintreeValidation(Request $request){
 		Braintree_Configuration::environment('sandbox');
 		Braintree_Configuration::merchantId('sn37rg5tcpydtbt3');
 		Braintree_Configuration::publicKey('3xdbz3s8mbrqnjpt');
 		Braintree_Configuration::privateKey('2a10e16734ee11bee5c7b0aab86be986');
 
 		//validation start
-		// if(!$request->nonce || !$request->user_id || !$request->target_id || !$request->role || !$request->package_id){
-		// 	return ResponseHelper::OutputJSON('fail' , 'missing parameter');
-		// }
+		if(!$request->nonce || !$request->user_id || !$request->target_id || !$request->role || !$request->package_id){
+			return ResponseHelper::OutputJSON('fail' , 'missing parameter');
+		}
+
+		$paymentMethodToken = $request->payment_method_token;
 
 		$user = User::find($request->user_id);
 		switch($request->role){
 			case 'parent' : $target = GameProfile::find($request->target_id); break;
 			case 'teacher' : $target = GameClass::find($request->class_id); break;
 
-            default: return ResponseHelper::OutputJSON('fail' , 'invalid role'); break;
+  			default: return ResponseHelper::OutputJSON('fail' , 'invalid role'); break;
 		}
 
 		$subPackage = SubscriptionPackage::find($request->package_id);
@@ -143,13 +121,17 @@ class BraintreeController extends Controller {
 
 		$userExternalId = UserExternalId::find($request->user_id);
 		if(!$userExternalId->braintree_id){
-			$this->createCustomer($request);
+			$customer = $this->createCustomer($request);
+
+			$paymentMethodToken = $customer[0]->creditCards[0]->token;
 		}
 		//validation end
 
+
 		$result = Braintree_Subscription::create([
-			'paymentMethodToken' => $request->payment_method_token,
+			'paymentMethodToken' => $paymentMethodToken,
 			'planId' => $request->plan_id
+			// 'planId' => 'profile-yearly-499'
 		]);
 
 		if($result->success){
@@ -158,47 +140,40 @@ class BraintreeController extends Controller {
 			$target->expired_at = $expiredAt;
 			$target->save();
 
-			// UserSubsTransaction::create([
-			// 	'user_id' => $request->user_id,
-			// 	'package_id' => $request->package_id,
-			// 	'target_id' => $request->target_id,
-			// 	'expired_at' => $expiredAt,
-			// 	]);
-			
-			var_export($result); die();
-			// LogBraintreeTransaction::create([
-			// 	'user_id' => $request->user_id,
-			// 	'role' => $request->role,
-			// 	'target_id' => $request->target_id,
-			// 	'package_id' => $request->package_id,
-			// 	'transaction_id' => $result->transaction->id,
-			// 	'status' => $result->transaction->status,
-			// 	'type' => $result->transaction->type,
-			// 	'currency_iso_code' => $result->transaction->currencyIsoCode,
-			// 	'amount' => $result->transaction->amount,
-			// 	'merchant_account_id' => $result->transaction->merchantAccountId,
-			// 	'sub_merchant_account_id' => $result->transaction->subMerchantAccountId,
-			// 	'master_merchant_account_id' => $result->transaction->masterMerchantAccountId,
-			// 	'order_id' => $result->transaction->orderId,
+			UserSubsTransaction::create([
+				'user_id' => $request->user_id,
+				'package_id' => $request->package_id,
+				'target_id' => $request->target_id,
+				'expired_at' => $expiredAt,
+				]);
 
-			// 	'customer_id'=>$result->transaction->customer['id'],
-			// 	'first_name' =>$result->transaction->customer['firstName'],
-			// 	'last_name' =>$result->transaction->customer['lastName'],
-			// 	'company' =>$result->transaction->customer['company'],
-			// 	'email'=>$result->transaction->customer['email'],
-			// 	'website'=>$result->transaction->customer['website'],
-			// 	'phone'=>$result->transaction->customer['phone'],
-			// 	'fax'=>$result->transaction->customer['fax']
-			// 	]);
+			LogBraintreeTransaction::create([
+				'user_id' => $request->user_id,
+				'role' => $request->role,
+				'target_id' => $request->target_id,
+				'package_id' => $request->package_id,
+				'transaction_id' => $result->transaction->id,
+				'status' => $result->transaction->status,
+				'type' => $result->transaction->type,
+				'currency_iso_code' => $result->transaction->currencyIsoCode,
+				'amount' => $result->transaction->amount,
+				'merchant_account_id' => $result->transaction->merchantAccountId,
+				'sub_merchant_account_id' => $result->transaction->subMerchantAccountId,
+				'master_merchant_account_id' => $result->transaction->masterMerchantAccountId,
+				'order_id' => $result->transaction->orderId,
+
+				'customer_id'=>$result->transaction->customer['id'],
+				'first_name' =>$result->transaction->customer['firstName'],
+				'last_name' =>$result->transaction->customer['lastName'],
+				]);
 		}
 	}
 
-	function createCustomer(Request $request){
-		die('create customer');
+	function createCustomer($request){
+
 		Braintree_Configuration::environment('sandbox');
 		Braintree_Configuration::merchantId('sn37rg5tcpydtbt3');
 		Braintree_Configuration::publicKey('3xdbz3s8mbrqnjpt');
-		Braintree_Configuration::privateKey('2a10e16734ee11bee5c7b0aab86be986');
 
 		$user = User::find($request->user_id);
 
@@ -209,6 +184,12 @@ class BraintreeController extends Controller {
 		$result = Braintree_Customer::create([
 		    'firstName' => $request->first_name,
 		    'lastName' => $request->last_name,
+		    'paymentMethodNonce' => $request->nonce
+		]);
+
+		$result = Braintree_Customer::create([
+		    'firstName' => 'lai',
+		    'lastName' => 'wei zhong',
 		    'paymentMethodNonce' => $request->nonce
 		]);
 
