@@ -776,6 +776,8 @@ Class ApiProfileController extends Controller {
 				$profile->avatar_id = $deviceProfile->avatar_id;
 				$profile->coin += $deviceProfile->avatar_id;
 				$profile->played = 1;
+				$profile->seed = $deviceProfile->seed;
+				$profile->expired_at = $deviceProfile->expired_at;
 				$profile->save();
 
 				$currentGameCode->played = 1;
@@ -832,6 +834,8 @@ Class ApiProfileController extends Controller {
 				$profile->avatar_id = $deviceProfile->avatar_id;
 				$profile->coin += $deviceProfile->avatar_id;
 				$profile->played = 1;
+				$profile->seed = $deviceProfile->seed;
+				$profile->expired_at = $deviceProfile->expired_at;
 				$profile->save();
 
 				SpaceshipUser::where('profile_id' , $deviceProfile->id)->update([
@@ -917,6 +921,8 @@ Class ApiProfileController extends Controller {
 			$profile->avatar_id = $deviceProfile->avatar_id;
 			$profile->coin += $deviceProfile->coin;
 			$profile->played = 1;
+			$profile->seed = $deviceProfile->seed;
+			$profile->expired_at = $deviceProfile->expired_at;
 			$profile->save();
 
 			$currentGameCode->played = 1;
@@ -978,6 +984,8 @@ Class ApiProfileController extends Controller {
 			$profile->avatar_id = $deviceProfile->avatar_id;
 			$profile->coin += $deviceProfile->coin;
 			$profile->played = 1;
+			$profile->seed = $deviceProfile->seed;
+			$profile->expired_at = $deviceProfile->expired_at;
 			$profile->save();
 
 			SpaceshipUserSpaceship::where('profile_id' , $deviceProfile->id)->update([
