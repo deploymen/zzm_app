@@ -1,11 +1,13 @@
 <?php
 
+use Config;
 App::setLocale('en'); 
 
 require __DIR__.'/Routes/page-docs.php';
 require __DIR__.'/Routes/api-cron.php';
 
 Route::any('saml/acs', 'AuthSchoologyController@schoology');
+Route::get('version' , function(){ die(Config::get('app.zzm_server')); });
 
 Route::group(['middleware' => 'version'], function () {
 
