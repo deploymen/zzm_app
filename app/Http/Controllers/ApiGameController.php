@@ -966,20 +966,21 @@ Class ApiGameController extends Controller {
 
 			$userEnablePlanet = 0;
 			$userType = 2;
+
 			if($profile->user_id){
 				$userType = 0;
+			}
 
-				if($profile->expired_at > date("Y-m-d H:i:s") ){
-					$userType = 1;
-				}else{
-					$class = GameClass::find($profile->class_id);
-					if($class){
-						if($class->expired_at > date("Y-m-d H:i:s") ){
-							$userType = 1;
-						}
+			if($profile->expired_at > date("Y-m-d H:i:s") ){
+				$userType = 1;
+			}else{
+				$class = GameClass::find($profile->class_id);
+				if($class){
+					if($class->expired_at > date("Y-m-d H:i:s") ){
+						$userType = 1;
 					}
-					
 				}
+				
 			}
 
 			$systems = [];		
@@ -1093,18 +1094,18 @@ Class ApiGameController extends Controller {
 			$userType = 2;
 			if($profile->user_id){
 				$userType = 0;
+			}
 
-				if($profile->expired_at > date("Y-m-d H:i:s") ){
-					$userType = 1;
-				}else{
-					$class = GameClass::find($profile->class_id);
-					if($class){
-						if($class->expired_at > date("Y-m-d H:i:s") ){
-							$userType = 1;
-						}
+			if($profile->expired_at > date("Y-m-d H:i:s") ){
+				$userType = 1;
+			}else{
+				$class = GameClass::find($profile->class_id);
+				if($class){
+					if($class->expired_at > date("Y-m-d H:i:s") ){
+						$userType = 1;
 					}
-					
 				}
+				
 			}
 
 			$systems = [];		
