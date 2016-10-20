@@ -1092,8 +1092,11 @@ Class ApiGameController extends Controller {
 
 			$userEnablePlanet = 0;
 			$userType = 2;
+			$signedUp = 0;
+			
 			if($profile->user_id){
 				$userType = 0;
+				$signedUp = 1;
 			}
 
 			if($profile->expired_at > date("Y-m-d H:i:s") ){
@@ -1179,6 +1182,7 @@ Class ApiGameController extends Controller {
 						'avatar' => $profile->avatar,
 						'coin' => $profile->coin,
 						'user_role' => $userRole,
+						'signed_up' => $signedUp,
 						] ,
 					'game_mission' => $mission,
 					'system_planet' => $systems,
