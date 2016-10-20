@@ -1401,6 +1401,7 @@ Class ApiGameController extends Controller {
 	}
 
 	public function offlinePost(){
+
 		$result = Request::input('result');
 
 		$profileId = Request::input('game_code_profile_id');
@@ -1638,9 +1639,10 @@ Class ApiGameController extends Controller {
 						FROM `t0200_game_question`
 							WHERE `id` IN(".join(',', $questionIds).")	
 				";
+
 				$result = DB::SELECT($sql);
 
-				if($result[0]->count !== count($questionIds)){
+				if($result[0]->count != count($questionIds)){
 					return ResponseHelper::OutputJSON('fail', 'invalid question id');
 				}
 				//validate question ids =end
@@ -1674,7 +1676,7 @@ Class ApiGameController extends Controller {
 				$gamePlay->code = $studentId;
 				$gamePlay->hash = $hash1;
 				$gamePlay->status = $gameStatus;
-				$gamePlay->played_time = $playedTime;
+				$gamePlay->played_time = $r['played_time'];
 				$gamePlay->difficulty = $sgameResult['difficulty'];
 
 				if(isset($sgameResult['badges'])){
@@ -1721,12 +1723,6 @@ Class ApiGameController extends Controller {
 					GameCoinTransaction::DoTransaction($profileId, $coinDaily, $descriptionDaily);	
 				}
 
-				if($watchedTutorial){
-					$coinTutorial = CoinReward::GetEntitleCoinReward('watch-tutorial' , 'difficuldifficulty' );
-					$descriptionTutorial = GameCoinTransaction::GetDescription('watch-tutorial' , ['playId' => $gamePlay->id, 'planetI' => $sgameResult['difficulty'] ]);
-					GameCoinTransaction::DoTransaction($profileId, $coinTutorial, $descriptionTutorial);	
-				}
-
 				//update play record too, again.
 				if($gameStatus === 'pass'){
 					$gamePlay->coin = $coinRegular;
@@ -1736,7 +1732,7 @@ Class ApiGameController extends Controller {
 
 
 				ZapZapQuestionHelper::UserMapV1_1($profileId, $planetId, $gamePlay, $sgameResult, $sgameResult['difficulty']); //update user_map
-				ZapZapQuestionHelper::LastSession($userId, $profileId, $sgameResult, $playedTime);
+				ZapZapQuestionHelper::LastSession($userId, $profileId, $sgameResult, $r['played_time']);
 
 				$profile = GameProfile::find($profileId);
 				$systemPlanet = GameSystemPlanet::where('planet_id', $planetId)->first();
