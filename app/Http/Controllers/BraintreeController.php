@@ -70,9 +70,7 @@ class BraintreeController extends Controller {
 				]);
 		}
 
-		$clientToken = Braintree_ClientToken::generate();
-
-		return ResponseHelper::OutputJSON('success' , '' , ['customer' => $output , 'client_token' => $clientToken]);
+		return ResponseHelper::OutputJSON('success' , '' , ['customer' => $output]);
 	}
 
 	public function addNewMethod(Request $request){
@@ -88,18 +86,14 @@ class BraintreeController extends Controller {
 		]);
 	}	
 
- 	// public function braintreeValidation(Request $request){
-
-	// }
-
-	public function braintreeValidation(Request $request){
+	public function braintreeSubscribe(Request $request){
 		Braintree_Configuration::environment('sandbox');
 		Braintree_Configuration::merchantId('sn37rg5tcpydtbt3');
 		Braintree_Configuration::publicKey('3xdbz3s8mbrqnjpt');
 		Braintree_Configuration::privateKey('2a10e16734ee11bee5c7b0aab86be986');
 
 		//validation start
-		if(!$request->nonce || !$request->user_id || !$request->target_id || !$request->role || !$request->package_id){
+		if(!$request->nonce || !$request->user_id || !$request->target_id || !$request->role || !$request->plan_id){
 			return ResponseHelper::OutputJSON('fail' , 'missing parameter');
 		}
 
@@ -108,12 +102,20 @@ class BraintreeController extends Controller {
 		$user = User::find($request->user_id);
 		switch($request->role){
 			case 'parent' : $target = GameProfile::find($request->target_id); break;
-			case 'teacher' : $target = GameClass::find($request->class_id); break;
+			case 'teacher' : $target = GameClass::find($request->target_id); break;
 
   			default: return ResponseHelper::OutputJSON('fail' , 'invalid role'); break;
 		}
 
-		$subPackage = SubscriptionPackage::find($request->package_id);
+		switch($request->plan_id){
+			case 'class-yearly-199' : $packageId = 'class-yearly-199'; break;
+			case 'class-yearly-99' : $packageId = 'class-yearly-99'; break;
+			case 'profile-yearly-4_99' : $packageId = 'profile-yearly-4.99'; break;
+			case 'profile-yearly-9_99' : $packageId = 'profile-yearly-9.99'; break;
+			default : return ResponseHelper::OutputJSON('fail' , 'invalid plan id'); break;
+		}	
+
+		$subPackage = SubscriptionPackage::find($packageId);
 
 		if(!$user || !$target || !$subPackage || !$subPackage->enable){
 			return ResponseHelper::OutputJSON('fail' , 'incorrect data');
@@ -123,10 +125,14 @@ class BraintreeController extends Controller {
 		if(!$userExternalId->braintree_id){
 			$customer = $this->createCustomer($request);
 
+			if(!$customer){
+				return ResponseHelper::OutputJSON('fail' , 'create customer fail');
+			}
 			$paymentMethodToken = $customer[0]->creditCards[0]->token;
 		}
-		//validation end
 
+		
+		//validation end
 
 		$result = Braintree_Subscription::create([
 			'paymentMethodToken' => $paymentMethodToken,
@@ -135,6 +141,7 @@ class BraintreeController extends Controller {
 		]);
 
 		if($result->success){
+
 			$expiredAt = date("Y-m-d H:i:s", strtotime('+1 year'));
 
 			$target->expired_at = $expiredAt;
@@ -142,7 +149,7 @@ class BraintreeController extends Controller {
 
 			UserSubsTransaction::create([
 				'user_id' => $request->user_id,
-				'package_id' => $request->package_id,
+				'package_id' => $packageId,
 				'target_id' => $request->target_id,
 				'expired_at' => $expiredAt,
 				]);
@@ -151,22 +158,25 @@ class BraintreeController extends Controller {
 				'user_id' => $request->user_id,
 				'role' => $request->role,
 				'target_id' => $request->target_id,
-				'package_id' => $request->package_id,
-				'transaction_id' => $result->transaction->id,
-				'status' => $result->transaction->status,
-				'type' => $result->transaction->type,
-				'currency_iso_code' => $result->transaction->currencyIsoCode,
-				'amount' => $result->transaction->amount,
-				'merchant_account_id' => $result->transaction->merchantAccountId,
-				'sub_merchant_account_id' => $result->transaction->subMerchantAccountId,
-				'master_merchant_account_id' => $result->transaction->masterMerchantAccountId,
-				'order_id' => $result->transaction->orderId,
+				'package_id' => $packageId,
+				'transaction_id' => $result->subscription->transactions[0]->id,
+				'status' => $result->subscription->transactions[0]->status,
+				'type' => $result->subscription->transactions[0]->type,
+				'currency_iso_code' => $result->subscription->transactions[0]->currencyIsoCode,
+				'amount' => $result->subscription->transactions[0]->amount,
+				'merchant_account_id' => $result->subscription->transactions[0]->merchantAccountId,
+				'sub_merchant_account_id' => $result->subscription->transactions[0]->subMerchantAccountId,
+				'master_merchant_account_id' => $result->subscription->transactions[0]->masterMerchantAccountId,
+				'order_id' => $result->subscription->transactions[0]->orderId,
 
-				'customer_id'=>$result->transaction->customer['id'],
-				'first_name' =>$result->transaction->customer['firstName'],
-				'last_name' =>$result->transaction->customer['lastName'],
+				'customer_id'=>$result->subscription->transactions[0]->customer['id'],
+				'first_name' =>$result->subscription->transactions[0]->customer['firstName'],
 				]);
+		}else{
+			return ResponseHelper::OutputJSON('fail' , 'subscribe fail');
 		}
+
+		return ResponseHelper::OutputJSON('success');
 	}
 
 	function createCustomer($request){
@@ -177,19 +187,13 @@ class BraintreeController extends Controller {
 
 		$user = User::find($request->user_id);
 
-		if(!$request->first_name || !$request->last_name || !$request->nonce){
-			return ResponseHelper::OutputJSON('fail' , 'missing parameter');
+		if(!$request->name || !$request->nonce){
+			return false;
 		}
 
 		$result = Braintree_Customer::create([
-		    'firstName' => $request->first_name,
-		    'lastName' => $request->last_name,
-		    'paymentMethodNonce' => $request->nonce
-		]);
+		    'firstName' => $request->name,
 
-		$result = Braintree_Customer::create([
-		    'firstName' => 'lai',
-		    'lastName' => 'wei zhong',
 		    'paymentMethodNonce' => $request->nonce
 		]);
 
