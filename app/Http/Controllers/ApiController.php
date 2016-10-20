@@ -452,15 +452,27 @@ class ApiController extends Controller {
     }
 
     function updateExpired($request, $receipt , $productId){
+    	
+    	if($receipt->is_trial_period == 'true'){
+    		$profile = GameProfile::find($request->student_profile_id); 
 
-    	if($receipt->is_trial_period == true){
-    		$profile = GameProfile::find($request->student_profile_id);               
-			$profile->expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 3 MONTH)');
+    		$expiredAt = DB::raw('DATE_ADD(NOW(), INTERVAL 3 MONTH)');
+    		if($profile->expired_at > date("Y-m-d H:i:s") ){ 
+    			$expiredAt = DB::raw('DATE_ADD("'.$profile->expired_at.'", INTERVAL 3 MONTH)');
+    		}
+
+			$profile->expired_at = $expiredAt;
 			$profile->save();
 
     	}else{
-    		$profile = GameProfile::find($request->student_profile_id);               
-			$profile->expired_at = DB::raw('DATE_ADD(NOW(), INTERVAL 1 YEAR)');
+    		$profile = GameProfile::find($request->student_profile_id);
+
+    		$expiredAt = DB::raw('DATE_ADD(NOW(), INTERVAL 1 YEAR)');
+    		if($profile->expired_at > date("Y-m-d H:i:s") ){ 
+    			$expiredAt = DB::raw('DATE_ADD("'.$profile->expired_at.'", INTERVAL 1 YEAR)');
+    		}
+
+			$profile->expired_at = $expiredAt;
 			$profile->save();
     	}
 
@@ -488,7 +500,7 @@ class ApiController extends Controller {
 			'package_id' => $productId,
 			'target_type' => 'profile',
 			'target_id' => $request->student_profile_id,
-			'expired_at' => $receipt->expires_date,
+			'expired_at' => $expiredAt,
 			]);
     	
     }
@@ -521,50 +533,6 @@ class ApiController extends Controller {
             //the rest same as first time subscription
         }
     }
-
-  //   public function appleGetStudentIdByReceipt(\Illuminate\Http\Request $request){
-
-  //   	$receipt = $request->receipt;
-  //       $plus = rawurldecode($request->plus);
-  //       $receipt = str_replace(' ', '+', $receipt);//should not use this because it wont happen. unless client forgot to do urlencode()
-
-  //       $client = new Client(['base_uri' => 'https://sandbox.itunes.apple.com']);
-  //       $response = $client->request('POST', '/verifyReceipt', [
-  //           'headers' => ['content-type' => 'application/json'],
-  //           'json' => [
-  //               'password' => '65c19378e32e47149339df84de781ecc',
-  //               'receipt-data' => $receipt
-  //           ]
-  //       ]);
-
-  //       $receiptObject = json_decode($response->getBody(), false);
-  //       $prevProfileId = 0;
-
-  //       if($receiptObject->status==0){
-  //           $profiles = [];
-
-  //           foreach ($receiptObject->receipt->in_app as $receipt) {
-  //           	$profile = LogAppleTransaction::where('transaction_id' , $receipt->transaction_id)->first()->studentId;
-
-  //           	if(!$profile){ continue; }
-
-  //           	if($profile->id != $prevProfileId){
-  //           		array_push($profiles, $profile);
-  //           	}
-
-  //           	$prevProfileId = $profile->id;
-  //           }
-
-  //       }else{
-		// 	return ResponseHelper::OutputJSON('fail' , 'validation fail');
-  //       }
-
-  //       if(!$profiles){
-		// 	return ResponseHelper::OutputJSON('success' , 'data not found');
-  //       }
-		// return ResponseHelper::OutputJSON('success' , '' , $profiles);
-
-  //   }
 
 	public function appleGetStudentIdByReceipt(\Illuminate\Http\Request $request){
 
