@@ -73,19 +73,6 @@ class BraintreeController extends Controller {
 		return ResponseHelper::OutputJSON('success' , '' , ['customer' => $output]);
 	}
 
-	public function addNewMethod(Request $request){
-		Braintree_Configuration::environment('sandbox');
-		Braintree_Configuration::merchantId('sn37rg5tcpydtbt3');
-		Braintree_Configuration::publicKey('3xdbz3s8mbrqnjpt');
-		Braintree_Configuration::privateKey('2a10e16734ee11bee5c7b0aab86be986');
-		
-
-		$result = Braintree_PaymentMethod::create([
-		    'customerId' => '17833695',
-		    'paymentMethodNonce' => $request->nonce
-		]);
-	}	
-
 	public function braintreeSubscribe(Request $request){
 		Braintree_Configuration::environment('sandbox');
 		Braintree_Configuration::merchantId('sn37rg5tcpydtbt3');
@@ -93,7 +80,7 @@ class BraintreeController extends Controller {
 		Braintree_Configuration::privateKey('2a10e16734ee11bee5c7b0aab86be986');
 
 		//validation start
-		if(!$request->nonce || !$request->user_id || !$request->target_id || !$request->role || !$request->plan_id){
+		if(!$request->user_id || !$request->target_id || !$request->role || !$request->plan_id){
 			return ResponseHelper::OutputJSON('fail' , 'missing parameter');
 		}
 
@@ -131,7 +118,15 @@ class BraintreeController extends Controller {
 			$paymentMethodToken = $customer[0]->creditCards[0]->token;
 		}
 
-		
+		if(!$paymentMethodToken){
+			$newPaymentMethod = Braintree_PaymentMethod::create([
+			    'customerId' => $userExternalId->braintree_id,
+			    'paymentMethodNonce' => $request->nonce
+			]);
+
+			$paymentMethodToken = $newPaymentMethod->paymentMethod->token;
+		}
+
 		//validation end
 
 		$result = Braintree_Subscription::create([
@@ -193,7 +188,6 @@ class BraintreeController extends Controller {
 
 		$result = Braintree_Customer::create([
 		    'firstName' => $request->name,
-
 		    'paymentMethodNonce' => $request->nonce
 		]);
 
@@ -204,6 +198,22 @@ class BraintreeController extends Controller {
 		$userExternalId = UserExternalId::find($request->user_id)->update(['braintree_id' => $result->customer->id]);
 		return [$result->customer];
 	}
+
+	public function deletedPaymentMethod(Request $request){
+		Braintree_Configuration::environment('sandbox');
+		Braintree_Configuration::merchantId('sn37rg5tcpydtbt3');
+		Braintree_Configuration::publicKey('3xdbz3s8mbrqnjpt');
+		Braintree_Configuration::privateKey('2a10e16734ee11bee5c7b0aab86be986');
+
+		$result = Braintree_PaymentMethod::delete($request->payment_method_token);
+
+		if(!$result->success){
+			return ResponseHelper::OutputJSON('fail');
+
+		}
+		return ResponseHelper::OutputJSON('success');
+	}
+
 }
 
 
