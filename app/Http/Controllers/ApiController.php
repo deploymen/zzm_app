@@ -405,31 +405,7 @@ class ApiController extends Controller {
 
            				$claimed = true;
                         break;
-                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_6':
-                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
-
-           				$claimed = true;
-                        break;
-                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_7':
-                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
-
-           				$claimed = true;
-                        break;
-                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_8':
-                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
-
-           				$claimed = true;
-                        break;
-                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_9':
-                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
-
-           				$claimed = true;
-                        break;
-                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_10':
-                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
-
-           				$claimed = true;
-                        break;
+                   
                    
                     default: return ResponseHelper::OutputJSON('fail' , 'incorrect product id'); ; break;
                 }
