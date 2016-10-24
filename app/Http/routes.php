@@ -1,6 +1,6 @@
 <?php
 
-use Config;
+// use Config;
 App::setLocale('en'); 
 
 require __DIR__.'/Routes/page-docs.php';
