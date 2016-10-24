@@ -26,6 +26,7 @@ use App\Models\RewardShareDomain;
 use App\Models\SpecialEmail;
 use App\Models\CampaignReferralSubscribe;
 use App\Models\CampaignReferralHit;
+use App\Models\AppSignupTeacher;
 use Config;
 use Cookie;
 use DB;
@@ -548,7 +549,7 @@ Class AuthUserController extends Controller {
 		$name = Request::input('name');
 		$password = Request::input('password');
 		$password_sha1 = sha1($password . Config::get('app.auth_salt'));
-		$role = Request::input('role');
+		$role = Request::input('role'); //Jem request update ,what ever role send in , change to parent
 		$classId = 0;
 
 		if (!$email || !$name) {
@@ -566,7 +567,7 @@ Class AuthUserController extends Controller {
 		}
 
 		try {
-			$newUser = ApiUserHelper::Register($role , $name , $email , '' , $email , $password_sha1 , 'app', '');
+			$newUser = ApiUserHelper::Register('parent' , $name , $email , '' , $email , $password_sha1 , 'app', '');
 			$newProfile = ApiProfileHelper::newProfile($newUser['user_id'] , $newUser['class_id']  ,'Anonymous' , '5_or_younger' , 'default school' , 'K', 999 , 999 , 999 , '');
 
 			$secretKey = sha1(time() . $email);
@@ -593,11 +594,16 @@ Class AuthUserController extends Controller {
 			$logOpenAcc->secret = $secretKey;
 			$logOpenAcc->save();
 
-			ApiUserHelper::mailin($role , [
+			ApiUserHelper::mailin('parent' , [
 				'username' => $email,
 				'name' => $name,
 			]);
 
+			if($role == 'teacher'){
+				AppSignupTeacher::create([
+					'user_id' => $newUser['user_id'],
+					]);
+			}
 			$userAccess = UserAccess::where('username', $email)->where('password_sha1', $password_sha1)->first();
 			$list = User::select('id' , 'role' , 'name' , 'register_from')->find($userAccess->user_id);
 			$subscription = CampaignReferralSubscribe::CheckSubscribe2016RefferalCampaign($list);
