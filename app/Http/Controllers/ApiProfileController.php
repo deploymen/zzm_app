@@ -26,6 +26,7 @@ use App\Models\SpaceshipUserFloor;
 use App\Models\GameCoinTransaction;
 use App\Models\GameMission;
 use App\Models\StudentIdChange;
+use App\Models\LogAppleTransaction;
 use DB;
 use Exception;
 use Request;
@@ -776,8 +777,6 @@ Class ApiProfileController extends Controller {
 				$profile->avatar_id = $deviceProfile->avatar_id;
 				$profile->coin += $deviceProfile->avatar_id;
 				$profile->played = 1;
-				$profile->seed = $deviceProfile->seed;
-				$profile->expired_at = $deviceProfile->expired_at;
 				$profile->save();
 
 				$currentGameCode->played = 1;
@@ -834,8 +833,6 @@ Class ApiProfileController extends Controller {
 				$profile->avatar_id = $deviceProfile->avatar_id;
 				$profile->coin += $deviceProfile->avatar_id;
 				$profile->played = 1;
-				$profile->seed = $deviceProfile->seed;
-				$profile->expired_at = $deviceProfile->expired_at;
 				$profile->save();
 
 				SpaceshipUser::where('profile_id' , $deviceProfile->id)->update([
@@ -848,6 +845,10 @@ Class ApiProfileController extends Controller {
 					]);
 
 				GameMission::where('profile_id', $deviceProfile->id)->update([
+					'profile_id' => $profile->id
+					]);
+
+				LogAppleTransaction::where('profile_id', $deviceProfile->id)->update([
 					'profile_id' => $profile->id
 					]);
 
@@ -921,8 +922,6 @@ Class ApiProfileController extends Controller {
 			$profile->avatar_id = $deviceProfile->avatar_id;
 			$profile->coin += $deviceProfile->coin;
 			$profile->played = 1;
-			$profile->seed = $deviceProfile->seed;
-			$profile->expired_at = $deviceProfile->expired_at;
 			$profile->save();
 
 			$currentGameCode->played = 1;
@@ -1010,6 +1009,10 @@ Class ApiProfileController extends Controller {
 			GameMission::where('profile_id', $deviceProfile->id)->update([
 				'profile_id' => $profile->id
 				]);
+
+			LogAppleTransaction::where('profile_id', $deviceProfile->id)->update([
+				'profile_id' => $profile->id
+			]);
 
 			return ResponseHelper::OutputJSON('success');
 			

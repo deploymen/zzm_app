@@ -57,5 +57,7 @@ Route::group(['prefix' => 'braintree' , 'middleware' => 'auth.user'], function()
 
 	Route::get('/client-token' , 'BraintreeController@generateToken');
 	Route::post('/subscribe' , 'BraintreeController@braintreeSubscribe');
+
+	Route::post('remove/payment-method' , 'BraintreeController@deletedPaymentMethod' );
 });
 

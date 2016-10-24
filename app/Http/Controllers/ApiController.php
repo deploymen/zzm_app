@@ -512,7 +512,8 @@ class ApiController extends Controller {
 
 	public function appleGetStudentIdByReceipt(\Illuminate\Http\Request $request){
 
-    	$sandbox = config::get('app.sandbox');
+    	// $sandbox = config::get('app.sandbox');
+    	$sandbox = true;
     	$receipt = $request->receipt;
         $plus = rawurldecode($request->plus);
         $receipt = str_replace(' ', '+', $receipt);//should not use this because it wont happen. unless client forgot to do urlencode()
