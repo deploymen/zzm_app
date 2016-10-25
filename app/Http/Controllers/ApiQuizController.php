@@ -31,6 +31,8 @@ class ApiQuizController extends Controller
 
             $players->name = "";
             $players->email = "";
+            $players->school = "";
+            $players->state = "";
             $players->save();
 
             $current_player_id = $players->id;
@@ -65,14 +67,20 @@ class ApiQuizController extends Controller
         $user_id = Request::input('user_id');
         $score = Request::input('score');
 
+
         if(($user_id != "" && is_numeric($user_id)) && ($score != "" && is_numeric($score)) ){
             $username = Request::input('name');
             $email = Request::input('email');
+            $school = Request::input('school');
+            $state = Request::input('state');
 
             try{
                 $player = QuizUser::find($user_id);
+
                 $player->name = $username;
                 $player->email = $email;
+                $player->school = $school;
+                $player->state = $state;
                 $player->score = $score;
                 $player->finished_game = 1;
 
@@ -87,6 +95,22 @@ class ApiQuizController extends Controller
             }
         }else{
             return ResponseHelper::OutputJSON('Invalid Player ID or parameter');
+        }
+    }
+
+    public function reset(){
+        $yes = Request::input('reset');
+
+        if($yes === "yes") {
+            try {
+                QuizUser::resetLeaderBoard();
+                return ResponseHelper::OutputJSON('success', '', "Successfully reset Leaderboard");
+
+            } catch (Exception $ex) {
+                return ResponseHelper::OutputJSON('Failed ' . Request::all(), $ex->getMessage());
+            }
+        }else{
+            return ResponseHelper::OutputJSON('Failed: Invalid Request');
         }
     }
 

@@ -10,7 +10,7 @@ class QuizUser extends Model
     public $table = 't9999_quiz_users';
     protected $primaryKey = 'id';
     public $timestamps = true;
-    protected $fillable = ['name', 'email', 'score'];
+    protected $fillable = ['name', 'email', 'school', 'state', 'score'];
     protected $limit = 10;
 
     public function leaderBoard(){
@@ -34,6 +34,8 @@ class QuizUser extends Model
                     'user_id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
+                    'school' => $user->school,
+                    'state' => $user->state,
                     'score' => $user->score,
                     'position' => $index.$positions[$index % 10]
                 ]);
@@ -62,6 +64,18 @@ class QuizUser extends Model
             $reset_id = "ALTER TABLE t9999_quiz_users AUTO_INCREMENT = {$maxId->id}";
         }
 
+        DB::statement($reset_id);
+    }
+
+    public static function resetLeaderBoard() {
+
+        $query = "DELETE FROM t9999_quiz_users WHERE id > :id";
+
+        DB::DELETE($query, [
+            'id' => 10
+        ]);
+
+        $reset_id = "ALTER TABLE t9999_quiz_users AUTO_INCREMENT = 11";
         DB::statement($reset_id);
     }
 
