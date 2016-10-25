@@ -29,20 +29,20 @@ class BraintreeController extends Controller {
 
 	public function generateToken(){
 
-		Braintree_Configuration::environment('sandbox');
-		Braintree_Configuration::merchantId('sn37rg5tcpydtbt3');
-		Braintree_Configuration::publicKey('3xdbz3s8mbrqnjpt');
-		Braintree_Configuration::privateKey('2a10e16734ee11bee5c7b0aab86be986');
+		Braintree_Configuration::environment(Config::get('app.braintree_sandbox'));
+		Braintree_Configuration::merchantId(Config::get('app.braintree_merchant_id'));
+		Braintree_Configuration::publicKey(Config::get('app.braintree_public_key'));
+		Braintree_Configuration::privateKey(Config::get('app.braintree_private_key'));
 		$clientToken = Braintree_ClientToken::generate();
 
 		return ResponseHelper::OutputJSON('success', '' , ['token' => $clientToken]);
 	}
 
 	public function getCustomer(Request $request){
-		Braintree_Configuration::environment('sandbox');
-		Braintree_Configuration::merchantId('sn37rg5tcpydtbt3');
-		Braintree_Configuration::publicKey('3xdbz3s8mbrqnjpt');
-		Braintree_Configuration::privateKey('2a10e16734ee11bee5c7b0aab86be986');
+				Braintree_Configuration::environment(Config::get('app.braintree_sandbox'));
+		Braintree_Configuration::merchantId(Config::get('app.braintree_merchant_id'));
+		Braintree_Configuration::publicKey(Config::get('app.braintree_public_key'));
+		Braintree_Configuration::privateKey(Config::get('app.braintree_private_key'));
 
 		$userExternalId = UserExternalId::find($request->user_id);
 
@@ -74,10 +74,10 @@ class BraintreeController extends Controller {
 	}
 
 	public function braintreeSubscribe(Request $request){
-		Braintree_Configuration::environment('sandbox');
-		Braintree_Configuration::merchantId('sn37rg5tcpydtbt3');
-		Braintree_Configuration::publicKey('3xdbz3s8mbrqnjpt');
-		Braintree_Configuration::privateKey('2a10e16734ee11bee5c7b0aab86be986');
+				Braintree_Configuration::environment(Config::get('app.braintree_sandbox'));
+		Braintree_Configuration::merchantId(Config::get('app.braintree_merchant_id'));
+		Braintree_Configuration::publicKey(Config::get('app.braintree_public_key'));
+		Braintree_Configuration::privateKey(Config::get('app.braintree_private_key'));
 
 		//validation start
 		if(!$request->user_id || !$request->target_id || !$request->role || !$request->plan_id){
@@ -176,9 +176,10 @@ class BraintreeController extends Controller {
 
 	function createCustomer($request){
 
-		Braintree_Configuration::environment('sandbox');
-		Braintree_Configuration::merchantId('sn37rg5tcpydtbt3');
-		Braintree_Configuration::publicKey('3xdbz3s8mbrqnjpt');
+		Braintree_Configuration::environment(Config::get('app.braintree_sandbox'));
+		Braintree_Configuration::merchantId(Config::get('app.braintree_merchant_id'));
+		Braintree_Configuration::publicKey(Config::get('app.braintree_public_key'));
+		Braintree_Configuration::privateKey(Config::get('app.braintree_private_key'));
 
 		$user = User::find($request->user_id);
 
@@ -200,10 +201,10 @@ class BraintreeController extends Controller {
 	}
 
 	public function deletedPaymentMethod(Request $request){
-		Braintree_Configuration::environment('sandbox');
-		Braintree_Configuration::merchantId('sn37rg5tcpydtbt3');
-		Braintree_Configuration::publicKey('3xdbz3s8mbrqnjpt');
-		Braintree_Configuration::privateKey('2a10e16734ee11bee5c7b0aab86be986');
+				Braintree_Configuration::environment(Config::get('app.braintree_sandbox'));
+		Braintree_Configuration::merchantId(Config::get('app.braintree_merchant_id'));
+		Braintree_Configuration::publicKey(Config::get('app.braintree_public_key'));
+		Braintree_Configuration::privateKey(Config::get('app.braintree_private_key'));
 
 		$result = Braintree_PaymentMethod::delete($request->payment_method_token);
 

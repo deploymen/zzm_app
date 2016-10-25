@@ -28,7 +28,7 @@ return [
     'braintree_merchant_id' => env('BRAINTREE_MERCHANT_ID'),
     'braintree_public_key' => env('BRAINTREE_PUBLIC_KEY'),
     'braintree_private_key' => env('BRAINTREE_PRIVATE_KEY'),
-
+    'braintree_sandbox' => env('BRAINTREE_SANDBOX'),
     'zzm_server' => env('ZZM_SERVER'),
 	/*
 	|--------------------------------------------------------------------------
