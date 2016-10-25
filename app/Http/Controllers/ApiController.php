@@ -369,64 +369,45 @@ class ApiController extends Controller {
             foreach ($receiptObject->receipt->in_app as $receipt) {
                 //dd($receipt);
                 //check receipt used before or not
+
                 $used = LogAppleTransaction::where('transaction_id' , $receipt->transaction_id)->first(); //replace this with actual model method
                 if($used){ continue; }
 
                 $productId = $receipt->product_id;
+                // $profileId = $originId->profile_id;
 
+                $originId = LogAppleTransaction::where('original_transaction_id', $receipt->original_transaction_id)->first();
+               
+                $profileId = ($originId) ? $originId->profile_id : $request->student_profile_id;
+          
                 switch ($productId) {
                     case 'com.visualmathinteractive.zapzapmath.oneyearprofilesubscription_1':
-                    	$this->updateExpired($request, $receipt , 'profile-yearly-4.99');
+                    	$this->updateExpired($request, $profileId , $receipt , 'profile-yearly-4.99');
 
            				 $claimed = true;
                         break;
 
                     case 'com.visualmathinteractive.zapzapmath.oneyearprofilesubscription_2':
-                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
+                        $this->updateExpired($request, $profileId , $receipt , 'profile-yearly-4.99');
 
            				$claimed = true;
                         break;
 
                     case 'com.visualmathinteractive.zapzapmath.oneyearprofilesubscription_3':
                 
-                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
+                        $this->updateExpired($request, $profileId , $receipt , 'profile-yearly-4.99');
 
            				$claimed = true;
                         break;
 
                     case 'com.visualmathinteractive.zapzapmath.oneyearprofilesubscription_4':
-                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
+                        $this->updateExpired($request, $profileId , $receipt , 'profile-yearly-4.99');
 
            				$claimed = true;
                         break;
 
                     case 'com.visualmathinteractive.zapzapmath.oneyearprofilesubscription_5':
-                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
-
-           				$claimed = true;
-                        break;
-                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_6':
-                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
-
-           				$claimed = true;
-                        break;
-                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_7':
-                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
-
-           				$claimed = true;
-                        break;
-                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_8':
-                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
-
-           				$claimed = true;
-                        break;
-                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_9':
-                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
-
-           				$claimed = true;
-                        break;
-                    case 'com.visualmathinteractive.zapzapmath.profilesubscriptionforoneyear_10':
-                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
+                        $this->updateExpired($request, $profileId , $receipt , 'profile-yearly-4.99');
 
            				$claimed = true;
                         break;
@@ -451,10 +432,10 @@ class ApiController extends Controller {
         } 
     }
 
-    function updateExpired($request, $receipt , $productId){
+    function updateExpired($request,$profileId, $receipt , $productId){
     	
     	if($receipt->is_trial_period == 'true'){
-    		$profile = GameProfile::find($request->student_profile_id); 
+    		$profile = GameProfile::find($profileId); 
 
     		$expiredAt = DB::raw('DATE_ADD(NOW(), INTERVAL 3 MONTH)');
     		if($profile->expired_at > date("Y-m-d H:i:s") ){ 
@@ -465,7 +446,7 @@ class ApiController extends Controller {
 			$profile->save();
 
     	}else{
-    		$profile = GameProfile::find($request->student_profile_id);
+    		$profile = GameProfile::find($profileId);
 
     		$expiredAt = DB::raw('DATE_ADD(NOW(), INTERVAL 1 YEAR)');
     		if($profile->expired_at > date("Y-m-d H:i:s") ){ 
@@ -477,8 +458,8 @@ class ApiController extends Controller {
     	}
 
     	LogAppleTransaction::create([
-        	'user_id' => $request->user_id,
-        	'profile_id' => $request->student_profile_id,
+        	'user_id' => $profile->user_id,
+        	'profile_id' => $profileId,
         	'transaction_id' => $receipt->transaction_id,
         	'product_id' => $productId,
         	'quantity' => $receipt->quantity,
@@ -496,10 +477,10 @@ class ApiController extends Controller {
     	]);
 
 		UserSubsTransaction::create([
-			'user_id' => $request->user_id,
+			'user_id' => $profile->user_id,
 			'package_id' => $productId,
 			'target_type' => 'profile',
-			'target_id' => $request->student_profile_id,
+			'target_id' => $profileId,
 			'expired_at' => $expiredAt,
 			]);
     	
