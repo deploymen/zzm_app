@@ -13,6 +13,9 @@ class QuizUser extends Model
     protected $fillable = ['name', 'email', 'school', 'state', 'score'];
     protected $limit = 10;
 
+    /**
+     * @return array [top ten players with their position]|string "Null"
+     */
     public function leaderBoard(){
 
         $query = "SELECT * FROM {$this->table} WHERE score > :score ORDER BY score DESC LIMIT :limit";
@@ -49,6 +52,9 @@ class QuizUser extends Model
         return $output;
     }
 
+    /**
+     * Delete Quiz users who didn't finish the game after 3 mins of launching the game and reset autoincrement ID
+     */
     public static function deleteInactivePlayers() {
 
         $query = "DELETE FROM t9999_quiz_users WHERE finished_game = :finished_game
@@ -67,6 +73,9 @@ class QuizUser extends Model
         DB::statement($reset_id);
     }
 
+    /**
+     * Delete Quiz users with ID greater than 10 and reset autoincrement ID to 11
+     */
     public static function resetLeaderBoard() {
 
         $query = "DELETE FROM t9999_quiz_users WHERE id > :id";

@@ -13,6 +13,11 @@ use App\Models\Quiz\QuizUser;
 class ApiQuizController extends Controller
 {
 
+    /**
+     * This function will pass questions, top ten players and current player
+     * @param $difficulty
+     * @return mixed
+     */
     public function load($difficulty)
     {
 
@@ -48,6 +53,9 @@ class ApiQuizController extends Controller
 
     }
 
+    /**
+     * @return mixed, returns top ten player based on Quiz score
+     */
     public function getLeaderBoard() {
 
         try{
@@ -63,6 +71,10 @@ class ApiQuizController extends Controller
         }
     }
 
+    /**
+     * Update Quiz result with Game post date {name, email, school, state ans user ID}
+     * @return mixed, the updated data is returned
+     */
     public function updateResult(){
         $user_id = Request::input('user_id');
         $score = Request::input('score');
@@ -98,6 +110,10 @@ class ApiQuizController extends Controller
         }
     }
 
+    /**
+     * Any valid request will delete all Quiz user with ID greater than 10
+     * @return mixed
+     */
     public function reset(){
         $yes = Request::input('reset');
 

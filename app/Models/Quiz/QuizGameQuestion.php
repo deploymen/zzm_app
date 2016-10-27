@@ -11,6 +11,10 @@ class QuizGameQuestion extends Model
     public $timestamps = true;
     protected $limit = 10;
 
+    /**
+     * @param $difficulty
+     * @return array [10 questions]|string "null"
+     */
     public function getQuestion($difficulty) {
 
         $game_difficulty = $difficulty;
