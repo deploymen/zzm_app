@@ -39,16 +39,17 @@ class BraintreeController extends Controller {
 	}
 
 	public function getCustomer(Request $request){
-		Braintree_Configuration::environment('sandbox');
-		Braintree_Configuration::merchantId('sn37rg5tcpydtbt3');
-		Braintree_Configuration::publicKey('3xdbz3s8mbrqnjpt');
-		Braintree_Configuration::privateKey('2a10e16734ee11bee5c7b0aab86be986');
 
-		$userExternalId = UserExternalId::find($request->user_id);
+        Braintree_Configuration::environment(Config::get('app.braintree_sandbox'));
+        Braintree_Configuration::merchantId(Config::get('app.braintree_merchant_id'));
+        Braintree_Configuration::publicKey(Config::get('app.braintree_public_key'));
+        Braintree_Configuration::privateKey(Config::get('app.braintree_private_key'));
 
-		if(!$userExternalId->braintree_id){
-			return ResponseHelper::OutputJSON('fail', 'missing customer id');
-		}
+        $userExternalId = UserExternalId::find($request->user_id);
+
+        if(!$userExternalId->braintree_id){
+            return ResponseHelper::OutputJSON('success','', ['customer' => [] ]);
+        }
 
 		//get BT customer ID and token(credit card)
 		$customer = Braintree_Customer::find($userExternalId->braintree_id);

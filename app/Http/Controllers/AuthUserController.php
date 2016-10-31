@@ -252,7 +252,8 @@ Class AuthUserController extends Controller {
 					'register_from' => $user->register_from,
 				] , 
 				'first_time_login' => $firstLogin, 
-				'subscription' => $subscription 
+				'subscription' => $subscription,
+                'has_used_code_2016-nov-conf' => false,
 				], ['X-access-token' => $accessToken,], ['access_token' => $accessToken,]);
 
 		} catch (Exception $ex) {
