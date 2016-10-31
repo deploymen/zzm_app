@@ -46,7 +46,7 @@ class GameQuestionP06 extends AbstractGameQuestion {
 		foreach ($result as $value){
 			array_push($questions, array_only((array)$value, [
 
-			]);
+			]));
 		}
 
 		return $questions;
