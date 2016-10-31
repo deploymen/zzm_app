@@ -58,7 +58,6 @@ class Version {
             die('All version also have no such route, cannot redirect.');
         }
 
-//dd(Route::getCurrentRoute()->getPath());
         return $next($request);
     }
 

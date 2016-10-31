@@ -349,7 +349,7 @@ class ApiController extends Controller {
             //Loop until a receipt id that never subscript in our db
             $claimed = false;
             foreach ($receiptObject->receipt->in_app as $receipt) {
-                //dd($receipt);
+
                 //check receipt used before or not
                 $used = LogAppleTransaction::where('transaction_id', $receipt->transaction_id)->first(); //replace this with actual model method
                 if ($used) {
