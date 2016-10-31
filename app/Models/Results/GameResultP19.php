@@ -2,7 +2,6 @@
 
 namespace App\Models\Results;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\GameQuestion;
 
 class GameResultP19 extends AbstractGameResult {

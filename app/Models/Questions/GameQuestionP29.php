@@ -2,7 +2,6 @@
 
 namespace App\Models\Questions;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\GamePlanet;
 use App\Models\Questions\AbstractGameQuestion;
 

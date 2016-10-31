@@ -3,7 +3,6 @@
 namespace App\Models\Questions;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Questions\GameQuestionP03;
 use Exception;
 use App\Libraries\LogHelper;

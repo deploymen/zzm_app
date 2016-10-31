@@ -2,8 +2,6 @@
 
 namespace App\Models\Results;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 class GameResult extends AbstractGameResult {
 
     public $table = 't0300_game_result';
