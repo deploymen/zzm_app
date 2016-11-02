@@ -4,9 +4,9 @@ namespace App\Models\Results;
 
 use App\Models\GameQuestion;
 
-class GameResultP60 extends AbstractGameResult {
+class GameResultP59 extends AbstractGameResult {
 
-    public $table = 't0360_game_result_p60';
+    public $table = 't0359_game_result_p59';
     protected $primaryKey = 'id';
     public $timestamps = true;
     protected $dates = ['deleted_at'];
@@ -22,7 +22,7 @@ class GameResultP60 extends AbstractGameResult {
         foreach ($gameResult['answers'] as $answer) {
             $question = GameQuestion::find($answer['question_id']);
 
-            $result = GameResultP60::create([
+            $result = GameResultP59::create([
                 'correct' => $answer['correct'],
                 'target_id' => $question->target_id,
                 'answer' => $answer['answer']
@@ -31,9 +31,9 @@ class GameResultP60 extends AbstractGameResult {
             GameResult::create([
                 'play_id' => $gamePlay->id,
                 'question_id' => $answer['question_id'],
-                'target_type' => 'p60',
+                'target_type' => 'p59',
                 'target_id' => $result->id,
-                'game_type_id' => '60',
+                'game_type_id' => '59',
                 'correct' => $answer['correct'],
             ]);
         }
