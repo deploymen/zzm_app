@@ -1,24 +1,18 @@
-<?php namespace App\Http\Controllers;
+<?php
 
-use App;
+namespace App\Http\Controllers;
+
 use Exception;
 use PDOException;
-use Config;
 use Request;
 use DB;
-use Session;
-use App\Libraries;
 use App\Libraries\LogHelper;
-use App\Libraries\AuthHelper;
-use App\Libraries\ZapZapHelper;
 use App\Libraries\EmailHelper;
 use App\Libraries\ResponseHelper;
 use App\Libraries\DatabaseUtilHelper;
 use App\Libraries\ApiProfileHelper;
 use Sendinblue\Mailin;
 use GuzzleHttp\Client;
-
-use App\Models;
 use App\Models\Subscribe;
 use App\Models\LaunchNotification;
 use App\Models\AppVersion;
@@ -27,214 +21,204 @@ use App\Models\GameProfile;
 use App\Models\LogAppleTransaction;
 use App\Models\UserSubsTransaction;
 
-use GuzzleHttp;
-use ReceiptValidator\iTunes\Validator as iTunesValidator;
-
 class ApiController extends Controller {
 
-	public function subscribe(){
+    public function subscribe() {
 
-		$email = Request::input("email");
-		$source = Request::input('source');
-		$name = Request::input('name');
-		$consent = Request::input('consent');
-		$ip = Request::ip();
-		$secret = 'SAKA5639953H5Z26Q74Z';
+        $email = Request::input("email");
+        $source = Request::input('source');
+        $name = Request::input('name');
+        $consent = Request::input('consent');
+        $ip = Request::ip();
+        $secret = 'SAKA5639953H5Z26Q74Z';
 
-		$emails =  Subscribe::where('email' , $email)->first();
-
-
-		if (!$email) {
-			return ResponseHelper::OutputJSON('fail', "missing parameters");
-		}
-
-		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-			return ResponseHelper::OutputJSON('fail', "invalid email format");
-		}
-
-		if($emails){
-			return ResponseHelper::OutputJSON('fail', "no double subscribe");
-		}
-
-		try {
-
-			$res = file_get_contents("http://api.apigurus.com/iplocation/v1.8/locateip?key={$secret}&ip={$ip}&format=json&compact=y");			
-			$ipDetail = json_decode($res, true);
+        $emails = Subscribe::where('email', $email)->first();
 
 
-			$subscribe = new Subscribe;
-			$subscribe->email = $email;
-			$subscribe->ip = $ip;
-			if(isset($ipDetail['geolocation_data']))
-			{ 
-				$geolocationData = $ipDetail['geolocation_data'];
-				$subscribe->ip_detail = json_encode($geolocationData );
-				$subscribe->ip_country = $geolocationData['country_name'];
-	
-			}
-			$subscribe->source = $source;			
-			$subscribe->name = $name;
-			$subscribe->consent = $consent;
-			$subscribe->save();
-			
-		} catch (Exception $ex) {
+        if (!$email) {
+            return ResponseHelper::OutputJSON('fail', "missing parameters");
+        }
 
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'source' => 'ApiController > subscribe',
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}	
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return ResponseHelper::OutputJSON('fail', "invalid email format");
+        }
+
+        if ($emails) {
+            return ResponseHelper::OutputJSON('fail', "no double subscribe");
+        }
+
+        try {
+
+            $res = file_get_contents("http://api.apigurus.com/iplocation/v1.8/locateip?key={$secret}&ip={$ip}&format=json&compact=y");
+            $ipDetail = json_decode($res, true);
 
 
-		return ResponseHelper::OutputJSON('success');
-	}
+            $subscribe = new Subscribe;
+            $subscribe->email = $email;
+            $subscribe->ip = $ip;
+            if (isset($ipDetail['geolocation_data'])) {
+                $geolocationData = $ipDetail['geolocation_data'];
+                $subscribe->ip_detail = json_encode($geolocationData);
+                $subscribe->ip_country = $geolocationData['country_name'];
+            }
+            $subscribe->source = $source;
+            $subscribe->name = $name;
+            $subscribe->consent = $consent;
+            $subscribe->save();
+        } catch (Exception $ex) {
 
-	public function contactUs(){
+            LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+                    'source' => 'ApiController > subscribe',
+                    'inputs' => Request::all(),
+            ])]);
+            return ResponseHelper::OutputJSON('exception');
+        }
 
-		$email = Request::input("email");
-		$message = Request::input("message");
 
-		if (!$email || !$message) {
-			return ResponseHelper::OutputJSON('fail', "missing parameters");
-		}
+        return ResponseHelper::OutputJSON('success');
+    }
 
-		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-			return ResponseHelper::OutputJSON('fail', "invalid email format");
-		}
+    public function contactUs() {
 
-		try {
-			$contactUs = new ModelsContactUs;
-			$contactUs->email = $email;
-			$contactUs->message = $message;
+        $email = Request::input("email");
+        $message = Request::input("message");
 
-			$contactUs->save();
-			DatabaseUtilHelper::LogInsert(0, 't0102_contact_us', $contactUs->id);
+        if (!$email || !$message) {
+            return ResponseHelper::OutputJSON('fail', "missing parameters");
+        }
 
-			//send email?
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return ResponseHelper::OutputJSON('fail', "invalid email format");
+        }
 
-		} catch (PDOException $ex) {
-			if ($ex->errorInfo[1] == 1062) {
-				return ResponseHelper::OutputJSON('exception');
-			}else{
-			 	throw $ex;			 	
-			}
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment'=>json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}	
+        try {
+            $contactUs = new ModelsContactUs;
+            $contactUs->email = $email;
+            $contactUs->message = $message;
 
-		return ResponseHelper::OutputJSON('success');
-	}
-	
-	public function launchNotification(){
-		$email = Request::input("email");
-		$newsLetter = Request::input("news_letter");
-		$launchNotified = Request::input("launch_notified");
+            $contactUs->save();
+            DatabaseUtilHelper::LogInsert(0, 't0102_contact_us', $contactUs->id);
 
-		$ip = Request::ip();
-		$secret = 'SAK6B2WE8688VT69G9DZ';
+            //send email?
+        } catch (PDOException $ex) {
+            if ($ex->errorInfo[1] == 1062) {
+                return ResponseHelper::OutputJSON('exception');
+            } else {
+                throw $ex;
+            }
+        } catch (Exception $ex) {
+            LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+                    'inputs' => Request::all(),
+            ])]);
+            return ResponseHelper::OutputJSON('exception');
+        }
 
-		try {
+        return ResponseHelper::OutputJSON('success');
+    }
 
-			if (!$email) {
-				return ResponseHelper::OutputJSON('fail', "missing parameter");
-			}
+    public function launchNotification() {
+        $email = Request::input("email");
+        $newsLetter = Request::input("news_letter");
+        $launchNotified = Request::input("launch_notified");
 
-			if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-				return ResponseHelper::OutputJSON('fail', "invalid email format");
-			}
+        $ip = Request::ip();
+        $secret = 'SAK6B2WE8688VT69G9DZ';
 
-			$emails =  LaunchNotification::where('email' , $email)->first();
+        try {
 
-			if(!$emails){
-				$emails = new LaunchNotification;
-				$emails->email = $email;
+            if (!$email) {
+                return ResponseHelper::OutputJSON('fail', "missing parameter");
+            }
 
-				$res = file_get_contents("http://api.apigurus.com/iplocation/v1.8/locateip?key={$secret}&ip={$ip}&format=json&compact=y");			
-				$ipDetail = json_decode($res, true);
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                return ResponseHelper::OutputJSON('fail', "invalid email format");
+            }
 
-				$emails->ip = $ip;
-				if(isset($ipDetail['geolocation_data']))
-				{ 
-					$geolocationData = $ipDetail['geolocation_data'];
-					$emails->ip_detail = json_encode($geolocationData );
-					$emails->ip_country = $geolocationData['country_name'];
-				}
-			}
+            $emails = LaunchNotification::where('email', $email)->first();
 
-			if($newsLetter){
-				$emails->news_letter = $newsLetter;
-			}
+            if (!$emails) {
+                $emails = new LaunchNotification;
+                $emails->email = $email;
 
-			if($launchNotified){
-				$emails->launch_notified = $launchNotified;
-			}
-		
-			$emails->save();
+                $res = file_get_contents("http://api.apigurus.com/iplocation/v1.8/locateip?key={$secret}&ip={$ip}&format=json&compact=y");
+                $ipDetail = json_decode($res, true);
 
-			DatabaseUtilHelper::LogInsert(0, 't0101_launch_notification', $emails->id);
+                $emails->ip = $ip;
+                if (isset($ipDetail['geolocation_data'])) {
+                    $geolocationData = $ipDetail['geolocation_data'];
+                    $emails->ip_detail = json_encode($geolocationData);
+                    $emails->ip_country = $geolocationData['country_name'];
+                }
+            }
 
-			return ResponseHelper::OutputJSON('success');
+            if ($newsLetter) {
+                $emails->news_letter = $newsLetter;
+            }
 
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment'=>json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}		
-	}
+            if ($launchNotified) {
+                $emails->launch_notified = $launchNotified;
+            }
 
-	public function getVersion(){
-		$deviceOs = Request::input('device_os');
-		$osVersion = Request::input('os_version');
-		$zzmVersion = Request::input('zzm_version');
+            $emails->save();
 
-		if(!$deviceOs || !$zzmVersion || !$osVersion){
-			return ResponseHelper::OutputJSON('fail', 'missing parameter');
-		}
+            DatabaseUtilHelper::LogInsert(0, 't0101_launch_notification', $emails->id);
 
-		$appVersion = AppVersion::where('device_os', $deviceOs)->where('zzm_version' , $zzmVersion)->first();
-		if(!$appVersion){
-			return ResponseHelper::OutputJSON('fail', 'version not found');
-		}
+            return ResponseHelper::OutputJSON('success');
+        } catch (Exception $ex) {
+            LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+                    'inputs' => Request::all(),
+            ])]);
+            return ResponseHelper::OutputJSON('exception');
+        }
+    }
 
-		return ResponseHelper::OutputJSON('success', '' , [
-			'device_os' => $deviceOs,
-			'zzm_version' => $zzmVersion,
-			'api_version' => $appVersion->api_version,
-			]);
-	}
+    public function getVersion() {
+        $deviceOs = Request::input('device_os');
+        $osVersion = Request::input('os_version');
+        $zzmVersion = Request::input('zzm_version');
 
-	public function weeklyReport(){
-		$email = User::where('activated', 1)->select('id' , 'role', 'email')->get();
-	
-		for($j=0; $j<count($email); $j++){
-			$e = $email[$j];
-			$mail = $email[$j]->email;
+        if (!$deviceOs || !$zzmVersion || !$osVersion) {
+            return ResponseHelper::OutputJSON('fail', 'missing parameter');
+        }
 
-			if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
-				continue;
-			}
+        $appVersion = AppVersion::where('device_os', $deviceOs)->where('zzm_version', $zzmVersion)->first();
+        if (!$appVersion) {
+            return ResponseHelper::OutputJSON('fail', 'version not found');
+        }
 
-			$profileInfo = ApiProfileHelper::GetProfile($e->id , 0);
-		
-			if($e->role == 'parent'){
-				$profile = GameProfile::where('user_id' , $e->id);
+        return ResponseHelper::OutputJSON('success', '', [
+                    'device_os' => $deviceOs,
+                    'zzm_version' => $zzmVersion,
+                    'api_version' => $appVersion->api_version,
+        ]);
+    }
 
-				if(count($profile) == 1){
-					$coc = 'child';
-				}else{
-					$coc = 'children';
-				}
+    public function weeklyReport() {
+        $email = User::where('activated', 1)->select('id', 'role', 'email')->get();
 
-			}else{
-				$coc = 'class';
-			}
+        for ($j = 0; $j < count($email); $j++) {
+            $e = $email[$j];
+            $mail = $email[$j]->email;
 
-			$sql = "
+            if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
+                continue;
+            }
+
+            $profileInfo = ApiProfileHelper::GetProfile($e->id, 0);
+
+            if ($e->role == 'parent') {
+                $profile = GameProfile::where('user_id', $e->id);
+
+                if (count($profile) == 1) {
+                    $coc = 'child';
+                } else {
+                    $coc = 'children';
+                }
+            } else {
+                $coc = 'class';
+            }
+
+            $sql = "
 				SELECT SEC_TO_TIME(SUM(p.`played_time`)) AS `total_played`, count(DISTINCT  DATE_FORMAT(p.`created_at`,'%m-%d-%Y')) AS `days` , count(r.`id`) AS `total_answered` , ((count(r2.`correct`) / count(r.`id`)) * 100) AS `percentage`
 					FROM `t0400_game_play` p, `t0300_game_result` r 
 					LEFT JOIN `t0300_game_result` r2 ON r2.`id` = r.`id` AND r2.`correct` = 1
@@ -245,113 +229,111 @@ class ApiController extends Controller {
 
 			";
 
-			$results = DB::SELECT($sql);
+            $results = DB::SELECT($sql);
 
-			if(!$results){
-				continue;
-			}
+            if (!$results) {
+                continue;
+            }
 
-			$result = $results[0];
+            $result = $results[0];
 
-			$time = explode(':' , $result->total_played);
-			$percentage = explode('.', $result->percentage);
+            $time = explode(':', $result->total_played);
+            $percentage = explode('.', $result->percentage);
 
-			$edmHtml = (string) view('emails.weekly-report', [ 
-				'coc' => $coc,
-				'hour' => $time[0],
-				'minute' => $time[1],
-				'days' => $result->days,
-				'total_answered' => $result->total_answered,
-				'percentage' => $percentage[0],
-				'zapzapmath_portal' => config('app.website_url') . '/user/app#/',
+            $edmHtml = (string) view('emails.weekly-report', [
+                        'coc' => $coc,
+                        'hour' => $time[0],
+                        'minute' => $time[1],
+                        'days' => $result->days,
+                        'total_answered' => $result->total_answered,
+                        'percentage' => $percentage[0],
+                        'zapzapmath_portal' => config('app.website_url') . '/user/app#/',
+                        'school' => $profileInfo[0]['school'],
+                        'game_code' => $profileInfo[0]['game_code']['code'],
+                        'grade' => $profileInfo[0]['grade'],
+                        'total_star' => $profileInfo[0]['total_star'],
+                        'last_planet_name' => $profileInfo[0]['last_played']['last_planet_name'],
+                        'last_played_date' => $profileInfo[0]['last_played']['last_played'],
+                        'last_played_time' => $profileInfo[0]['last_played']['last_played_time'],
+                        'accuracy' => $profileInfo[0]['last_session']['accuracy'],
+                        'total_played_time' => $profileInfo[0]['last_session']['total_played_time'],
+                        'total_answered_last' => $profileInfo[0]['last_session']['total_answered'],
+                        'total_correct' => $profileInfo[0]['last_session']['total_correct'],
+            ]);
 
-				'school' => $profileInfo[0]['school'],
-				'game_code' => $profileInfo[0]['game_code']['code'],
-				'grade' => $profileInfo[0]['grade'],
-				'total_star' => $profileInfo[0]['total_star'],
-				'last_planet_name' => $profileInfo[0]['last_played']['last_planet_name'],
-				'last_played_date' => $profileInfo[0]['last_played']['last_played'],
-				'last_played_time' => $profileInfo[0]['last_played']['last_played_time'],
+            EmailHelper::SendEmail([
+                'about' => 'Zap Zap Math',
+                'subject' => 'Weekly Report',
+                'body' => $edmHtml,
+                'bodyHtml' => $edmHtml,
+                'toAddresses' => [$mail],
+            ]);
+        }
 
-				'accuracy' => $profileInfo[0]['last_session']['accuracy'],
-				'total_played_time' => $profileInfo[0]['last_session']['total_played_time'],
-				'total_answered_last' => $profileInfo[0]['last_session']['total_answered'],
-				'total_correct' => $profileInfo[0]['last_session']['total_correct'],
-			]);
+        return ResponseHelper::OutputJSON('success');
+    }
 
-			EmailHelper::SendEmail([
-				'about' => 'Zap Zap Math',
-				'subject' => 'Weekly Report',
-				'body' => $edmHtml,
-				'bodyHtml' => $edmHtml,
-				'toAddresses' => [$mail],
-			]);
-		}
+    public function InviteTeacher(\Illuminate\Http\Request $request) {
 
-		return ResponseHelper::OutputJSON('success');
-	}
+        if (!$request->emails) {
+            return ResponseHelper::OutputJSON('fail', 'missing parameter');
+        }
 
-	public function InviteTeacher(\Illuminate\Http\Request $request){
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return ResponseHelper::OutputJSON('fail', "invalid email format");
+        }
 
-		if(!$request->emails){
-			return ResponseHelper::OutputJSON('fail', 'missing parameter');
-		}
+        for ($i = 0; $i < count($request->emails); $i++) {
+            $email = $request->emails[$i];
 
-		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-			return ResponseHelper::OutputJSON('fail', "invalid email format");
-		}
+            $edmHtml = (string) view('emails.teacher-invite', [
+                        'app_store_address' => config('app.app_store_url'),
+                        'username' => $email,
+                        'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
+                        'email_support' => config('app.support_email'),
+                        'zzm_url' => config('app.website_url'),
+                        'social_media_links' => config('app.fanpage_url'),
+            ]);
 
-		for($i=0; $i<count($request->emails); $i++){
-			$email = $request->emails[$i];
+            EmailHelper::SendEmail([
+                'about' => 'Zap Zap Math',
+                'subject' => 'Assist our school to get Zap Zap Math for free!',
+                'body' => $edmHtml,
+                'bodyHtml' => $edmHtml,
+                'toAddresses' => [$email],
+            ]);
+        }
 
-			$edmHtml = (string) view('emails.teacher-invite', [ 
-				'app_store_address' => config('app.app_store_url'),
-				'username' => $email,
-				'zapzapmath_portal' => config('app.website_url') . '/user/sign-in',
-				'email_support' => config('app.support_email'),
-				'zzm_url' => config('app.website_url'),
-				'social_media_links' => config('app.fanpage_url'),
-			]);
+        return ResponseHelper::OutputJSON('success');
+    }
 
-			EmailHelper::SendEmail([
-				'about' => 'Zap Zap Math',
-				'subject' => 'Assist our school to get Zap Zap Math for free!',
-				'body' => $edmHtml,
-				'bodyHtml' => $edmHtml,
-				'toAddresses' => [$email],
-			]);
-		}
+    public function SendInBlue() {
+        $mailin = new Mailin("https://api.sendinblue.com/v2.0", "AC0B8IKZ2nw64hSW");
 
-		return ResponseHelper::OutputJSON('success');
-	}
+        $data = array("email" => "example@example.com",
+            "attributes" => ["NAME" => "wz test", "SURNAME" => ""],
+            "listid" => [6],
+            "listid_unlink" => []
+        );
 
-	public function SendInBlue(){
-		$mailin = new Mailin("https://api.sendinblue.com/v2.0","AC0B8IKZ2nw64hSW");
-	
-	    $data = array( "email" => "example@example.com",
-	        "attributes" => ["NAME"=>"wz test", "SURNAME"=>""],
-	        "listid" => [6],
-	        "listid_unlink" => []
-	    );
+        var_export($mailin->create_update_user($data));
+    }
 
-	    var_export($mailin->create_update_user($data));
-	}
-
-	public function appleValidateSubscription(\Illuminate\Http\Request $request){
+    public function appleValidateSubscription(\Illuminate\Http\Request $request) {
 
         //this method is to validate new subscription
         // $sandbox = config::get('app.sandbox');
         $sandbox = true;
         $receipt = $request->receipt;
         $plus = rawurldecode($request->plus);
-        $receipt = str_replace(' ', '+', $receipt);//should not use this because it wont happen. unless client forgot to do urlencode()
+        $receipt = str_replace(' ', '+', $receipt); //should not use this because it wont happen. unless client forgot to do urlencode()
 
-        if($sandbox){
-     	   	$client = new Client(['base_uri' => 'https://sandbox.itunes.apple.com']);
-        }else{
-        	$client = new Client(['base_uri' => 'https://buy.itunes.apple.com/verifyReceipt']);
+        if ($sandbox) {
+            $client = new Client(['base_uri' => 'https://sandbox.itunes.apple.com']);
+        } else {
+            $client = new Client(['base_uri' => 'https://buy.itunes.apple.com/verifyReceipt']);
         }
-    
+
         $response = $client->request('POST', '/verifyReceipt', [
             'headers' => ['content-type' => 'application/json'],
             'json' => [
@@ -362,140 +344,139 @@ class ApiController extends Controller {
 
         $receiptObject = json_decode($response->getBody(), false);
 
-        if($receiptObject->status==0){
+        if ($receiptObject->status == 0) {
             //OK
             //Loop until a receipt id that never subscript in our db
             $claimed = false;
             foreach ($receiptObject->receipt->in_app as $receipt) {
-                //dd($receipt);
+
                 //check receipt used before or not
-                $used = LogAppleTransaction::where('transaction_id' , $receipt->transaction_id)->first(); //replace this with actual model method
-                if($used){ continue; }
+                $used = LogAppleTransaction::where('transaction_id', $receipt->transaction_id)->first(); //replace this with actual model method
+                if ($used) {
+                    continue;
+                }
 
                 $productId = $receipt->product_id;
 
                 switch ($productId) {
                     case 'com.visualmathinteractive.zapzapmath.oneyearprofilesubscription_1':
-                    	$this->updateExpired($request, $receipt , 'profile-yearly-4.99');
+                        $this->updateExpired($request, $receipt, 'profile-yearly-4.99');
 
-           				 $claimed = true;
+                        $claimed = true;
                         break;
 
                     case 'com.visualmathinteractive.zapzapmath.oneyearprofilesubscription_2':
-                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
+                        $this->updateExpired($request, $receipt, 'profile-yearly-4.99');
 
-           				$claimed = true;
+                        $claimed = true;
                         break;
 
                     case 'com.visualmathinteractive.zapzapmath.oneyearprofilesubscription_3':
-                
-                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
 
-           				$claimed = true;
+                        $this->updateExpired($request, $receipt, 'profile-yearly-4.99');
+
+                        $claimed = true;
                         break;
 
                     case 'com.visualmathinteractive.zapzapmath.oneyearprofilesubscription_4':
-                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
+                        $this->updateExpired($request, $receipt, 'profile-yearly-4.99');
 
-           				$claimed = true;
+                        $claimed = true;
                         break;
 
                     case 'com.visualmathinteractive.zapzapmath.oneyearprofilesubscription_5':
-                        $this->updateExpired($request, $receipt , 'profile-yearly-4.99');
+                        $this->updateExpired($request, $receipt, 'profile-yearly-4.99');
 
-           				$claimed = true;
+                        $claimed = true;
                         break;
-                   
-                   
-                    default: return ResponseHelper::OutputJSON('fail' , 'incorrect product id'); ; break;
+
+
+                    default: return ResponseHelper::OutputJSON('fail', 'incorrect product id');
+                        ;
+                        break;
                 }
- 
             }
 
-            if($claimed){
+            if ($claimed) {
 
-				return ResponseHelper::OutputJSON('success');
-                	
-            }else{
-				return ResponseHelper::OutputJSON('fail' , 'duplicated data');
-               
+                return ResponseHelper::OutputJSON('success');
+            } else {
+                return ResponseHelper::OutputJSON('fail', 'duplicated data');
+            }
+        } else {
+            return ResponseHelper::OutputJSON('fail', 'validation fail');
+        }
+    }
+
+    function updateExpired($request, $receipt, $productId) {
+
+        if ($receipt->is_trial_period == 'true') {
+            $profile = GameProfile::find($request->student_profile_id);
+
+            $expiredAt = DB::raw('DATE_ADD(NOW(), INTERVAL 3 MONTH)');
+            if ($profile->expired_at > date("Y-m-d H:i:s")) {
+                $expiredAt = DB::raw('DATE_ADD("' . $profile->expired_at . '", INTERVAL 3 MONTH)');
             }
 
+            $profile->expired_at = $expiredAt;
+            $profile->save();
+        } else {
+            $profile = GameProfile::find($request->student_profile_id);
 
-        }else{
-			return ResponseHelper::OutputJSON('fail', 'validation fail');
-        } 
+            $expiredAt = DB::raw('DATE_ADD(NOW(), INTERVAL 1 YEAR)');
+            if ($profile->expired_at > date("Y-m-d H:i:s")) {
+                $expiredAt = DB::raw('DATE_ADD("' . $profile->expired_at . '", INTERVAL 1 YEAR)');
+            }
+
+            $profile->expired_at = $expiredAt;
+            $profile->save();
+        }
+
+        LogAppleTransaction::create([
+            'user_id' => $request->user_id,
+            'profile_id' => $request->student_profile_id,
+            'transaction_id' => $receipt->transaction_id,
+            'product_id' => $productId,
+            'quantity' => $receipt->quantity,
+            'original_transaction_id' => $receipt->original_transaction_id,
+            'purchase_date' => $receipt->purchase_date,
+            'purchase_date_ms' => $receipt->purchase_date_ms,
+            'purchase_date_pst' => $receipt->purchase_date_pst,
+            'original_purchase_date' => $receipt->original_purchase_date,
+            'original_purchase_date_ms' => $receipt->original_purchase_date_ms,
+            'original_purchase_date_pst' => $receipt->original_purchase_date_pst,
+            'expires_date' => $receipt->expires_date,
+            'expires_date_ms' => $receipt->expires_date_ms,
+            'web_order_line_item_id' => $receipt->web_order_line_item_id,
+            'is_trial_period' => $receipt->is_trial_period,
+        ]);
+
+        UserSubsTransaction::create([
+            'user_id' => $request->user_id,
+            'package_id' => $productId,
+            'target_type' => 'profile',
+            'target_id' => $request->student_profile_id,
+            'expired_at' => $expiredAt,
+        ]);
     }
 
-    function updateExpired($request, $receipt , $productId){
-    	
-    	if($receipt->is_trial_period == 'true'){
-    		$profile = GameProfile::find($request->student_profile_id); 
-
-    		$expiredAt = DB::raw('DATE_ADD(NOW(), INTERVAL 3 MONTH)');
-    		if($profile->expired_at > date("Y-m-d H:i:s") ){ 
-    			$expiredAt = DB::raw('DATE_ADD("'.$profile->expired_at.'", INTERVAL 3 MONTH)');
-    		}
-
-			$profile->expired_at = $expiredAt;
-			$profile->save();
-
-    	}else{
-    		$profile = GameProfile::find($request->student_profile_id);
-
-    		$expiredAt = DB::raw('DATE_ADD(NOW(), INTERVAL 1 YEAR)');
-    		if($profile->expired_at > date("Y-m-d H:i:s") ){ 
-    			$expiredAt = DB::raw('DATE_ADD("'.$profile->expired_at.'", INTERVAL 1 YEAR)');
-    		}
-
-			$profile->expired_at = $expiredAt;
-			$profile->save();
-    	}
-
-    	LogAppleTransaction::create([
-        	'user_id' => $request->user_id,
-        	'profile_id' => $request->student_profile_id,
-        	'transaction_id' => $receipt->transaction_id,
-        	'product_id' => $productId,
-        	'quantity' => $receipt->quantity,
-        	'original_transaction_id' => $receipt->original_transaction_id,
-        	'purchase_date' => $receipt->purchase_date,
-        	'purchase_date_ms' => $receipt->purchase_date_ms,
-        	'purchase_date_pst' => $receipt->purchase_date_pst,
-        	'original_purchase_date' => $receipt->original_purchase_date,
-        	'original_purchase_date_ms' => $receipt->original_purchase_date_ms,
-        	'original_purchase_date_pst' => $receipt->original_purchase_date_pst,
-        	'expires_date' => $receipt->expires_date,
-        	'expires_date_ms' => $receipt->expires_date_ms,
-        	'web_order_line_item_id' => $receipt->web_order_line_item_id,
-        	'is_trial_period' => $receipt->is_trial_period,
-    	]);
-
-		UserSubsTransaction::create([
-			'user_id' => $request->user_id,
-			'package_id' => $productId,
-			'target_type' => 'profile',
-			'target_id' => $request->student_profile_id,
-			'expired_at' => $expiredAt,
-			]);
-    	
-    }
-
-    public function scheduleAppleCheckRecurring_onPremiumProfile(){
+    public function scheduleAppleCheckRecurring_onPremiumProfile() {
         //get all grace period 
-    	$sandbox = config::get('app.sandbox');
+        $sandbox = config::get('app.sandbox');
         $graces = []; //replace this with actual model method
         foreach ($graces as $grace) {
             $originalReceipt = $grace->originalReceipt; //replace this with actual model method
-            if(!$originalReceipt){ continue; /* this should not happen */}
-            
+            if (!$originalReceipt) {
+                continue; /* this should not happen */
+            }
+
             //query apple
 
-    	    if($sandbox){
-	     	   	$client = new Client(['base_uri' => 'https://sandbox.itunes.apple.com']);
-	        }else{
-	        	$client = new Client(['base_uri' => 'https://buy.itunes.apple.com/verifyReceipt']);
-	        }
+            if ($sandbox) {
+                $client = new Client(['base_uri' => 'https://sandbox.itunes.apple.com']);
+            } else {
+                $client = new Client(['base_uri' => 'https://buy.itunes.apple.com/verifyReceipt']);
+            }
 
             $response = $client->request('POST', '/verifyReceipt', [
                 'headers' => ['content-type' => 'application/json'],
@@ -505,25 +486,25 @@ class ApiController extends Controller {
                 ]
             ]);
 
-            $receiptObject = json_decode($response->getBody(), false);            
+            $receiptObject = json_decode($response->getBody(), false);
             //the rest same as first time subscription
         }
     }
 
-	public function appleGetStudentIdByReceipt(\Illuminate\Http\Request $request){
+    public function appleGetStudentIdByReceipt(\Illuminate\Http\Request $request) {
 
-    	// $sandbox = config::get('app.sandbox');
-    	$sandbox = true;
-    	$receipt = $request->receipt;
+        // $sandbox = config::get('app.sandbox');
+        $sandbox = true;
+        $receipt = $request->receipt;
         $plus = rawurldecode($request->plus);
-        $receipt = str_replace(' ', '+', $receipt);//should not use this because it wont happen. unless client forgot to do urlencode()
+        $receipt = str_replace(' ', '+', $receipt); //should not use this because it wont happen. unless client forgot to do urlencode()
 
-        if($sandbox){
-	 	   	$client = new Client(['base_uri' => 'https://sandbox.itunes.apple.com']);
-	    }else{
-	    	$client = new Client(['base_uri' => 'https://buy.itunes.apple.com/verifyReceipt']);
-	    }
-	    
+        if ($sandbox) {
+            $client = new Client(['base_uri' => 'https://sandbox.itunes.apple.com']);
+        } else {
+            $client = new Client(['base_uri' => 'https://buy.itunes.apple.com/verifyReceipt']);
+        }
+
         $response = $client->request('POST', '/verifyReceipt', [
             'headers' => ['content-type' => 'application/json'],
             'json' => [
@@ -535,32 +516,28 @@ class ApiController extends Controller {
         $receiptObject = json_decode($response->getBody(), false);
         $prevProfileId = 0;
 
-        if($receiptObject->status==0){
+        if ($receiptObject->status == 0) {
             $transactionId = [];
-           
-            foreach ($receiptObject->receipt->in_app as $receipt){
 
-            	array_push($transactionId , $receipt->transaction_id);
+            foreach ($receiptObject->receipt->in_app as $receipt) {
 
+                array_push($transactionId, $receipt->transaction_id);
             }
 
             $profileIds = LogAppleTransaction::getProfile($transactionId);
 
-            $profiles = GameProfile::whereIn('id',$profileIds )->get();
-      
-            foreach($profiles as $profile){
-            	$profile->nickName1;
-				$profile->nickName2;
-				$profile->avatar;
+            $profiles = GameProfile::whereIn('id', $profileIds)->get();
+
+            foreach ($profiles as $profile) {
+                $profile->nickName1;
+                $profile->nickName2;
+                $profile->avatar;
             }
-            	
-        }else{
-			return ResponseHelper::OutputJSON('fail' , 'validation fail');
+        } else {
+            return ResponseHelper::OutputJSON('fail', 'validation fail');
         }
 
-		return ResponseHelper::OutputJSON('success' , '' , $profiles);
-
+        return ResponseHelper::OutputJSON('success', '', $profiles);
     }
 
 }
-

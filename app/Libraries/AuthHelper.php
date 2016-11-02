@@ -1,11 +1,13 @@
-<?php namespace App\Libraries;
+<?php
+
+namespace App\Libraries;
 
 use Config;
 
-class AuthHelper{
+class AuthHelper {
 
-	public static function GenerateAccessToken($userId)
-	{
-		return $userId.'|'.sha1(time().Config::get('app.auth_salt'));	
-	}
+    public static function GenerateAccessToken($userId) {
+        return $userId . '|' . sha1(time() . Config::get('app.auth_salt'));
+    }
+
 }
