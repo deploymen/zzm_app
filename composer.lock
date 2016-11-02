@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "98aa3fd0bd2da83586badd0840c9323a",
-    "content-hash": "a14b09d1ff3f7ee7eaa6d1b7a6ffb538",
+    "hash": "e3ef9e710d2b6f50a0ab46e999d661b9",
+    "content-hash": "7ffd65f6ccceae701c36deedd9be7441",
     "packages": [
         {
             "name": "aporat/store-receipt-validator",
@@ -173,16 +173,16 @@
         },
         {
             "name": "braintree/braintree_php",
-            "version": "3.16.0",
+            "version": "3.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/braintree/braintree_php.git",
-                "reference": "d6ce80f7f54abe9972d577173343d1975bc49e77"
+                "reference": "a51a36eade9988928aa49e36e23a5abb68a32251"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/braintree/braintree_php/zipball/d6ce80f7f54abe9972d577173343d1975bc49e77",
-                "reference": "d6ce80f7f54abe9972d577173343d1975bc49e77",
+                "url": "https://api.github.com/repos/braintree/braintree_php/zipball/a51a36eade9988928aa49e36e23a5abb68a32251",
+                "reference": "a51a36eade9988928aa49e36e23a5abb68a32251",
                 "shasum": ""
             },
             "require": {
@@ -216,7 +216,7 @@
                 }
             ],
             "description": "Braintree PHP Client Library",
-            "time": "2016-08-30 20:34:36"
+            "time": "2016-10-13 19:16:51"
         },
         {
             "name": "chumper/zipper",
@@ -1456,16 +1456,16 @@
         },
         {
             "name": "laravel/socialite",
-            "version": "v2.0.19",
+            "version": "v2.0.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/socialite.git",
-                "reference": "4efbdb1e9e45ee0d21d1bc1ad35370c0eee5adb2"
+                "reference": "aca8de9a93a28a119714e289c8bc599bd81aa88d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/socialite/zipball/4efbdb1e9e45ee0d21d1bc1ad35370c0eee5adb2",
-                "reference": "4efbdb1e9e45ee0d21d1bc1ad35370c0eee5adb2",
+                "url": "https://api.github.com/repos/laravel/socialite/zipball/aca8de9a93a28a119714e289c8bc599bd81aa88d",
+                "reference": "aca8de9a93a28a119714e289c8bc599bd81aa88d",
                 "shasum": ""
             },
             "require": {
@@ -1506,7 +1506,7 @@
                 "laravel",
                 "oauth"
             ],
-            "time": "2016-10-24 13:06:51"
+            "time": "2016-11-01 18:49:10"
         },
         {
             "name": "league/flysystem",

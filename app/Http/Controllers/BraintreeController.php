@@ -27,22 +27,21 @@ use App\Models\LogBraintreeTransaction;
 
 class BraintreeController extends Controller {
 
-	public function generateToken(){
+    public function __construct()
+    {
+        Braintree_Configuration::environment(Config::get('app.braintree_sandbox'));
+        Braintree_Configuration::merchantId(Config::get('app.braintree_merchant_id'));
+        Braintree_Configuration::publicKey(Config::get('app.braintree_public_key'));
+        Braintree_Configuration::privateKey(Config::get('app.braintree_private_key'));
+    }
 
-		Braintree_Configuration::environment(Config::get('app.braintree_sandbox'));
-		Braintree_Configuration::merchantId(Config::get('app.braintree_merchant_id'));
-		Braintree_Configuration::publicKey(Config::get('app.braintree_public_key'));
-		Braintree_Configuration::privateKey(Config::get('app.braintree_private_key'));
+    public function generateToken(){
+
 		$clientToken = Braintree_ClientToken::generate();
-
 		return ResponseHelper::OutputJSON('success', '' , ['token' => $clientToken]);
 	}
 
 	public function getCustomer(Request $request){
-				Braintree_Configuration::environment(Config::get('app.braintree_sandbox'));
-		Braintree_Configuration::merchantId(Config::get('app.braintree_merchant_id'));
-		Braintree_Configuration::publicKey(Config::get('app.braintree_public_key'));
-		Braintree_Configuration::privateKey(Config::get('app.braintree_private_key'));
 
 		$userExternalId = UserExternalId::find($request->user_id);
 
@@ -74,10 +73,6 @@ class BraintreeController extends Controller {
 	}
 
 	public function braintreeSubscribe(Request $request){
-				Braintree_Configuration::environment(Config::get('app.braintree_sandbox'));
-		Braintree_Configuration::merchantId(Config::get('app.braintree_merchant_id'));
-		Braintree_Configuration::publicKey(Config::get('app.braintree_public_key'));
-		Braintree_Configuration::privateKey(Config::get('app.braintree_private_key'));
 
 		//validation start
 		if(!$request->user_id || !$request->target_id || !$request->role || !$request->plan_id){
@@ -100,7 +95,7 @@ class BraintreeController extends Controller {
 			case 'profile-yearly-4_99' : $packageId = 'profile-yearly-4.99'; break;
 			case 'profile-yearly-9_99' : $packageId = 'profile-yearly-9.99'; break;
 			default : return ResponseHelper::OutputJSON('fail' , 'invalid plan id'); break;
-		}	
+		}
 
 		$subPackage = SubscriptionPackage::find($packageId);
 
@@ -176,11 +171,6 @@ class BraintreeController extends Controller {
 
 	function createCustomer($request){
 
-		Braintree_Configuration::environment(Config::get('app.braintree_sandbox'));
-		Braintree_Configuration::merchantId(Config::get('app.braintree_merchant_id'));
-		Braintree_Configuration::publicKey(Config::get('app.braintree_public_key'));
-		Braintree_Configuration::privateKey(Config::get('app.braintree_private_key'));
-
 		$user = User::find($request->user_id);
 
 		if(!$request->name || !$request->nonce){
@@ -201,11 +191,6 @@ class BraintreeController extends Controller {
 	}
 
 	public function deletedPaymentMethod(Request $request){
-				Braintree_Configuration::environment(Config::get('app.braintree_sandbox'));
-		Braintree_Configuration::merchantId(Config::get('app.braintree_merchant_id'));
-		Braintree_Configuration::publicKey(Config::get('app.braintree_public_key'));
-		Braintree_Configuration::privateKey(Config::get('app.braintree_private_key'));
-
 		$result = Braintree_PaymentMethod::delete($request->payment_method_token);
 
 		if(!$result->success){
