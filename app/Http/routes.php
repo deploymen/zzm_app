@@ -7,6 +7,7 @@ require __DIR__.'/Routes/page-docs.php';
 require __DIR__.'/Routes/api-cron.php';
 
 Route::any('saml/acs', 'AuthSchoologyController@schoology');
+
 Route::get('version' , function(){ 
 	return response()->json([
 		'server' => Config::get('app.zzm_server'),
@@ -38,6 +39,7 @@ Route::group(['middleware' => 'version'], function () {
 	Route::group(['prefix' => '/1.3'], function () {
 		require __DIR__.'/Routes/1.3/api.php';
 		require __DIR__.'/Routes/1.3/api-user.php';
+        require __DIR__.'/Routes/1.3/api-quiz.php';
 		require __DIR__.'/Routes/1.3/api-game.php';
 	});
 });
