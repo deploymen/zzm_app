@@ -63,3 +63,8 @@ Route::group(['prefix' => 'braintree', 'middleware' => 'auth.user'], function() 
     Route::post('remove/payment-method', 'BraintreeController@deletedPaymentMethod');
 });
 
+/**
+ * November 2016 Voucher
+ */
+
+Route::post('/redeem/2016-nov-conf', 'VoucherController@redeem');
