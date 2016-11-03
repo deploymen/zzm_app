@@ -35,7 +35,7 @@ class VoucherController extends Controller
                  * Check if Voucher has not been used
                  */
                 if ($checkVoucher->status == 1) {
-                    return ResponseHelper::OutputJSON('fail', '',"This Voucher code ({$code}) has been used");
+                    return ResponseHelper::OutputJSON('fail', '',"Voucher already used");
                 }
 
 
