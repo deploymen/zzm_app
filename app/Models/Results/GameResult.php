@@ -1,16 +1,14 @@
-<?php namespace App\Models\Results;
+<?php
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\GameQuestion;
+namespace App\Models\Results;
+
 class GameResult extends AbstractGameResult {
 
-	public $table = 't0300_game_result';
-	protected $primaryKey = 'id';
-	public $timestamps = true;
-	protected $dates = ['deleted_at'];
-
-	protected $fillable = ['play_id', 'question_id', 'target_type', 'target_id', 'game_type_id', 'correct'];
-	protected $hidden = [];
+    public $table = 't0300_game_result';
+    protected $primaryKey = 'id';
+    public $timestamps = true;
+    protected $dates = ['deleted_at'];
+    protected $fillable = ['play_id', 'question_id', 'target_type', 'target_id', 'game_type_id', 'correct'];
+    protected $hidden = [];
 
 }

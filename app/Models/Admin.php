@@ -1,21 +1,23 @@
-<?php namespace App\Models;
+<?php
+
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Admin extends Eloquent{
-	use SoftDeletes;
+class Admin extends Eloquent {
 
-	public $table = 't8881_user_admin';
-	protected $primaryKey = 'id';
-	public $timestamps = true;
-	protected $dates = ['deleted_at'];
+    use SoftDeletes;
 
-	protected $hidden = [];
+    public $table = 't8881_user_admin';
+    protected $primaryKey = 'id';
+    public $timestamps = true;
+    protected $dates = ['deleted_at'];
+    protected $hidden = [];
 
-	public function access() {
+    public function access() {
 
-		return $this->hasMany('AdminAccess', 'user_id');
-	}	
+        return $this->hasMany('AdminAccess', 'user_id');
+    }
 
 }
