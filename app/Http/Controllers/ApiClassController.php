@@ -1,216 +1,209 @@
-<?php namespace App\Http\Controllers;
+<?php
 
-use App;
+namespace App\Http\Controllers;
+
 use Exception;
-use Config;
-use App\Models;
 use App\Models\GameProfile;
 use App\Models\GameClass;
 use App\Models\UserFlag;
-use App\Libraries;
 use App\Libraries\LogHelper;
 use App\Libraries\ResponseHelper;
 use App\Libraries\ApiProfileHelper;
-
 use Validator;
 use Request;
 
 Class ApiClassController extends Controller {
 
-	public function get() {
+    public function get() {
 
-		try {
-			$userId = Request::input('user_id');
-			$GameClass = GameClass::where('user_id', $userId)->get();
+        try {
+            $userId = Request::input('user_id');
+            $GameClass = GameClass::where('user_id', $userId)->get();
 
-			foreach ($GameClass as $class){
-				$class->paid = ($class->expired_at > date("Y-m-d H:i:s"))?1:0;
-			}
-			return ResponseHelper::OutputJSON('success', '', ['game_class' => $GameClass]);
+            foreach ($GameClass as $class) {
+                $class->paid = ($class->expired_at > date("Y-m-d H:i:s")) ? 1 : 0;
+            }
+            return ResponseHelper::OutputJSON('success', '', ['game_class' => $GameClass]);
+        } catch (Exception $ex) {
+            LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+                    'inputs' => Request::all(),
+            ])]);
+            return ResponseHelper::OutputJSON('exception');
+        }
+    }
 
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
-	}
+    public function create() {
+        try {
+            $userId = Request::input('user_id');
+            $className = Request::input('name');
 
-	public function create() {
-		try {
-			$userId = Request::input('user_id');
-			$className = Request::input('name');
+            $userFlag = UserFlag::find($userId);
+            $userClass = GameClass::where('user_id', $userId)->count();
 
-			$userFlag = UserFlag::find($userId);
-			$userClass = GameClass::where('user_id' , $userId)->count();
+            if ($userClass >= $userFlag->class_limit) {
+                return ResponseHelper::OutputJSON('fail', "limited");
+            }
 
-			if($userClass >= $userFlag->class_limit){
-				return ResponseHelper::OutputJSON('fail', "limited");
-			}
+            if (!$className || !$userId) {
+                return ResponseHelper::OutputJSON('fail', "missing parameters");
+            }
 
-			if (!$className || !$userId) {
-				return ResponseHelper::OutputJSON('fail', "missing parameters");
-			}
+            $classN = GameClass::where('user_id', $userId)->where('name', $className)->first();
+            if ($classN) {
+                return ResponseHelper::OutputJSON('fail', "class name already exist");
+            }
 
-			$classN = GameClass::where('user_id' , $userId)->where('name' , $className)->first();
-			if($classN){
-				return ResponseHelper::OutputJSON('fail', "class name already exist");
-			}
+            $gameClass = new GameClass;
+            $gameClass->user_id = $userId;
+            $gameClass->name = $className;
+            $gameClass->save();
 
-			$gameClass = new GameClass;
-			$gameClass->user_id = $userId;
-			$gameClass->name = $className;
-			$gameClass->save();
+            return ResponseHelper::OutputJSON('success', '', $gameClass);
+        } catch (Exception $ex) {
+            LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+                    'inputs' => Request::all(),
+            ])]);
+            return ResponseHelper::OutputJSON('exception');
+        }
+    }
 
-			return ResponseHelper::OutputJSON('success', '' , $gameClass);
+    public function update(\Illuminate\Http\Request $request, $id) {
+        try {
+            if (!$request->name) {
+                return ResponseHelper::OutputJSON('fail', "missing parameters");
+            }
 
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
-	}
+            $gameClass = GameClass::find($id);
+            if (!$gameClass) {
+                return ResponseHelper::OutputJSON("fail", "class not found");
+            }
 
-	public function update(\Illuminate\Http\Request $request , $id) {
-		try {
-			if(!$request->name){
-				return ResponseHelper::OutputJSON('fail', "missing parameters");
-			}
+            $validator = Validator::make($request->all(), [
+                        'name' => 'required|min:3|unique:t0112_game_class,name,' . $id . ',id,user_id,' . $request->user_id . ',deleted_at,NULL',
+            ]);
 
-			$gameClass = GameClass::find($id);
-			if(!$gameClass){
-				return ResponseHelper::OutputJSON("fail", "class not found");
-			}
+            if ($validator->fails()) {
+                return ResponseHelper::OutputJSON("fail", "class name already exist");
+            }
 
-			$validator = Validator::make($request->all(),  [
-		        'name' => 'required|min:3|unique:t0112_game_class,name,'.$id.',id,user_id,'.$request->user_id.',deleted_at,NULL',
-		    ]);
+            $gameClass->name = $request->name;
+            // $gameClass->grade = $request->grade;
+            // $gameClass->age = $request->age;
+            $gameClass->save();
 
-			if ($validator->fails()) {
-				return ResponseHelper::OutputJSON("fail", "class name already exist");
-       		}
+            return ResponseHelper::OutputJSON('success');
+        } catch (Exception $ex) {
+            LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+                    'inputs' => Request::all(),
+            ])]);
+            return ResponseHelper::OutputJSON('exception');
+        }
+    }
 
-			$gameClass->name = $request->name;
-			// $gameClass->grade = $request->grade;
-			// $gameClass->age = $request->age;
-			$gameClass->save();
+    public function delete($id) {
+        $userId = Request::input('user_id');
 
-			return ResponseHelper::OutputJSON('success');
+        try {
 
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
-	}
+            $gameClass = GameClass::find($id);
+            if (!$gameClass) {
+                return ResponseHelper::OutputJSON('fail', "class not found");
+            }
 
-	public function delete($id) {
-		$userId = Request::input('user_id');
+            if ($userId == $gameClass->user_id) {
+                $gameClass->delete();
+                return ResponseHelper::OutputJSON('success');
+            }
 
-		try {
+            return ResponseHelper::OutputJSON('fail', 'wrong user id');
+        } catch (Exception $ex) {
+            LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+                    'inputs' => Request::all(),
+            ])]);
+            return ResponseHelper::OutputJSON('exception');
+        }
+    }
 
-			$gameClass = GameClass::find($id);
-			if (!$gameClass) {
-				return ResponseHelper::OutputJSON('fail', "class not found");
-			}
+    public function addProfile() {
 
-			if($userId == $gameClass->user_id){
-				$gameClass->delete();
-				return ResponseHelper::OutputJSON('success');
-			}	
+        $userId = Request::input('user_id');
+        $profileId = Request::input('profile_id');
+        $classId = Request::input('class_id');
 
-			return ResponseHelper::OutputJSON('fail','wrong user id');
+        try {
 
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
-	}
+            if (!$profileId || !$userId || !$classId) {
+                return ResponseHelper::OutputJSON('fail', "missing parameters");
+            }
 
-	public function addProfile() {
+            $gameClass = GameClass::find($classId);
+            if (!$gameClass) {
+                return ResponseHelper::OutputJSON('fail', "class not found");
+            }
 
-		$userId = Request::input('user_id');
-		$profileId = Request::input('profile_id');
-		$classId = Request::input('class_id');
+            $profile = GameProfile::find($profileId);
+            if (!$profile->user_id == $userId) {
+                return ResponseHelper::OutputJSON('fail', "profile not found");
+            }
 
-		try{
+            $profile->class_id = $classId;
+            $profile->save();
 
-			if(!$profileId || !$userId || !$classId) {
-				return ResponseHelper::OutputJSON('fail', "missing parameters");
-			}
-			
-			$gameClass = GameClass::find($classId);
-			if(!$gameClass) {
-				return ResponseHelper::OutputJSON('fail', "class not found");
-			}
+            return ResponseHelper::OutputJSON('success');
+        } catch (Exception $ex) {
+            LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
+                    'inputs' => Request::all(),
+            ])]);
+            return ResponseHelper::OutputJSON('exception');
+        }
+    }
 
-			$profile = GameProfile::find($profileId);
-			if(!$profile->user_id == $userId) {
-				return ResponseHelper::OutputJSON('fail', "profile not found");
-			}
+    public function getProfile($classId) {
+        $userId = Request::input('user_id');
 
-			$profile->class_id = $classId;
-			$profile->save();
+        $gameClass = GameClass::where('id', $classId)->where('user_id', $userId)->get();
+        if (!$gameClass) {
+            return ResponseHelper::OutputJSON('fail', 'class not found');
+        }
 
-			return ResponseHelper::OutputJSON('success');
+        $profiles = ApiProfileHelper::GetProfile($userId, $classId);
 
-		} catch (Exception $ex) {
-			LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
-				'inputs' => Request::all(),
-			])]);
-			return ResponseHelper::OutputJSON('exception');
-		}
-	}
+        return ResponseHelper::OutputJSON('success', '', ['profile' => $profiles]);
+    }
 
-	public function getProfile($classId){
-		$userId = Request::input('user_id');
+    public function getGameClass($classId) {
+        $userId = Request::input('user_id');
+        $profileLimit = 1;
+        $unlock = 0;
 
-		$gameClass = GameClass::where('id', $classId)->where('user_id' , $userId)->get();
-		if(!$gameClass){
-			return ResponseHelper::OutputJSON('fail', 'class not found');
-		}
+        $class = GameClass::find($classId);
 
-		$profiles = ApiProfileHelper::GetProfile($userId, $classId);
+        $profileCount = GameProfile::where('class_id', $classId)->where('user_id', $userId)->count();
+        $userFlag = UserFlag::find($userId);
 
-		return ResponseHelper::OutputJSON('success', '' , ['profile' => $profiles ]);
-	}
+        if (!$class) {
+            return ResponseHelper::OutputJSON('fail', "class no found");
+        }
 
-	public function getGameClass($classId){
-		$userId = Request::input('user_id');
-		$profileLimit = 1;
-		$unlock = 0;
+        $pLimit = ($class->expired_at > date("Y-m-d H:i:s")) ? 50 : 30;
 
-		$class = GameClass::find($classId);
-	
-		$profileCount = GameProfile::where('class_id' , $classId)->where('user_id' , $userId)->count();
-		$userFlag = UserFlag::find($userId);
+        if ($profileCount >= $pLimit) {
+            $profileLimit = 0;
+        }
 
-		if(!$class){
-			return ResponseHelper::OutputJSON('fail', "class no found");
-		}
+        if ($userFlag->profile_limit == 50) {
+            $unlock = 1;
+        }
 
-		$pLimit = ($class->expired_at > date("Y-m-d H:i:s"))?50:30;
+        return ResponseHelper::OutputJSON('success', '', [
+                    'id' => $class->id,
+                    'user_id' => $class->user_id,
+                    'name' => $class->name,
+                    'profile_count' => $profileCount,
+                    'within_profile_limit' => $profileLimit,
+                    'unlock' => $unlock,
+                    'paid' => ($class->expired_at > date("Y-m-d H:i:s")) ? 1 : 0,
+        ]);
+    }
 
-		if($profileCount >= $pLimit){
-			$profileLimit = 0;
-		}
-
-		if($userFlag->profile_limit == 50){
-			$unlock = 1;
-		}
-
-		return ResponseHelper::OutputJSON('success', '', [ 
-			'id' => $class->id,
-			'user_id' => $class->user_id,
-			'name' => $class->name,
-			'profile_count' => $profileCount,
-			'within_profile_limit' => $profileLimit,
-			'unlock' => $unlock,
-			'paid' => ($class->expired_at > date("Y-m-d H:i:s"))?1:0,
-			]);
-	}
 }

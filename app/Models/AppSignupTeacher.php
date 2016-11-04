@@ -1,17 +1,19 @@
-<?php namespace App\Models;
+<?php
+
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class AppSignupTeacher extends Eloquent{
-	use SoftDeletes;
+class AppSignupTeacher extends Eloquent {
 
-	public $table = 't9104_app_signup_teacher';
-	protected $primaryKey = 'id';
-	public $timestamps = true;
-	protected $dates = ['deleted_at'];
+    use SoftDeletes;
 
-	protected $hidden = [];
-	protected $fillable = ['user_id'];
+    public $table = 't9104_app_signup_teacher';
+    protected $primaryKey = 'id';
+    public $timestamps = true;
+    protected $dates = ['deleted_at'];
+    protected $hidden = [];
+    protected $fillable = ['user_id'];
 
 }

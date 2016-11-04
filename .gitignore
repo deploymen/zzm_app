@@ -1,10 +1,8 @@
 /vendor
+/node_modules
 /cron
 /shell
 /_ref
-/public/bower_components
-/public/node_modules
-/public/package/
 /database/backup
 .env*
 *.log

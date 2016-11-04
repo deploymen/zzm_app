@@ -1,15 +1,18 @@
-<?php namespace App\Models;
+<?php
+
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class UserSetting extends Eloquent{
-	use SoftDeletes;
+class UserSetting extends Eloquent {
 
-	public $table = 't0104_user_setting';
-	protected $primaryKey = 'user_id';
-	public $timestamps = true;
-	protected $dates = ['deleted_at'];
+    use SoftDeletes;
 
-	protected $hidden = [];
+    public $table = 't0104_user_setting';
+    protected $primaryKey = 'user_id';
+    public $timestamps = true;
+    protected $dates = ['deleted_at'];
+    protected $hidden = [];
+
 }

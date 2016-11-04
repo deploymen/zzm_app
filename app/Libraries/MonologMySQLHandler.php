@@ -1,4 +1,6 @@
-<?php namespace App\Libraries;
+<?php
+
+namespace App\Libraries;
 
 use Monolog\Logger;
 use Monolog\Handler\AbstractProcessingHandler;
@@ -73,10 +75,11 @@ class MonologMySQLHandler extends AbstractProcessingHandler {
         $contentArray = array(
             'level_name' => $record['level_name'],
             'message' => $record['message'],
-            'environment' => (isset($record['context']['environment']))?$record['context']['environment']:"",
-            'created_ip' => $_SERVER['REMOTE_ADDR'],            
+            'environment' => (isset($record['context']['environment'])) ? $record['context']['environment'] : "",
+            'created_ip' => $_SERVER['REMOTE_ADDR'],
         );
 
         $this->statement->execute($contentArray);
     }
+
 }
