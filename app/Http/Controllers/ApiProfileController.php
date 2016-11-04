@@ -1063,8 +1063,8 @@ Class ApiProfileController extends Controller {
                     return ResponseHelper::OutputJSON('fail', 'incomplete info');
                 }
 
-                $studentId = $rowData[0][0];
-                $firstName = $rowData[0][1];
+                $firstName = $rowData[0][0];
+                $studentId = $rowData[0][1];
 
                 if (in_array($studentId, $studentIds, true)) {
                     unlink($file);
@@ -1087,8 +1087,8 @@ Class ApiProfileController extends Controller {
                     ]);
                 }
 
-                array_push($studentIds, $studentId);
                 array_push($firstNames, $firstName);
+                array_push($studentIds, $studentId);
             }
 
             if (!$studentIds && !$firstNames) {
@@ -1122,8 +1122,8 @@ Class ApiProfileController extends Controller {
                     continue;
                 }
 
-                $studentId = $rowData[0][0];
-                $firstName = $rowData[0][1];
+                $firstName = $rowData[0][0];
+                $studentId = $rowData[0][1];
 
                 ApiProfileHelper::newProfile($userId, $classId, $firstName, $age, $school, $grade, 999, 999, 999, $studentId);
             }
