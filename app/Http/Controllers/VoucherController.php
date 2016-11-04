@@ -12,6 +12,7 @@ use App\Models\UserSubsTransaction;
 class VoucherController extends Controller
 {
     public function redeem(){
+
         $class_id = Request::input('class_id');
         $code = Request::input('code');
 
@@ -50,7 +51,7 @@ class VoucherController extends Controller
                  * Upgrade class to premium
                  */
                 if ($checkVoucher->save()) {
-                    $expired_date = date('Y-m-d', strtotime('+1 year'))." 00:00:00";
+                    $expired_date = date('Y-m-d H:i:s', strtotime('+1 year'));
                     $checkClass->expired_at = $expired_date;
 
                     /**
