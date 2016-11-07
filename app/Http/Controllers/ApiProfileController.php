@@ -1066,6 +1066,16 @@ Class ApiProfileController extends Controller {
                 $firstName = $rowData[0][0];
                 $studentId = $rowData[0][1];
 
+                if ( !preg_match('/[A-Za-z0-9]$/', $studentId) ){
+                    unlink($file);
+                    return ResponseHelper::OutputJSON('fail', 'student id invalid format');
+                }
+
+                if(strlen($studentId) < 6 || strlen($studentId) > 20){
+                    unlink($file);
+                    return ResponseHelper::OutputJSON('fail', 'student id invalid format');
+                }
+
                 if (in_array($studentId, $studentIds, true)) {
                     unlink($file);
                     return ResponseHelper::OutputJSON('fail', 'student id duplicate');
