@@ -10,7 +10,7 @@ Route::any('saml/acs', 'AuthSchoologyController@schoology');
 
 Route::get('version' , function(){ 
 	return response()->json([
-		'server' => Config::get('app.zzm_server'),
+		'servername' => Config::get('app.zzm_server'),
 	]);
 });
 
