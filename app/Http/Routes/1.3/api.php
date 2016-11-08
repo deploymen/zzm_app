@@ -45,8 +45,10 @@ Route::get('send-in-blue', 'ApiController@SendInBlue');
 Route::group(['prefix' => 'admin'], function () {
     Route::get('/paypal/transaction-history', 'ApiAdminController@getTransaction');
 });
+
 Route::group(['middleware' => ['auth.student']], function () {
     Route::post('subscription/validation/apple', 'ApiController@appleValidateSubscription');
+    Route::post('subscription/validation/google-receipt', 'ApiController@googleReceiptValidation');
 });
 
 Route::any('pay-pal/ipn', 'PaypalController@InstantPaymentNotification');

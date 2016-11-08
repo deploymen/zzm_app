@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App;
+use Carbon\Carbon;
 use Exception;
 use PDOException;
 use Config;
@@ -29,6 +30,10 @@ use App\Models\UserSubsTransaction;
 
 use GuzzleHttp;
 use ReceiptValidator\iTunes\Validator as iTunesValidator;
+use Google_Client;
+use Google_Auth_AssertionCredentials;
+use Google_Service_AndroidPublisher;
+
 
 class ApiController extends Controller {
 
@@ -337,6 +342,101 @@ class ApiController extends Controller {
 	    var_export($mailin->create_update_user($data));
 	}
 
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @throws Exception
+     * Validate Google IN-APP purchase Receipt
+     */
+	public function googleReceiptValidation(\Illuminate\Http\Request $request){
+
+        try {
+
+            /**
+             * Instantiate Google client and validate credentials
+             */
+            $client = new Google_Client();
+            $client->setApplicationName("Zap Zap Math - K6 Math Games");
+            $service_key = file_get_contents($_ENV['GOOGLE_KEY_PATH']);
+            $service_id = config('app.google_api_service_id');
+
+            $cred = new Google_Auth_AssertionCredentials(
+                $service_id, ['https://www.googleapis.com/auth/androidpublisher'], $service_key
+            );
+
+            $client->setAssertionCredentials($cred);
+
+            /**
+             * instantiate a new Android Publisher service class
+             */
+            $service = new Google_Service_AndroidPublisher($client);
+
+            /**
+             * get package name, subscription id and purchase token from request
+             */
+            $packageName = $request->input('package_name');
+            $subscriptionId = $request->input('subscription_id');
+            $token = $request->input('token');
+
+            /**
+             * Validate request input
+             */
+            if($packageName == "" || $subscriptionId == "" || $token == ""){
+                return ResponseHelper::OutputJSON('fail' , 'missing parameter');
+            }
+
+            /**
+             * get the subscription info info from google
+             */
+            $subscription = $service->purchases_subscriptions->get($packageName, $subscriptionId, $token);
+
+            /**
+             * check if no subscription info was returned
+             */
+            if (is_null($subscription)) {
+                return ResponseHelper::OutputJSON('fail' , 'No subscription info returned');
+            }
+
+            /**
+             * check if an error was returned
+             */
+            if (isset($subscription['error']['code'])) {
+                return ResponseHelper::OutputJSON('fail' , 'Error validating transaction');
+            }
+
+            /**
+             * check if subscription data has expiring milliseconds set
+             */
+            if (!isset($subscription['expiryTimeMillis'])) {
+                return ResponseHelper::OutputJSON('fail' , 'Subscription info has no expiring time');
+            }
+
+            /**
+             * convert to seconds since Epoch
+             */
+            $seconds = $subscription['expiryTimeMillis'] / 1000;
+            // format seconds as a datetime string and create a new UTC Carbon time object from the string
+            $date = date("d-m-Y H:i:s", $seconds);
+            $datetime = new Carbon($date);
+
+            /**
+             * check if the expiration date is in the past
+             */
+            if (Carbon::now()->gt($datetime)) {
+                return ResponseHelper::OutputJSON('Subscription has expired');
+            }
+
+            return ResponseHelper::OutputJSON('success', '', $subscription->toSimpleObject());
+
+        } catch (\Google_Auth_Exception $e) {
+            LogHelper::LogToDatabase($e->getMessage(), ['environment' => json_encode([
+                'source' => 'ApiController > googleReceiptValidation',
+                'inputs' => $request->all()
+            ])]);
+            return ResponseHelper::OutputJSON('Error validating credentials');
+        }
+
+    }
+
 	public function appleValidateSubscription(\Illuminate\Http\Request $request){
 
         //this method is to validate new subscription
@@ -412,7 +512,7 @@ class ApiController extends Controller {
            				$claimed = true;
                         break;
                    
-                    default: return ResponseHelper::OutputJSON('fail' , 'incorrect product id'); ; break;
+                    default: return ResponseHelper::OutputJSON('fail' , 'incorrect product id'); break;
                 }
  
             }
@@ -437,7 +537,7 @@ class ApiController extends Controller {
     	if($receipt->is_trial_period == 'true'){
     		$profile = GameProfile::find($profileId); 
 
-    		$expiredAt = DB::raw('DATE_ADD(NOW(), INTERVAL 3 MONTH)');
+    		$expiredAt = DB::raw('DATE_ADD(NOW(), INTERVAL 1 MONTH)');
     		if($profile->expired_at > date("Y-m-d H:i:s") ){ 
     			$expiredAt = DB::raw('DATE_ADD("'.$profile->expired_at.'", INTERVAL 3 MONTH)');
     		}
