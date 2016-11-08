@@ -1096,6 +1096,20 @@ Class ApiProfileController extends Controller {
                 return ResponseHelper::OutputJSON('fail', 'no profile in upload file');
             }
 
+            if($studentIds){
+                foreach ($studentIds as $student_Id){
+                    if ( !preg_match('/^[a-zA-Z]+[a-zA-Z0-9]+$/', $student_Id) ){
+                        unlink($file);
+                        return ResponseHelper::OutputJSON('fail', 'student id invalid format');
+                    }
+
+                    if(strlen($student_Id) < 6 || strlen($student_Id) > 20){
+                        unlink($file);
+                        return ResponseHelper::OutputJSON('fail', 'student id invalid format');
+                    }
+                }
+            }
+
             $sql = "
 				SELECT `student_id`
 					FROM `t0111_game_profile` 
