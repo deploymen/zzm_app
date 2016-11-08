@@ -1066,16 +1066,6 @@ Class ApiProfileController extends Controller {
                 $firstName = $rowData[0][0];
                 $studentId = $rowData[0][1];
 
-                if ( !preg_match('/[A-Za-z0-9]$/', $studentId) ){
-                    unlink($file);
-                    return ResponseHelper::OutputJSON('fail', 'student id invalid format');
-                }
-
-                if(strlen($studentId) < 6 || strlen($studentId) > 20){
-                    unlink($file);
-                    return ResponseHelper::OutputJSON('fail', 'student id invalid format');
-                }
-
                 if (in_array($studentId, $studentIds, true)) {
                     unlink($file);
                     return ResponseHelper::OutputJSON('fail', 'student id duplicate');
@@ -1104,6 +1094,20 @@ Class ApiProfileController extends Controller {
             if (!$studentIds && !$firstNames) {
                 unlink($file);
                 return ResponseHelper::OutputJSON('fail', 'no profile in upload file');
+            }
+
+            if($studentIds){
+                foreach ($studentIds as $student_Id){
+                    if ( !preg_match('/^[a-zA-Z]+[a-zA-Z0-9]+$/', $student_Id) ){
+                        unlink($file);
+                        return ResponseHelper::OutputJSON('fail', 'student id invalid format');
+                    }
+
+                    if(strlen($student_Id) < 6 || strlen($student_Id) > 20){
+                        unlink($file);
+                        return ResponseHelper::OutputJSON('fail', 'student id invalid format');
+                    }
+                }
             }
 
             $sql = "
