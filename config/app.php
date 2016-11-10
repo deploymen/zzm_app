@@ -24,6 +24,11 @@ return [
     'braintree_private_key' => env('BRAINTREE_PRIVATE_KEY'),
     'braintree_sandbox' => env('BRAINTREE_SANDBOX'),
     'zzm_server' => env('ZZM_SERVER'),
+
+    'google_api_service_id' => env('GOOGLE_SERVICE_ID'),
+    'google_api_service_key' => env('GOOGLE_SERVICE_KEY'),
+    'google_api_secret' => env('GOOGLE_SERVICE_ACCESS_PASSWORD'),
+
     /*
       |--------------------------------------------------------------------------
       | Application Debug Mode
