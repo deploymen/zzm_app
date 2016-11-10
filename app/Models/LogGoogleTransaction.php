@@ -14,7 +14,7 @@ use App\Models\UserSubsTransaction;
 
 class LogGoogleTransaction extends Eloquent {
 
-    public $table = 't9208_log_google_transaction';
+    public $table = 't9209_log_google_transaction';
     protected $primaryKey = 'id';
     public $timestamps = true;
     protected $hidden = [];
