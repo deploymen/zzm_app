@@ -33,6 +33,7 @@ use ReceiptValidator\iTunes\Validator as iTunesValidator;
 use Google_Client;
 use Google_Auth_AssertionCredentials;
 use Google_Service_AndroidPublisher;
+use App\Models\LogGoogleTransaction;
 
 
 class ApiController extends Controller {
@@ -359,11 +360,11 @@ class ApiController extends Controller {
             $service_key = file_get_contents($_ENV['GOOGLE_KEY_PATH']);
             $service_id = config('app.google_api_service_id');
 
-            $cred = new Google_Auth_AssertionCredentials(
+            $credentials = new Google_Auth_AssertionCredentials(
                 $service_id, ['https://www.googleapis.com/auth/androidpublisher'], $service_key
             );
 
-            $client->setAssertionCredentials($cred);
+            $client->setAssertionCredentials($credentials);
 
             /**
              * instantiate a new Android Publisher service class
@@ -376,6 +377,7 @@ class ApiController extends Controller {
             $packageName = $request->input('package_name');
             $subscriptionId = $request->input('subscription_id');
             $token = $request->input('token');
+            $profile_id = $request->input('student_profile_id');
 
             /**
              * Validate request input
@@ -406,26 +408,46 @@ class ApiController extends Controller {
             /**
              * check if subscription data has expiring milliseconds set
              */
-            if (!isset($subscription['expiryTimeMillis'])) {
+            if (!isset($subscription->expiryTimeMillis)) {
                 return ResponseHelper::OutputJSON('fail' , 'Subscription info has no expiring time');
             }
 
             /**
              * convert to seconds since Epoch
              */
-            $seconds = $subscription['expiryTimeMillis'] / 1000;
+            $seconds = $subscription->expiryTimeMillis / 1000;
             // format seconds as a datetime string and create a new UTC Carbon time object from the string
-            $date = date("d-m-Y H:i:s", $seconds);
+            $date = date("Y-m-d H:i:s", $seconds);
             $datetime = new Carbon($date);
+
 
             /**
              * check if the expiration date is in the past
              */
             if (Carbon::now()->gt($datetime)) {
-                return ResponseHelper::OutputJSON('Subscription has expired');
+                return ResponseHelper::OutputJSON('fail', 'Error validating subscription data, expiration date is in the past');
             }
 
-            return ResponseHelper::OutputJSON('success', '', $subscription->toSimpleObject());
+            /**
+             * Process Request
+             */
+
+            if (LogGoogleTransaction::where('token' , $token)->first()){
+                return ResponseHelper::OutputJSON('fail', 'This token has already been use');
+            }
+
+            if (!GameProfile::find($profile_id)){
+                return ResponseHelper::OutputJSON('fail', 'Invalid profile id');
+            }
+
+            $package = ['package_name' => $packageName, 'subscription_id' => $subscriptionId, 'token' => $token];
+            $transaction = LogGoogleTransaction::logTransaction($profile_id, $package, $subscription);
+
+            if ($transaction ) {
+                return ResponseHelper::OutputJSON('success');
+            }
+
+            return ResponseHelper::OutputJSON('fail', $transaction);
 
         } catch (\Google_Auth_Exception $e) {
             LogHelper::LogToDatabase($e->getMessage(), ['environment' => json_encode([

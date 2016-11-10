@@ -49,6 +49,8 @@ Route::group(['prefix' => 'admin'], function () {
 Route::group(['middleware' => ['auth.student']], function () {
     Route::post('subscription/validation/apple', 'ApiController@appleValidateSubscription');
     Route::post('subscription/validation/google-receipt', 'ApiController@googleReceiptValidation');
+    //this route is for me to manually test subscription renewal
+    Route::post('subscription/check', 'GoogleSubscriptionCheck@verify');
 });
 
 Route::any('pay-pal/ipn', 'PaypalController@InstantPaymentNotification');
