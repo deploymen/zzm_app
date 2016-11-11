@@ -10,7 +10,7 @@ class QuizUser extends Model
     public $table = 't9999_quiz_users';
     protected $primaryKey = 'id';
     public $timestamps = true;
-    protected $fillable = ['name', 'email', 'school', 'state', 'score'];
+    protected $fillable = ['name', 'email', 'school', 'state', 'hide', 'score'];
     protected $limit = 10;
 
     /**
@@ -18,10 +18,11 @@ class QuizUser extends Model
      */
     public function leaderBoard(){
 
-        $query = "SELECT * FROM {$this->table} WHERE score > :score ORDER BY score DESC LIMIT :limit";
+        $query = "SELECT * FROM {$this->table} WHERE score > :score AND hide = :hide ORDER BY score DESC LIMIT :limit";
 
         $users = DB::SELECT($query, [
             'score' => 0,
+            'hide' => 0,
             "limit" => $this->limit
         ]);
 
@@ -57,10 +58,12 @@ class QuizUser extends Model
      */
     public static function deleteInactivePlayers() {
 
-        $query = "DELETE FROM t9999_quiz_users WHERE finished_game = :finished_game
+        $query = "DELETE FROM t9999_quiz_users WHERE email = :email AND `name` = :username AND finished_game = :finished_game
                         AND created_at < (NOW() - INTERVAL 3 MINUTE)";
 
         DB::DELETE($query, [
+            'email' => 'anonymous',
+            'username' => 'anonymous',
             'finished_game' => 0
         ]);
 
@@ -78,14 +81,9 @@ class QuizUser extends Model
      */
     public static function resetLeaderBoard() {
 
-        $query = "DELETE FROM t9999_quiz_users WHERE id > :id";
-
-        DB::DELETE($query, [
-            'id' => 10
-        ]);
-
-        $reset_id = "ALTER TABLE t9999_quiz_users AUTO_INCREMENT = 11";
-        DB::statement($reset_id);
+        DB::table('t9999_quiz_users')
+            ->where('id', '>', 10)
+            ->update(['hide' => 1]);
     }
 
 }
