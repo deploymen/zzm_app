@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LogGoogleTransaction;
 use Exception;
 use Config;
 use Request;
@@ -1045,6 +1046,8 @@ Class ApiGameController extends Controller {
         $profileId = Request::input('student_profile_id');
         $userId = Request::input('user_id');
         $studentId = Request::input('student_id');
+
+        LogGoogleTransaction::updateSubscription();
 
         try {
             $result = ZapZapQuestionHelper::GetUserMapV1_3($profileId);

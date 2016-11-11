@@ -29,15 +29,15 @@ class ApiQuizController extends Controller
             $quiz = new QuizGameQuestion();
             $questions = $quiz->getQuestion($difficulty);
 
-            QuizUser::deleteInactivePlayers();
+            //QuizUser::deleteInactivePlayers();
 
             $players = new QuizUser;
             $top_players = $players->leaderBoard();
 
-            $players->name = "";
-            $players->email = "";
-            $players->school = "";
-            $players->state = "";
+            $players->name = "anonymous";
+            $players->email = "anonymous";
+            $players->school = "not given";
+            $players->state = "not given";
             $players->save();
 
             $current_player_id = $players->id;
