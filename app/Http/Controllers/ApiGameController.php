@@ -1047,7 +1047,7 @@ Class ApiGameController extends Controller {
         $userId = Request::input('user_id');
         $studentId = Request::input('student_id');
 
-        LogGoogleTransaction::updateSubscription();
+        //LogGoogleTransaction::updateSubscription();
 
         try {
             $result = ZapZapQuestionHelper::GetUserMapV1_3($profileId);

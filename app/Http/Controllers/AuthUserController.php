@@ -357,7 +357,8 @@ Class AuthUserController extends Controller {
                 ->first();
 
         if ($logAccountActivated) {
-            return redirect::to('../user/activated');
+
+            return redirect('../user/activated');
         }
 
         $logAccountActivate = LogAccountActivate::where('secret', $secretKey)
@@ -366,12 +367,12 @@ Class AuthUserController extends Controller {
                 ->first();
 
         if (!$logAccountActivate) {
-            return redirect::to('../user/activate-fail');
+            return redirect('../user/activate-fail');
         }
 
         $user = $logAccountActivate->findUser()->first();
         if (!$user) {
-            return redirect::to('../user/activate-fail');
+            return redirect('../user/activate-fail');
         }
 
         try {
@@ -383,7 +384,7 @@ Class AuthUserController extends Controller {
             $user->activated = 1;
             $user->save();
 
-            return redirect::to('../user/activate-success');
+            return redirect('../user/activate-success');
         } catch (Exception $ex) {
             LogHelper::LogToDatabase($ex->getMessage(), ['environment' => json_encode([
                     'source' => 'AuthUserController > activate',

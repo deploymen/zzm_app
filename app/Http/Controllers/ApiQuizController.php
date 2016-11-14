@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Libraries\ResponseHelper;
+use App\Models\Quiz\QuizUserLog;
 use Aws\CloudFront\Exception\Exception;
 use Request;
 use App\Http\Controllers\Controller;
@@ -32,6 +33,7 @@ class ApiQuizController extends Controller
             //QuizUser::deleteInactivePlayers();
 
             $players = new QuizUser;
+            $log = new QuizUserLog;
             $top_players = $players->leaderBoard();
 
             $players->name = "anonymous";
@@ -39,6 +41,12 @@ class ApiQuizController extends Controller
             $players->school = "not given";
             $players->state = "not given";
             $players->save();
+
+            $log->name = "anonymous";
+            $log->email = "anonymous";
+            $log->school = "not given";
+            $log->state = "not given";
+            $log->save();
 
             $current_player_id = $players->id;
 
@@ -88,6 +96,7 @@ class ApiQuizController extends Controller
 
             try{
                 $player = QuizUser::find($user_id);
+                $log = QuizUserLog::find($user_id);
 
                 $player->name = $username;
                 $player->email = $email;
@@ -97,6 +106,15 @@ class ApiQuizController extends Controller
                 $player->finished_game = 1;
 
                 $player->save();
+
+                $log->name = $username;
+                $log->email = $email;
+                $log->school = $school;
+                $log->state = $state;
+                $log->score = $score;
+                $log->finished_game = 1;
+
+                $log->save();
 
                 return ResponseHelper::OutputJSON('success', '', [
                     'player_result' => $player->toArray()

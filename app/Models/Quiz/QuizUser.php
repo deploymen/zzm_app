@@ -59,7 +59,7 @@ class QuizUser extends Model
     public static function deleteInactivePlayers() {
 
         $query = "DELETE FROM t9999_quiz_users WHERE email = :email AND `name` = :username AND finished_game = :finished_game
-                        AND created_at < (NOW() - INTERVAL 3 MINUTE)";
+                        AND created_at < (NOW() - INTERVAL 5 MINUTE)";
 
         DB::DELETE($query, [
             'email' => 'anonymous',
@@ -81,9 +81,11 @@ class QuizUser extends Model
      */
     public static function resetLeaderBoard() {
 
-        DB::table('t9999_quiz_users')
-            ->where('id', '>', 10)
-            ->update(['hide' => 1]);
+        $query = "DELETE FROM t9999_quiz_users WHERE id > :id";
+
+         DB::DELETE($query, [
+             'id' => 10
+         ]);
     }
 
 }
